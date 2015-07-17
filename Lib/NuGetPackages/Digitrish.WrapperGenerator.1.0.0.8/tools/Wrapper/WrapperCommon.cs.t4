@@ -1,0 +1,201 @@
+﻿<#@ assembly name="EnvDTE" #>
+<#@ assembly name="VSLangProj" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#+ 
+	BindingFlags binding = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Static;
+	Type MatchType; 
+
+	Type GetType(dynamic model)
+	{	
+		if (MatchType != null) return MatchType;
+		List<object> projs =  model.Project;
+		if ( projs.Count > 0)
+		{
+			var proj = (EnvDTE.Project)projs[0];
+			var vsproject = (VSLangProj.VSProject)proj.Object;
+			foreach (VSLangProj.Reference reference in vsproject.References)
+			{
+				var assembly = Assembly.LoadFile(reference.Path);
+				var type = assembly.GetType(model.ClassFullName);
+				if (type != null) {
+					MatchType = type; 
+					return MatchType; 
+				}
+			}
+		}
+		throw new Exception(String.Format("The {0} class does not exist to any project references. Please make sure you specified the full class name including namespace and the reference assemblies is added to the project.", model.ClassFullName)); 
+	}
+	
+	string[] DiscoverAllRequireNamespace(Type type, bool includeMethods = false, bool includeProperties = false, bool includeConstructor = false)
+	{
+		var list = new List<string>();
+		if (type == null) return list.ToArray();
+		if (type.IsArray) 
+		{
+			list.Add(type.GetElementType().Namespace);
+		}
+		else if (type.IsGenericType)
+		{
+			list.Add(type.GetGenericTypeDefinition().Namespace);
+			var parameters = type.GetGenericArguments();
+			foreach(var param in parameters)
+				list.AddRange(DiscoverAllRequireNamespace(param));
+		} else 
+		{
+			list.Add(type.Namespace);
+		}
+
+		if (includeMethods)
+		{
+			var methods = GetMethods(type);
+			foreach(var method in methods)
+			{
+				list.AddRange(DiscoverAllRequireNamespace(method.ReturnType));
+				foreach(var param in method.GetParameters())
+					list.AddRange(DiscoverAllRequireNamespace(param.ParameterType));
+			}
+		} 
+
+		if (includeProperties)
+		{
+			var properties = type.GetProperties(binding);
+			foreach(var prop in properties)
+				list.AddRange(DiscoverAllRequireNamespace(prop.PropertyType));
+		}
+
+		if (includeConstructor)
+		{
+			var parameters = type.GetConstructors().SelectMany(a => a.GetParameters()).ToList();
+			foreach(var param in parameters)
+				list.AddRange(DiscoverAllRequireNamespace(param.ParameterType));
+		}
+
+		return list.GroupBy(a=>a).Select(a => a.Key).ToArray(); 
+	}
+	
+	string GenerateTypeName(Type type)
+	{
+		if (type.Name == "Void") return "void";
+		if (type.Name == "String") return "string";
+		if (type.Name == "Boolean") return "bool";
+		if (type.Name == "Byte") return "byte";
+			
+		if (type.IsArray)
+			return GenerateTypeName(type.GetElementType()) + "[]";
+
+		if (type.IsGenericType)
+		{
+			var name = type.GetGenericTypeDefinition().Name;
+			name = name.Remove(name.IndexOf('`'));
+			return string.Format("{0}<{1}>", name, GenerateGenericParameters(type));
+		}
+		
+		return type.Name.Replace("&",""); 
+	}
+
+
+	string IsOutParam(Type type)
+    {
+		if (type.Name.EndsWith("&"))
+			return "out ";
+	     else 
+			return "";
+    }
+	
+
+	string GenerateGenericParameters(Type type)
+	{
+		var parameters = type.GetGenericArguments();
+		var list = new List<string>(); 
+		foreach(var param in parameters)
+			list.Add(GenerateTypeName(param));
+		return string.Join(", ", list.ToArray());
+	}
+
+	string GenerateParameter(ParameterInfo[] parameters, bool withType)
+	{
+		var list = new List<string>(); 
+		foreach(var param in parameters)
+		{
+			var line = string.Format("{0}{1}{2}", 
+				IsOutParam(param.ParameterType),
+				withType ? GenerateTypeName(param.ParameterType) + " " : "", 
+				param.Name);
+			list.Add(line);
+		}
+		return string.Join(", ", list.ToArray());
+	}
+
+	bool IsStatic(Type type) 
+	{
+		return (type.IsAbstract && type.IsSealed) || Model.StaticOnly == "true";
+	}
+
+	PropertyInfo[] GetProperties(object model)
+	{
+		var type = GetType(model);
+		var bind = Model.StaticOnly == "true" 
+			? BindingFlags.Public | BindingFlags.Static
+			: binding;
+		return type.GetProperties(bind);
+	}
+
+	MethodInfo[] GetMethods(object model)
+	{
+		var type = GetType(model);
+		var bind = Model.StaticOnly == "true" 
+			? BindingFlags.Public | BindingFlags.Static
+			: binding;
+		return type.GetMethods(bind).Where(a => !a.IsSpecialName).ToArray(); 
+	}
+
+	EventInfo[] GetEvents(object model)
+	{
+		var type = GetType(model);
+		return type.GetEvents(binding);
+	}
+
+	ConstructorInfo[] GetConstructor(object model)
+	{
+		if (Model.StaticOnly == "true") return new ConstructorInfo[0];
+		var type = GetType(model);
+		return type.GetConstructors();
+	}
+	
+	string[] GenerateProperties(Type type, bool isInterface = true)
+	{
+		var list = new List<string>();
+		var items = type.GetProperties(binding);
+		foreach(var item in items)
+		{
+			var line = string.Format("{0} {1} {{ get; set; }}", GenerateTypeName(item.PropertyType), item.Name);
+			list.Add(line);
+		}
+		return list.ToArray();
+	}
+		
+	string GeneratePrivateInstanceForNonStatic(object model)
+	{
+		var type = GetType(model);
+		if (!IsStatic(type)) 
+			return string.Format("private readonly {0} _{1};", type.Name, ToCamelCase(type.Name));
+		return string.Empty;
+	}
+
+	string ToCamelCase(string name)
+	{
+		return Char.ToLowerInvariant(name[0]) + name.Substring(1);
+	}
+
+	string GenerateClassIntanceVariable(object model) 
+	{
+		var type = GetType(model);
+		if (!IsStatic(type)) 
+			return string.Format("_{0}", ToCamelCase(type.Name));
+		else 
+			return string.Format("{0}", type.Name);
+	}
+#>

@@ -1,0 +1,754 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D5FCD526-1C19-410F-8CE4-2B4C4C5B12CA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AldurSoft.WurmApi.Tests</RootNamespace>
+    <AssemblyName>AldurSoft.WurmApi.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>
+    </NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\..\Lib\NuGetPackages\Moq.4.2.1409.1722\lib\net40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\NuGetPackages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.core">
+      <HintPath>..\..\Lib\NuGetPackages\NUnitTestAdapter.1.2\lib\nunit.core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.core.interfaces">
+      <HintPath>..\..\Lib\NuGetPackages\NUnitTestAdapter.1.2\lib\nunit.core.interfaces.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\Lib\NuGetPackages\NUnit.3.0.0-alpha-4\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.util">
+      <HintPath>..\..\Lib\NuGetPackages\NUnitTestAdapter.1.2\lib\nunit.util.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="NUnit.VisualStudio.TestAdapter">
+      <HintPath>..\..\Lib\NuGetPackages\NUnitTestAdapter.1.2\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture">
+      <HintPath>..\..\Lib\NuGetPackages\AutoFixture.3.22.0\lib\net40\Ploeh.AutoFixture.dll</HintPath>
+    </Reference>
+    <Reference Include="Ploeh.AutoFixture.AutoMoq">
+      <HintPath>..\..\Lib\NuGetPackages\AutoFixture.AutoMoq.3.22.0\lib\net40\Ploeh.AutoFixture.AutoMoq.dll</HintPath>
+    </Reference>
+    <Reference Include="SevenZipSharp">
+      <HintPath>..\..\Lib\NuGetPackages\SevenZipSharp.0.64\lib\SevenZipSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Compile Include="Helpers\LogWriter.cs" />
+    <Compile Include="Helpers\SelfTests\LogWriterTests.cs" />
+    <Compile Include="Tests\WurmCharacterDirectoriesImpl\WurmCharacterDirectoriesTests.cs" />
+    <Compile Include="Tests\WurmCharactersImpl\WurmCharactersTests.cs" />
+    <Compile Include="Tests\WurmConfigDirectoriesImpl\WurmConfigDirectoriesTests.cs" />
+    <Compile Include="Tests\WurmConfigsImpl\WurmConfigsTests.cs" />
+    <Compile Include="Tests\WurmLogDefinitionsImpl\WurmLogDefinitionsTests.cs" />
+    <Compile Include="Tests\WurmLogFilesImpl\WurmLogFilesTests.cs" />
+    <Compile Include="Tests\WurmLogsHistoryImpl\MonthlyHeuristicsExtractorTests.cs" />
+    <Compile Include="Tests\WurmLogsHistoryImpl\WurmLogsHistoryTests.cs" />
+    <Compile Include="Tests\WurmLogsMonitorImpl\WurmLogsMonitorTests.cs" />
+    <Compile Include="Tests\WurmServerHistoryImpl\SortedServerHistoryTests.cs" />
+    <Compile Include="Tests\WurmServerHistoryImpl\WurmServerHistoryTests.cs" />
+    <Compile Include="Tests\WurmServersImpl\WurmServersTests.cs" />
+    <Compile Include="WurmApiFixtureBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\DataModel\WurmApiDataContextTests.cs" />
+    <Compile Include="Tests\WurmDateTimeTests.cs" />
+    <Compile Include="WurmApiIntegrationFixtureBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactBL\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactBL\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactBR\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactBR\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactTL\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactTL\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactTR\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactTR\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compact\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compact\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\default\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\default\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactBL\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactBL\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactBR\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactBR\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactTL\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactTL\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactTR\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactTR\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compact\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compact\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\default\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\default\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactBL\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactBL\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactBR\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactBR\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactTL\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactTL\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactTR\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactTR\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compact\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compact\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\default\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\default\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmDir-configs\configs\compactBL\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmDir-configs\configs\compactBL\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmDir-configs\configs\compactBR\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmDir-configs\configs\compactBR\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmDir-configs\configs\compactTL\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmDir-configs\configs\compactTL\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmDir-configs\configs\compactTR\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmDir-configs\configs\compactTR\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmDir-configs\configs\compact\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmDir-configs\configs\compact\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmDir-configs\configs\default\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\TestPaks\WurmDir-configs\configs\default\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.Testing\Core.Testing.csproj">
+      <Project>{6e2db07a-e220-4e96-ac4b-4fdfbd275a21}</Project>
+      <Name>Core.Testing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Core\Core.csproj">
+      <Project>{b9e61cdc-72bd-4158-b77e-6850455a07cd}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SimplePersist\SimplePersist.Contracts\SimplePersist.Contracts.csproj">
+      <Project>{e3dfe2ca-6523-4a70-a145-22b43cf2de8d}</Project>
+      <Name>SimplePersist.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SimplePersist\SimplePersist\SimplePersist.csproj">
+      <Project>{f2d42263-c177-425c-b69c-6d53b1f4aaa0}</Project>
+      <Name>SimplePersist</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmApi.Contracts\WurmApi.Contracts.csproj">
+      <Project>{8f480cb0-5ee3-4ad7-a209-21eab461ebb3}</Project>
+      <Name>WurmApi.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmApi.Impl\WurmApi.Impl.csproj">
+      <Project>{147284ab-a3d5-4322-92b0-e6ecc8cc7059}</Project>
+      <Name>WurmApi.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmApi\WurmApi.csproj">
+      <Project>{f23b8ad5-5c3b-4c9a-bc11-3577f1cb3272}</Project>
+      <Name>WurmApi</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\TestPaks\logs-samples-forLogsMonitor\players\Testguy\logs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactBL\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactBL\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactBL\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactBR\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactBR\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactBR\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactTL\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactTL\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactTL\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactTR\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactTR\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactTR\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compact\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compact\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compact\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\default\AldurToolbeltDefault.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\default\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\default\gamesettings - Kopia.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\default\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\default\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\default\myToolbeltSetup.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\default\test.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\players\Testguytwo\config.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\players\Testguytwo\logs\_Event.2014-12.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\players\Testguy\config.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\players\Testguy\logs\_Event.2014-12.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\players\Testguy\logs\_Skills.2012-08.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\players\Testguy\logs\_Skills.2012-09-21.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\players\Testguy\logs\_Skills.2012-09-22.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\players\Testguy\logs\_Skills.2012-09-23.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\players\Testguy\logs\_Skills.2012-09.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactBL\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactBL\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactBL\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactBR\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactBR\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactBR\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactTL\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactTL\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactTL\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactTR\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactTR\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compactTR\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compact\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compact\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\compact\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\default\AldurToolbeltDefault.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\default\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\default\gamesettings - Kopia.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\default\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\default\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\default\myToolbeltSetup.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\configs\default\test.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\players\Testguytwo\config.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\players\Testguy\config.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir-webrequests\Exodus.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactBL\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactBL\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactBL\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactBR\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactBR\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactBR\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactTL\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactTL\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactTL\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactTR\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactTR\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compactTR\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compact\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compact\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\compact\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\default\AldurToolbeltDefault.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\default\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\default\gamesettings - Kopia.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\default\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\default\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\default\myToolbeltSetup.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\configs\default\test.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\players\Testguytwo\config.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\players\Testguytwo\logs\_Event.2014-12.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\players\Testguy\config.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\players\Testguy\logs\_Event.2014-12.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\players\Testguy\logs\_Skills.2012-08.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\players\Testguy\logs\_Skills.2012-09-21.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\players\Testguy\logs\_Skills.2012-09-22.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\players\Testguy\logs\_Skills.2012-09-23.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerTests-wurmdir\players\Testguy\logs\_Skills.2012-09.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\LogFileStreamReader-testdata\LogFileStreamReaderTestData.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-emptyfiles\players\Anotherguy\logs\_Combat.2012-08-03.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-emptyfiles\players\Testguy\logs\PM__Eve.2012-02-01.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-emptyfiles\players\Testguy\logs\PM__John.2012-02-03.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-emptyfiles\players\Testguy\logs\PM__John.2012-02.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-emptyfiles\players\Testguy\logs\_Combat.2012-01-03.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-emptyfiles\players\Testguy\logs\_Combat.2012-01-04.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-emptyfiles\players\Testguy\logs\_Combat.2012-01.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-emptyfiles\players\Testguy\logs\_Combat.2012-02.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-emptyfiles\players\Testguy\logs\_Combat.2013-06.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-emptyfiles\players\Testguy\logs\_Event.2012-02-02.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-emptyfiles\players\Testguy\logs\_Event.2012-02.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-emptyfiles\players\Testguy\logs\_Event.2012-03-05.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-emptyfiles\players\Testguy\logs\_Event.2012-03.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-forLogsMonitor\players\Anotherguy\logs\_Event.2014-01-01.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-realdata\players\Testguy\logs\_Skills.2012-08.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-realdata\players\Testguy\logs\_Skills.2012-09-21.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-realdata\players\Testguy\logs\_Skills.2012-09-22.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-realdata\players\Testguy\logs\_Skills.2012-09-23.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\logs-samples-realdata\players\Testguy\logs\_Skills.2012-09.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\MonthlyHeuristicsExtractor-sample-logs\unrecognized.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\MonthlyHeuristicsExtractor-sample-logs\Village.2012-10-24.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\MonthlyHeuristicsExtractor-sample-logs\Village.2013-04.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\MonthlyHeuristicsExtractor-sample-logs\Village.2013-03.empty.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\MonthlyHeuristicsExtractor-sample-logs\Village.2013-03.invaliddata.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\MonthlyHeuristicsExtractor-sample-logs\Village.2013-03.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\MonthlyHeuristicsExtractor-sample-logs\_Event.2014-12.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\MonthlyHeuristicsExtractor-sample-logs\_Skills.2012-08.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WebExtractorTests-raw-requests\Independence.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compactBL\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compactBL\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compactBL\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compactBR\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compactBR\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compactBR\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compactTL\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compactTL\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compactTL\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compactTR\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compactTR\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compactTR\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compact\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compact\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\compact\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\default\AldurToolbeltDefault.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\default\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\default\gamesettings - Kopia.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\default\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\default\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\default\myToolbeltSetup.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-configs\configs\default\test.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-PlayersDirWithPlayers\players\Someotherplayer\logs\placeholder.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmDir-PlayersDirWithPlayers\players\Someplayer\logs\placeholder.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\players\Testguytwo\logs\_Event.2014-12.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\players\Testguy\logs\_Event.2014-12.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>REM cleanup target dir
+rd /s /q "$(TargetDir)"</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

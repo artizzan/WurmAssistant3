@@ -1,0 +1,92 @@
+<!DOCTYPE html> <HTML>
+	<HEAD>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> <TITLE>Wurm Online Server Stats</TITLE>
+	<link rel="stylesheet" type="text/css" href="http://www.wurmonline.com/css/gameData.css" />
+	</HEAD>
+
+<BODY id="body" class="gameDataBody">
+	<TABLE id="statsDataTable">
+		<TR>
+			<TH></TH>
+			<TH></TH>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Server name</TD>
+			<TD class="statsDataTDValue">Exodus</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Last updated</TD>
+			<TD class="statsDataTDValue">Dec 30, 2015</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Status</TD>
+			<TD class="statsDataTDValue">Up and running</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Uptime</TD>
+			<TD class="statsDataTDValue">3 days, 15 hours and 30 minutes</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Wurm Time</TD>
+			<TD class="statsDataTDValue">It is 12:01:40 on day of the Ant in week 2 of the Snake's starfall in the year of 1045.</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Golden Valley players</TD>
+			<TD class="statsDataTDValue">3/400</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Chaos players</TD>
+			<TD class="statsDataTDValue">61/800</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Independence players</TD>
+			<TD class="statsDataTDValue">94/800</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Deliverance players</TD>
+			<TD class="statsDataTDValue">62/400</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Exodus players</TD>
+			<TD class="statsDataTDValue">46/800</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Celebration players</TD>
+			<TD class="statsDataTDValue">26/400</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Serenity players</TD>
+			<TD class="statsDataTDValue">53/400</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Desertion players</TD>
+			<TD class="statsDataTDValue">31/400</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Affliction players</TD>
+			<TD class="statsDataTDValue">27/400</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Elevation players</TD>
+			<TD class="statsDataTDValue">24/400</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Pristine players</TD>
+			<TD class="statsDataTDValue">64/400</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Release players</TD>
+			<TD class="statsDataTDValue">54/400</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Xanadu players</TD>
+			<TD class="statsDataTDValue">380/2000</TD>
+		</TR>
+		<TR class="statsTR">
+			<TD class="statsDataTDName">Total players</TD>
+			<TD class="statsDataTDValue">925/8000</TD>
+		</TR>
+		</TABLE>
+
+</BODY>
+</HTML>

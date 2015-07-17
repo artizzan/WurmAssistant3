@@ -1,0 +1,30 @@
+# Two forms are supported; all matches are case insensitive.
+# - "exact match" replacement text
+# - /regular expression/ replacement text
+#  
+
+"asshole" .
+"asswipe" .
+"bitch" .
+"bugger" .
+"cocaine" .
+"cock" .
+"cunt" .
+"dick" .
+"faggot" .
+"fuck" .
+# Appears as a prefix in decent words
+/\bhomo\b/ .
+"marijuana" .
+"nigga" .
+"nigger" .
+"penis" .
+"piss" .
+"phuck" .
+"pussie" .
+"pussy" .
+"shit" .
+"slut" .
+"stfu" .
+# Swanky is good, wankers not
+/\bwank/ .

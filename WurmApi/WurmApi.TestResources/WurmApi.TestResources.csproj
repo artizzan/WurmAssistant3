@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C8C027A4-9357-4426-B26D-6005FFAE84C7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WurmAssistant3.TestResources</RootNamespace>
+    <AssemblyName>WurmAssistant3.TestResources</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="SevenZipSharp">
+      <HintPath>..\..\Lib\NuGetPackages\SevenZipSharp.0.64\lib\SevenZipSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestingEnvironment.cs" />
+    <Compile Include="TestingResourcesPackage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="7z.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\LogFileStreamReader-testdata\LogFileStreamReaderTestData.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\logs-samples-emptyfiles\TestGuy\PM__John.2012-02-03.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\logs-samples-emptyfiles\TestGuy\PM__John.2012-02.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\logs-samples-emptyfiles\TestGuy\_Combat.2012-01-03.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\logs-samples-emptyfiles\TestGuy\_Combat.2012-01-04.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\logs-samples-emptyfiles\TestGuy\_Combat.2012-01.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\logs-samples-emptyfiles\TestGuy\_Combat.2012-02.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\logs-samples-emptyfiles\TestGuy\_Combat.2013-06.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\logs-samples-emptyfiles\TestGuy\_Event.2012-02-02.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\logs-samples-emptyfiles\TestGuy\_Event.2012-02.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\logs-samples-emptyfiles\TestGuy\_Event.2012-03-05.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\logs-samples-emptyfiles\TestGuy\_Event.2012-03.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\MonthlyHeuristicsExtractor-sample-logs\unrecognized.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\MonthlyHeuristicsExtractor-sample-logs\Village.2012-10-24.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\MonthlyHeuristicsExtractor-sample-logs\Village.2013-03.empty.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\MonthlyHeuristicsExtractor-sample-logs\Village.2013-03.invaliddata.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\MonthlyHeuristicsExtractor-sample-logs\Village.2013-03.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\WebExtractorTests-raw-requests\Independence.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactBL\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactBL\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactBL\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactBR\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactBR\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactBR\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactTL\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactTL\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactTL\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactTR\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactTR\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactTR\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compact\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compact\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compact\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\default\AldurToolbeltDefault.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\default\autorun.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\default\gamesettings - Kopia.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\default\gamesettings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\default\keybindings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\default\myToolbeltSetup.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\default\test.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactBL\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactBL\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactBR\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactBR\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactTL\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactTL\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactTR\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compactTR\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compact\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\compact\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\default\gamesettings.txt.bak">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="BlueprintResourcePackages\wurm-configs-only\wurm\configs\default\words.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core\Core.csproj">
+      <Project>{b9e61cdc-72bd-4158-b77e-6850455a07cd}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

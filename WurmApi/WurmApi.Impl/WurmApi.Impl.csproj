@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{147284AB-A3D5-4322-92B0-E6ECC8CC7059}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AldurSoft.WurmApi.Impl</RootNamespace>
+    <AssemblyName>AldurSoft.WurmApi.Impl</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\NuGetPackages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HttpWebRequestsImpl\HttpWebRequests.cs" />
+    <Compile Include="HttpWebRequestsImpl\WurmServerStats.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ThreadGuardImpl\ThreadGuard.cs" />
+    <Compile Include="Utility\FileSystemSubdirectoriesMonitor.cs" />
+    <Compile Include="Utility\LogFileParser.cs" />
+    <Compile Include="Utility\LogFileStreamReaderFactory.cs" />
+    <Compile Include="Utility\ParsingHelper.cs" />
+    <Compile Include="Utility\WurmSubdirsMonitor.cs" />
+    <Compile Include="WurmApiDataContextImpl\WurmApiDataContext.cs" />
+    <Compile Include="WurmAutorunsImpl\WurmAutoruns.cs" />
+    <Compile Include="WurmCharacterDirectoriesImpl\WurmCharacterDirectories.cs" />
+    <Compile Include="WurmCharactersImpl\PlayerConfigWatcher.cs" />
+    <Compile Include="WurmCharactersImpl\WurmCharacter.cs" />
+    <Compile Include="WurmCharactersImpl\WurmCharacters.cs" />
+    <Compile Include="WurmConfigDirectoriesImpl\WurmConfigDirectories.cs" />
+    <Compile Include="WurmConfigFilesImpl\WurmConfigFiles.cs" />
+    <Compile Include="WurmConfigsImpl\ConfigReader.cs" />
+    <Compile Include="WurmConfigsImpl\ConfigWriter.cs" />
+    <Compile Include="WurmConfigsImpl\WurmConfig.cs" />
+    <Compile Include="WurmConfigsImpl\WurmConfigs.cs" />
+    <Compile Include="WurmGameClientsImpl\WurmGameClients.cs" />
+    <Compile Include="WurmLogDefinitionsImpl\WurmLogDefinitions.cs" />
+    <Compile Include="WurmLogFilesImpl\LogFileInfoFactory.cs" />
+    <Compile Include="WurmLogFilesImpl\LogTypeManager.cs" />
+    <Compile Include="WurmLogFilesImpl\WurmCharacterLogFiles.cs" />
+    <Compile Include="WurmLogFilesImpl\WurmLogFiles.cs" />
+    <Compile Include="WurmLogsHistoryImpl\Heuristics\CharacterMonthlyLogHeuristics.cs" />
+    <Compile Include="WurmLogsHistoryImpl\Heuristics\DayInfo.cs" />
+    <Compile Include="WurmLogsHistoryImpl\Heuristics\HeuristicsExtractionResult.cs" />
+    <Compile Include="WurmLogsHistoryImpl\Heuristics\IMonthlyHeuristicsDataBuilder.cs" />
+    <Compile Include="WurmLogsHistoryImpl\Heuristics\MonthlyDataBuilders\DataBuilder.cs" />
+    <Compile Include="WurmLogsHistoryImpl\Heuristics\MonthlyDataBuilders\DataBuilderV2.cs" />
+    <Compile Include="WurmLogsHistoryImpl\Heuristics\MonthlyFileHeuristics.cs" />
+    <Compile Include="WurmLogsHistoryImpl\Heuristics\MonthlyHeuristicsExtractor.cs" />
+    <Compile Include="WurmLogsHistoryImpl\Heuristics\MonthlyHeuristicsExtractorFactory.cs" />
+    <Compile Include="WurmLogsHistoryImpl\Heuristics\MonthlyLogFileHeuristicsFactory.cs" />
+    <Compile Include="WurmLogsHistoryImpl\LogsScanner.cs" />
+    <Compile Include="WurmLogsHistoryImpl\LogsScannerFactory.cs" />
+    <Compile Include="WurmLogsHistoryImpl\WurmLogsHistory.cs" />
+    <Compile Include="WurmLogsMonitorImpl\CharacterLogsMonitorEngine.cs" />
+    <Compile Include="WurmLogsMonitorImpl\CharacterLogsMonitorEngineFactory.cs" />
+    <Compile Include="WurmLogsMonitorImpl\LogsMonitorEngineManager.cs" />
+    <Compile Include="WurmLogsMonitorImpl\MonitorEvents.cs" />
+    <Compile Include="WurmLogsMonitorImpl\SingleFileMonitor.cs" />
+    <Compile Include="WurmLogsMonitorImpl\SingleFileMonitorFactory.cs" />
+    <Compile Include="WurmLogsMonitorImpl\WurmLogsMonitor.cs" />
+    <Compile Include="WurmPathsImpl\WurmPaths.cs" />
+    <Compile Include="WurmServerGroupsImpl\ServerGroup.cs" />
+    <Compile Include="WurmServerHistoryImpl\ServerHistoryProvider.cs" />
+    <Compile Include="WurmServerHistoryImpl\ServerHistoryProviderFactory.cs" />
+    <Compile Include="WurmServerHistoryImpl\SortedServerHistory.cs" />
+    <Compile Include="WurmServerHistoryImpl\WurmServerHistory.cs" />
+    <Compile Include="WurmServerListImpl\WurmServerList.cs" />
+    <Compile Include="WurmServersImpl\LiveLogs.cs" />
+    <Compile Include="WurmServersImpl\LiveLogsDataForCharacter.cs" />
+    <Compile Include="WurmServersImpl\LiveLogsDataQueue.cs" />
+    <Compile Include="WurmServersImpl\LogEntriesParser.cs" />
+    <Compile Include="WurmServersImpl\LogHistory.cs" />
+    <Compile Include="WurmServersImpl\LogHistorySaved.cs" />
+    <Compile Include="WurmServersImpl\WebFeedExtractor.cs" />
+    <Compile Include="WurmServersImpl\WebFeeds.cs" />
+    <Compile Include="WurmServersImpl\WurmDateAndUptime.cs" />
+    <Compile Include="WurmServersImpl\WurmServer.cs" />
+    <Compile Include="WurmServersImpl\WurmServerFactory.cs" />
+    <Compile Include="WurmServersImpl\WurmServers.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core\Core.csproj">
+      <Project>{b9e61cdc-72bd-4158-b77e-6850455a07cd}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SimplePersist\SimplePersist.Contracts\SimplePersist.Contracts.csproj">
+      <Project>{e3dfe2ca-6523-4a70-a145-22b43cf2de8d}</Project>
+      <Name>SimplePersist.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SimplePersist\SimplePersist.Persistence.FlatFiles\SimplePersist.Persistence.FlatFiles.csproj">
+      <Project>{dd77f37c-44c6-4cf1-9a6c-e736b82c06ad}</Project>
+      <Name>SimplePersist.Persistence.FlatFiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SimplePersist\SimplePersist.Serializers.JsonNet\SimplePersist.Serializers.JsonNet.csproj">
+      <Project>{74620697-8038-40d4-b394-9988d23b37ee}</Project>
+      <Name>SimplePersist.Serializers.JsonNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SimplePersist\SimplePersist\SimplePersist.csproj">
+      <Project>{f2d42263-c177-425c-b69c-6d53b1f4aaa0}</Project>
+      <Name>SimplePersist</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmApi.Contracts\WurmApi.Contracts.csproj">
+      <Project>{8f480cb0-5ee3-4ad7-a209-21eab461ebb3}</Project>
+      <Name>WurmApi.Contracts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

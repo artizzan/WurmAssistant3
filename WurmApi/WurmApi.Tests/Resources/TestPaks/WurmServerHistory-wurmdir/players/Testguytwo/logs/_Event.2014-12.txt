@@ -1,0 +1,30 @@
+﻿Logging started 2014-12-14
+[17:02:19] You will now fight normally.
+[17:02:19] You will now fight normally.
+[17:02:19] Sakuto is logged in on Xanadu.
+[17:02:19] Belfesar is logged in on Exodus.
+[17:02:19] Wocas is logged in on Xanadu.
+[17:02:19] Haraldost is logged in on Xanadu.
+[17:02:19] Fraeya is logged in on Xanadu.
+[17:02:19] Baloo is logged in on Xanadu.
+[17:02:19] Welcome back, Testguytwo! The Exodus server has been waiting for you.
+[17:02:21] You enter Misthaven.
+[17:02:21] You enter Freedom Isles.
+[17:02:21] You feel the presence of Fo.
+[17:02:21] You may not move right now.
+[17:02:21] 42 other players are online. You are on Exodus (765 totally in Wurm).
+[17:02:21] Type /help for available commands.
+[17:02:21] You feel rested.
+[17:02:28] The server has been up 1 days, 23 hours and 22 minutes.
+[17:02:28] It is 21:07:50 on Luck day in week 2 of the Snake's starfall in the year of 1045.
+Logging started 2014-12-14
+[17:08:19] Welcome back, Testguytwo! The Chaos server has been waiting for you.
+[17:08:21] You enter Misthaven.
+[17:08:21] You enter Freedom Isles.
+[17:08:21] You feel the presence of Fo.
+[17:08:21] You may not move right now.
+[17:08:21] 42 other players are online. You are on Chaos (765 totally in Wurm).
+[17:08:21] Type /help for available commands.
+[17:08:21] You feel rested.
+[17:08:28] The server has been up 1 days, 23 hours and 22 minutes.
+[17:08:28] It is 21:07:50 on Luck day in week 2 of the Snake's starfall in the year of 1045.

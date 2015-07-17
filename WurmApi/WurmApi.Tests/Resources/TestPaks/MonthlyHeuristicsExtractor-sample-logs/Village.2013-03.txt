@@ -1,0 +1,16 @@
+Logging started 2013-03-03
+[16:13:32] <Aldur> starts to disband the village of Misthaven.
+[16:13:32] <Aldur> has set Misthaven to disband in 24 hours.
+[16:13:32] <Aldur> has set Misthaven to disband in 24 hours.
+[16:13:36] <Lalawurm> has set Freedom And Cheese Gardens to disband immediately.
+Logging started 2013-03-03
+[21:54:18] <Aldur> starts to salvage the village of Misthaven.
+[21:54:47] <Aldur> has salvaged the village of Misthaven.
+Logging started 2013-03-06
+[19:34:26] <Aldur> starts to disband the village of Misthaven.
+[19:34:26] <Aldur> has set Misthaven to disband in 24 hours.
+[19:34:26] <Aldur> has set Misthaven to disband in 24 hours.
+Logging started 2013-03-07
+[18:45:39] <Lalawurm> has set Freedom And Cheese Gardens to disband immediately.
+Logging started 2013-03-15
+[18:31:16] <Scouter> has set Freedom And Cheese Hunting Lodge to disband immediately.

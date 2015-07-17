@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8F480CB0-5EE3-4AD7-A209-21EAB461EBB3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AldurSoft.WurmApi</RootNamespace>
+    <AssemblyName>AldurSoft.WurmApi.Contracts</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\NuGetPackages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CharacterName.cs" />
+    <Compile Include="DataModel\LogsHistoryModel\WurmCharacterLogsEntity.cs" />
+    <Compile Include="DataModel\LogsHistoryModel\WurmLogMonthlyFile.cs" />
+    <Compile Include="DataModel\LogsHistoryModel\WurmLogMonthlyFileHeuristics.cs" />
+    <Compile Include="DataModel\ServerHistoryModel\ServerHistory.cs" />
+    <Compile Include="DataModel\ServerHistoryModel\ServerStamp.cs" />
+    <Compile Include="DataModel\WurmServersModel\ServerData.cs" />
+    <Compile Include="DataModel\WurmServersModel\ServerDateStamped.cs" />
+    <Compile Include="DataModel\WurmServersModel\ServerUptimeStamped.cs" />
+    <Compile Include="DataModel\WurmServersModel\TimeDetails.cs" />
+    <Compile Include="DataModel\WurmServersModel\WurmServerLogsData.cs" />
+    <Compile Include="HttpWebResponse.cs" />
+    <Compile Include="IHttpWebRequests.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="InvalidSearchParametersException.cs" />
+    <Compile Include="IRequireRefresh.cs" />
+    <Compile Include="IThreadGuard.cs" />
+    <Compile Include="IWurmApi.cs" />
+    <Compile Include="IWurmApiDataContext.cs" />
+    <Compile Include="IWurmAutoruns.cs" />
+    <Compile Include="IWurmCharacter.cs" />
+    <Compile Include="IWurmCharacterDirectories.cs" />
+    <Compile Include="IWurmCharacterLogFiles.cs" />
+    <Compile Include="IWurmCharacters.cs" />
+    <Compile Include="IWurmConfig.cs" />
+    <Compile Include="IWurmConfigDirectories.cs" />
+    <Compile Include="IWurmConfigFiles.cs" />
+    <Compile Include="IWurmConfigs.cs" />
+    <Compile Include="IWurmGameClients.cs" />
+    <Compile Include="IWurmInstallDirectory.cs" />
+    <Compile Include="IWurmLogDefinitions.cs" />
+    <Compile Include="IWurmLogFiles.cs" />
+    <Compile Include="IWurmLogsHistory.cs" />
+    <Compile Include="IWurmLogsMonitor.cs" />
+    <Compile Include="IWurmPaths.cs" />
+    <Compile Include="IWurmServer.cs" />
+    <Compile Include="IWurmServerGroups.cs" />
+    <Compile Include="IWurmServerHistory.cs" />
+    <Compile Include="IWurmServerList.cs" />
+    <Compile Include="IWurmServers.cs" />
+    <Compile Include="LogDefinition.cs" />
+    <Compile Include="LogEntry.cs" />
+    <Compile Include="LogFileDate.cs" />
+    <Compile Include="LogFileInfo.cs" />
+    <Compile Include="LogSaveMode.cs" />
+    <Compile Include="LogSavingType.cs" />
+    <Compile Include="LogsLocation.cs" />
+    <Compile Include="LogsMonitorEventArgs.cs" />
+    <Compile Include="LogType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerGroup.cs" />
+    <Compile Include="ServerName.cs" />
+    <Compile Include="SkillGainRate.cs" />
+    <Compile Include="SpecificCharacterSearchParameters.cs" />
+    <Compile Include="ThreadGuardException.cs" />
+    <Compile Include="WurmApiException.cs" />
+    <Compile Include="WurmDateTime.cs" />
+    <Compile Include="WurmDay.cs" />
+    <Compile Include="WurmServerInfo.cs" />
+    <Compile Include="WurmStarfall.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core\Core.csproj">
+      <Project>{b9e61cdc-72bd-4158-b77e-6850455a07cd}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SimplePersist\SimplePersist.Contracts\SimplePersist.Contracts.csproj">
+      <Project>{e3dfe2ca-6523-4a70-a145-22b43cf2de8d}</Project>
+      <Name>SimplePersist.Contracts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

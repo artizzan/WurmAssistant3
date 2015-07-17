@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3C3A7717-408F-44F5-9760-7F8B6141B8F5}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AldurSoft.WurmAssistant3</RootNamespace>
+    <AssemblyName>AldurSoft.WurmAssistant3</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>WurmAssistantIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Caliburn.Micro">
+      <HintPath>..\..\Lib\NuGetPackages\Caliburn.Micro.Core.2.0.1\lib\net45\Caliburn.Micro.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform">
+      <HintPath>..\..\Lib\NuGetPackages\Caliburn.Micro.2.0.1\lib\net45\Caliburn.Micro.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\Lib\NuGetPackages\Castle.Core.3.2.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\NuGetPackages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\..\Lib\NuGetPackages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Conventions">
+      <HintPath>..\..\Lib\NuGetPackages\Ninject.Extensions.Conventions.3.2.0.0\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Factory">
+      <HintPath>..\..\Lib\NuGetPackages\Ninject.Extensions.Factory.3.2.1.0\lib\net45-full\Ninject.Extensions.Factory.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\..\Lib\NuGetPackages\NLog.3.2.0.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\Lib\NuGetPackages\Caliburn.Micro.2.0.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock">
+      <HintPath>..\..\Lib\NuGetPackages\Extended.Wpf.Toolkit.2.3\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero">
+      <HintPath>..\..\Lib\NuGetPackages\Extended.Wpf.Toolkit.2.3\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
+      <HintPath>..\..\Lib\NuGetPackages\Extended.Wpf.Toolkit.2.3\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010">
+      <HintPath>..\..\Lib\NuGetPackages\Extended.Wpf.Toolkit.2.3\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid">
+      <HintPath>..\..\Lib\NuGetPackages\Extended.Wpf.Toolkit.2.3\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\..\Lib\NuGetPackages\Extended.Wpf.Toolkit.2.3\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="AppCore\WurmApiLogger.cs" />
+    <Compile Include="SystemsCustomBind\Environment.cs" />
+    <Compile Include="AppCore\SimplePersistLogger.cs" />
+    <Compile Include="SystemsCustomBind\LoggingSystem.cs" />
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AppCore\ApplicationBootstrapper.cs" />
+    <Compile Include="Systems\TimerFactory.cs" />
+    <Compile Include="ViewModels\ApplicationWindowViewModel.cs" />
+    <Compile Include="ViewModels\Main\WurmClientConfigViewModel.cs" />
+    <Compile Include="ViewModels\Main\WurmClientInstallDirChooserViewModel.cs" />
+    <Compile Include="ViewModels\Modules\Calendar\CalendarToolControlViewModel.cs" />
+    <Compile Include="ViewModels\Modules\Granger\GrangerToolControlViewModel.cs" />
+    <Compile Include="ViewModels\Modules\LogScanner\LogScannerToolControlViewModel.cs" />
+    <Compile Include="ViewModels\Main\MainViewModel.cs" />
+    <Compile Include="ViewModels\Main\ToolboxViewModel.cs" />
+    <Compile Include="ViewModels\Modules\ModuleToolControlViewModel.cs" />
+    <Compile Include="ViewModels\Modules\Timers\TimersToolControlViewModel.cs" />
+    <Compile Include="ViewModels\Modules\Triggers\TriggersToolControlViewModel.cs" />
+    <Compile Include="Views\ApplicationWindowView.xaml.cs">
+      <DependentUpon>ApplicationWindowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Main\WurmClientConfigView.xaml.cs">
+      <DependentUpon>WurmClientConfigView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modules\Calendar\CalendarToolControlView.xaml.cs">
+      <DependentUpon>CalendarToolControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modules\Granger\GrangerToolControlView.xaml.cs">
+      <DependentUpon>GrangerToolControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modules\LogScanner\LogScannerToolControlView.xaml.cs">
+      <DependentUpon>LogScannerToolControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Main\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Main\ToolboxView.xaml.cs">
+      <DependentUpon>ToolboxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modules\Timers\TimersToolControlView.xaml.cs">
+      <DependentUpon>TimersToolControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modules\Triggers\TriggersToolControlView.xaml.cs">
+      <DependentUpon>TriggersToolControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Main\WurmClientInstallDirChooserView.xaml.cs">
+      <DependentUpon>WurmClientInstallDirChooserView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.AppFramework.Wpf\Core.AppFramework.Wpf.csproj">
+      <Project>{D2EF2E16-1001-497F-8420-9EAC02AA967F}</Project>
+      <Name>Core.AppFramework.Wpf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Core\Core.csproj">
+      <Project>{b9e61cdc-72bd-4158-b77e-6850455a07cd}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SimplePersist\SimplePersist.Contracts\SimplePersist.Contracts.csproj">
+      <Project>{e3dfe2ca-6523-4a70-a145-22b43cf2de8d}</Project>
+      <Name>SimplePersist.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SimplePersist\SimplePersist.Persistence.FlatFiles\SimplePersist.Persistence.FlatFiles.csproj">
+      <Project>{dd77f37c-44c6-4cf1-9a6c-e736b82c06ad}</Project>
+      <Name>SimplePersist.Persistence.FlatFiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SimplePersist\SimplePersist.Serializers.JsonNet\SimplePersist.Serializers.JsonNet.csproj">
+      <Project>{74620697-8038-40d4-b394-9988d23b37ee}</Project>
+      <Name>SimplePersist.Serializers.JsonNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SimplePersist\SimplePersist\SimplePersist.csproj">
+      <Project>{f2d42263-c177-425c-b69c-6d53b1f4aaa0}</Project>
+      <Name>SimplePersist</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WurmApi\WurmApi.Contracts\WurmApi.Contracts.csproj">
+      <Project>{8f480cb0-5ee3-4ad7-a209-21eab461ebb3}</Project>
+      <Name>WurmApi.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WurmApi\WurmApi.Impl\WurmApi.Impl.csproj">
+      <Project>{147284ab-a3d5-4322-92b0-e6ecc8cc7059}</Project>
+      <Name>WurmApi.Impl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\WurmApi\WurmApi\WurmApi.csproj">
+      <Project>{f23b8ad5-5c3b-4c9a-bc11-3577f1cb3272}</Project>
+      <Name>WurmApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant3.Contracts\WurmAssistant3.Contracts.csproj">
+      <Project>{359b3172-892d-4b29-9eac-aebf858cf5fe}</Project>
+      <Name>WurmAssistant3.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant3.Engine\WurmAssistant3.Engine.csproj">
+      <Project>{5bff4049-2ee2-4cd6-a74a-5fc3011f0cdb}</Project>
+      <Name>WurmAssistant3.Engine</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="WurmAssistantIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\ApplicationWindowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Main\WurmClientConfigView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modules\Calendar\CalendarToolControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modules\Granger\GrangerToolControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modules\LogScanner\LogScannerToolControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Main\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Main\ToolboxView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modules\Timers\TimersToolControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Modules\Triggers\TriggersToolControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Main\WurmClientInstallDirChooserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
