@@ -1,0 +1,3 @@
+[submodule "AldursLab"]
+	path = AldursLab
+	url = https://github.com/PeterAldur/AldursLab
