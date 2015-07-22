@@ -11,6 +11,8 @@
     <AssemblyName>AldurSoft.WurmApi.Impl</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,72 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HttpWebRequestsImpl\HttpWebRequests.cs" />
-    <Compile Include="HttpWebRequestsImpl\WurmServerStats.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ThreadGuardImpl\ThreadGuard.cs" />
-    <Compile Include="Utility\FileSystemSubdirectoriesMonitor.cs" />
-    <Compile Include="Utility\LogFileParser.cs" />
-    <Compile Include="Utility\LogFileStreamReaderFactory.cs" />
-    <Compile Include="Utility\ParsingHelper.cs" />
-    <Compile Include="Utility\WurmSubdirsMonitor.cs" />
-    <Compile Include="WurmApiDataContextImpl\WurmApiDataContext.cs" />
-    <Compile Include="WurmAutorunsImpl\WurmAutoruns.cs" />
-    <Compile Include="WurmCharacterDirectoriesImpl\WurmCharacterDirectories.cs" />
-    <Compile Include="WurmCharactersImpl\PlayerConfigWatcher.cs" />
-    <Compile Include="WurmCharactersImpl\WurmCharacter.cs" />
-    <Compile Include="WurmCharactersImpl\WurmCharacters.cs" />
-    <Compile Include="WurmConfigDirectoriesImpl\WurmConfigDirectories.cs" />
-    <Compile Include="WurmConfigFilesImpl\WurmConfigFiles.cs" />
-    <Compile Include="WurmConfigsImpl\ConfigReader.cs" />
-    <Compile Include="WurmConfigsImpl\ConfigWriter.cs" />
-    <Compile Include="WurmConfigsImpl\WurmConfig.cs" />
-    <Compile Include="WurmConfigsImpl\WurmConfigs.cs" />
-    <Compile Include="WurmGameClientsImpl\WurmGameClients.cs" />
-    <Compile Include="WurmLogDefinitionsImpl\WurmLogDefinitions.cs" />
-    <Compile Include="WurmLogFilesImpl\LogFileInfoFactory.cs" />
-    <Compile Include="WurmLogFilesImpl\LogTypeManager.cs" />
-    <Compile Include="WurmLogFilesImpl\WurmCharacterLogFiles.cs" />
-    <Compile Include="WurmLogFilesImpl\WurmLogFiles.cs" />
-    <Compile Include="WurmLogsHistoryImpl\Heuristics\CharacterMonthlyLogHeuristics.cs" />
-    <Compile Include="WurmLogsHistoryImpl\Heuristics\DayInfo.cs" />
-    <Compile Include="WurmLogsHistoryImpl\Heuristics\HeuristicsExtractionResult.cs" />
-    <Compile Include="WurmLogsHistoryImpl\Heuristics\IMonthlyHeuristicsDataBuilder.cs" />
-    <Compile Include="WurmLogsHistoryImpl\Heuristics\MonthlyDataBuilders\DataBuilder.cs" />
-    <Compile Include="WurmLogsHistoryImpl\Heuristics\MonthlyDataBuilders\DataBuilderV2.cs" />
-    <Compile Include="WurmLogsHistoryImpl\Heuristics\MonthlyFileHeuristics.cs" />
-    <Compile Include="WurmLogsHistoryImpl\Heuristics\MonthlyHeuristicsExtractor.cs" />
-    <Compile Include="WurmLogsHistoryImpl\Heuristics\MonthlyHeuristicsExtractorFactory.cs" />
-    <Compile Include="WurmLogsHistoryImpl\Heuristics\MonthlyLogFileHeuristicsFactory.cs" />
-    <Compile Include="WurmLogsHistoryImpl\LogsScanner.cs" />
-    <Compile Include="WurmLogsHistoryImpl\LogsScannerFactory.cs" />
-    <Compile Include="WurmLogsHistoryImpl\WurmLogsHistory.cs" />
-    <Compile Include="WurmLogsMonitorImpl\CharacterLogsMonitorEngine.cs" />
-    <Compile Include="WurmLogsMonitorImpl\CharacterLogsMonitorEngineFactory.cs" />
-    <Compile Include="WurmLogsMonitorImpl\LogsMonitorEngineManager.cs" />
-    <Compile Include="WurmLogsMonitorImpl\MonitorEvents.cs" />
-    <Compile Include="WurmLogsMonitorImpl\SingleFileMonitor.cs" />
-    <Compile Include="WurmLogsMonitorImpl\SingleFileMonitorFactory.cs" />
-    <Compile Include="WurmLogsMonitorImpl\WurmLogsMonitor.cs" />
-    <Compile Include="WurmPathsImpl\WurmPaths.cs" />
-    <Compile Include="WurmServerGroupsImpl\ServerGroup.cs" />
-    <Compile Include="WurmServerHistoryImpl\ServerHistoryProvider.cs" />
-    <Compile Include="WurmServerHistoryImpl\ServerHistoryProviderFactory.cs" />
-    <Compile Include="WurmServerHistoryImpl\SortedServerHistory.cs" />
-    <Compile Include="WurmServerHistoryImpl\WurmServerHistory.cs" />
-    <Compile Include="WurmServerListImpl\WurmServerList.cs" />
-    <Compile Include="WurmServersImpl\LiveLogs.cs" />
-    <Compile Include="WurmServersImpl\LiveLogsDataForCharacter.cs" />
-    <Compile Include="WurmServersImpl\LiveLogsDataQueue.cs" />
-    <Compile Include="WurmServersImpl\LogEntriesParser.cs" />
-    <Compile Include="WurmServersImpl\LogHistory.cs" />
-    <Compile Include="WurmServersImpl\LogHistorySaved.cs" />
-    <Compile Include="WurmServersImpl\WebFeedExtractor.cs" />
-    <Compile Include="WurmServersImpl\WebFeeds.cs" />
-    <Compile Include="WurmServersImpl\WurmDateAndUptime.cs" />
-    <Compile Include="WurmServersImpl\WurmServer.cs" />
-    <Compile Include="WurmServersImpl\WurmServerFactory.cs" />
-    <Compile Include="WurmServersImpl\WurmServers.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core\Core.csproj">
@@ -131,15 +68,18 @@
       <Project>{f2d42263-c177-425c-b69c-6d53b1f4aaa0}</Project>
       <Name>SimplePersist</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WurmApi.Contracts\WurmApi.Contracts.csproj">
-      <Project>{8f480cb0-5ee3-4ad7-a209-21eab461ebb3}</Project>
-      <Name>WurmApi.Contracts</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

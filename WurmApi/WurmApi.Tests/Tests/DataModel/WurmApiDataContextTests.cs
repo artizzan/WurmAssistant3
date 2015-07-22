@@ -8,13 +8,7 @@ using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
 using AldurSoft.SimplePersist;
-using AldurSoft.WurmApi.DataModel;
-using AldurSoft.WurmApi.DataModel.LogsHistoryModel;
-using AldurSoft.WurmApi.DataModel.ServerHistoryModel;
-using AldurSoft.WurmApi.DataModel.WurmServersModel;
-using AldurSoft.WurmApi.Impl;
-using AldurSoft.WurmApi.Impl.WurmApiDataContextImpl;
-
+using AldurSoft.WurmApi.Persistence.WurmApiDataContextModule;
 using NUnit.Framework;
 
 using Ploeh.AutoFixture;

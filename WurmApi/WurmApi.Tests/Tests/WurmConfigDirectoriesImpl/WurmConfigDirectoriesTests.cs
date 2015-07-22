@@ -7,10 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
-using AldurSoft.WurmApi.Impl.WurmConfigDirectoriesImpl;
-using AldurSoft.WurmApi.Impl.WurmPathsImpl;
 using AldurSoft.WurmApi.Tests.Tests.WurmCharacterDirectoriesImpl;
-
+using AldurSoft.WurmApi.Wurm.Configs.WurmConfigDirectoriesModule;
+using AldurSoft.WurmApi.Wurm.Paths;
+using AldurSoft.WurmApi.Wurm.Paths.WurmPathsModule;
 using Moq;
 
 using NUnit.Framework;

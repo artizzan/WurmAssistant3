@@ -2,7 +2,9 @@
 using System.IO;
 
 using AldurSoft.Core.Testing;
-
+using AldurSoft.WurmApi.Logging;
+using AldurSoft.WurmApi.Networking;
+using AldurSoft.WurmApi.Wurm.Paths;
 using Moq;
 
 using NUnit.Framework;

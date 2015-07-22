@@ -11,6 +11,8 @@
     <AssemblyName>AldurSoft.WurmApi.Contracts</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,66 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CharacterName.cs" />
-    <Compile Include="DataModel\LogsHistoryModel\WurmCharacterLogsEntity.cs" />
-    <Compile Include="DataModel\LogsHistoryModel\WurmLogMonthlyFile.cs" />
-    <Compile Include="DataModel\LogsHistoryModel\WurmLogMonthlyFileHeuristics.cs" />
-    <Compile Include="DataModel\ServerHistoryModel\ServerHistory.cs" />
-    <Compile Include="DataModel\ServerHistoryModel\ServerStamp.cs" />
-    <Compile Include="DataModel\WurmServersModel\ServerData.cs" />
-    <Compile Include="DataModel\WurmServersModel\ServerDateStamped.cs" />
-    <Compile Include="DataModel\WurmServersModel\ServerUptimeStamped.cs" />
-    <Compile Include="DataModel\WurmServersModel\TimeDetails.cs" />
-    <Compile Include="DataModel\WurmServersModel\WurmServerLogsData.cs" />
-    <Compile Include="HttpWebResponse.cs" />
-    <Compile Include="IHttpWebRequests.cs" />
-    <Compile Include="ILogger.cs" />
-    <Compile Include="InvalidSearchParametersException.cs" />
-    <Compile Include="IRequireRefresh.cs" />
-    <Compile Include="IThreadGuard.cs" />
-    <Compile Include="IWurmApi.cs" />
-    <Compile Include="IWurmApiDataContext.cs" />
-    <Compile Include="IWurmAutoruns.cs" />
-    <Compile Include="IWurmCharacter.cs" />
-    <Compile Include="IWurmCharacterDirectories.cs" />
-    <Compile Include="IWurmCharacterLogFiles.cs" />
-    <Compile Include="IWurmCharacters.cs" />
-    <Compile Include="IWurmConfig.cs" />
-    <Compile Include="IWurmConfigDirectories.cs" />
-    <Compile Include="IWurmConfigFiles.cs" />
-    <Compile Include="IWurmConfigs.cs" />
-    <Compile Include="IWurmGameClients.cs" />
-    <Compile Include="IWurmInstallDirectory.cs" />
-    <Compile Include="IWurmLogDefinitions.cs" />
-    <Compile Include="IWurmLogFiles.cs" />
-    <Compile Include="IWurmLogsHistory.cs" />
-    <Compile Include="IWurmLogsMonitor.cs" />
-    <Compile Include="IWurmPaths.cs" />
-    <Compile Include="IWurmServer.cs" />
-    <Compile Include="IWurmServerGroups.cs" />
-    <Compile Include="IWurmServerHistory.cs" />
-    <Compile Include="IWurmServerList.cs" />
-    <Compile Include="IWurmServers.cs" />
-    <Compile Include="LogDefinition.cs" />
-    <Compile Include="LogEntry.cs" />
-    <Compile Include="LogFileDate.cs" />
-    <Compile Include="LogFileInfo.cs" />
-    <Compile Include="LogSaveMode.cs" />
-    <Compile Include="LogSavingType.cs" />
-    <Compile Include="LogsLocation.cs" />
-    <Compile Include="LogsMonitorEventArgs.cs" />
-    <Compile Include="LogType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerGroup.cs" />
-    <Compile Include="ServerName.cs" />
-    <Compile Include="SkillGainRate.cs" />
-    <Compile Include="SpecificCharacterSearchParameters.cs" />
-    <Compile Include="ThreadGuardException.cs" />
-    <Compile Include="WurmApiException.cs" />
-    <Compile Include="WurmDateTime.cs" />
-    <Compile Include="WurmDay.cs" />
-    <Compile Include="WurmServerInfo.cs" />
-    <Compile Include="WurmStarfall.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Core\Core.csproj">
@@ -118,6 +61,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

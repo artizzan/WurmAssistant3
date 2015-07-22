@@ -10,9 +10,11 @@ using System.Threading.Tasks;
 using AldurSoft.Core;
 using AldurSoft.Core.Testing;
 using AldurSoft.SimplePersist;
-using AldurSoft.WurmApi.DataModel;
 using AldurSoft.WurmApi.Tests.Helpers;
-
+using AldurSoft.WurmApi.Wurm.Characters;
+using AldurSoft.WurmApi.Wurm.CharacterServers;
+using AldurSoft.WurmApi.Wurm.Logs;
+using AldurSoft.WurmApi.Wurm.Servers;
 using Moq;
 
 using NUnit.Framework;

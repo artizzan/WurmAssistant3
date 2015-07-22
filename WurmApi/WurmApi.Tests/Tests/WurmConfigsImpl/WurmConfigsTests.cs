@@ -6,10 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
-using AldurSoft.WurmApi.Impl.WurmConfigDirectoriesImpl;
-using AldurSoft.WurmApi.Impl.WurmConfigsImpl;
-using AldurSoft.WurmApi.Impl.WurmPathsImpl;
-
+using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.Logging;
+using AldurSoft.WurmApi.Validation;
+using AldurSoft.WurmApi.Wurm.Configs;
+using AldurSoft.WurmApi.Wurm.Configs.WurmConfigDirectoriesModule;
+using AldurSoft.WurmApi.Wurm.Configs.WurmConfigsModule;
+using AldurSoft.WurmApi.Wurm.GameClients;
+using AldurSoft.WurmApi.Wurm.Paths;
+using AldurSoft.WurmApi.Wurm.Paths.WurmPathsModule;
 using Moq;
 
 using NUnit.Framework;

@@ -20,6 +20,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,8 +58,9 @@
       <HintPath>..\..\Lib\NuGetPackages\NUnitTestAdapter.1.2\lib\nunit.core.interfaces.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\Lib\NuGetPackages\NUnit.3.0.0-alpha-4\lib\net45\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\..\Lib\NuGetPackages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="nunit.util">
       <HintPath>..\..\Lib\NuGetPackages\NUnitTestAdapter.1.2\lib\nunit.util.dll</HintPath>
@@ -275,14 +278,6 @@
     <ProjectReference Include="..\..\SimplePersist\SimplePersist\SimplePersist.csproj">
       <Project>{f2d42263-c177-425c-b69c-6d53b1f4aaa0}</Project>
       <Name>SimplePersist</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WurmApi.Contracts\WurmApi.Contracts.csproj">
-      <Project>{8f480cb0-5ee3-4ad7-a209-21eab461ebb3}</Project>
-      <Name>WurmApi.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WurmApi.Impl\WurmApi.Impl.csproj">
-      <Project>{147284ab-a3d5-4322-92b0-e6ecc8cc7059}</Project>
-      <Name>WurmApi.Impl</Name>
     </ProjectReference>
     <ProjectReference Include="..\WurmApi\WurmApi.csproj">
       <Project>{f23b8ad5-5c3b-4c9a-bc11-3577f1cb3272}</Project>
@@ -744,6 +739,13 @@
     <PreBuildEvent>REM cleanup target dir
 rd /s /q "$(TargetDir)"</PreBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

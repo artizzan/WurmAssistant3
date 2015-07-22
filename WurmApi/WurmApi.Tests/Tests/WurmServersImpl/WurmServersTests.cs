@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 
 using AldurSoft.Core;
 using AldurSoft.Core.Testing;
+using AldurSoft.WurmApi.Networking;
 using AldurSoft.WurmApi.Tests.Helpers;
-
+using AldurSoft.WurmApi.Wurm.Characters;
+using AldurSoft.WurmApi.Wurm.DateAndTime;
+using AldurSoft.WurmApi.Wurm.Logs;
+using AldurSoft.WurmApi.Wurm.Servers;
 using Moq;
 
 using NUnit.Framework;

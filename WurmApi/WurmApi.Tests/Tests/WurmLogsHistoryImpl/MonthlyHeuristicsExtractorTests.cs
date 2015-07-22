@@ -7,11 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
-using AldurSoft.WurmApi.Impl.Utility;
-using AldurSoft.WurmApi.Impl.WurmLogDefinitionsImpl;
-using AldurSoft.WurmApi.Impl.WurmLogFilesImpl;
-using AldurSoft.WurmApi.Impl.WurmLogsHistoryImpl.Heuristics;
-
+using AldurSoft.WurmApi.Logging;
+using AldurSoft.WurmApi.Wurm.Logs.Parsing;
+using AldurSoft.WurmApi.Wurm.Logs.Reading;
+using AldurSoft.WurmApi.Wurm.Logs.Searching.WurmLogsHistoryModule.Heuristics;
+using AldurSoft.WurmApi.Wurm.Logs.WurmLogDefinitionsModule;
+using AldurSoft.WurmApi.Wurm.Logs.WurmLogFilesModule;
 using Moq;
 
 using NUnit.Framework;

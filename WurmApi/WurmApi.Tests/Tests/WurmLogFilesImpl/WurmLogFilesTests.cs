@@ -8,11 +8,16 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
-using AldurSoft.WurmApi.Impl.WurmCharacterDirectoriesImpl;
-using AldurSoft.WurmApi.Impl.WurmLogDefinitionsImpl;
-using AldurSoft.WurmApi.Impl.WurmLogFilesImpl;
-using AldurSoft.WurmApi.Impl.WurmPathsImpl;
-
+using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.Logging;
+using AldurSoft.WurmApi.Wurm.CharacterDirectories.WurmCharacterDirectoriesModule;
+using AldurSoft.WurmApi.Wurm.Characters;
+using AldurSoft.WurmApi.Wurm.Logs;
+using AldurSoft.WurmApi.Wurm.Logs.Searching;
+using AldurSoft.WurmApi.Wurm.Logs.WurmLogDefinitionsModule;
+using AldurSoft.WurmApi.Wurm.Logs.WurmLogFilesModule;
+using AldurSoft.WurmApi.Wurm.Paths;
+using AldurSoft.WurmApi.Wurm.Paths.WurmPathsModule;
 using Moq;
 
 using NUnit.Framework;

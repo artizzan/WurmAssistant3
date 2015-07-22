@@ -1,25 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using AldurSoft.WurmApi.DataModel;
-using AldurSoft.WurmApi.Impl;
-using AldurSoft.WurmApi.Impl.HttpWebRequestsImpl;
-using AldurSoft.WurmApi.Impl.ThreadGuardImpl;
-using AldurSoft.WurmApi.Impl.WurmApiDataContextImpl;
-using AldurSoft.WurmApi.Impl.WurmAutorunsImpl;
-using AldurSoft.WurmApi.Impl.WurmCharacterDirectoriesImpl;
-using AldurSoft.WurmApi.Impl.WurmCharactersImpl;
-using AldurSoft.WurmApi.Impl.WurmConfigDirectoriesImpl;
-using AldurSoft.WurmApi.Impl.WurmConfigsImpl;
-using AldurSoft.WurmApi.Impl.WurmGameClientsImpl;
-using AldurSoft.WurmApi.Impl.WurmLogDefinitionsImpl;
-using AldurSoft.WurmApi.Impl.WurmLogFilesImpl;
-using AldurSoft.WurmApi.Impl.WurmLogsHistoryImpl;
-using AldurSoft.WurmApi.Impl.WurmLogsMonitorImpl;
-using AldurSoft.WurmApi.Impl.WurmPathsImpl;
-using AldurSoft.WurmApi.Impl.WurmServerHistoryImpl;
-using AldurSoft.WurmApi.Impl.WurmServerListImpl;
-using AldurSoft.WurmApi.Impl.WurmServersImpl;
+using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.Logging;
+using AldurSoft.WurmApi.Networking;
+using AldurSoft.WurmApi.Networking.HttpWebRequestsModule;
+using AldurSoft.WurmApi.Persistence;
+using AldurSoft.WurmApi.Persistence.WurmApiDataContextModule;
+using AldurSoft.WurmApi.Validation;
+using AldurSoft.WurmApi.Validation.ThreadGuardModule;
+using AldurSoft.WurmApi.Wurm.Autoruns;
+using AldurSoft.WurmApi.Wurm.Autoruns.WurmAutorunsModule;
+using AldurSoft.WurmApi.Wurm.CharacterDirectories;
+using AldurSoft.WurmApi.Wurm.CharacterDirectories.WurmCharacterDirectoriesModule;
+using AldurSoft.WurmApi.Wurm.Characters;
+using AldurSoft.WurmApi.Wurm.Characters.WurmCharactersModule;
+using AldurSoft.WurmApi.Wurm.CharacterServers;
+using AldurSoft.WurmApi.Wurm.CharacterServers.WurmServerHistoryModule;
+using AldurSoft.WurmApi.Wurm.Configs;
+using AldurSoft.WurmApi.Wurm.Configs.WurmConfigDirectoriesModule;
+using AldurSoft.WurmApi.Wurm.Configs.WurmConfigsModule;
+using AldurSoft.WurmApi.Wurm.GameClients;
+using AldurSoft.WurmApi.Wurm.GameClients.WurmGameClientsModule;
+using AldurSoft.WurmApi.Wurm.Logs;
+using AldurSoft.WurmApi.Wurm.Logs.Monitoring;
+using AldurSoft.WurmApi.Wurm.Logs.Monitoring.WurmLogsMonitorModule;
+using AldurSoft.WurmApi.Wurm.Logs.Searching;
+using AldurSoft.WurmApi.Wurm.Logs.Searching.WurmLogsHistoryModule;
+using AldurSoft.WurmApi.Wurm.Logs.WurmLogDefinitionsModule;
+using AldurSoft.WurmApi.Wurm.Logs.WurmLogFilesModule;
+using AldurSoft.WurmApi.Wurm.Paths;
+using AldurSoft.WurmApi.Wurm.Paths.WurmInstallDirectoryModule;
+using AldurSoft.WurmApi.Wurm.Paths.WurmPathsModule;
+using AldurSoft.WurmApi.Wurm.Servers;
+using AldurSoft.WurmApi.Wurm.Servers.WurmServersModule;
 
 namespace AldurSoft.WurmApi
 {
@@ -57,12 +71,12 @@ namespace AldurSoft.WurmApi
 
         public WurmApiManager(
             WurmApiDataDirectory dataDirectory,
-            WurmGameClientInstallDirectory gameClientInstallDirectory,
+            WurmInstallDirectory installDirectory,
             ILogger wurmApiLogger)
         {
             threadGuard = new ThreadGuard();
             IHttpWebRequests httpRequests = new HttpWebRequests();
-            ConstructSystems(dataDirectory.FullPath, gameClientInstallDirectory, httpRequests, wurmApiLogger);
+            ConstructSystems(dataDirectory.FullPath, installDirectory, httpRequests, wurmApiLogger);
         }
 
         /// <summary>
