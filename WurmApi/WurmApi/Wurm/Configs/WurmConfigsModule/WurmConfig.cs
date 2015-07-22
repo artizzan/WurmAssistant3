@@ -12,6 +12,10 @@ namespace AldurSoft.WurmApi.Wurm.Configs.WurmConfigsModule
     /// </summary>
     public class WurmConfig : IDisposable, IWurmConfig, IRequireRefresh
     {
+        // note: editing config through IWurmApi is not allowed,
+        // because there is no good way to ensure, Wurm Game Client isn't accessing it at the moment
+        // setters are maintained to support testing
+
         private readonly FileInfo gameSettingsFileInfo;
         private readonly IWurmGameClients wurmGameClientsImpl;
         private readonly IThreadGuard threadGuard;

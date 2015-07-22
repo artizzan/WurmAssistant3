@@ -11,14 +11,6 @@ namespace AldurSoft.WurmApi.Wurm.Configs
     /// </remarks>
     public interface IWurmConfig
     {
-        /// <summary>
-        /// Indicates if editing this config is currently possible.
-        /// </summary>
-        /// <remarks>
-        /// Note that this value can change between reading it and attempting actual modification on any property.
-        /// </remarks>
-        bool CanChangeConfig { get; }
-
         LogsLocation CustomTimerSource { get; }
 
         LogsLocation ExecSource { get; }
@@ -27,37 +19,21 @@ namespace AldurSoft.WurmApi.Wurm.Configs
 
         LogsLocation AutoRunSource { get; }
 
-        /// <summary></summary>
-        /// <exception cref="WurmApiException">Setting this value is currently not allowed.</exception>
-        LogSaveMode IrcLoggingType { get; set; }
+        LogSaveMode IrcLoggingType { get; }
 
-        /// <summary></summary>
-        /// <exception cref="WurmApiException">Setting this value is currently not allowed.</exception>
-        LogSaveMode OtherLoggingType { get; set; }
+        LogSaveMode OtherLoggingType { get; }
 
-        /// <summary></summary>
-        /// <exception cref="WurmApiException">Setting this value is currently not allowed.</exception>
-        LogSaveMode EventLoggingType { get; set; }
+        LogSaveMode EventLoggingType { get; }
 
-        /// <summary></summary>
-        /// <exception cref="WurmApiException">Setting this value is currently not allowed.</exception>
-        SkillGainRate SkillGainRate { get; set; }
+        SkillGainRate SkillGainRate { get; }
 
-        /// <summary></summary>
-        /// <exception cref="WurmApiException">Setting this value is currently not allowed.</exception>
-        bool? NoSkillMessageOnAlignmentChange { get; set; }
+        bool? NoSkillMessageOnAlignmentChange { get; }
 
-        /// <summary></summary>
-        /// <exception cref="WurmApiException">Setting this value is currently not allowed.</exception>
-        bool? NoSkillMessageOnFavorChange { get; set; }
+        bool? NoSkillMessageOnFavorChange { get; }
 
-        /// <summary></summary>
-        /// <exception cref="WurmApiException">Setting this value is currently not allowed.</exception>
-        bool? SaveSkillsOnQuit { get; set; }
+        bool? SaveSkillsOnQuit { get; }
 
-        /// <summary></summary>
-        /// <exception cref="WurmApiException">Setting this value is currently not allowed.</exception>
-        bool? TimestampMessages { get; set; }
+        bool? TimestampMessages { get; }
 
         /// <summary>
         /// Directory path, where this config is located
@@ -66,6 +42,9 @@ namespace AldurSoft.WurmApi.Wurm.Configs
 
         event EventHandler ConfigChanged;
 
+        /// <summary>
+        /// Wurm Game Client identificator of this config.
+        /// </summary>
         string Name { get; }
     }
 }

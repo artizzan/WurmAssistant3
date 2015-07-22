@@ -50,52 +50,6 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigsImpl
         }
 
         [Test]
-        public void ChangingConfig()
-        {
-            var wurmDir = CreateTestPakFromDir(Path.Combine(TestPaksDirFullPath, "WurmDir-configs"));
-            // wurm dir has to be reused
-            {
-                using (var frame = new MockFrame(this, wurmDir))
-                {
-                    var wurmConfigs = frame.System;
-                    var config = wurmConfigs.GetConfig(CompactConfigName);
-                    config.EventLoggingType = LogSaveMode.Daily;
-                    config.IrcLoggingType = LogSaveMode.Daily;
-                    config.OtherLoggingType = LogSaveMode.Daily;
-                    config.SkillGainRate = SkillGainRate.PerInteger;
-                    config.SaveSkillsOnQuit = false;
-                    config.TimestampMessages = false;
-                    config.NoSkillMessageOnAlignmentChange = true;
-                    config.NoSkillMessageOnFavorChange = true;
-                    Assert.AreEqual(config.EventLoggingType, LogSaveMode.Daily);
-                    Assert.AreEqual(config.IrcLoggingType, LogSaveMode.Daily);
-                    Assert.AreEqual(config.OtherLoggingType, LogSaveMode.Daily);
-                    Assert.AreEqual(config.SkillGainRate, SkillGainRate.PerInteger);
-                    Assert.AreEqual(config.SaveSkillsOnQuit, false);
-                    Assert.AreEqual(config.TimestampMessages, false);
-                    Assert.AreEqual(config.NoSkillMessageOnAlignmentChange, true);
-                    Assert.AreEqual(config.NoSkillMessageOnFavorChange, true);
-                }
-            }
-
-            {
-                using (var frame = new MockFrame(this, wurmDir))
-                {
-                    var wurmConfigs = frame.System;
-                    var config = wurmConfigs.GetConfig(CompactConfigName);
-                    Assert.AreEqual(config.EventLoggingType, LogSaveMode.Daily);
-                    Assert.AreEqual(config.IrcLoggingType, LogSaveMode.Daily);
-                    Assert.AreEqual(config.OtherLoggingType, LogSaveMode.Daily);
-                    Assert.AreEqual(config.SkillGainRate, SkillGainRate.PerInteger);
-                    Assert.AreEqual(config.SaveSkillsOnQuit, false);
-                    Assert.AreEqual(config.TimestampMessages, false);
-                    Assert.AreEqual(config.NoSkillMessageOnAlignmentChange, true);
-                    Assert.AreEqual(config.NoSkillMessageOnFavorChange, true);
-                }
-            }
-        }
-
-        [Test]
         public async Task ChangeEvents()
         {
             var wurmDir = CreateTestPakFromDir(Path.Combine(TestPaksDirFullPath, "WurmDir-configs"));
@@ -104,7 +58,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigsImpl
                 using (var frame = new MockFrame(this, wurmDir))
                 {
                     var wurmConfigs = frame.System;
-                    var config = wurmConfigs.GetConfig(CompactConfigName);
+                    var config = (WurmConfig)wurmConfigs.GetConfig(CompactConfigName);
                     config.SkillGainRate = SkillGainRate.PerInteger;
                     await Task.Delay(TimeSpan.FromMilliseconds(5));
                     // expecting changewatcher event may fail, depends on file system response time
