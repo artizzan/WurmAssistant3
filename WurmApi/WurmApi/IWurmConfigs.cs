@@ -11,7 +11,7 @@ namespace AldurSoft.WurmApi
         /// <summary>
         /// Triggered, when config is edited in any way.
         /// </summary>
-        event EventHandler<EventArgs> ConfigsChanged;
+        event EventHandler<EventArgs> AvailableConfigsChanged;
 
         /// <summary>
         /// Enumerates all configs detected and managed by WurmApi.

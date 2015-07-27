@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AldurSoft.WurmApi.Modules.Events.Messages;
+using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
 
-namespace AldurSoft.WurmApi.Modules.Events
+namespace AldurSoft.WurmApi.Modules.Events.Internal
 {
     /// <summary>
     ///   Enables loosely-coupled publication of and subscription to events.

@@ -6,14 +6,11 @@ namespace AldurSoft.WurmApi.Utility
 {
     public class LogFileParser
     {
-        private readonly ParsingHelper parsingHelper;
         private readonly ILogger logger;
 
-        public LogFileParser(ParsingHelper parsingHelper, ILogger logger)
+        public LogFileParser(ILogger logger)
         {
-            if (parsingHelper == null) throw new ArgumentNullException("parsingHelper");
             if (logger == null) throw new ArgumentNullException("logger");
-            this.parsingHelper = parsingHelper;
             this.logger = logger;
         }
 
@@ -38,7 +35,7 @@ namespace AldurSoft.WurmApi.Utility
                 }
 
                 // handle timestamp
-                var lineStamp = parsingHelper.TryParseTimestampFromLogLine(line);
+                var lineStamp = ParsingHelper.TryParseTimestampFromLogLine(line);
                 if (lineStamp == TimeSpan.MinValue)
                 {
                     // bad timestamp may indicate corrupted file, special unforseen case 
@@ -61,8 +58,8 @@ namespace AldurSoft.WurmApi.Utility
                     currentLineStamp = lineStamp;
                 }
 
-                string source = parsingHelper.TryParseSourceFromLogLine(line);
-                string content = parsingHelper.TryParseContentFromLogLine(line);
+                string source = ParsingHelper.TryParseSourceFromLogLine(line);
+                string content = ParsingHelper.TryParseContentFromLogLine(line);
 
                 LogEntry entry = new LogEntry()
                 {
@@ -86,8 +83,8 @@ namespace AldurSoft.WurmApi.Utility
                 {
                     continue;
                 }
-                string source = parsingHelper.TryParseSourceFromLogLine(line);
-                string content = parsingHelper.TryParseContentFromLogLine(line);
+                string source = ParsingHelper.TryParseSourceFromLogLine(line);
+                string content = ParsingHelper.TryParseContentFromLogLine(line);
 
                 LogEntry entry = new LogEntry()
                 {
@@ -102,7 +99,7 @@ namespace AldurSoft.WurmApi.Utility
 
         private bool IsLoggingStartedLine(string line)
         {
-            return parsingHelper.IsLoggingStartedLine(line);
+            return ParsingHelper.IsLoggingStartedLine(line);
         }
 
         private void HandleUnparseableTimestamp(LogFileInfo logFileInfo, string line, List<LogEntry> result)
@@ -162,20 +159,17 @@ namespace AldurSoft.WurmApi.Utility
 
     public class LogFileParserFactory
     {
-        private readonly ParsingHelper parsingHelper;
         private readonly ILogger logger;
 
-        public LogFileParserFactory(ParsingHelper parsingHelper, ILogger logger)
+        public LogFileParserFactory(ILogger logger)
         {
-            if (parsingHelper == null) throw new ArgumentNullException("parsingHelper");
             if (logger == null) throw new ArgumentNullException("logger");
-            this.parsingHelper = parsingHelper;
             this.logger = logger;
         }
 
         public LogFileParser Create()
         {
-            return new LogFileParser(parsingHelper, logger);
+            return new LogFileParser(logger);
         }
     }
 }

@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using AldurSoft.Core.Testing;
 using AldurSoft.WurmApi.Infrastructure;
 using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Events.Internal;
+using AldurSoft.WurmApi.Modules.Events.Public;
 using AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories;
 using AldurSoft.WurmApi.Modules.Wurm.Configs;
 using AldurSoft.WurmApi.Modules.Wurm.Paths;
@@ -132,12 +134,14 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigsImpl
                 this.baseFixture = baseFixture;
                 WurmInstallDirectory.Setup(directory => directory.FullPath)
                     .Returns(this.wurmDir.DirectoryFullPath);
-
-                wurmConfigDirectories = new WurmConfigDirectories(new WurmPaths(WurmInstallDirectory.Object), new LoggerStub());
+                var publicEventInvoker = new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub());
+                var internalEventAggregator = new InternalEventAggregator();
+                wurmConfigDirectories = new WurmConfigDirectories(new WurmPaths(WurmInstallDirectory.Object), publicEventInvoker, internalEventAggregator);
                 System = new WurmConfigs(
                     wurmConfigDirectories,
                     Mock.Of<ILogger>(),
-                    new SimpleEventMarshaller());
+                    publicEventInvoker,
+                    internalEventAggregator);
             }
 
             public void Dispose()

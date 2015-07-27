@@ -9,14 +9,6 @@ namespace AldurSoft.WurmApi
     public interface IWurmLogFiles
     {
         /// <summary>
-        /// Gets the log files based on search parameters.
-        /// Returns zero-count enumerable if nothing found.
-        /// </summary>
-        /// <param name="searchParameters">The search parameters.</param>
-        [Obsolete]
-        IEnumerable<LogFileInfo> TryGetLogFiles(LogSearchParameters searchParameters);
-
-        /// <summary>
         /// Gets the log files provider for specific character.
         /// </summary>
         /// <param name="characterName">Name of the character.</param>

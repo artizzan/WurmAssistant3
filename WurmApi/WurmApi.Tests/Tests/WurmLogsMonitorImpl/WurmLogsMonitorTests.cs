@@ -7,6 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
+using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Events.Internal;
+using AldurSoft.WurmApi.Modules.Events.Public;
 using AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories;
 using AldurSoft.WurmApi.Modules.Wurm.LogDefinitions;
 using AldurSoft.WurmApi.Modules.Wurm.LogFiles;
@@ -35,11 +38,15 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
             installDirectory.GetMock()
                 .Setup(directory => directory.FullPath)
                 .Returns(WurmDir.DirectoryFullPath);
-            wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDirectory), new LoggerStub());
+            var internalEventAggregator = new InternalEventAggregator();
+            wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDirectory),
+                new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()), internalEventAggregator);
             wurmLogFiles = new WurmLogFiles(
                 wurmCharacterDirectories,
                 Mock.Of<ILogger>(),
-                new WurmLogDefinitions());
+                new WurmLogDefinitions(),
+                internalEventAggregator,
+                new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()));
             System =
                 new WurmLogsMonitor(
                     wurmLogFiles,

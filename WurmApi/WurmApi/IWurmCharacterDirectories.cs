@@ -9,7 +9,7 @@ namespace AldurSoft.WurmApi
 
         IEnumerable<string> AllDirectoriesFullPaths { get; }
 
-        event EventHandler DirectoriesChanged;
+        event EventHandler<EventArgs> DirectoriesChanged;
 
         /// <summary>
         /// </summary>

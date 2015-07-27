@@ -53,8 +53,9 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
         /// <returns></returns>
         public async Task<IList<LogEntry>> ExtractEntries()
         {
+            var man = this.wurmLogFiles.GetManagerForCharacter(logSearchParameters.CharacterName);
             LogFileInfo[] logFileInfos =
-                this.wurmLogFiles.TryGetLogFiles(logSearchParameters).ToArray();
+                man.TryGetLogFiles(logSearchParameters.DateFrom, logSearchParameters.DateTo).ToArray();
 
             IEnumerable<LogFileInfo> monthlyFiles = logFileInfos.Where(info => info.LogFileDate.LogSavingType == LogSavingType.Monthly);
             HeuristicsFileMap heuristicsFileMap = new HeuristicsFileMap();

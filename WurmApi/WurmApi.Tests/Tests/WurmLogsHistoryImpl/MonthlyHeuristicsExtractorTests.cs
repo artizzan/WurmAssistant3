@@ -53,7 +53,6 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
             
             return new MonthlyHeuristicsExtractor(
                 factory.Create(info), 
-                new ParsingHelper(),
                 new LogFileStreamReaderFactory(),
                 Mock.Of<ILogger>());
         }

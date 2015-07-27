@@ -1,8 +1,11 @@
 using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
 using AldurSoft.Core;
 using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Events.Public;
 using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Configs
@@ -18,19 +21,24 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
 
         readonly FileInfo gameSettingsFileInfo;
         readonly ILogger logger;
-        readonly IEventMarshaller eventMarshaller;
+        readonly IPublicEventInvoker publicEventMarshaller;
+
         readonly ConfigReader configReader;
         readonly ConfigWriter configWriter;
 
         readonly FileSystemWatcher configFileWatcher;
         readonly object locker = new object();
 
+        private volatile int rebuildPending = 1;
+
+        readonly PublicEvent onConfigChanged;
+
         internal WurmConfig(string gameSettingsFullPath, [NotNull] ILogger logger,
-            [NotNull] IEventMarshaller eventMarshaller)
+            [NotNull] IPublicEventInvoker publicEventMarshaller)
         {
             if (gameSettingsFullPath == null) throw new ArgumentNullException("gameSettingsFullPath");
             if (logger == null) throw new ArgumentNullException("logger");
-            if (eventMarshaller == null) throw new ArgumentNullException("eventMarshaller");
+            if (publicEventMarshaller == null) throw new ArgumentNullException("publicEventMarshaller");
             this.gameSettingsFileInfo = new FileInfo(gameSettingsFullPath);
             if (gameSettingsFileInfo.Directory == null)
             {
@@ -40,13 +48,18 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
             Name = gameSettingsFileInfo.Directory.Name;
 
             this.logger = logger;
-            this.eventMarshaller = eventMarshaller;
+            this.publicEventMarshaller = publicEventMarshaller;
+
+            onConfigChanged = publicEventMarshaller.Create(() => ConfigChanged.SafeInvoke(this),
+                TimeSpan.FromMilliseconds(500));
+
             this.configReader = new ConfigReader(this);
             this.configWriter = new ConfigWriter(this);
 
             configFileWatcher = new FileSystemWatcher(gameSettingsFileInfo.Directory.FullName)
             {
-                Filter = gameSettingsFileInfo.Name
+                Filter = gameSettingsFileInfo.Name,
+                NotifyFilter = NotifyFilters.Size | NotifyFilters.LastWrite
             };
             configFileWatcher.Changed += ConfigFileWatcherOnChanged;
             configFileWatcher.Created += ConfigFileWatcherOnChanged;
@@ -57,11 +70,9 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
 
         void ConfigFileWatcherOnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
-            this.isCacheValid = 0;
+            this.rebuildPending = 1;
+            onConfigChanged.Trigger();
         }
-
-        private volatile int isCacheValid = 0;
-        private bool IsCacheValid { get { return isCacheValid == 0; } }
 
         public string FullConfigFilePath
         {
@@ -78,6 +89,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
 
         public void Dispose()
         {
+            onConfigChanged.Detach();
             configFileWatcher.EnableRaisingEvents = false;
             configFileWatcher.Dispose();
         }
@@ -97,31 +109,15 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         private bool? saveSkillsOnQuit;
         private bool? timestampMessages;
 
-        public event EventHandler ConfigChanged;
+        public event EventHandler<EventArgs> ConfigChanged;
 
         public string Name { get; private set; }
-
-        protected virtual void OnConfigChanged()
-        {
-            try
-            {
-                EventHandler handler = ConfigChanged;
-                if (handler != null)
-                {
-                    eventMarshaller.Marshal(() => handler(this, EventArgs.Empty));
-                }
-            }
-            catch (Exception exception)
-            {
-                logger.Log(LogLevel.Error, "OnConfigChanged delegate threw exception", this, exception);
-            }
-        }
 
         public LogsLocation CustomTimerSource
         {
             get
             {
-                RefreshValues();
+                Refresh();
                 return customTimerSource;
             }
         }
@@ -130,7 +126,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                RefreshValues();
+                Refresh();
                 return execSource;
             }
         }
@@ -139,7 +135,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                RefreshValues();
+                Refresh();
                 return keyBindSource;
             }
         }
@@ -148,7 +144,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                RefreshValues();
+                Refresh();
                 return autoRunSource;
             }
         }
@@ -157,12 +153,13 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                RefreshValues();
+                Refresh();
                 return ircLoggingType;
             }
             set
             {
                 this.configWriter.SetIrcLoggingMode(value);
+                HaveChanged();
             }
         }
 
@@ -170,12 +167,13 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                RefreshValues();
+                Refresh();
                 return otherLoggingType;
             }
             set
             {
                 this.configWriter.SetOtherLoggingMode(value);
+                HaveChanged();
             }
         }
 
@@ -183,12 +181,13 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                RefreshValues();
+                Refresh();
                 return eventLoggingType;
             }
             set
             {
                 this.configWriter.SetEventLoggingMode(value);
+                HaveChanged();
             }
         }
 
@@ -196,12 +195,13 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                RefreshValues();
+                Refresh();
                 return skillGainRate;
             }
             set
             {
                 this.configWriter.SetSkillGainRate(value);
+                HaveChanged();
             }
         }
 
@@ -209,12 +209,13 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                RefreshValues();
+                Refresh();
                 return noSkillMessageOnAlignmentChange;
             }
             set
             {
                 this.configWriter.SetNoSkillMessageOnAlignmentChange(value);
+                HaveChanged();
             }
         }
 
@@ -222,12 +223,13 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                RefreshValues();
+                Refresh();
                 return noSkillMessageOnFavorChange;
             }
             set
             {
                 this.configWriter.SetNoSkillMessageOnFavorChange(value);
+                HaveChanged();
             }
         }
 
@@ -235,12 +237,13 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                RefreshValues();
+                Refresh();
                 return saveSkillsOnQuit;
             }
             set
             {
                 this.configWriter.SetSaveSkillsOnQuit(value);
+                HaveChanged();
             }
         }
 
@@ -248,23 +251,29 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                RefreshValues();
+                Refresh();
                 return timestampMessages;
             }
             set
             {
                 this.configWriter.SetTimestampMessages(value);
+                HaveChanged();
             }
         }
 
-        private void RefreshValues()
+        private void HaveChanged()
         {
-            if (!IsCacheValid)
+            rebuildPending = 1;
+            onConfigChanged.Trigger();
+        }
+
+        private void Refresh()
+        {
+            if (rebuildPending == 1)
             {
-                bool changed = false;
                 lock (locker)
                 {
-                    if (Interlocked.CompareExchange(ref isCacheValid, 1, 0) == 0)
+                    if (Interlocked.CompareExchange(ref rebuildPending, 0, 1) == 1)
                     {
                         var result = this.configReader.ReadValues();
                         this.customTimerSource = result.CustomTimerSource;
@@ -279,12 +288,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
                         this.noSkillMessageOnFavorChange = result.NoSkillMessageOnFavorChange;
                         this.saveSkillsOnQuit = result.SaveSkillsOnQuit;
                         this.timestampMessages = result.TimestampMessages;
-                        changed = true;
                     }
-                }
-                if (changed)
-                {
-                    OnConfigChanged();
                 }
             }
         }

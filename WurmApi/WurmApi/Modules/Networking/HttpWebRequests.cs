@@ -9,7 +9,7 @@ namespace AldurSoft.WurmApi.Modules.Networking
         {
             var req = (HttpWebRequest)WebRequest.Create(url);
             req.Timeout = 15000;
-            var response = (System.Net.HttpWebResponse)await req.GetResponseAsync();
+            var response = (System.Net.HttpWebResponse)await req.GetResponseAsync().ConfigureAwait(false);
             return new HttpWebResponse(response);
         }
     }

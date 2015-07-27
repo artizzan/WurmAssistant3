@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Events.Public;
 using AldurSoft.WurmApi.Tests.Builders;
 using NUnit.Framework;
 using Telerik.JustMock;
@@ -21,7 +22,7 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Events
         [SetUp]
         public void Setup()
         {
-            invoker = new PublicEventInvoker(new ThreadPoolEventMarshaller(logger), logger)
+            invoker = new PublicEventInvoker(new ThreadPoolMarshaller(logger), logger)
             {
                 LoopDelayMillis = 1
             };
@@ -48,7 +49,7 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Events
             var handle = invoker.Create(OnFoovent, TimeSpan.Zero);
             Expect(value, EqualTo(0));
 
-            invoker.Signal(handle);
+            invoker.Trigger(handle);
 
             Thread.Sleep(10);
             Expect(value, EqualTo(1));
@@ -60,12 +61,12 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Events
             var handle = invoker.Create(OnFoovent, TimeSpan.FromMilliseconds(20));
             Expect(value, EqualTo(0));
 
-            invoker.Signal(handle);
+            invoker.Trigger(handle);
 
             Thread.Sleep(10);
             Expect(value, EqualTo(1));
 
-            invoker.Signal(handle);
+            invoker.Trigger(handle);
 
             Thread.Sleep(5);
             Expect(value, EqualTo(1));
@@ -79,12 +80,12 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Events
         {
             var handle = invoker.Create(OnFoovent, TimeSpan.FromMilliseconds(10));
             Expect(value, EqualTo(0));
-            invoker.Signal(handle);
+            invoker.Trigger(handle);
             Thread.Sleep(10);
             Expect(value, EqualTo(1));
-            invoker.Signal(handle);
-            invoker.Signal(handle);
-            invoker.Signal(handle);
+            invoker.Trigger(handle);
+            invoker.Trigger(handle);
+            invoker.Trigger(handle);
 
             Thread.Sleep(15);
             Expect(value, EqualTo(2));

@@ -5,25 +5,25 @@ using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace AldurSoft.WurmApi.Modules.Events
+namespace AldurSoft.WurmApi.Modules.Events.Public
 {
     class PublicEventInvoker : IPublicEventInvoker, IDisposable
     {
-        readonly IEventMarshaller eventMarshaller;
+        readonly IPublicEventMarshaller publicEventMarshaller;
         readonly ILogger logger;
         readonly Task schedulingTask;
         volatile bool stop = false;
 
         readonly ConcurrentDictionary<PublicEvent, EventManager> events = new ConcurrentDictionary<PublicEvent, EventManager>(); 
 
-        public PublicEventInvoker([NotNull] IEventMarshaller eventMarshaller, [NotNull] ILogger logger)
+        public PublicEventInvoker([NotNull] IPublicEventMarshaller publicEventMarshaller, [NotNull] ILogger logger)
         {
-            if (eventMarshaller == null) throw new ArgumentNullException("eventMarshaller");
+            if (publicEventMarshaller == null) throw new ArgumentNullException("publicEventMarshaller");
             if (logger == null) throw new ArgumentNullException("logger");
-            this.eventMarshaller = eventMarshaller;
+            this.publicEventMarshaller = publicEventMarshaller;
             this.logger = logger;
 
-            LoopDelayMillis = 500;
+            LoopDelayMillis = 100;
 
             schedulingTask = new Task(RunSchedule, TaskCreationOptions.LongRunning);
             schedulingTask.Start();
@@ -34,19 +34,18 @@ namespace AldurSoft.WurmApi.Modules.Events
         public PublicEvent Create([NotNull] Action action, TimeSpan invocationMinDelay)
         {
             if (action == null) throw new ArgumentNullException("action");
-            var e = new PublicEvent(action);
-            events.TryAdd(e,
-                new EventManager() {PublicEvent = e, BetweenDelay = invocationMinDelay});
+            var e = new PublicEventImpl(this);
+            events.TryAdd(e, new EventManager(e, invocationMinDelay, action));
             return e;
         }
 
-        public void Clear(PublicEvent publicEvent)
+        internal void Detach(PublicEvent publicEvent)
         {
             EventManager em;
             events.TryRemove(publicEvent, out em);
         }
 
-        public void Signal(PublicEvent publicEvent)
+        internal void Trigger(PublicEvent publicEvent)
         {
             EventManager em;
             if (events.TryGetValue(publicEvent, out em))
@@ -60,6 +59,7 @@ namespace AldurSoft.WurmApi.Modules.Events
             stop = true;
             schedulingTask.Wait();
             schedulingTask.Dispose();
+            events.Clear();
         }
 
         void RunSchedule()
@@ -76,7 +76,7 @@ namespace AldurSoft.WurmApi.Modules.Events
                     {
                         try
                         {
-                            eventMarshaller.Marshal(eventManager.PublicEvent.Action);
+                            publicEventMarshaller.Marshal(eventManager.Action);
                         }
                         catch (Exception exception)
                         {
@@ -94,18 +94,48 @@ namespace AldurSoft.WurmApi.Modules.Events
 
         class EventManager
         {
-            public PublicEvent PublicEvent;
-            public TimeSpan BetweenDelay;
+            public EventManager([NotNull] PublicEvent publicEvent, TimeSpan betweenDelay, [NotNull] Action action)
+            {
+                if (publicEvent == null) throw new ArgumentNullException("publicEvent");
+                if (action == null) throw new ArgumentNullException("action");
+                PublicEvent = publicEvent;
+                BetweenDelay = betweenDelay;
+                Action = action;
+            }
+
+            public PublicEvent PublicEvent { get; private set; }
+            public TimeSpan BetweenDelay { get; private set; }
+            public Action Action { get; private set; }
 
             public volatile int Pending = 0;
-            public DateTime LastInvoke;
+            private DateTime lastInvoke;
+
+            public DateTime LastInvoke
+            {
+                // locks are not needed, because read/writes are synchronous
+                // uncomment if implementation changes
+                get
+                {
+                    //lock (this)
+                    {
+                        return lastInvoke;
+                    }
+                }
+                set
+                {
+                    //lock (this)
+                    {
+                        lastInvoke = value;
+                    }
+                }
+            }
 
             public bool ShouldInvoke
             {
                 get
                 {
                     return Pending == 1
-                           && LastInvoke < DateTime.Now - BetweenDelay;
+                           && lastInvoke < DateTime.Now - BetweenDelay;
                 }
             }
         }

@@ -9,7 +9,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics.MonthlyDataBuild
     class DataBuilderV2 : IMonthlyHeuristicsDataBuilder
     {
         private readonly string logFileName;
-        private readonly ParsingHelper parsingHelper;
         private readonly DateTime today;
         private readonly ILogger logger;
 
@@ -21,28 +20,25 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics.MonthlyDataBuild
         readonly List<Record> records = new List<Record>();
         private long finalPositionInLogFile;
 
-        public DataBuilderV2(string logFileName, ParsingHelper parsingHelper, DateTime today, ILogger logger)
+        public DataBuilderV2(string logFileName, DateTime today, ILogger logger)
         {
             if (logFileName == null)
                 throw new ArgumentNullException("logFileName");
-            if (parsingHelper == null)
-                throw new ArgumentNullException("parsingHelper");
             if (logger == null)
                 throw new ArgumentNullException("logger");
 
             this.logFileName = logFileName;
-            this.parsingHelper = parsingHelper;
             this.today = today;
             this.logger = logger;
 
-            var logDate = parsingHelper.GetDateFromLogFileName(logFileName);
+            var logDate = ParsingHelper.GetDateFromLogFileName(logFileName);
             if (logDate.LogSavingType != LogSavingType.Monthly)
             {
                 throw new WurmApiException("This builder can only be used for monthly log files, actual file name: " + logFileName);
             }
 
             ProcessedLogDate = logDate.DateTime;
-            DayCountInThisLogMonth = parsingHelper.GetDaysInMonthForLogFile(logFileName);
+            DayCountInThisLogMonth = ParsingHelper.GetDaysInMonthForLogFile(logFileName);
             ThisLogIsForCurrentMonth = ProcessedLogDate.Year == today.Year && ProcessedLogDate.Month == today.Month;
         }
 
@@ -53,7 +49,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics.MonthlyDataBuild
                 if (line.StartsWith("Logging started", StringComparison.Ordinal))
                 {
                     var lastDay = records.Any() ? records.Last().Day : 0;
-                    var dayStamp = parsingHelper.GetDateFromLogFileLoggingStarted(line);
+                    var dayStamp = ParsingHelper.GetDateFromLogFileLoggingStarted(line);
 
                     ReadjustPreviousRecords(lastDay, dayStamp);
 
@@ -63,7 +59,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics.MonthlyDataBuild
                 else
                 {
                     var currentDay = records.Last().Day;
-                    var lineStamp = parsingHelper.GetTimestampFromLogLine(line);
+                    var lineStamp = ParsingHelper.GetTimestampFromLogLine(line);
 
                     if (OverflowsToNextDay(lineStamp))
                     {
@@ -105,7 +101,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics.MonthlyDataBuild
         private bool OverflowsToNextDay(TimeSpan lineStamp)
         {
             return lineStamp < LastLogLineStamp
-                   && parsingHelper.AreMoreThanOneHourAppartOnSameDay(lineStamp, LastLogLineStamp);
+                   && ParsingHelper.AreMoreThanOneHourAppartOnSameDay(lineStamp, LastLogLineStamp);
         }
 
         private void ReadjustPreviousRecords(int lastDay, DateTime dayStamp)

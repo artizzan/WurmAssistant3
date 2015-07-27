@@ -134,7 +134,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
                         logger,
                         new SingleFileMonitorFactory(
                             new LogFileStreamReaderFactory(),
-                            new LogFileParser(new ParsingHelper(), logger)),
+                            new LogFileParser(logger)),
                         wurmLogFiles.GetManagerForCharacter(characterName)));
                 characterNameToEngineManagers.Add(characterName, manager);
             }

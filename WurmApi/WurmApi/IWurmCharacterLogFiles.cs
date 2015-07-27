@@ -11,7 +11,7 @@ namespace AldurSoft.WurmApi
         /// <summary>
         /// Occurs when log files are added or removed for a single character.
         /// </summary>
-        event EventHandler FilesAddedOrRemoved;
+        event EventHandler<EventArgs> FilesAddedOrRemoved;
 
         /// <summary>
         /// Gets the date of oldest log file for this character.
@@ -21,7 +21,7 @@ namespace AldurSoft.WurmApi
         /// <summary>
         /// Gets all current log files matching dates, only date part is significant.
         /// </summary>
-        IEnumerable<LogFileInfo> TryGetLogFiles(DateTime timeNow, DateTime dateFrom);
+        IEnumerable<LogFileInfo> TryGetLogFiles(DateTime dateFrom, DateTime dateTo);
 
         /// <summary>
         /// Gets all current log files matching type and dates, only date part is significant.

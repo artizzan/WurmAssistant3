@@ -3,9 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace AldurSoft.WurmApi.Utility
 {
-    public class ParsingHelper
+    public static class ParsingHelper
     {
-        public LogFileDate GetDateFromLogFileName(string fileName)
+        public static LogFileDate GetDateFromLogFileName(string fileName)
         {
             LogFileDate logDate = TryGetDateFromLogFileName(fileName);
             if (logDate.LogSavingType == LogSavingType.Unknown)
@@ -21,7 +21,7 @@ namespace AldurSoft.WurmApi.Utility
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public LogFileDate TryGetDateFromLogFileName(string fileName)
+        public static LogFileDate TryGetDateFromLogFileName(string fileName)
         {
             Match matchDate = Regex.Match(fileName, @"(\d\d\d\d)-(\d\d)-(\d\d)");
             if (matchDate.Success)
@@ -51,7 +51,7 @@ namespace AldurSoft.WurmApi.Utility
             return new LogFileDate(DateTime.MinValue, LogSavingType.Unknown);
         }
 
-        public DateTime GetDateFromLogFileLoggingStarted(string line)
+        public static DateTime GetDateFromLogFileLoggingStarted(string line)
         {
             //Logging started 2012-09-01
             Match matchDate = Regex.Match(line, @"(\d\d\d\d)-(\d\d)-(\d\d)");
@@ -65,7 +65,7 @@ namespace AldurSoft.WurmApi.Utility
             throw new WurmApiException("Unable to parse date from logging started message section: " + line);
         }
 
-        public TimeSpan GetTimestampFromLogLine(string line)
+        public static TimeSpan GetTimestampFromLogLine(string line)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace AldurSoft.WurmApi.Utility
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
-        public TimeSpan TryParseTimestampFromLogLine(string line)
+        public static TimeSpan TryParseTimestampFromLogLine(string line)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace AldurSoft.WurmApi.Utility
             }
         }
 
-        public int GetDaysInMonthForLogFile(string fileName)
+        public static int GetDaysInMonthForLogFile(string fileName)
         {
             var date = GetDateFromLogFileName(fileName);
             if (date.LogSavingType != LogSavingType.Monthly)
@@ -119,7 +119,7 @@ namespace AldurSoft.WurmApi.Utility
         /// <param name="dt1"></param>
         /// <param name="dt2"></param>
         /// <returns></returns>
-        public bool AreMoreThanOneHourAppartOnSameDay(TimeSpan dt1, TimeSpan dt2)
+        public static bool AreMoreThanOneHourAppartOnSameDay(TimeSpan dt1, TimeSpan dt2)
         {
             double ts1TotalMinutes = dt1.TotalMinutes;
             double ts2TotalMinutes = dt2.TotalMinutes;
@@ -132,7 +132,7 @@ namespace AldurSoft.WurmApi.Utility
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
-        public bool IsLoggingStartedLine(string line)
+        public static bool IsLoggingStartedLine(string line)
         {
             return line.StartsWith("Logging started");
         }
@@ -142,7 +142,7 @@ namespace AldurSoft.WurmApi.Utility
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
-        public string TryParseSourceFromLogLine(string line)
+        public static string TryParseSourceFromLogLine(string line)
         {
             var match = Regex.Match(line, @"^\[\d\d\:\d\d\:\d\d\] <(.+)>", RegexOptions.Compiled);
             if (match.Success)
@@ -160,7 +160,7 @@ namespace AldurSoft.WurmApi.Utility
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
-        public string TryParseContentFromLogLine(string line)
+        public static string TryParseContentFromLogLine(string line)
         {
             Match match;
 
@@ -177,7 +177,7 @@ namespace AldurSoft.WurmApi.Utility
             return string.Empty;
         }
 
-        public string TryParsePmRecipientFromFileName(string fileName)
+        public static string TryParsePmRecipientFromFileName(string fileName)
         {
             try
             {

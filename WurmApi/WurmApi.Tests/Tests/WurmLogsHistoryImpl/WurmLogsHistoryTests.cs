@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using AldurSoft.Core.Testing;
 using AldurSoft.SimplePersist;
 using AldurSoft.WurmApi.Modules.DataContext;
+using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Events.Internal;
+using AldurSoft.WurmApi.Modules.Events.Public;
 using AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories;
 using AldurSoft.WurmApi.Modules.Wurm.LogDefinitions;
 using AldurSoft.WurmApi.Modules.Wurm.LogFiles;
@@ -41,8 +44,9 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
             var installDir = new Mock<IWurmInstallDirectory>();
             installDir.Setup(directory => directory.FullPath).Returns(WurmDir.DirectoryFullPath);
 
-            wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDir.Object), new LoggerStub());
-
+            var internalEventAggregator = new InternalEventAggregator();
+            wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDir.Object),
+                new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()), internalEventAggregator);
 
             logger = new Mock<ILogger>();
             logger.Setup(logger1 => logger1.Log(It.IsAny<LogLevel>(), It.IsAny<string>(), It.IsAny<object>(), It.IsAny<Exception>()))
@@ -52,7 +56,9 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
             wurmLogFiles = new WurmLogFiles(
                 wurmCharacterDirectories,
                 logger.Object,
-                new WurmLogDefinitions());
+                new WurmLogDefinitions(),
+                internalEventAggregator,
+                new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()));
             System =
                 new WurmLogsHistory(
                     new WurmApiDataContext(DataDir.DirectoryFullPath, Mock.Of<ISimplePersistLogger>()),

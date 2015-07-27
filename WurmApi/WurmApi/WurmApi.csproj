@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CharacterName.cs" />
-    <Compile Include="IEventMarshaller.cs" />
+    <Compile Include="IPublicEventMarshaller.cs" />
     <Compile Include="Modules\DataContext\DataModel\LogsHistoryModel\WurmCharacterLogsEntity.cs" />
     <Compile Include="Modules\DataContext\DataModel\LogsHistoryModel\WurmLogMonthlyFile.cs" />
     <Compile Include="Modules\DataContext\DataModel\LogsHistoryModel\WurmLogMonthlyFileHeuristics.cs" />
@@ -70,13 +70,22 @@
     <Compile Include="Modules\DataContext\DataModel\WurmServersModel\ServerUptimeStamped.cs" />
     <Compile Include="Modules\DataContext\DataModel\WurmServersModel\TimeDetails.cs" />
     <Compile Include="Modules\DataContext\DataModel\WurmServersModel\WurmServerLogsData.cs" />
-    <Compile Include="Modules\Events\IInternalEventAggregator.cs" />
+    <Compile Include="Modules\Events\EventHandlerExtensions.cs" />
+    <Compile Include="Modules\Events\Internal\IInternalEventAggregator.cs" />
     <Compile Include="Modules\Events\ExtensionMethods.cs" />
-    <Compile Include="Modules\Events\InternalEventAggregator.cs" />
-    <Compile Include="Modules\Events\IPublicEventInvoker.cs" />
-    <Compile Include="Modules\Events\Messages\Message.cs" />
-    <Compile Include="Modules\Events\PublicEventInvoker.cs" />
-    <Compile Include="Modules\Events\ThreadPoolEventMarshaller.cs" />
+    <Compile Include="Modules\Events\Internal\IInternalEventInvoker.cs" />
+    <Compile Include="Modules\Events\Internal\InternalEvent.cs" />
+    <Compile Include="Modules\Events\Internal\InternalEventAggregator.cs" />
+    <Compile Include="Modules\Events\Internal\InternalEventImpl.cs" />
+    <Compile Include="Modules\Events\Internal\InternalEventInvoker.cs" />
+    <Compile Include="Modules\Events\Public\IPublicEventInvoker.cs" />
+    <Compile Include="Modules\Events\Internal\Messages\CharacterDirectoriesChanged.cs" />
+    <Compile Include="Modules\Events\Internal\Messages\ConfigDirectoriesChanged.cs" />
+    <Compile Include="Modules\Events\Internal\Messages\Message.cs" />
+    <Compile Include="Modules\Events\Public\PublicEvent.cs" />
+    <Compile Include="Modules\Events\Public\PublicEventImpl.cs" />
+    <Compile Include="Modules\Events\Public\PublicEventInvoker.cs" />
+    <Compile Include="Modules\Events\ThreadPoolMarshaller.cs" />
     <Compile Include="Modules\Networking\HttpWebResponse.cs" />
     <Compile Include="IHttpWebRequests.cs" />
     <Compile Include="ILogger.cs" />
@@ -115,10 +124,11 @@
     <Compile Include="ServerName.cs" />
     <Compile Include="SkillGainRate.cs" />
     <Compile Include="SpecificCharacterSearchParameters.cs" />
-    <Compile Include="Modules\Events\SimpleEventMarshaller.cs" />
+    <Compile Include="Modules\Events\SimpleMarshaller.cs" />
     <Compile Include="Utility\ExceptionEventArgs.cs" />
     <Compile Include="Utility\FileSystemChangeMonitor.cs" />
     <Compile Include="Utility\RepeatableThreadedOperation.cs" />
+    <Compile Include="Utility\TSafeProperty.cs" />
     <Compile Include="WurmApiExceptions.cs" />
     <Compile Include="WurmDateTime.cs" />
     <Compile Include="WurmDay.cs" />

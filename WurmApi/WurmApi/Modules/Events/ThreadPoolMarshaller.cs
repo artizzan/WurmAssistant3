@@ -4,11 +4,11 @@ using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Events
 {
-    class ThreadPoolEventMarshaller : IEventMarshaller
+    class ThreadPoolMarshaller : IPublicEventMarshaller
     {
         readonly ILogger logger;
 
-        public ThreadPoolEventMarshaller([NotNull] ILogger logger)
+        public ThreadPoolMarshaller([NotNull] ILogger logger)
         {
             if (logger == null) throw new ArgumentNullException("logger");
             this.logger = logger;

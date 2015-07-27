@@ -32,22 +32,18 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics
     public class MonthlyHeuristicsExtractor
     {
         private readonly LogFileInfo logFileInfo;
-        private readonly ParsingHelper parsingHelper;
         private readonly LogFileStreamReaderFactory logFileStreamReaderFactory;
         private readonly ILogger logger;
 
         public MonthlyHeuristicsExtractor(
             LogFileInfo logFileInfo, 
-            ParsingHelper parsingHelper, 
             LogFileStreamReaderFactory logFileStreamReaderFactory,
             ILogger logger)
         {
             if (logFileInfo == null) throw new ArgumentNullException("logFileInfo");
-            if (parsingHelper == null) throw new ArgumentNullException("parsingHelper");
             if (logFileStreamReaderFactory == null) throw new ArgumentNullException("logFileStreamReaderFactory");
             if (logger == null) throw new ArgumentNullException("logger");
             this.logFileInfo = logFileInfo;
-            this.parsingHelper = parsingHelper;
             this.logFileStreamReaderFactory = logFileStreamReaderFactory;
             this.logger = logger;
         }
@@ -57,7 +53,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics
             using (var reader = logFileStreamReaderFactory.Create(logFileInfo.FullPath, startPosition: 0, trackFileBytePositions: true))
             {
                 string line;
-                IMonthlyHeuristicsDataBuilder builder = new DataBuilderV2(logFileInfo.FileName, parsingHelper, Time.Clock.LocalNow, logger);
+                IMonthlyHeuristicsDataBuilder builder = new DataBuilderV2(logFileInfo.FileName, Time.Clock.LocalNow, logger);
 
                 while ((line = reader.TryReadNextLine()) != null)
                 {

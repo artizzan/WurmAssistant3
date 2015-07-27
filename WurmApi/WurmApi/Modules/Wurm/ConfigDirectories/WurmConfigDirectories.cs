@@ -1,17 +1,28 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
+using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Events.Internal;
+using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
+using AldurSoft.WurmApi.Modules.Events.Public;
 using AldurSoft.WurmApi.Utility;
+using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories
 {
     /// <summary>
     /// Manages directory information about wurm configs
     /// </summary>
-    public class WurmConfigDirectories : WurmSubdirsMonitor, IWurmConfigDirectories
+    class WurmConfigDirectories : WurmSubdirsMonitor, IWurmConfigDirectories
     {
+        readonly IInternalEventAggregator eventAggregator;
+
         public WurmConfigDirectories(
-            IWurmPaths wurmPaths, ILogger logger) : base(wurmPaths.ConfigsDirFullPath, logger)
+            IWurmPaths wurmPaths, IPublicEventInvoker eventInvoker, [NotNull] IInternalEventAggregator eventAggregator)
+            : base(wurmPaths.ConfigsDirFullPath, eventInvoker)
         {
+            if (eventAggregator == null) throw new ArgumentNullException("eventAggregator");
+            this.eventAggregator = eventAggregator;
         }
 
         public string GetGameSettingsFileFullPathForConfigName(string directoryName)
@@ -36,6 +47,11 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories
                         this.DirectoryFullPath));
             }
             return file.FullName;
+        }
+
+        protected override void OnDirectoriesChanged()
+        {
+            eventAggregator.Send(new ConfigDirectoriesChanged());
         }
     }
 }

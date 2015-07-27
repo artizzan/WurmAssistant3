@@ -5,6 +5,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Events.Internal;
+using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
+using AldurSoft.WurmApi.Modules.Events.Public;
+using AldurSoft.WurmApi.Utility;
 using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
@@ -12,78 +17,47 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
     /// <summary>
     /// Provides accurate information about Wurm log files.
     /// </summary>
-    public class WurmLogFiles : IWurmLogFiles, IDisposable
+    public class WurmLogFiles : IWurmLogFiles, IDisposable, IHandle<CharacterDirectoriesChanged>
     {
         readonly IWurmCharacterDirectories wurmCharacterDirectories;
         readonly ILogger logger;
         readonly IWurmLogDefinitions wurmLogDefinitions;
+        readonly IInternalEventAggregator eventAggregator;
+        readonly IPublicEventInvoker publicEventInvoker;
 
         IReadOnlyDictionary<CharacterName, WurmCharacterLogFiles> characterNormalizedNameToWatcherMap =
             new Dictionary<CharacterName, WurmCharacterLogFiles>();
 
-        Task updaterTask;
-        readonly TaskCompletionSource<bool> initialUpdateAwaiter = new TaskCompletionSource<bool>();
-        volatile int managersRequireRefresh = 0;
-        volatile bool stop = false;
+        volatile int rebuildRequired = 1;
+        readonly object locker = new object();
 
-        public WurmLogFiles(IWurmCharacterDirectories wurmCharacterDirectories, ILogger logger, IWurmLogDefinitions wurmLogDefinitions)
+        internal WurmLogFiles(IWurmCharacterDirectories wurmCharacterDirectories, ILogger logger, IWurmLogDefinitions wurmLogDefinitions,
+            [NotNull] IInternalEventAggregator eventAggregator, [NotNull] IPublicEventInvoker publicEventInvoker)
         {
             if (wurmCharacterDirectories == null) throw new ArgumentNullException("wurmCharacterDirectories");
             if (logger == null) throw new ArgumentNullException("logger");
             if (wurmLogDefinitions == null) throw new ArgumentNullException("wurmLogDefinitions");
+            if (eventAggregator == null) throw new ArgumentNullException("eventAggregator");
+            if (publicEventInvoker == null) throw new ArgumentNullException("publicEventInvoker");
             this.wurmCharacterDirectories = wurmCharacterDirectories;
             this.logger = logger;
             this.wurmLogDefinitions = wurmLogDefinitions;
+            this.eventAggregator = eventAggregator;
+            this.publicEventInvoker = publicEventInvoker;
 
-            updaterTask = new Task(() =>
-            {
-                while (true)
-                {
-                    if (stop)
-                    {
-                        return;
-                    }
-
-                    try
-                    {
-                        if (Interlocked.CompareExchange(ref managersRequireRefresh, 0, 1) == 1)
-                        {
-                            RefreshManagers();
-                            initialUpdateAwaiter.TrySetResult(true);
-                        }
-
-                        foreach (var characterLogFiles in characterNormalizedNameToWatcherMap.Values)
-                        {
-                            characterLogFiles.Refresh();
-                        }
-                    }
-                    catch (Exception exception)
-                    {
-                        logger.Log(LogLevel.Error, "Error during log files manager update: " + exception.Message, this, exception);
-                    }
-
-                    if (stop)
-                    {
-                        return;
-                    }
-                    Thread.Sleep(500);
-                }
-            }, TaskCreationOptions.LongRunning);
-            updaterTask.Start();
-
-            wurmCharacterDirectories.DirectoriesChanged += WurmCharacterDirectoriesOnDirectoriesChanged;
+            eventAggregator.Subscribe(this);
         }
 
-        private void WurmCharacterDirectoriesOnDirectoriesChanged(object sender, EventArgs eventArgs)
+        public void Handle(CharacterDirectoriesChanged message)
         {
-            managersRequireRefresh = 1;
+            rebuildRequired = 1;
         }
 
         public IEnumerable<LogFileInfo> TryGetLogFiles(LogSearchParameters searchParameters)
         {
             searchParameters.AssertAreValid();
 
-            WaitForInitialUpdate();
+            Refresh();
 
             WurmCharacterLogFiles characterLogFiles;
             if (characterNormalizedNameToWatcherMap.TryGetValue(searchParameters.CharacterName, out characterLogFiles))
@@ -116,7 +90,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
         {
             if (characterName == null) throw new ArgumentNullException("characterName");
 
-            WaitForInitialUpdate();
+            Refresh();
 
             WurmCharacterLogFiles manager;
             characterNormalizedNameToWatcherMap.TryGetValue(characterName, out manager);
@@ -127,53 +101,32 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
             return manager;
         }
 
-        void WaitForInitialUpdate()
+
+        private void Refresh()
         {
-            if (!initialUpdateAwaiter.Task.Wait(TimeSpan.FromSeconds(30)))
+            if (rebuildRequired == 1)
             {
-                throw new TimeoutException();
+                lock (locker)
+                {
+                    if (Interlocked.CompareExchange(ref rebuildRequired, 0, 1) == 1)
+                    {
+                        var allDirNames = wurmCharacterDirectories.AllDirectoryNamesNormalized.ToArray();
+                        var oldMap = characterNormalizedNameToWatcherMap;
+                        var newMap = new Dictionary<CharacterName, WurmCharacterLogFiles>();
+
+                        AddNewFileManagers(allDirNames, oldMap, newMap);
+
+                        DisposeOldFileManagers(oldMap, allDirNames);
+
+                        characterNormalizedNameToWatcherMap = newMap;
+                    }
+                }
             }
+            
         }
 
-        private void RefreshManagers()
+        void DisposeOldFileManagers(IReadOnlyDictionary<CharacterName, WurmCharacterLogFiles> oldMap, string[] allDirNames)
         {
-            var allDirNames = wurmCharacterDirectories.AllDirectoryNamesNormalized.ToArray();
-            var oldMap = characterNormalizedNameToWatcherMap;
-            var newMap = new Dictionary<CharacterName, WurmCharacterLogFiles>();
-
-            foreach (var dirName in allDirNames)
-            {
-                var charName = new CharacterName(dirName);
-                WurmCharacterLogFiles logFiles;
-                if (!oldMap.TryGetValue(charName, out logFiles))
-                {
-                    try
-                    {
-                        var fullDirPathForCharacter = wurmCharacterDirectories.GetFullDirPathForCharacter(charName);
-                        var logsDirPath = Path.Combine(fullDirPathForCharacter, "logs");
-                        
-                        logFiles = new WurmCharacterLogFiles(
-                            charName,
-                            logsDirPath,
-                            logger,
-                            new LogFileInfoFactory(wurmLogDefinitions, logger));
-
-                        newMap.Add(charName, logFiles);
-                    }
-                    catch (DataNotFoundException exception)
-                    {
-                        logger.Log(LogLevel.Warn,
-                            string.Format(
-                                "Could not create log files manager for character {0} due to missing logs directory. Perhaps it was deleted?",
-                                charName), this, exception);
-                    }
-                }
-                else
-                {
-                    newMap.Add(charName, logFiles);
-                }
-            }
-
             foreach (var characterName in oldMap.Keys.ToArray())
             {
                 if (!allDirNames.Contains(characterName.Normalized))
@@ -195,14 +148,48 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
                     }
                 }
             }
+        }
 
-            characterNormalizedNameToWatcherMap = newMap;
+        void AddNewFileManagers(string[] allDirNames, IReadOnlyDictionary<CharacterName, WurmCharacterLogFiles> oldMap, Dictionary<CharacterName, WurmCharacterLogFiles> newMap)
+        {
+            foreach (var dirName in allDirNames)
+            {
+                var charName = new CharacterName(dirName);
+                WurmCharacterLogFiles logFiles;
+                if (!oldMap.TryGetValue(charName, out logFiles))
+                {
+                    try
+                    {
+                        var fullDirPathForCharacter = wurmCharacterDirectories.GetFullDirPathForCharacter(charName);
+                        var logsDirPath = Path.Combine(fullDirPathForCharacter, "logs");
+
+                        logFiles = new WurmCharacterLogFiles(
+                            charName,
+                            logsDirPath,
+                            logger,
+                            new LogFileInfoFactory(wurmLogDefinitions, logger),
+                            publicEventInvoker);
+
+                        newMap.Add(charName, logFiles);
+                    }
+                    catch (DataNotFoundException exception)
+                    {
+                        logger.Log(LogLevel.Warn,
+                            string.Format(
+                                "Could not create log files manager for character {0} due to missing logs directory. Perhaps it was deleted?",
+                                charName), this, exception);
+                    }
+                }
+                else
+                {
+                    newMap.Add(charName, logFiles);
+                }
+            }
         }
 
         public void Dispose()
         {
-            stop = true;
-            updaterTask.Wait();
+            eventAggregator.Unsubscribe(this);
             foreach (var characterLogFiles in characterNormalizedNameToWatcherMap.Values)
             {
                 characterLogFiles.Dispose();

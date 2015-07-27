@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Events.Internal;
+using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
+using AldurSoft.WurmApi.Modules.Events.Public;
 using AldurSoft.WurmApi.Utility;
 using JetBrains.Annotations;
 
@@ -9,11 +13,17 @@ namespace AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories
     /// <summary>
     /// Manages directory information about wurm character folders
     /// </summary>
-    public class WurmCharacterDirectories : WurmSubdirsMonitor, IWurmCharacterDirectories
+    class WurmCharacterDirectories : WurmSubdirsMonitor, IWurmCharacterDirectories
     {
+        readonly IInternalEventAggregator eventAggregator;
+
         public WurmCharacterDirectories(
-            IWurmPaths wurmPaths, ILogger logger) : base(wurmPaths.CharactersDirFullPath, logger)
+            IWurmPaths wurmPaths, IPublicEventInvoker publicEventInvoker,
+            [NotNull] IInternalEventAggregator eventAggregator)
+            : base(wurmPaths.CharactersDirFullPath, publicEventInvoker)
         {
+            if (eventAggregator == null) throw new ArgumentNullException("eventAggregator");
+            this.eventAggregator = eventAggregator;
         }
 
         public string GetFullDirPathForCharacter([NotNull] CharacterName characterName)
@@ -25,6 +35,11 @@ namespace AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories
         public IEnumerable<CharacterName> GetAllCharacters()
         {
             return base.AllDirectoryNamesNormalized.Select(s => new CharacterName(s)).ToArray();
+        }
+
+        protected override void OnDirectoriesChanged()
+        {
+            eventAggregator.Send(new CharacterDirectoriesChanged());
         }
     }
 }

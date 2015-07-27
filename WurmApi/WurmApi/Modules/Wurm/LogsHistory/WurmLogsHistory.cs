@@ -12,12 +12,12 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
         public WurmLogsHistory(IWurmApiDataContext dataContext, IWurmLogFiles wurmLogFiles, ILogger logger)
         {
             logsScannerFactory = new LogsScannerFactory(
-                new LogFileParserFactory(new ParsingHelper(), logger),
+                new LogFileParserFactory(logger),
                 new LogFileStreamReaderFactory(),
                 new MonthlyLogFileHeuristicsFactory(
                     dataContext,
                     wurmLogFiles,
-                    new MonthlyHeuristicsExtractorFactory(new ParsingHelper(), new LogFileStreamReaderFactory(), logger)),
+                    new MonthlyHeuristicsExtractorFactory(new LogFileStreamReaderFactory(), logger)),
                 wurmLogFiles,
                 logger);
         }

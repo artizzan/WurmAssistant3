@@ -102,6 +102,7 @@
     <Compile Include="Helpers\DummyException.cs" />
     <Compile Include="Helpers\LogWriter.cs" />
     <Compile Include="Helpers\SelfTests\LogWriterTests.cs" />
+    <Compile Include="UnitTests\Events\InternalEventInvokerTests.cs" />
     <Compile Include="UnitTests\Events\PublicEventInvokerTests.cs" />
     <Compile Include="UnitTests\Utility\SignallizableThreadedOperationTests.cs" />
     <Compile Include="Tests\WurmCharacterDirectoriesImpl\WurmCharacterDirectoriesTests.cs" />

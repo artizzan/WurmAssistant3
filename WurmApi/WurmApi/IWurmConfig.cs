@@ -39,7 +39,7 @@ namespace AldurSoft.WurmApi
         /// <summary>
         /// If event handler throws exception, it will be logged and ignored. 
         /// </summary>
-        event EventHandler ConfigChanged;
+        event EventHandler<EventArgs> ConfigChanged;
 
         /// <summary>
         /// Wurm Game Client identificator of this config.

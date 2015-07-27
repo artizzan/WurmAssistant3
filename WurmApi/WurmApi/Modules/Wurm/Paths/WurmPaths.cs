@@ -4,34 +4,23 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Paths
 {
     public class WurmPaths : IWurmPaths
     {
-        private readonly IWurmInstallDirectory wurmInstallDirectory;
-
-        private string configsDirPath;
-        private string playersDirPath;
+        private readonly string configsDirPath;
+        private readonly string playersDirPath;
 
         public WurmPaths(IWurmInstallDirectory wurmInstallDirectory)
         {
-            this.wurmInstallDirectory = wurmInstallDirectory;
+            configsDirPath = Path.Combine(wurmInstallDirectory.FullPath, "configs");
+            playersDirPath = Path.Combine(wurmInstallDirectory.FullPath, "players");
         }
 
         public string ConfigsDirFullPath
         {
-            get
-            {
-                return configsDirPath
-                       ?? (configsDirPath =
-                           Path.Combine(this.wurmInstallDirectory.FullPath, "configs"));
-            }
+            get { return configsDirPath; }
         }
 
         public string CharactersDirFullPath
         {
-            get
-            {
-                return playersDirPath
-                       ?? (playersDirPath =
-                           Path.Combine(this.wurmInstallDirectory.FullPath, "players"));
-            }
+            get { return playersDirPath; }
         }
     }
 }

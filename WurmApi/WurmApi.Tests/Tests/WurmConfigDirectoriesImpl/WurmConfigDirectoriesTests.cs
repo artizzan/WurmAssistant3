@@ -7,7 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
+using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Events.Internal;
+using AldurSoft.WurmApi.Modules.Events.Public;
+using AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories;
 using AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories;
+using AldurSoft.WurmApi.Modules.Wurm.InstallDirectory;
 using AldurSoft.WurmApi.Modules.Wurm.Paths;
 using AldurSoft.WurmApi.Tests.Tests.WurmCharacterDirectoriesImpl;
 using Moq;
@@ -33,7 +38,9 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigDirectoriesImpl
             Mock.Get(installDir)
                 .Setup(directory => directory.FullPath)
                 .Returns(testDir.DirectoryFullPath);
-            system = new WurmConfigDirectories(new WurmPaths(installDir), new LoggerStub());
+            var publicEventInvoker = new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub());
+            var internalEventAggregator = new InternalEventAggregator();
+            system = new WurmConfigDirectories(new WurmPaths(installDir), publicEventInvoker, internalEventAggregator);
 
             configsDirInfo = new DirectoryInfo(Path.Combine(testDir.DirectoryFullPath, "configs"));
         }

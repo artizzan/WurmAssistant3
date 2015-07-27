@@ -6,7 +6,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
 {
     public class LogFileInfoFactory
     {
-        private readonly ParsingHelper parsingHelper = new ParsingHelper();
         private readonly IWurmLogDefinitions wurmLogDefinitions;
         private readonly ILogger logger;
 
@@ -26,12 +25,12 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
         {
             // should never throw
 
-            var dateFromLogFileName = parsingHelper.TryGetDateFromLogFileName(fileInfo.Name);
+            var dateFromLogFileName = ParsingHelper.TryGetDateFromLogFileName(fileInfo.Name);
             var typeFromLogFileName = wurmLogDefinitions.TryGetTypeFromLogFileName(fileInfo.Name);
             string pmRecipient = null;
             if (typeFromLogFileName == LogType.Pm)
             {
-                pmRecipient = parsingHelper.TryParsePmRecipientFromFileName(fileInfo.Name);
+                pmRecipient = ParsingHelper.TryParsePmRecipientFromFileName(fileInfo.Name);
             }
 
             bool parsingError = false;

@@ -2,23 +2,28 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Autoruns
 {
     public class WurmAutoruns : IWurmAutoruns
     {
-        private readonly IWurmConfigs wurmConfigs;
-        private readonly IWurmCharacterDirectories wurmCharacterDirectories;
-        private readonly object locker = new object();
+        readonly IWurmConfigs wurmConfigs;
+        readonly IWurmCharacterDirectories wurmCharacterDirectories;
+        readonly ILogger logger;
+        readonly object locker = new object();
 
         public WurmAutoruns(
-            IWurmConfigs wurmConfigs,
-            IWurmCharacterDirectories wurmCharacterDirectories)
+            [NotNull] IWurmConfigs wurmConfigs,
+            [NotNull] IWurmCharacterDirectories wurmCharacterDirectories, 
+            [NotNull] ILogger logger)
         {
             if (wurmConfigs == null) throw new ArgumentNullException("wurmConfigs");
             if (wurmCharacterDirectories == null) throw new ArgumentNullException("wurmCharacterDirectories");
+            if (logger == null) throw new ArgumentNullException("logger");
             this.wurmConfigs = wurmConfigs;
             this.wurmCharacterDirectories = wurmCharacterDirectories;
+            this.logger = logger;
         }
 
         public void AppendCommandToAllAutoruns(string command)
@@ -32,6 +37,10 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Autoruns
                     if (file.Exists)
                     {
                         AppendCommandIfNotInFile(file, command);
+                    }
+                    else
+                    {
+                        LogThatFileNotFound(file);
                     }
                 }
             }
@@ -54,9 +63,18 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Autoruns
                             filesMissingCommand.Add(file.FullName);
                         }
                     }
+                    else
+                    {
+                        LogThatFileNotFound(file);
+                    }
                 }
                 return filesMissingCommand;
             }
+        }
+
+        void LogThatFileNotFound(FileInfo file)
+        {
+            logger.Log(LogLevel.Warn, "autorun.txt file was not found at path " + file.FullName, this, null);
         }
 
         private IEnumerable<string> GetAllAutorunFullFilePaths()

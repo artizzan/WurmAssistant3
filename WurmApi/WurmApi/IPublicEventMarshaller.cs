@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace AldurSoft.WurmApi
 {
     /// <summary>
-    /// Marshalls event invocations to designated thread.
+    /// Marshalls public WurmApi event invocations to designated thread.
     /// </summary>
-    public interface IEventMarshaller
+    public interface IPublicEventMarshaller
     {
         /// <summary>
         /// Invokes provided action on a designated thread.

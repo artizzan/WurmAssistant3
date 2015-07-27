@@ -2,109 +2,71 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Events.Internal;
+using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
+using AldurSoft.WurmApi.Modules.Events.Public;
 using AldurSoft.WurmApi.Utility;
 using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Configs
 {
-    public class WurmConfigs : IWurmConfigs, IDisposable
+    public class WurmConfigs : IWurmConfigs, IDisposable, IHandle<ConfigDirectoriesChanged>
     {
         readonly IWurmConfigDirectories wurmConfigDirectories;
         readonly ILogger logger;
-        readonly IEventMarshaller eventMarshaller;
+        readonly IPublicEventInvoker publicEventInvoker;
+        readonly IInternalEventAggregator eventAggregator;
 
         IReadOnlyDictionary<string, WurmConfig> nameToConfigMap = new Dictionary<string, WurmConfig>();
 
-        readonly RepeatableThreadedOperation rebuilder;
+        volatile int rebuildPending = 1;
+        readonly object locker = new object();
 
-        public WurmConfigs(
+        readonly PublicEvent onAvailableConfigsChanged;
+        readonly PublicEvent onAnyConfigChanged;
+
+        internal WurmConfigs(
             [NotNull] IWurmConfigDirectories wurmConfigDirectories,
-            [NotNull] ILogger logger, [NotNull] IEventMarshaller eventMarshaller)
+            [NotNull] ILogger logger, [NotNull] IPublicEventInvoker publicEventInvoker,
+            [NotNull] IInternalEventAggregator eventAggregator)
         {
             if (wurmConfigDirectories == null) throw new ArgumentNullException("wurmConfigDirectories");
             if (logger == null) throw new ArgumentNullException("logger");
-            if (eventMarshaller == null) throw new ArgumentNullException("eventMarshaller");
+            if (publicEventInvoker == null) throw new ArgumentNullException("publicEventInvoker");
+            if (eventAggregator == null) throw new ArgumentNullException("eventAggregator");
             this.wurmConfigDirectories = wurmConfigDirectories;
             this.logger = logger;
-            this.eventMarshaller = eventMarshaller;
+            this.publicEventInvoker = publicEventInvoker;
+            this.eventAggregator = eventAggregator;
 
-            rebuilder = new RepeatableThreadedOperation(() =>
-            {
-                bool anyChanges = false;
-                var configNamesNormalized = wurmConfigDirectories.AllDirectoryNamesNormalized.ToArray();
-                var oldMap = nameToConfigMap;
-                var newMap = new Dictionary<string, WurmConfig>();
-                foreach (var configName in configNamesNormalized)
-                {
-                    WurmConfig config;
-                    if (!oldMap.TryGetValue(configName, out config))
-                    {
-                        try
-                        {
-                            FileInfo gameSettingsFileInfo =
-                                new FileInfo(wurmConfigDirectories.GetGameSettingsFileFullPathForConfigName(configName));
+            onAvailableConfigsChanged = publicEventInvoker.Create(
+                () => AvailableConfigsChanged.SafeInvoke(this), 
+                TimeSpan.FromMilliseconds(500));
+            onAnyConfigChanged = publicEventInvoker.Create(
+                () => AnyConfigChanged.SafeInvoke(this), 
+                TimeSpan.FromMilliseconds(500));
 
-                            config = new WurmConfig(gameSettingsFileInfo.FullName, logger,
-                                eventMarshaller);
-                            config.ConfigChanged += ConfigOnConfigChanged;
-
-                            newMap.Add(configName, config);
-                            anyChanges = true;
-                        }
-                        catch (Exception exception)
-                        {
-                            logger.Log(LogLevel.Warn,
-                                "Exception whle attempting to create config for name: " + configName, this, exception);
-                        }
-                    }
-                    else
-                    {
-                        newMap.Add(configName, config);
-                    }
-
-                }
-                var removedConfigNames = configNamesNormalized.Where(name => !oldMap.ContainsKey(name)).ToArray();
-                foreach (var configName in removedConfigNames)
-                {
-                    var config = oldMap[configName];
-                    config.ConfigChanged -= ConfigOnConfigChanged;
-                    config.Dispose();
-                    newMap.Remove(configName);
-                    anyChanges = true;
-                }
-                if (anyChanges)
-                {
-                    nameToConfigMap = newMap;
-                    OnConfigsChanged();
-                }
-            });
-
-            rebuilder.OperationError +=
-                (sender, args) =>
-                {
-                    const int retryDelay = 5;
-                    logger.Log(LogLevel.Error,
-                        string.Format("Error during configs rebuild, retrying in {0} seconds", retryDelay), this, args.Exception);
-                    rebuilder.DelayedSignal(TimeSpan.FromSeconds(retryDelay));
-                };
-
-            wurmConfigDirectories.DirectoriesChanged += WurmConfigDirectoriesOnDirectoriesChanged;
-            rebuilder.Signal();
-            rebuilder.WaitSynchronouslyForInitialOperation(TimeSpan.FromSeconds(30));
+            eventAggregator.Subscribe(this);
         }
 
-        private void WurmConfigDirectoriesOnDirectoriesChanged(object sender, EventArgs eventArgs)
+        public event EventHandler<EventArgs> AvailableConfigsChanged;
+
+        public event EventHandler<EventArgs> AnyConfigChanged;
+
+        public void Handle(ConfigDirectoriesChanged message)
         {
-            rebuilder.Signal();
+            rebuildPending = 1;
+            onAvailableConfigsChanged.Trigger();
         }
-
-        public event EventHandler<EventArgs> ConfigsChanged;
 
         public IEnumerable<IWurmConfig> All
         {
             get
             {
+                Refresh();
                 return this.nameToConfigMap.Values.ToArray();
             }
         }
@@ -112,6 +74,8 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         public IWurmConfig GetConfig([NotNull] string name)
         {
             if (name == null) throw new ArgumentNullException("name");
+
+            Refresh();
 
             name = name.Trim().ToUpperInvariant();
             WurmConfig config;
@@ -122,35 +86,70 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
             return config;
         }
 
-        protected virtual void OnConfigsChanged()
-        {
-            try
-            {
-                var handler = ConfigsChanged;
-                if (handler != null)
-                {
-                    eventMarshaller.Marshal(() => handler(this, EventArgs.Empty));
-                }
-            }
-            catch (Exception exception)
-            {
-                logger.Log(LogLevel.Error, "OnConfigsChanged delegate threw exception", this, exception);
-            }
-        }
-
         private void ConfigOnConfigChanged(object sender, EventArgs eventArgs)
         {
-            OnConfigsChanged();
+            onAnyConfigChanged.Trigger();
         }
 
         public void Dispose()
         {
-            wurmConfigDirectories.DirectoriesChanged -= WurmConfigDirectoriesOnDirectoriesChanged;
-            rebuilder.Dispose();
+            eventAggregator.Unsubscribe(this);
+            onAnyConfigChanged.Detach();
+            onAvailableConfigsChanged.Detach();
             foreach (var wurmConfig in this.nameToConfigMap)
             {
                 wurmConfig.Value.ConfigChanged -= ConfigOnConfigChanged;
                 wurmConfig.Value.Dispose();
+            }
+        }
+
+        private void Refresh()
+        {
+            if (rebuildPending == 1)
+            {
+                lock (locker)
+                {
+                    if (Interlocked.CompareExchange(ref rebuildPending, 0, 1) == 1)
+                    {
+                        bool anyChanges = false;
+                        var configNamesNormalized = wurmConfigDirectories.AllDirectoryNamesNormalized.ToArray();
+                        var oldMap = nameToConfigMap;
+                        var newMap = new Dictionary<string, WurmConfig>();
+                        foreach (var configName in configNamesNormalized)
+                        {
+                            WurmConfig config;
+                            if (!oldMap.TryGetValue(configName, out config))
+                            {
+                                FileInfo gameSettingsFileInfo =
+                                    new FileInfo(wurmConfigDirectories.GetGameSettingsFileFullPathForConfigName(configName));
+
+                                config = new WurmConfig(gameSettingsFileInfo.FullName, logger, publicEventInvoker);
+                                config.ConfigChanged += ConfigOnConfigChanged;
+
+                                newMap.Add(configName, config);
+                                anyChanges = true;
+                            }
+                            else
+                            {
+                                newMap.Add(configName, config);
+                            }
+
+                        }
+                        var removedConfigNames = configNamesNormalized.Where(name => !oldMap.ContainsKey(name)).ToArray();
+                        foreach (var configName in removedConfigNames)
+                        {
+                            var config = oldMap[configName];
+                            config.ConfigChanged -= ConfigOnConfigChanged;
+                            config.Dispose();
+                            newMap.Remove(configName);
+                            anyChanges = true;
+                        }
+                        if (anyChanges)
+                        {
+                            nameToConfigMap = newMap;
+                        }
+                    }
+                }
             }
         }
     }
