@@ -15,7 +15,7 @@ namespace AldurSoft.WurmApi.Logging
 
         public void Log(string message, Severity severity)
         {
-            logger.Log(GetLogLevel(severity), message, "WurmApi");
+            logger.Log(GetLogLevel(severity), message, "WurmApi", null);
         }
 
         private LogLevel GetLogLevel(Severity severity)

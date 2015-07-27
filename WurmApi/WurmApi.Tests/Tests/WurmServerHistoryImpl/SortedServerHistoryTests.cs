@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
 using AldurSoft.SimplePersist;
-using AldurSoft.WurmApi.Persistence;
-using AldurSoft.WurmApi.Persistence.DataModel.ServerHistoryModel;
-using AldurSoft.WurmApi.Persistence.WurmApiDataContextModule;
-using AldurSoft.WurmApi.Wurm.CharacterServers.WurmServerHistoryModule;
-using AldurSoft.WurmApi.Wurm.Servers;
+using AldurSoft.WurmApi.Modules.DataContext;
+using AldurSoft.WurmApi.Modules.DataContext.DataModel.ServerHistoryModel;
+using AldurSoft.WurmApi.Modules.Wurm.ServerHistory;
 using Moq;
 
 using NUnit.Framework;

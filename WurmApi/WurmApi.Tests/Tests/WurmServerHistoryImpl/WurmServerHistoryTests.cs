@@ -11,10 +11,6 @@ using AldurSoft.Core;
 using AldurSoft.Core.Testing;
 using AldurSoft.SimplePersist;
 using AldurSoft.WurmApi.Tests.Helpers;
-using AldurSoft.WurmApi.Wurm.Characters;
-using AldurSoft.WurmApi.Wurm.CharacterServers;
-using AldurSoft.WurmApi.Wurm.Logs;
-using AldurSoft.WurmApi.Wurm.Servers;
 using Moq;
 
 using NUnit.Framework;
@@ -41,7 +37,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServerHistoryImpl
 
             ConstructApi(Path.Combine(TestPaksDirFullPath, "WurmServerHistory-wurmdir"));
             ServerHistory = WurmApiManager.WurmServerHistory;
-            WurmApiManager.Update();
+            //WurmApiManager.Update();
         }
 
         [TestFixture]
@@ -50,42 +46,42 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServerHistoryImpl
             [Test]
             public async Task Gets()
             {
-                var server = await ServerHistory.TryGetServer(characterNameTestguy, new DateTime(2014, 12, 14, 17, 3, 0));
+                var server = await ServerHistory.GetServer(characterNameTestguy, new DateTime(2014, 12, 14, 17, 3, 0));
                 Expect(server, EqualTo(new ServerName("Exodus")));
             }
 
             [Test]
             public async Task NullWhenNoData()
             {
-                var server = await ServerHistory.TryGetServer(characterNameTestguy, new DateTime(2014, 12, 14, 17, 2, 0));
+                var server = await ServerHistory.GetServer(characterNameTestguy, new DateTime(2014, 12, 14, 17, 2, 0));
                 Expect(server, Null);
             }
 
             [Test]
             public async Task GetsWhenMoreData()
             {
-                var server1 = await ServerHistory.TryGetServer(characterNameTestguytwo, new DateTime(2014, 12, 14, 17, 0, 0));
+                var server1 = await ServerHistory.GetServer(characterNameTestguytwo, new DateTime(2014, 12, 14, 17, 0, 0));
                 Expect(server1, Null);
-                var server2 = await ServerHistory.TryGetServer(characterNameTestguytwo, new DateTime(2014, 12, 14, 17, 5, 0));
+                var server2 = await ServerHistory.GetServer(characterNameTestguytwo, new DateTime(2014, 12, 14, 17, 5, 0));
                 Expect(server2, EqualTo(new ServerName("Exodus")));
-                var server3 = await ServerHistory.TryGetServer(characterNameTestguytwo, new DateTime(2014, 12, 14, 17, 9, 59));
+                var server3 = await ServerHistory.GetServer(characterNameTestguytwo, new DateTime(2014, 12, 14, 17, 9, 59));
                 Expect(server3, EqualTo(new ServerName("Chaos")));
-                var currentServer1 = await ServerHistory.TryGetCurrentServer(characterNameTestguy);
+                var currentServer1 = await ServerHistory.GetCurrentServer(characterNameTestguy);
                 Expect(currentServer1, EqualTo(new ServerName("Exodus")));
-                var currentServer2 = await ServerHistory.TryGetCurrentServer(characterNameTestguytwo);
+                var currentServer2 = await ServerHistory.GetCurrentServer(characterNameTestguytwo);
                 Expect(currentServer2, EqualTo(new ServerName("Chaos")));
             }
 
             [Test]
             public async Task GetsAfterLiveEvent()
             {
-                WurmApiManager.Update();
+                //WurmApiManager.Update();
                 // next day
                 ClockScope.LocalNow = new DateTime(2014, 12, 15, 3, 5, 0);
                 ClockScope.LocalNowOffset = new DateTime(2014, 12, 15, 3, 5, 0);
 
                 // verify current
-                var nameCurrent1 = await ServerHistory.TryGetCurrentServer(characterNameTestguy);
+                var nameCurrent1 = await ServerHistory.GetCurrentServer(characterNameTestguy);
                 Expect(nameCurrent1, EqualTo(new ServerName("Exodus")));
 
                 // add live event
@@ -113,12 +109,12 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServerHistoryImpl
                 //Trace.WriteLine("-----");
 
                 // refresh and assert
-                WurmApiManager.Update();
-                var nameBefore = await ServerHistory.TryGetServer(characterNameTestguy, new DateTime(2014, 12, 15, 3, 3, 0));
+                //WurmApiManager.Update();
+                var nameBefore = await ServerHistory.GetServer(characterNameTestguy, new DateTime(2014, 12, 15, 3, 3, 0));
                 Expect(nameBefore, EqualTo(new ServerName("Exodus")));
-                var nameAfter = await ServerHistory.TryGetServer(characterNameTestguy, new DateTime(2014, 12, 15, 3, 5, 0));
+                var nameAfter = await ServerHistory.GetServer(characterNameTestguy, new DateTime(2014, 12, 15, 3, 5, 0));
                 Expect(nameAfter, EqualTo(new ServerName("Abuzabi")));
-                var nameCurrent2 = await ServerHistory.TryGetCurrentServer(characterNameTestguy);
+                var nameCurrent2 = await ServerHistory.GetCurrentServer(characterNameTestguy);
                 Expect(nameCurrent2, EqualTo(new ServerName("Abuzabi")));
             }
         }

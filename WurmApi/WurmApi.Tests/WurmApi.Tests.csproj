@@ -80,6 +80,10 @@
       <HintPath>..\..\Lib\NuGetPackages\SevenZipSharp.0.64\lib\SevenZipSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="Telerik.JustMock, Version=2015.2.715.1, Culture=neutral, PublicKeyToken=721b6c5bc0326b3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Lib\NuGetPackages\JustMock.2015.2.715.1\lib\Net35\Telerik.JustMock.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -94,8 +98,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Builders\LoggerBuilder.cs" />
+    <Compile Include="Helpers\DummyException.cs" />
     <Compile Include="Helpers\LogWriter.cs" />
     <Compile Include="Helpers\SelfTests\LogWriterTests.cs" />
+    <Compile Include="UnitTests\Events\PublicEventInvokerTests.cs" />
+    <Compile Include="UnitTests\Utility\SignallizableThreadedOperationTests.cs" />
     <Compile Include="Tests\WurmCharacterDirectoriesImpl\WurmCharacterDirectoriesTests.cs" />
     <Compile Include="Tests\WurmCharactersImpl\WurmCharactersTests.cs" />
     <Compile Include="Tests\WurmConfigDirectoriesImpl\WurmConfigDirectoriesTests.cs" />

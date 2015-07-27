@@ -7,14 +7,11 @@ using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
 using AldurSoft.WurmApi.Infrastructure;
-using AldurSoft.WurmApi.Logging;
-using AldurSoft.WurmApi.Validation;
-using AldurSoft.WurmApi.Wurm.Configs;
-using AldurSoft.WurmApi.Wurm.Configs.WurmConfigDirectoriesModule;
-using AldurSoft.WurmApi.Wurm.Configs.WurmConfigsModule;
-using AldurSoft.WurmApi.Wurm.GameClients;
-using AldurSoft.WurmApi.Wurm.Paths;
-using AldurSoft.WurmApi.Wurm.Paths.WurmPathsModule;
+using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories;
+using AldurSoft.WurmApi.Modules.Wurm.Configs;
+using AldurSoft.WurmApi.Modules.Wurm.Paths;
+using AldurSoft.WurmApi.Utility;
 using Moq;
 
 using NUnit.Framework;
@@ -113,7 +110,6 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigsImpl
             private TestPak wurmDir;
 
             public WurmConfigs System { get; private set; }
-            public Mock<IWurmGameClients> WurmGameClients = new Mock<IWurmGameClients>();
             public Mock<IWurmInstallDirectory> WurmInstallDirectory = new Mock<IWurmInstallDirectory>();
             private readonly WurmConfigDirectories wurmConfigDirectories;
 
@@ -137,12 +133,11 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigsImpl
                 WurmInstallDirectory.Setup(directory => directory.FullPath)
                     .Returns(this.wurmDir.DirectoryFullPath);
 
-                wurmConfigDirectories = new WurmConfigDirectories(new WurmPaths(WurmInstallDirectory.Object));
+                wurmConfigDirectories = new WurmConfigDirectories(new WurmPaths(WurmInstallDirectory.Object), new LoggerStub());
                 System = new WurmConfigs(
-                    WurmGameClients.Object,
                     wurmConfigDirectories,
                     Mock.Of<ILogger>(),
-                    Mock.Of<IThreadGuard>());
+                    new SimpleEventMarshaller());
             }
 
             public void Dispose()

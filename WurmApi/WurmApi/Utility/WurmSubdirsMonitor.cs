@@ -1,42 +1,91 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using AldurSoft.WurmApi.Infrastructure;
+using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Utility
 {
     /// <summary>
     /// Provides cached info about subdirectories and notifies when they change.
     /// </summary>
-    public abstract class WurmSubdirsMonitor : IDisposable, IRequireRefresh
+    public abstract class WurmSubdirsMonitor : IDisposable
     {
         protected readonly string DirectoryFullPath;
-        readonly FileSystemSubdirectoriesMonitor directoryMonitor;
+        readonly FileSystemWatcher fileSystemWatcher;
 
-        private readonly Dictionary<string, string> dirNameToFullPathMap = new Dictionary<string, string>();
+        IReadOnlyDictionary<string, string> dirNameToFullPathMap = new Dictionary<string, string>();
+        readonly RepeatableThreadedOperation rebuilder;
+        volatile bool initiallyRebuilt = false;
 
-        public WurmSubdirsMonitor(string directoryFullPath)
+        public WurmSubdirsMonitor(string directoryFullPath, ILogger logger)
         {
             this.DirectoryFullPath = directoryFullPath;
-            directoryMonitor = new FileSystemSubdirectoriesMonitor(directoryFullPath);
-            directoryMonitor.DirectoriesChanged += DirectoryMonitorOnDirectoriesChanged;
 
-            Rebuild();
+            rebuilder = new RepeatableThreadedOperation(() =>
+            {
+                bool changed = false;
+
+                var di = new DirectoryInfo(DirectoryFullPath);
+                var newMap = di.GetDirectories().ToDictionary(info => info.Name.ToUpperInvariant(), info => info.FullName);
+
+                var oldDirs = dirNameToFullPathMap.Select(pair => pair.Key).OrderBy(s => s).ToArray();
+                var newDirs = newMap.Select(pair => pair.Key).OrderBy(s => s).ToArray();
+
+                changed = oldDirs.SequenceEqual(newDirs);
+
+                if (changed)
+                {
+                    dirNameToFullPathMap = newMap;
+                    if (initiallyRebuilt)
+                    {
+                        OnDirectoriesChanged();
+                    }
+                }
+
+                initiallyRebuilt = true;
+            });
+
+            rebuilder.OperationError += (sender, args) =>
+            {
+                const int retryDelay = 5;
+                logger.Log(LogLevel.Error,
+                    string.Format("Error at directory refresh job, retrying in {0} seconds", retryDelay), this, args.Exception);
+                rebuilder.DelayedSignal(TimeSpan.FromSeconds(retryDelay));
+            };
+
+            fileSystemWatcher = new FileSystemWatcher(directoryFullPath) {NotifyFilter = NotifyFilters.DirectoryName};
+            fileSystemWatcher.Created += DirectoryMonitorOnDirectoriesChanged;
+            fileSystemWatcher.Renamed += DirectoryMonitorOnDirectoriesChanged;
+            fileSystemWatcher.Deleted += DirectoryMonitorOnDirectoriesChanged;
+            fileSystemWatcher.EnableRaisingEvents = true;
+
+            rebuilder.Signal();
+            rebuilder.WaitSynchronouslyForInitialOperation(TimeSpan.FromSeconds(30));
         }
 
         private void DirectoryMonitorOnDirectoriesChanged(object sender, EventArgs eventArgs)
         {
-            Rebuild();
+            rebuilder.Signal();
         }
 
         public IEnumerable<string> AllDirectoryNamesNormalized
         {
-            get { return dirNameToFullPathMap.Keys; }
+            get
+            {
+                return dirNameToFullPathMap.Keys;
+            }
         }
 
         public IEnumerable<string> AllDirectoriesFullPaths
         {
-            get { return this.dirNameToFullPathMap.Values; }
+            get
+            {
+                return this.dirNameToFullPathMap.Values;
+            }
         }
 
         public event EventHandler DirectoriesChanged;
@@ -48,52 +97,21 @@ namespace AldurSoft.WurmApi.Utility
                 handler(this, EventArgs.Empty);
         }
 
-        public void Refresh()
-        {
-            directoryMonitor.Refresh();
-        }
-
-        private void Rebuild()
-        {
-            var currentDirs = directoryMonitor.GetAllDirectories().ToArray();
-            bool changed = false;
-            foreach (var directoryInfo in currentDirs)
-            {
-                var dirName = directoryInfo.Name.ToUpperInvariant();
-                if (!dirNameToFullPathMap.ContainsKey(dirName))
-                {
-                    dirNameToFullPathMap.Add(dirName, directoryInfo.FullName);
-                    changed = true;
-                }
-            }
-
-            foreach (var keyvaluepair in dirNameToFullPathMap.ToArray())
-            {
-                if (currentDirs.All(info => info.Name.ToUpperInvariant() != keyvaluepair.Key))
-                {
-                    dirNameToFullPathMap.Remove(keyvaluepair.Key);
-                    changed = true;
-                }
-            }
-            if (changed)
-            {
-                OnDirectoriesChanged();
-            }
-        }
-
         public void Dispose()
         {
-            directoryMonitor.Dispose();
+            fileSystemWatcher.EnableRaisingEvents = false;
+            fileSystemWatcher.Dispose();
+            rebuilder.Dispose();
         }
 
-        protected string TryGetFullPathForDirName(string dirName)
+        protected string GetFullPathForDirName([NotNull] string dirName)
         {
+            if (dirName == null) throw new ArgumentNullException("dirName");
+
             string directoryFullPath;
-            dirNameToFullPathMap.TryGetValue(dirName.ToUpperInvariant(), out directoryFullPath);
-            if (directoryFullPath == null)
+            if (!dirNameToFullPathMap.TryGetValue(dirName.ToUpperInvariant(), out directoryFullPath))
             {
-                Rebuild();
-                dirNameToFullPathMap.TryGetValue(dirName.ToUpperInvariant(), out directoryFullPath);
+                throw new DataNotFoundException(dirName);
             }
             return directoryFullPath;
         }

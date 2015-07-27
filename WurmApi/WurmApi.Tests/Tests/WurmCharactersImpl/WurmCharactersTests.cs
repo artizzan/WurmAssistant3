@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AldurSoft.WurmApi.Wurm.Characters;
-using AldurSoft.WurmApi.Wurm.Servers;
 using NUnit.Framework;
 
 namespace AldurSoft.WurmApi.Tests.Tests.WurmCharactersImpl

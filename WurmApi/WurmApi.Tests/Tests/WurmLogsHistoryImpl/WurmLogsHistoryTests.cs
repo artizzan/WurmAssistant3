@@ -8,18 +8,12 @@ using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
 using AldurSoft.SimplePersist;
-using AldurSoft.WurmApi.Logging;
-using AldurSoft.WurmApi.Persistence.WurmApiDataContextModule;
-using AldurSoft.WurmApi.Validation;
-using AldurSoft.WurmApi.Wurm.CharacterDirectories.WurmCharacterDirectoriesModule;
-using AldurSoft.WurmApi.Wurm.Characters;
-using AldurSoft.WurmApi.Wurm.Logs;
-using AldurSoft.WurmApi.Wurm.Logs.Searching;
-using AldurSoft.WurmApi.Wurm.Logs.Searching.WurmLogsHistoryModule;
-using AldurSoft.WurmApi.Wurm.Logs.WurmLogDefinitionsModule;
-using AldurSoft.WurmApi.Wurm.Logs.WurmLogFilesModule;
-using AldurSoft.WurmApi.Wurm.Paths;
-using AldurSoft.WurmApi.Wurm.Paths.WurmPathsModule;
+using AldurSoft.WurmApi.Modules.DataContext;
+using AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories;
+using AldurSoft.WurmApi.Modules.Wurm.LogDefinitions;
+using AldurSoft.WurmApi.Modules.Wurm.LogFiles;
+using AldurSoft.WurmApi.Modules.Wurm.LogsHistory;
+using AldurSoft.WurmApi.Modules.Wurm.Paths;
 using Moq;
 
 using NUnit.Framework;
@@ -47,11 +41,11 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
             var installDir = new Mock<IWurmInstallDirectory>();
             installDir.Setup(directory => directory.FullPath).Returns(WurmDir.DirectoryFullPath);
 
-            wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDir.Object));
+            wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDir.Object), new LoggerStub());
 
 
             logger = new Mock<ILogger>();
-            logger.Setup(logger1 => logger1.Log(It.IsAny<LogLevel>(), It.IsAny<string>(), It.IsAny<object>()))
+            logger.Setup(logger1 => logger1.Log(It.IsAny<LogLevel>(), It.IsAny<string>(), It.IsAny<object>(), It.IsAny<Exception>()))
                 .Callback<LogLevel, string, object>(
                     (level, s, arg3) => Trace.WriteLine(string.Format("{0} {1} {2}", level, arg3, s)));
 
@@ -63,8 +57,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
                 new WurmLogsHistory(
                     new WurmApiDataContext(DataDir.DirectoryFullPath, Mock.Of<ISimplePersistLogger>()),
                     wurmLogFiles,
-                    logger.Object,
-                    Mock.Of<IThreadGuard>());
+                    logger.Object);
         }
 
         [TearDown]
@@ -176,7 +169,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
 
         private void VerifyLoggedErrors(int count = 0)
         {
-            logger.Verify(logger1 => logger1.Log(It.IsAny<LogLevel>(), It.IsAny<string>(), It.IsAny<object>()), Times.Exactly(count));
+            logger.Verify(logger1 => logger1.Log(It.IsAny<LogLevel>(), It.IsAny<string>(), It.IsAny<object>(), It.IsAny<Exception>()), Times.Exactly(count));
         }
     }
 }

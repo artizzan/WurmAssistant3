@@ -50,7 +50,6 @@
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="Eventing\EventAggregator.cs" />
     <Compile Include="Eventing\ExtensionMethods.cs" />
-    <Compile Include="FileSystemChangeMonitor.cs" />
     <Compile Include="NoException.cs" />
     <Compile Include="Nothing.cs" />
     <Compile Include="Percent.cs" />

@@ -237,9 +237,7 @@ namespace AldurSoft.Core.Eventing {
                 var target = reference.Target;
                 if (target == null) {
                     return false;
-                }
-
-                foreach(var pair in supportedHandlers) {
+                }foreach(var pair in supportedHandlers) {
                     if(pair.Key.IsAssignableFrom(messageType)) {
                         var result = pair.Value.Invoke(target, new[] { message });
                         if (result != null) {

@@ -7,17 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
-using AldurSoft.WurmApi.Logging;
-using AldurSoft.WurmApi.Validation;
-using AldurSoft.WurmApi.Wurm.CharacterDirectories.WurmCharacterDirectoriesModule;
-using AldurSoft.WurmApi.Wurm.Characters;
-using AldurSoft.WurmApi.Wurm.Logs;
-using AldurSoft.WurmApi.Wurm.Logs.Monitoring;
-using AldurSoft.WurmApi.Wurm.Logs.Monitoring.WurmLogsMonitorModule;
-using AldurSoft.WurmApi.Wurm.Logs.WurmLogDefinitionsModule;
-using AldurSoft.WurmApi.Wurm.Logs.WurmLogFilesModule;
-using AldurSoft.WurmApi.Wurm.Paths;
-using AldurSoft.WurmApi.Wurm.Paths.WurmPathsModule;
+using AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories;
+using AldurSoft.WurmApi.Modules.Wurm.LogDefinitions;
+using AldurSoft.WurmApi.Modules.Wurm.LogFiles;
+using AldurSoft.WurmApi.Modules.Wurm.LogsMonitor;
+using AldurSoft.WurmApi.Modules.Wurm.Paths;
 using Moq;
 
 using NUnit.Framework;
@@ -41,7 +35,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
             installDirectory.GetMock()
                 .Setup(directory => directory.FullPath)
                 .Returns(WurmDir.DirectoryFullPath);
-            wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDirectory));
+            wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDirectory), new LoggerStub());
             wurmLogFiles = new WurmLogFiles(
                 wurmCharacterDirectories,
                 Mock.Of<ILogger>(),
@@ -49,8 +43,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
             System =
                 new WurmLogsMonitor(
                     wurmLogFiles,
-                    Mock.Of<ILogger>(),
-                    Mock.Of<IThreadGuard>());
+                    Mock.Of<ILogger>());
         }
 
         [Test]
@@ -226,8 +219,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
 
         private void RefreshSystems()
         {
-            wurmCharacterDirectories.Refresh();
-            wurmLogFiles.Refresh();
+            //wurmCharacterDirectories.Refresh();
+            //wurmLogFiles.Refresh();
             System.Refresh();
         }
 

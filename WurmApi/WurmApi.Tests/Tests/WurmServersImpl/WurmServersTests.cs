@@ -8,12 +8,8 @@ using System.Threading.Tasks;
 
 using AldurSoft.Core;
 using AldurSoft.Core.Testing;
-using AldurSoft.WurmApi.Networking;
+using AldurSoft.WurmApi.Modules.Networking;
 using AldurSoft.WurmApi.Tests.Helpers;
-using AldurSoft.WurmApi.Wurm.Characters;
-using AldurSoft.WurmApi.Wurm.DateAndTime;
-using AldurSoft.WurmApi.Wurm.Logs;
-using AldurSoft.WurmApi.Wurm.Servers;
 using Moq;
 
 using NUnit.Framework;
@@ -48,7 +44,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
         [Test]
         public void TryGetByName_Gets()
         {
-            var server = Servers.TryGetByName(new ServerName("Exodus"));
+            var server = Servers.GetByName(new ServerName("Exodus"));
             Expect(server, !Null);
         }
 
@@ -70,7 +66,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
             public override void Setup()
             {
                 base.Setup();
-                server = Servers.TryGetByName(serverName);
+                server = Servers.GetByName(serverName);
                 event201412Writer =
                     new LogWriter(
                         Path.Combine(WurmDir.DirectoryFullPath, "players", "Testguy", "Logs", "_Event.2014-12.txt"),
@@ -126,7 +122,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
                             Timestamp = MockedNow
                         }
                     });
-                WurmApiManager.Update();
+                //WurmApiManager.Update();
                 var uptime = await server.TryGetCurrentUptime();
                 var datetime = await server.TryGetCurrentTime();
                 Expect(uptime, EqualTo(new TimeSpan(3, 15, 30, 0)));

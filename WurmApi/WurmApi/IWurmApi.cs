@@ -3,14 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AldurSoft.WurmApi.Wurm.Autoruns;
-using AldurSoft.WurmApi.Wurm.Characters;
-using AldurSoft.WurmApi.Wurm.Configs;
-using AldurSoft.WurmApi.Wurm.GameClients;
-using AldurSoft.WurmApi.Wurm.Logs;
-using AldurSoft.WurmApi.Wurm.Logs.Monitoring;
-using AldurSoft.WurmApi.Wurm.Logs.Searching;
-using AldurSoft.WurmApi.Wurm.Servers;
 
 namespace AldurSoft.WurmApi
 {
@@ -33,10 +25,6 @@ namespace AldurSoft.WurmApi
         /// </summary>
         IWurmConfigs WurmConfigs { get; }
         /// <summary>
-        /// API that provides information about running game clients.
-        /// </summary>
-        IWurmGameClients WurmGameClients { get; }
-        /// <summary>
         /// API that defines game log types supported by WurmApi.
         /// </summary>
         IWurmLogDefinitions WurmLogDefinitions { get; }
@@ -52,13 +40,5 @@ namespace AldurSoft.WurmApi
         /// API that provides information about wurm servers.
         /// </summary>
         IWurmServers WurmServers { get; }
-    }
-
-    public interface IWurmApiController
-    {
-        /// <summary>
-        /// Update the state of the API
-        /// </summary>
-        void Update();
     }
 }

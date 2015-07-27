@@ -9,15 +9,10 @@ using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
 using AldurSoft.WurmApi.Infrastructure;
-using AldurSoft.WurmApi.Logging;
-using AldurSoft.WurmApi.Wurm.CharacterDirectories.WurmCharacterDirectoriesModule;
-using AldurSoft.WurmApi.Wurm.Characters;
-using AldurSoft.WurmApi.Wurm.Logs;
-using AldurSoft.WurmApi.Wurm.Logs.Searching;
-using AldurSoft.WurmApi.Wurm.Logs.WurmLogDefinitionsModule;
-using AldurSoft.WurmApi.Wurm.Logs.WurmLogFilesModule;
-using AldurSoft.WurmApi.Wurm.Paths;
-using AldurSoft.WurmApi.Wurm.Paths.WurmPathsModule;
+using AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories;
+using AldurSoft.WurmApi.Modules.Wurm.LogDefinitions;
+using AldurSoft.WurmApi.Modules.Wurm.LogFiles;
+using AldurSoft.WurmApi.Modules.Wurm.Paths;
 using Moq;
 
 using NUnit.Framework;
@@ -54,7 +49,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
             installDir.GetMock()
                 .Setup(directory => directory.FullPath)
                 .Returns(wurmDir.DirectoryFullPath);
-            wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDir));
+            wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDir), new LoggerStub());
             system = new WurmLogFiles(wurmCharacterDirectories, Mock.Of<ILogger>(), new WurmLogDefinitions());
             testGuyLogFiles = system.GetManagerForCharacter(new CharacterName("Testguy"));
         }

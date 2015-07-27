@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AldurSoft.WurmApi.Wurm.Logs;
-using AldurSoft.WurmApi.Wurm.Logs.WurmLogDefinitionsModule;
+using AldurSoft.WurmApi.Modules.Wurm.LogDefinitions;
 using NUnit.Framework;
 
 namespace AldurSoft.WurmApi.Tests.Tests.WurmLogDefinitionsImpl

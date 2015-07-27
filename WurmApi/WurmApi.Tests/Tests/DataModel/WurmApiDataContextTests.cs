@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
 using AldurSoft.SimplePersist;
-using AldurSoft.WurmApi.Persistence.WurmApiDataContextModule;
+using AldurSoft.WurmApi.Modules.DataContext;
 using NUnit.Framework;
 
 using Ploeh.AutoFixture;

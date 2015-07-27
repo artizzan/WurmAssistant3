@@ -7,10 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
-using AldurSoft.WurmApi.Wurm.CharacterDirectories.WurmCharacterDirectoriesModule;
-using AldurSoft.WurmApi.Wurm.Characters;
-using AldurSoft.WurmApi.Wurm.Paths;
-using AldurSoft.WurmApi.Wurm.Paths.WurmPathsModule;
+using AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories;
+using AldurSoft.WurmApi.Modules.Wurm.Paths;
 using Moq;
 
 using NUnit.Framework;
@@ -34,7 +32,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmCharacterDirectoriesImpl
             Mock.Get(installDir)
                 .Setup(directory => directory.FullPath)
                 .Returns(testDir.DirectoryFullPath);
-            system = new WurmCharacterDirectories(new WurmPaths(installDir));
+            system = new WurmCharacterDirectories(new WurmPaths(installDir), new LoggerStub());
 
             playersDirInfo = new DirectoryInfo(Path.Combine(testDir.DirectoryFullPath, "players"));
         }
@@ -77,7 +75,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmCharacterDirectoriesImpl
                 system.DirectoriesChanged += (sender, args) => changed = true;
                 var dir = playersDirInfo.CreateSubdirectory("Newplayer");
                 Thread.Sleep(10); // might require more delay
-                system.Refresh();
+                //system.Refresh();
                 Expect(changed, True);
                 var allChars = system.GetAllCharacters().ToList();
                 var allDirFullPaths = system.AllDirectoriesFullPaths.ToList();

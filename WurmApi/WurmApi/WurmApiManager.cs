@@ -1,39 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using AldurSoft.WurmApi.Infrastructure;
 using AldurSoft.WurmApi.Logging;
-using AldurSoft.WurmApi.Networking;
-using AldurSoft.WurmApi.Networking.HttpWebRequestsModule;
-using AldurSoft.WurmApi.Persistence;
-using AldurSoft.WurmApi.Persistence.WurmApiDataContextModule;
-using AldurSoft.WurmApi.Validation;
-using AldurSoft.WurmApi.Validation.ThreadGuardModule;
-using AldurSoft.WurmApi.Wurm.Autoruns;
-using AldurSoft.WurmApi.Wurm.Autoruns.WurmAutorunsModule;
-using AldurSoft.WurmApi.Wurm.CharacterDirectories;
-using AldurSoft.WurmApi.Wurm.CharacterDirectories.WurmCharacterDirectoriesModule;
-using AldurSoft.WurmApi.Wurm.Characters;
-using AldurSoft.WurmApi.Wurm.Characters.WurmCharactersModule;
-using AldurSoft.WurmApi.Wurm.CharacterServers;
-using AldurSoft.WurmApi.Wurm.CharacterServers.WurmServerHistoryModule;
-using AldurSoft.WurmApi.Wurm.Configs;
-using AldurSoft.WurmApi.Wurm.Configs.WurmConfigDirectoriesModule;
-using AldurSoft.WurmApi.Wurm.Configs.WurmConfigsModule;
-using AldurSoft.WurmApi.Wurm.GameClients;
-using AldurSoft.WurmApi.Wurm.GameClients.WurmGameClientsModule;
-using AldurSoft.WurmApi.Wurm.Logs;
-using AldurSoft.WurmApi.Wurm.Logs.Monitoring;
-using AldurSoft.WurmApi.Wurm.Logs.Monitoring.WurmLogsMonitorModule;
-using AldurSoft.WurmApi.Wurm.Logs.Searching;
-using AldurSoft.WurmApi.Wurm.Logs.Searching.WurmLogsHistoryModule;
-using AldurSoft.WurmApi.Wurm.Logs.WurmLogDefinitionsModule;
-using AldurSoft.WurmApi.Wurm.Logs.WurmLogFilesModule;
-using AldurSoft.WurmApi.Wurm.Paths;
-using AldurSoft.WurmApi.Wurm.Paths.WurmInstallDirectoryModule;
-using AldurSoft.WurmApi.Wurm.Paths.WurmPathsModule;
-using AldurSoft.WurmApi.Wurm.Servers;
-using AldurSoft.WurmApi.Wurm.Servers.WurmServersModule;
+using AldurSoft.WurmApi.Modules.DataContext;
+using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Networking;
+using AldurSoft.WurmApi.Modules.Wurm.Autoruns;
+using AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories;
+using AldurSoft.WurmApi.Modules.Wurm.Characters;
+using AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories;
+using AldurSoft.WurmApi.Modules.Wurm.Configs;
+using AldurSoft.WurmApi.Modules.Wurm.InstallDirectory;
+using AldurSoft.WurmApi.Modules.Wurm.LogDefinitions;
+using AldurSoft.WurmApi.Modules.Wurm.LogFiles;
+using AldurSoft.WurmApi.Modules.Wurm.LogsHistory;
+using AldurSoft.WurmApi.Modules.Wurm.LogsMonitor;
+using AldurSoft.WurmApi.Modules.Wurm.Paths;
+using AldurSoft.WurmApi.Modules.Wurm.ServerHistory;
+using AldurSoft.WurmApi.Modules.Wurm.Servers;
+using AldurSoft.WurmApi.Utility;
 
 namespace AldurSoft.WurmApi
 {
@@ -62,21 +47,20 @@ namespace AldurSoft.WurmApi
     /// wipe its data directory of all contents. Alternatively WurmApi can just be disposed and recreated,
     /// but any active objects obtained from old (disposed instance of) WurmApi will no longer function.
     /// </remarks>
-    public sealed class WurmApiManager : IWurmApi, IWurmApiController, IWurmApiInternal, IDisposable
+    public sealed class WurmApiManager : IWurmApi, IWurmApiInternal, IDisposable
     {
         readonly List<IRequireRefresh> requireRefreshes = new List<IRequireRefresh>();
         readonly List<IDisposable> disposables = new List<IDisposable>();
 
-        private readonly IThreadGuard threadGuard;
-
         public WurmApiManager(
             WurmApiDataDirectory dataDirectory,
             WurmInstallDirectory installDirectory,
-            ILogger wurmApiLogger)
+            ILogger wurmApiLogger,
+            IEventMarshaller eventMarshaller = null)
         {
-            threadGuard = new ThreadGuard();
+            if (eventMarshaller == null) eventMarshaller = new ThreadPoolEventMarshaller(wurmApiLogger);
             IHttpWebRequests httpRequests = new HttpWebRequests();
-            ConstructSystems(dataDirectory.FullPath, installDirectory, httpRequests, wurmApiLogger);
+            ConstructSystems(dataDirectory.FullPath, installDirectory, httpRequests, wurmApiLogger, eventMarshaller);
         }
 
         /// <summary>
@@ -86,44 +70,38 @@ namespace AldurSoft.WurmApi
             string dataDir,
             IWurmInstallDirectory installDirectory,
             IHttpWebRequests httpWebRequests,
-            ILogger logger,
-            bool disableThreadGuard = true)
+            ILogger logger)
         {
-            if (disableThreadGuard)
-            {
-                threadGuard = new ThreadGuardStub();
-            }
-            ConstructSystems(dataDir, installDirectory, httpWebRequests, logger);
+            ConstructSystems(dataDir, installDirectory, httpWebRequests, logger, new ThreadPoolEventMarshaller(logger));
         }
 
-        private void ConstructSystems(
-            string wurmApiDataDirectoryFullPath,
-            IWurmInstallDirectory installDirectory,
-            IHttpWebRequests httpWebRequests,
-            ILogger logger)
+        void ConstructSystems(string wurmApiDataDirectoryFullPath, IWurmInstallDirectory installDirectory,
+            IHttpWebRequests httpWebRequests, ILogger logger, IEventMarshaller eventMarshaller)
         {
             Wire(installDirectory);
             Wire(httpWebRequests);
+
+            IInternalEventAggregator internalEventAggregator = new InternalEventAggregator();
+            IPublicEventInvoker publicEventInvoker = new PublicEventInvoker(eventMarshaller, logger);
 
             IWurmApiDataContext dataContext =
                 Wire(new WurmApiDataContext(wurmApiDataDirectoryFullPath, Wire(new SimplePersistLoggerAdapter(logger))));
 
             IWurmPaths paths = Wire(new WurmPaths(installDirectory));
-            IWurmGameClients clients = Wire(new WurmGameClients());
 
             IWurmServerList serverList = Wire(new WurmServerList());
 
             IWurmLogDefinitions logDefinitions = Wire(new WurmLogDefinitions());
 
-            IWurmConfigDirectories configDirectories = Wire(new WurmConfigDirectories(paths));
-            IWurmCharacterDirectories characterDirectories = Wire(new WurmCharacterDirectories(paths));
+            IWurmConfigDirectories configDirectories = Wire(new WurmConfigDirectories(paths, logger));
+            IWurmCharacterDirectories characterDirectories = Wire(new WurmCharacterDirectories(paths, logger));
             IWurmLogFiles logFiles = Wire(new WurmLogFiles(characterDirectories, logger, logDefinitions));
 
-            IWurmLogsMonitor logsMonitor = Wire(new WurmLogsMonitor(logFiles, logger, threadGuard));
-            IWurmLogsHistory logsHistory = Wire(new WurmLogsHistory(dataContext, logFiles, logger, threadGuard));
+            IWurmLogsMonitor logsMonitor = Wire(new WurmLogsMonitor(logFiles, logger));
+            IWurmLogsHistory logsHistory = Wire(new WurmLogsHistory(dataContext, logFiles, logger));
 
-            IWurmConfigs wurmConfigs = Wire(new WurmConfigs(clients, configDirectories, logger, threadGuard));
-            IWurmAutoruns autoruns = Wire(new WurmAutoruns(wurmConfigs, characterDirectories, threadGuard));
+            IWurmConfigs wurmConfigs = Wire(new WurmConfigs(configDirectories, logger, eventMarshaller));
+            IWurmAutoruns autoruns = Wire(new WurmAutoruns(wurmConfigs, characterDirectories));
 
             IWurmServerHistory wurmServerHistory =
                 Wire(new WurmServerHistory(dataContext, logsHistory, serverList, logger, logsMonitor, logFiles));
@@ -138,16 +116,14 @@ namespace AldurSoft.WurmApi
                         dataContext,
                         characterDirectories,
                         wurmServerHistory,
-                        logger, 
-                        threadGuard));
+                        logger));
 
             IWurmCharacters characters =
-                Wire(new WurmCharacters(characterDirectories, wurmConfigs, wurmServers, wurmServerHistory, threadGuard));
+                Wire(new WurmCharacters(characterDirectories, wurmConfigs, wurmServers, wurmServerHistory, logger));
 
             WurmAutoruns = autoruns;
             WurmCharacters = characters;
             WurmConfigs = wurmConfigs;
-            WurmGameClients = clients;
             WurmLogDefinitions = logDefinitions;
             WurmLogsHistory = logsHistory;
             WurmLogsMonitor = logsMonitor;
@@ -161,27 +137,13 @@ namespace AldurSoft.WurmApi
         public IWurmAutoruns WurmAutoruns { get; private set; }
         public IWurmCharacters WurmCharacters { get; private set; }
         public IWurmConfigs WurmConfigs { get; private set; }
-        public IWurmGameClients WurmGameClients { get; private set; }
         public IWurmLogDefinitions WurmLogDefinitions { get; private set; }
         public IWurmLogsHistory WurmLogsHistory { get; private set; }
         public IWurmLogsMonitor WurmLogsMonitor { get; private set; }
         public IWurmServers WurmServers { get; private set; }
 
-        /// <summary>
-        /// Updates engine state, allowing it to catch up on all real-time changes since last update and trigger all events.
-        /// </summary>
-        public void Update()
-        {
-            threadGuard.ValidateCurrentThread();
-            foreach (var requireRefresh in requireRefreshes)
-            {
-                requireRefresh.Refresh();
-            }
-        }
-
         public void Dispose()
         {
-            threadGuard.ValidateCurrentThread();
             foreach (var disposable in disposables)
             {
                 disposable.Dispose();

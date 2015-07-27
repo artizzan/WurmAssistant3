@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
-using AldurSoft.WurmApi.Wurm.Logs;
 using NUnit.Framework;
 
 namespace AldurSoft.WurmApi.Tests.Helpers.SelfTests

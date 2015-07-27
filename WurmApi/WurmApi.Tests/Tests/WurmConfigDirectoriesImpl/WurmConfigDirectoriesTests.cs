@@ -7,10 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
+using AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories;
+using AldurSoft.WurmApi.Modules.Wurm.Paths;
 using AldurSoft.WurmApi.Tests.Tests.WurmCharacterDirectoriesImpl;
-using AldurSoft.WurmApi.Wurm.Configs.WurmConfigDirectoriesModule;
-using AldurSoft.WurmApi.Wurm.Paths;
-using AldurSoft.WurmApi.Wurm.Paths.WurmPathsModule;
 using Moq;
 
 using NUnit.Framework;
@@ -34,7 +33,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigDirectoriesImpl
             Mock.Get(installDir)
                 .Setup(directory => directory.FullPath)
                 .Returns(testDir.DirectoryFullPath);
-            system = new WurmConfigDirectories(new WurmPaths(installDir));
+            system = new WurmConfigDirectories(new WurmPaths(installDir), new LoggerStub());
 
             configsDirInfo = new DirectoryInfo(Path.Combine(testDir.DirectoryFullPath, "configs"));
         }
@@ -77,7 +76,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigDirectoriesImpl
                 system.DirectoriesChanged += (sender, args) => changed = true;
                 var dir = configsDirInfo.CreateSubdirectory("newconfig");
                 Thread.Sleep(10); // might require more delay
-                system.Refresh();
+                //system.Refresh();
                 Expect(changed, True);
                 var allDirFullPaths = system.AllDirectoriesFullPaths.ToList();
                 var allDirNames = system.AllDirectoryNamesNormalized.ToList();
