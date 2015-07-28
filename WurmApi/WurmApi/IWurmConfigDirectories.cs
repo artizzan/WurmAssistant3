@@ -9,14 +9,14 @@ namespace AldurSoft.WurmApi
 
         IEnumerable<string> AllDirectoriesFullPaths { get; }
 
-        event EventHandler<EventArgs> DirectoriesChanged;
+        IEnumerable<string> AllConfigNames { get; }
 
         /// <summary>
-        /// 
+        /// Returns absolute gamesettings.txt file path for specified config name.
         /// </summary>
-        /// <param name="directoryName"></param>
+        /// <param name="directoryName">Case insensitive</param>
         /// <returns></returns>
-        /// <exception cref="DataNotFoundException"></exception>
+        /// <exception cref="DataNotFoundException">Config does not exist.</exception>
         string GetGameSettingsFileFullPathForConfigName(string directoryName);
     }
 }

@@ -39,18 +39,18 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
                 .Setup(directory => directory.FullPath)
                 .Returns(WurmDir.DirectoryFullPath);
             var internalEventAggregator = new InternalEventAggregator();
-            wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDirectory),
-                new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()), internalEventAggregator);
-            wurmLogFiles = new WurmLogFiles(
-                wurmCharacterDirectories,
-                Mock.Of<ILogger>(),
-                new WurmLogDefinitions(),
-                internalEventAggregator,
-                new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()));
-            System =
-                new WurmLogsMonitor(
-                    wurmLogFiles,
-                    Mock.Of<ILogger>());
+            //wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDirectory),
+            //    new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()), internalEventAggregator);
+            //wurmLogFiles = new WurmLogFiles(
+            //    wurmCharacterDirectories,
+            //    Mock.Of<ILogger>(),
+            //    new WurmLogDefinitions(),
+            //    internalEventAggregator,
+            //    new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()));
+            //System =
+            //    new WurmLogsMonitor(
+            //        wurmLogFiles,
+            //        Mock.Of<ILogger>());
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
                 Expect(events.Single().WurmLogEntries.Single().Timestamp, EqualTo(MockableClock.LocalNow));
                 Expect(events.Single().WurmLogEntries.Single().Content, EqualTo("Horses like this one have many uses."));
 
-                System.Unsubscribe(eventHandler);
+                //System.Unsubscribe(TODO, eventHandler);
 
                 WriteToLogFile("_Event.2014-01-01.txt", "[00:00:13] Horses like this one have many uses.");
 
@@ -108,8 +108,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
 
                 EventHandler<LogsMonitorEventArgs> anotherGuyEventHandler = (sender, args) => anotherGuyEvents.Add(args);
                 EventHandler<LogsMonitorEventArgs> unrelatedGuyEventHandler = (sender, args) => unrelatedGuyEvents.Add(args);
-                System.SubscribePm(new CharacterName("Testguy"), "Anotherguy", anotherGuyEventHandler);
-                System.SubscribePm(new CharacterName("Testguy"), "Unrelatedguy", unrelatedGuyEventHandler);
+                //System.SubscribePm(new CharacterName("Testguy"), "Anotherguy", anotherGuyEventHandler);
+                //System.SubscribePm(new CharacterName("Testguy"), "Unrelatedguy", unrelatedGuyEventHandler);
                 WriteToLogFile("PM__Anotherguy.2014-01-01.txt", "[00:00:12] <Anotherguy> Horses like this one have many uses.");
 
                 Thread.Sleep(20);
@@ -123,7 +123,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
                 Expect(anotherGuyEvents.Single().WurmLogEntries.Single().Content, EqualTo("Horses like this one have many uses."));
                 Expect(anotherGuyEvents.Single().WurmLogEntries.Single().Source, EqualTo("Anotherguy"));
 
-                System.UnsubscribePm(anotherGuyEventHandler);
+                //System.UnsubscribePm(TODO, TODO, anotherGuyEventHandler);
 
                 WriteToLogFile("PM__Anotherguy.2014-01-01.txt", "[00:00:13] <Anotherguy> Horses like this one have many uses.");
 
@@ -145,7 +145,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
 
                 List<LogsMonitorEventArgs> allEvents = new List<LogsMonitorEventArgs>();
                 EventHandler<LogsMonitorEventArgs> eventHandler = (sender, args) => allEvents.Add(args);
-                System.SubscribeAll(eventHandler);
+                System.SubscribeAllActive(eventHandler);
 
                 // should not gather this, since no normal subscription for these events yet
                 WriteToLogFile("_Event.2014-01-01.txt", "Logging started 2014-01-01");
@@ -171,7 +171,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
                 Thread.Sleep(20);
                 RefreshSystems();
 
-                System.Unsubscribe(regularSubHandler);
+                //System.Unsubscribe(TODO, regularSubHandler);
 
                 // should not gather this, since all subs are unsubscribed
                 WriteToLogFile("_Event.2014-01-01.txt", "[00:00:13] Horses like this one have many uses.");
@@ -228,7 +228,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
         {
             //wurmCharacterDirectories.Refresh();
             //wurmLogFiles.Refresh();
-            System.Refresh();
+            //System.Refresh();
         }
 
         [TearDown]

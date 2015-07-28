@@ -54,6 +54,24 @@ namespace AldurSoft.WurmApi.Modules.Events.Public
             }
         }
 
+        public void TriggerInstantly<TEventArgs>(EventHandler<TEventArgs> handler, object source, TEventArgs args) where TEventArgs : EventArgs
+        {
+            publicEventMarshaller.Marshal(() =>
+            {
+                try
+                {
+                    if (handler != null)
+                        handler(source, args);
+                }
+                catch (Exception exception)
+                {
+                    logger.Log(LogLevel.Error,
+                        "EventMarshaller has thrown an unhandled exception on instant handler invocation", this,
+                        exception);
+                }
+            });
+        }
+
         public void Dispose()
         {
             stop = true;

@@ -49,7 +49,7 @@ namespace AldurSoft.WurmApi
     /// wipe its data directory of all contents. Alternatively WurmApi can just be disposed and recreated,
     /// but any active objects obtained from old (disposed instance of) WurmApi will no longer function.
     /// </remarks>
-    public sealed class WurmApiManager : IWurmApi, IWurmApiInternal, IDisposable
+    public sealed class WurmApiManager : IWurmApi, IDisposable
     {
         readonly List<IRequireRefresh> requireRefreshes = new List<IRequireRefresh>();
         readonly List<IDisposable> disposables = new List<IDisposable>();
@@ -96,11 +96,15 @@ namespace AldurSoft.WurmApi
 
             IWurmLogDefinitions logDefinitions = Wire(new WurmLogDefinitions());
 
-            IWurmConfigDirectories configDirectories = Wire(new WurmConfigDirectories(paths, publicEventInvoker, internalEventAggregator));
-            IWurmCharacterDirectories characterDirectories = Wire(new WurmCharacterDirectories(paths, publicEventInvoker, internalEventAggregator));
-            IWurmLogFiles logFiles = Wire(new WurmLogFiles(characterDirectories, logger, logDefinitions, internalEventAggregator, publicEventInvoker));
+            IWurmConfigDirectories configDirectories = Wire(new WurmConfigDirectories(paths, internalEventAggregator));
+            IWurmCharacterDirectories characterDirectories = Wire(new WurmCharacterDirectories(paths, internalEventAggregator));
+            IWurmLogFiles logFiles =
+                Wire(new WurmLogFiles(characterDirectories, logger, logDefinitions, internalEventAggregator,
+                    internalEventInvoker));
 
-            IWurmLogsMonitor logsMonitor = Wire(new WurmLogsMonitor(logFiles, logger));
+            IWurmLogsMonitor logsMonitor =
+                Wire(new WurmLogsMonitor(logFiles, logger, publicEventInvoker, internalEventAggregator,
+                    characterDirectories));
             IWurmLogsHistory logsHistory = Wire(new WurmLogsHistory(dataContext, logFiles, logger));
 
             IWurmConfigs wurmConfigs = Wire(new WurmConfigs(configDirectories, logger, publicEventInvoker, internalEventAggregator));
@@ -110,16 +114,8 @@ namespace AldurSoft.WurmApi
                 Wire(new WurmServerHistory(dataContext, logsHistory, serverList, logger, logsMonitor, logFiles));
 
             IWurmServers wurmServers =
-                Wire(
-                    new WurmServers(
-                        logsHistory,
-                        logsMonitor,
-                        serverList,
-                        httpWebRequests,
-                        dataContext,
-                        characterDirectories,
-                        wurmServerHistory,
-                        logger));
+                Wire(new WurmServers(logsHistory, logsMonitor, serverList, httpWebRequests, dataContext,
+                    characterDirectories, wurmServerHistory, logger));
 
             IWurmCharacters characters =
                 Wire(new WurmCharacters(characterDirectories, wurmConfigs, wurmServers, wurmServerHistory, logger));
@@ -135,6 +131,9 @@ namespace AldurSoft.WurmApi
             // internal systems
 
             WurmServerHistory = wurmServerHistory;
+            WurmCharacterDirectories = characterDirectories;
+            WurmConfigDirectories = configDirectories;
+            InternalEventAggregator = internalEventAggregator;
         }
 
         public IWurmAutoruns WurmAutoruns { get; private set; }
@@ -164,16 +163,6 @@ namespace AldurSoft.WurmApi
 
         private TSystem Wire<TSystem>(TSystem system)
         {
-            var requiresRefresh = system as IRequireRefresh;
-            if (requiresRefresh != null)
-            {
-                if (requireRefreshes.Contains(requiresRefresh))
-                {
-                    throw new InvalidOperationException(
-                        "attempted to wire same object twice for IRequireRefresh, obj type: " + system.GetType());
-                }
-                requireRefreshes.Add(requiresRefresh);
-            }
             var disposable = system as IDisposable;
             if (disposable != null)
             {
@@ -188,6 +177,9 @@ namespace AldurSoft.WurmApi
 
         // internal systems
 
-        public IWurmServerHistory WurmServerHistory { get; private set; }
+        internal IWurmServerHistory WurmServerHistory { get; private set; }
+        internal IWurmCharacterDirectories WurmCharacterDirectories { get; private set; }
+        internal IWurmConfigDirectories WurmConfigDirectories { get; private set; }
+        internal IInternalEventAggregator InternalEventAggregator { get; private set; }
     }
 }

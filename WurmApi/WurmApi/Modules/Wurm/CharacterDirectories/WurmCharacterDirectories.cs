@@ -17,10 +17,8 @@ namespace AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories
     {
         readonly IInternalEventAggregator eventAggregator;
 
-        public WurmCharacterDirectories(
-            IWurmPaths wurmPaths, IPublicEventInvoker publicEventInvoker,
-            [NotNull] IInternalEventAggregator eventAggregator)
-            : base(wurmPaths.CharactersDirFullPath, publicEventInvoker)
+        public WurmCharacterDirectories(IWurmPaths wurmPaths, [NotNull] IInternalEventAggregator eventAggregator)
+            : base(wurmPaths.CharactersDirFullPath)
         {
             if (eventAggregator == null) throw new ArgumentNullException("eventAggregator");
             this.eventAggregator = eventAggregator;

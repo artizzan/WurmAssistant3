@@ -98,10 +98,25 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Builders\HttpWebRequestsBuilder.cs" />
     <Compile Include="Builders\LoggerBuilder.cs" />
+    <Compile Include="Builders\WurmClient\Autorun.cs" />
+    <Compile Include="Builders\WurmClient\Defaults.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Defaults.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Builders\WurmClient\GameSettings.cs" />
+    <Compile Include="Builders\WurmClient\WurmClientMock.cs" />
+    <Compile Include="Builders\WurmClient\WurmClientMockBuilder.cs" />
+    <Compile Include="Builders\WurmClient\WurmClientMockValidator.cs" />
+    <Compile Include="Builders\WurmClient\WurmConfig.cs" />
+    <Compile Include="Builders\WurmClient\WurmLogs.cs" />
+    <Compile Include="Builders\WurmClient\WurmPlayer.cs" />
     <Compile Include="Helpers\DummyException.cs" />
     <Compile Include="Helpers\LogWriter.cs" />
     <Compile Include="Helpers\SelfTests\LogWriterTests.cs" />
+    <Compile Include="Helpers\Subscriber.cs" />
     <Compile Include="UnitTests\Events\InternalEventInvokerTests.cs" />
     <Compile Include="UnitTests\Events\PublicEventInvokerTests.cs" />
     <Compile Include="UnitTests\Utility\SignallizableThreadedOperationTests.cs" />
@@ -121,6 +136,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\DataModel\WurmApiDataContextTests.cs" />
     <Compile Include="Tests\WurmDateTimeTests.cs" />
+    <Compile Include="WurmApiFixtureV2.cs" />
     <Compile Include="WurmApiIntegrationFixtureBase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -272,6 +288,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\AldursLab\Lab\Testing\Testing.csproj">
+      <Project>{A0CE70F0-6F13-47F5-9B61-69F6BE1AB082}</Project>
+      <Name>Testing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Core.Testing\Core.Testing.csproj">
       <Project>{6e2db07a-e220-4e96-ac4b-4fdfbd275a21}</Project>
       <Name>Core.Testing</Name>
@@ -297,6 +317,8 @@
     <Folder Include="Resources\TestPaks\logs-samples-forLogsMonitor\players\Testguy\logs\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\autorun.txt" />
+    <None Include="Resources\gamesettings.txt" />
     <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactBL\autorun.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -723,6 +745,12 @@
     <Content Include="Resources\TestPaks\WurmServerHistory-wurmdir\players\Testguy\logs\_Event.2014-12.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Builders\WurmClient\Defaults.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Defaults.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

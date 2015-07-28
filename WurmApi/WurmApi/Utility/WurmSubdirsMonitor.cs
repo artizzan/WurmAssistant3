@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AldurSoft.WurmApi.Infrastructure;
 using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Public;
 using JetBrains.Annotations;
 
@@ -17,7 +18,6 @@ namespace AldurSoft.WurmApi.Utility
     abstract class WurmSubdirsMonitor : IDisposable
     {
         protected readonly string DirectoryFullPath;
-        readonly IPublicEventInvoker publicEventInvoker;
         readonly FileSystemWatcher fileSystemWatcher;
 
         IReadOnlyDictionary<string, string> dirNameToFullPathMap = new Dictionary<string, string>();
@@ -25,14 +25,10 @@ namespace AldurSoft.WurmApi.Utility
         volatile int rebuildPending = 1;
         volatile object locker = new object();
 
-        readonly PublicEvent onDirectoriesChanged;
-
-        public WurmSubdirsMonitor([NotNull] string directoryFullPath, [NotNull] IPublicEventInvoker publicEventInvoker)
+        public WurmSubdirsMonitor([NotNull] string directoryFullPath)
         {
             if (directoryFullPath == null) throw new ArgumentNullException("directoryFullPath");
-            if (publicEventInvoker == null) throw new ArgumentNullException("publicEventInvoker");
             this.DirectoryFullPath = directoryFullPath;
-            this.publicEventInvoker = publicEventInvoker;
 
             fileSystemWatcher = new FileSystemWatcher(directoryFullPath) {NotifyFilter = NotifyFilters.DirectoryName};
             fileSystemWatcher.Created += DirectoryMonitorOnDirectoriesChanged;
@@ -40,16 +36,12 @@ namespace AldurSoft.WurmApi.Utility
             fileSystemWatcher.Deleted += DirectoryMonitorOnDirectoriesChanged;
             fileSystemWatcher.EnableRaisingEvents = true;
 
-            onDirectoriesChanged = publicEventInvoker.Create(() => DirectoriesChanged.SafeInvoke(this),
-                TimeSpan.FromMilliseconds(500));
-
-            Refresh();
+            Refresh(false);
         }
 
         private void DirectoryMonitorOnDirectoriesChanged(object sender, EventArgs eventArgs)
         {
             rebuildPending = 1;
-            onDirectoriesChanged.Trigger();
             OnDirectoriesChanged();
         }
 
@@ -73,8 +65,6 @@ namespace AldurSoft.WurmApi.Utility
             }
         }
 
-        public event EventHandler<EventArgs> DirectoriesChanged;
-
         public void Dispose()
         {
             fileSystemWatcher.EnableRaisingEvents = false;
@@ -95,7 +85,7 @@ namespace AldurSoft.WurmApi.Utility
             return directoryFullPath;
         }
 
-        private void Refresh()
+        private void Refresh(bool sendEvents = true)
         {
             if (rebuildPending == 1)
             {
@@ -117,7 +107,7 @@ namespace AldurSoft.WurmApi.Utility
                         if (changed)
                         {
                             dirNameToFullPathMap = newMap;
-                            OnDirectoriesChanged();
+                            if (sendEvents) OnDirectoriesChanged();
                         }
                     }
                 }

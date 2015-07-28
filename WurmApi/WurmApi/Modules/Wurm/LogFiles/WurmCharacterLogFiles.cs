@@ -6,8 +6,11 @@ using System.Threading;
 using AldurSoft.Core;
 using AldurSoft.WurmApi.Infrastructure;
 using AldurSoft.WurmApi.Modules.Events;
+using AldurSoft.WurmApi.Modules.Events.Internal;
+using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
 using AldurSoft.WurmApi.Modules.Events.Public;
 using AldurSoft.WurmApi.Utility;
+using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
 {
@@ -27,25 +30,26 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
         readonly object locker = new object();
         readonly FileSystemWatcher directoryWatcher;
 
-        readonly PublicEvent onFilesAddedOrRemoved;
+        readonly InternalEvent onFilesAddedOrRemoved;
 
         internal WurmCharacterLogFiles(
-            CharacterName characterName,
-            string fullDirPathToCharacterLogsDir,
-            ILogger logger,
-            LogFileInfoFactory logFileInfoFactory, 
-            IPublicEventInvoker publicEventInvoker)
+            [NotNull] CharacterName characterName,
+            [NotNull] string fullDirPathToCharacterLogsDir,
+            [NotNull] ILogger logger,
+            [NotNull] LogFileInfoFactory logFileInfoFactory, 
+            [NotNull] IInternalEventInvoker internalEventInvoker)
         {
             if (characterName == null) throw new ArgumentNullException("characterName");
             if (fullDirPathToCharacterLogsDir == null) throw new ArgumentNullException("fullDirPathToCharacterLogsDir");
             if (logger == null) throw new ArgumentNullException("logger");
             if (logFileInfoFactory == null) throw new ArgumentNullException("logFileInfoFactory");
+            if (internalEventInvoker == null) throw new ArgumentNullException("internalEventInvoker");
             this.logger = logger;
             this.logFileInfoFactory = logFileInfoFactory;
             CharacterName = characterName;
             FullDirPathToCharacterLogsDir = fullDirPathToCharacterLogsDir;
 
-            onFilesAddedOrRemoved = publicEventInvoker.Create(() => FilesAddedOrRemoved.SafeInvoke(this), TimeSpan.FromMilliseconds(500));
+            onFilesAddedOrRemoved = internalEventInvoker.Create(() => new CharacterLogFilesAddedOrRemoved(CharacterName));
 
             directoryWatcher = new FileSystemWatcher(fullDirPathToCharacterLogsDir)
             {
@@ -68,8 +72,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
             rebuildRequired = 1;
             onFilesAddedOrRemoved.Trigger();
         }
-
-        public event EventHandler<EventArgs> FilesAddedOrRemoved;
 
         public IEnumerable<LogFileInfo> TryGetLogFiles(DateTime dateFrom, DateTime dateTo)
         {

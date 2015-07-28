@@ -9,15 +9,18 @@ namespace AldurSoft.WurmApi
 
         IEnumerable<string> AllDirectoriesFullPaths { get; }
 
-        event EventHandler<EventArgs> DirectoriesChanged;
-
         /// <summary>
+        /// Returns absolute directory path for specified character.
         /// </summary>
-        /// <param name="characterName"></param>
+        /// <param name="characterName">Case insensitive</param>
         /// <returns></returns>
-        /// <exception cref="DataNotFoundException"></exception>
+        /// <exception cref="DataNotFoundException">Character does not exist.</exception>
         string GetFullDirPathForCharacter(CharacterName characterName);
 
+        /// <summary>
+        /// Returns all game characters.
+        /// </summary>
+        /// <returns></returns>
         IEnumerable<CharacterName> GetAllCharacters();
     }
 }

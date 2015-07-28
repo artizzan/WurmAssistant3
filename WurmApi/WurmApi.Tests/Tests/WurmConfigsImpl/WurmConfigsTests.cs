@@ -58,7 +58,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigsImpl
                 {
                     var wurmConfigs = frame.System;
                     var config = (WurmConfig)wurmConfigs.GetConfig(CompactConfigName);
-                    config.SkillGainRate = SkillGainRate.PerInteger;
+                    //config.SkillGainRate = SkillGainRate.PerInteger;
                     await Task.Delay(TimeSpan.FromMilliseconds(5));
                     // expecting changewatcher event may fail, depends on file system response time
                     ((IRequireRefresh)config).Refresh();
@@ -136,7 +136,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigsImpl
                     .Returns(this.wurmDir.DirectoryFullPath);
                 var publicEventInvoker = new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub());
                 var internalEventAggregator = new InternalEventAggregator();
-                wurmConfigDirectories = new WurmConfigDirectories(new WurmPaths(WurmInstallDirectory.Object), publicEventInvoker, internalEventAggregator);
+                //wurmConfigDirectories = new WurmConfigDirectories(new WurmPaths(WurmInstallDirectory.Object), publicEventInvoker, internalEventAggregator);
                 System = new WurmConfigs(
                     wurmConfigDirectories,
                     Mock.Of<ILogger>(),

@@ -23,7 +23,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
         readonly ILogger logger;
         readonly IWurmLogDefinitions wurmLogDefinitions;
         readonly IInternalEventAggregator eventAggregator;
-        readonly IPublicEventInvoker publicEventInvoker;
+        readonly IInternalEventInvoker internalEventInvoker;
 
         IReadOnlyDictionary<CharacterName, WurmCharacterLogFiles> characterNormalizedNameToWatcherMap =
             new Dictionary<CharacterName, WurmCharacterLogFiles>();
@@ -32,18 +32,18 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
         readonly object locker = new object();
 
         internal WurmLogFiles(IWurmCharacterDirectories wurmCharacterDirectories, ILogger logger, IWurmLogDefinitions wurmLogDefinitions,
-            [NotNull] IInternalEventAggregator eventAggregator, [NotNull] IPublicEventInvoker publicEventInvoker)
+            [NotNull] IInternalEventAggregator eventAggregator, [NotNull] IInternalEventInvoker internalEventInvoker)
         {
             if (wurmCharacterDirectories == null) throw new ArgumentNullException("wurmCharacterDirectories");
             if (logger == null) throw new ArgumentNullException("logger");
             if (wurmLogDefinitions == null) throw new ArgumentNullException("wurmLogDefinitions");
             if (eventAggregator == null) throw new ArgumentNullException("eventAggregator");
-            if (publicEventInvoker == null) throw new ArgumentNullException("publicEventInvoker");
+            if (internalEventInvoker == null) throw new ArgumentNullException("internalEventInvoker");
             this.wurmCharacterDirectories = wurmCharacterDirectories;
             this.logger = logger;
             this.wurmLogDefinitions = wurmLogDefinitions;
             this.eventAggregator = eventAggregator;
-            this.publicEventInvoker = publicEventInvoker;
+            this.internalEventInvoker = internalEventInvoker;
 
             eventAggregator.Subscribe(this);
         }
@@ -168,7 +168,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
                             logsDirPath,
                             logger,
                             new LogFileInfoFactory(wurmLogDefinitions, logger),
-                            publicEventInvoker);
+                            internalEventInvoker);
 
                         newMap.Add(charName, logFiles);
                     }

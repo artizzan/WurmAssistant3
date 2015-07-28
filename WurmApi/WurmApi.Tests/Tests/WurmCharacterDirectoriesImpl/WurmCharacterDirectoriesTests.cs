@@ -9,9 +9,12 @@ using System.Threading.Tasks;
 using AldurSoft.Core.Testing;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
+using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
 using AldurSoft.WurmApi.Modules.Events.Public;
 using AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories;
 using AldurSoft.WurmApi.Modules.Wurm.Paths;
+using AldurSoft.WurmApi.Tests.Builders.WurmClient;
+using AldurSoft.WurmApi.Tests.Helpers;
 using Moq;
 
 using NUnit.Framework;
@@ -20,96 +23,66 @@ using Ploeh.AutoFixture;
 
 namespace AldurSoft.WurmApi.Tests.Tests.WurmCharacterDirectoriesImpl
 {
-    public class WurmCharacterDirectoriesTests : WurmApiFixtureBase
+    public class WurmCharacterDirectoriesTests : AssertionHelper
     {
-        private readonly WurmCharacterDirectories system;
-        readonly TestPak testDir;
+        WurmApiFixtureV2 fixture;
+        WurmClientMock clientMock;
+        IWurmCharacterDirectories characterDirectories;
 
-        private readonly DirectoryInfo playersDirInfo;
-
-        public WurmCharacterDirectoriesTests()
+        [SetUp]
+        public void Setup()
         {
-            
-            testDir = CreateTestPakFromDir(Path.Combine(TestPaksDirFullPath, "WurmDir-PlayersDirWithPlayers"));
-            var installDir = Automocker.Create<IWurmInstallDirectory>();
-            Mock.Get(installDir)
-                .Setup(directory => directory.FullPath)
-                .Returns(testDir.DirectoryFullPath);
-            system = new WurmCharacterDirectories(new WurmPaths(installDir),
-                new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()), new InternalEventAggregator());
-
-            playersDirInfo = new DirectoryInfo(Path.Combine(testDir.DirectoryFullPath, "players"));
+            fixture = new WurmApiFixtureV2();
+            clientMock = fixture.WurmClientMock;
+            characterDirectories = fixture.WurmApiManager.WurmCharacterDirectories;
         }
 
-        [TearDown]
-        public override void Teardown()
+        [Test]
+        public void ReturnsValidNormalizedNames()
         {
-            system.Dispose();
-            base.Teardown();
+            var players = SetupDefaultPlayers().OrderBy(s => s);
+            var dirnames = characterDirectories.AllDirectoryNamesNormalized.OrderBy(s => s).ToArray();
+            Expect(dirnames, EqualTo(players));
         }
 
-        public class AllDirectoryNamesNormalized : WurmCharacterDirectoriesTests
+        [Test]
+        public void ReturnsValidFullPaths()
         {
-            [Test]
-            public void ReturnsNormalizedNames()
-            {
-                var realdirnames = playersDirInfo.GetDirectories().Select(s => s.Name.ToUpperInvariant()).OrderBy(s => s).ToArray();
-                var dirnames = system.AllDirectoryNamesNormalized.OrderBy(s => s).ToArray();
-                Expect(dirnames, EqualTo(realdirnames));
-            }
+            SetupDefaultPlayers();
+            var realdirfullpaths = fixture.WurmClientMock.Players.Select(player => player.PlayerDir.FullName).OrderBy(s => s).ToArray();
+            var dirpaths = characterDirectories.AllDirectoriesFullPaths.OrderBy(s => s).ToArray();
+            Expect(dirpaths, EqualTo(realdirfullpaths));
         }
 
-        public class AllDirectoriesFullPaths : WurmCharacterDirectoriesTests
+        [Test]
+        public void OnChanged_TriggersEvent_UpdatesData()
         {
-            [Test]
-            public void ReturnsFullPaths()
-            {
-                var realdirfullpaths = playersDirInfo.GetDirectories().Select(s => s.FullName).OrderBy(s => s).ToArray();
-                var dirpaths = system.AllDirectoriesFullPaths.OrderBy(s => s).ToArray();
-                Expect(dirpaths, EqualTo(realdirfullpaths));
-            }
+            var subscriber = CreateSubscriber();
+            var batman = clientMock.AddPlayer("Batman");
+            Thread.Sleep(20);
+
+            // verifying event sent
+            Expect(subscriber.ReceivedMessages, GreaterThan(0));
+
+            // verifying data updated
+            var allChars = characterDirectories.GetAllCharacters().ToList();
+            var allDirFullPaths = characterDirectories.AllDirectoriesFullPaths.ToList();
+            var allDirNames = characterDirectories.AllDirectoryNamesNormalized.ToList();
+            Expect(allChars, Member(new CharacterName(batman.Name)).And.Count.EqualTo(1));
+            Expect(allDirFullPaths, Member(batman.PlayerDir.FullName).And.Count.EqualTo(1));
+            Expect(allDirNames, Member(batman.PlayerDir.Name.ToUpperInvariant()).And.Count.EqualTo(1));
         }
 
-        public class DirectoriesChanged : WurmCharacterDirectoriesTests
+        string[] SetupDefaultPlayers()
         {
-            [Test]
-            public void TriggersOnChanged()
-            {
-                bool changed = false;
-                system.DirectoriesChanged += (sender, args) => changed = true;
-                var dir = playersDirInfo.CreateSubdirectory("Newplayer");
-                Thread.Sleep(10); // might require more delay
-                //system.Refresh();
-                Expect(changed, True);
-                var allChars = system.GetAllCharacters().ToList();
-                var allDirFullPaths = system.AllDirectoriesFullPaths.ToList();
-                var allDirNames = system.AllDirectoryNamesNormalized.ToList();
-                Expect(allChars, Member(new CharacterName("Newplayer")).And.Count.EqualTo(3));
-                Expect(allDirFullPaths, Member(dir.FullName).And.Count.EqualTo(3));
-                Expect(allDirNames, Member(dir.Name.ToUpperInvariant()).And.Count.EqualTo(3));
-            }
+            clientMock.AddPlayer("Foo");
+            clientMock.AddPlayer("Bar");
+            return new string[] {"Foo", "Bar"};
         }
 
-        public class GetFullDirPathForCharacter : WurmCharacterDirectoriesTests
+        Subscriber<CharacterDirectoriesChanged> CreateSubscriber()
         {
-            [Test]
-            public void GetsDirForCharacter()
-            {
-                var realPath = playersDirInfo.GetDirectories().Single(d => d.Name.Equals("someplayer", StringComparison.InvariantCultureIgnoreCase));
-                var dir = system.GetFullDirPathForCharacter(new CharacterName("someplayer"));
-                Expect(dir, EqualTo(realPath.FullName));
-            }
-        }
-
-        public class GetAllCharacters : WurmCharacterDirectoriesTests
-        {
-            [Test]
-            public void GetsAllCharacterNames()
-            {
-                var realdirnames = playersDirInfo.GetDirectories().Select(s => s.Name.ToUpperInvariant()).OrderBy(s => s).ToArray();
-                var allNames = system.GetAllCharacters().OrderBy(name => name.Normalized).Select(name => name.Normalized);
-                Expect(allNames, EqualTo(realdirnames));
-            }
+            return new Subscriber<CharacterDirectoriesChanged>(fixture.WurmApiManager.InternalEventAggregator);
         }
     }
 }

@@ -28,8 +28,8 @@ namespace AldurSoft.WurmApi
         public IEnumerable<LogEntry> WurmLogEntries { get; private set; }
 
         /// <summary>
-        /// Name of the wurm character, that this conversation is with.
-        /// Only applicable to Pm logs.
+        /// Optional. Name of conversation recipient, if used with dedicated Pm Subscription.
+        /// For any subscription, names of all chat participants can be read from Source property of LogEntry.
         /// </summary>
         public string ConversationNameNormalized { get; private set; }
     }

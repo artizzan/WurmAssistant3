@@ -1,27 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using AldursLab.Essentials.Extensions.DotNet.Collections.Generic;
 using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.Modules.Events.Internal;
+using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
+using AldurSoft.WurmApi.Modules.Events.Public;
 using AldurSoft.WurmApi.Utility;
+using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
 {
-    public class WurmLogsMonitor : IWurmLogsMonitor, IRequireRefresh
+    class WurmLogsMonitor : IWurmLogsMonitor, IDisposable, IHandle<CharacterDirectoriesChanged>
     {
-        private readonly IWurmLogFiles wurmLogFiles;
-        private readonly ILogger logger;
-        private readonly Dictionary<CharacterName, LogsMonitorEngineManager> characterNameToEngineManagers =
+        readonly IWurmLogFiles wurmLogFiles;
+        readonly ILogger logger;
+        readonly IPublicEventInvoker publicEventInvoker;
+        readonly IInternalEventAggregator internalEventAggregator;
+        readonly IWurmCharacterDirectories wumCharacterDirectories;
+
+        IReadOnlyDictionary<CharacterName, LogsMonitorEngineManager> characterNameToEngineManagers =
             new Dictionary<CharacterName, LogsMonitorEngineManager>();
 
-        private readonly List<EventHandler<LogsMonitorEventArgs>> allEventSubscriptions =
-            new List<EventHandler<LogsMonitorEventArgs>>(); 
+        readonly EventSubscriptionsTsafeHashset allEventSubscriptionsTsafe = new EventSubscriptionsTsafeHashset();
 
-        public WurmLogsMonitor(IWurmLogFiles wurmLogFiles, ILogger logger)
+        readonly Task updater;
+        volatile bool stop = false;
+        readonly object locker = new object();
+
+        public WurmLogsMonitor([NotNull] IWurmLogFiles wurmLogFiles, [NotNull] ILogger logger,
+            [NotNull] IPublicEventInvoker publicEventInvoker, [NotNull] IInternalEventAggregator internalEventAggregator,
+            [NotNull] IWurmCharacterDirectories wumCharacterDirectories)
         {
             if (wurmLogFiles == null) throw new ArgumentNullException("wurmLogFiles");
             if (logger == null) throw new ArgumentNullException("logger");
+            if (publicEventInvoker == null) throw new ArgumentNullException("publicEventInvoker");
+            if (internalEventAggregator == null) throw new ArgumentNullException("internalEventAggregator");
+            if (wumCharacterDirectories == null) throw new ArgumentNullException("wumCharacterDirectories");
             this.wurmLogFiles = wurmLogFiles;
             this.logger = logger;
+            this.publicEventInvoker = publicEventInvoker;
+            this.internalEventAggregator = internalEventAggregator;
+            this.wumCharacterDirectories = wumCharacterDirectories;
+
+            internalEventAggregator.Subscribe(this);
+
+            Rebuild();
+
+            updater = new Task(() =>
+            {
+                while (true)
+                {
+                    if (stop) return;
+                    Thread.Sleep(500);
+                    if (stop) return;
+
+                    foreach (var logsMonitorEngineManager in characterNameToEngineManagers.Values)
+                    {
+                        logsMonitorEngineManager.Update(allEventSubscriptionsTsafe);
+                    }
+                }
+            }, TaskCreationOptions.LongRunning);
+            updater.Start();
+        }
+
+        public void Handle(CharacterDirectoriesChanged message)
+        {
+            Rebuild();
         }
 
         public virtual void Subscribe(CharacterName characterName, LogType logType, EventHandler<LogsMonitorEventArgs> eventHandler)
@@ -30,96 +77,48 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
             manager.AddSubscription(logType, eventHandler);
         }
 
-        public virtual void Unsubscribe(EventHandler<LogsMonitorEventArgs> eventHandler)
-        {
-            foreach (var manager in characterNameToEngineManagers.Values)
-            {
-                manager.RemoveSubscription(eventHandler);
-            }
-        }
-
-        public void SubscribePm(CharacterName characterName, string pmRecipient, EventHandler<LogsMonitorEventArgs> eventHandler)
+        public virtual void Unsubscribe(CharacterName characterName, EventHandler<LogsMonitorEventArgs> eventHandler)
         {
             var manager = GetManager(characterName);
-            manager.AddPmSubscription(pmRecipient, eventHandler);
+            manager.RemoveSubscription(eventHandler);
         }
 
-        public void UnsubscribePm(EventHandler<LogsMonitorEventArgs> eventHandler)
+        public void SubscribePm(CharacterName characterName, CharacterName pmRecipient, EventHandler<LogsMonitorEventArgs> eventHandler)
         {
-            foreach (var manager in characterNameToEngineManagers.Values)
+            var manager = GetManager(characterName);
+            manager.AddPmSubscription(eventHandler, pmRecipient.Normalized);
+        }
+
+        public void UnsubscribePm(CharacterName characterName, CharacterName pmRecipient, EventHandler<LogsMonitorEventArgs> eventHandler)
+        {
+            var manager = GetManager(characterName);
+            manager.RemovePmSubscription(eventHandler, pmRecipient.Normalized);
+        }
+
+        public void SubscribeAllActive(EventHandler<LogsMonitorEventArgs> eventHandler)
+        {
+            var exists = allEventSubscriptionsTsafe.Add(eventHandler);
+            if (exists)
             {
-                manager.RemovePmSubscription(eventHandler);
+                logger.Log(LogLevel.Warn,
+                    "Attempted to SubscribeAllActive with handler, that's already subscribed. " +
+                    "Additional subscription will be ignored. " +
+                    "Handler pointing to method: "
+                    + eventHandler.Method.DeclaringType.FullName + eventHandler.Method.Name, this, null);
             }
         }
 
-        public void SubscribeAll(EventHandler<LogsMonitorEventArgs> eventHandler)
+        public void UnsubscribeAllActive(EventHandler<LogsMonitorEventArgs> eventHandler)
         {
-            allEventSubscriptions.Add(eventHandler);
+            allEventSubscriptionsTsafe.Remove(eventHandler);
         }
 
-        public void UnsubscribeAll(EventHandler<LogsMonitorEventArgs> eventHandler)
+        public void UnsubscribeFromAll(EventHandler<LogsMonitorEventArgs> eventHandler)
         {
-            allEventSubscriptions.Remove(eventHandler);
-        }
-
-        public void Refresh()
-        {
-            var activeEngineManagers = characterNameToEngineManagers.Values.Where(manager => manager.IsActive);
-            foreach (var logsMonitorEngineManager in activeEngineManagers)
+            UnsubscribeAllActive(eventHandler);
+            foreach (var characterNameToEngineManager in characterNameToEngineManagers.Values)
             {
-                BroadcastAllEventsFromManager(logsMonitorEngineManager);
-            }
-        }
-
-        private void BroadcastAllEventsFromManager(LogsMonitorEngineManager logsMonitorEngineManager)
-        {
-            IEnumerable<MonitorEvents> events = logsMonitorEngineManager.RefreshAndGetNewEvents();
-            var eventsGroupedByType = events.GroupBy(monitorEvents => monitorEvents.LogFileInfo.LogType);
-            foreach (var eventGroup in eventsGroupedByType)
-            {
-                if (eventGroup.Key == LogType.Pm)
-                {
-                    BroadcastPmEvents(logsMonitorEngineManager, eventGroup);
-                }
-                else
-                {
-                    BroadcastNormalEvents(logsMonitorEngineManager, eventGroup);
-                }
-            }
-        }
-
-        private void BroadcastNormalEvents(LogsMonitorEngineManager logsMonitorEngineManager, IGrouping<LogType, MonitorEvents> eventGroup)
-        {
-            foreach (var allEventSubscription in allEventSubscriptions)
-            {
-                allEventSubscription(
-                    this,
-                    new LogsMonitorEventArgs(
-                        logsMonitorEngineManager.CharacterName,
-                        eventGroup.Key,
-                        eventGroup.SelectMany(monitorEvents => monitorEvents.LogEntries).ToArray(),
-                        null));
-            }
-        }
-
-        private void BroadcastPmEvents(LogsMonitorEngineManager logsMonitorEngineManager, IGrouping<LogType, MonitorEvents> eventGroup)
-        {
-            Dictionary<string, MonitorEvents[]> pmLogEntries =
-                eventGroup.GroupBy(entry => entry.PmRecipient)
-                    .ToDictionary(eventses => eventses.Key, eventses => eventses.ToArray());
-
-            foreach (var allEventSubscription in allEventSubscriptions)
-            {
-                foreach (var pair in pmLogEntries)
-                {
-                    allEventSubscription(
-                        this,
-                        new LogsMonitorEventArgs(
-                            logsMonitorEngineManager.CharacterName,
-                            eventGroup.Key,
-                            eventGroup.SelectMany(monitorEvents => monitorEvents.LogEntries).ToArray(),
-                            pair.Key));
-                }
+                characterNameToEngineManager.RemoveAllSubscriptions(eventHandler);
             }
         }
 
@@ -128,17 +127,60 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
             LogsMonitorEngineManager manager;
             if (!characterNameToEngineManagers.TryGetValue(characterName, out manager))
             {
-                manager = new LogsMonitorEngineManager(
-                    characterName,
-                    new CharacterLogsMonitorEngineFactory(
-                        logger,
-                        new SingleFileMonitorFactory(
-                            new LogFileStreamReaderFactory(),
-                            new LogFileParser(logger)),
-                        wurmLogFiles.GetManagerForCharacter(characterName)));
-                characterNameToEngineManagers.Add(characterName, manager);
+                throw new DataNotFoundException("Character does not exist or unknown: " + characterName);
             }
             return manager;
+        }
+
+        private void Rebuild()
+        {
+            lock (locker)
+            {
+                var characters = wumCharacterDirectories.GetAllCharacters().ToHashSet();
+                var newMap = characterNameToEngineManagers.ToDictionary(pair => pair.Key, pair => pair.Value);
+                LogsMonitorEngineManager man;
+                foreach (var characterName in characters)
+                {
+                    if (!newMap.TryGetValue(characterName, out man))
+                    {
+                        var manager = new LogsMonitorEngineManager(
+                            characterName,
+                            new CharacterLogsMonitorEngineFactory(
+                                logger,
+                                new SingleFileMonitorFactory(
+                                    new LogFileStreamReaderFactory(),
+                                    new LogFileParser(logger)),
+                                wurmLogFiles.GetManagerForCharacter(characterName), 
+                                internalEventAggregator),
+                            publicEventInvoker,
+                            logger);
+                        newMap.Add(characterName, manager);
+                    }
+                }
+                foreach (var pair in newMap)
+                {
+                    if (!characters.Contains(pair.Key))
+                    {
+                        pair.Value.Dispose();
+                        newMap.Remove(pair.Key);
+                    }
+                }
+                characterNameToEngineManagers = newMap;
+            }
+        }
+
+        public void Dispose()
+        {
+            stop = true;
+            updater.Wait();
+            updater.Dispose();
+            lock (locker)
+            {
+                foreach (var characterNameToEngineManager in characterNameToEngineManagers.Values)
+                {
+                    characterNameToEngineManager.Dispose();
+                }
+            }
         }
     }
 }

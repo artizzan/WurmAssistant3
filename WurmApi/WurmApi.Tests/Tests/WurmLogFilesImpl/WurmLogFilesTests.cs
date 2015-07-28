@@ -53,10 +53,10 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
                 .Setup(directory => directory.FullPath)
                 .Returns(wurmDir.DirectoryFullPath);
             var internalEventAggregator = new InternalEventAggregator();
-            wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDir),
-                new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()), internalEventAggregator);
-            system = new WurmLogFiles(wurmCharacterDirectories, Mock.Of<ILogger>(), new WurmLogDefinitions(),
-                internalEventAggregator, new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()));
+            //wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDir),
+            //    new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()), internalEventAggregator);
+            //system = new WurmLogFiles(wurmCharacterDirectories, Mock.Of<ILogger>(), new WurmLogDefinitions(),
+            //    internalEventAggregator, new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()));
             testGuyLogFiles = system.GetManagerForCharacter(new CharacterName("Testguy"));
         }
 
@@ -179,7 +179,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
                 public void NotifiesWhenAdded()
                 {
                     bool notified = false;
-                    testGuyLogFiles.FilesAddedOrRemoved += (sender, args) => notified = true;
+                    //testGuyLogFiles.FilesAddedOrRemoved += (sender, args) => notified = true;
                     Expect(notified, False);
                     using (File.Create(Path.Combine(TestGuyDirectoryInfo.FullName, "logs", "_Event.2012-04.txt"))) { }
                     WaitForFileSystem();
@@ -191,7 +191,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
                 public void NotifiesWhenRemoved()
                 {
                     bool notified = false;
-                    testGuyLogFiles.FilesAddedOrRemoved += (sender, args) => notified = true;
+                    //testGuyLogFiles.FilesAddedOrRemoved += (sender, args) => notified = true;
                     Expect(notified, False);
                     File.Delete(Path.Combine(TestGuyDirectoryInfo.FullName, "logs", "_Event.2012-03.txt"));
                     WaitForFileSystem();

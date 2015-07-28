@@ -40,15 +40,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\NuGetPackages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SimpleInjector">
-      <HintPath>..\..\Lib\NuGetPackages\SimpleInjector.2.6.1\lib\net45\SimpleInjector.dll</HintPath>
-    </Reference>
-    <Reference Include="SimpleInjector.Diagnostics">
-      <HintPath>..\..\Lib\NuGetPackages\SimpleInjector.2.6.1\lib\net45\SimpleInjector.Diagnostics.dll</HintPath>
-    </Reference>
-    <Reference Include="SimpleInjector.Extensions.LifetimeScoping">
-      <HintPath>..\..\Lib\NuGetPackages\SimpleInjector.Extensions.LifetimeScoping.2.5.2\lib\net40-client\SimpleInjector.Extensions.LifetimeScoping.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -78,6 +69,7 @@
     <Compile Include="Modules\Events\Internal\InternalEventAggregator.cs" />
     <Compile Include="Modules\Events\Internal\InternalEventImpl.cs" />
     <Compile Include="Modules\Events\Internal\InternalEventInvoker.cs" />
+    <Compile Include="Modules\Events\Internal\Messages\CharacterLogFilesAddedOrRemoved.cs" />
     <Compile Include="Modules\Events\Public\IPublicEventInvoker.cs" />
     <Compile Include="Modules\Events\Internal\Messages\CharacterDirectoriesChanged.cs" />
     <Compile Include="Modules\Events\Internal\Messages\ConfigDirectoriesChanged.cs" />
@@ -120,6 +112,8 @@
     <Compile Include="LogsLocation.cs" />
     <Compile Include="LogsMonitorEventArgs.cs" />
     <Compile Include="LogType.cs" />
+    <Compile Include="Modules\Wurm\LogsMonitor\EventSubscriptionsTsafeHashset.cs" />
+    <Compile Include="Modules\Wurm\LogsMonitor\PmSubscriptionKey.cs" />
     <Compile Include="ServerGroup.cs" />
     <Compile Include="ServerName.cs" />
     <Compile Include="SkillGainRate.cs" />
@@ -195,7 +189,6 @@
     <Compile Include="Modules\Wurm\Servers\WurmServer.cs" />
     <Compile Include="Modules\Wurm\Servers\WurmServerFactory.cs" />
     <Compile Include="Modules\Wurm\Servers\WurmServers.cs" />
-    <Compile Include="Infrastructure\IWurmApiInternal.cs" />
     <Compile Include="LoggerStub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Logging\SimplePersistLoggerAdapter.cs" />
@@ -209,6 +202,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\AldursLab\Lab\Essentials\Essentials.csproj">
+      <Project>{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}</Project>
+      <Name>Essentials</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Core\Core.csproj">
       <Project>{b9e61cdc-72bd-4158-b77e-6850455a07cd}</Project>
       <Name>Core</Name>

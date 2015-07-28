@@ -249,7 +249,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
 
         public void Dispose()
         {
-            logsMonitor.Unsubscribe(HandleEventLogEntries);
+            logsMonitor.Unsubscribe(characterName, HandleEventLogEntries);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AldurSoft.WurmApi.Modules.Events;
@@ -17,25 +18,21 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories
     {
         readonly IInternalEventAggregator eventAggregator;
 
-        public WurmConfigDirectories(
-            IWurmPaths wurmPaths, IPublicEventInvoker eventInvoker, [NotNull] IInternalEventAggregator eventAggregator)
-            : base(wurmPaths.ConfigsDirFullPath, eventInvoker)
+        public WurmConfigDirectories(IWurmPaths wurmPaths, [NotNull] IInternalEventAggregator eventAggregator)
+            : base(wurmPaths.ConfigsDirFullPath)
         {
             if (eventAggregator == null) throw new ArgumentNullException("eventAggregator");
             this.eventAggregator = eventAggregator;
         }
 
+        public IEnumerable<string> AllConfigNames
+        {
+            get { return AllDirectoryNamesNormalized; }
+        }
+
         public string GetGameSettingsFileFullPathForConfigName(string directoryName)
         {
             var dirPath = GetFullPathForDirName(directoryName);
-            if (dirPath == null)
-            {
-                throw new DataNotFoundException(
-                    string.Format(
-                        "Directory full path not found for name: {0} ; Dir monitor for: {1}",
-                        directoryName,
-                        this.DirectoryFullPath));
-            }
             var configDirectoryInfo = new DirectoryInfo(dirPath);
             var file = configDirectoryInfo.GetFiles("gamesettings.txt").FirstOrDefault();
             if (file == null)

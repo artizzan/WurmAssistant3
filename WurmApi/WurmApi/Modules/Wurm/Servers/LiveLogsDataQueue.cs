@@ -16,7 +16,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             this.wurmLogsMonitor = wurmLogsMonitor;
             this.logEntriesParser = logEntriesParser;
 
-            wurmLogsMonitor.SubscribeAll(EventHandler);
+            wurmLogsMonitor.SubscribeAllActive(EventHandler);
         }
 
         private void EventHandler(object sender, LogsMonitorEventArgs logsMonitorEventArgs)

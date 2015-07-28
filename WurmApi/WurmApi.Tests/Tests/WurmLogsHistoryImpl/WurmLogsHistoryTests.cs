@@ -45,20 +45,20 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
             installDir.Setup(directory => directory.FullPath).Returns(WurmDir.DirectoryFullPath);
 
             var internalEventAggregator = new InternalEventAggregator();
-            wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDir.Object),
-                new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()), internalEventAggregator);
+            //wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDir.Object),
+            //    new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()), internalEventAggregator);
 
             logger = new Mock<ILogger>();
             logger.Setup(logger1 => logger1.Log(It.IsAny<LogLevel>(), It.IsAny<string>(), It.IsAny<object>(), It.IsAny<Exception>()))
                 .Callback<LogLevel, string, object>(
                     (level, s, arg3) => Trace.WriteLine(string.Format("{0} {1} {2}", level, arg3, s)));
 
-            wurmLogFiles = new WurmLogFiles(
-                wurmCharacterDirectories,
-                logger.Object,
-                new WurmLogDefinitions(),
-                internalEventAggregator,
-                new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()));
+            //wurmLogFiles = new WurmLogFiles(
+            //    wurmCharacterDirectories,
+            //    logger.Object,
+            //    new WurmLogDefinitions(),
+            //    internalEventAggregator,
+            //    new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()));
             System =
                 new WurmLogsHistory(
                     new WurmApiDataContext(DataDir.DirectoryFullPath, Mock.Of<ISimplePersistLogger>()),

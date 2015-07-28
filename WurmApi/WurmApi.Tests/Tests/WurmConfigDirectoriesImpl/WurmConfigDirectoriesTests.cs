@@ -40,7 +40,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigDirectoriesImpl
                 .Returns(testDir.DirectoryFullPath);
             var publicEventInvoker = new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub());
             var internalEventAggregator = new InternalEventAggregator();
-            system = new WurmConfigDirectories(new WurmPaths(installDir), publicEventInvoker, internalEventAggregator);
+            //system = new WurmConfigDirectories(new WurmPaths(installDir), publicEventInvoker, internalEventAggregator);
 
             configsDirInfo = new DirectoryInfo(Path.Combine(testDir.DirectoryFullPath, "configs"));
         }
@@ -80,7 +80,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigDirectoriesImpl
             public void TriggersOnChanged()
             {
                 bool changed = false;
-                system.DirectoriesChanged += (sender, args) => changed = true;
+                //system.DirectoriesChanged += (sender, args) => changed = true;
                 var dir = configsDirInfo.CreateSubdirectory("newconfig");
                 Thread.Sleep(10); // might require more delay
                 //system.Refresh();

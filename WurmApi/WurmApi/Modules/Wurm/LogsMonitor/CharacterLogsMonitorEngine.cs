@@ -2,31 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using AldurSoft.Core;
+using AldurSoft.WurmApi.Modules.Events.Internal;
+using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
+using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
 {
-    public class CharacterLogsMonitorEngine
+    class CharacterLogsMonitorEngine : IHandle<CharacterLogFilesAddedOrRemoved>
     {
-        private readonly CharacterName characterName;
-        private readonly ILogger logger;
-        private readonly SingleFileMonitorFactory singleFileMonitorFactory;
-        private readonly IWurmCharacterLogFiles wurmCharacterLogFiles;
+        readonly CharacterName characterName;
+        readonly ILogger logger;
+        readonly SingleFileMonitorFactory singleFileMonitorFactory;
+        readonly IWurmCharacterLogFiles wurmCharacterLogFiles;
 
         private DateTimeOffset lastRefresh;
 
-        private readonly Dictionary<string, SingleFileMonitor> monitors = new Dictionary<string, SingleFileMonitor>();
-        private readonly HashSet<string> loggedUnknownFiles = new HashSet<string>();
+        readonly Dictionary<string, SingleFileMonitor> monitors = new Dictionary<string, SingleFileMonitor>();
+        readonly HashSet<string> loggedUnknownFiles = new HashSet<string>();
+
+        readonly object locker = new object();
+        volatile bool initialRebuild = true;
 
         public CharacterLogsMonitorEngine(
-            CharacterName characterName,
-            ILogger logger,
-            SingleFileMonitorFactory singleFileMonitorFactory,
-            IWurmCharacterLogFiles wurmCharacterLogFiles)
+            [NotNull] CharacterName characterName,
+            [NotNull] ILogger logger,
+            [NotNull] SingleFileMonitorFactory singleFileMonitorFactory,
+            [NotNull] IWurmCharacterLogFiles wurmCharacterLogFiles, 
+            [NotNull] IInternalEventAggregator internalEventAggregator)
         {
             if (characterName == null) throw new ArgumentNullException("characterName");
             if (logger == null) throw new ArgumentNullException("logger");
             if (singleFileMonitorFactory == null) throw new ArgumentNullException("singleFileMonitorFactory");
             if (wurmCharacterLogFiles == null) throw new ArgumentNullException("wurmCharacterLogFiles");
+            if (internalEventAggregator == null) throw new ArgumentNullException("internalEventAggregator");
             this.characterName = characterName;
             this.logger = logger;
             this.singleFileMonitorFactory = singleFileMonitorFactory;
@@ -34,40 +42,53 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
 
             lastRefresh = Time.Clock.LocalNowOffset;
 
-            RebuildAllMonitors(initialRebuild:true);
+            internalEventAggregator.Subscribe(this);
 
-            wurmCharacterLogFiles.FilesAddedOrRemoved += WurmCharacterLogFilesOnFilesAddedOrRemoved;
+            lock (locker)
+            {
+                RebuildAllMonitors();
+            }
+        }
+
+        public void Handle(CharacterLogFilesAddedOrRemoved message)
+        {
+            if (message.CharacterName == characterName)
+            {
+                lock (locker)
+                {
+                    RebuildAllMonitors();
+                }
+            }
         }
 
         internal IEnumerable<MonitorEvents> RefreshAndGetNewEvents()
         {
-            var currentDate = Time.Clock.LocalNowOffset;
-            CheckForLargeRefreshDelay(currentDate);
-
-            List<MonitorEvents> eventsList = new List<MonitorEvents>();
-            foreach (var monitor in monitors.Values)
+            lock (locker)
             {
-                var newEvents = monitor.GetNewEvents();
-                if (newEvents.Count > 0)
+                var currentDate = Time.Clock.LocalNowOffset;
+                CheckForLargeRefreshDelay(currentDate);
+
+                List<MonitorEvents> eventsList = new List<MonitorEvents>();
+                foreach (var monitor in monitors.Values)
                 {
-                    var container = new MonitorEvents(monitor.LogFileInfo);
-                    container.AddEvents(newEvents);
-                    eventsList.Add(container);
+                    var newEvents = monitor.GetNewEvents();
+                    if (newEvents.Count > 0)
+                    {
+                        var container = new MonitorEvents(monitor.LogFileInfo);
+                        container.AddEvents(newEvents);
+                        eventsList.Add(container);
+                    }
                 }
+
+                lastRefresh = currentDate;
+
+                return eventsList;
             }
-
-            lastRefresh = currentDate;
-
-            return eventsList;
         }
 
-        private void WurmCharacterLogFilesOnFilesAddedOrRemoved(object sender, EventArgs eventArgs)
+        void RebuildAllMonitors()
         {
-            RebuildAllMonitors();
-        }
-
-        private void RebuildAllMonitors(bool initialRebuild = false)
-        {
+            var ir = initialRebuild;
             var timeNow = Time.Clock.LocalNow;
             RemoveOldMonitors(timeNow);
             var files = wurmCharacterLogFiles.TryGetLogFiles(timeNow, timeNow);
@@ -80,15 +101,16 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
                         SingleFileMonitor monitor;
                         // when initializing engine, we ignore events already in files
                         // when adding engines for new files, we want to always read from start of file
-                        if (initialRebuild)
+                        if (ir)
                         {
                             monitor = singleFileMonitorFactory.Create(file);
+                            initialRebuild = false;
                         }
                         else
                         {
                             monitor = singleFileMonitorFactory.Create(file, 0L);
                         }
-                        
+
                         monitors.Add(file.FullPath, monitor);
                     }
                 }

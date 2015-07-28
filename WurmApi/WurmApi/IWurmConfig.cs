@@ -3,7 +3,7 @@ using System;
 namespace AldurSoft.WurmApi
 {
     /// <summary>
-    /// Provides means of reading some of wurm config properties.
+    /// Allows reading and observing changes of a single wurm config.
     /// </summary>
     public interface IWurmConfig
     {
@@ -32,17 +32,17 @@ namespace AldurSoft.WurmApi
         bool? TimestampMessages { get; }
 
         /// <summary>
-        /// Directory path, where this config is located
+        /// Directory absolute path, where this gamesettings.txt is located
         /// </summary>
         string ConfigDirectoryFullPath { get; }
 
         /// <summary>
-        /// If event handler throws exception, it will be logged and ignored. 
+        /// Triggered when config is modified. 
         /// </summary>
         event EventHandler<EventArgs> ConfigChanged;
 
         /// <summary>
-        /// Wurm Game Client identificator of this config.
+        /// Name of this config.
         /// </summary>
         string Name { get; }
     }

@@ -4,27 +4,31 @@ using System.Collections.Generic;
 namespace AldurSoft.WurmApi
 {
     /// <summary>
-    /// Provides means of working with wurm configs.
+    /// Provides read-only access to game client configs.
     /// </summary>
     public interface IWurmConfigs
     {
         /// <summary>
-        /// Triggered, when config is edited in any way.
+        /// Triggered, when a config is added, renamed or removed.
         /// </summary>
         event EventHandler<EventArgs> AvailableConfigsChanged;
 
         /// <summary>
-        /// Enumerates all configs detected and managed by WurmApi.
+        /// Triggered when any config is modified.
+        /// </summary>
+        event EventHandler<EventArgs> AnyConfigChanged;
+
+        /// <summary>
+        /// Retrieves all configs.
         /// </summary>
         IEnumerable<IWurmConfig> All { get; }
-        
+
         /// <summary>
-        /// Gets config by its name, case insensitive.
-        /// Returns null, if config does not exist or cannot be read.
+        /// Gets config by its name. Case insensitive.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        /// <exception cref="DataNotFoundException"></exception>
+        /// <exception cref="DataNotFoundException">Config with this name does not exist</exception>
         IWurmConfig GetConfig(string name);
     }
 }

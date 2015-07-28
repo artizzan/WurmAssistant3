@@ -17,7 +17,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
     {
         // note: editing config through IWurmApi is no longer allowed,
         // because there is no good way to ensure, that Wurm Game Client isn't accessing it at the moment
-        // setters are maintained only to support testing, until tests are properly refactored todo
 
         readonly FileInfo gameSettingsFileInfo;
         readonly ILogger logger;
@@ -156,11 +155,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
                 Refresh();
                 return ircLoggingType;
             }
-            set
-            {
-                this.configWriter.SetIrcLoggingMode(value);
-                HaveChanged();
-            }
         }
 
         public LogSaveMode OtherLoggingType
@@ -169,11 +163,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
             {
                 Refresh();
                 return otherLoggingType;
-            }
-            set
-            {
-                this.configWriter.SetOtherLoggingMode(value);
-                HaveChanged();
             }
         }
 
@@ -184,11 +173,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
                 Refresh();
                 return eventLoggingType;
             }
-            set
-            {
-                this.configWriter.SetEventLoggingMode(value);
-                HaveChanged();
-            }
         }
 
         public SkillGainRate SkillGainRate
@@ -197,11 +181,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
             {
                 Refresh();
                 return skillGainRate;
-            }
-            set
-            {
-                this.configWriter.SetSkillGainRate(value);
-                HaveChanged();
             }
         }
 
@@ -212,11 +191,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
                 Refresh();
                 return noSkillMessageOnAlignmentChange;
             }
-            set
-            {
-                this.configWriter.SetNoSkillMessageOnAlignmentChange(value);
-                HaveChanged();
-            }
         }
 
         public bool? NoSkillMessageOnFavorChange
@@ -225,11 +199,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
             {
                 Refresh();
                 return noSkillMessageOnFavorChange;
-            }
-            set
-            {
-                this.configWriter.SetNoSkillMessageOnFavorChange(value);
-                HaveChanged();
             }
         }
 
@@ -240,11 +209,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
                 Refresh();
                 return saveSkillsOnQuit;
             }
-            set
-            {
-                this.configWriter.SetSaveSkillsOnQuit(value);
-                HaveChanged();
-            }
         }
 
         public bool? TimestampMessages
@@ -254,17 +218,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
                 Refresh();
                 return timestampMessages;
             }
-            set
-            {
-                this.configWriter.SetTimestampMessages(value);
-                HaveChanged();
-            }
-        }
-
-        private void HaveChanged()
-        {
-            rebuildPending = 1;
-            onConfigChanged.Trigger();
         }
 
         private void Refresh()

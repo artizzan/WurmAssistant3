@@ -54,7 +54,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Characters
                     rebuilder.DelayedSignal(TimeSpan.FromSeconds(retryDelay));
                 };
 
-            characterDirectories.DirectoriesChanged += (sender, args) => rebuilder.Signal();
+            //characterDirectories.DirectoriesChanged += (sender, args) => rebuilder.Signal();
             rebuilder.Signal();
             rebuilder.WaitSynchronouslyForInitialOperation(TimeSpan.FromSeconds(30));
         }

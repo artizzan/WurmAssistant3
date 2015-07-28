@@ -9,11 +9,6 @@ namespace AldurSoft.WurmApi
     public interface IWurmCharacterLogFiles
     {
         /// <summary>
-        /// Occurs when log files are added or removed for a single character.
-        /// </summary>
-        event EventHandler<EventArgs> FilesAddedOrRemoved;
-
-        /// <summary>
         /// Gets the date of oldest log file for this character.
         /// </summary>
         DateTime OldestLogFileDate { get; }
