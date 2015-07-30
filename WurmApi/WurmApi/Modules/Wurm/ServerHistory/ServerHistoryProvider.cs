@@ -167,23 +167,23 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
                 end = true;
             }
 
-            var results = await logsSearcher.Scan(
-                new LogSearchParameters()
-                {
-                    CharacterName = characterName,
-                    DateFrom = dateFrom,
-                    DateTo = dateTo,
-                    LogType = LogType.Event
-                });
+            //var results = await logsSearcher.Scan(
+            //    new LogSearchParameters()
+            //    {
+            //        CharacterName = characterName,
+            //        DateFrom = dateFrom,
+            //        DateTo = dateTo,
+            //        LogType = LogType.Event
+            //    });
 
             UpdateEntity(dateFrom, dateTo);
 
-            var found = ParseForServerInfo(results);
+            //var found = ParseForServerInfo(results);
             
-            if (found)
-            {
-                return true;
-            }
+            //if (found)
+            //{
+            //    return true;
+            //}
             if (end)
             {
                 return false;
@@ -218,22 +218,22 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
                 return false;
             }
 
-            var results = await logsSearcher.Scan(
-                new LogSearchParameters()
-                {
-                    CharacterName = characterName,
-                    DateFrom = dateFrom,
-                    DateTo = datetimeTo,
-                    LogType = LogType.Event
-                });
+            //var results = await logsSearcher.Scan(
+            //    new LogSearchParameters()
+            //    {
+            //        CharacterName = characterName,
+            //        DateFrom = dateFrom,
+            //        DateTo = datetimeTo,
+            //        LogType = LogType.Event
+            //    });
 
             UpdateEntity(dateFrom, datetimeTo);
 
-            var found = ParseForServerInfo(results);
-            if (found)
-            {
-                return true;
-            }
+            //var found = ParseForServerInfo(results);
+            //if (found)
+            //{
+            //    return true;
+            //}
 
             return await SearchLogsBackwards(dateFrom);
         }

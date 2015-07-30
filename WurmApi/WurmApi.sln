@@ -36,6 +36,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials", "..\AldursLab\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "..\AldursLab\Lab\Testing\Testing.csproj", "{A0CE70F0-6F13-47F5-9B61-69F6BE1AB082}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentObjects", "..\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj", "{0962A106-B1B2-4E21-9931-81D68A98ED37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentObjects.FlatFiles", "..\AldursLab\Lab\PersistentObjects.FlatFiles\PersistentObjects.FlatFiles.csproj", "{6322FD00-9AAA-40D9-8C6F-515CC4290B45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +86,14 @@ Global
 		{A0CE70F0-6F13-47F5-9B61-69F6BE1AB082}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0CE70F0-6F13-47F5-9B61-69F6BE1AB082}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0CE70F0-6F13-47F5-9B61-69F6BE1AB082}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0962A106-B1B2-4E21-9931-81D68A98ED37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0962A106-B1B2-4E21-9931-81D68A98ED37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0962A106-B1B2-4E21-9931-81D68A98ED37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0962A106-B1B2-4E21-9931-81D68A98ED37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6322FD00-9AAA-40D9-8C6F-515CC4290B45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6322FD00-9AAA-40D9-8C6F-515CC4290B45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6322FD00-9AAA-40D9-8C6F-515CC4290B45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6322FD00-9AAA-40D9-8C6F-515CC4290B45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,5 +109,7 @@ Global
 		{E3DFE2CA-6523-4A70-A145-22B43CF2DE8D} = {E238CD49-9E46-462B-84D2-BA4C1B6C4E0B}
 		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB} = {498EFA75-1968-457C-A35C-8ED55E092E14}
 		{A0CE70F0-6F13-47F5-9B61-69F6BE1AB082} = {498EFA75-1968-457C-A35C-8ED55E092E14}
+		{0962A106-B1B2-4E21-9931-81D68A98ED37} = {498EFA75-1968-457C-A35C-8ED55E092E14}
+		{6322FD00-9AAA-40D9-8C6F-515CC4290B45} = {498EFA75-1968-457C-A35C-8ED55E092E14}
 	EndGlobalSection
 EndGlobal

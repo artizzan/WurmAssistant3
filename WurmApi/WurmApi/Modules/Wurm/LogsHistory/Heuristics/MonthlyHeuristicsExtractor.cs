@@ -65,9 +65,9 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics
             }
         }
 
-        public async Task<HeuristicsExtractionResult> ExtractDayToPositionMapAsync()
+        public HeuristicsExtractionResult ExtractDayToPositionMapAsync()
         {
-            return await Task.Factory.StartNew(() => ExtractDayToPositionMap());
+            return ExtractDayToPositionMap();
         }
     }
 }

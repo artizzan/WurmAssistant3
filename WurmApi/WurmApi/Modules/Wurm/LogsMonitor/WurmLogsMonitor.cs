@@ -150,7 +150,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
                                 new SingleFileMonitorFactory(
                                     new LogFileStreamReaderFactory(),
                                     new LogFileParser(logger)),
-                                wurmLogFiles.GetManagerForCharacter(characterName), 
+                                wurmLogFiles.GetForCharacter(characterName), 
                                 internalEventAggregator),
                             publicEventInvoker,
                             logger);

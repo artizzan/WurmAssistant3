@@ -38,7 +38,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
         {
             if (characterName == null) throw new ArgumentNullException("characterName");
             var persistenceManager = dataContext.ServerHistory.Get(new EntityKey(characterName.Normalized));
-            var wurmCharacterLogFiles = wurmLogFiles.GetManagerForCharacter(characterName);
+            var wurmCharacterLogFiles = wurmLogFiles.GetForCharacter(characterName);
             return new ServerHistoryProvider(
                 characterName,
                 persistenceManager,

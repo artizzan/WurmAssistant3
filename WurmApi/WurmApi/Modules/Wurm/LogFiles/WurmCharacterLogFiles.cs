@@ -73,7 +73,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
             onFilesAddedOrRemoved.Trigger();
         }
 
-        public IEnumerable<LogFileInfo> TryGetLogFiles(DateTime dateFrom, DateTime dateTo)
+        public IEnumerable<LogFileInfo> GetLogFiles(DateTime dateFrom, DateTime dateTo)
         {
             Refresh();
             List<LogFileInfo> files = new List<LogFileInfo>();
@@ -84,7 +84,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
             return files.OrderBy(info => info.LogFileDate.DateTime).ToList();
         }
 
-        public IEnumerable<LogFileInfo> TryGetLogFiles(DateTime dateFrom, DateTime dateTo, LogType logType)
+        public IEnumerable<LogFileInfo> GetLogFiles(DateTime dateFrom, DateTime dateTo, LogType logType)
         {
             Refresh();
             LogTypeManager logTypeManager;
@@ -102,7 +102,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
         public IEnumerable<LogFileInfo> TryGetLogFilesForSpecificPm(DateTime dateFrom, DateTime dateTo, CharacterName pmCharacterName)
         {
             Refresh();
-            var allPmLogs = TryGetLogFiles(dateFrom, dateTo, LogType.Pm);
+            var allPmLogs = GetLogFiles(dateFrom, dateTo, LogType.Pm);
             return
                 allPmLogs.Where(
                     info => info.FileName.IndexOf(pmCharacterName.Normalized, StringComparison.InvariantCultureIgnoreCase) > -1);

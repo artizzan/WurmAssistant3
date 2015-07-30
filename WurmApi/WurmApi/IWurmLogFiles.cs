@@ -13,6 +13,6 @@ namespace AldurSoft.WurmApi
         /// </summary>
         /// <param name="characterName">Name of the character.</param>
         /// <exception cref="DataNotFoundException">This character does not appear to exist.</exception>
-        IWurmCharacterLogFiles GetManagerForCharacter(CharacterName characterName);
+        IWurmCharacterLogFiles GetForCharacter(CharacterName characterName);
     }
 }

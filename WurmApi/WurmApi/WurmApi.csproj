@@ -51,9 +51,9 @@
   <ItemGroup>
     <Compile Include="CharacterName.cs" />
     <Compile Include="IPublicEventMarshaller.cs" />
-    <Compile Include="Modules\DataContext\DataModel\LogsHistoryModel\WurmCharacterLogsEntity.cs" />
-    <Compile Include="Modules\DataContext\DataModel\LogsHistoryModel\WurmLogMonthlyFile.cs" />
-    <Compile Include="Modules\DataContext\DataModel\LogsHistoryModel\WurmLogMonthlyFileHeuristics.cs" />
+    <Compile Include="Modules\Wurm\LogsHistory\Heuristics\PersistentModel\WurmCharacterLogsEntity.cs" />
+    <Compile Include="Modules\Wurm\LogsHistory\Heuristics\PersistentModel\WurmLogMonthlyFile.cs" />
+    <Compile Include="Modules\Wurm\LogsHistory\Heuristics\PersistentModel\WurmLogMonthlyFileHeuristics.cs" />
     <Compile Include="Modules\DataContext\DataModel\ServerHistoryModel\ServerHistory.cs" />
     <Compile Include="Modules\DataContext\DataModel\ServerHistoryModel\ServerStamp.cs" />
     <Compile Include="Modules\DataContext\DataModel\WurmServersModel\ServerData.cs" />
@@ -112,6 +112,9 @@
     <Compile Include="LogsLocation.cs" />
     <Compile Include="LogsMonitorEventArgs.cs" />
     <Compile Include="LogType.cs" />
+    <Compile Include="Modules\Wurm\LogsHistory\JobCancellationManager.cs" />
+    <Compile Include="Modules\Wurm\LogsHistory\LogScansRunner.cs" />
+    <Compile Include="Modules\Wurm\LogsHistory\ScanResult.cs" />
     <Compile Include="Modules\Wurm\LogsMonitor\EventSubscriptionsTsafeHashset.cs" />
     <Compile Include="Modules\Wurm\LogsMonitor\PmSubscriptionKey.cs" />
     <Compile Include="ServerGroup.cs" />
@@ -159,7 +162,7 @@
     <Compile Include="Modules\Wurm\LogsHistory\Heuristics\MonthlyFileHeuristics.cs" />
     <Compile Include="Modules\Wurm\LogsHistory\Heuristics\MonthlyHeuristicsExtractor.cs" />
     <Compile Include="Modules\Wurm\LogsHistory\Heuristics\MonthlyHeuristicsExtractorFactory.cs" />
-    <Compile Include="Modules\Wurm\LogsHistory\Heuristics\MonthlyLogFileHeuristicsFactory.cs" />
+    <Compile Include="Modules\Wurm\LogsHistory\Heuristics\MonthlyLogFilesHeuristics.cs" />
     <Compile Include="Modules\Wurm\LogsHistory\LogsScanner.cs" />
     <Compile Include="Modules\Wurm\LogsHistory\LogsScannerFactory.cs" />
     <Compile Include="Modules\Wurm\LogsHistory\WurmLogsHistory.cs" />
@@ -205,6 +208,14 @@
     <ProjectReference Include="..\..\AldursLab\Lab\Essentials\Essentials.csproj">
       <Project>{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}</Project>
       <Name>Essentials</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\AldursLab\Lab\PersistentObjects.FlatFiles\PersistentObjects.FlatFiles.csproj">
+      <Project>{6322fd00-9aaa-40d9-8c6f-515cc4290b45}</Project>
+      <Name>PersistentObjects.FlatFiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj">
+      <Project>{0962a106-b1b2-4e21-9931-81d68a98ed37}</Project>
+      <Name>PersistentObjects</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Core\Core.csproj">
       <Project>{b9e61cdc-72bd-4158-b77e-6850455a07cd}</Project>

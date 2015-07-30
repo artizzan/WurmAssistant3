@@ -57,7 +57,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
             //    new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()), internalEventAggregator);
             //system = new WurmLogFiles(wurmCharacterDirectories, Mock.Of<ILogger>(), new WurmLogDefinitions(),
             //    internalEventAggregator, new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()));
-            testGuyLogFiles = system.GetManagerForCharacter(new CharacterName("Testguy"));
+            testGuyLogFiles = system.GetForCharacter(new CharacterName("Testguy"));
         }
 
         [TearDown]
@@ -74,14 +74,14 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
                 [Test]
                 public void GetsCorrectNumberOfFiles()
                 {
-                    var logFiles = testGuyLogFiles.TryGetLogFiles(DateTime.MinValue, DateTime.MaxValue, LogType.Combat).ToList();
+                    var logFiles = testGuyLogFiles.GetLogFiles(DateTime.MinValue, DateTime.MaxValue, LogType.Combat).ToList();
                     Expect(logFiles.Count, EqualTo(5));
                 }
 
                 [Test]
                 public void GetsFilesInCorrectOrder()
                 {
-                    var logFiles = testGuyLogFiles.TryGetLogFiles(DateTime.MinValue, DateTime.MaxValue, LogType.Combat).ToList();
+                    var logFiles = testGuyLogFiles.GetLogFiles(DateTime.MinValue, DateTime.MaxValue, LogType.Combat).ToList();
                     var resortedLogFiles = logFiles.OrderBy(info => info.LogFileDate.DateTime).ToList();
                     Expect(resortedLogFiles, EqualTo(logFiles));
                 }
@@ -89,21 +89,21 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
                 [Test]
                 public void RespectsRange()
                 {
-                    var logFiles = testGuyLogFiles.TryGetLogFiles(new DateTime(2012, 01, 04), new DateTime(2012, 02, 01), LogType.Combat).ToList();
+                    var logFiles = testGuyLogFiles.GetLogFiles(new DateTime(2012, 01, 04), new DateTime(2012, 02, 01), LogType.Combat).ToList();
                     Expect(logFiles.Count, EqualTo(3));
                 }
 
                 [Test]
                 public void RespectsLogType()
                 {
-                    var logFiles = testGuyLogFiles.TryGetLogFiles(DateTime.MinValue, DateTime.MaxValue, LogType.Event).ToList();
+                    var logFiles = testGuyLogFiles.GetLogFiles(DateTime.MinValue, DateTime.MaxValue, LogType.Event).ToList();
                     Expect(logFiles.Any(), True);
                 }
 
                 [Test]
                 public void RetrievesPmLogs()
                 {
-                    var logFiles = testGuyLogFiles.TryGetLogFiles(DateTime.MinValue, DateTime.MaxValue, LogType.Pm).ToList();
+                    var logFiles = testGuyLogFiles.GetLogFiles(DateTime.MinValue, DateTime.MaxValue, LogType.Pm).ToList();
                     Expect(logFiles.Any(), True);
                 }
 
@@ -121,14 +121,14 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
                 [Test]
                 public void GetsCorrectNumberOfFiles()
                 {
-                    var logFiles = testGuyLogFiles.TryGetLogFiles(DateTime.MinValue, DateTime.MaxValue).ToList();
+                    var logFiles = testGuyLogFiles.GetLogFiles(DateTime.MinValue, DateTime.MaxValue).ToList();
                     Expect(logFiles.Count, EqualTo(TotalFileCount));
                 }
 
                 [Test]
                 public void GetsFilesInCorrectOrder()
                 {
-                    var logFiles = testGuyLogFiles.TryGetLogFiles(DateTime.MinValue, DateTime.MaxValue).ToList();
+                    var logFiles = testGuyLogFiles.GetLogFiles(DateTime.MinValue, DateTime.MaxValue).ToList();
                     var resortedLogFiles = logFiles.OrderBy(info => info.LogFileDate.DateTime).ToList();
                     Expect(resortedLogFiles, EqualTo(logFiles));
                 }
@@ -207,11 +207,11 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
             [Test]
             public void GetsManagers()
             {
-                var manager = system.GetManagerForCharacter(new CharacterName("Testguy"));
+                var manager = system.GetForCharacter(new CharacterName("Testguy"));
                 Expect(manager, EqualTo(testGuyLogFiles));
-                var manager2 = system.GetManagerForCharacter(new CharacterName("Anotherguy"));
+                var manager2 = system.GetForCharacter(new CharacterName("Anotherguy"));
                 Expect(manager2, !Null);
-                Assert.Throws<WurmApiException>(() => system.GetManagerForCharacter(new CharacterName("Idonotexist")));
+                Assert.Throws<WurmApiException>(() => system.GetForCharacter(new CharacterName("Idonotexist")));
             }
 
             [Test]
@@ -220,8 +220,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
                 CreateNewCharacterEmptyDir("Newguy");             
                 WaitForFileSystem();
                 RefreshSystem();
-                var manager = system.GetManagerForCharacter(new CharacterName("Newguy"));
-                var files = manager.TryGetLogFiles(DateTime.MinValue, DateTime.MaxValue);
+                var manager = system.GetForCharacter(new CharacterName("Newguy"));
+                var files = manager.GetLogFiles(DateTime.MinValue, DateTime.MaxValue);
                 Expect(files.Count(), EqualTo(0));
             }
 

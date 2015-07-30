@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using AldurSoft.WurmApi.Modules.DataContext.DataModel.LogsHistoryModel;
+using AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics.PersistentModel;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics
 {

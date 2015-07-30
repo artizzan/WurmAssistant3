@@ -1,21 +1,22 @@
 using System;
+using System.Threading;
 using AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics;
 using AldurSoft.WurmApi.Utility;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
 {
-    public class LogsScannerFactory
+    internal class LogsScannerFactory
     {
         private readonly LogFileParserFactory logFileParserFactory;
         private readonly LogFileStreamReaderFactory streamReaderFactory;
-        private readonly MonthlyLogFileHeuristicsFactory heuristicsFactory;
+        private readonly MonthlyLogFilesHeuristics heuristics;
         private readonly IWurmLogFiles wurmLogFiles;
         private readonly ILogger logger;
 
         public LogsScannerFactory(
             LogFileParserFactory logFileParserFactory,
             LogFileStreamReaderFactory streamReaderFactory,
-            MonthlyLogFileHeuristicsFactory heuristicsFactory,
+            MonthlyLogFilesHeuristics heuristics,
             IWurmLogFiles wurmLogFiles,
             ILogger logger)
         {
@@ -23,15 +24,15 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
                 throw new ArgumentNullException("logFileParserFactory");
             if (streamReaderFactory == null)
                 throw new ArgumentNullException("streamReaderFactory");
-            if (heuristicsFactory == null)
-                throw new ArgumentNullException("heuristicsFactory");
+            if (heuristics == null)
+                throw new ArgumentNullException("heuristics");
             if (wurmLogFiles == null)
                 throw new ArgumentNullException("wurmLogFiles");
             if (logger == null)
                 throw new ArgumentNullException("logger");
             this.logFileParserFactory = logFileParserFactory;
             this.streamReaderFactory = streamReaderFactory;
-            this.heuristicsFactory = heuristicsFactory;
+            this.heuristics = heuristics;
             this.wurmLogFiles = wurmLogFiles;
             this.logger = logger;
         }
@@ -40,12 +41,13 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
         /// Extracts all lines matching scan parameters.
         /// </summary>
         /// <returns></returns>
-        public LogsScanner Create(LogSearchParameters logSearchParameters)
+        public LogsScanner Create(LogSearchParameters logSearchParameters, JobCancellationManager cancellationManager)
         {
             return new LogsScanner(
                 logSearchParameters,
+                cancellationManager,
                 wurmLogFiles,
-                heuristicsFactory,
+                heuristics,
                 streamReaderFactory,
                 logger,
                 logFileParserFactory);

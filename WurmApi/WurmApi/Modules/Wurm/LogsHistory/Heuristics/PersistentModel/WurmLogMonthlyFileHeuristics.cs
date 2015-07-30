@@ -1,4 +1,4 @@
-﻿namespace AldurSoft.WurmApi.Modules.DataContext.DataModel.LogsHistoryModel
+﻿namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics.PersistentModel
 {
     public class WurmLogMonthlyFileHeuristics
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using AldurSoft.WurmApi.Infrastructure;
 using AldurSoft.WurmApi.Logging;
 using AldurSoft.WurmApi.Modules.DataContext;
@@ -105,7 +106,8 @@ namespace AldurSoft.WurmApi
             IWurmLogsMonitor logsMonitor =
                 Wire(new WurmLogsMonitor(logFiles, logger, publicEventInvoker, internalEventAggregator,
                     characterDirectories));
-            IWurmLogsHistory logsHistory = Wire(new WurmLogsHistory(dataContext, logFiles, logger));
+            var heuristicsDataDirectory = Path.Combine(wurmApiDataDirectoryFullPath, "WurmLogsHistory");
+            IWurmLogsHistory logsHistory = Wire(new WurmLogsHistory(logFiles, logger, heuristicsDataDirectory));
 
             IWurmConfigs wurmConfigs = Wire(new WurmConfigs(configDirectories, logger, publicEventInvoker, internalEventAggregator));
             IWurmAutoruns autoruns = Wire(new WurmAutoruns(wurmConfigs, characterDirectories, logger));

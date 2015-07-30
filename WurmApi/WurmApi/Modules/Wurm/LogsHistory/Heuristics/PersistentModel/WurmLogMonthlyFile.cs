@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AldurSoft.WurmApi.Modules.DataContext.DataModel.LogsHistoryModel
+namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics.PersistentModel
 {
     public class WurmLogMonthlyFile
     {

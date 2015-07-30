@@ -91,7 +91,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
             var ir = initialRebuild;
             var timeNow = Time.Clock.LocalNow;
             RemoveOldMonitors(timeNow);
-            var files = wurmCharacterLogFiles.TryGetLogFiles(timeNow, timeNow);
+            var files = wurmCharacterLogFiles.GetLogFiles(timeNow, timeNow);
             foreach (var file in files)
             {
                 if (ShouldFileBeMonitored(file, timeNow))

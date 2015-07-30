@@ -71,7 +71,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
                 }
                 else
                 {
-                    return characterLogFiles.TryGetLogFiles(searchParameters.DateFrom,
+                    return characterLogFiles.GetLogFiles(searchParameters.DateFrom,
                         searchParameters.DateTo, searchParameters.LogType);
                 }
             }
@@ -86,7 +86,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
             }
         }
 
-        public IWurmCharacterLogFiles GetManagerForCharacter([NotNull] CharacterName characterName)
+        public IWurmCharacterLogFiles GetForCharacter([NotNull] CharacterName characterName)
         {
             if (characterName == null) throw new ArgumentNullException("characterName");
 

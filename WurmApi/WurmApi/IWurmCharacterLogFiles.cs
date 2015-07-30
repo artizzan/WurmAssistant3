@@ -16,12 +16,12 @@ namespace AldurSoft.WurmApi
         /// <summary>
         /// Gets all current log files matching dates, only date part is significant.
         /// </summary>
-        IEnumerable<LogFileInfo> TryGetLogFiles(DateTime dateFrom, DateTime dateTo);
+        IEnumerable<LogFileInfo> GetLogFiles(DateTime dateFrom, DateTime dateTo);
 
         /// <summary>
         /// Gets all current log files matching type and dates, only date part is significant.
         /// </summary>
-        IEnumerable<LogFileInfo> TryGetLogFiles(DateTime dateFrom, DateTime dateTo, LogType logType);
+        IEnumerable<LogFileInfo> GetLogFiles(DateTime dateFrom, DateTime dateTo, LogType logType);
 
         /// <summary>
         /// Gets all current PM log files matching dates and recipient, only date part is significant.

@@ -1,45 +1,46 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics;
 using AldurSoft.WurmApi.Utility;
+using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
 {
-    public class LogsScanner
+    class LogsScanner
     {
-        private readonly LogSearchParameters logSearchParameters;
-        private readonly IWurmLogFiles wurmLogFiles;
-        private readonly MonthlyLogFileHeuristicsFactory heuristicsFactory;
-        private readonly LogFileStreamReaderFactory streamReaderFactory;
-        private readonly ILogger logger;
-        private readonly LogFileParserFactory logFileParserFactory;
+        readonly IWurmLogFiles wurmLogFiles;
+        readonly MonthlyLogFilesHeuristics monthlyHeuristics;
+        readonly LogFileStreamReaderFactory streamReaderFactory;
+        readonly ILogger logger;
+        readonly LogFileParserFactory logFileParserFactory;
 
-        private readonly SemaphoreSlim semaphore = new SemaphoreSlim(4,4);
+        readonly LogSearchParameters logSearchParameters;
+        readonly JobCancellationManager cancellationManager;
 
         public LogsScanner(
-            LogSearchParameters logSearchParameters,
-            IWurmLogFiles wurmLogFiles,
-            MonthlyLogFileHeuristicsFactory heuristicsFactory,
-            LogFileStreamReaderFactory streamReaderFactory,
-            ILogger logger,
-            LogFileParserFactory logFileParserFactory)
+            [NotNull] LogSearchParameters logSearchParameters, 
+            [NotNull] JobCancellationManager cancellationManager,
+            [NotNull] IWurmLogFiles wurmLogFiles,
+            [NotNull] MonthlyLogFilesHeuristics monthlyHeuristics,
+            [NotNull] LogFileStreamReaderFactory streamReaderFactory,
+            [NotNull] ILogger logger,
+            [NotNull] LogFileParserFactory logFileParserFactory)
         {
-            if (wurmLogFiles == null)
-                throw new ArgumentNullException("wurmLogFiles");
-            if (heuristicsFactory == null)
-                throw new ArgumentNullException("heuristicsFactory");
-            if (streamReaderFactory == null)
-                throw new ArgumentNullException("streamReaderFactory");
-            if (logger == null)
-                throw new ArgumentNullException("logger");
-            if (logFileParserFactory == null)
-                throw new ArgumentNullException("logFileParserFactory");
+            if (logSearchParameters == null) throw new ArgumentNullException("logSearchParameters");
+            if (cancellationManager == null) throw new ArgumentNullException("cancellationManager");
+            if (wurmLogFiles == null) throw new ArgumentNullException("wurmLogFiles");
+            if (monthlyHeuristics == null) throw new ArgumentNullException("monthlyHeuristics");
+            if (streamReaderFactory == null) throw new ArgumentNullException("streamReaderFactory");
+            if (logger == null) throw new ArgumentNullException("logger");
+            if (logFileParserFactory == null) throw new ArgumentNullException("logFileParserFactory");
             this.logSearchParameters = logSearchParameters;
+            this.cancellationManager = cancellationManager;
             this.wurmLogFiles = wurmLogFiles;
-            this.heuristicsFactory = heuristicsFactory;
+            this.monthlyHeuristics = monthlyHeuristics;
             this.streamReaderFactory = streamReaderFactory;
             this.logger = logger;
             this.logFileParserFactory = logFileParserFactory;
@@ -51,77 +52,66 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
         /// Returned entries are in descending timestamp order.
         /// </summary>
         /// <returns></returns>
-        public async Task<IList<LogEntry>> ExtractEntries()
+        public ScanResult Scan()
         {
-            var man = this.wurmLogFiles.GetManagerForCharacter(logSearchParameters.CharacterName);
+            var man = this.wurmLogFiles.GetForCharacter(logSearchParameters.CharacterName);
             LogFileInfo[] logFileInfos =
-                man.TryGetLogFiles(logSearchParameters.DateFrom, logSearchParameters.DateTo).ToArray();
+                man.GetLogFiles(logSearchParameters.DateFrom, logSearchParameters.DateTo).ToArray();
 
-            IEnumerable<LogFileInfo> monthlyFiles = logFileInfos.Where(info => info.LogFileDate.LogSavingType == LogSavingType.Monthly);
-            HeuristicsFileMap heuristicsFileMap = new HeuristicsFileMap();
-            CharacterMonthlyLogHeuristics characterHeuristics = heuristicsFactory.Create(logSearchParameters.CharacterName);
-            foreach (var monthlyFile in monthlyFiles)
-            {
-                MonthlyFileHeuristics monthlyHeuristics = await characterHeuristics.GetFullHeuristicsForMonthAsync(monthlyFile);
-                heuristicsFileMap.Add(monthlyFile, monthlyHeuristics);
-            }
+            cancellationManager.ThrowIfCancelled();
 
-            return await ExtractOnWorkerThread(logFileInfos, heuristicsFileMap);
+            CharacterMonthlyLogHeuristics characterHeuristics = monthlyHeuristics.GetForCharacter(logSearchParameters.CharacterName);
+
+            cancellationManager.ThrowIfCancelled();
+
+            var result = GetEntries(logFileInfos, characterHeuristics);
+            return new ScanResult(result);
         }
 
-        private async Task<IList<LogEntry>> ExtractOnWorkerThread(
+        private IList<LogEntry> GetEntries(
             IEnumerable<LogFileInfo> logFileInfos,
-            HeuristicsFileMap heuristicsFileMap)
+            CharacterMonthlyLogHeuristics heuristicsFileMap)
         {
-            try
-            {
-                await semaphore.WaitAsync();
-                var parsingHelper = logFileParserFactory.Create();
-                return await Task.Factory.StartNew(
-                    () =>
-                        {
-                            List<LogEntry> result = new List<LogEntry>();
-                            IOrderedEnumerable<LogFileInfo> orderedLogFileInfos =
-                                logFileInfos.OrderBy(info => info.LogFileDate.DateTime);
+            var parsingHelper = logFileParserFactory.Create();
 
-                            foreach (LogFileInfo logFileInfo in orderedLogFileInfos)
-                            {
-                                if (logFileInfo.LogFileDate.LogSavingType == LogSavingType.Monthly)
-                                {
-                                    ParseMonthlyFile(heuristicsFileMap, logFileInfo, result, parsingHelper);
-                                }
-                                else if (logFileInfo.LogFileDate.LogSavingType == LogSavingType.Daily)
-                                {
-                                    ParseDailyFile(logFileInfo, result, parsingHelper);
-                                }
-                                else
-                                {
-                                    logger.Log(
-                                        LogLevel.Warn,
-                                        string.Format(
-                                            "LogsScanner encountered and skipped file with unsupported saving type, type: {0}, file: {1}",
-                                            logFileInfo.LogFileDate.LogSavingType,
-                                            logFileInfo.FullPath),
-                                        this,
-                                        null);
-                                }
-                            }
-                            return result;
-                        });
-            }
-            finally
+            List<LogEntry> result = new List<LogEntry>();
+            IOrderedEnumerable<LogFileInfo> orderedLogFileInfos =
+                logFileInfos.OrderBy(info => info.LogFileDate.DateTime);
+
+            foreach (LogFileInfo logFileInfo in orderedLogFileInfos)
             {
-                semaphore.Release();
+                if (logFileInfo.LogFileDate.LogSavingType == LogSavingType.Monthly)
+                {
+                    ParseMonthlyFile(heuristicsFileMap, logFileInfo, result, parsingHelper);
+                }
+                else if (logFileInfo.LogFileDate.LogSavingType == LogSavingType.Daily)
+                {
+                    ParseDailyFile(logFileInfo, result, parsingHelper);
+                }
+                else
+                {
+                    logger.Log(
+                        LogLevel.Warn,
+                        string.Format(
+                            "LogsScanner encountered and skipped file with unsupported saving type, type: {0}, file: {1}",
+                            logFileInfo.LogFileDate.LogSavingType,
+                            logFileInfo.FullPath),
+                        this,
+                        null);
+                }
+
+                cancellationManager.ThrowIfCancelled();
             }
+            return result;
         }
 
         private void ParseMonthlyFile(
-            HeuristicsFileMap heuristicsFileMap,
+            CharacterMonthlyLogHeuristics heuristicsFileMap,
             LogFileInfo logFileInfo,
             List<LogEntry> result,
             LogFileParser logFileParser)
         {
-            var heuristics = heuristicsFileMap.Get(logFileInfo);
+            var heuristics = heuristicsFileMap.GetFullHeuristicsForMonth(logFileInfo);
             var dayToSearchFrom = GetMinDayToSearchFrom(logSearchParameters.DateFrom, logFileInfo.LogFileDate.DateTime);
             var dayToSearchTo = GetMaxDayToSearchUpTo(logSearchParameters.DateTo, logFileInfo.LogFileDate.DateTime);
             for (int day = dayToSearchFrom; day <= dayToSearchTo; day++)
@@ -152,6 +142,8 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
                 }
                 IEnumerable<LogEntry> parsedLines = logFileParser.ParseLinesForDay(allLines, thisEntryDate, logFileInfo);
                 result.AddRange(parsedLines);
+
+                cancellationManager.ThrowIfCancelled();
             }
         }
 
@@ -196,21 +188,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
                 logFileInfo.LogFileDate.DateTime,
                 logFileInfo);
             result.AddRange(parsedLines);
-        }
-
-        class HeuristicsFileMap
-        {
-            readonly Dictionary<LogFileInfo, MonthlyFileHeuristics> fileToHeuristicsMap = new Dictionary<LogFileInfo, MonthlyFileHeuristics>();
-
-            public void Add(LogFileInfo logFileInfo, MonthlyFileHeuristics heuristics)
-            {
-                fileToHeuristicsMap[logFileInfo] = heuristics;
-            }
-
-            public MonthlyFileHeuristics Get(LogFileInfo logFileInfo)
-            {
-                return fileToHeuristicsMap[logFileInfo];
-            }
         }
     }
 }
