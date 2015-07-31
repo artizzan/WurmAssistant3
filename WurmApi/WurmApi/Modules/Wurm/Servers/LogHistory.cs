@@ -70,7 +70,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             var allChars = wurmCharacterDirectories.GetAllCharacters();
             foreach (var characterName in allChars)
             {
-                var searchResults = await wurmLogsHistory.Scan(
+                var searchResults = await wurmLogsHistory.ScanAsync(
                     new LogSearchParameters()
                     {
                         CharacterName = characterName,
@@ -83,7 +83,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
                     var upt = parser.TryParseUptime(searchResult);
                     if (upt != null)
                     {
-                        var server = await wurmServerHistory.GetServer(characterName, searchResult.Timestamp);
+                        var server = await wurmServerHistory.GetServerAsync(characterName, searchResult.Timestamp);
                         if (server != null)
                         {
                             logHistorySaved.UpdateHistoric(server, upt);
@@ -93,7 +93,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
                     var wdt = parser.TryParseWurmDateTime(searchResult);
                     if (wdt != null)
                     {
-                        var server = await wurmServerHistory.GetServer(characterName, searchResult.Timestamp);
+                        var server = await wurmServerHistory.GetServerAsync(characterName, searchResult.Timestamp);
                         if (server != null)
                         {
                             logHistorySaved.UpdateHistoric(server, wdt);

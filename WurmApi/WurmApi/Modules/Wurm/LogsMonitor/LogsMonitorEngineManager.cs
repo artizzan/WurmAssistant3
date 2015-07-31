@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Public;
 using JetBrains.Annotations;
 
@@ -13,6 +14,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
         readonly CharacterLogsMonitorEngineFactory characterLogsMonitorEngineFactory;
         readonly IPublicEventInvoker publicEventInvoker;
         readonly ILogger logger;
+        readonly IInternalEventInvoker internalEventInvoker;
 
         readonly CharacterLogsMonitorEngine engine;
 
@@ -22,17 +24,23 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
         readonly ConcurrentDictionary<PmSubscriptionKey, EnginePmSubscription> pmSubscriptions =
             new ConcurrentDictionary<PmSubscriptionKey, EnginePmSubscription>();
 
-        public LogsMonitorEngineManager([NotNull] CharacterName characterName, [NotNull] CharacterLogsMonitorEngineFactory characterLogsMonitorEngineFactory,
-            [NotNull] IPublicEventInvoker publicEventInvoker, [NotNull] ILogger logger)
+        public LogsMonitorEngineManager(
+            [NotNull] CharacterName characterName,
+            [NotNull] CharacterLogsMonitorEngineFactory characterLogsMonitorEngineFactory,
+            [NotNull] IPublicEventInvoker publicEventInvoker, 
+            [NotNull] ILogger logger,
+            [NotNull] IInternalEventInvoker internalEventInvoker)
         {
             if (characterName == null) throw new ArgumentNullException("characterName");
             if (characterLogsMonitorEngineFactory == null) throw new ArgumentNullException("characterLogsMonitorEngineFactory");
             if (publicEventInvoker == null) throw new ArgumentNullException("publicEventInvoker");
             if (logger == null) throw new ArgumentNullException("logger");
+            if (internalEventInvoker == null) throw new ArgumentNullException("internalEventInvoker");
             this.characterName = characterName;
             this.characterLogsMonitorEngineFactory = characterLogsMonitorEngineFactory;
             this.publicEventInvoker = publicEventInvoker;
             this.logger = logger;
+            this.internalEventInvoker = internalEventInvoker;
 
             engine = characterLogsMonitorEngineFactory.Create(characterName);
         }
@@ -41,9 +49,14 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
 
         public void AddSubscription(LogType logType, EventHandler<LogsMonitorEventArgs> eventHandler)
         {
+            TryAddSubscription(logType, eventHandler);
+        }
+
+        void TryAddSubscription(LogType logType, EventHandler<LogsMonitorEventArgs> eventHandler, bool internalSub = false)
+        {
             bool exists = subscriptions.TryAdd(
                 eventHandler,
-                new EngineSubscription() { LogType = logType, LogsMonitorEventHandler = eventHandler });
+                new EngineSubscription() {LogType = logType, LogsMonitorEventHandler = eventHandler, InternalSubscription = internalSub});
             if (exists)
             {
                 logger.Log(LogLevel.Warn,
@@ -53,6 +66,11 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
                     "Handler pointing to method: "
                     + eventHandler.Method.DeclaringType.FullName + "." + eventHandler.Method.Name, this, null);
             }
+        }
+
+        public void AddSubscriptionInternal(LogType logType, EventHandler<LogsMonitorEventArgs> eventHandler)
+        {
+            TryAddSubscription(logType, eventHandler, true);
         }
 
         public void AddPmSubscription(EventHandler<LogsMonitorEventArgs> eventHandler, string pmRecipient)
@@ -145,28 +163,52 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
                 MonitorEvents[] outEvents;
                 if (groupedEvents.TryGetValue(engineSubscription.LogType, out outEvents))
                 {
-                    publicEventInvoker.TriggerInstantly(engineSubscription.LogsMonitorEventHandler, this,
-                        new LogsMonitorEventArgs(
-                            characterName,
-                            engineSubscription.LogType,
-                            outEvents.SelectMany(monitorEvents => monitorEvents.LogEntries).ToArray(),
-                            null));
+                    if (engineSubscription.InternalSubscription)
+                    {
+                        internalEventInvoker.TriggerInstantly(engineSubscription.LogsMonitorEventHandler, this,
+                            new LogsMonitorEventArgs(
+                                characterName,
+                                engineSubscription.LogType,
+                                outEvents.SelectMany(monitorEvents => monitorEvents.LogEntries).ToArray(),
+                                null));
+                    }
+                    else
+                    {
+                        publicEventInvoker.TriggerInstantly(engineSubscription.LogsMonitorEventHandler, this,
+                            new LogsMonitorEventArgs(
+                                characterName,
+                                engineSubscription.LogType,
+                                outEvents.SelectMany(monitorEvents => monitorEvents.LogEntries).ToArray(),
+                                null));
+                    }
                 }
             }
         }
 
-        void BroadcastGlobalEvents(Dictionary<LogType, MonitorEvents[]> groupedEvents, EventHandler<LogsMonitorEventArgs>[] globalSubs)
+        void BroadcastGlobalEvents(Dictionary<LogType, MonitorEvents[]> groupedEvents, AllEventsSubscription[] globalSubs)
         {
             foreach (var pair in groupedEvents)
             {
-                foreach (var eventHandler in globalSubs)
+                foreach (var sub in globalSubs)
                 {
-                    publicEventInvoker.TriggerInstantly(eventHandler, this,
-                        new LogsMonitorEventArgs(
-                            characterName,
-                            pair.Key,
-                            pair.Value.SelectMany(monitorEvents => monitorEvents.LogEntries).ToArray(),
-                            null));
+                    if (sub.InternalSubscription)
+                    {
+                        internalEventInvoker.TriggerInstantly(sub.EventHandler, this,
+                            new LogsMonitorEventArgs(
+                                characterName,
+                                pair.Key,
+                                pair.Value.SelectMany(monitorEvents => monitorEvents.LogEntries).ToArray(),
+                                null));
+                    }
+                    else
+                    {
+                        publicEventInvoker.TriggerInstantly(sub.EventHandler, this,
+                            new LogsMonitorEventArgs(
+                                characterName,
+                                pair.Key,
+                                pair.Value.SelectMany(monitorEvents => monitorEvents.LogEntries).ToArray(),
+                                null));
+                    }
                 }
             }
         }
@@ -212,6 +254,8 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
             public LogType LogType { get; set; }
 
             public EventHandler<LogsMonitorEventArgs> LogsMonitorEventHandler { get; set; }
+
+            public bool InternalSubscription { get; set; }
         }
 
         class EnginePmSubscription

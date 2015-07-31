@@ -9,18 +9,18 @@ namespace AldurSoft.WurmApi.Modules.Events.Public
 {
     class PublicEventInvoker : IPublicEventInvoker, IDisposable
     {
-        readonly IPublicEventMarshaller publicEventMarshaller;
+        readonly IEventMarshaller eventMarshaller;
         readonly ILogger logger;
         readonly Task schedulingTask;
         volatile bool stop = false;
 
         readonly ConcurrentDictionary<PublicEvent, EventManager> events = new ConcurrentDictionary<PublicEvent, EventManager>(); 
 
-        public PublicEventInvoker([NotNull] IPublicEventMarshaller publicEventMarshaller, [NotNull] ILogger logger)
+        public PublicEventInvoker([NotNull] IEventMarshaller eventMarshaller, [NotNull] ILogger logger)
         {
-            if (publicEventMarshaller == null) throw new ArgumentNullException("publicEventMarshaller");
+            if (eventMarshaller == null) throw new ArgumentNullException("eventMarshaller");
             if (logger == null) throw new ArgumentNullException("logger");
-            this.publicEventMarshaller = publicEventMarshaller;
+            this.eventMarshaller = eventMarshaller;
             this.logger = logger;
 
             LoopDelayMillis = 100;
@@ -56,7 +56,7 @@ namespace AldurSoft.WurmApi.Modules.Events.Public
 
         public void TriggerInstantly<TEventArgs>(EventHandler<TEventArgs> handler, object source, TEventArgs args) where TEventArgs : EventArgs
         {
-            publicEventMarshaller.Marshal(() =>
+            eventMarshaller.Marshal(() =>
             {
                 try
                 {
@@ -94,7 +94,7 @@ namespace AldurSoft.WurmApi.Modules.Events.Public
                     {
                         try
                         {
-                            publicEventMarshaller.Marshal(eventManager.Action);
+                            eventMarshaller.Marshal(eventManager.Action);
                         }
                         catch (Exception exception)
                         {

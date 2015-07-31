@@ -1,11 +1,13 @@
+using System;
 using System.Threading;
+using AldurSoft.WurmApi.JobRunning;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
 {
     class JobCancellationManager
     {
-        readonly CancellationToken internalCancellationToken;
-        readonly CancellationToken externalCancellationToken;
+        CancellationToken internalCancellationToken;
+        CancellationToken externalCancellationToken;
 
         public JobCancellationManager(CancellationToken internalCancellationToken, CancellationToken externalCancellationToken)
         {
@@ -13,16 +15,19 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
             this.externalCancellationToken = externalCancellationToken;
         }
 
+        /// <summary>
+        /// Check for job cancellation and throws <see cref="OperationCanceledException"/>.
+        /// These exceptions must be allowed to bubble to the job runner, to properly signal cancellation.
+        /// </summary>
         public void ThrowIfCancelled()
         {
-            if (externalCancellationToken.IsCancellationRequested)
-            {
-                throw new InternalJobCancellationException();
-            }
-            else if (internalCancellationToken.IsCancellationRequested)
-            {
-                throw new ExternalJobCancellationException();
-            }
+            externalCancellationToken.ThrowIfCancellationRequested();
+            internalCancellationToken.ThrowIfCancellationRequested();
+        }
+
+        public CancellationToken GetLinkedToken()
+        {
+            return CancellationTokenSource.CreateLinkedTokenSource(externalCancellationToken, internalCancellationToken).Token;
         }
     }
 }

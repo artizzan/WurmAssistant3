@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
 using AldurSoft.WurmApi.Tests.Builders;
@@ -22,7 +23,7 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Events
         {
             eventAggregator = new InternalEventAggregator();
             receiver = new MessageReceiver(eventAggregator);
-            invoker = new InternalEventInvoker(eventAggregator, logger)
+            invoker = new InternalEventInvoker(eventAggregator, logger, new ThreadPoolMarshaller(logger))
             {
                 LoopDelayMillis = 1
             };

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AldurSoft.WurmApi.Modules.DataContext.DataModel.ServerHistoryModel
+namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory.PersistentModel
 {
     public class ServerStamp
     {

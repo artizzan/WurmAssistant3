@@ -55,7 +55,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             {
                 if (data.Uptime != null)
                 {
-                    var server = await wurmServerHistory.GetServer(data.Character, data.Uptime.Stamp.DateTime);
+                    var server = await wurmServerHistory.GetServerAsync(data.Character, data.Uptime.Stamp.DateTime);
                     if (server != null)
                     {
                         TimeDetails details;
@@ -77,7 +77,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
                 }
                 if (data.WurmDateTime != null)
                 {
-                    var server = await wurmServerHistory.GetServer(data.Character, data.WurmDateTime.Stamp.DateTime);
+                    var server = await wurmServerHistory.GetServerAsync(data.Character, data.WurmDateTime.Stamp.DateTime);
                     if (server != null)
                     {
                         TimeDetails details;

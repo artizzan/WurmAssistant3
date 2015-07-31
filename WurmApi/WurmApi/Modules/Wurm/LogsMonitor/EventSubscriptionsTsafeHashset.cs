@@ -5,12 +5,12 @@ using System.Linq;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
 {
-    class EventSubscriptionsTsafeHashset : IEnumerable<EventHandler<LogsMonitorEventArgs>>
+    class EventSubscriptionsTsafeHashset : IEnumerable<AllEventsSubscription>
     {
         readonly object locker = new object();
-        readonly HashSet<EventHandler<LogsMonitorEventArgs>> handlers = new HashSet<EventHandler<LogsMonitorEventArgs>>();
+        readonly HashSet<AllEventsSubscription> handlers = new HashSet<AllEventsSubscription>();
 
-        public IEnumerator<EventHandler<LogsMonitorEventArgs>> GetEnumerator()
+        public IEnumerator<AllEventsSubscription> GetEnumerator()
         {
             lock (locker)
             {
@@ -23,7 +23,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
             return GetEnumerator();
         }
 
-        public bool Add(EventHandler<LogsMonitorEventArgs> item)
+        public bool Add(AllEventsSubscription item)
         {
             lock (locker)
             {
@@ -31,11 +31,11 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
             }
         }
 
-        public bool Remove(EventHandler<LogsMonitorEventArgs> item)
+        public bool Remove(EventHandler<LogsMonitorEventArgs> eventHandler)
         {
             lock (locker)
             {
-                return handlers.Remove(item);
+                return handlers.RemoveWhere(subscription => subscription.EventHandler == eventHandler) > 0;
             }
         }
 

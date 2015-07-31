@@ -61,12 +61,7 @@ namespace AldurSoft.WurmApi.Utility
                 string source = ParsingHelper.TryParseSourceFromLogLine(line);
                 string content = ParsingHelper.TryParseContentFromLogLine(line);
 
-                LogEntry entry = new LogEntry()
-                {
-                    Timestamp = originDate + currentLineStamp,
-                    Content = content,
-                    Source = source
-                };
+                LogEntry entry = new LogEntry(originDate + currentLineStamp, source, content);
 
                 result.Add(entry);
             }
@@ -86,12 +81,7 @@ namespace AldurSoft.WurmApi.Utility
                 string source = ParsingHelper.TryParseSourceFromLogLine(line);
                 string content = ParsingHelper.TryParseContentFromLogLine(line);
 
-                LogEntry entry = new LogEntry()
-                {
-                    Timestamp = linesStamp,
-                    Content = content,
-                    Source = source
-                };
+                LogEntry entry = new LogEntry(linesStamp, source, content);
                 result.Add(entry);
             }
             return result;
@@ -110,10 +100,11 @@ namespace AldurSoft.WurmApi.Utility
                     line),
                 logFileInfo);
 
-            LogEntry lastEntry = result.LastOrDefault();
-            if (lastEntry != null)
+            if (result.Any())
             {
-                lastEntry.Content += line;
+                var lastIndex = result.Count - 1;
+                var oldEntry = result[lastIndex];
+                result[lastIndex] = new LogEntry(oldEntry.Timestamp, oldEntry.Source, oldEntry.Content + line);
             }
             else
             {

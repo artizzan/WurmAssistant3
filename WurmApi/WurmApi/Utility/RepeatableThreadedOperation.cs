@@ -16,7 +16,7 @@ namespace AldurSoft.WurmApi.Utility
     public sealed class RepeatableThreadedOperation : IDisposable
     {
         [CanBeNull]
-        readonly IPublicEventMarshaller publicEventMarshaller;
+        readonly IEventMarshaller eventMarshaller;
         readonly Task task;
         Task delayedSignallingTask;
         volatile bool exit = false;
@@ -28,10 +28,10 @@ namespace AldurSoft.WurmApi.Utility
         /// <param name="job">
         /// Delegate to execute after receiving signals.
         /// </param>
-        /// <param name="publicEventMarshaller">Optional thread marshaller of the events.</param>
-        public RepeatableThreadedOperation([NotNull] Action job, IPublicEventMarshaller publicEventMarshaller = null)
+        /// <param name="eventMarshaller">Optional thread marshaller of the events.</param>
+        public RepeatableThreadedOperation([NotNull] Action job, IEventMarshaller eventMarshaller = null)
         {
-            this.publicEventMarshaller = publicEventMarshaller;
+            this.eventMarshaller = eventMarshaller;
 
             if (job == null) throw new ArgumentNullException("job");
             task = new Task(() =>
@@ -158,9 +158,9 @@ namespace AldurSoft.WurmApi.Utility
             var handler = OperationError;
             if (handler != null)
             {
-                if (publicEventMarshaller != null)
+                if (eventMarshaller != null)
                 {
-                    publicEventMarshaller.Marshal(() =>
+                    eventMarshaller.Marshal(() =>
                     {
                         handler(this, e);
                     });

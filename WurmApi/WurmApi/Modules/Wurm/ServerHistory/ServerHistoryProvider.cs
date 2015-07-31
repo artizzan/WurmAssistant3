@@ -1,62 +1,82 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AldursLab.PersistentObjects;
 using AldurSoft.Core;
-using AldurSoft.SimplePersist;
-using AldurSoft.WurmApi.Modules.DataContext.DataModel.ServerHistoryModel;
+using AldurSoft.WurmApi.Modules.Wurm.LogsHistory;
+using AldurSoft.WurmApi.Modules.Wurm.LogsMonitor;
+using AldurSoft.WurmApi.Modules.Wurm.ServerHistory.PersistentModel;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
 {
-    public class ServerHistoryProvider : IDisposable
+    class ServerHistoryProvider : IDisposable
     {
-        private readonly CharacterName characterName;
-        private readonly SortedServerHistory sortedServerHistory;
-        private readonly IPersistent<DataContext.DataModel.ServerHistoryModel.ServerHistory> serverHistoryRepository;
-        private readonly IWurmLogsMonitor logsMonitor;
-        private readonly IWurmLogsHistory logsSearcher;
-        private readonly IWurmServerList wurmServerList;
-        private readonly ILogger logger;
-        private readonly IWurmCharacterLogFiles wurmCharacterLogFiles;
+        readonly CharacterName characterName;
+        readonly SortedServerHistory sortedServerHistory;
+        readonly IPersistent<PersistentModel.ServerHistory> persistentData;
+        readonly IWurmLogsMonitorInternal logsMonitor;
+        readonly IWurmLogsHistory logsSearcher;
+        readonly IWurmServerList wurmServerList;
+        readonly ILogger logger;
+        readonly IWurmCharacterLogFiles wurmCharacterLogFiles;
 
-        private ServerName currentLiveLogsServer;
+        ServerName currentLiveLogsServer;
+
+        readonly ConcurrentQueue<LogEntry[]> liveEventsToParse = new ConcurrentQueue<LogEntry[]>();
 
         public ServerHistoryProvider(
-            CharacterName characterName,
-            IPersistent<DataContext.DataModel.ServerHistoryModel.ServerHistory> serverHistoryRepository,
-            IWurmLogsMonitor logsMonitor,
+            CharacterName characterName, IPersistent<PersistentModel.ServerHistory> persistentData,
+            IWurmLogsMonitorInternal logsMonitor,
             IWurmLogsHistory logsSearcher,
             IWurmServerList wurmServerList,
             ILogger logger,
             IWurmCharacterLogFiles wurmCharacterLogFiles)
         {
             if (characterName == null) throw new ArgumentNullException("characterName");
-            if (serverHistoryRepository == null) throw new ArgumentNullException("serverHistoryRepository");
+            if (persistentData == null) throw new ArgumentNullException("persistentData");
             if (logsMonitor == null) throw new ArgumentNullException("logsMonitor");
             if (logsSearcher == null) throw new ArgumentNullException("logsSearcher");
             if (wurmServerList == null) throw new ArgumentNullException("wurmServerList");
             if (logger == null) throw new ArgumentNullException("logger");
             if (wurmCharacterLogFiles == null) throw new ArgumentNullException("wurmCharacterLogFiles");
             this.characterName = characterName;
-            this.sortedServerHistory = new SortedServerHistory(serverHistoryRepository);
-            this.serverHistoryRepository = serverHistoryRepository;
+            this.sortedServerHistory = new SortedServerHistory(persistentData);
+            this.persistentData = persistentData;
             this.logsMonitor = logsMonitor;
             this.logsSearcher = logsSearcher;
             this.wurmServerList = wurmServerList;
             this.logger = logger;
             this.wurmCharacterLogFiles = wurmCharacterLogFiles;
 
-            logsMonitor.Subscribe(characterName, LogType.Event, HandleEventLogEntries);
+            logsMonitor.SubscribeInternal(characterName, LogType.Event, HandleEventLogEntries);
         }
 
-        public void HandleEventLogEntries(object sender, LogsMonitorEventArgs logsMonitorEventArgs)
+        #region Not Thread Safe
+
+        private void HandleEventLogEntries(object sender, LogsMonitorEventArgs logsMonitorEventArgs)
         {
+            // this handler may run on arbitrary threads!
+
             if (logsMonitorEventArgs.CharacterName == characterName)
             {
                 if (logsMonitorEventArgs.LogType == LogType.Event)
                 {
-                    ParseForServerInfo(logsMonitorEventArgs.WurmLogEntries, true);
+                    liveEventsToParse.Enqueue(logsMonitorEventArgs.WurmLogEntries.ToArray());
                 }
+            }
+        }
+
+        #endregion
+
+        public void ParsePendingLiveLogEvents()
+        {
+            LogEntry[] logEntries;
+            while (liveEventsToParse.TryDequeue(out logEntries))
+            {
+                ParseForServerInfo(logEntries, true);
             }
         }
 
@@ -96,21 +116,23 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
             return foundAny;
         }
 
-        public virtual async Task<ServerName> TryGetAtTimestamp(DateTime timestamp)
+        public ServerName TryGetAtTimestamp(DateTime timestamp, JobCancellationManager jobCancellationManager)
         {
+            ParsePendingLiveLogEvents();
+
             var timeNow = Time.Clock.LocalNow;
             var time12MonthsAgo = timeNow.AddMonths(-12);
 
             // a cheap hack to reset history if its very outdated
-            if (serverHistoryRepository.Entity.SearchedFrom < time12MonthsAgo
-                && serverHistoryRepository.Entity.SearchedTo < time12MonthsAgo)
+            if (persistentData.Entity.SearchedFrom < time12MonthsAgo
+                && persistentData.Entity.SearchedTo < time12MonthsAgo)
             {
-                serverHistoryRepository.Entity.Reset();
+                persistentData.Entity.Reset();
             }
 
-            if (serverHistoryRepository.Entity.AnySearchCompleted 
-                && timestamp >= serverHistoryRepository.Entity.SearchedFrom
-                && timestamp <= serverHistoryRepository.Entity.SearchedTo)
+            if (persistentData.Entity.AnySearchCompleted 
+                && timestamp >= persistentData.Entity.SearchedFrom
+                && timestamp <= persistentData.Entity.SearchedTo)
             {
                 // within already scanned period
                 ServerName serverName = sortedServerHistory.TryGetServerAtStamp(timestamp);
@@ -124,29 +146,29 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
 
             bool found = false;
 
-            if (serverHistoryRepository.Entity.AnySearchCompleted)
+            if (persistentData.Entity.AnySearchCompleted)
             {
-                if (timestamp > serverHistoryRepository.Entity.SearchedTo)
+                if (timestamp > persistentData.Entity.SearchedTo)
                 {
-                    found = await SearchLogsForwards(serverHistoryRepository.Entity.SearchedTo);
+                    found = SearchLogsForwards(persistentData.Entity.SearchedTo, jobCancellationManager);
                 }
 
-                if (!found || timestamp < serverHistoryRepository.Entity.SearchedFrom)
+                if (!found || timestamp < persistentData.Entity.SearchedFrom)
                 {
-                    await SearchLogsBackwards(serverHistoryRepository.Entity.SearchedFrom);
+                    SearchLogsBackwards(persistentData.Entity.SearchedFrom, jobCancellationManager);
                 }
             }
             else
             {
-                found = await SearchLogsForwards(timestamp);
+                found = SearchLogsForwards(timestamp, jobCancellationManager);
                 if (!found)
                 {
-                    await SearchLogsBackwards(timestamp);
+                    SearchLogsBackwards(timestamp, jobCancellationManager);
                 }
-                serverHistoryRepository.Entity.AnySearchCompleted = true;
+                persistentData.Entity.AnySearchCompleted = true;
             }
            
-            serverHistoryRepository.SaveIfSetChanged();
+            persistentData.FlagAsChanged();
 
             return sortedServerHistory.TryGetServerAtStamp(timestamp);
         }
@@ -154,7 +176,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
         /// <summary>
         /// True if any data found
         /// </summary>
-        private async Task<bool> SearchLogsForwards(DateTime datetimeFrom)
+        private bool SearchLogsForwards(DateTime datetimeFrom, JobCancellationManager jobCancellationManager)
         {
             var dateFrom = datetimeFrom;
             var dateTo = datetimeFrom + TimeSpan.FromDays(30);
@@ -167,49 +189,49 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
                 end = true;
             }
 
-            //var results = await logsSearcher.Scan(
-            //    new LogSearchParameters()
-            //    {
-            //        CharacterName = characterName,
-            //        DateFrom = dateFrom,
-            //        DateTo = dateTo,
-            //        LogType = LogType.Event
-            //    });
+            var results = logsSearcher.ScanAsync(
+                new LogSearchParameters()
+                {
+                    CharacterName = characterName,
+                    DateFrom = dateFrom,
+                    DateTo = dateTo,
+                    LogType = LogType.Event
+                }).Result;
 
             UpdateEntity(dateFrom, dateTo);
 
-            //var found = ParseForServerInfo(results);
-            
-            //if (found)
-            //{
-            //    return true;
-            //}
+            var found = ParseForServerInfo(results);
+
+            if (found)
+            {
+                return true;
+            }
             if (end)
             {
                 return false;
             }
 
-            return await SearchLogsForwards(dateTo);
+            return SearchLogsForwards(dateTo, jobCancellationManager);
         }
 
         private void UpdateEntity(DateTime dateFrom, DateTime dateTo)
         {
-            if (dateTo > serverHistoryRepository.Entity.SearchedTo)
+            if (dateTo > persistentData.Entity.SearchedTo)
             {
-                serverHistoryRepository.Entity.SearchedTo = dateTo;
-                serverHistoryRepository.SetChanged();
+                persistentData.Entity.SearchedTo = dateTo;
+                persistentData.FlagAsChanged();
             }
-            if (dateFrom < serverHistoryRepository.Entity.SearchedFrom)
+            if (dateFrom < persistentData.Entity.SearchedFrom)
             {
-                serverHistoryRepository.Entity.SearchedFrom = dateFrom;
-                serverHistoryRepository.SetChanged();
+                persistentData.Entity.SearchedFrom = dateFrom;
+                persistentData.FlagAsChanged();
             }
         }
 
         /// <summary>
         /// True if any data found
         /// </summary>
-        private async Task<bool> SearchLogsBackwards(DateTime datetimeTo)
+        private bool SearchLogsBackwards(DateTime datetimeTo, JobCancellationManager jobCancellationManager)
         {
             var dateFrom = datetimeTo - TimeSpan.FromDays(30);
 
@@ -218,33 +240,35 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
                 return false;
             }
 
-            //var results = await logsSearcher.Scan(
-            //    new LogSearchParameters()
-            //    {
-            //        CharacterName = characterName,
-            //        DateFrom = dateFrom,
-            //        DateTo = datetimeTo,
-            //        LogType = LogType.Event
-            //    });
+            var results = logsSearcher.ScanAsync(
+                new LogSearchParameters()
+                {
+                    CharacterName = characterName,
+                    DateFrom = dateFrom,
+                    DateTo = datetimeTo,
+                    LogType = LogType.Event
+                }, jobCancellationManager.GetLinkedToken()).Result;
 
             UpdateEntity(dateFrom, datetimeTo);
 
-            //var found = ParseForServerInfo(results);
-            //if (found)
-            //{
-            //    return true;
-            //}
+            var found = ParseForServerInfo(results);
+            if (found)
+            {
+                return true;
+            }
 
-            return await SearchLogsBackwards(dateFrom);
+            return SearchLogsBackwards(dateFrom, jobCancellationManager);
         }
 
-        public virtual async Task<ServerName> TryGetCurrentServer()
+        public ServerName TryGetCurrentServer(JobCancellationManager jobCancellationManager)
         {
+            ParsePendingLiveLogEvents();
+
             if (currentLiveLogsServer != null)
             {
                 return currentLiveLogsServer;
             }
-            return await TryGetAtTimestamp(Time.Clock.LocalNow);
+            return TryGetAtTimestamp(Time.Clock.LocalNow, jobCancellationManager);
         }
 
         public void Dispose()

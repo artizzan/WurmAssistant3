@@ -44,8 +44,7 @@ namespace AldurSoft.WurmApi
         void UnsubscribePm(CharacterName characterName, CharacterName pmRecipient, EventHandler<LogsMonitorEventArgs> eventHandler);
 
         /// <summary>
-        /// Subscribes to all events from currently active characters.
-        /// Active characters are those, that have at least one direct subscription.
+        /// Subscribes to all events from all characters.
         /// </summary>
         /// <param name="eventHandler"></param>
         void SubscribeAllActive(EventHandler<LogsMonitorEventArgs> eventHandler);

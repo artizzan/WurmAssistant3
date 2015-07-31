@@ -1,9 +1,10 @@
 using System;
 using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
+using AldurSoft.WurmApi.Modules.Events.Public;
 
 namespace AldurSoft.WurmApi.Modules.Events.Internal
 {
-    interface IInternalEventInvoker
+    interface IInternalEventInvoker : IEventInvoker
     {
         /// <summary>
         /// Creates a new handle to event publication.

@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AldurSoft.SimplePersist;
-using AldurSoft.WurmApi.Modules.DataContext.DataModel.ServerHistoryModel;
+using AldursLab.PersistentObjects;
+using AldurSoft.WurmApi.Modules.Wurm.ServerHistory.PersistentModel;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
 {
     public class SortedServerHistory
     {
-        private readonly IPersistent<DataContext.DataModel.ServerHistoryModel.ServerHistory> serverHistoryRepository;
+        readonly IPersistent<PersistentModel.ServerHistory> persistentData;
 
-        public SortedServerHistory(IPersistent<DataContext.DataModel.ServerHistoryModel.ServerHistory> serverHistoryRepository)
+        List<ServerStamp> orderedStamps = new List<ServerStamp>();
+
+        public SortedServerHistory(IPersistent<PersistentModel.ServerHistory> persistentData)
         {
-            if (serverHistoryRepository == null)
-                throw new ArgumentNullException("serverHistoryRepository");
-            this.serverHistoryRepository = serverHistoryRepository;
+            if (persistentData == null)
+                throw new ArgumentNullException("persistentData");
+            this.persistentData = persistentData;
 
-            Rebuild(serverHistoryRepository.Entity.ServerStamps);
+            Rebuild(persistentData.Entity.ServerStamps);
         }
-
-        private List<ServerStamp> orderedStamps = new List<ServerStamp>();
 
         public void Insert(params ServerStamp[] serverStamps)
         {
-            serverHistoryRepository.Entity.ServerStamps.AddRange(serverStamps);
-            Rebuild(serverHistoryRepository.Entity.ServerStamps);
+            persistentData.Entity.ServerStamps.AddRange(serverStamps);
+            Rebuild(persistentData.Entity.ServerStamps);
         }
 
         /// <summary>

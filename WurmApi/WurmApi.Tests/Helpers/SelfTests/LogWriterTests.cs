@@ -32,17 +32,8 @@ namespace AldurSoft.WurmApi.Tests.Helpers.SelfTests
         [Test]
         public void WritesCorrectlyFormattedEntries()
         {
-            var validLogEntry1 = new LogEntry()
-            {
-                Content = "Contents1",
-                Source = "Source",
-                Timestamp = new DateTime(2014, 1, 1, 1, 1, 1)
-            };
-            var validLogEntry2 = new LogEntry()
-            {
-                Content = "Contents2",
-                Timestamp = new DateTime(2014, 1, 1, 1, 1, 2)
-            };
+            var validLogEntry1 = new LogEntry(new DateTime(2014, 1, 1, 1, 1, 1), "Source", "Contents1");
+            var validLogEntry2 = new LogEntry(new DateTime(2014, 1, 1, 1, 1, 2), string.Empty, "Contents2");
             dailyWriter.WriteSection(new[] { validLogEntry1 }, true);
             dailyWriter.WriteSection(new[] { validLogEntry2 });
             monthlyWriter.WriteSection(new [] { validLogEntry1 }, true);

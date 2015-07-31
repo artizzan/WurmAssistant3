@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using AldursLab.PersistentObjects;
 
-namespace AldurSoft.WurmApi.Modules.DataContext.DataModel.ServerHistoryModel
+namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory.PersistentModel
 {
-    public class ServerHistory
+    public class ServerHistory : Entity
     {
         public ServerHistory()
         {

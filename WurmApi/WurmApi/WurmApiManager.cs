@@ -59,11 +59,11 @@ namespace AldurSoft.WurmApi
             WurmApiDataDirectory dataDirectory,
             WurmInstallDirectory installDirectory,
             ILogger wurmApiLogger,
-            IPublicEventMarshaller publicEventMarshaller = null)
+            IEventMarshaller eventMarshaller = null)
         {
-            if (publicEventMarshaller == null) publicEventMarshaller = new ThreadPoolMarshaller(wurmApiLogger);
+            if (eventMarshaller == null) eventMarshaller = new ThreadPoolMarshaller(wurmApiLogger);
             IHttpWebRequests httpRequests = new HttpWebRequests();
-            ConstructSystems(dataDirectory.FullPath, installDirectory, httpRequests, wurmApiLogger, publicEventMarshaller);
+            ConstructSystems(dataDirectory.FullPath, installDirectory, httpRequests, wurmApiLogger, eventMarshaller);
         }
 
         /// <summary>
@@ -79,47 +79,50 @@ namespace AldurSoft.WurmApi
         }
 
         void ConstructSystems(string wurmApiDataDirectoryFullPath, IWurmInstallDirectory installDirectory,
-            IHttpWebRequests httpWebRequests, ILogger logger, IPublicEventMarshaller publicEventMarshaller)
+            IHttpWebRequests httpWebRequests, ILogger logger, IEventMarshaller publicEventMarshaller)
         {
             Wire(installDirectory);
             Wire(httpWebRequests);
 
-            IInternalEventAggregator internalEventAggregator = new InternalEventAggregator();
-            IPublicEventInvoker publicEventInvoker = new PublicEventInvoker(publicEventMarshaller, logger);
-            IInternalEventInvoker internalEventInvoker = new InternalEventInvoker(internalEventAggregator, logger);
+            ThreadPoolMarshaller internalEventMarshaller = new ThreadPoolMarshaller(logger);
 
-            IWurmApiDataContext dataContext =
+            InternalEventAggregator internalEventAggregator = new InternalEventAggregator();
+            PublicEventInvoker publicEventInvoker = new PublicEventInvoker(publicEventMarshaller, logger);
+            InternalEventInvoker internalEventInvoker = new InternalEventInvoker(internalEventAggregator, logger, internalEventMarshaller);
+
+            WurmApiDataContext dataContext =
                 Wire(new WurmApiDataContext(wurmApiDataDirectoryFullPath, Wire(new SimplePersistLoggerAdapter(logger))));
 
-            IWurmPaths paths = Wire(new WurmPaths(installDirectory));
+            WurmPaths paths = Wire(new WurmPaths(installDirectory));
 
-            IWurmServerList serverList = Wire(new WurmServerList());
+            WurmServerList serverList = Wire(new WurmServerList());
 
-            IWurmLogDefinitions logDefinitions = Wire(new WurmLogDefinitions());
+            WurmLogDefinitions logDefinitions = Wire(new WurmLogDefinitions());
 
-            IWurmConfigDirectories configDirectories = Wire(new WurmConfigDirectories(paths, internalEventAggregator));
-            IWurmCharacterDirectories characterDirectories = Wire(new WurmCharacterDirectories(paths, internalEventAggregator));
-            IWurmLogFiles logFiles =
+            WurmConfigDirectories configDirectories = Wire(new WurmConfigDirectories(paths, internalEventAggregator));
+            WurmCharacterDirectories characterDirectories = Wire(new WurmCharacterDirectories(paths, internalEventAggregator));
+            WurmLogFiles logFiles =
                 Wire(new WurmLogFiles(characterDirectories, logger, logDefinitions, internalEventAggregator,
                     internalEventInvoker));
 
-            IWurmLogsMonitor logsMonitor =
+            WurmLogsMonitor logsMonitor =
                 Wire(new WurmLogsMonitor(logFiles, logger, publicEventInvoker, internalEventAggregator,
-                    characterDirectories));
+                    characterDirectories, internalEventInvoker));
             var heuristicsDataDirectory = Path.Combine(wurmApiDataDirectoryFullPath, "WurmLogsHistory");
-            IWurmLogsHistory logsHistory = Wire(new WurmLogsHistory(logFiles, logger, heuristicsDataDirectory));
+            WurmLogsHistory logsHistory = Wire(new WurmLogsHistory(logFiles, logger, heuristicsDataDirectory));
 
-            IWurmConfigs wurmConfigs = Wire(new WurmConfigs(configDirectories, logger, publicEventInvoker, internalEventAggregator));
-            IWurmAutoruns autoruns = Wire(new WurmAutoruns(wurmConfigs, characterDirectories, logger));
+            WurmConfigs wurmConfigs = Wire(new WurmConfigs(configDirectories, logger, publicEventInvoker, internalEventAggregator));
+            WurmAutoruns autoruns = Wire(new WurmAutoruns(wurmConfigs, characterDirectories, logger));
 
-            IWurmServerHistory wurmServerHistory =
-                Wire(new WurmServerHistory(dataContext, logsHistory, serverList, logger, logsMonitor, logFiles));
+            var wurmServerHistoryDataDirectory = Path.Combine(wurmApiDataDirectoryFullPath, "WurmServerHistory");
+            WurmServerHistory wurmServerHistory =
+                Wire(new WurmServerHistory(wurmServerHistoryDataDirectory, logsHistory, serverList, logger, logsMonitor, logFiles));
 
-            IWurmServers wurmServers =
+            WurmServers wurmServers =
                 Wire(new WurmServers(logsHistory, logsMonitor, serverList, httpWebRequests, dataContext,
                     characterDirectories, wurmServerHistory, logger));
 
-            IWurmCharacters characters =
+            WurmCharacters characters =
                 Wire(new WurmCharacters(characterDirectories, wurmConfigs, wurmServers, wurmServerHistory, logger));
 
             WurmAutoruns = autoruns;

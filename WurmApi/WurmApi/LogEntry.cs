@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi
 {
@@ -7,22 +8,31 @@ namespace AldurSoft.WurmApi
     /// </summary>
     public class LogEntry
     {
+        public LogEntry(DateTime timestamp, [NotNull] string source, [NotNull] string content)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (content == null) throw new ArgumentNullException("content");
+            Timestamp = timestamp;
+            Source = source;
+            Content = content;
+        }
+
         /// <summary>
         /// Timestamp of this log line or DateTime.Min if not parseable.
         /// </summary>
-        public DateTime Timestamp { get; set; }
+        public DateTime Timestamp { get; private set; }
 
         /// <summary>
         /// Gets the source of this log entry (the text inside brackets, for example chat names).
-        /// Null if not available.
+        /// String.Empty if not available.
         /// </summary>
-        public string Source { get; set; }
+        public string Source { get; private set; }
 
         /// <summary>
         /// Gets the log entry full content.
-        /// Null if not available.
+        /// String.Empty if not available.
         /// </summary>
-        public string Content { get; set; }
+        public string Content { get; private set; }
 
         public override string ToString()
         {

@@ -95,14 +95,14 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Characters
 
         public async Task<IWurmServer> GetHistoricServerAtLogStamp(DateTime stamp)
         {
-            var serverName = await wurmServerHistory.GetServer(this.Name, stamp).ConfigureAwait(false);
+            var serverName = await wurmServerHistory.GetServerAsync(this.Name, stamp).ConfigureAwait(false);
             var server = wurmServers.GetByName(serverName);
             return server;
         }
 
         public async Task<IWurmServer> GetCurrentServer()
         {
-            var serverName = await wurmServerHistory.GetCurrentServer(this.Name).ConfigureAwait(false);
+            var serverName = await wurmServerHistory.GetCurrentServerAsync(this.Name).ConfigureAwait(false);
             var server = wurmServers.GetByName(serverName);
             return server;
         }

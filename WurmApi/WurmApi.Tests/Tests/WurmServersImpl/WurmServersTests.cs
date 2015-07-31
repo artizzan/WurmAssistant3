@@ -106,21 +106,13 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
                 event201412Writer.WriteSection(
                     new Collection<LogEntry>()
                     {
-                        new LogEntry()
-                        {
-                            Content = "The server has been up 3 days, 15 hours and 30 minutes.",
-                            Timestamp = MockedNow
-                        }
+                        new LogEntry(MockedNow, string.Empty, "The server has been up 3 days, 15 hours and 30 minutes.")
                     }, true);
                 event201412Writer.WriteSection(
                     new Collection<LogEntry>()
                     {
-                        new LogEntry()
-                        {
-                            Content =
-                                "It is 12:01:40 on day of the Ant in week 2 of the Snake's starfall in the year of 1045.",
-                            Timestamp = MockedNow
-                        }
+                        new LogEntry(MockedNow, String.Empty,
+                            "It is 12:01:40 on day of the Ant in week 2 of the Snake's starfall in the year of 1045.")
                     });
                 //WurmApiManager.Update();
                 var uptime = await server.TryGetCurrentUptime();

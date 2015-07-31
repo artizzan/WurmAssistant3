@@ -13,13 +13,14 @@ using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
 {
-    class WurmLogsMonitor : IWurmLogsMonitor, IDisposable, IHandle<CharacterDirectoriesChanged>
+    class WurmLogsMonitor : IWurmLogsMonitor, IDisposable, IHandle<CharacterDirectoriesChanged>, IWurmLogsMonitorInternal
     {
         readonly IWurmLogFiles wurmLogFiles;
         readonly ILogger logger;
         readonly IPublicEventInvoker publicEventInvoker;
         readonly IInternalEventAggregator internalEventAggregator;
         readonly IWurmCharacterDirectories wumCharacterDirectories;
+        readonly InternalEventInvoker internalEventInvoker;
 
         IReadOnlyDictionary<CharacterName, LogsMonitorEngineManager> characterNameToEngineManagers =
             new Dictionary<CharacterName, LogsMonitorEngineManager>();
@@ -32,18 +33,21 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
 
         public WurmLogsMonitor([NotNull] IWurmLogFiles wurmLogFiles, [NotNull] ILogger logger,
             [NotNull] IPublicEventInvoker publicEventInvoker, [NotNull] IInternalEventAggregator internalEventAggregator,
-            [NotNull] IWurmCharacterDirectories wumCharacterDirectories)
+            [NotNull] IWurmCharacterDirectories wumCharacterDirectories,
+            [NotNull] InternalEventInvoker internalEventInvoker)
         {
             if (wurmLogFiles == null) throw new ArgumentNullException("wurmLogFiles");
             if (logger == null) throw new ArgumentNullException("logger");
             if (publicEventInvoker == null) throw new ArgumentNullException("publicEventInvoker");
             if (internalEventAggregator == null) throw new ArgumentNullException("internalEventAggregator");
             if (wumCharacterDirectories == null) throw new ArgumentNullException("wumCharacterDirectories");
+            if (internalEventInvoker == null) throw new ArgumentNullException("internalEventInvoker");
             this.wurmLogFiles = wurmLogFiles;
             this.logger = logger;
             this.publicEventInvoker = publicEventInvoker;
             this.internalEventAggregator = internalEventAggregator;
             this.wumCharacterDirectories = wumCharacterDirectories;
+            this.internalEventInvoker = internalEventInvoker;
 
             internalEventAggregator.Subscribe(this);
 
@@ -71,13 +75,20 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
             Rebuild();
         }
 
-        public virtual void Subscribe(CharacterName characterName, LogType logType, EventHandler<LogsMonitorEventArgs> eventHandler)
+        public void Subscribe(CharacterName characterName, LogType logType, EventHandler<LogsMonitorEventArgs> eventHandler)
         {
             var manager = GetManager(characterName);
             manager.AddSubscription(logType, eventHandler);
         }
 
-        public virtual void Unsubscribe(CharacterName characterName, EventHandler<LogsMonitorEventArgs> eventHandler)
+        public void SubscribeInternal(CharacterName characterName, LogType logType,
+            EventHandler<LogsMonitorEventArgs> eventHandler)
+        {
+            var manager = GetManager(characterName);
+            manager.AddSubscriptionInternal(logType, eventHandler);
+        }
+
+        public void Unsubscribe(CharacterName characterName, EventHandler<LogsMonitorEventArgs> eventHandler)
         {
             var manager = GetManager(characterName);
             manager.RemoveSubscription(eventHandler);
@@ -97,7 +108,17 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
 
         public void SubscribeAllActive(EventHandler<LogsMonitorEventArgs> eventHandler)
         {
-            var exists = allEventSubscriptionsTsafe.Add(eventHandler);
+            TrySubscribeAllActive(eventHandler);
+        }
+
+        public void SubscribeAllActiveInternal(EventHandler<LogsMonitorEventArgs> eventHandler)
+        {
+            TrySubscribeAllActive(eventHandler, true);
+        }
+
+        void TrySubscribeAllActive(EventHandler<LogsMonitorEventArgs> eventHandler, bool internalSubscription = false)
+        {
+            var exists = allEventSubscriptionsTsafe.Add(new AllEventsSubscription(eventHandler, internalSubscription));
             if (exists)
             {
                 logger.Log(LogLevel.Warn,
@@ -153,7 +174,8 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
                                 wurmLogFiles.GetForCharacter(characterName), 
                                 internalEventAggregator),
                             publicEventInvoker,
-                            logger);
+                            logger,
+                            internalEventInvoker);
                         newMap.Add(characterName, manager);
                     }
                 }

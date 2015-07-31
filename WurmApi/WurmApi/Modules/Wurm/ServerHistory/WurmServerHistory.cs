@@ -1,65 +1,80 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using AldursLab.PersistentObjects;
+using AldursLab.PersistentObjects.FlatFiles;
+using AldurSoft.WurmApi.JobRunning;
+using AldurSoft.WurmApi.Modules.Wurm.LogsMonitor;
+using AldurSoft.WurmApi.Modules.Wurm.ServerHistory.Jobs;
+using AldurSoft.WurmApi.Utility;
+using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
 {
-    public class WurmServerHistory : IWurmServerHistory
+    class WurmServerHistory : IWurmServerHistory
     {
-        readonly ServerHistoryProviderFactory providerFactory;
-
-        readonly Dictionary<CharacterName, ServerHistoryProvider> historyProviders = new Dictionary<CharacterName, ServerHistoryProvider>();
+        readonly QueuedJobsSyncRunner<object, ServerName> runner;
 
         public WurmServerHistory(
-            IWurmApiDataContext dataContext,
+            string dataDirectoryFullPath,
             IWurmLogsHistory wurmLogsHistory,
             IWurmServerList wurmServerList,
             ILogger logger,
-            IWurmLogsMonitor wurmLogsMonitor,
+            IWurmLogsMonitorInternal wurmLogsMonitor,
             IWurmLogFiles wurmLogFiles)
         {
-            providerFactory = new ServerHistoryProviderFactory(
-                dataContext,
+            var persistentLibrary = new PersistentCollectionsLibrary(new FlatFilesPersistenceStrategy(dataDirectoryFullPath));
+            var collection = persistentLibrary.GetCollection("serverhistory");
+
+            var providerFactory = new ServerHistoryProviderFactory(
+                collection,
                 wurmLogsHistory,
                 wurmServerList,
                 logger,
                 wurmLogsMonitor,
                 wurmLogFiles);
+
+            runner = new QueuedJobsSyncRunner<object, ServerName>(new JobExecutor(providerFactory, persistentLibrary), logger);
         }
 
-        public async Task<ServerName> GetServer(CharacterName character, DateTime exactDate)
+        public async Task<ServerName> GetServerAsync(CharacterName character, DateTime exactDate)
         {
-            ServerHistoryProvider provider = GetServerHistoryProvider(character);
-            var result = await provider.TryGetAtTimestamp(exactDate);
-            if (result == null)
-            {
-                throw new DataNotFoundException(
-                    string.Format("Server not found for timestamp {0} and character name {1}", exactDate, character));
-            }
-            return result;
+            return await runner.Run(new GetServerAtDateJob(character, exactDate), CancellationToken.None).ConfigureAwait(false);
         }
 
-        public async Task<ServerName> GetCurrentServer(CharacterName character)
+        public async Task<ServerName> GetServerAsync(CharacterName character, DateTime exactDate, CancellationToken cancellationToken)
         {
-            ServerHistoryProvider provider = GetServerHistoryProvider(character);
-            var result = await provider.TryGetCurrentServer();
-            if (result == null)
-            {
-                throw new DataNotFoundException(
-                    string.Format("Current server not found for character name {0}", character));
-            }
-            return result;
+            return await runner.Run(new GetServerAtDateJob(character, exactDate), cancellationToken).ConfigureAwait(false);
         }
 
-        ServerHistoryProvider GetServerHistoryProvider(CharacterName character)
+        public ServerName GetServer(CharacterName character, DateTime exactDate)
         {
-            ServerHistoryProvider provider;
-            if (!historyProviders.TryGetValue(character, out provider))
-            {
-                provider = providerFactory.Create(character);
-                historyProviders.Add(character, provider);
-            }
-            return provider;
+            return TaskHelper.UnwrapSingularAggegateException(() => GetServerAsync(character, exactDate).Result);
+        }
+
+        public ServerName GetServer(CharacterName character, DateTime exactDate, CancellationToken cancellationToken)
+        {
+            return TaskHelper.UnwrapSingularAggegateException(() => GetServerAsync(character, exactDate, cancellationToken).Result);
+        }
+
+        public async Task<ServerName> GetCurrentServerAsync(CharacterName character)
+        {
+            return await runner.Run(new GetCurrentServerJob(character), CancellationToken.None).ConfigureAwait(false);
+        }
+
+        public async Task<ServerName> GetCurrentServerAsync(CharacterName character, CancellationToken cancellationToken)
+        {
+            return await runner.Run(new GetCurrentServerJob(character), cancellationToken).ConfigureAwait(false);
+        }
+
+        public ServerName GetCurrentServer(CharacterName character)
+        {
+            return TaskHelper.UnwrapSingularAggegateException(() => GetCurrentServerAsync(character).Result);
+        }
+
+        public ServerName GetCurrentServer(CharacterName character, CancellationToken cancellationToken)
+        {
+            return TaskHelper.UnwrapSingularAggegateException(() => GetCurrentServerAsync(character, cancellationToken).Result);
         }
     }
 }

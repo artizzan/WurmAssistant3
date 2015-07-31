@@ -14,18 +14,22 @@ namespace AldurSoft.WurmApi.Modules.Events.Internal
     {
         readonly IInternalEventAggregator eventAggregator;
         readonly ILogger logger;
+        readonly IEventMarshaller eventMarshaller;
 
         readonly Task schedulingTask;
         volatile bool stop = false;
 
         readonly ConcurrentDictionary<InternalEvent, EventManager> events = new ConcurrentDictionary<InternalEvent, EventManager>(); 
 
-        public InternalEventInvoker([NotNull] IInternalEventAggregator eventAggregator, [NotNull] ILogger logger)
+        public InternalEventInvoker([NotNull] IInternalEventAggregator eventAggregator, [NotNull] ILogger logger,
+            [NotNull] IEventMarshaller eventMarshaller)
         {
             if (eventAggregator == null) throw new ArgumentNullException("eventAggregator");
             if (logger == null) throw new ArgumentNullException("logger");
+            if (eventMarshaller == null) throw new ArgumentNullException("eventMarshaller");
             this.eventAggregator = eventAggregator;
             this.logger = logger;
+            this.eventMarshaller = eventMarshaller;
 
             LoopDelayMillis = 100;
 
@@ -47,6 +51,24 @@ namespace AldurSoft.WurmApi.Modules.Events.Internal
             var e = new InternalEventImpl(this);
             events.TryAdd(e, new EventManager(e, invocationMinDelay, messageFactory));
             return e;
+        }
+
+        public void TriggerInstantly<TEventArgs>(EventHandler<TEventArgs> handler, object source, TEventArgs args) where TEventArgs : EventArgs
+        {
+            eventMarshaller.Marshal(() =>
+            {
+                try
+                {
+                    if (handler != null)
+                        handler(source, args);
+                }
+                catch (Exception exception)
+                {
+                    logger.Log(LogLevel.Error,
+                        "EventMarshaller has thrown an unhandled exception on instant handler invocation", this,
+                        exception);
+                }
+            });
         }
 
         internal void Detach(InternalEvent internalEvent)
