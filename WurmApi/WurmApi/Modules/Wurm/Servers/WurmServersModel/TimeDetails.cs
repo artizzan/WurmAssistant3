@@ -1,4 +1,4 @@
-﻿namespace AldurSoft.WurmApi.Modules.DataContext.DataModel.WurmServersModel
+﻿namespace AldurSoft.WurmApi.Modules.Wurm.Servers.WurmServersModel
 {
     public class TimeDetails
     {

@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using AldurSoft.Core;
 using AldurSoft.WurmApi.JobRunning;
-using AldurSoft.WurmApi.Modules.DataContext.DataModel.WurmServersModel;
 using AldurSoft.WurmApi.Modules.Wurm.Servers.Jobs;
+using AldurSoft.WurmApi.Modules.Wurm.Servers.WurmServersModel;
 using AldurSoft.WurmApi.Utility;
 using JetBrains.Annotations;
 

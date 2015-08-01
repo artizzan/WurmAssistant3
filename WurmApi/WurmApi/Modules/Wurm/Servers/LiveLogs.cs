@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AldurSoft.WurmApi.Modules.DataContext.DataModel.WurmServersModel;
+using AldurSoft.WurmApi.Modules.Wurm.Servers.WurmServersModel;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Servers
 {

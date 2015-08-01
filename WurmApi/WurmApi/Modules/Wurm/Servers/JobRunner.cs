@@ -3,9 +3,9 @@ using System.Threading;
 using AldursLab.PersistentObjects;
 using AldurSoft.Core;
 using AldurSoft.WurmApi.JobRunning;
-using AldurSoft.WurmApi.Modules.DataContext.DataModel.WurmServersModel;
 using AldurSoft.WurmApi.Modules.Wurm.LogsHistory;
 using AldurSoft.WurmApi.Modules.Wurm.Servers.Jobs;
+using AldurSoft.WurmApi.Modules.Wurm.Servers.WurmServersModel;
 using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Servers

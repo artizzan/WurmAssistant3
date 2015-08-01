@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using AldursLab.PersistentObjects;
 using Newtonsoft.Json;
 
-namespace AldurSoft.WurmApi.Modules.DataContext.DataModel.WurmServersModel
+namespace AldurSoft.WurmApi.Modules.Wurm.Servers.WurmServersModel
 {
     [JsonObject(MemberSerialization.Fields)]
     public class ServersData : Entity

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using AldurSoft.WurmApi.Infrastructure;
-using AldurSoft.WurmApi.Logging;
-using AldurSoft.WurmApi.Modules.DataContext;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Public;
@@ -89,9 +87,6 @@ namespace AldurSoft.WurmApi
             InternalEventAggregator internalEventAggregator = new InternalEventAggregator();
             PublicEventInvoker publicEventInvoker = new PublicEventInvoker(publicEventMarshaller, logger);
             InternalEventInvoker internalEventInvoker = new InternalEventInvoker(internalEventAggregator, logger, internalEventMarshaller);
-
-            WurmApiDataContext dataContext =
-                Wire(new WurmApiDataContext(wurmApiDataDirectoryFullPath, Wire(new SimplePersistLoggerAdapter(logger))));
 
             WurmPaths paths = Wire(new WurmPaths(installDirectory));
 

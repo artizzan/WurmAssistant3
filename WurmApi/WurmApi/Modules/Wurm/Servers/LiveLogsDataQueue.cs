@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using AldurSoft.WurmApi.Modules.DataContext.DataModel.WurmServersModel;
 using AldurSoft.WurmApi.Modules.Wurm.LogsMonitor;
+using AldurSoft.WurmApi.Modules.Wurm.Servers.WurmServersModel;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Servers
 {

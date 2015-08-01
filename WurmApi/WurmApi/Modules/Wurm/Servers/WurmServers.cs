@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using AldursLab.PersistentObjects;
 using AldursLab.PersistentObjects.FlatFiles;
 using AldurSoft.WurmApi.JobRunning;
-using AldurSoft.WurmApi.Modules.DataContext.DataModel.WurmServersModel;
 using AldurSoft.WurmApi.Modules.Wurm.LogsMonitor;
 using AldurSoft.WurmApi.Modules.Wurm.Servers.Jobs;
+using AldurSoft.WurmApi.Modules.Wurm.Servers.WurmServersModel;
 using AldurSoft.WurmApi.Utility;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Servers
@@ -101,6 +101,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
 
         public void Dispose()
         {
+            persistentCollectionsLibrary.SaveChanged();
             liveLogsDataQueue.Dispose();
             runner.Dispose();
         }

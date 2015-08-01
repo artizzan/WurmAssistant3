@@ -59,11 +59,11 @@
     <Compile Include="Modules\Wurm\ServerHistory\Jobs\GetServerAtDateJob.cs" />
     <Compile Include="Modules\Wurm\ServerHistory\PersistentModel\ServerHistory.cs" />
     <Compile Include="Modules\Wurm\ServerHistory\PersistentModel\ServerStamp.cs" />
-    <Compile Include="Modules\DataContext\DataModel\WurmServersModel\ServerData.cs" />
-    <Compile Include="Modules\DataContext\DataModel\WurmServersModel\ServerDateStamped.cs" />
-    <Compile Include="Modules\DataContext\DataModel\WurmServersModel\ServerUptimeStamped.cs" />
-    <Compile Include="Modules\DataContext\DataModel\WurmServersModel\TimeDetails.cs" />
-    <Compile Include="Modules\DataContext\DataModel\WurmServersModel\WurmServerLogsData.cs" />
+    <Compile Include="Modules\Wurm\Servers\WurmServersModel\ServerData.cs" />
+    <Compile Include="Modules\Wurm\Servers\WurmServersModel\ServerDateStamped.cs" />
+    <Compile Include="Modules\Wurm\Servers\WurmServersModel\ServerUptimeStamped.cs" />
+    <Compile Include="Modules\Wurm\Servers\WurmServersModel\TimeDetails.cs" />
+    <Compile Include="Modules\Wurm\Servers\WurmServersModel\WurmServerLogsData.cs" />
     <Compile Include="Modules\Events\EventHandlerExtensions.cs" />
     <Compile Include="Modules\Events\Internal\IInternalEventAggregator.cs" />
     <Compile Include="Modules\Events\ExtensionMethods.cs" />
@@ -87,7 +87,6 @@
     <Compile Include="InvalidSearchParametersException.cs" />
     <Compile Include="Infrastructure\IRequireRefresh.cs" />
     <Compile Include="IWurmApi.cs" />
-    <Compile Include="IWurmApiDataContext.cs" />
     <Compile Include="IWurmAutoruns.cs" />
     <Compile Include="IWurmCharacter.cs" />
     <Compile Include="IWurmCharacterDirectories.cs" />
@@ -152,7 +151,6 @@
     <Compile Include="Utility\LogFileStreamReaderFactory.cs" />
     <Compile Include="Utility\ParsingHelper.cs" />
     <Compile Include="Utility\WurmSubdirsMonitor.cs" />
-    <Compile Include="Modules\DataContext\WurmApiDataContext.cs" />
     <Compile Include="Modules\Wurm\Autoruns\WurmAutoruns.cs" />
     <Compile Include="Modules\Wurm\CharacterDirectories\WurmCharacterDirectories.cs" />
     <Compile Include="Modules\Wurm\Characters\WurmCharacter.cs" />
@@ -208,7 +206,6 @@
     <Compile Include="Modules\Wurm\Servers\WurmServers.cs" />
     <Compile Include="LoggerStub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Logging\SimplePersistLoggerAdapter.cs" />
     <Compile Include="WurmApiManager.cs" />
     <Compile Include="WurmApiDataDirectory.cs" />
     <Compile Include="Modules\Wurm\InstallDirectory\WurmInstallDirectory.cs" />
@@ -217,7 +214,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Logging\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\AldursLab\Lab\Essentials\Essentials.csproj">
       <Project>{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}</Project>
@@ -234,18 +233,6 @@
     <ProjectReference Include="..\..\Core\Core\Core.csproj">
       <Project>{b9e61cdc-72bd-4158-b77e-6850455a07cd}</Project>
       <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SimplePersist\SimplePersist.Contracts\SimplePersist.Contracts.csproj">
-      <Project>{e3dfe2ca-6523-4a70-a145-22b43cf2de8d}</Project>
-      <Name>SimplePersist.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SimplePersist\SimplePersist.Persistence.FlatFiles\SimplePersist.Persistence.FlatFiles.csproj">
-      <Project>{dd77f37c-44c6-4cf1-9a6c-e736b82c06ad}</Project>
-      <Name>SimplePersist.Persistence.FlatFiles</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SimplePersist\SimplePersist.Serializers.JsonNet\SimplePersist.Serializers.JsonNet.csproj">
-      <Project>{74620697-8038-40d4-b394-9988d23b37ee}</Project>
-      <Name>SimplePersist.Serializers.JsonNet</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SimplePersist\SimplePersist\SimplePersist.csproj">
       <Project>{f2d42263-c177-425c-b69c-6d53b1f4aaa0}</Project>

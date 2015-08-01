@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 using AldurSoft.Core.Testing;
 using AldurSoft.SimplePersist;
-using AldurSoft.WurmApi.Modules.DataContext;
 using AldurSoft.WurmApi.Modules.Wurm.ServerHistory;
 using AldurSoft.WurmApi.Modules.Wurm.ServerHistory.PersistentModel;
 using Moq;
@@ -25,7 +24,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServerHistoryImpl
         public void Setup()
         {
             DataDir = CreateTestPakEmptyDir();
-            IWurmApiDataContext dataContext = new WurmApiDataContext(DataDir.DirectoryFullPath, Mock.Of<ISimplePersistLogger>());
+            //IWurmApiDataContext dataContext = new WurmApiDataContext(DataDir.DirectoryFullPath, Mock.Of<ISimplePersistLogger>());
             //System = new SortedServerHistory(dataContext.ServerHistory.Get(new EntityKey("Sample")));
         }
 
