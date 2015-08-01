@@ -5,8 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
-using AldurSoft.Core.Testing;
+using AldursLab.Testing;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Public;
@@ -15,34 +14,34 @@ using AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories;
 using AldurSoft.WurmApi.Modules.Wurm.InstallDirectory;
 using AldurSoft.WurmApi.Modules.Wurm.Paths;
 using AldurSoft.WurmApi.Tests.Tests.WurmCharacterDirectoriesImpl;
-using Moq;
 
 using NUnit.Framework;
 
-using Ploeh.AutoFixture;
+using Telerik.JustMock;
+using Telerik.JustMock.Helpers;
 
 namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigDirectoriesImpl
 {
     public class WurmConfigDirectoriesTests : WurmApiFixtureBase
     {
         private WurmConfigDirectories system;
-        TestPak testDir;
+        DirectoryHandle testDir;
 
         private DirectoryInfo configsDirInfo;
 
         [SetUp]
         public void Setup()
         {
-            testDir = CreateTestPakFromDir(Path.Combine(TestPaksDirFullPath, "WurmDir-configs"));
-            var installDir = Automocker.Create<IWurmInstallDirectory>();
-            Mock.Get(installDir)
-                .Setup(directory => directory.FullPath)
-                .Returns(testDir.DirectoryFullPath);
+            testDir = TempDirectoriesFactory.CreateByCopy(Path.Combine(TestPaksDirFullPath, "WurmDir-configs"));
+            var installDir = Mock.Create<IWurmInstallDirectory>();
+            installDir
+                .Arrange(directory => directory.FullPath)
+                .Returns(testDir.AbsolutePath);
             var publicEventInvoker = new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub());
             var internalEventAggregator = new InternalEventAggregator();
             //system = new WurmConfigDirectories(new WurmPaths(installDir), publicEventInvoker, internalEventAggregator);
 
-            configsDirInfo = new DirectoryInfo(Path.Combine(testDir.DirectoryFullPath, "configs"));
+            configsDirInfo = new DirectoryInfo(Path.Combine(testDir.AbsolutePath, "configs"));
         }
 
         [TearDown]

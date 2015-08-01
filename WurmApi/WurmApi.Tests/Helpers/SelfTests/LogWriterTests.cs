@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using AldurSoft.Core.Testing;
+using AldursLab.Testing;
 using NUnit.Framework;
 
 namespace AldurSoft.WurmApi.Tests.Helpers.SelfTests
@@ -13,7 +12,7 @@ namespace AldurSoft.WurmApi.Tests.Helpers.SelfTests
     [TestFixture]
     class LogWriterTests : WurmApiFixtureBase
     {
-        private TestPak testDir;
+        private DirectoryHandle testDir;
         private LogWriter monthlyWriter;
         private LogWriter dailyWriter;
         private string pathDaily;
@@ -22,9 +21,9 @@ namespace AldurSoft.WurmApi.Tests.Helpers.SelfTests
         [SetUp]
         public void Setup()
         {
-            testDir = CreateTestPakEmptyDir();
-            this.pathDaily = Path.Combine(testDir.DirectoryFullPath, "_event.2014-01-01.txt");
-            this.pathMonthly = Path.Combine(testDir.DirectoryFullPath, "_event.2014-01.txt");
+            testDir = TempDirectoriesFactory.CreateEmpty();
+            this.pathDaily = Path.Combine(testDir.AbsolutePath, "_event.2014-01-01.txt");
+            this.pathMonthly = Path.Combine(testDir.AbsolutePath, "_event.2014-01.txt");
             monthlyWriter = new LogWriter(pathDaily, new DateTime(2014, 1, 1), false);
             dailyWriter = new LogWriter(pathMonthly, new DateTime(2014, 1, 1), false);
         }

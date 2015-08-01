@@ -6,16 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using AldurSoft.Core;
-using AldurSoft.Core.Testing;
-using AldurSoft.SimplePersist;
+using AldursLab.Essentials;
 using AldurSoft.WurmApi.Tests.Helpers;
-using Moq;
 
 using NUnit.Framework;
-
-using Ploeh.AutoFixture;
 
 namespace AldurSoft.WurmApi.Tests.Tests.WurmServerHistoryImpl
 {
@@ -23,7 +17,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServerHistoryImpl
     class WurmServerHistoryTests : WurmApiIntegrationFixtureBase
     {
         protected IWurmServerHistory ServerHistory;
-        protected MockableClock.MockedScope ClockScope;
+        protected StubbableTime.StubScope ClockScope;
 
         private readonly CharacterName characterNameTestguy = new CharacterName("Testguy");
         private readonly CharacterName characterNameTestguytwo = new CharacterName("Testguytwo");
@@ -31,9 +25,9 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServerHistoryImpl
         [SetUp]
         public void Init()
         {
-            ClockScope = MockableClock.CreateScope();
-            ClockScope.LocalNow = new DateTime(2014, 12, 14, 17, 10, 0);
-            ClockScope.LocalNowOffset = new DateTime(2014, 12, 14, 17, 10, 0);
+            ClockScope = TimeStub.CreateStubbedScope();
+            ClockScope.OverrideNow(new DateTime(2014, 12, 14, 17, 10, 0));
+            ClockScope.OverrideNowOffset(new DateTime(2014, 12, 14, 17, 10, 0));
 
             ConstructApi(Path.Combine(TestPaksDirFullPath, "WurmServerHistory-wurmdir"));
             ServerHistory = WurmApiManager.WurmServerHistory;
@@ -77,8 +71,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServerHistoryImpl
             {
                 //WurmApiManager.Update();
                 // next day
-                ClockScope.LocalNow = new DateTime(2014, 12, 15, 3, 5, 0);
-                ClockScope.LocalNowOffset = new DateTime(2014, 12, 15, 3, 5, 0);
+                ClockScope.OverrideNow(new DateTime(2014, 12, 15, 3, 5, 0));
+                ClockScope.OverrideNowOffset(new DateTime(2014, 12, 15, 3, 5, 0));
 
                 // verify current
                 var nameCurrent1 = await ServerHistory.GetCurrentServerAsync(characterNameTestguy);
@@ -86,7 +80,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServerHistoryImpl
 
                 // add live event
                 var path = Path.Combine(
-                    WurmDir.DirectoryFullPath,
+                    WurmDir.AbsolutePath,
                     "players",
                     "Testguy",
                     "logs",

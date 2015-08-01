@@ -6,8 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
-using AldurSoft.Core.Testing;
+using AldursLab.Testing;
 using AldurSoft.WurmApi.Infrastructure;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
@@ -16,18 +15,17 @@ using AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories;
 using AldurSoft.WurmApi.Modules.Wurm.LogDefinitions;
 using AldurSoft.WurmApi.Modules.Wurm.LogFiles;
 using AldurSoft.WurmApi.Modules.Wurm.Paths;
-using Moq;
 
 using NUnit.Framework;
-
-using Ploeh.AutoFixture;
+using Telerik.JustMock;
+using Telerik.JustMock.Helpers;
 
 namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
 {
     public class WurmLogFilesTests : WurmApiFixtureBase
     {
         protected WurmLogFiles system;
-        protected TestPak wurmDir;
+        protected DirectoryHandle wurmDir;
         private WurmCharacterDirectories wurmCharacterDirectories;
         protected IWurmCharacterLogFiles testGuyLogFiles;
 
@@ -37,10 +35,10 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
         [SetUp]
         public void Setup()
         {
-            wurmDir = CreateTestPakFromDir(Path.Combine(TestPaksDirFullPath, "logs-samples-emptyfiles"));
+            wurmDir = TempDirectoriesFactory.CreateByCopy(Path.Combine(TestPaksDirFullPath, "logs-samples-emptyfiles"));
 
             TestGuyDirectoryInfo =
-                new DirectoryInfo(wurmDir.DirectoryFullPath)
+                new DirectoryInfo(wurmDir.AbsolutePath)
                     .GetDirectories("players")
                     .Single()
                     .GetDirectories("Testguy")
@@ -48,10 +46,10 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
 
             TotalFileCount = TestGuyDirectoryInfo.GetDirectories("logs").Single().GetFiles().Length;
 
-            var installDir = Automocker.Create<IWurmInstallDirectory>();
-            installDir.GetMock()
-                .Setup(directory => directory.FullPath)
-                .Returns(wurmDir.DirectoryFullPath);
+            var installDir = Mock.Create<IWurmInstallDirectory>();
+            installDir
+                .Arrange(directory => directory.FullPath)
+                .Returns(wurmDir.AbsolutePath);
             var internalEventAggregator = new InternalEventAggregator();
             //wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDir),
             //    new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()), internalEventAggregator);
@@ -63,7 +61,9 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
         [TearDown]
         public override void Teardown()
         {
-            ExecuteAll(system.Dispose, wurmCharacterDirectories.Dispose, base.Teardown);
+            system.Dispose();
+            wurmCharacterDirectories.Dispose();
+            base.Teardown();
         }
 
         class WurmCharacterLogFilesTests : WurmLogFilesTests
@@ -227,7 +227,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
 
             private void CreateNewCharacterEmptyDir(string characterName)
             {
-                var dirinfo = new DirectoryInfo(wurmDir.DirectoryFullPath).GetDirectories("players").Single();
+                var dirinfo = new DirectoryInfo(wurmDir.AbsolutePath).GetDirectories("players").Single();
                 var info = Directory.CreateDirectory(Path.Combine(dirinfo.FullName, characterName));
                 Directory.CreateDirectory(Path.Combine(info.FullName, "logs"));
             }
@@ -288,7 +288,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogFilesImpl
 
             private void CreateNewCharacterDirWithALog(string characterName, string logFileName)
             {
-                var playersDir = new DirectoryInfo(wurmDir.DirectoryFullPath).GetDirectories("players").Single();
+                var playersDir = new DirectoryInfo(wurmDir.AbsolutePath).GetDirectories("players").Single();
                 var playerDir = Directory.CreateDirectory(Path.Combine(playersDir.FullName, characterName));
                 var logsDir = Directory.CreateDirectory(Path.Combine(playerDir.FullName, "logs"));
                 File.Create(Path.Combine(logsDir.FullName, logFileName)).Dispose();

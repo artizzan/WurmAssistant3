@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AldursLab.Essentials;
 using AldursLab.PersistentObjects;
-using AldurSoft.Core;
 using AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics.PersistentModel;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics
@@ -74,7 +74,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics
                 fileData.DayToHeuristicsMap = results.Heuristics;
                 needsSaving = true;
             }
-            fileData.LastUpdated = Time.Clock.LocalNowOffset; 
+            fileData.LastUpdated = Time.Get.LocalNowOffset; 
 
             if (isNewFile) persistentData.Entity.WurmLogFiles.Add(fileData.FileName, fileData);
             if (needsSaving) persistentData.FlagAsChanged();

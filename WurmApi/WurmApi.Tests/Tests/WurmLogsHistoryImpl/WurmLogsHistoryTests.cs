@@ -5,9 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using AldurSoft.Core.Testing;
-using AldurSoft.SimplePersist;
+using AldursLab.Testing;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Public;
@@ -16,40 +14,41 @@ using AldurSoft.WurmApi.Modules.Wurm.LogDefinitions;
 using AldurSoft.WurmApi.Modules.Wurm.LogFiles;
 using AldurSoft.WurmApi.Modules.Wurm.LogsHistory;
 using AldurSoft.WurmApi.Modules.Wurm.Paths;
-using Moq;
 
 using NUnit.Framework;
+using Telerik.JustMock;
+using Telerik.JustMock.Helpers;
 
 namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
 {
     [TestFixture]
     class WurmLogsHistoryTests : WurmApiFixtureBase
     {
-        protected TestPak DataDir;
-        protected TestPak WurmDir;
+        protected DirectoryHandle DataDir;
+        protected DirectoryHandle WurmDir;
 
         protected WurmLogsHistory System;
         private WurmLogFiles wurmLogFiles;
         private WurmCharacterDirectories wurmCharacterDirectories;
 
-        Mock<ILogger> logger;
+        ILogger logger;
 
         [SetUp]
         public void Setup()
         {
-            DataDir = CreateTestPakEmptyDir();
-            WurmDir = CreateTestPakFromDir(Path.Combine(TestPaksDirFullPath, "logs-samples-realdata"));
+            DataDir = TempDirectoriesFactory.CreateEmpty();
+            WurmDir = TempDirectoriesFactory.CreateByCopy(Path.Combine(TestPaksDirFullPath, "logs-samples-realdata"));
 
-            var installDir = new Mock<IWurmInstallDirectory>();
-            installDir.Setup(directory => directory.FullPath).Returns(WurmDir.DirectoryFullPath);
+            var installDir = Mock.Create<IWurmInstallDirectory>();
+            installDir.Arrange(directory => directory.FullPath).Returns(WurmDir.AbsolutePath);
 
             var internalEventAggregator = new InternalEventAggregator();
             //wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDir.Object),
             //    new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()), internalEventAggregator);
 
-            logger = new Mock<ILogger>();
-            logger.Setup(logger1 => logger1.Log(It.IsAny<LogLevel>(), It.IsAny<string>(), It.IsAny<object>(), It.IsAny<Exception>()))
-                .Callback<LogLevel, string, object>(
+            logger = Mock.Create<ILogger>();
+            logger.Arrange(logger1 => logger1.Log(Arg.IsAny<LogLevel>(), Arg.IsAny<string>(), Arg.IsAny<object>(), Arg.IsAny<Exception>()))
+                .DoInstead<LogLevel, string, object>(
                     (level, s, arg3) => Trace.WriteLine(string.Format("{0} {1} {2}", level, arg3, s)));
 
             //wurmLogFiles = new WurmLogFiles(
@@ -174,7 +173,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
 
         private void VerifyLoggedErrors(int count = 0)
         {
-            logger.Verify(logger1 => logger1.Log(It.IsAny<LogLevel>(), It.IsAny<string>(), It.IsAny<object>(), It.IsAny<Exception>()), Times.Exactly(count));
+            logger.Assert(logger1 => logger1.Log(Arg.IsAny<LogLevel>(), Arg.IsAny<string>(), Arg.IsAny<object>(), Arg.IsAny<Exception>()), Occurs.Exactly(count));
         }
     }
 }

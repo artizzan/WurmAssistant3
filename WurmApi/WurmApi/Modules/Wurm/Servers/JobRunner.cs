@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
+using AldursLab.Essentials;
 using AldursLab.PersistentObjects;
-using AldurSoft.Core;
 using AldurSoft.WurmApi.JobRunning;
 using AldurSoft.WurmApi.Modules.Wurm.LogsHistory;
 using AldurSoft.WurmApi.Modules.Wurm.Servers.Jobs;
@@ -66,7 +66,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
                 return AdjustedWurmDateTime(liveData.ServerDate);
             }
             var logHistoryData = logHistory.GetForServer(serverName);
-            if (logHistoryData.ServerDate.Stamp > Time.Clock.LocalNowOffset.AddDays(-1))
+            if (logHistoryData.ServerDate.Stamp > Time.Get.LocalNowOffset.AddDays(-1))
             {
                 return AdjustedWurmDateTime(logHistoryData.ServerDate);
             }
@@ -91,7 +91,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
                 return AdjustedUptime(liveData.ServerUptime);
             }
             var logHistoryData = logHistory.GetForServer(serverName);
-            if (logHistoryData.ServerUptime.Stamp > Time.Clock.LocalNowOffset.AddDays(-1))
+            if (logHistoryData.ServerUptime.Stamp > Time.Get.LocalNowOffset.AddDays(-1))
             {
                 return AdjustedUptime(logHistoryData.ServerUptime);
             }
@@ -110,12 +110,12 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
 
         private TimeSpan AdjustedUptime(ServerUptimeStamped uptime)
         {
-            return uptime.Uptime + (Time.Clock.LocalNowOffset - uptime.Stamp);
+            return uptime.Uptime + (Time.Get.LocalNowOffset - uptime.Stamp);
         }
 
         private WurmDateTime AdjustedWurmDateTime(ServerDateStamped date)
         {
-            return date.WurmDateTime + (Time.Clock.LocalNowOffset - date.Stamp);
+            return date.WurmDateTime + (Time.Get.LocalNowOffset - date.Stamp);
         }
 
     }

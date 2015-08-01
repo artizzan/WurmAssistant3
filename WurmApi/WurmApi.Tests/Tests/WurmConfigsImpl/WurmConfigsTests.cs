@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using AldurSoft.Core.Testing;
+using AldursLab.Testing;
 using AldurSoft.WurmApi.Infrastructure;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
@@ -14,9 +13,10 @@ using AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories;
 using AldurSoft.WurmApi.Modules.Wurm.Configs;
 using AldurSoft.WurmApi.Modules.Wurm.Paths;
 using AldurSoft.WurmApi.Utility;
-using Moq;
 
 using NUnit.Framework;
+using Telerik.JustMock;
+using Telerik.JustMock.Helpers;
 
 namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigsImpl
 {
@@ -51,7 +51,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigsImpl
         [Test]
         public async Task ChangeEvents()
         {
-            var wurmDir = CreateTestPakFromDir(Path.Combine(TestPaksDirFullPath, "WurmDir-configs"));
+            var wurmDir = TempDirectoriesFactory.CreateByCopy(Path.Combine(TestPaksDirFullPath, "WurmDir-configs"));
             // wurm dir has to be reused
             {
                 using (var frame = new MockFrame(this, wurmDir))
@@ -109,13 +109,13 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigsImpl
         private class MockFrame : IDisposable
         {
             private readonly WurmConfigsTests baseFixture;
-            private TestPak wurmDir;
+            private DirectoryHandle wurmDir;
 
             public WurmConfigs System { get; private set; }
-            public Mock<IWurmInstallDirectory> WurmInstallDirectory = new Mock<IWurmInstallDirectory>();
+            public IWurmInstallDirectory WurmInstallDirectory = Mock.Create<IWurmInstallDirectory>();
             private readonly WurmConfigDirectories wurmConfigDirectories;
 
-            public MockFrame(WurmConfigsTests baseFixture, TestPak wurmDir = null)
+            public MockFrame(WurmConfigsTests baseFixture, DirectoryHandle wurmDir = null)
             {
                 if (baseFixture == null)
                 {
@@ -128,18 +128,18 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmConfigsImpl
                 }
                 else
                 {
-                    this.wurmDir = baseFixture.CreateTestPakFromDir(Path.Combine(TestPaksDirFullPath, "WurmDir-configs"));
+                    this.wurmDir = TempDirectoriesFactory.CreateByCopy(Path.Combine(TestPaksDirFullPath, "WurmDir-configs"));
                 }
 
                 this.baseFixture = baseFixture;
-                WurmInstallDirectory.Setup(directory => directory.FullPath)
-                    .Returns(this.wurmDir.DirectoryFullPath);
+                WurmInstallDirectory.Arrange(directory => directory.FullPath)
+                    .Returns(this.wurmDir.AbsolutePath);
                 var publicEventInvoker = new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub());
                 var internalEventAggregator = new InternalEventAggregator();
                 //wurmConfigDirectories = new WurmConfigDirectories(new WurmPaths(WurmInstallDirectory.Object), publicEventInvoker, internalEventAggregator);
                 System = new WurmConfigs(
                     wurmConfigDirectories,
-                    Mock.Of<ILogger>(),
+                    Mock.Create<ILogger>(),
                     publicEventInvoker,
                     internalEventAggregator);
             }

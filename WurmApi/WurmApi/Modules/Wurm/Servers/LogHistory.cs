@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using AldurSoft.Core;
+using AldursLab.Essentials;
 using AldurSoft.WurmApi.Modules.Wurm.Servers.WurmServersModel;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Servers
@@ -38,7 +38,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
         {
             EnsureScanned();
 
-            logHistorySaved.LastScanDate = Time.Clock.LocalNowOffset;
+            logHistorySaved.LastScanDate = Time.Get.LocalNowOffset;
 
             return logHistorySaved.GetHistoricForServer(serverName);
         }
@@ -47,7 +47,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
         {
             if (scanned) return;
 
-            var maxScanSince = Time.Clock.LocalNowOffset.AddDays(-30);
+            var maxScanSince = Time.Get.LocalNowOffset.AddDays(-30);
             var lastScanSince = logHistorySaved.LastScanDate.AddDays(-1);
             var scanSince = lastScanSince < maxScanSince ? maxScanSince : lastScanSince;
 
@@ -59,7 +59,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
                     {
                         CharacterName = characterName,
                         DateFrom = scanSince.DateTime,
-                        DateTo = Time.Clock.LocalNow,
+                        DateTo = Time.Get.LocalNow,
                         LogType = LogType.Event
                     });
                 foreach (var searchResult in searchResults)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using AldurSoft.Core;
+using AldursLab.Essentials;
 using AldurSoft.WurmApi.Infrastructure;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
@@ -22,7 +22,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
         IReadOnlyDictionary<LogType, LogTypeManager> wurmLogTypeToLogTypeManagerMap =
             new Dictionary<LogType, LogTypeManager>();
 
-        readonly ThreadSafeProperty<DateTime> oldestLogFileDate = ThreadSafeProperty.Create(Time.Clock.LocalNow);
+        readonly ThreadSafeProperty<DateTime> oldestLogFileDate = ThreadSafeProperty.Create(Time.Get.LocalNow);
 
         readonly HashSet<string> blacklistedFileNames = new HashSet<string>();
 

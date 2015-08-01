@@ -5,16 +5,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using AldurSoft.Core;
-using AldurSoft.Core.Testing;
+using AldursLab.Essentials;
+using AldursLab.Testing;
 using AldurSoft.WurmApi.Modules.Networking;
 using AldurSoft.WurmApi.Tests.Helpers;
-using Moq;
 
 using NUnit.Framework;
-
-using Ploeh.AutoFixture;
+using Telerik.JustMock;
+using Telerik.JustMock.Helpers;
 
 namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
 {
@@ -22,19 +20,19 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
     class WurmServersTests : WurmApiIntegrationFixtureBase
     {
         protected IWurmServers Servers;
-        public MockableClock.MockedScope Timescope;
+        public StubbableTime.StubScope Timescope;
         protected readonly CharacterName TestGuyCharacterName = new CharacterName("Testguy");
         protected DateTime MockedNow = new DateTime(2014, 12, 15, 0, 0, 0);
 
-        protected TestPak HtmlWebRequestsDir;
+        protected DirectoryHandle HtmlWebRequestsDir;
 
         [SetUp]
         public virtual void Setup()
         {
             HtmlWebRequestsDir =
-                CreateTestPakFromDir(Path.Combine(TestPaksDirFullPath, "WurmServerTests-wurmdir-webrequests"));
+                TempDirectoriesFactory.CreateByCopy(Path.Combine(TestPaksDirFullPath, "WurmServerTests-wurmdir-webrequests"));
 
-            Timescope = MockableClock.CreateScope();
+            Timescope = TimeStub.CreateStubbedScope();
             Timescope.SetAllLocalTimes(MockedNow);
 
             ConstructApi(Path.Combine(TestPaksDirFullPath, "WurmServerTests-wurmdir"));
@@ -69,7 +67,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
                 server = Servers.GetByName(serverName);
                 event201412Writer =
                     new LogWriter(
-                        Path.Combine(WurmDir.DirectoryFullPath, "players", "Testguy", "Logs", "_Event.2014-12.txt"),
+                        Path.Combine(WurmDir.AbsolutePath, "players", "Testguy", "Logs", "_Event.2014-12.txt"),
                         new DateTime(2014, 12, 1),
                         true);
             }
@@ -128,13 +126,13 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
                 var newMockedNow = new DateTime(2014, 12, 30, 0, 0, 0);
                 Timescope.SetAllLocalTimes(newMockedNow);
 
-                var responseMock = Automocker.Create<HttpWebResponse>().GetMock();
-                var htmlBytes = File.ReadAllBytes(Path.Combine(HtmlWebRequestsDir.DirectoryFullPath, "Exodus.txt"));
-                responseMock.Setup(response => response.GetResponseStream())
+                var responseMock = Mock.Create<HttpWebResponse>();
+                var htmlBytes = File.ReadAllBytes(Path.Combine(HtmlWebRequestsDir.AbsolutePath, "Exodus.txt"));
+                responseMock.Arrange(response => response.GetResponseStream())
                     .Returns(() => new MemoryStream(htmlBytes));
-                responseMock.Setup(response => response.LastModified).Returns(newMockedNow);
-                base.HttpWebRequestsMock.Setup(requests => requests.GetResponseAsync(It.IsAny<string>()))
-                    .Returns(() => Task.FromResult(responseMock.Object));
+                responseMock.Arrange(response => response.LastModified).Returns(newMockedNow);
+                base.HttpWebRequestsMock.Arrange(requests => requests.GetResponseAsync(Arg.IsAny<string>()))
+                    .Returns(() => Task.FromResult(responseMock));
 
                 var uptime = await server.TryGetCurrentUptimeAsync();
                 var datetime = await server.TryGetCurrentTimeAsync();
@@ -146,7 +144,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
         [TearDown]
         public override void Teardown()
         {
-            ExecuteAll(Timescope.Dispose, base.Teardown);
+            Timescope.Dispose();
+            base.Teardown();
         }
     }
 }

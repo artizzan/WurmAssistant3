@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AldurSoft.Core;
+using AldursLab.Essentials;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
 using JetBrains.Annotations;
@@ -40,7 +40,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
             this.singleFileMonitorFactory = singleFileMonitorFactory;
             this.wurmCharacterLogFiles = wurmCharacterLogFiles;
 
-            lastRefresh = Time.Clock.LocalNowOffset;
+            lastRefresh = Time.Get.LocalNowOffset;
 
             internalEventAggregator.Subscribe(this);
 
@@ -65,7 +65,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
         {
             lock (locker)
             {
-                var currentDate = Time.Clock.LocalNowOffset;
+                var currentDate = Time.Get.LocalNowOffset;
                 CheckForLargeRefreshDelay(currentDate);
 
                 List<MonitorEvents> eventsList = new List<MonitorEvents>();
@@ -89,7 +89,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
         void RebuildAllMonitors()
         {
             var ir = initialRebuild;
-            var timeNow = Time.Clock.LocalNow;
+            var timeNow = Time.Get.LocalNow;
             RemoveOldMonitors(timeNow);
             var files = wurmCharacterLogFiles.GetLogFiles(timeNow, timeNow);
             foreach (var file in files)

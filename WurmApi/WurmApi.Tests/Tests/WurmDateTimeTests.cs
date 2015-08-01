@@ -5,8 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
-
-using AldurSoft.Core.Testing.Tools;
+using AldurSoft.WurmApi.Tests.Tools;
 using Newtonsoft.Json;
 
 using NUnit.Framework;

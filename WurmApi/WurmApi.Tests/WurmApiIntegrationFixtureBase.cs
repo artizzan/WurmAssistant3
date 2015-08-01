@@ -1,30 +1,30 @@
 ﻿using System;
 using System.IO;
-
-using AldurSoft.Core.Testing;
-using Moq;
+using AldursLab.Testing;
 
 using NUnit.Framework;
+using Telerik.JustMock;
+using Telerik.JustMock.Helpers;
 
 namespace AldurSoft.WurmApi.Tests
 {
     public abstract class WurmApiIntegrationFixtureBase : WurmApiFixtureBase
     {
-        private TestPak dataDir;
-        private TestPak wurmDir;
+        private DirectoryHandle dataDir;
+        private DirectoryHandle wurmDir;
 
-        protected Mock<IWurmInstallDirectory> WurmInstallDirectoryMock;
-        protected Mock<IHttpWebRequests> HttpWebRequestsMock;
-        protected Mock<ILogger> LoggerMock;
+        protected IWurmInstallDirectory WurmInstallDirectoryMock;
+        protected IHttpWebRequests HttpWebRequestsMock;
+        protected ILogger LoggerMock;
 
         protected WurmApiManager WurmApiManager;
 
-        public TestPak WurmDir
+        public DirectoryHandle WurmDir
         {
             get { return wurmDir; }
         }
 
-        public TestPak DataDir
+        public DirectoryHandle DataDir
         {
             get { return dataDir; }
         }
@@ -32,28 +32,32 @@ namespace AldurSoft.WurmApi.Tests
         protected void ConstructApi(string wurmDirFullPath)
         {
             if (wurmDirFullPath == null) throw new ArgumentNullException("wurmDirFullPath");
-            wurmDir = CreateTestPakFromDir(wurmDirFullPath);
-            dataDir = CreateTestPakEmptyDir();
+            wurmDir = TempDirectoriesFactory.CreateByCopy(wurmDirFullPath);
+            dataDir = TempDirectoriesFactory.CreateEmpty();
 
-            WurmInstallDirectoryMock = new Mock<IWurmInstallDirectory>();
-            WurmInstallDirectoryMock.Setup(directory => directory.FullPath).Returns(WurmDir.DirectoryFullPath);
+            WurmInstallDirectoryMock = Mock.Create<IWurmInstallDirectory>();
+            WurmInstallDirectoryMock.Arrange(directory => directory.FullPath).Returns(WurmDir.AbsolutePath);
 
-            HttpWebRequestsMock = new Mock<IHttpWebRequests>();
+            HttpWebRequestsMock = Mock.Create<IHttpWebRequests>();
 
-            LoggerMock = new Mock<ILogger>();
+            LoggerMock = Mock.Create<ILogger>();
 
             WurmApiManager apiManager = new WurmApiManager(
-                DataDir.DirectoryFullPath,
-                WurmInstallDirectoryMock.Object,
-                HttpWebRequestsMock.Object,
-                LoggerMock.Object);
+                DataDir.AbsolutePath,
+                WurmInstallDirectoryMock,
+                HttpWebRequestsMock,
+                LoggerMock);
 
             WurmApiManager = apiManager;
         }
 
+        [TearDown]
         public override void Teardown()
         {
-            ExecuteAll(WurmApiManager.Dispose, base.Teardown);
+            base.Teardown();
+            WurmApiManager.Dispose();
+            DataDir.Dispose();
+            wurmDir.Dispose();
         }
     }
 }

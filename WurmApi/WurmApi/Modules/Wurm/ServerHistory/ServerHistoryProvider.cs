@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AldursLab.Essentials;
 using AldursLab.PersistentObjects;
-using AldurSoft.Core;
 using AldurSoft.WurmApi.Modules.Wurm.LogsHistory;
 using AldurSoft.WurmApi.Modules.Wurm.LogsMonitor;
 using AldurSoft.WurmApi.Modules.Wurm.ServerHistory.PersistentModel;
@@ -120,7 +120,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
         {
             ParsePendingLiveLogEvents();
 
-            var timeNow = Time.Clock.LocalNow;
+            var timeNow = Time.Get.LocalNow;
             var time12MonthsAgo = timeNow.AddMonths(-12);
 
             // a cheap hack to reset history if its very outdated
@@ -181,7 +181,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
             var dateFrom = datetimeFrom;
             var dateTo = datetimeFrom + TimeSpan.FromDays(30);
 
-            var timeNow = Time.Clock.LocalNow;
+            var timeNow = Time.Get.LocalNow;
             bool end = false;
             if (dateTo > timeNow)
             {
@@ -268,7 +268,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
             {
                 return currentLiveLogsServer;
             }
-            return TryGetAtTimestamp(Time.Clock.LocalNow, jobCancellationManager);
+            return TryGetAtTimestamp(Time.Get.LocalNow, jobCancellationManager);
         }
 
         public void Dispose()

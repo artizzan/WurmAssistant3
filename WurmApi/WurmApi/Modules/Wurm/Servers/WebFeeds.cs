@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AldurSoft.Core;
+using AldursLab.Essentials;
 using AldurSoft.WurmApi.Modules.Wurm.Servers.WurmServersModel;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Servers
@@ -46,7 +46,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
 
         public void UpdateWebData()
         {
-            if (lastSync < Time.Clock.LocalNowOffset.AddHours(-6))
+            if (lastSync < Time.Get.LocalNowOffset.AddHours(-6))
             {
                 SyncWebData();
             }
@@ -91,7 +91,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
                         exception);
                 }
             }
-            lastSync = Time.Clock.LocalNowOffset;
+            lastSync = Time.Get.LocalNowOffset;
         }
     }
 }

@@ -36,6 +36,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=9.1.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\..\Lib\NuGetPackages\JetBrains.Annotations.9.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\NuGetPackages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -229,14 +233,6 @@
     <ProjectReference Include="..\..\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj">
       <Project>{0962a106-b1b2-4e21-9931-81d68a98ed37}</Project>
       <Name>PersistentObjects</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Core\Core.csproj">
-      <Project>{b9e61cdc-72bd-4158-b77e-6850455a07cd}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SimplePersist\SimplePersist\SimplePersist.csproj">
-      <Project>{f2d42263-c177-425c-b69c-6d53b1f4aaa0}</Project>
-      <Name>SimplePersist</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

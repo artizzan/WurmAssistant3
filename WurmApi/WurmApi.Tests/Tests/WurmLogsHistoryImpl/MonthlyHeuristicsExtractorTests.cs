@@ -5,15 +5,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using AldurSoft.Core.Testing;
+using AldursLab.Essentials;
+using AldursLab.Testing;
 using AldurSoft.WurmApi.Modules.Wurm.LogDefinitions;
 using AldurSoft.WurmApi.Modules.Wurm.LogFiles;
 using AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics;
 using AldurSoft.WurmApi.Utility;
-using Moq;
 
 using NUnit.Framework;
+using Telerik.JustMock;
 
 namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
 {
@@ -29,13 +29,13 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
         private FileInfo fileThatGoesBeyondMonthDays;
         private FileInfo fileEvent201412;
 
-        private TestPak logsDir;
+        private DirectoryHandle logsDir;
 
         [SetUp]
         public void SetUp()
         {
-            logsDir = CreateTestPakFromDir(Path.Combine(TestPaksDirFullPath, "MonthlyHeuristicsExtractor-sample-logs"));
-            string basePath = logsDir.DirectoryFullPath;
+            logsDir = TempDirectoriesFactory.CreateByCopy(Path.Combine(TestPaksDirFullPath, "MonthlyHeuristicsExtractor-sample-logs"));
+            string basePath = logsDir.AbsolutePath;
 
             testFile = new FileInfo(Path.Combine(basePath, "Village.2013-03.txt"));
             emptyTestFile = new FileInfo(Path.Combine(basePath, "Village.2013-03.empty.txt"));
@@ -49,20 +49,20 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
 
         private MonthlyHeuristicsExtractor ConstructForFilePath(FileInfo info)
         {
-            LogFileInfoFactory factory = new LogFileInfoFactory(new WurmLogDefinitions(), Mock.Of<ILogger>());
+            LogFileInfoFactory factory = new LogFileInfoFactory(new WurmLogDefinitions(), Mock.Create<ILogger>());
             
             return new MonthlyHeuristicsExtractor(
                 factory.Create(info), 
                 new LogFileStreamReaderFactory(),
-                Mock.Of<ILogger>());
+                Mock.Create<ILogger>());
         }
 
         [Test]
         public void ExtractDataToPositionMap()
         {
-            using (var scope = MockableClock.CreateScope())
+            using (var scope = TimeStub.CreateStubbedScope())
             {
-                scope.LocalNow = new DateTime(2014, 1, 1);
+                scope.OverrideNow(new DateTime(2014, 1, 1));
 
                 MonthlyHeuristicsExtractor extractor = ConstructForFilePath(testFile);
 
@@ -88,9 +88,9 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
         [Test]
         public void ExtractDataToPositionMap_ForCurrentMonth()
         {
-            using (var scope = MockableClock.CreateScope())
+            using (var scope = TimeStub.CreateStubbedScope())
             {
-                scope.LocalNow = new DateTime(2013, 3, 15);
+                scope.OverrideNow(new DateTime(2013, 3, 15));
 
                 MonthlyHeuristicsExtractor extractor = ConstructForFilePath(testFile);
 
@@ -172,7 +172,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
         [Test]
         public void ExtractForEvent201412()
         {
-            using (var scope = MockableClock.CreateScope())
+            using (var scope = TimeStub.CreateStubbedScope())
             {
                 scope.SetAllLocalTimes(new DateTime(2014,12,15));
                 MonthlyHeuristicsExtractor extractor = ConstructForFilePath(fileEvent201412);

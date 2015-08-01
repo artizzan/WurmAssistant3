@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AldurSoft.Core;
+using AldursLab.Essentials;
 using AldurSoft.WurmApi.Utility;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Servers
@@ -80,7 +80,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
                         }
                     }
 
-                    DateTime dtnow = Time.Clock.LocalNow;
+                    DateTime dtnow = Time.Get.LocalNow;
                     if (headerLastUpdated > dtnow)
                     {
                         headerLastUpdated = dtnow;

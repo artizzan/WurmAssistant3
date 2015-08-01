@@ -5,8 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
-using AldurSoft.Core.Testing;
+using AldursLab.Testing;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Public;
@@ -15,16 +14,17 @@ using AldurSoft.WurmApi.Modules.Wurm.LogDefinitions;
 using AldurSoft.WurmApi.Modules.Wurm.LogFiles;
 using AldurSoft.WurmApi.Modules.Wurm.LogsMonitor;
 using AldurSoft.WurmApi.Modules.Wurm.Paths;
-using Moq;
 
 using NUnit.Framework;
+using Telerik.JustMock;
+using Telerik.JustMock.Helpers;
 
 namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
 {
     [TestFixture]
     class WurmLogsMonitorTests : WurmApiFixtureBase
     {
-        protected TestPak WurmDir;
+        protected DirectoryHandle WurmDir;
         protected WurmLogsMonitor System;
         private WurmCharacterDirectories wurmCharacterDirectories;
         private WurmLogFiles wurmLogFiles;
@@ -32,12 +32,12 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
         [SetUp]
         public void Setup()
         {
-            WurmDir = CreateTestPakFromDir(Path.Combine(TestPaksDirFullPath, "logs-samples-forLogsMonitor"));
+            WurmDir = TempDirectoriesFactory.CreateByCopy(Path.Combine(TestPaksDirFullPath, "logs-samples-forLogsMonitor"));
 
-            IWurmInstallDirectory installDirectory = Mock.Of<IWurmInstallDirectory>();
-            installDirectory.GetMock()
-                .Setup(directory => directory.FullPath)
-                .Returns(WurmDir.DirectoryFullPath);
+            IWurmInstallDirectory installDirectory = Mock.Create<IWurmInstallDirectory>();
+            installDirectory
+                .Arrange(directory => directory.FullPath)
+                .Returns(WurmDir.AbsolutePath);
             var internalEventAggregator = new InternalEventAggregator();
             //wurmCharacterDirectories = new WurmCharacterDirectories(new WurmPaths(installDirectory),
             //    new PublicEventInvoker(new SimpleMarshaller(), new LoggerStub()), internalEventAggregator);
@@ -56,10 +56,10 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
         [Test]
         public void SubscribeSingleLogType_TriggerWithSingleEvent()
         {
-            using (var scope = MockableClock.CreateScope())
+            using (var scope = TimeStub.CreateStubbedScope())
             {
-                scope.LocalNowOffset = new DateTimeOffset(2014, 1, 1, 0, 0, 0, TimeSpan.Zero);
-                scope.LocalNow = new DateTime(2014, 1, 1, 0, 0, 0);
+                scope.OverrideNowOffset(new DateTimeOffset(2014, 1, 1, 0, 0, 0, TimeSpan.Zero));
+                scope.OverrideNow(new DateTime(2014, 1, 1, 0, 0, 0));
 
                 List<LogsMonitorEventArgs> events = new List<LogsMonitorEventArgs>();
                 WriteToLogFile("_Event.2014-01-01.txt", "Logging started 2014-01-01");
@@ -77,7 +77,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
                 Expect(events.Count, EqualTo(1));
                 Expect(events.Single().CharacterName, EqualTo(new CharacterName("Testguy")));
                 Expect(events.Single().WurmLogEntries.Count(), EqualTo(1));
-                Expect(events.Single().WurmLogEntries.Single().Timestamp, EqualTo(MockableClock.LocalNow));
+                Expect(events.Single().WurmLogEntries.Single().Timestamp, EqualTo(TimeStub.LocalNow));
                 Expect(events.Single().WurmLogEntries.Single().Content, EqualTo("Horses like this one have many uses."));
 
                 //System.Unsubscribe(TODO, eventHandler);
@@ -94,10 +94,10 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
         [Test]
         public void SubscribePmLog_TriggerWithSingleEvent()
         {
-            using (var scope = MockableClock.CreateScope())
+            using (var scope = TimeStub.CreateStubbedScope())
             {
-                scope.LocalNowOffset = new DateTimeOffset(2014, 1, 1, 0, 0, 0, TimeSpan.Zero);
-                scope.LocalNow = new DateTime(2014, 1, 1, 0, 0, 0);
+                scope.OverrideNowOffset(new DateTimeOffset(2014, 1, 1, 0, 0, 0, TimeSpan.Zero));
+                scope.OverrideNow(new DateTime(2014, 1, 1, 0, 0, 0));
 
                 List<LogsMonitorEventArgs> anotherGuyEvents = new List<LogsMonitorEventArgs>();
                 List<LogsMonitorEventArgs> unrelatedGuyEvents = new List<LogsMonitorEventArgs>();
@@ -119,7 +119,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
                 Expect(unrelatedGuyEvents.Count, EqualTo(0));
                 Expect(anotherGuyEvents.Single().CharacterName, EqualTo(new CharacterName("Testguy")));
                 Expect(anotherGuyEvents.Single().WurmLogEntries.Count(), EqualTo(1));
-                Expect(anotherGuyEvents.Single().WurmLogEntries.Single().Timestamp, EqualTo(MockableClock.LocalNow));
+                Expect(anotherGuyEvents.Single().WurmLogEntries.Single().Timestamp, EqualTo(TimeStub.LocalNow));
                 Expect(anotherGuyEvents.Single().WurmLogEntries.Single().Content, EqualTo("Horses like this one have many uses."));
                 Expect(anotherGuyEvents.Single().WurmLogEntries.Single().Source, EqualTo("Anotherguy"));
 
@@ -138,10 +138,10 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
         [Test]
         public void SubscribeAll_TriggerWithSingleEvent()
         {
-            using (var scope = MockableClock.CreateScope())
+            using (var scope = TimeStub.CreateStubbedScope())
             {
-                scope.LocalNowOffset = new DateTimeOffset(2014, 1, 1, 0, 0, 0, TimeSpan.Zero);
-                scope.LocalNow = new DateTime(2014, 1, 1, 0, 0, 0);
+                scope.OverrideNowOffset(new DateTimeOffset(2014, 1, 1, 0, 0, 0, TimeSpan.Zero));
+                scope.OverrideNow(new DateTime(2014, 1, 1, 0, 0, 0));
 
                 List<LogsMonitorEventArgs> allEvents = new List<LogsMonitorEventArgs>();
                 EventHandler<LogsMonitorEventArgs> eventHandler = (sender, args) => allEvents.Add(args);
@@ -165,7 +165,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
                 Expect(allEvents.Count, EqualTo(1));
                 Expect(allEvents.Single().CharacterName, EqualTo(new CharacterName("Testguy")));
                 Expect(allEvents.Single().WurmLogEntries.Count(), EqualTo(1));
-                Expect(allEvents.Single().WurmLogEntries.Single().Timestamp, EqualTo(MockableClock.LocalNow));
+                Expect(allEvents.Single().WurmLogEntries.Single().Timestamp, EqualTo(TimeStub.LocalNow));
                 Expect(allEvents.Single().WurmLogEntries.Single().Content, EqualTo("Horses like this one have many uses."));
 
                 Thread.Sleep(20);
@@ -186,10 +186,10 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
         [Test]
         public void GathersEventsOnNewDay_StopsGatheringOnOldDay()
         {
-            using (var scope = MockableClock.CreateScope())
+            using (var scope = TimeStub.CreateStubbedScope())
             {
-                scope.LocalNowOffset = new DateTimeOffset(2014, 1, 1, 0, 0, 0, TimeSpan.Zero);
-                scope.LocalNow = new DateTime(2014, 1, 1, 0, 0, 0);
+                scope.OverrideNowOffset(new DateTimeOffset(2014, 1, 1, 0, 0, 0, TimeSpan.Zero));
+                scope.OverrideNow(new DateTime(2014, 1, 1, 0, 0, 0));
 
                 List<LogsMonitorEventArgs> events = new List<LogsMonitorEventArgs>();
                 WriteToLogFile("_Event.2014-01-01.txt", "Logging started 2014-01-01");
@@ -204,8 +204,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
                 Thread.Sleep(20);
                 RefreshSystems();
 
-                scope.LocalNowOffset = new DateTimeOffset(2014, 1, 2, 0, 0, 0, TimeSpan.Zero);
-                scope.LocalNow = new DateTime(2014, 1, 2, 0, 0, 0);
+                scope.OverrideNowOffset(new DateTimeOffset(2014, 1, 2, 0, 0, 0, TimeSpan.Zero));
+                scope.OverrideNow(new DateTime(2014, 1, 2, 0, 0, 0));
 
                 WriteToLogFile("_Event.2014-01-01.txt", "[02:12:22] Should not log this, because its yesterday log.");
                 WriteToLogFile("_Event.2014-01-02.txt", "Logging started 2014-01-01");
@@ -234,12 +234,14 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsMonitorImpl
         [TearDown]
         public override void Teardown()
         {
-            ExecuteAll(wurmCharacterDirectories.Dispose, wurmLogFiles.Dispose, base.Teardown);
+            wurmCharacterDirectories.Dispose();
+            wurmLogFiles.Dispose();
+            base.Teardown();
         }
 
         private void WriteToLogFile(string fileName, string contents)
         {
-            var dirpath = Path.Combine(WurmDir.DirectoryFullPath, "players", "Testguy", "logs");
+            var dirpath = Path.Combine(WurmDir.AbsolutePath, "players", "Testguy", "logs");
             if (!Directory.Exists(dirpath))
             {
                 Directory.CreateDirectory(dirpath);

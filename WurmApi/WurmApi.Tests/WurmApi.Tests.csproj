@@ -43,8 +43,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Moq">
-      <HintPath>..\..\Lib\NuGetPackages\Moq.4.2.1409.1722\lib\net40\Moq.dll</HintPath>
+    <Reference Include="JetBrains.Annotations, Version=9.1.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\..\Lib\NuGetPackages\JetBrains.Annotations.9.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -69,12 +70,6 @@
     <Reference Include="NUnit.VisualStudio.TestAdapter">
       <HintPath>..\..\Lib\NuGetPackages\NUnitTestAdapter.1.2\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
       <Private>False</Private>
-    </Reference>
-    <Reference Include="Ploeh.AutoFixture">
-      <HintPath>..\..\Lib\NuGetPackages\AutoFixture.3.22.0\lib\net40\Ploeh.AutoFixture.dll</HintPath>
-    </Reference>
-    <Reference Include="Ploeh.AutoFixture.AutoMoq">
-      <HintPath>..\..\Lib\NuGetPackages\AutoFixture.AutoMoq.3.22.0\lib\net40\Ploeh.AutoFixture.AutoMoq.dll</HintPath>
     </Reference>
     <Reference Include="SevenZipSharp">
       <HintPath>..\..\Lib\NuGetPackages\SevenZipSharp.0.64\lib\SevenZipSharp.dll</HintPath>
@@ -117,6 +112,8 @@
     <Compile Include="Helpers\LogWriter.cs" />
     <Compile Include="Helpers\SelfTests\LogWriterTests.cs" />
     <Compile Include="Helpers\Subscriber.cs" />
+    <Compile Include="Tools\BinaryTestSerializer.cs" />
+    <Compile Include="Tools\JsonTestSerializer.cs" />
     <Compile Include="UnitTests\Events\InternalEventInvokerTests.cs" />
     <Compile Include="UnitTests\Events\PublicEventInvokerTests.cs" />
     <Compile Include="UnitTests\Utility\SignallizableThreadedOperationTests.cs" />
@@ -288,25 +285,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\AldursLab\Lab\Essentials\Essentials.csproj">
+      <Project>{e7e145ed-1938-4c09-b432-dc7d7a2d5ddb}</Project>
+      <Name>Essentials</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\AldursLab\Lab\PersistentObjects.FlatFiles\PersistentObjects.FlatFiles.csproj">
+      <Project>{6322fd00-9aaa-40d9-8c6f-515cc4290b45}</Project>
+      <Name>PersistentObjects.FlatFiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj">
+      <Project>{0962a106-b1b2-4e21-9931-81d68a98ed37}</Project>
+      <Name>PersistentObjects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\AldursLab\Lab\Testing\Testing.csproj">
       <Project>{A0CE70F0-6F13-47F5-9B61-69F6BE1AB082}</Project>
       <Name>Testing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Core.Testing\Core.Testing.csproj">
-      <Project>{6e2db07a-e220-4e96-ac4b-4fdfbd275a21}</Project>
-      <Name>Core.Testing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Core\Core.csproj">
-      <Project>{b9e61cdc-72bd-4158-b77e-6850455a07cd}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SimplePersist\SimplePersist.Contracts\SimplePersist.Contracts.csproj">
-      <Project>{e3dfe2ca-6523-4a70-a145-22b43cf2de8d}</Project>
-      <Name>SimplePersist.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SimplePersist\SimplePersist\SimplePersist.csproj">
-      <Project>{f2d42263-c177-425c-b69c-6d53b1f4aaa0}</Project>
-      <Name>SimplePersist</Name>
     </ProjectReference>
     <ProjectReference Include="..\WurmApi\WurmApi.csproj">
       <Project>{f23b8ad5-5c3b-4c9a-bc11-3577f1cb3272}</Project>

@@ -3,27 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using AldurSoft.Core.Testing;
-using AldurSoft.SimplePersist;
+using AldursLab.Testing;
 using AldurSoft.WurmApi.Modules.Wurm.ServerHistory;
 using AldurSoft.WurmApi.Modules.Wurm.ServerHistory.PersistentModel;
-using Moq;
 
 using NUnit.Framework;
 
 namespace AldurSoft.WurmApi.Tests.Tests.WurmServerHistoryImpl
 {
     [TestFixture]
-    class SortedServerHistoryTests : FixtureBase
+    class SortedServerHistoryTests : AssertionHelper
     {
-        protected TestPak DataDir;
+        protected DirectoryHandle DataDir;
         protected SortedServerHistory System;
 
         [SetUp]
         public void Setup()
         {
-            DataDir = CreateTestPakEmptyDir();
+            DataDir = TempDirectoriesFactory.CreateEmpty();
             //IWurmApiDataContext dataContext = new WurmApiDataContext(DataDir.DirectoryFullPath, Mock.Of<ISimplePersistLogger>());
             //System = new SortedServerHistory(dataContext.ServerHistory.Get(new EntityKey("Sample")));
         }

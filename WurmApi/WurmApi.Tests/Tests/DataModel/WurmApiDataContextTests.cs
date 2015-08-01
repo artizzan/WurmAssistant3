@@ -6,11 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-using AldurSoft.Core.Testing;
-using AldurSoft.SimplePersist;
 using NUnit.Framework;
-
-using Ploeh.AutoFixture;
 
 namespace AldurSoft.WurmApi.Tests.Tests.DataModel
 {

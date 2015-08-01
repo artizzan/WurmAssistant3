@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using AldurSoft.Core;
+using AldursLab.Essentials;
 using AldurSoft.WurmApi.Utility;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
@@ -36,7 +36,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
         public virtual ICollection<LogEntry> GetNewEvents()
         {
             List<string> logLines = ReadNewLogLines();
-            var parsedEntries = logFileParser.ParseLinesFromLogsScan(logLines, Time.Clock.LocalNow);
+            var parsedEntries = logFileParser.ParseLinesFromLogsScan(logLines, Time.Get.LocalNow);
             return parsedEntries;
         }
 

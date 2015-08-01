@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AldurSoft.Core;
+using AldursLab.Essentials;
 using AldurSoft.WurmApi.JobRunning;
 using AldurSoft.WurmApi.Modules.Wurm.Servers.Jobs;
 using AldurSoft.WurmApi.Modules.Wurm.Servers.WurmServersModel;
@@ -68,7 +68,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
 
         private WurmDateTime AdjustedWurmDateTime(ServerDateStamped date)
         {
-            return date.WurmDateTime + (Time.Clock.LocalNowOffset - date.Stamp);
+            return date.WurmDateTime + (Time.Get.LocalNowOffset - date.Stamp);
         }
 
         #region TryGetCurrentUptime
@@ -100,7 +100,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
 
         private TimeSpan AdjustedUptime(ServerUptimeStamped uptime)
         {
-            return uptime.Uptime + (Time.Clock.LocalNowOffset - uptime.Stamp);
+            return uptime.Uptime + (Time.Get.LocalNowOffset - uptime.Stamp);
         }
     }
 }

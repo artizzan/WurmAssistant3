@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AldurSoft.Core;
+using AldursLab.Essentials;
 using AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics.MonthlyDataBuilders;
 using AldurSoft.WurmApi.Utility;
 
@@ -53,7 +53,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics
             using (var reader = logFileStreamReaderFactory.Create(logFileInfo.FullPath, startPosition: 0, trackFileBytePositions: true))
             {
                 string line;
-                IMonthlyHeuristicsDataBuilder builder = new DataBuilderV2(logFileInfo.FileName, Time.Clock.LocalNow, logger);
+                IMonthlyHeuristicsDataBuilder builder = new DataBuilderV2(logFileInfo.FileName, Time.Get.LocalNow, logger);
 
                 while ((line = reader.TryReadNextLine()) != null)
                 {

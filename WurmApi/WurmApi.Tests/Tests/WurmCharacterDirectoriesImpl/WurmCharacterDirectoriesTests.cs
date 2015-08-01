@@ -5,8 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
-using AldurSoft.Core.Testing;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
@@ -15,11 +13,8 @@ using AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories;
 using AldurSoft.WurmApi.Modules.Wurm.Paths;
 using AldurSoft.WurmApi.Tests.Builders.WurmClient;
 using AldurSoft.WurmApi.Tests.Helpers;
-using Moq;
 
 using NUnit.Framework;
-
-using Ploeh.AutoFixture;
 
 namespace AldurSoft.WurmApi.Tests.Tests.WurmCharacterDirectoriesImpl
 {
