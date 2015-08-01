@@ -84,8 +84,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
             [Test]
             public async Task ObtainsServerTimesFromLogHistory()
             {
-                var uptime = await server.TryGetCurrentUptime();
-                var datetime = await server.TryGetCurrentTime();
+                var uptime = await server.TryGetCurrentUptimeAsync();
+                var datetime = await server.TryGetCurrentTimeAsync();
                 Expect(uptime, GreaterThanOrEqualTo(new TimeSpan(1, 23, 22)));
                 Expect(datetime, GreaterThanOrEqualTo(new WurmDateTime(1045, WurmStarfall.Snake, 2, WurmDay.Luck, 21, 07, 50)));
             }
@@ -93,8 +93,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
             [Test]
             public async Task ObtainsServerTimesFromLogHistory_AdjustedForRealTime()
             {
-                var uptime = await server.TryGetCurrentUptime();
-                var datetime = await server.TryGetCurrentTime();
+                var uptime = await server.TryGetCurrentUptimeAsync();
+                var datetime = await server.TryGetCurrentTimeAsync();
                 Expect(uptime, EqualTo(new TimeSpan(2, 6, 19, 32)));
                 Expect(datetime, EqualTo(new WurmDateTime(1045, WurmStarfall.Snake, 2, WurmDay.Wurm, 04, 05, 22)));
             }
@@ -115,8 +115,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
                             "It is 12:01:40 on day of the Ant in week 2 of the Snake's starfall in the year of 1045.")
                     });
                 //WurmApiManager.Update();
-                var uptime = await server.TryGetCurrentUptime();
-                var datetime = await server.TryGetCurrentTime();
+                var uptime = await server.TryGetCurrentUptimeAsync();
+                var datetime = await server.TryGetCurrentTimeAsync();
                 Expect(uptime, EqualTo(new TimeSpan(3, 15, 30, 0)));
                 Expect(datetime, EqualTo(new WurmDateTime(1045, WurmStarfall.Snake, 2, WurmDay.Ant, 12, 01, 40)));
             }
@@ -133,11 +133,11 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
                 responseMock.Setup(response => response.GetResponseStream())
                     .Returns(() => new MemoryStream(htmlBytes));
                 responseMock.Setup(response => response.LastModified).Returns(newMockedNow);
-                base.HttpWebRequestsMock.Setup(requests => requests.GetResponse(It.IsAny<string>()))
+                base.HttpWebRequestsMock.Setup(requests => requests.GetResponseAsync(It.IsAny<string>()))
                     .Returns(() => Task.FromResult(responseMock.Object));
 
-                var uptime = await server.TryGetCurrentUptime();
-                var datetime = await server.TryGetCurrentTime();
+                var uptime = await server.TryGetCurrentUptimeAsync();
+                var datetime = await server.TryGetCurrentTimeAsync();
                 Expect(uptime, EqualTo(new TimeSpan(3, 15, 30, 0)));
                 Expect(datetime, EqualTo(new WurmDateTime(1045, WurmStarfall.Snake, 2, WurmDay.Ant, 12, 01, 40)));
             }

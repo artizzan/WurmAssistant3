@@ -22,5 +22,7 @@ namespace AldurSoft.WurmApi
         /// </summary>
         /// <returns></returns>
         IEnumerable<CharacterName> GetAllCharacters();
+
+        bool Exists(CharacterName characterName);
     }
 }

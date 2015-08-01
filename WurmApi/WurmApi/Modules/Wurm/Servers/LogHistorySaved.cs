@@ -1,5 +1,5 @@
 using System;
-using AldurSoft.SimplePersist;
+using AldursLab.PersistentObjects;
 using AldurSoft.WurmApi.Modules.DataContext.DataModel.WurmServersModel;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Servers
@@ -20,7 +20,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             set
             {
                 persistenceManager.Entity.LastScanDate = value;
-                persistenceManager.Save();
+                persistenceManager.FlagAsChanged();
             }
         }
 
@@ -30,7 +30,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             if (data.LogHistory.ServerDate.Stamp < date.Stamp)
             {
                 data.LogHistory.ServerDate = date;
-                persistenceManager.Save();
+                persistenceManager.FlagAsChanged();
             }
         }
 
@@ -40,7 +40,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             if (data.LogHistory.ServerUptime.Stamp < uptime.Stamp)
             {
                 data.LogHistory.ServerUptime = uptime;
-                persistenceManager.Save();
+                persistenceManager.FlagAsChanged();
             }
         }
 
@@ -57,7 +57,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             {
                 data = new ServerData();
                 persistenceManager.Entity.ServerDatas.Add(serverName, data);
-                persistenceManager.Save();
+                persistenceManager.FlagAsChanged();
             }
             return data;
         }

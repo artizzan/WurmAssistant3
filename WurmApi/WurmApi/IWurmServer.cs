@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AldurSoft.WurmApi
@@ -18,14 +19,52 @@ namespace AldurSoft.WurmApi
         /// </summary>
         ServerGroup ServerGroup { get; }
 
+        #region TryGetCurrentTime
+
         /// <summary>
         /// Returns current server game time or null if no data available.
         /// </summary>
-        Task<WurmDateTime?> TryGetCurrentTime();
+        Task<WurmDateTime?> TryGetCurrentTimeAsync();
+
+        /// <summary>
+        /// Returns current server game time or null if no data available.
+        /// </summary>
+        WurmDateTime? TryGetCurrentTime();
+
+        /// <summary>
+        /// Returns current server game time or null if no data available.
+        /// </summary>
+        Task<WurmDateTime?> TryGetCurrentTimeAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Returns current server game time or null if no data available.
+        /// </summary>
+        WurmDateTime? TryGetCurrentTime(CancellationToken cancellationToken);
+
+        #endregion
+
+        #region TryGetCurrentUptime
 
         /// <summary>
         /// Returns current server uptime or null if no data available.
         /// </summary>
-        Task<TimeSpan?> TryGetCurrentUptime();
+        Task<TimeSpan?> TryGetCurrentUptimeAsync();
+
+        /// <summary>
+        /// Returns current server uptime or null if no data available.
+        /// </summary>
+        TimeSpan? TryGetCurrentUptime();
+
+        /// <summary>
+        /// Returns current server uptime or null if no data available.
+        /// </summary>
+        Task<TimeSpan?> TryGetCurrentUptimeAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Returns current server uptime or null if no data available.
+        /// </summary>
+        TimeSpan? TryGetCurrentUptime(CancellationToken cancellationToken);
+
+        #endregion
     }
 }

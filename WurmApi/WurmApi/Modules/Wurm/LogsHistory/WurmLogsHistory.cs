@@ -21,7 +21,9 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
             if (wurmLogFiles == null) throw new ArgumentNullException("wurmLogFiles");
             if (logger == null) throw new ArgumentNullException("logger");
 
-            var persistentLibrary = new PersistentCollectionsLibrary(new FlatFilesPersistenceStrategy(heuristicsDataDirectory));
+            var persistentLibrary =
+                new PersistentCollectionsLibrary(new FlatFilesPersistenceStrategy(heuristicsDataDirectory),
+                    new PersObjErrorHandlingStrategy(logger));
             var heuristicsCollection = persistentLibrary.GetCollection("heuristics");
 
             var logFileStreamReaderFactory = new LogFileStreamReaderFactory();

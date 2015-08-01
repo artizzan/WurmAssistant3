@@ -189,14 +189,14 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
                 end = true;
             }
 
-            var results = logsSearcher.ScanAsync(
+            var results = logsSearcher.Scan(
                 new LogSearchParameters()
                 {
                     CharacterName = characterName,
                     DateFrom = dateFrom,
                     DateTo = dateTo,
                     LogType = LogType.Event
-                }).Result;
+                });
 
             UpdateEntity(dateFrom, dateTo);
 
@@ -240,14 +240,14 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
                 return false;
             }
 
-            var results = logsSearcher.ScanAsync(
+            var results = logsSearcher.Scan(
                 new LogSearchParameters()
                 {
                     CharacterName = characterName,
                     DateFrom = dateFrom,
                     DateTo = datetimeTo,
                     LogType = LogType.Event
-                }, jobCancellationManager.GetLinkedToken()).Result;
+                }, jobCancellationManager.GetLinkedToken());
 
             UpdateEntity(dateFrom, datetimeTo);
 

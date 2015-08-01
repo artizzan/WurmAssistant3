@@ -1,22 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using AldurSoft.WurmApi.Modules.DataContext.DataModel.WurmServersModel;
+using AldurSoft.WurmApi.Modules.Wurm.LogsMonitor;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Servers
 {
-    class LiveLogsDataQueue
+    class LiveLogsDataQueue : IDisposable
     {
-        private readonly IWurmLogsMonitor wurmLogsMonitor;
-        private readonly LogEntriesParser logEntriesParser;
+        private readonly IWurmLogsMonitorInternal wurmLogsMonitor;
 
-        public LiveLogsDataQueue(IWurmLogsMonitor wurmLogsMonitor, LogEntriesParser logEntriesParser)
+        // if parser becomes thread-unsafe, scope it to EventHandler
+        private readonly LogEntriesParser logEntriesParser = new LogEntriesParser();
+
+        readonly object locker = new object();
+
+        public LiveLogsDataQueue(IWurmLogsMonitorInternal wurmLogsMonitor)
         {
             if (wurmLogsMonitor == null) throw new ArgumentNullException("wurmLogsMonitor");
-            if (logEntriesParser == null) throw new ArgumentNullException("logEntriesParser");
             this.wurmLogsMonitor = wurmLogsMonitor;
-            this.logEntriesParser = logEntriesParser;
 
-            wurmLogsMonitor.SubscribeAllActive(EventHandler);
+            wurmLogsMonitor.SubscribeAllActiveInternal(EventHandler);
         }
 
         private void EventHandler(object sender, LogsMonitorEventArgs logsMonitorEventArgs)
@@ -46,19 +49,33 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
 
         private void Add(CharacterName character, ServerDateStamped wurmDateTime)
         {
-            data.Add(new LiveLogsDataForCharacter(character) { WurmDateTime = wurmDateTime });
+            lock (locker)
+            {
+                data.Add(new LiveLogsDataForCharacter(character, wurmDateTime, null));
+            }
         }
 
         private void Add(CharacterName character, ServerUptimeStamped uptime)
         {
-            data.Add(new LiveLogsDataForCharacter(character) { Uptime = uptime });
+            lock (locker)
+            {
+                data.Add(new LiveLogsDataForCharacter(character, null, uptime));
+            }
         }
 
         public IEnumerable<LiveLogsDataForCharacter> Consume()
         {
-            var result = data.ToArray();
-            data = new List<LiveLogsDataForCharacter>();
-            return result;
+            lock (locker)
+            {
+                var result = data;
+                data = new List<LiveLogsDataForCharacter>();
+                return result;
+            }
+        }
+
+        public void Dispose()
+        {
+            wurmLogsMonitor.UnsubscribeFromAll(EventHandler);
         }
     }
 }

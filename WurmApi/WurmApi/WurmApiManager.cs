@@ -119,7 +119,7 @@ namespace AldurSoft.WurmApi
                 Wire(new WurmServerHistory(wurmServerHistoryDataDirectory, logsHistory, serverList, logger, logsMonitor, logFiles));
 
             WurmServers wurmServers =
-                Wire(new WurmServers(logsHistory, logsMonitor, serverList, httpWebRequests, dataContext,
+                Wire(new WurmServers(logsHistory, logsMonitor, serverList, httpWebRequests, "WurmServers",
                     characterDirectories, wurmServerHistory, logger));
 
             WurmCharacters characters =

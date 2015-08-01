@@ -1,31 +1,26 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using AldurSoft.Core;
+using AldurSoft.WurmApi.JobRunning;
 using AldurSoft.WurmApi.Modules.DataContext.DataModel.WurmServersModel;
+using AldurSoft.WurmApi.Modules.Wurm.Servers.Jobs;
+using AldurSoft.WurmApi.Utility;
+using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Servers
 {
     public class WurmServer : IWurmServer
     {
         private readonly WurmServerInfo wurmServerInfo;
-        private readonly LiveLogs liveLogs;
-        private readonly WebFeeds webFeeds;
-        private readonly LogHistory logHistory;
+        readonly QueuedJobsSyncRunner<Job, JobResult> jobRunner;
 
-        internal WurmServer(
-            WurmServerInfo wurmServerInfo,
-            LiveLogs liveLogs,
-            LogHistory logHistory,
-            WebFeeds webFeeds)
+        internal WurmServer(WurmServerInfo wurmServerInfo, [NotNull] QueuedJobsSyncRunner<Job, JobResult> jobRunner)
         {
             if (wurmServerInfo == null) throw new ArgumentNullException("wurmServerInfo");
-            if (liveLogs == null) throw new ArgumentNullException("liveLogs");
-            if (webFeeds == null) throw new ArgumentNullException("webFeeds");
-            if (logHistory == null) throw new ArgumentNullException("logHistory");
+            if (jobRunner == null) throw new ArgumentNullException("jobRunner");
             this.wurmServerInfo = wurmServerInfo;
-            this.liveLogs = liveLogs;
-            this.webFeeds = webFeeds;
-            this.logHistory = logHistory;
+            this.jobRunner = jobRunner;
         }
 
         public virtual ServerName ServerName
@@ -44,60 +39,64 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             }
         }
 
-        public async Task<WurmDateTime?> TryGetCurrentTime()
-        {
-            var liveData = await liveLogs.GetForServer(ServerName);
-            if (liveData.ServerDate.Stamp > DateTimeOffset.MinValue)
-            {
-                return AdjustedWurmDateTime(liveData.ServerDate);
-            }
-            var logHistoryData = await logHistory.GetForServer(ServerName);
-            if (logHistoryData.ServerDate.Stamp > Time.Clock.LocalNowOffset.AddDays(-1))
-            {
-                return AdjustedWurmDateTime(logHistoryData.ServerDate);
-            }
-            var webFeedsData = await webFeeds.GetForServer(ServerName);
-            if (webFeedsData.ServerDate.Stamp > DateTimeOffset.MinValue)
-            {
-                return AdjustedWurmDateTime(webFeedsData.ServerDate);
-            }
-            if (logHistoryData.ServerDate.Stamp > DateTimeOffset.MinValue)
-            {
-                return AdjustedWurmDateTime(logHistoryData.ServerDate);
-            }
+        #region TryGetCurrentTime
 
-            return null;
+        public async Task<WurmDateTime?> TryGetCurrentTimeAsync()
+        {
+            return await TryGetCurrentTimeAsync(CancellationToken.None).ConfigureAwait(false);
         }
+
+        public WurmDateTime? TryGetCurrentTime()
+        {
+            return TryGetCurrentTime(CancellationToken.None);
+        }
+
+        public async Task<WurmDateTime?> TryGetCurrentTimeAsync(CancellationToken cancellationToken)
+        {
+            var result =
+                await
+                    jobRunner.Run(new CurrentWurmDateTimeJob(ServerName), cancellationToken).ConfigureAwait(false);
+            return result.WurmDateTime;
+        }
+
+        public WurmDateTime? TryGetCurrentTime(CancellationToken cancellationToken)
+        {
+            return TaskHelper.UnwrapSingularAggegateException(() => TryGetCurrentTimeAsync(cancellationToken).Result);
+        }
+
+        #endregion
 
         private WurmDateTime AdjustedWurmDateTime(ServerDateStamped date)
         {
             return date.WurmDateTime + (Time.Clock.LocalNowOffset - date.Stamp);
         }
 
-        public async Task<TimeSpan?> TryGetCurrentUptime()
-        {
-            var liveData = await liveLogs.GetForServer(ServerName);
-            if (liveData.ServerUptime.Stamp > DateTimeOffset.MinValue)
-            {
-                return AdjustedUptime(liveData.ServerUptime);
-            }
-            var logHistoryData = await logHistory.GetForServer(ServerName);
-            if (logHistoryData.ServerUptime.Stamp > Time.Clock.LocalNowOffset.AddDays(-1))
-            {
-                return AdjustedUptime(logHistoryData.ServerUptime);
-            }
-            var webFeedsData = await webFeeds.GetForServer(ServerName);
-            if (webFeedsData.ServerUptime.Stamp > DateTimeOffset.MinValue)
-            {
-                return AdjustedUptime(webFeedsData.ServerUptime);
-            }
-            if (logHistoryData.ServerUptime.Stamp > DateTimeOffset.MinValue)
-            {
-                return AdjustedUptime(logHistoryData.ServerUptime);
-            }
+        #region TryGetCurrentUptime
 
-            return null;
+        public async Task<TimeSpan?> TryGetCurrentUptimeAsync()
+        {
+            return await TryGetCurrentUptimeAsync(CancellationToken.None).ConfigureAwait(false);
         }
+
+        public TimeSpan? TryGetCurrentUptime()
+        {
+            return TryGetCurrentUptime(CancellationToken.None);
+        }
+
+        public async Task<TimeSpan?> TryGetCurrentUptimeAsync(CancellationToken cancellationToken)
+        {
+            var result =
+                await
+                    jobRunner.Run(new CurrentWurmDateTimeJob(ServerName), cancellationToken).ConfigureAwait(false);
+            return result.Uptime;
+        }
+
+        public TimeSpan? TryGetCurrentUptime(CancellationToken cancellationToken)
+        {
+            return TaskHelper.UnwrapSingularAggegateException(() => TryGetCurrentUptimeAsync(cancellationToken).Result);
+        }
+
+        #endregion
 
         private TimeSpan AdjustedUptime(ServerUptimeStamped uptime)
         {

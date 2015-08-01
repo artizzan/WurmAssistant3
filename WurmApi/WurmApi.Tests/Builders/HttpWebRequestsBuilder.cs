@@ -12,7 +12,7 @@ namespace AldurSoft.WurmApi.Tests.Builders
     {
         public static IHttpWebRequests SetupUrl(this IHttpWebRequests req, string url, Func<HttpWebResponse> response)
         {
-            req.Arrange(requests => requests.GetResponse(url)).Returns(async () => response());
+            req.Arrange(requests => requests.GetResponseAsync(url)).Returns(async () => response());
             return req;
         }
     }

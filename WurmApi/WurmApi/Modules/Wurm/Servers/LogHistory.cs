@@ -7,13 +7,13 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
 {
     class LogHistory
     {
-        private readonly IWurmLogsHistory wurmLogsHistory;
-        private readonly IWurmCharacterDirectories wurmCharacterDirectories;
-        private readonly IWurmServerHistory wurmServerHistory;
-        private readonly LogHistorySaved logHistorySaved;
-        private readonly LogEntriesParser parser;
+        readonly IWurmLogsHistory wurmLogsHistory;
+        readonly IWurmCharacterDirectories wurmCharacterDirectories;
+        readonly IWurmServerHistory wurmServerHistory;
+        readonly LogHistorySaved logHistorySaved;
+        readonly LogEntriesParser parser;
 
-        private bool scanned = false;
+        bool scanned = false;
 
         public LogHistory(
             IWurmLogsHistory wurmLogsHistory,
@@ -34,35 +34,19 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             this.parser = parser;
         }
 
-        private Task scanTask;
-
-        public async Task<TimeDetails> GetForServer(ServerName serverName)
+        public TimeDetails GetForServer(ServerName serverName)
         {
-            if (!scanned)
-            {
-                if (scanTask != null)
-                {
-                    await scanTask;
-                }
-                else
-                {
-                    try
-                    {
-                        scanTask = Scan();
-                        await scanTask;
-                    }
-                    finally
-                    {
-                        scanTask = null;
-                    }
-                }
-            }
+            EnsureScanned();
+
+            logHistorySaved.LastScanDate = Time.Clock.LocalNowOffset;
 
             return logHistorySaved.GetHistoricForServer(serverName);
         }
 
-        private async Task Scan()
+        void EnsureScanned()
         {
+            if (scanned) return;
+
             var maxScanSince = Time.Clock.LocalNowOffset.AddDays(-30);
             var lastScanSince = logHistorySaved.LastScanDate.AddDays(-1);
             var scanSince = lastScanSince < maxScanSince ? maxScanSince : lastScanSince;
@@ -70,7 +54,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             var allChars = wurmCharacterDirectories.GetAllCharacters();
             foreach (var characterName in allChars)
             {
-                var searchResults = await wurmLogsHistory.ScanAsync(
+                var searchResults = wurmLogsHistory.Scan(
                     new LogSearchParameters()
                     {
                         CharacterName = characterName,
@@ -83,17 +67,16 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
                     var upt = parser.TryParseUptime(searchResult);
                     if (upt != null)
                     {
-                        var server = await wurmServerHistory.GetServerAsync(characterName, searchResult.Timestamp);
+                        var server = wurmServerHistory.GetServer(characterName, searchResult.Timestamp);
                         if (server != null)
                         {
                             logHistorySaved.UpdateHistoric(server, upt);
                         }
-                        
                     }
                     var wdt = parser.TryParseWurmDateTime(searchResult);
                     if (wdt != null)
                     {
-                        var server = await wurmServerHistory.GetServerAsync(characterName, searchResult.Timestamp);
+                        var server = wurmServerHistory.GetServer(characterName, searchResult.Timestamp);
                         if (server != null)
                         {
                             logHistorySaved.UpdateHistoric(server, wdt);
@@ -103,7 +86,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             }
 
             scanned = true;
-            logHistorySaved.LastScanDate = Time.Clock.LocalNowOffset;
         }
     }
 }

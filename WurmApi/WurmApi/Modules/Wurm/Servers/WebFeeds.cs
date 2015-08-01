@@ -31,54 +31,43 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             extractor = new WebFeedExtractor(httpWebRequests);
         }
 
-        private Task currentSyncWebData = null;
-
-        public async Task<TimeDetails> GetForServer(ServerName serverName)
+        public TimeDetails GetForServer(ServerName serverName)
         {
-            if (lastSync < Time.Clock.LocalNowOffset.AddHours(-6))
-            {
-                if (currentSyncWebData != null)
-                {
-                    await currentSyncWebData;
-                }
-                else
-                {
-                    try
-                    {
-                        var task = SyncWebData();
-                        currentSyncWebData = task;
-                        await task;
-                    }
-                    finally
-                    {
-                        currentSyncWebData = null;
-                    }
-                }
-            }
+            UpdateWebData();
 
             TimeDetails details;
             if (dataCache.TryGetValue(serverName, out details))
             {
-                return details;
+                return new TimeDetails() {ServerDate = details.ServerDate, ServerUptime = details.ServerUptime};
             }
             
             return new TimeDetails();
         }
 
-        private async Task SyncWebData()
+        public void UpdateWebData()
+        {
+            if (lastSync < Time.Clock.LocalNowOffset.AddHours(-6))
+            {
+                SyncWebData();
+            }
+        }
+
+        private void SyncWebData()
         {
             var allServers = wurmServerList.All.ToArray();
+
             List<KeyValuePair<WurmServerInfo, Task<WebDataExtractionResult>>> jobs = new List<KeyValuePair<WurmServerInfo, Task<WebDataExtractionResult>>>();
             foreach (var wurmServerInfo in allServers)
             {
-                var task = extractor.Extract(wurmServerInfo);
+                var info = wurmServerInfo;
+                var task = Task.Factory.StartNew(() => extractor.Extract(info));
                 jobs.Add(new KeyValuePair<WurmServerInfo, Task<WebDataExtractionResult>>(wurmServerInfo, task));
             }
             foreach (var job in jobs)
             {
                 try
                 {
-                    var result = await job.Value;
+                    var result = job.Value.Result;
                     dataCache[result.ServerName] = new TimeDetails()
                     {
                         ServerDate = new ServerDateStamped()

@@ -66,14 +66,14 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmCharactersImpl
             [Test]
             public async Task GetHistoricServerAtLogStamp_Gets()
             {
-                var server = await wurmCharacter.GetHistoricServerAtLogStamp(new DateTime(2014, 12, 15));
+                var server = await wurmCharacter.GetHistoricServerAtLogStampAsync(new DateTime(2014, 12, 15));
                 Expect(server.ServerName, EqualTo(new ServerName("Exodus")));
             }
 
             [Test]
             public async Task GetCurrentServer()
             {
-                var server = await wurmCharacter.GetCurrentServer();
+                var server = await wurmCharacter.GetCurrentServerAsync();
                 Expect(server.ServerName, EqualTo(new ServerName("Exodus")));
             }
         }

@@ -1,7 +1,9 @@
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.Utility;
 using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Characters
@@ -89,23 +91,63 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Characters
             }
         }
 
-        public virtual CharacterName Name { get; private set; }
+
+
+        public CharacterName Name { get; private set; }
 
         public IWurmConfig CurrentConfig { get; private set; }
 
-        public async Task<IWurmServer> GetHistoricServerAtLogStamp(DateTime stamp)
+        #region GetHistoricServerAtLogStamp
+
+        public async Task<IWurmServer> GetHistoricServerAtLogStampAsync(DateTime stamp)
         {
-            var serverName = await wurmServerHistory.GetServerAsync(this.Name, stamp).ConfigureAwait(false);
+            return await GetHistoricServerAtLogStampAsync(stamp, CancellationToken.None).ConfigureAwait(false);
+        }
+
+        public IWurmServer GetHistoricServerAtLogStamp(DateTime stamp)
+        {
+            return GetHistoricServerAtLogStamp(stamp, CancellationToken.None);
+        }
+
+        public async Task<IWurmServer> GetHistoricServerAtLogStampAsync(DateTime stamp, CancellationToken cancellationToken)
+        {
+            var serverName = await wurmServerHistory.GetServerAsync(this.Name, stamp, cancellationToken).ConfigureAwait(false);
             var server = wurmServers.GetByName(serverName);
             return server;
         }
 
-        public async Task<IWurmServer> GetCurrentServer()
+        public IWurmServer GetHistoricServerAtLogStamp(DateTime stamp, CancellationToken cancellationToken)
         {
-            var serverName = await wurmServerHistory.GetCurrentServerAsync(this.Name).ConfigureAwait(false);
+            return TaskHelper.UnwrapSingularAggegateException(() => GetHistoricServerAtLogStampAsync(stamp, cancellationToken).Result);
+        }
+
+        #endregion
+
+        #region GetCurrentServer
+
+        public async Task<IWurmServer> GetCurrentServerAsync()
+        {
+            return await GetCurrentServerAsync(CancellationToken.None);
+        }
+
+        public IWurmServer GetCurrentServer()
+        {
+            return GetCurrentServer(CancellationToken.None);
+        }
+
+        public async Task<IWurmServer> GetCurrentServerAsync(CancellationToken cancellationToken)
+        {
+            var serverName = await wurmServerHistory.GetCurrentServerAsync(this.Name, cancellationToken).ConfigureAwait(false);
             var server = wurmServers.GetByName(serverName);
             return server;
         }
+
+        public IWurmServer GetCurrentServer(CancellationToken cancellationToken)
+        {
+            return TaskHelper.UnwrapSingularAggegateException(() => GetCurrentServerAsync(cancellationToken).Result);
+        }
+
+        #endregion
 
         public void Dispose()
         {

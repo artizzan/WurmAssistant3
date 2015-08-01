@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using AldursLab.PersistentObjects;
 using Newtonsoft.Json;
 
 namespace AldurSoft.WurmApi.Modules.DataContext.DataModel.WurmServersModel
 {
     [JsonObject(MemberSerialization.Fields)]
-    public class ServersData
+    public class ServersData : Entity
     {
         private readonly Dictionary<ServerName, ServerData> serverDatas;
         private DateTimeOffset lastScanDate;

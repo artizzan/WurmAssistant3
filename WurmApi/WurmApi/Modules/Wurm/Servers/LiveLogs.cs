@@ -17,27 +17,9 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             this.wurmServerHistory = wurmServerHistory;
         }
 
-        private Task currentHandleNewLiveData = null;
-
-        public async Task<TimeDetails> GetForServer(ServerName serverName)
+        public TimeDetails GetForServer(ServerName serverName)
         {
-            if (currentHandleNewLiveData != null)
-            {
-                await currentHandleNewLiveData;
-            }
-            else
-            {
-                try
-                {
-                    var task = HandleNewLiveData(serverName);
-                    currentHandleNewLiveData = task;
-                    await task;
-                }
-                finally
-                {
-                    currentHandleNewLiveData = null;
-                }
-            }
+            HandleNewLiveData();
 
             TimeDetails details;
             if (latestData.TryGetValue(serverName, out details))
@@ -48,18 +30,18 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             return new TimeDetails();
         }
 
-        private async Task HandleNewLiveData(ServerName serverName)
+        public void HandleNewLiveData()
         {
             var newData = liveLogsDataQueue.Consume();
             foreach (var data in newData)
             {
                 if (data.Uptime != null)
                 {
-                    var server = await wurmServerHistory.GetServerAsync(data.Character, data.Uptime.Stamp.DateTime);
-                    if (server != null)
+                    var serverName = wurmServerHistory.GetServer(data.Character, data.Uptime.Stamp.DateTime);
+                    if (serverName != null)
                     {
                         TimeDetails details;
-                        if (!latestData.TryGetValue(server, out details))
+                        if (!latestData.TryGetValue(serverName, out details))
                         {
                             details = new TimeDetails();
                             latestData.Add(serverName, details);
@@ -77,11 +59,11 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
                 }
                 if (data.WurmDateTime != null)
                 {
-                    var server = await wurmServerHistory.GetServerAsync(data.Character, data.WurmDateTime.Stamp.DateTime);
-                    if (server != null)
+                    var serverName = wurmServerHistory.GetServer(data.Character, data.WurmDateTime.Stamp.DateTime);
+                    if (serverName != null)
                     {
                         TimeDetails details;
-                        if (!latestData.TryGetValue(server, out details))
+                        if (!latestData.TryGetValue(serverName, out details))
                         {
                             details = new TimeDetails();
                             latestData.Add(serverName, details);

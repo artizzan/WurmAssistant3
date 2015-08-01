@@ -23,7 +23,9 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
             IWurmLogsMonitorInternal wurmLogsMonitor,
             IWurmLogFiles wurmLogFiles)
         {
-            var persistentLibrary = new PersistentCollectionsLibrary(new FlatFilesPersistenceStrategy(dataDirectoryFullPath));
+            var persistentLibrary =
+                new PersistentCollectionsLibrary(new FlatFilesPersistenceStrategy(dataDirectoryFullPath),
+                    new PersObjErrorHandlingStrategy(logger));
             var collection = persistentLibrary.GetCollection("serverhistory");
 
             var providerFactory = new ServerHistoryProviderFactory(

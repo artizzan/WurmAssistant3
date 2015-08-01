@@ -1,33 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using AldurSoft.SimplePersist;
+using AldursLab.PersistentObjects;
+using AldursLab.PersistentObjects.FlatFiles;
+using AldurSoft.WurmApi.JobRunning;
 using AldurSoft.WurmApi.Modules.DataContext.DataModel.WurmServersModel;
+using AldurSoft.WurmApi.Modules.Wurm.LogsMonitor;
+using AldurSoft.WurmApi.Modules.Wurm.Servers.Jobs;
+using AldurSoft.WurmApi.Utility;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Servers
 {
     /// <summary>
     /// Manages information about wurm game servers.
     /// </summary>
-    public class WurmServers : IWurmServers
+    class WurmServers : IWurmServers, IDisposable
     {
-        private readonly IWurmLogsHistory wurmLogsHistory;
-        private readonly IWurmLogsMonitor wurmLogsMonitor;
-        private readonly IWurmServerList wurmServerList;
-        private readonly IHttpWebRequests httpWebRequests;
-        private readonly IWurmApiDataContext dataContext;
-        private readonly IWurmCharacterDirectories wurmCharacterDirectories;
-        private readonly IWurmServerHistory wurmServerHistory;
-        private readonly ILogger logger;
-        private readonly Dictionary<ServerName, WurmServer> nameToServerMap = new Dictionary<ServerName, WurmServer>();
+        readonly Dictionary<ServerName, WurmServer> nameToServerMap = new Dictionary<ServerName, WurmServer>();
 
-        private readonly WurmServerFactory wurmServerFactory;
+        readonly WurmServerFactory wurmServerFactory;
+        readonly LiveLogsDataQueue liveLogsDataQueue;
+
+        readonly QueuedJobsSyncRunner<Job, JobResult> runner;
+
+        readonly PersistentCollectionsLibrary persistentCollectionsLibrary;
 
         public WurmServers(
             IWurmLogsHistory wurmLogsHistory,
-            IWurmLogsMonitor wurmLogsMonitor,
+            IWurmLogsMonitorInternal wurmLogsMonitor,
             IWurmServerList wurmServerList,
             IHttpWebRequests httpWebRequests,
-            IWurmApiDataContext dataContext,
+            string dataDirectory,
             IWurmCharacterDirectories wurmCharacterDirectories,
             IWurmServerHistory wurmServerHistory,
             ILogger logger)
@@ -36,32 +38,26 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             if (wurmLogsMonitor == null) throw new ArgumentNullException("wurmLogsMonitor");
             if (wurmServerList == null) throw new ArgumentNullException("wurmServerList");
             if (httpWebRequests == null) throw new ArgumentNullException("httpWebRequests");
-            if (dataContext == null) throw new ArgumentNullException("dataContext");
+            if (dataDirectory == null) throw new ArgumentNullException("dataDirectory");
             if (wurmCharacterDirectories == null) throw new ArgumentNullException("wurmCharacterDirectories");
             if (wurmServerHistory == null) throw new ArgumentNullException("wurmServerHistory");
             if (logger == null) throw new ArgumentNullException("logger");
-            this.wurmLogsHistory = wurmLogsHistory;
-            this.wurmLogsMonitor = wurmLogsMonitor;
-            this.wurmServerList = wurmServerList;
-            this.httpWebRequests = httpWebRequests;
-            this.dataContext = dataContext;
-            this.wurmCharacterDirectories = wurmCharacterDirectories;
-            this.wurmServerHistory = wurmServerHistory;
-            this.logger = logger;
 
-            LiveLogsDataQueue liveLogsDataQueue = new LiveLogsDataQueue(wurmLogsMonitor, new LogEntriesParser());
+            liveLogsDataQueue = new LiveLogsDataQueue(wurmLogsMonitor);
             LiveLogs liveLogs = new LiveLogs(liveLogsDataQueue, wurmServerHistory);
 
-            IPersistent<ServersData> persistent = dataContext.ServersData.Get(new EntityKey("WurmServers"));
+            persistentCollectionsLibrary =
+                new PersistentCollectionsLibrary(new FlatFilesPersistenceStrategy(dataDirectory),
+                    new PersObjErrorHandlingStrategy(logger));
+            var persistent = persistentCollectionsLibrary.DefaultCollection.GetObject<ServersData>("WurmServers");
             LogHistorySaved logHistorySaved = new LogHistorySaved(persistent);
             LogHistory logHistory = new LogHistory(wurmLogsHistory, wurmCharacterDirectories, wurmServerHistory, logHistorySaved, new LogEntriesParser());
             
             WebFeeds webFeeds = new WebFeeds(httpWebRequests, wurmServerList, logger);
 
-            wurmServerFactory = new WurmServerFactory(
-                liveLogs,
-                logHistory,
-                webFeeds);
+            runner = new QueuedJobsSyncRunner<Job, JobResult>(new JobRunner(liveLogs, logHistory, webFeeds, persistentCollectionsLibrary), logger);
+
+            wurmServerFactory = new WurmServerFactory(runner);
 
             var descriptions = wurmServerList.All;
             foreach (var serverDescription in descriptions)
@@ -101,6 +97,12 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
                 throw new DataNotFoundException("No server found with name " + name);
             }
             return server;
+        }
+
+        public void Dispose()
+        {
+            liveLogsDataQueue.Dispose();
+            runner.Dispose();
         }
     }
 }

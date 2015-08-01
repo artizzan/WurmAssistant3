@@ -15,27 +15,27 @@ using Ploeh.AutoFixture;
 
 namespace AldurSoft.WurmApi.Tests.Tests.DataModel
 {
-    [TestFixture]
-    public class WurmApiDataContextTests : WurmApiFixtureBase
-    {
-        private readonly WurmApiDataContext context;
+    //[TestFixture]
+    //public class WurmApiDataContextTests : WurmApiFixtureBase
+    //{
+    //    private readonly WurmApiDataContext context;
 
-        public WurmApiDataContextTests()
-        {
-            TestPak testDir = CreateTestPakEmptyDir();
-            context = new WurmApiDataContext(testDir.DirectoryFullPath, Automocker.Create<ISimplePersistLogger>());
-        }
+    //    public WurmApiDataContextTests()
+    //    {
+    //        TestPak testDir = CreateTestPakEmptyDir();
+    //        context = new WurmApiDataContext(testDir.DirectoryFullPath, Automocker.Create<ISimplePersistLogger>());
+    //    }
 
-        [Test]
-        public void Constructs()
-        {
-            var entity = context.ServersData.Get(new EntityKey("test"));
-            var dateTimeOffset = new DateTimeOffset(2014, 1, 1, 0, 0, 0, TimeSpan.Zero);
-            entity.Entity.LastScanDate = dateTimeOffset;
-            entity.Save();
+    //    [Test]
+    //    public void Constructs()
+    //    {
+    //        var entity = context.ServersData.Get(new EntityKey("test"));
+    //        var dateTimeOffset = new DateTimeOffset(2014, 1, 1, 0, 0, 0, TimeSpan.Zero);
+    //        entity.Entity.LastScanDate = dateTimeOffset;
+    //        entity.Save();
 
-            var verifyEntity = context.ServersData.Get(new EntityKey("test"));
-            Expect(verifyEntity.Entity.LastScanDate, EqualTo(dateTimeOffset));
-        }
-    }
+    //        var verifyEntity = context.ServersData.Get(new EntityKey("test"));
+    //        Expect(verifyEntity.Entity.LastScanDate, EqualTo(dateTimeOffset));
+    //    }
+    //}
 }

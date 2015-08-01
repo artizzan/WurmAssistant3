@@ -35,6 +35,11 @@ namespace AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories
             return base.AllDirectoryNamesNormalized.Select(s => new CharacterName(s)).ToArray();
         }
 
+        public bool Exists(CharacterName characterName)
+        {
+            return base.AllDirectoryNamesNormalized.Any(s => new CharacterName(s) == characterName);
+        }
+
         protected override void OnDirectoriesChanged()
         {
             eventAggregator.Send(new CharacterDirectoriesChanged());

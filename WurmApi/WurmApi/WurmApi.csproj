@@ -124,6 +124,11 @@
     <Compile Include="Modules\Wurm\LogsMonitor\IWurmLogsMonitorInternal.cs" />
     <Compile Include="Modules\Wurm\LogsMonitor\PmSubscriptionKey.cs" />
     <Compile Include="Modules\Wurm\ServerHistory\JobExecutor.cs" />
+    <Compile Include="Modules\Wurm\Servers\JobRunner.cs" />
+    <Compile Include="Modules\Wurm\Servers\Jobs\CurrentUptimeJob.cs" />
+    <Compile Include="Modules\Wurm\Servers\Jobs\CurrentWurmDateTimeJob.cs" />
+    <Compile Include="Modules\Wurm\Servers\Jobs\Job.cs" />
+    <Compile Include="Modules\Wurm\Servers\Jobs\JobResult.cs" />
     <Compile Include="ServerGroup.cs" />
     <Compile Include="ServerName.cs" />
     <Compile Include="SkillGainRate.cs" />
@@ -131,6 +136,7 @@
     <Compile Include="Modules\Events\SimpleMarshaller.cs" />
     <Compile Include="Utility\ExceptionEventArgs.cs" />
     <Compile Include="Utility\FileSystemChangeMonitor.cs" />
+    <Compile Include="Utility\PersObjErrorHandlingStrategy.cs" />
     <Compile Include="Utility\RepeatableThreadedOperation.cs" />
     <Compile Include="Utility\TaskHelper.cs" />
     <Compile Include="Utility\TSafeProperty.cs" />

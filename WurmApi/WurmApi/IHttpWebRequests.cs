@@ -5,6 +5,7 @@ namespace AldurSoft.WurmApi
 {
     public interface IHttpWebRequests
     {
-        Task<HttpWebResponse> GetResponse(string url);
+        Task<HttpWebResponse> GetResponseAsync(string url);
+        HttpWebResponse GetResponse(string url);
     }
 }

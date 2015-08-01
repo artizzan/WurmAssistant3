@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AldurSoft.Core;
+using AldurSoft.WurmApi.Utility;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Servers
 {
@@ -19,11 +20,11 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             this.httpWebRequests = httpWebRequests;
         }
 
-        public virtual async Task<WebDataExtractionResult> Extract(WurmServerInfo serverInfo)
+        public async Task<WebDataExtractionResult> ExtractAsync(WurmServerInfo serverInfo)
         {
             WebDataExtractionResult result = new WebDataExtractionResult(serverInfo.Name);
 
-            var res = await this.httpWebRequests.GetResponse(serverInfo.WebStatsUrl);
+            var res = await this.httpWebRequests.GetResponseAsync(serverInfo.WebStatsUrl).ConfigureAwait(false);
             DateTime headerLastUpdated = res.LastModified;
 
             using (Stream stream = res.GetResponseStream())
@@ -96,6 +97,11 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
             }
 
             return result;
+        }
+
+        public WebDataExtractionResult Extract(WurmServerInfo serverInfo)
+        {
+            return TaskHelper.UnwrapSingularAggegateException(() => ExtractAsync(serverInfo).Result);
         }
 
         static TimeSpan GetTimeSpanFromUptimeWebString(string webString)
