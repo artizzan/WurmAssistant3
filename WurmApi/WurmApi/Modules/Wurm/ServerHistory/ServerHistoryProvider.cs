@@ -89,7 +89,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
                 {
                     Match match = Regex.Match(
                         wurmLogEntry.Content,
-                        @"\d+ other players are online\. You are on (.+) \(",
+                        @"\d+ other players are online.*\. You are on (.+) \(",
                         RegexOptions.Compiled);
                     if (match.Success)
                     {
