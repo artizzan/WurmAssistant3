@@ -175,3 +175,6 @@ FakesAssemblies/
 
 # Custom
 /WurmAssistantWebApp/WurmAssistantWebApp/Web.Release.config
+
+!*.dll
+!*.exe
