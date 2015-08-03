@@ -12,22 +12,17 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.CharacterDirectories
     {
         // assumption: normalization convention for WurmApi is ToUpperInvariant
 
-        IWurmCharacterDirectories characterDirectories;
-        Subscriber<CharacterDirectoriesChanged> subscriber;
-
-        [SetUp]
-        public void Setup()
+        // property-redirect to enable some setup, before wurmapi init 
+        IWurmCharacterDirectories System
         {
-            characterDirectories = Fixture.WurmApiManager.WurmCharacterDirectories;
-            subscriber = new Subscriber<CharacterDirectoriesChanged>(Fixture.WurmApiManager.InternalEventAggregator);
+            get { return Fixture.WurmApiManager.WurmCharacterDirectories; }
         }
 
         [Test]
         public void ReturnsValidNormalizedNames()
         {
             var players = SetupDefaultPlayers().Select(s => s.ToUpperInvariant()).OrderBy(s => s);
-            subscriber.WaitMessages(1);
-            var dirnames = characterDirectories.AllDirectoryNamesNormalized.OrderBy(s => s).ToArray();
+            var dirnames = System.AllDirectoryNamesNormalized.OrderBy(s => s).ToArray();
             Expect(dirnames, EqualTo(players));
         }
 
@@ -35,16 +30,16 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.CharacterDirectories
         public void ReturnsValidFullPaths()
         {
             SetupDefaultPlayers();
-            subscriber.WaitMessages(1);
 
             var realdirfullpaths = Fixture.WurmClientMock.Players.Select(player => player.PlayerDir.FullName).OrderBy(s => s).ToArray();
-            var dirpaths = characterDirectories.AllDirectoriesFullPaths.OrderBy(s => s).ToArray();
+            var dirpaths = System.AllDirectoriesFullPaths.OrderBy(s => s).ToArray();
             Expect(dirpaths, EqualTo(realdirfullpaths));
         }
 
         [Test]
         public void OnChanged_TriggersEvent_UpdatesData()
         {
+            var subscriber = new Subscriber<CharacterDirectoriesChanged>(Fixture.WurmApiManager.InternalEventAggregator);
             var batman = ClientMock.AddPlayer("Batman");
             subscriber.WaitMessages(1);
 
@@ -52,9 +47,9 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.CharacterDirectories
             Expect(subscriber.ReceivedMessages.Count(), GreaterThan(0));
 
             // verifying data updated
-            var allChars = characterDirectories.GetAllCharacters().ToList();
-            var allDirFullPaths = characterDirectories.AllDirectoriesFullPaths.ToList();
-            var allDirNames = characterDirectories.AllDirectoryNamesNormalized.ToList();
+            var allChars = System.GetAllCharacters().ToList();
+            var allDirFullPaths = System.AllDirectoriesFullPaths.ToList();
+            var allDirNames = System.AllDirectoryNamesNormalized.ToList();
             Expect(allChars, Member(new CharacterName(batman.Name)).And.Count.EqualTo(1));
             Expect(allDirFullPaths, Member(batman.PlayerDir.FullName).And.Count.EqualTo(1));
             Expect(allDirNames, Member(batman.PlayerDir.Name.ToUpperInvariant()).And.Count.EqualTo(1));

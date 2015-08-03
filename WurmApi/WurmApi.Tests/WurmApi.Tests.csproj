@@ -120,7 +120,7 @@
     <Compile Include="UnitTests\Utility\SignallizableThreadedOperationTests.cs" />
     <Compile Include="Tests\Modules\Wurm\CharacterDirectories\WurmCharacterDirectoriesTests.cs" />
     <Compile Include="Tests\WurmCharactersTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\CharacterDirectories\WurmConfigDirectoriesTests.cs" />
+    <Compile Include="Tests\Modules\Wurm\ConfigDirectories\WurmConfigDirectoriesTests.cs" />
     <Compile Include="Tests\WurmConfigsTests.cs" />
     <Compile Include="Tests\WurmLogDefinitionsTests.cs" />
     <Compile Include="Tests\WurmLogFilesTests.cs" />

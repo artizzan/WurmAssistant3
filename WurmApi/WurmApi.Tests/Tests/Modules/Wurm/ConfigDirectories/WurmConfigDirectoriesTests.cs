@@ -1,39 +1,25 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using AldursLab.Testing;
-using AldurSoft.WurmApi.Modules.Events;
-using AldurSoft.WurmApi.Modules.Events.Internal;
+﻿using System.Linq;
 using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
-using AldurSoft.WurmApi.Modules.Events.Public;
-using AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories;
 using AldurSoft.WurmApi.Tests.Helpers;
 using NUnit.Framework;
-using Telerik.JustMock;
-using Telerik.JustMock.Helpers;
 
-namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.CharacterDirectories
+namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.ConfigDirectories
 {
     public class WurmConfigDirectoriesTests : WurmTests
     {
         // assumption: normalization convention for WurmApi is ToUpperInvariant
 
-        IWurmConfigDirectories configDirectories;
-        Subscriber<ConfigDirectoriesChanged> subscriber;
-
-        [SetUp]
-        public void Setup()
+        // property-redirect to enable some setup, before wurmapi init 
+        IWurmConfigDirectories System
         {
-            configDirectories = Fixture.WurmApiManager.WurmConfigDirectories;
-            subscriber = new Subscriber<ConfigDirectoriesChanged>(Fixture.WurmApiManager.InternalEventAggregator);
+            get { return Fixture.WurmApiManager.WurmConfigDirectories; }
         }
 
         [Test]
         public void ReturnsNormalizedNames()
         {
             var realdirnames = SetupDefaultConfigs().Select(s => s.ToUpperInvariant()).OrderBy(s => s).ToArray();
-            var dirnames = configDirectories.AllDirectoryNamesNormalized.OrderBy(s => s).ToArray();
+            var dirnames = System.AllDirectoryNamesNormalized.OrderBy(s => s).ToArray();
             Expect(dirnames, EqualTo(realdirnames));
         }
 
@@ -42,13 +28,14 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.CharacterDirectories
         {
             SetupDefaultConfigs();
             var realdirfullpaths = Fixture.WurmClientMock.Configs.Select(s => s.ConfigDir.FullName).OrderBy(s => s).ToArray();
-            var dirpaths = configDirectories.AllDirectoriesFullPaths.OrderBy(s => s).ToArray();
+            var dirpaths = System.AllDirectoriesFullPaths.OrderBy(s => s).ToArray();
             Expect(dirpaths, EqualTo(realdirfullpaths));
         }
 
         [Test]
         public void TriggersOnChanged()
         {
+            var subscriber = new Subscriber<ConfigDirectoriesChanged>(Fixture.WurmApiManager.InternalEventAggregator);
             var batman = ClientMock.AddConfig("batmobile");
             subscriber.WaitMessages(1);
 
@@ -56,9 +43,9 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.CharacterDirectories
             Expect(subscriber.ReceivedMessages.Count(), GreaterThan(0));
 
             // verifying data updated
-            var allConfigs = configDirectories.AllConfigNames.ToList();
-            var allDirFullPaths = configDirectories.AllDirectoriesFullPaths.ToList();
-            var allDirNames = configDirectories.AllDirectoryNamesNormalized.ToList();
+            var allConfigs = System.AllConfigNames.ToList();
+            var allDirFullPaths = System.AllDirectoriesFullPaths.ToList();
+            var allDirNames = System.AllDirectoryNamesNormalized.ToList();
             Expect(allConfigs, Member(batman.NameNormalized).And.Count.EqualTo(1));
             Expect(allDirFullPaths, Member(batman.ConfigDir.FullName).And.Count.EqualTo(1));
             Expect(allDirNames, Member(batman.ConfigDir.Name.ToUpperInvariant()).And.Count.EqualTo(1));
@@ -69,9 +56,9 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.CharacterDirectories
         {
             var config = ClientMock.AddConfig("batmobile");
             var realPath = config.GameSettings.FileInfo.FullName;
-            var dir1 = configDirectories.GetGameSettingsFileFullPathForConfigName("batmobile");
-            var dir2 = configDirectories.GetGameSettingsFileFullPathForConfigName("Batmobile");
-            var dir3 = configDirectories.GetGameSettingsFileFullPathForConfigName("BATMOBILE");
+            var dir1 = System.GetGameSettingsFileFullPathForConfigName("batmobile");
+            var dir2 = System.GetGameSettingsFileFullPathForConfigName("Batmobile");
+            var dir3 = System.GetGameSettingsFileFullPathForConfigName("BATMOBILE");
             Expect(dir1, EqualTo(realPath));
             Expect(dir2, EqualTo(realPath));
             Expect(dir3, EqualTo(realPath));
@@ -80,7 +67,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.CharacterDirectories
         [Test]
         public void ThrowsWhenGamesettingsNotExist()
         {
-            Assert.Catch<WurmApiException>(() => configDirectories.GetGameSettingsFileFullPathForConfigName("notexisting"));
+            Assert.Catch<WurmApiException>(() => System.GetGameSettingsFileFullPathForConfigName("notexisting"));
         }
 
         string[] SetupDefaultConfigs()
