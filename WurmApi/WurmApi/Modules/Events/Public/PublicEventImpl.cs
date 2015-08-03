@@ -22,5 +22,10 @@ namespace AldurSoft.WurmApi.Modules.Events.Public
         {
             publicEventInvoker.Detach(this);
         }
+
+        public override string ToString()
+        {
+            return publicEventInvoker.GetEventInfoString(this);
+        }
     }
 }

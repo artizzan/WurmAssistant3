@@ -42,7 +42,7 @@ namespace AldurSoft.WurmApi
         event EventHandler<EventArgs> ConfigChanged;
 
         /// <summary>
-        /// Name of this config.
+        /// Name of this config. Not normalized.
         /// </summary>
         string Name { get; }
     }

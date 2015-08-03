@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using AldursLab.Testing;
-
+using AldurSoft.WurmApi.Modules.Events;
 using NUnit.Framework;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;

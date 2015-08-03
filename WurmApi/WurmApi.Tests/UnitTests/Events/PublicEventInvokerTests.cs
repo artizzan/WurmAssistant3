@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Public;
 using AldurSoft.WurmApi.Tests.Builders;
+using AldurSoft.WurmApi.Tests.Helpers;
 using NUnit.Framework;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
@@ -17,8 +18,8 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Events
     {
         readonly ILogger logger = Mock.Create<ILogger>().RedirectToTraceOut();
         PublicEventInvoker invoker;
-        int value = 0;
-
+        EventAwaiter<EventArgs> eventAwaiter;
+            
         [SetUp]
         public void Setup()
         {
@@ -27,19 +28,13 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Events
                 LoopDelayMillis = 1
             };
 
-            Foovent += OnFoovent;
-        }
-
-        void OnFoovent(object sender, EventArgs eventArgs)
-        {
-            value++;
+            eventAwaiter = new EventAwaiter<EventArgs>();
+            Foovent += eventAwaiter.Handle;
         }
 
         [TearDown]
         public void TearDown()
         {
-            Foovent -= OnFoovent;
-            value = 0;
             invoker.Dispose();
         }
 
@@ -47,48 +42,52 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Events
         public void InvokesEvents()
         {
             var handle = invoker.Create(OnFoovent, TimeSpan.Zero);
-            Expect(value, EqualTo(0));
+            Expect(eventAwaiter.Invocations.Count(), EqualTo(0));
 
             invoker.Trigger(handle);
 
-            Thread.Sleep(10);
-            Expect(value, EqualTo(1));
+            eventAwaiter.WaitInvocations(1);
         }
 
         [Test]
         public void RespectsEventDelay()
         {
-            var handle = invoker.Create(OnFoovent, TimeSpan.FromMilliseconds(20));
-            Expect(value, EqualTo(0));
+            var handle = invoker.Create(OnFoovent, TimeSpan.FromMilliseconds(500));
+            Expect(eventAwaiter.Invocations.Count(), EqualTo(0));
 
             invoker.Trigger(handle);
 
-            Thread.Sleep(10);
-            Expect(value, EqualTo(1));
+            eventAwaiter.WaitInvocations(1);
 
             invoker.Trigger(handle);
 
             Thread.Sleep(5);
-            Expect(value, EqualTo(1));
+            Expect(eventAwaiter.Invocations.Count(), EqualTo(1));
 
-            Thread.Sleep(20);
-            Expect(value, EqualTo(2));
+            eventAwaiter.WaitInvocations(2);
         }
 
         [Test]
         public void BundlesMultipleSignals()
         {
-            var handle = invoker.Create(OnFoovent, TimeSpan.FromMilliseconds(10));
-            Expect(value, EqualTo(0));
+            var handle = invoker.Create(OnFoovent, TimeSpan.FromMilliseconds(500));
+            Expect(eventAwaiter.Invocations.Count(), EqualTo(0));
             invoker.Trigger(handle);
-            Thread.Sleep(10);
-            Expect(value, EqualTo(1));
+
+            eventAwaiter.WaitInvocations(1);
+
             invoker.Trigger(handle);
             invoker.Trigger(handle);
             invoker.Trigger(handle);
 
-            Thread.Sleep(15);
-            Expect(value, EqualTo(2));
+            Thread.Sleep(20);
+            Expect(eventAwaiter.Invocations.Count(), EqualTo(1));
+
+            eventAwaiter.WaitInvocations(2);
+
+            Thread.Sleep(500);
+
+            Expect(eventAwaiter.Invocations.Count(), EqualTo(2));
         }
 
         public event EventHandler<EventArgs> Foovent;

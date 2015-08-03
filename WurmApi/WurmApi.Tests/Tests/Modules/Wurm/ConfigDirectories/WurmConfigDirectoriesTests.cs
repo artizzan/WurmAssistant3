@@ -55,7 +55,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.ConfigDirectories
         public void GetsGamesettingsWhenFileExists()
         {
             var config = ClientMock.AddConfig("batmobile");
-            var realPath = config.GameSettings.FileInfo.FullName;
+            var realPath = config.GameSettings.GameSettingsTxt.FullName;
             var dir1 = System.GetGameSettingsFileFullPathForConfigName("batmobile");
             var dir2 = System.GetGameSettingsFileFullPathForConfigName("Batmobile");
             var dir3 = System.GetGameSettingsFileFullPathForConfigName("BATMOBILE");

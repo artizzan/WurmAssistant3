@@ -176,4 +176,9 @@ namespace AldurSoft.WurmApi
         internal IInternalEventAggregator InternalEventAggregator { get; private set; }
         internal IHttpWebRequests HttpWebRequests { get; private set; }
     }
+
+    internal class WurmApiTuningParams
+    {
+        public static TimeSpan PublicEventMarshallerDelay = TimeSpan.FromMilliseconds(500);
+    }
 }

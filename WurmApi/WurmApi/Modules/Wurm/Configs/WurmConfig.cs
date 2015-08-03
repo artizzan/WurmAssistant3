@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
+using AldursLab.Essentials.Extensions.DotNet;
 using AldurSoft.WurmApi.Infrastructure;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Public;
@@ -49,7 +51,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
             this.publicEventMarshaller = publicEventMarshaller;
 
             onConfigChanged = publicEventMarshaller.Create(() => ConfigChanged.SafeInvoke(this),
-                TimeSpan.FromMilliseconds(500));
+                WurmApiTuningParams.PublicEventMarshallerDelay);
 
             this.configReader = new ConfigReader(this);
             this.configWriter = new ConfigWriter(this);
@@ -69,6 +71,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         void ConfigFileWatcherOnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
             this.rebuildPending = 1;
+            //Trace.WriteLine(DateTime.Now.ToString("O"));
             onConfigChanged.Trigger();
         }
 

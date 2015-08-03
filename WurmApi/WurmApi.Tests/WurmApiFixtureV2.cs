@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AldursLab.Testing;
+using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Tests.Builders;
 using AldurSoft.WurmApi.Tests.Builders.WurmClient;
 using Telerik.JustMock;
@@ -13,6 +14,10 @@ namespace AldurSoft.WurmApi.Tests
 {
     class WurmApiFixtureV2
     {
+        // note: 
+        // using default ThreadPool marshallers for both internal and public events
+        // while simple marshaller would speed tests, using thread pool can potentially uncover more bugs
+
         WurmApiManager wurmApiManager;
         readonly object locker = new object();
 

@@ -42,7 +42,7 @@ namespace AldurSoft.WurmApi.Tests.Helpers
             }
         }
 
-        public void WaitMessages(int messageCount, int timeoutMillis = 500)
+        public void WaitMessages(int messageCount, int timeoutMillis = 5000)
         {
             int currentWait = 0;
             while (true)

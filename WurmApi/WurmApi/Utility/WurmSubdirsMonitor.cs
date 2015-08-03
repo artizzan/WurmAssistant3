@@ -34,6 +34,7 @@ namespace AldurSoft.WurmApi.Utility
             fileSystemWatcher.Created += DirectoryMonitorOnDirectoriesChanged;
             fileSystemWatcher.Renamed += DirectoryMonitorOnDirectoriesChanged;
             fileSystemWatcher.Deleted += DirectoryMonitorOnDirectoriesChanged;
+            fileSystemWatcher.Changed += DirectoryMonitorOnDirectoriesChanged;
             fileSystemWatcher.EnableRaisingEvents = true;
 
             Refresh(false);

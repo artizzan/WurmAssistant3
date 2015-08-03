@@ -119,23 +119,24 @@ namespace AldurSoft.WurmApi.Utility
             autoResetEvent.Set();
         }
 
-        /// <summary>
-        /// Schedules signal to be sent after specified time interval.
-        /// If signal is already scheduled, this method does nothing. 
-        /// </summary>
-        /// <param name="delay"></param>
-        public void DelayedSignal(TimeSpan delay)
-        {
-            // preventing possible explosion in thread counts
-            if (delayedSignallingTask != null && delayedSignallingTask.IsCompleted)
-            {
-                delayedSignallingTask = Task.Factory.StartNew(() =>
-                {
-                    Thread.Sleep(delay);
-                    Signal();
-                }, TaskCreationOptions.LongRunning);
-            }
-        }
+        // not used, disabled, todo fix race condition between if-check and Signal()
+        ///// <summary>
+        ///// Schedules signal to be sent after specified time interval.
+        ///// If signal is already scheduled, this method does nothing. 
+        ///// </summary>
+        ///// <param name="delay"></param>
+        //public void DelayedSignal(TimeSpan delay)
+        //{
+        //    // preventing possible explosion in thread counts
+        //    if (delayedSignallingTask == null || delayedSignallingTask.IsCompleted)
+        //    {
+        //        delayedSignallingTask = Task.Factory.StartNew(() =>
+        //        {
+        //            Thread.Sleep(delay);
+        //            Signal();
+        //        }, TaskCreationOptions.LongRunning);
+        //    }
+        //}
 
         public void Dispose()
         {

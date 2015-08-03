@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AldursLab.Essentials.Extensions;
 using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Events.Public
@@ -84,17 +86,22 @@ namespace AldurSoft.WurmApi.Modules.Events.Public
         {
             while (true)
             {
+                //Trace.WriteLine("public event invoker schedule: " + DateTime.Now.ToString("O"));
                 if (stop) return;
 
                 var toTrigger = events.Values.ToArray().Where(manager => manager.ShouldInvoke);
+                //Trace.WriteLine("to trigger count: " + toTrigger.Count());
                 foreach (var eventManager in toTrigger)
                 {
                     var invoke = Interlocked.CompareExchange(ref eventManager.Pending, 0, 1) == 1;
                     if (invoke)
                     {
+                        //Trace.WriteLine("Invoking: " + eventManager.PublicEvent);
                         try
                         {
                             eventMarshaller.Marshal(eventManager.Action);
+                            //Trace.WriteLine("Invoked: " + eventManager.PublicEvent);
+                            //Trace.WriteLine(eventMarshaller.GetType().FullName);
                         }
                         catch (Exception exception)
                         {
@@ -156,6 +163,13 @@ namespace AldurSoft.WurmApi.Modules.Events.Public
                            && lastInvoke < DateTime.Now - BetweenDelay;
                 }
             }
+        }
+
+        public string GetEventInfoString(PublicEventImpl publicEventImpl)
+        {
+            EventManager em;
+            events.TryGetValue(publicEventImpl, out em);
+            return em != null ? em.Action.MethodInformationToString() : "NULL";
         }
     }
 }

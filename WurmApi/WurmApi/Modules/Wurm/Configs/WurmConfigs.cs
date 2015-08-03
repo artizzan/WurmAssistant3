@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using AldursLab.Essentials.Extensions.DotNet;
 using AldurSoft.WurmApi.Infrastructure;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
@@ -44,10 +45,10 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
 
             onAvailableConfigsChanged = publicEventInvoker.Create(
                 () => AvailableConfigsChanged.SafeInvoke(this), 
-                TimeSpan.FromMilliseconds(500));
+                WurmApiTuningParams.PublicEventMarshallerDelay);
             onAnyConfigChanged = publicEventInvoker.Create(
-                () => AnyConfigChanged.SafeInvoke(this), 
-                TimeSpan.FromMilliseconds(500));
+                () => AnyConfigChanged.SafeInvoke(this),
+                WurmApiTuningParams.PublicEventMarshallerDelay);
 
             eventAggregator.Subscribe(this);
         }
@@ -93,13 +94,16 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
 
         public void Dispose()
         {
-            eventAggregator.Unsubscribe(this);
-            onAnyConfigChanged.Detach();
-            onAvailableConfigsChanged.Detach();
-            foreach (var wurmConfig in this.nameToConfigMap)
+            lock (locker)
             {
-                wurmConfig.Value.ConfigChanged -= ConfigOnConfigChanged;
-                wurmConfig.Value.Dispose();
+                eventAggregator.Unsubscribe(this);
+                onAnyConfigChanged.Detach();
+                onAvailableConfigsChanged.Detach();
+                foreach (var wurmConfig in this.nameToConfigMap)
+                {
+                    wurmConfig.Value.ConfigChanged -= ConfigOnConfigChanged;
+                    wurmConfig.Value.Dispose();
+                }
             }
         }
 
@@ -133,16 +137,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
                             {
                                 newMap.Add(configName, config);
                             }
-
-                        }
-                        var removedConfigNames = configNamesNormalized.Where(name => !oldMap.ContainsKey(name)).ToArray();
-                        foreach (var configName in removedConfigNames)
-                        {
-                            var config = oldMap[configName];
-                            config.ConfigChanged -= ConfigOnConfigChanged;
-                            config.Dispose();
-                            newMap.Remove(configName);
-                            anyChanges = true;
                         }
                         if (anyChanges)
                         {

@@ -41,7 +41,7 @@ namespace AldurSoft.WurmApi.Tests.Builders.WurmClient
 
         public IWurmInstallDirectory InstallDirectory { get; private set; }
 
-        public List<WurmPlayer> Players
+        public IEnumerable<WurmPlayer> Players
         {
             get
             {
@@ -49,7 +49,7 @@ namespace AldurSoft.WurmApi.Tests.Builders.WurmClient
             }
         }
 
-        public List<WurmConfig> Configs
+        public IEnumerable<WurmConfig> Configs
         {
             get { return configs; }
         }

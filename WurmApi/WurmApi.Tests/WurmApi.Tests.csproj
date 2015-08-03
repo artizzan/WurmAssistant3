@@ -109,6 +109,7 @@
     <Compile Include="Builders\WurmClient\WurmLogs.cs" />
     <Compile Include="Builders\WurmClient\WurmPlayer.cs" />
     <Compile Include="Helpers\DummyException.cs" />
+    <Compile Include="Helpers\EventAwaiter.cs" />
     <Compile Include="Helpers\LogWriter.cs" />
     <Compile Include="Helpers\SelfTests\LogWriterTests.cs" />
     <Compile Include="Helpers\Subscriber.cs" />
@@ -121,8 +122,8 @@
     <Compile Include="Tests\Modules\Wurm\CharacterDirectories\WurmCharacterDirectoriesTests.cs" />
     <Compile Include="Tests\WurmCharactersTests.cs" />
     <Compile Include="Tests\Modules\Wurm\ConfigDirectories\WurmConfigDirectoriesTests.cs" />
-    <Compile Include="Tests\WurmConfigsTests.cs" />
-    <Compile Include="Tests\WurmLogDefinitionsTests.cs" />
+    <Compile Include="Tests\Modules\Wurm\Configs\WurmConfigsTests.cs" />
+    <Compile Include="Tests\Modules\Wurm\LogDefinitions\WurmLogDefinitionsTests.cs" />
     <Compile Include="Tests\WurmLogFilesTests.cs" />
     <Compile Include="Tests\MonthlyHeuristicsExtractorTests.cs" />
     <Compile Include="Tests\WurmLogsHistoryTests.cs" />
