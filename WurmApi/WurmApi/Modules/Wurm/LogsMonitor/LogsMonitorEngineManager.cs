@@ -2,8 +2,10 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using AldursLab.Essentials.Extensions.DotNet;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Public;
+using AldurSoft.WurmApi.Utility;
 using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
@@ -60,11 +62,10 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
             if (exists)
             {
                 logger.Log(LogLevel.Warn,
-                    "Attempted to AddSubscription with handler, that's already subscribed. " +
-                    "Additional subscription will be ignored. " +
-                    "LogType: " + logType +
-                    "Handler pointing to method: "
-                    + eventHandler.Method.DeclaringType.FullName + "." + eventHandler.Method.Name, this, null);
+                    string.Format(
+                        "Attempted to AddSubscription with handler, that's already subscribed. "
+                        + "Additional subscription will be ignored. "
+                        + "LogType: {0} Handler pointing to method: {1}", logType, eventHandler.MethodInformationToString()), this, null);
             }
         }
 
@@ -86,11 +87,11 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
             if (exists)
             {
                 logger.Log(LogLevel.Warn,
-                    "Attempted to AddPmSubscription with handler, that's already subscribed. " +
-                    "Additional subscription will be ignored. " +
-                    "PmRecipient: " + pmRecipient +
-                    "Handler pointing to method: "
-                    + eventHandler.Method.DeclaringType.FullName + "." + eventHandler.Method.Name, this, null);
+                    string.Format(
+                        "Attempted to AddPmSubscription with handler, that's already subscribed. "
+                        + "Additional subscription will be ignored. "
+                        + "PmRecipient: {0} Handler pointing to method: {1}", pmRecipient,
+                        eventHandler.MethodInformationToString()), this, null);
             }
         }
 

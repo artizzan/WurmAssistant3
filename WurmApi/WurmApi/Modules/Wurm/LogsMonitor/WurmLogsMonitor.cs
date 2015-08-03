@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.Essentials.Extensions.DotNet.Collections.Generic;
 using AldurSoft.WurmApi.Infrastructure;
 using AldurSoft.WurmApi.Modules.Events.Internal;
@@ -118,14 +119,15 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
 
         void TrySubscribeAllActive(EventHandler<LogsMonitorEventArgs> eventHandler, bool internalSubscription = false)
         {
-            var exists = allEventSubscriptionsTsafe.Add(new AllEventsSubscription(eventHandler, internalSubscription));
-            if (exists)
+            var added = allEventSubscriptionsTsafe.Add(new AllEventsSubscription(eventHandler, internalSubscription));
+            if (!added)
             {
                 logger.Log(LogLevel.Warn,
-                    "Attempted to SubscribeAllActive with handler, that's already subscribed. " +
-                    "Additional subscription will be ignored. " +
-                    "Handler pointing to method: "
-                    + eventHandler.Method.DeclaringType.FullName + eventHandler.Method.Name, this, null);
+                    string.Format(
+                        "Attempted to SubscribeAllActive with handler, that's already subscribed. "
+                        + "Additional subscription will be ignored. "
+                        + "Handler pointing to method: {0}",
+                        eventHandler.MethodInformationToString()), this, null);
             }
         }
 

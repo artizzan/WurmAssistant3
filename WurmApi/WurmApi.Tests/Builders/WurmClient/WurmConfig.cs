@@ -21,8 +21,14 @@ namespace AldurSoft.WurmApi.Tests.Builders.WurmClient
         }
 
         public string Name { get; private set; }
+        public string NameNormalized { get { return Name.ToUpperInvariant(); }}
 
         public Autorun Autorun { get; private set; }
         public GameSettings GameSettings { get; private set; }
+
+        public DirectoryInfo ConfigDir
+        {
+            get { return configDir; }
+        }
     }
 }

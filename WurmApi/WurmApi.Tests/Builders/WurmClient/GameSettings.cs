@@ -5,6 +5,7 @@ namespace AldurSoft.WurmApi.Tests.Builders.WurmClient
     class GameSettings
     {
         FileInfo GameSettingsTxt { get; set; }
+        public FileInfo FileInfo { get { return GameSettingsTxt; } }
 
         public GameSettings(FileInfo gameSettingsTxt)
         {

@@ -23,6 +23,11 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
             return GetEnumerator();
         }
 
+        /// <summary>
+        /// Returns true if added or false if subscription already added.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public bool Add(AllEventsSubscription item)
         {
             lock (locker)

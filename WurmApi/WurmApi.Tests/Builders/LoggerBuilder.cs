@@ -15,7 +15,7 @@ namespace AldurSoft.WurmApi.Tests.Builders
         {
             logger.Arrange(
                 logger1 => logger1.Log(Arg.IsAny<LogLevel>(), Arg.AnyString, Arg.AnyObject, Arg.IsAny<Exception>())).DoInstead(
-                    (LogLevel l, string m, string s, Exception e) =>
+                    (LogLevel l, string m, object s, Exception e) =>
                     {
                         Trace.WriteLine(string.Format("Logged: {0}: {1}\r\nat {2} {3}", l, m, s,
                             e != null ? "\r\n Exc: " + (verbose ? e.ToString() : e.Message) : string.Empty));

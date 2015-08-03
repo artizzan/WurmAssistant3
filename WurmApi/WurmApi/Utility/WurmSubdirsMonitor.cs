@@ -102,7 +102,7 @@ namespace AldurSoft.WurmApi.Utility
                         var oldDirs = dirNameToFullPathMap.Select(pair => pair.Key).OrderBy(s => s).ToArray();
                         var newDirs = newMap.Select(pair => pair.Key).OrderBy(s => s).ToArray();
 
-                        changed = oldDirs.SequenceEqual(newDirs);
+                        changed = !oldDirs.SequenceEqual(newDirs);
 
                         if (changed)
                         {

@@ -82,6 +82,8 @@ namespace AldurSoft.WurmApi
             Wire(installDirectory);
             Wire(httpWebRequests);
 
+            HttpWebRequests = httpWebRequests;
+
             ThreadPoolMarshaller internalEventMarshaller = new ThreadPoolMarshaller(logger);
 
             InternalEventAggregator internalEventAggregator = new InternalEventAggregator();
@@ -150,15 +152,6 @@ namespace AldurSoft.WurmApi
             {
                 disposable.Dispose();
             }
-            GC.SuppressFinalize(this);
-        }
-
-        ~WurmApiManager()
-        {
-            foreach (var disposable in disposables)
-            {
-                disposable.Dispose();
-            }
         }
 
         private TSystem Wire<TSystem>(TSystem system)
@@ -181,5 +174,6 @@ namespace AldurSoft.WurmApi
         internal IWurmCharacterDirectories WurmCharacterDirectories { get; private set; }
         internal IWurmConfigDirectories WurmConfigDirectories { get; private set; }
         internal IInternalEventAggregator InternalEventAggregator { get; private set; }
+        internal IHttpWebRequests HttpWebRequests { get; private set; }
     }
 }

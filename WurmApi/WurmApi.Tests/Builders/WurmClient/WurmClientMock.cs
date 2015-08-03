@@ -9,7 +9,7 @@ using Telerik.JustMock.Helpers;
 
 namespace AldurSoft.WurmApi.Tests.Builders.WurmClient
 {
-    class WurmClientMock
+    class WurmClientMock : IDisposable
     {
         readonly DirectoryHandle dir;
 
@@ -22,26 +22,31 @@ namespace AldurSoft.WurmApi.Tests.Builders.WurmClient
 
         readonly List<WurmConfig> configs = new List<WurmConfig>();
 
-        public WurmClientMock([NotNull] DirectoryHandle dir)
+        public  WurmClientMock([NotNull] DirectoryHandle dir, bool createBasicDirs)
         {
             if (dir == null) throw new ArgumentNullException("dir");
             this.dir = dir;
 
-            InstallDirectory = Mock.Create<IWurmInstallDirectory>();
-            InstallDirectory.Arrange(directory => directory.FullPath).Returns(Path.Combine(dir.AbsolutePath, "wurm"));
-
             var dirinfo = new DirectoryInfo(dir.AbsolutePath);
             WurmDir = dirinfo.CreateSubdirectory("wurm");
-            ConfigsDir = WurmDir.CreateSubdirectory("configs");
-            PacksDir = WurmDir.CreateSubdirectory("packs");
-            PlayersDir = WurmDir.CreateSubdirectory("players");
+
+            if (createBasicDirs)
+            {
+                CreateBasicDirectories();
+            }
+
+            InstallDirectory = Mock.Create<IWurmInstallDirectory>();
+            InstallDirectory.Arrange(directory => directory.FullPath).Returns(Path.Combine(dir.AbsolutePath, "wurm"));
         }
 
         public IWurmInstallDirectory InstallDirectory { get; private set; }
 
         public List<WurmPlayer> Players
         {
-            get { return players; }
+            get
+            {
+                return players;
+            }
         }
 
         public List<WurmConfig> Configs
@@ -49,8 +54,41 @@ namespace AldurSoft.WurmApi.Tests.Builders.WurmClient
             get { return configs; }
         }
 
+        public WurmClientMock CreateBasicDirectories()
+        {
+            CreateConfigsDir();
+            CreatePacksDir();
+            CreatePlayersDir();
+            return this;
+        }
+
+        void CreatePacksDir()
+        {
+            if (PacksDir == null)
+            {
+                PacksDir = WurmDir.CreateSubdirectory("packs");
+            }
+        }
+
+        void CreatePlayersDir()
+        {
+            if (PlayersDir == null)
+            {
+                PlayersDir = WurmDir.CreateSubdirectory("players");
+            }
+        }
+
+        void CreateConfigsDir()
+        {
+            if (ConfigsDir == null)
+            {
+                ConfigsDir = WurmDir.CreateSubdirectory("configs");
+            }
+        }
+
         public WurmPlayer AddPlayer(string name)
         {
+            CreatePlayersDir();
             var p = new WurmPlayer(PlayersDir.CreateSubdirectory(name), name);
             if (players.Any(player => player.Name == name))
             {
@@ -62,6 +100,7 @@ namespace AldurSoft.WurmApi.Tests.Builders.WurmClient
 
         public WurmConfig AddConfig(string name)
         {
+            CreateConfigsDir();
             var p = new WurmConfig(ConfigsDir.CreateSubdirectory(name), name);
             if (configs.Any(config => config.Name == name))
             {
@@ -69,6 +108,22 @@ namespace AldurSoft.WurmApi.Tests.Builders.WurmClient
             }
             configs.Add(p);
             return p;
+        }
+
+        /// <summary>
+        /// Copies / overwrites contents of wurm directory from source directory.
+        /// </summary>
+        /// <param name="sourceDirFullPath"></param>
+        /// <returns></returns>
+        public WurmClientMock PopulateFromDir(string sourceDirFullPath)
+        {
+            dir.AmmendFromSourceDirectory(sourceDirFullPath, "wurm");
+            return this;
+        }
+
+        public void Dispose()
+        {
+            dir.Dispose();
         }
     }
 }

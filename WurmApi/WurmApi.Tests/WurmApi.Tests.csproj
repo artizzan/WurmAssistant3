@@ -47,9 +47,9 @@
       <HintPath>..\..\Lib\NuGetPackages\JetBrains.Annotations.9.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\NuGetPackages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\Lib\NuGetPackages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="nunit.core">
       <HintPath>..\..\Lib\NuGetPackages\NUnitTestAdapter.1.2\lib\nunit.core.dll</HintPath>
@@ -112,26 +112,26 @@
     <Compile Include="Helpers\LogWriter.cs" />
     <Compile Include="Helpers\SelfTests\LogWriterTests.cs" />
     <Compile Include="Helpers\Subscriber.cs" />
+    <Compile Include="Tests\Modules\Wurm\WurmTests.cs" />
     <Compile Include="Tools\BinaryTestSerializer.cs" />
     <Compile Include="Tools\JsonTestSerializer.cs" />
     <Compile Include="UnitTests\Events\InternalEventInvokerTests.cs" />
     <Compile Include="UnitTests\Events\PublicEventInvokerTests.cs" />
     <Compile Include="UnitTests\Utility\SignallizableThreadedOperationTests.cs" />
-    <Compile Include="Tests\WurmCharacterDirectoriesImpl\WurmCharacterDirectoriesTests.cs" />
-    <Compile Include="Tests\WurmCharactersImpl\WurmCharactersTests.cs" />
-    <Compile Include="Tests\WurmConfigDirectoriesImpl\WurmConfigDirectoriesTests.cs" />
-    <Compile Include="Tests\WurmConfigsImpl\WurmConfigsTests.cs" />
-    <Compile Include="Tests\WurmLogDefinitionsImpl\WurmLogDefinitionsTests.cs" />
-    <Compile Include="Tests\WurmLogFilesImpl\WurmLogFilesTests.cs" />
-    <Compile Include="Tests\WurmLogsHistoryImpl\MonthlyHeuristicsExtractorTests.cs" />
-    <Compile Include="Tests\WurmLogsHistoryImpl\WurmLogsHistoryTests.cs" />
-    <Compile Include="Tests\WurmLogsMonitorImpl\WurmLogsMonitorTests.cs" />
-    <Compile Include="Tests\WurmServerHistoryImpl\SortedServerHistoryTests.cs" />
-    <Compile Include="Tests\WurmServerHistoryImpl\WurmServerHistoryTests.cs" />
-    <Compile Include="Tests\WurmServersImpl\WurmServersTests.cs" />
+    <Compile Include="Tests\Modules\Wurm\CharacterDirectories\WurmCharacterDirectoriesTests.cs" />
+    <Compile Include="Tests\WurmCharactersTests.cs" />
+    <Compile Include="Tests\Modules\Wurm\CharacterDirectories\WurmConfigDirectoriesTests.cs" />
+    <Compile Include="Tests\WurmConfigsTests.cs" />
+    <Compile Include="Tests\WurmLogDefinitionsTests.cs" />
+    <Compile Include="Tests\WurmLogFilesTests.cs" />
+    <Compile Include="Tests\MonthlyHeuristicsExtractorTests.cs" />
+    <Compile Include="Tests\WurmLogsHistoryTests.cs" />
+    <Compile Include="Tests\WurmLogsMonitorTests.cs" />
+    <Compile Include="Tests\SortedServerHistoryTests.cs" />
+    <Compile Include="Tests\WurmServerHistoryTests.cs" />
+    <Compile Include="Tests\WurmServersTests.cs" />
     <Compile Include="WurmApiFixtureBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\DataModel\WurmApiDataContextTests.cs" />
     <Compile Include="Tests\WurmDateTimeTests.cs" />
     <Compile Include="WurmApiFixtureV2.cs" />
     <Compile Include="WurmApiIntegrationFixtureBase.cs" />
@@ -599,6 +599,7 @@
     <EmbeddedResource Include="Builders\WurmClient\Defaults.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Defaults.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Choose>

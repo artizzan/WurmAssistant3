@@ -8,7 +8,13 @@ namespace AldurSoft.WurmApi.Tests.Builders.WurmClient
         public static WurmClientMock Create()
         {
             var dir = TempDirectoriesFactory.CreateEmpty();
-            return new WurmClientMock(dir);
+            return new WurmClientMock(dir, true);
+        }
+
+        public static WurmClientMock CreateWithoutBasicDirs()
+        {
+            var dir = TempDirectoriesFactory.CreateEmpty();
+            return new WurmClientMock(dir, false);
         }
     }
 }
