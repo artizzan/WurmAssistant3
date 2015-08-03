@@ -178,3 +178,4 @@ FakesAssemblies/
 
 !*.dll
 !*.exe
+!*.bak
