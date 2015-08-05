@@ -142,10 +142,10 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
         }
 
         [TearDown]
-        public override void Teardown()
+        public override void FixtureTeardown()
         {
             Timescope.Dispose();
-            base.Teardown();
+            base.FixtureTeardown();
         }
     }
 }

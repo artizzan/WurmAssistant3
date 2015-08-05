@@ -56,10 +56,10 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
 
         void TryAddSubscription(LogType logType, EventHandler<LogsMonitorEventArgs> eventHandler, bool internalSub = false)
         {
-            bool exists = subscriptions.TryAdd(
+            bool success = subscriptions.TryAdd(
                 eventHandler,
                 new EngineSubscription() {LogType = logType, LogsMonitorEventHandler = eventHandler, InternalSubscription = internalSub});
-            if (exists)
+            if (!success)
             {
                 logger.Log(LogLevel.Warn,
                     string.Format(
@@ -241,7 +241,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
 
         bool AnyLocalSubscriptions
         {
-            get { return subscriptions.Count + pmSubscriptions.Count == 0; }
+            get { return subscriptions.Count + pmSubscriptions.Count > 0; }
         }
 
         public void Dispose()

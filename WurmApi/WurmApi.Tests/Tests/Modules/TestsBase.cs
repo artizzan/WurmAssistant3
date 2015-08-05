@@ -8,31 +8,35 @@ using System.Threading.Tasks;
 using AldursLab.Essentials;
 using NUnit.Framework;
 
-namespace AldurSoft.WurmApi.Tests
+namespace AldurSoft.WurmApi.Tests.Tests.Modules
 {
-    public abstract class WurmApiFixtureBase : AssertionHelper
+    public class TestsBase : AssertionHelper
     {
-        public static string TestPaksDirFullPath { get; private set; }
+        internal string TestPaksDirFullPath { get; private set; }
+
         public const int FileSystemDelayMillis = 20;
+
         public static StubbableTime TimeStub { get; private set; }
 
-        static WurmApiFixtureBase()
+        static TestsBase()
         {
-            TestPaksDirFullPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "TestPaks");
             TimeStub = new StubbableTime();
             Time.SetProvider(TimeStub);
         }
+
+        [SetUp]
+        public void BaseSetup()
+        {
+            TestPaksDirFullPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "TestPaks");
+        }
+
+        public void DoNothing() { }
+        public void DoNothing<T1>(T1 arg1) { }
+        public void DoNothing<T1, T2>(T1 arg1, T2 arg2) { }
 
         protected void WaitForFileSystem()
         {
             Thread.Sleep(FileSystemDelayMillis);
         }
-
-        [TearDown]
-        public virtual void FixtureTeardown() { }
-
-        public void DoNothing() { }
-        public void DoNothing<T1>(T1 arg1) { }
-        public void DoNothing<T1, T2>(T1 arg1, T2 arg2) { }
     }
 }

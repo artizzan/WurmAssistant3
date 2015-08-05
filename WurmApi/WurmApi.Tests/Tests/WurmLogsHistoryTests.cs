@@ -65,11 +65,11 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
         }
 
         [TearDown]
-        public override void Teardown()
+        public override void FixtureTeardown()
         {
             wurmCharacterDirectories.Dispose();
             wurmLogFiles.Dispose();
-            base.Teardown();
+            base.FixtureTeardown();
         }
 
         [Test]

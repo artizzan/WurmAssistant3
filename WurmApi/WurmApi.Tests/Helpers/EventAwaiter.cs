@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Tests.Helpers
 {
     class EventAwaiter<TEventArgs> where TEventArgs : EventArgs
     {
+        EventHandler<TEventArgs> eventHandler;
+
         readonly List<TEventArgs> invocations = new List<TEventArgs>();
         readonly object locker = new object();
 
@@ -27,6 +30,40 @@ namespace AldurSoft.WurmApi.Tests.Helpers
             lock (locker)
             {
                 invocations.Add(eventArgs);
+            }
+        }
+
+        public EventHandler<TEventArgs> GetEventHandler()
+        {
+            if (eventHandler == null)
+            {
+                eventHandler = Handle;
+            }
+            return eventHandler;
+        }
+
+        public void WaitUntilMatch([NotNull] Func<List<TEventArgs>, bool> isEventArgsMatch, int timeoutMillis = 5000)
+        {
+            if (isEventArgsMatch == null) throw new ArgumentNullException("isEventArgsMatch");
+
+            int currentWait = 0;
+            while (true)
+            {
+                var loopMillis = 10;
+                Thread.Sleep(loopMillis);
+                currentWait += loopMillis;
+                lock (locker)
+                {
+                    if (isEventArgsMatch(invocations))
+                    {
+                        //Trace.WriteLine("WaitInvocations:" + DateTime.Now.ToString("O"));
+                        return;
+                    }
+                }
+                if (currentWait > timeoutMillis)
+                {
+                    throw new Exception("timeout");
+                }
             }
         }
 

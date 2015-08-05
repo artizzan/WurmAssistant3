@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
+using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Tests.Helpers
 {
@@ -44,6 +45,11 @@ namespace AldurSoft.WurmApi.Tests.Helpers
 
         public void WaitMessages(int messageCount, int timeoutMillis = 5000)
         {
+            WaitMessages(messageCount, null, timeoutMillis);
+        }
+
+        public void WaitMessages(int messageCount, [CanBeNull] Func<TMessage, bool> isMatch, int timeoutMillis = 5000)
+        {
             int currentWait = 0;
             while (true)
             {
@@ -52,7 +58,7 @@ namespace AldurSoft.WurmApi.Tests.Helpers
                 currentWait += loopMillis;
                 lock (locker)
                 {
-                    if (ReceivedMessages.Count() >= messageCount)
+                    if (ReceivedMessages.Count(message => isMatch == null || isMatch(message)) >= messageCount)
                     {
                         return;
                     }

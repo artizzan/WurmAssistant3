@@ -161,9 +161,9 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
             {
                 var characters = wumCharacterDirectories.GetAllCharacters().ToHashSet();
                 var newMap = characterNameToEngineManagers.ToDictionary(pair => pair.Key, pair => pair.Value);
-                LogsMonitorEngineManager man;
                 foreach (var characterName in characters)
                 {
+                    LogsMonitorEngineManager man;
                     if (!newMap.TryGetValue(characterName, out man))
                     {
                         var manager = new LogsMonitorEngineManager(
@@ -179,14 +179,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
                             logger,
                             internalEventInvoker);
                         newMap.Add(characterName, manager);
-                    }
-                }
-                foreach (var pair in newMap)
-                {
-                    if (!characters.Contains(pair.Key))
-                    {
-                        pair.Value.Dispose();
-                        newMap.Remove(pair.Key);
                     }
                 }
                 characterNameToEngineManagers = newMap;

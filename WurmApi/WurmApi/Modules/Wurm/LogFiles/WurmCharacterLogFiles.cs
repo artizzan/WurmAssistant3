@@ -61,6 +61,12 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
             directoryWatcher.Renamed += DirectoryWatcherOnChanged;
 
             directoryWatcher.EnableRaisingEvents = true;
+
+            // if some log files have been created before watcher started watching
+            if (Directory.EnumerateFiles(fullDirPathToCharacterLogsDir).Any())
+            {
+                onFilesAddedOrRemoved.Trigger();
+            }
         }
 
         public CharacterName CharacterName { get; private set; }

@@ -154,7 +154,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
 
         private void CheckForLargeRefreshDelay(DateTimeOffset currentDate)
         {
-            if (lastRefresh - TimeSpan.FromSeconds(10) < currentDate)
+            if (currentDate > lastRefresh + TimeSpan.FromSeconds(10))
             {
                 logger.Log(
                     LogLevel.Warn,

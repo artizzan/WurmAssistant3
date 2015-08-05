@@ -13,12 +13,10 @@ using NUnit.Framework;
 
 namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm
 {
-    public abstract class WurmTests : AssertionHelper
+    public abstract class WurmTests : TestsBase
     {
         internal WurmApiFixtureV2 Fixture { get; private set; }
         internal WurmClientMock ClientMock { get { return Fixture.WurmClientMock; } }
-
-        internal string TestPaksDirFullPath { get; private set; }
 
         [SetUp]
         public void WurmTestsSetup()
@@ -29,7 +27,6 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm
             //Trace.WriteLine(string.Format("ThreadPool: Max worker threads: {0}, Max IO ops: {1}", maxo, maxioo));
             //Trace.WriteLine(string.Format("ThreadPool: Min worker threads: {0}, Min IO ops: {1}", mino, minioo));
 
-            TestPaksDirFullPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "TestPaks");
             Fixture = new WurmApiFixtureV2();
             WurmApiTuningParams.PublicEventMarshallerDelay = TimeSpan.FromMilliseconds(1);
         }
@@ -40,9 +37,5 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm
             Fixture.WurmApiManager.Dispose();
             Fixture.WurmClientMock.Dispose();
         }
-
-        public void DoNothing() { }
-        public void DoNothing<T1>(T1 arg1) { }
-        public void DoNothing<T1, T2>(T1 arg1, T2 arg2) { }
     }
 }

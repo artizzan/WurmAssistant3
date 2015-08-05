@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AldursLab.PersistentObjects;
+using AldursLab.PersistentObjects.FlatFiles;
 using AldursLab.Testing;
 using AldurSoft.WurmApi.Modules.Wurm.ServerHistory;
 using AldurSoft.WurmApi.Modules.Wurm.ServerHistory.PersistentModel;
@@ -21,8 +23,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServerHistoryImpl
         public void Setup()
         {
             DataDir = TempDirectoriesFactory.CreateEmpty();
-            //IWurmApiDataContext dataContext = new WurmApiDataContext(DataDir.DirectoryFullPath, Mock.Of<ISimplePersistLogger>());
-            //System = new SortedServerHistory(dataContext.ServerHistory.Get(new EntityKey("Sample")));
+            var lib = new PersistentCollectionsLibrary(new FlatFilesPersistenceStrategy(DataDir.AbsolutePath));
+            System = new SortedServerHistory(lib.DefaultCollection.GetObject<ServerHistory>("default"));
         }
 
         [Test]

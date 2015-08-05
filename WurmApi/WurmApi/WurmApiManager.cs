@@ -82,8 +82,6 @@ namespace AldurSoft.WurmApi
             Wire(installDirectory);
             Wire(httpWebRequests);
 
-            HttpWebRequests = httpWebRequests;
-
             ThreadPoolMarshaller internalEventMarshaller = new ThreadPoolMarshaller(logger);
 
             InternalEventAggregator internalEventAggregator = new InternalEventAggregator();
@@ -122,6 +120,7 @@ namespace AldurSoft.WurmApi
             WurmCharacters characters =
                 Wire(new WurmCharacters(characterDirectories, wurmConfigs, wurmServers, wurmServerHistory, logger));
 
+            HttpWebRequests = httpWebRequests;
             WurmAutoruns = autoruns;
             WurmCharacters = characters;
             WurmConfigs = wurmConfigs;
@@ -129,6 +128,7 @@ namespace AldurSoft.WurmApi
             WurmLogsHistory = logsHistory;
             WurmLogsMonitor = logsMonitor;
             WurmServers = wurmServers;
+            WurmLogFiles = logFiles;
 
             // internal systems
 
@@ -175,6 +175,7 @@ namespace AldurSoft.WurmApi
         internal IWurmConfigDirectories WurmConfigDirectories { get; private set; }
         internal IInternalEventAggregator InternalEventAggregator { get; private set; }
         internal IHttpWebRequests HttpWebRequests { get; private set; }
+        public IWurmLogFiles WurmLogFiles { get; private set; }
     }
 
     internal class WurmApiTuningParams

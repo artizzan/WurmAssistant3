@@ -113,6 +113,7 @@
     <Compile Include="Helpers\LogWriter.cs" />
     <Compile Include="Helpers\SelfTests\LogWriterTests.cs" />
     <Compile Include="Helpers\Subscriber.cs" />
+    <Compile Include="Tests\Modules\TestsBase.cs" />
     <Compile Include="Tests\Modules\Wurm\WurmTests.cs" />
     <Compile Include="Tools\BinaryTestSerializer.cs" />
     <Compile Include="Tools\JsonTestSerializer.cs" />
@@ -124,11 +125,11 @@
     <Compile Include="Tests\Modules\Wurm\ConfigDirectories\WurmConfigDirectoriesTests.cs" />
     <Compile Include="Tests\Modules\Wurm\Configs\WurmConfigsTests.cs" />
     <Compile Include="Tests\Modules\Wurm\LogDefinitions\WurmLogDefinitionsTests.cs" />
-    <Compile Include="Tests\WurmLogFilesTests.cs" />
-    <Compile Include="Tests\MonthlyHeuristicsExtractorTests.cs" />
+    <Compile Include="Tests\Modules\Wurm\LogFiles\WurmLogFilesTests.cs" />
+    <Compile Include="Tests\Modules\Wurm\LogsHistory\MonthlyHeuristicsExtractorTests.cs" />
     <Compile Include="Tests\WurmLogsHistoryTests.cs" />
-    <Compile Include="Tests\WurmLogsMonitorTests.cs" />
-    <Compile Include="Tests\SortedServerHistoryTests.cs" />
+    <Compile Include="Tests\Modules\Wurm\LogsMonitor\WurmLogsMonitorTests.cs" />
+    <Compile Include="Tests\Modules\Wurm\ServerHistory\SortedServerHistoryTests.cs" />
     <Compile Include="Tests\WurmServerHistoryTests.cs" />
     <Compile Include="Tests\WurmServersTests.cs" />
     <Compile Include="WurmApiFixtureBase.cs" />
@@ -163,12 +164,13 @@
       <Name>WurmApi</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\TestPaks\logs-samples-forLogsMonitor\players\Testguy\logs\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\autorun.txt" />
     <None Include="Resources\gamesettings.txt" />
+    <Content Include="Resources\TestPaks\logs-samples-forLogsMonitor\players\Testguy\logs\_Event.2014-01-01.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\TestPaks\WurmCharactersTests-wurmdir\configs\compactBL\autorun.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

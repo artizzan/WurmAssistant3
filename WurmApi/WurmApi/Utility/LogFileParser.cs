@@ -78,10 +78,17 @@ namespace AldurSoft.WurmApi.Utility
                 {
                     continue;
                 }
+                TimeSpan span = ParsingHelper.GetTimestampFromLogLine(line);
                 string source = ParsingHelper.TryParseSourceFromLogLine(line);
                 string content = ParsingHelper.TryParseContentFromLogLine(line);
+                DateTime finalStamp = new DateTime(linesStamp.Year,
+                    linesStamp.Month,
+                    linesStamp.Day,
+                    span.Hours,
+                    span.Minutes,
+                    span.Seconds);
 
-                LogEntry entry = new LogEntry(linesStamp, source, content);
+                LogEntry entry = new LogEntry(finalStamp, source, content);
                 result.Add(entry);
             }
             return result;

@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AldursLab.Essentials;
 using AldursLab.Testing;
 using AldurSoft.WurmApi.Modules.Wurm.LogDefinitions;
 using AldurSoft.WurmApi.Modules.Wurm.LogFiles;
 using AldurSoft.WurmApi.Modules.Wurm.LogsHistory.Heuristics;
 using AldurSoft.WurmApi.Utility;
-
 using NUnit.Framework;
 using Telerik.JustMock;
 
-namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
+namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogsHistory
 {
     [TestFixture]
     class MonthlyHeuristicsExtractorTests : WurmApiFixtureBase
@@ -32,7 +27,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
         private DirectoryHandle logsDir;
 
         [SetUp]
-        public void SetUp()
+        public void Setup()
         {
             logsDir = TempDirectoriesFactory.CreateByCopy(Path.Combine(TestPaksDirFullPath, "MonthlyHeuristicsExtractor-sample-logs"));
             string basePath = logsDir.AbsolutePath;
@@ -45,6 +40,12 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmLogsHistoryImpl
             fileWithBadStamp = new FileInfo(Path.Combine(basePath, "_Skills.2012-08.txt"));
             fileThatGoesBeyondMonthDays = new FileInfo(Path.Combine(basePath, "Village.2013-04.txt"));
             fileEvent201412 = new FileInfo(Path.Combine(basePath, "_Event.2014-12.txt"));
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+            logsDir.Dispose();
         }
 
         private MonthlyHeuristicsExtractor ConstructForFilePath(FileInfo info)
