@@ -77,14 +77,14 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
         public void AddPmSubscription(EventHandler<LogsMonitorEventArgs> eventHandler, string pmRecipient)
         {
             var key = new PmSubscriptionKey(eventHandler, pmRecipient);
-            bool exists = pmSubscriptions.TryAdd(
+            bool success = pmSubscriptions.TryAdd(
                 key,
                 new EnginePmSubscription()
                 {
                     PmRecipientNormalized = pmRecipient.ToUpperInvariant(),
                     LogsMonitorPmEventHandler = eventHandler
                 });
-            if (exists)
+            if (!success)
             {
                 logger.Log(LogLevel.Warn,
                     string.Format(
