@@ -1,3 +1,0 @@
-# do not mess with line endings
-WurmApi\WurmApi.Tests\Resources\*.txt text eol=crlf
-WurmApi\WurmApi.Tests\Resources\**\*.txt text eol=crlf

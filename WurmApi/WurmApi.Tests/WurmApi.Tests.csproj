@@ -141,6 +141,42 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <Content Include="Resources\TestPaksZipped\logs-samples-realdata.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaksZipped\LogFileStreamReader-testdata.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaksZipped\logs-samples-emptyfiles.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaksZipped\logs-samples-forLogsMonitor.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaksZipped\MonthlyHeuristicsExtractor-sample-logs.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaksZipped\WebExtractorTests-raw-requests.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaksZipped\WurmCharactersTests-wurmdir.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaksZipped\WurmDir-configs.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaksZipped\WurmDir-PlayersDirWithPlayers.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaksZipped\WurmServerHistory-wurmdir.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaksZipped\WurmServerTests-wurmdir-webrequests.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\TestPaksZipped\WurmServerTests-wurmdir.7z">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\AldursLab\Lab\Essentials\Essentials.csproj">

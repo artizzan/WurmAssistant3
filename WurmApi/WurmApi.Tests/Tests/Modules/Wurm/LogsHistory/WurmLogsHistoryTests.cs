@@ -23,7 +23,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogsHistory
         [SetUp]
         public void Setup()
         {
-            ClientMock.PopulateFromDir(Path.Combine(TestPaksDirFullPath, "logs-samples-realdata"));
+            //ClientMock.PopulateFromDir(Path.Combine(TestPaksDirFullPath, "logs-samples-realdata"));
+            ClientMock.PopulateFromZip(Path.Combine(TestPaksZippedDirFullPath, "logs-samples-realdata.7z"));
         }
 
         [TearDown]

@@ -121,6 +121,16 @@ namespace AldurSoft.WurmApi.Tests.Builders.WurmClient
             return this;
         }
 
+
+        public WurmClientMock PopulateFromZip(string zipFileFullPath)
+        {
+            using (var handle = TempDirectoriesFactory.CreateByUnzippingFile(zipFileFullPath))
+            {
+                PopulateFromDir(handle.AbsolutePath);
+            }
+            return this;
+        }
+
         public void Dispose()
         {
             dir.Dispose();

@@ -13,6 +13,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules
     public class TestsBase : AssertionHelper
     {
         internal string TestPaksDirFullPath { get; private set; }
+        internal string TestPaksZippedDirFullPath { get; private set; }
 
         public const int FileSystemDelayMillis = 20;
 
@@ -28,6 +29,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules
         public void BaseSetup()
         {
             TestPaksDirFullPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "TestPaks");
+            TestPaksZippedDirFullPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "TestPaksZipped");
         }
 
         [TearDown]

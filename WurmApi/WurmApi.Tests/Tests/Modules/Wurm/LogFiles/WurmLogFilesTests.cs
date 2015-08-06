@@ -21,7 +21,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogFiles
         [SetUp]
         public void Setup()
         {
-            ClientMock.PopulateFromDir(Path.Combine(TestPaksDirFullPath, "logs-samples-emptyfiles"));
+            //ClientMock.PopulateFromDir(Path.Combine(TestPaksDirFullPath, "logs-samples-emptyfiles"));
+            ClientMock.PopulateFromZip(Path.Combine(TestPaksZippedDirFullPath, "logs-samples-emptyfiles.7z"));
 
             TestGuyDirectoryInfo =
                 new DirectoryInfo(ClientMock.InstallDirectory.FullPath)

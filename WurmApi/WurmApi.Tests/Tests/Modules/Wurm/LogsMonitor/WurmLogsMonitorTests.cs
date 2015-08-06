@@ -21,7 +21,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogsMonitor
             scope = TimeStub.CreateStubbedScope();
             scope.OverrideNowOffset(new DateTimeOffset(2014, 1, 1, 0, 0, 0, TimeSpan.Zero));
             scope.OverrideNow(new DateTime(2014, 1, 1, 0, 0, 0));
-            ClientMock.PopulateFromDir(Path.Combine(TestPaksDirFullPath, "logs-samples-forLogsMonitor"));
+            //ClientMock.PopulateFromDir(Path.Combine(TestPaksDirFullPath, "logs-samples-forLogsMonitor"));
+            ClientMock.PopulateFromZip(Path.Combine(TestPaksZippedDirFullPath, "logs-samples-forLogsMonitor.7z"));
             System = Fixture.WurmApiManager.WurmLogsMonitor;
         }
 

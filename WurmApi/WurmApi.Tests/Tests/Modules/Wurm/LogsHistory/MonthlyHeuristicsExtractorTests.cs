@@ -29,7 +29,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogsHistory
         [SetUp]
         public void Setup()
         {
-            logsDir = TempDirectoriesFactory.CreateByCopy(Path.Combine(TestPaksDirFullPath, "MonthlyHeuristicsExtractor-sample-logs"));
+            //logsDir = TempDirectoriesFactory.CreateByCopy(Path.Combine(TestPaksDirFullPath, "MonthlyHeuristicsExtractor-sample-logs"));
+            logsDir = TempDirectoriesFactory.CreateByUnzippingFile(Path.Combine(TestPaksZippedDirFullPath, "MonthlyHeuristicsExtractor-sample-logs.7z"));
             string basePath = logsDir.AbsolutePath;
 
             testFile = new FileInfo(Path.Combine(basePath, "Village.2013-03.txt"));
