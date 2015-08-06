@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using AldursLab.Testing;
 using AldurSoft.WurmApi.Infrastructure;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
+using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
 using AldurSoft.WurmApi.Modules.Events.Public;
 using AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories;
 using AldurSoft.WurmApi.Modules.Wurm.Configs;
@@ -17,17 +19,24 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.Configs
 {
     public class WurmConfigsTests : WurmTests
     {
-        //private const string CompactConfigName = "compact";
-
         public IWurmConfigs System { get { return Fixture.WurmApiManager.WurmConfigs; } }
+        EventAwaiter<EventArgs> awaiter;
+        Builders.WurmClient.WurmConfig configMock;
+
+        [SetUp]
+        public void Setup()
+        {
+            var batmobile = "batmobile";
+            configMock = ClientMock.AddConfig(batmobile);
+
+            awaiter = new EventAwaiter<EventArgs>();
+            System.AnyConfigChanged += awaiter.Handle;
+        }
 
         [Test]
         public void ReadingConfig()
         {
-            var batmobile = "batmobile";
-            ClientMock.AddConfig(batmobile);
-
-            var config = System.GetConfig(batmobile);
+            IWurmConfig config = System.GetConfig(configMock.Name);
 
             // verifying against values in default config template attached to this project
 
@@ -45,19 +54,19 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.Configs
             Assert.AreEqual(true, config.TimestampMessages);
             Assert.AreEqual(false, config.NoSkillMessageOnAlignmentChange);
             Assert.AreEqual(false, config.NoSkillMessageOnFavorChange);
+
+            Assert.AreEqual(true, config.HasBeenRead);
         }
 
         [Test]
         public void TriggersEventOnChanged()
         {
-            var batmobile = "batmobile";
-            var configMock = ClientMock.AddConfig(batmobile);
+            IWurmConfig config = System.GetConfig(configMock.Name);
 
-            var config = System.GetConfig(batmobile);
             Expect(config.NoSkillMessageOnFavorChange, False);
 
-            var awaiter = new EventAwaiter<EventArgs>();
-            config.ConfigChanged += awaiter.Handle;
+            var configAwaiter = new EventAwaiter<EventArgs>();
+            config.ConfigChanged += configAwaiter.Handle;
 
             configMock.GameSettings.ChangeValue("skillgain_no_favor", "true");
 
@@ -69,11 +78,35 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.Configs
         [Test]
         public void GetsName()
         {
-            var batmobile = "batmobile";
-            ClientMock.AddConfig(batmobile);
+            IWurmConfig config = System.GetConfig(configMock.Name);
+            Expect(config.Name, EqualTo(configMock.Name));
+        }
 
-            var config = System.GetConfig(batmobile);
-            Expect(config.Name, EqualTo(batmobile));
+        [Test]
+        public void AddsNewConfig()
+        {
+            var configMock2 = ClientMock.AddConfig("batmobile2");
+            var config2 = WaitUntilConfigAvailable(configMock2.Name);
+            Expect(config2.Name, EqualTo(configMock2.Name).IgnoreCase);
+        }
+
+        IWurmConfig WaitUntilConfigAvailable(string configName)
+        {
+            IWurmConfig config = null;
+            awaiter.WaitUntilMatch(list =>
+            {
+                try
+                {
+                    config = System.GetConfig(configName);
+                    return true;
+                }
+                catch (Exception exception)
+                {
+                    Trace.WriteLine(exception.Message);
+                    return false;
+                }
+            });
+            return config;
         }
     }
 }

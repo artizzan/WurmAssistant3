@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.JobRunning;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
@@ -24,73 +25,57 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
         readonly IWurmLogDefinitions wurmLogDefinitions;
         readonly IInternalEventAggregator eventAggregator;
         readonly IInternalEventInvoker internalEventInvoker;
+        readonly TaskManager taskManager;
 
         IReadOnlyDictionary<CharacterName, WurmCharacterLogFiles> characterNormalizedNameToWatcherMap =
             new Dictionary<CharacterName, WurmCharacterLogFiles>();
 
-        volatile int rebuildRequired = 1;
         readonly object locker = new object();
 
+        readonly TaskHandle taskHandle;
+
         internal WurmLogFiles(IWurmCharacterDirectories wurmCharacterDirectories, ILogger logger, IWurmLogDefinitions wurmLogDefinitions,
-            [NotNull] IInternalEventAggregator eventAggregator, [NotNull] IInternalEventInvoker internalEventInvoker)
+            [NotNull] IInternalEventAggregator eventAggregator, [NotNull] IInternalEventInvoker internalEventInvoker,
+            [NotNull] TaskManager taskManager)
         {
             if (wurmCharacterDirectories == null) throw new ArgumentNullException("wurmCharacterDirectories");
             if (logger == null) throw new ArgumentNullException("logger");
             if (wurmLogDefinitions == null) throw new ArgumentNullException("wurmLogDefinitions");
             if (eventAggregator == null) throw new ArgumentNullException("eventAggregator");
             if (internalEventInvoker == null) throw new ArgumentNullException("internalEventInvoker");
+            if (taskManager == null) throw new ArgumentNullException("taskManager");
             this.wurmCharacterDirectories = wurmCharacterDirectories;
             this.logger = logger;
             this.wurmLogDefinitions = wurmLogDefinitions;
             this.eventAggregator = eventAggregator;
             this.internalEventInvoker = internalEventInvoker;
+            this.taskManager = taskManager;
+
+            try
+            {
+                Refresh();
+            }
+            catch (Exception exception)
+            {
+                logger.Log(LogLevel.Error, "Error at initial WurmLogFiles refresh", this, exception);
+            }
 
             eventAggregator.Subscribe(this);
+            
+            taskHandle = new TaskHandle(Refresh, "WurmLogFiles refresh");
+            taskManager.Add(taskHandle);
+
+            taskHandle.Trigger();
         }
 
         public void Handle(CharacterDirectoriesChanged message)
         {
-            rebuildRequired = 1;
-        }
-
-        public IEnumerable<LogFileInfo> TryGetLogFiles(LogSearchParameters searchParameters)
-        {
-            searchParameters.AssertAreValid();
-
-            Refresh();
-
-            WurmCharacterLogFiles characterLogFiles;
-            if (characterNormalizedNameToWatcherMap.TryGetValue(searchParameters.CharacterName, out characterLogFiles))
-            {
-                if (searchParameters.PmCharacterName != null)
-                {
-                    return characterLogFiles.TryGetLogFilesForSpecificPm(
-                        searchParameters.DateFrom,
-                        searchParameters.DateTo,
-                        searchParameters.PmCharacterName);
-                }
-                else
-                {
-                    return characterLogFiles.GetLogFiles(searchParameters.DateFrom,
-                        searchParameters.DateTo, searchParameters.LogType);
-                }
-            }
-            else
-            {
-                logger.Log(
-                    LogLevel.Warn,
-                    string.Format("No log files watcher found for given search parameters: {0}", searchParameters),
-                    this,
-                    null);
-                return new LogFileInfo[0];
-            }
+            taskHandle.Trigger();
         }
 
         public IWurmCharacterLogFiles GetForCharacter([NotNull] CharacterName characterName)
         {
             if (characterName == null) throw new ArgumentNullException("characterName");
-
-            Refresh();
 
             WurmCharacterLogFiles manager;
             characterNormalizedNameToWatcherMap.TryGetValue(characterName, out manager);
@@ -102,56 +87,29 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
         }
 
 
-        private void Refresh()
+        void Refresh()
         {
-            if (rebuildRequired == 1)
+            List<Exception> errors = null;
+            lock (locker)
             {
-                lock (locker)
-                {
-                    if (Interlocked.CompareExchange(ref rebuildRequired, 0, 1) == 1)
-                    {
-                        var allDirNames = wurmCharacterDirectories.AllDirectoryNamesNormalized.ToArray();
-                        var oldMap = characterNormalizedNameToWatcherMap;
-                        var newMap = new Dictionary<CharacterName, WurmCharacterLogFiles>();
+                var allDirNames = wurmCharacterDirectories.AllDirectoryNamesNormalized.ToArray();
+                var oldMap = characterNormalizedNameToWatcherMap;
+                var newMap = new Dictionary<CharacterName, WurmCharacterLogFiles>();
 
-                        AddNewFileManagers(allDirNames, oldMap, newMap);
+                errors = AddNewFileManagers(allDirNames, oldMap, newMap);
 
-                        DisposeOldFileManagers(oldMap, allDirNames);
-
-                        characterNormalizedNameToWatcherMap = newMap;
-                    }
-                }
+                characterNormalizedNameToWatcherMap = newMap;
             }
-            
-        }
-
-        void DisposeOldFileManagers(IReadOnlyDictionary<CharacterName, WurmCharacterLogFiles> oldMap, string[] allDirNames)
-        {
-            foreach (var characterName in oldMap.Keys.ToArray())
+            if (errors != null && errors.Any())
             {
-                if (!allDirNames.Contains(characterName.Normalized))
-                {
-                    WurmCharacterLogFiles logFiles;
-                    if (oldMap.TryGetValue(characterName, out logFiles))
-                    {
-                        logFiles.Dispose();
-                    }
-                    else
-                    {
-                        logger.Log(
-                            LogLevel.Warn,
-                            string.Format(
-                                "Characters directory no longer contains character {0}, but that character logs were not being monitored.",
-                                characterName),
-                            this,
-                            null);
-                    }
-                }
+                throw new AggregateException(errors);
             }
         }
 
-        void AddNewFileManagers(string[] allDirNames, IReadOnlyDictionary<CharacterName, WurmCharacterLogFiles> oldMap, Dictionary<CharacterName, WurmCharacterLogFiles> newMap)
+        List<Exception> AddNewFileManagers(string[] allDirNames, IReadOnlyDictionary<CharacterName, WurmCharacterLogFiles> oldMap, Dictionary<CharacterName, WurmCharacterLogFiles> newMap)
         {
+            List<Exception> exceptions = new List<Exception>();
+
             foreach (var dirName in allDirNames)
             {
                 var charName = new CharacterName(dirName);
@@ -168,16 +126,15 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
                             logsDirPath,
                             logger,
                             new LogFileInfoFactory(wurmLogDefinitions, logger),
-                            internalEventInvoker);
+                            internalEventInvoker,
+                            taskManager);
 
                         newMap.Add(charName, logFiles);
                     }
-                    catch (DataNotFoundException exception)
+                    catch (Exception exception)
                     {
-                        logger.Log(LogLevel.Warn,
-                            string.Format(
-                                "Could not create log files manager for character {0} due to missing logs directory. Perhaps it was deleted?",
-                                charName), this, exception);
+                        logger.Log(LogLevel.Error, "Error at WurmLogFiles refresh for character: " + charName, this, exception);
+                        exceptions.Add(exception);
                     }
                 }
                 else
@@ -185,10 +142,13 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
                     newMap.Add(charName, logFiles);
                 }
             }
+
+            return exceptions;
         }
 
         public void Dispose()
         {
+            taskManager.Remove(taskHandle);
             eventAggregator.Unsubscribe(this);
             foreach (var characterLogFiles in characterNormalizedNameToWatcherMap.Values)
             {

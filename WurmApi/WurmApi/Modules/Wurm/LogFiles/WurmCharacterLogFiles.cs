@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using AldursLab.Essentials;
 using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.JobRunning;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
@@ -18,6 +19,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
     {
         readonly ILogger logger;
         readonly LogFileInfoFactory logFileInfoFactory;
+        readonly TaskManager taskManager;
 
         IReadOnlyDictionary<LogType, LogTypeManager> wurmLogTypeToLogTypeManagerMap =
             new Dictionary<LogType, LogTypeManager>();
@@ -26,30 +28,38 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
 
         readonly HashSet<string> blacklistedFileNames = new HashSet<string>();
 
-        volatile int rebuildRequired = 1;
         readonly object locker = new object();
         readonly FileSystemWatcher directoryWatcher;
 
         readonly InternalEvent onFilesAddedOrRemoved;
 
-        internal WurmCharacterLogFiles(
-            [NotNull] CharacterName characterName,
-            [NotNull] string fullDirPathToCharacterLogsDir,
-            [NotNull] ILogger logger,
-            [NotNull] LogFileInfoFactory logFileInfoFactory, 
-            [NotNull] IInternalEventInvoker internalEventInvoker)
+        readonly TaskHandle taskHandle;
+
+        internal WurmCharacterLogFiles([NotNull] CharacterName characterName, [NotNull] string fullDirPathToCharacterLogsDir, [NotNull] ILogger logger, [NotNull] LogFileInfoFactory logFileInfoFactory, [NotNull] IInternalEventInvoker internalEventInvoker,
+            [NotNull] TaskManager taskManager)
         {
             if (characterName == null) throw new ArgumentNullException("characterName");
             if (fullDirPathToCharacterLogsDir == null) throw new ArgumentNullException("fullDirPathToCharacterLogsDir");
             if (logger == null) throw new ArgumentNullException("logger");
             if (logFileInfoFactory == null) throw new ArgumentNullException("logFileInfoFactory");
             if (internalEventInvoker == null) throw new ArgumentNullException("internalEventInvoker");
+            if (taskManager == null) throw new ArgumentNullException("taskManager");
             this.logger = logger;
             this.logFileInfoFactory = logFileInfoFactory;
+            this.taskManager = taskManager;
             CharacterName = characterName;
             FullDirPathToCharacterLogsDir = fullDirPathToCharacterLogsDir;
 
             onFilesAddedOrRemoved = internalEventInvoker.Create(() => new CharacterLogFilesAddedOrRemoved(CharacterName));
+
+            try
+            {
+                Refresh();
+            }
+            catch (Exception exception)
+            {
+                logger.Log(LogLevel.Error, "Error at initial WurmCharacterLogFiles refresh: " + CharacterName, this, exception);
+            }
 
             directoryWatcher = new FileSystemWatcher(fullDirPathToCharacterLogsDir)
             {
@@ -59,29 +69,29 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
             directoryWatcher.Created += DirectoryWatcherOnChanged;
             directoryWatcher.Deleted += DirectoryWatcherOnChanged;
             directoryWatcher.Renamed += DirectoryWatcherOnChanged;
+            directoryWatcher.Changed += DirectoryWatcherOnChanged;
 
             directoryWatcher.EnableRaisingEvents = true;
 
-            // if some log files have been created before watcher started watching
-            if (Directory.EnumerateFiles(fullDirPathToCharacterLogsDir).Any())
-            {
-                onFilesAddedOrRemoved.Trigger();
-            }
+            taskHandle = new TaskHandle(Refresh, "WurmCharacterLogFiles refresh: " + CharacterName);
+            taskManager.Add(taskHandle);
+
+            taskHandle.Trigger();
         }
 
         public CharacterName CharacterName { get; private set; }
         public string FullDirPathToCharacterLogsDir { get; private set; }
         public DateTime OldestLogFileDate { get { return oldestLogFileDate.Value; }}
 
+        public bool HasBeenInitiallyRefreshed { get; private set; }
+
         void DirectoryWatcherOnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
-            rebuildRequired = 1;
-            onFilesAddedOrRemoved.Trigger();
+            taskHandle.Trigger();
         }
 
         public IEnumerable<LogFileInfo> GetLogFiles(DateTime dateFrom, DateTime dateTo)
         {
-            Refresh();
             List<LogFileInfo> files = new List<LogFileInfo>();
             foreach (var typeManager in wurmLogTypeToLogTypeManagerMap.Values)
             {
@@ -92,7 +102,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
 
         public IEnumerable<LogFileInfo> GetLogFiles(DateTime dateFrom, DateTime dateTo, LogType logType)
         {
-            Refresh();
             LogTypeManager logTypeManager;
             if (wurmLogTypeToLogTypeManagerMap.TryGetValue(logType, out logTypeManager))
             {
@@ -107,31 +116,25 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
 
         public IEnumerable<LogFileInfo> TryGetLogFilesForSpecificPm(DateTime dateFrom, DateTime dateTo, CharacterName pmCharacterName)
         {
-            Refresh();
             var allPmLogs = GetLogFiles(dateFrom, dateTo, LogType.Pm);
             return
                 allPmLogs.Where(
                     info => info.FileName.IndexOf(pmCharacterName.Normalized, StringComparison.InvariantCultureIgnoreCase) > -1);
         }
 
-        private void Refresh()
+        void Refresh()
         {
-            if (rebuildRequired == 1)
+            lock (locker)
             {
-                lock (locker)
+                List<LogFileInfo> parsedFiles = ObtainLatestFiles();
+                if (parsedFiles.Any())
                 {
-                    if (Interlocked.CompareExchange(ref rebuildRequired, 0, 1) == 1)
-                    {
-                        List<LogFileInfo> parsedFiles = ObtainLatestFiles();
-                        if (parsedFiles.Any())
-                        {
-                            oldestLogFileDate.Value = parsedFiles.Min(info => info.LogFileDate.DateTime);
-                        }
-                        UpdateTypeManagers(parsedFiles);
-                    }
+                    oldestLogFileDate.Value = parsedFiles.Min(info => info.LogFileDate.DateTime);
                 }
+                UpdateTypeManagers(parsedFiles);
+                HasBeenInitiallyRefreshed = true;
             }
-
+            onFilesAddedOrRemoved.Trigger();
         }
 
         private void UpdateTypeManagers(List<LogFileInfo> parsedFiles)
@@ -222,6 +225,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogFiles
 
         public void Dispose()
         {
+            taskManager.Remove(taskHandle);
             directoryWatcher.EnableRaisingEvents = false;
             directoryWatcher.Dispose();
         }

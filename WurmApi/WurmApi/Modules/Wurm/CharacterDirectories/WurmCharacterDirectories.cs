@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AldurSoft.WurmApi.JobRunning;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
@@ -17,8 +18,8 @@ namespace AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories
     {
         readonly IInternalEventAggregator eventAggregator;
 
-        public WurmCharacterDirectories(IWurmPaths wurmPaths, [NotNull] IInternalEventAggregator eventAggregator)
-            : base(wurmPaths.CharactersDirFullPath)
+        public WurmCharacterDirectories(IWurmPaths wurmPaths, [NotNull] IInternalEventAggregator eventAggregator, TaskManager taskManager)
+            : base(wurmPaths.CharactersDirFullPath, taskManager, () => eventAggregator.Send(new CharacterDirectoriesChanged()))
         {
             if (eventAggregator == null) throw new ArgumentNullException("eventAggregator");
             this.eventAggregator = eventAggregator;
@@ -38,11 +39,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.CharacterDirectories
         public bool Exists(CharacterName characterName)
         {
             return base.AllDirectoryNamesNormalized.Any(s => new CharacterName(s) == characterName);
-        }
-
-        protected override void OnDirectoriesChanged()
-        {
-            eventAggregator.Send(new CharacterDirectoriesChanged());
         }
     }
 }

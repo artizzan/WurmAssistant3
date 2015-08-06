@@ -37,5 +37,22 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm
             Fixture.WurmApiManager.Dispose();
             Fixture.WurmClientMock.Dispose();
         }
+
+        protected void WaitUntilTrue(Func<bool> conditionFunc, int timeoutMillis = 5000)
+        {
+            int currentWait = 0;
+            while (true)
+            {
+                const int loopMillis = 50;
+                Thread.Sleep(loopMillis);
+                currentWait += loopMillis;
+                var result = conditionFunc();
+                if (result) break;
+                if (currentWait > timeoutMillis)
+                {
+                    throw new Exception("timeout");
+                }
+            }
+        }
     }
 }

@@ -51,7 +51,8 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
             return TaskHelper.UnwrapSingularAggegateException(() => ScanAsync(logSearchParameters).Result);
         }
 
-        public virtual async Task<IList<LogEntry>> ScanAsync(LogSearchParameters logSearchParameters, CancellationToken cancellationToken)
+        public virtual async Task<IList<LogEntry>> ScanAsync(LogSearchParameters logSearchParameters,
+            CancellationToken cancellationToken)
         {
             var result = await runner.Run(logSearchParameters, cancellationToken).ConfigureAwait(false);
             return result.LogEntries;

@@ -35,7 +35,17 @@ namespace AldurSoft.WurmApi.Utility
             {
                 if (exception.InnerExceptions.Count == 1)
                 {
-                    ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
+                    // for some reason, OperationCancelledException is converted to TaskCancelledException
+                    // when accessing .Result of an async method Task.
+                    var taskCancelledException = exception.InnerException as TaskCanceledException;
+                    if (taskCancelledException != null)
+                    {
+                        throw new OperationCanceledException("Operation cancelled", taskCancelledException);
+                    }
+                    else
+                    {
+                        ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
+                    }
                 }
                 throw;
             }

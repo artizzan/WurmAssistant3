@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.JobRunning;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Public;
@@ -57,11 +58,20 @@ namespace AldurSoft.WurmApi
             WurmApiDataDirectory dataDirectory,
             WurmInstallDirectory installDirectory,
             ILogger wurmApiLogger,
-            IEventMarshaller eventMarshaller = null)
+            IEventMarshaller publicEventMarshaller = null)
         {
-            if (eventMarshaller == null) eventMarshaller = new ThreadPoolMarshaller(wurmApiLogger);
+            var threadPoolMarshaller = new ThreadPoolMarshaller(wurmApiLogger);
+            if (publicEventMarshaller == null)
+            {
+                publicEventMarshaller = threadPoolMarshaller;
+            }
             IHttpWebRequests httpRequests = new HttpWebRequests();
-            ConstructSystems(dataDirectory.FullPath, installDirectory, httpRequests, wurmApiLogger, eventMarshaller);
+            ConstructSystems(dataDirectory.FullPath,
+                installDirectory,
+                httpRequests,
+                wurmApiLogger,
+                publicEventMarshaller,
+                threadPoolMarshaller);
         }
 
         /// <summary>
@@ -73,16 +83,16 @@ namespace AldurSoft.WurmApi
             IHttpWebRequests httpWebRequests,
             ILogger logger)
         {
-            ConstructSystems(dataDir, installDirectory, httpWebRequests, logger, new ThreadPoolMarshaller(logger));
+            ConstructSystems(dataDir, installDirectory, httpWebRequests, logger, new SimpleMarshaller(), new SimpleMarshaller());
         }
 
         void ConstructSystems(string wurmApiDataDirectoryFullPath, IWurmInstallDirectory installDirectory,
-            IHttpWebRequests httpWebRequests, ILogger logger, IEventMarshaller publicEventMarshaller)
+            IHttpWebRequests httpWebRequests, ILogger logger, IEventMarshaller publicEventMarshaller, IEventMarshaller internalEventMarshaller)
         {
             Wire(installDirectory);
             Wire(httpWebRequests);
 
-            ThreadPoolMarshaller internalEventMarshaller = new ThreadPoolMarshaller(logger);
+            TaskManager taskManager = new TaskManager(logger);
 
             InternalEventAggregator internalEventAggregator = new InternalEventAggregator();
             PublicEventInvoker publicEventInvoker = new PublicEventInvoker(publicEventMarshaller, logger);
@@ -94,19 +104,29 @@ namespace AldurSoft.WurmApi
 
             WurmLogDefinitions logDefinitions = Wire(new WurmLogDefinitions());
 
-            WurmConfigDirectories configDirectories = Wire(new WurmConfigDirectories(paths, internalEventAggregator));
-            WurmCharacterDirectories characterDirectories = Wire(new WurmCharacterDirectories(paths, internalEventAggregator));
+            WurmConfigDirectories configDirectories = Wire(new WurmConfigDirectories(paths, internalEventAggregator, taskManager));
+            WurmCharacterDirectories characterDirectories = Wire(new WurmCharacterDirectories(paths, internalEventAggregator, taskManager));
             WurmLogFiles logFiles =
                 Wire(new WurmLogFiles(characterDirectories, logger, logDefinitions, internalEventAggregator,
-                    internalEventInvoker));
+                    internalEventInvoker, taskManager));
 
             WurmLogsMonitor logsMonitor =
-                Wire(new WurmLogsMonitor(logFiles, logger, publicEventInvoker, internalEventAggregator,
-                    characterDirectories, internalEventInvoker));
+                Wire(new WurmLogsMonitor(logFiles,
+                    logger,
+                    publicEventInvoker,
+                    internalEventAggregator,
+                    characterDirectories,
+                    internalEventInvoker,
+                    taskManager));
             var heuristicsDataDirectory = Path.Combine(wurmApiDataDirectoryFullPath, "WurmLogsHistory");
             WurmLogsHistory logsHistory = Wire(new WurmLogsHistory(logFiles, logger, heuristicsDataDirectory));
 
-            WurmConfigs wurmConfigs = Wire(new WurmConfigs(configDirectories, logger, publicEventInvoker, internalEventAggregator));
+            WurmConfigs wurmConfigs =
+                Wire(new WurmConfigs(configDirectories,
+                    logger,
+                    publicEventInvoker,
+                    internalEventAggregator,
+                    taskManager));
             WurmAutoruns autoruns = Wire(new WurmAutoruns(wurmConfigs, characterDirectories, logger));
 
             var wurmServerHistoryDataDirectory = Path.Combine(wurmApiDataDirectoryFullPath, "WurmServerHistory");

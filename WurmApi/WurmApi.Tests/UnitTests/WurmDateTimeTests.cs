@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using AldurSoft.WurmApi.Tests.Tools;
-using Newtonsoft.Json;
-
 using NUnit.Framework;
 
-namespace AldurSoft.WurmApi.Tests
+namespace AldurSoft.WurmApi.Tests.UnitTests
 {
     [TestFixture]
     public class WurmDateTimeTests

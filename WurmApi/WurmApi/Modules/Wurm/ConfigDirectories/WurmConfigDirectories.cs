@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using AldurSoft.WurmApi.JobRunning;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
@@ -18,8 +19,8 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories
     {
         readonly IInternalEventAggregator eventAggregator;
 
-        public WurmConfigDirectories(IWurmPaths wurmPaths, [NotNull] IInternalEventAggregator eventAggregator)
-            : base(wurmPaths.ConfigsDirFullPath)
+        public WurmConfigDirectories(IWurmPaths wurmPaths, [NotNull] IInternalEventAggregator eventAggregator, TaskManager taskManager)
+            : base(wurmPaths.ConfigsDirFullPath, taskManager, () => eventAggregator.Send(new ConfigDirectoriesChanged()))
         {
             if (eventAggregator == null) throw new ArgumentNullException("eventAggregator");
             this.eventAggregator = eventAggregator;
@@ -44,11 +45,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ConfigDirectories
                         this.DirectoryFullPath));
             }
             return file.FullName;
-        }
-
-        protected override void OnDirectoriesChanged()
-        {
-            eventAggregator.Send(new ConfigDirectoriesChanged());
         }
     }
 }

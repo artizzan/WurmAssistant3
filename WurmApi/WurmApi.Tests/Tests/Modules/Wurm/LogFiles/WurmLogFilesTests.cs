@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
@@ -192,12 +193,23 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogFiles
             [Test]
             public void CreatesManagerForNewCharacter()
             {
-                var directoriesChangedSubscriber = new Subscriber<CharacterDirectoriesChanged>(Fixture.WurmApiManager.InternalEventAggregator);
                 CreateNewCharacterEmptyDir("Newguy");    
                 // there is a delay before new directory gets observed
-                directoriesChangedSubscriber.WaitMessages(1);
-
-                var manager = System.GetForCharacter(new CharacterName("Newguy"));
+                IWurmCharacterLogFiles manager = null;
+                WaitUntilTrue(() =>
+                {
+                    try
+                    {
+                        manager = System.GetForCharacter(new CharacterName("Newguy"));
+                        return true;
+                    }
+                    catch (Exception exception)
+                    {
+                        Trace.WriteLine(exception.Message);
+                        return false;
+                    }
+                });
+                
                 var files = manager.GetLogFiles(DateTime.MinValue, DateTime.MaxValue);
                 Expect(files.Count(), EqualTo(0));
             }
@@ -231,13 +243,26 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogFiles
             {
                 var newCharacterName = new CharacterName("Figurant");
 
-                Expect(subscriber.ReceivedMessages.Count(), EqualTo(0));
-                var directoriesChangedSubscriber = new Subscriber<CharacterDirectoriesChanged>(Fixture.WurmApiManager.InternalEventAggregator);
+                Expect(subscriber.ReceivedMessages.Count(m => m.CharacterName == newCharacterName), EqualTo(0));
 
                 CreateNewCharacterDirWithALog("Figurant", "_Event.2012-07.txt");
-                directoriesChangedSubscriber.WaitMessages(1);
-                var manager = System.GetForCharacter(newCharacterName);
-                subscriber.WaitMessages(1, m => m.CharacterName == new CharacterName("Figurant"));
+
+                IWurmCharacterLogFiles manager = null;
+                WaitUntilTrue(() =>
+                {
+                    try
+                    {
+                        manager = System.GetForCharacter(newCharacterName);
+                        return true;
+                    }
+                    catch (Exception exception)
+                    {
+                        Trace.WriteLine(exception.Message);
+                        return false;
+                    }
+                });
+
+                subscriber.WaitMessages(1, m => m.CharacterName == newCharacterName);
                 var results = manager.GetLogFiles(DateTime.MinValue, DateTime.MaxValue, LogType.Event);
                 Expect(results.Count(), EqualTo(1));
             }

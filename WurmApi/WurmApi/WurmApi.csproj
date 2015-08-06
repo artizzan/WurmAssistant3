@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="CharacterName.cs" />
     <Compile Include="IEventMarshaller.cs" />
+    <Compile Include="JobRunning\ITaskManager.cs" />
     <Compile Include="Modules\Events\Public\IEventInvoker.cs" />
     <Compile Include="Modules\Wurm\LogsHistory\Heuristics\PersistentModel\WurmCharacterLogsEntity.cs" />
     <Compile Include="Modules\Wurm\LogsHistory\Heuristics\PersistentModel\WurmLogMonthlyFile.cs" />

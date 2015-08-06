@@ -127,14 +127,14 @@
     <Compile Include="Tests\Modules\Wurm\LogDefinitions\WurmLogDefinitionsTests.cs" />
     <Compile Include="Tests\Modules\Wurm\LogFiles\WurmLogFilesTests.cs" />
     <Compile Include="Tests\Modules\Wurm\LogsHistory\MonthlyHeuristicsExtractorTests.cs" />
-    <Compile Include="Tests\WurmLogsHistoryTests.cs" />
+    <Compile Include="Tests\Modules\Wurm\LogsHistory\WurmLogsHistoryTests.cs" />
     <Compile Include="Tests\Modules\Wurm\LogsMonitor\WurmLogsMonitorTests.cs" />
     <Compile Include="Tests\Modules\Wurm\ServerHistory\SortedServerHistoryTests.cs" />
     <Compile Include="Tests\WurmServerHistoryTests.cs" />
     <Compile Include="Tests\WurmServersTests.cs" />
     <Compile Include="WurmApiFixtureBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\WurmDateTimeTests.cs" />
+    <Compile Include="UnitTests\WurmDateTimeTests.cs" />
     <Compile Include="WurmApiFixtureV2.cs" />
     <Compile Include="WurmApiIntegrationFixtureBase.cs" />
   </ItemGroup>

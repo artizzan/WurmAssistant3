@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.Essentials.Extensions.DotNet.Collections.Generic;
 using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.JobRunning;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Internal.Messages;
 using AldurSoft.WurmApi.Modules.Events.Public;
@@ -20,8 +21,9 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
         readonly ILogger logger;
         readonly IPublicEventInvoker publicEventInvoker;
         readonly IInternalEventAggregator internalEventAggregator;
-        readonly IWurmCharacterDirectories wumCharacterDirectories;
+        readonly IWurmCharacterDirectories wurmCharacterDirectories;
         readonly InternalEventInvoker internalEventInvoker;
+        readonly TaskManager taskManager;
 
         IReadOnlyDictionary<CharacterName, LogsMonitorEngineManager> characterNameToEngineManagers =
             new Dictionary<CharacterName, LogsMonitorEngineManager>();
@@ -32,27 +34,41 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
         volatile bool stop = false;
         readonly object locker = new object();
 
+        TaskHandle taskHandle;
+
         public WurmLogsMonitor([NotNull] IWurmLogFiles wurmLogFiles, [NotNull] ILogger logger,
             [NotNull] IPublicEventInvoker publicEventInvoker, [NotNull] IInternalEventAggregator internalEventAggregator,
-            [NotNull] IWurmCharacterDirectories wumCharacterDirectories,
-            [NotNull] InternalEventInvoker internalEventInvoker)
+            [NotNull] IWurmCharacterDirectories wurmCharacterDirectories,
+            [NotNull] InternalEventInvoker internalEventInvoker, [NotNull] TaskManager taskManager)
         {
             if (wurmLogFiles == null) throw new ArgumentNullException("wurmLogFiles");
             if (logger == null) throw new ArgumentNullException("logger");
             if (publicEventInvoker == null) throw new ArgumentNullException("publicEventInvoker");
             if (internalEventAggregator == null) throw new ArgumentNullException("internalEventAggregator");
-            if (wumCharacterDirectories == null) throw new ArgumentNullException("wumCharacterDirectories");
+            if (wurmCharacterDirectories == null) throw new ArgumentNullException("wurmCharacterDirectories");
             if (internalEventInvoker == null) throw new ArgumentNullException("internalEventInvoker");
+            if (taskManager == null) throw new ArgumentNullException("taskManager");
             this.wurmLogFiles = wurmLogFiles;
             this.logger = logger;
             this.publicEventInvoker = publicEventInvoker;
             this.internalEventAggregator = internalEventAggregator;
-            this.wumCharacterDirectories = wumCharacterDirectories;
+            this.wurmCharacterDirectories = wurmCharacterDirectories;
             this.internalEventInvoker = internalEventInvoker;
+            this.taskManager = taskManager;
+
+            try
+            {
+                Rebuild();
+            }
+            catch (Exception exception)
+            {
+                logger.Log(LogLevel.Error, "Error at WurmLogsMonitor initial rebuild", this, exception);
+            }
 
             internalEventAggregator.Subscribe(this);
 
-            Rebuild();
+            taskHandle = new TaskHandle(Rebuild, "WurmLogsMonitor rebuild");
+            taskManager.Add(taskHandle);
 
             updater = new Task(() =>
             {
@@ -69,11 +85,13 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
                 }
             }, TaskCreationOptions.LongRunning);
             updater.Start();
+
+            taskHandle.Trigger();
         }
 
         public void Handle(CharacterDirectoriesChanged message)
         {
-            Rebuild();
+            taskHandle.Trigger();
         }
 
         public void Subscribe(CharacterName characterName, LogType logType, EventHandler<LogsMonitorEventArgs> eventHandler)
@@ -157,36 +175,49 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsMonitor
 
         private void Rebuild()
         {
+            List<Exception> exceptions = new List<Exception>();
             lock (locker)
             {
-                var characters = wumCharacterDirectories.GetAllCharacters().ToHashSet();
+                var characters = wurmCharacterDirectories.GetAllCharacters().ToHashSet();
                 var newMap = characterNameToEngineManagers.ToDictionary(pair => pair.Key, pair => pair.Value);
                 foreach (var characterName in characters)
                 {
-                    LogsMonitorEngineManager man;
-                    if (!newMap.TryGetValue(characterName, out man))
+                    try
                     {
-                        var manager = new LogsMonitorEngineManager(
-                            characterName,
-                            new CharacterLogsMonitorEngineFactory(
+                        LogsMonitorEngineManager man;
+                        if (!newMap.TryGetValue(characterName, out man))
+                        {
+                            var manager = new LogsMonitorEngineManager(
+                                characterName,
+                                new CharacterLogsMonitorEngineFactory(
+                                    logger,
+                                    new SingleFileMonitorFactory(
+                                        new LogFileStreamReaderFactory(),
+                                        new LogFileParser(logger)),
+                                    wurmLogFiles.GetForCharacter(characterName),
+                                    internalEventAggregator),
+                                publicEventInvoker,
                                 logger,
-                                new SingleFileMonitorFactory(
-                                    new LogFileStreamReaderFactory(),
-                                    new LogFileParser(logger)),
-                                wurmLogFiles.GetForCharacter(characterName), 
-                                internalEventAggregator),
-                            publicEventInvoker,
-                            logger,
-                            internalEventInvoker);
-                        newMap.Add(characterName, manager);
+                                internalEventInvoker);
+                            newMap.Add(characterName, manager);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        exceptions.Add(exception);
                     }
                 }
                 characterNameToEngineManagers = newMap;
+            }
+            if (exceptions.Any())
+            {
+                throw new AggregateException(exceptions);
             }
         }
 
         public void Dispose()
         {
+            taskManager.Remove(taskHandle);
             stop = true;
             updater.Wait();
             updater.Dispose();

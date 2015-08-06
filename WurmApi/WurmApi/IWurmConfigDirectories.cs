@@ -16,7 +16,9 @@ namespace AldurSoft.WurmApi
         /// </summary>
         /// <param name="directoryName">Case insensitive</param>
         /// <returns></returns>
-        /// <exception cref="DataNotFoundException">Config does not exist.</exception>
+        /// <exception cref="DataNotFoundException">
+        /// No config file available in specified directory.
+        /// </exception>
         string GetGameSettingsFileFullPathForConfigName(string directoryName);
     }
 }

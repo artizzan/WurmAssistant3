@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Threading;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.JobRunning;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Public;
 using JetBrains.Annotations;
@@ -20,25 +21,22 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         // because there is no good way to ensure, that Wurm Game Client isn't accessing it at the moment
 
         readonly FileInfo gameSettingsFileInfo;
-        readonly ILogger logger;
-        readonly IPublicEventInvoker publicEventMarshaller;
+        readonly TaskManager taskManager;
 
         readonly ConfigReader configReader;
-        readonly ConfigWriter configWriter;
 
         readonly FileSystemWatcher configFileWatcher;
         readonly object locker = new object();
 
-        private volatile int rebuildPending = 1;
-
         readonly PublicEvent onConfigChanged;
 
-        internal WurmConfig(string gameSettingsFullPath, [NotNull] ILogger logger,
-            [NotNull] IPublicEventInvoker publicEventMarshaller)
+        readonly TaskHandle taskHandle;
+
+        internal WurmConfig(string gameSettingsFullPath, [NotNull] IPublicEventInvoker publicEventMarshaller,
+            [NotNull] TaskManager taskManager, ILogger logger)
         {
             if (gameSettingsFullPath == null) throw new ArgumentNullException("gameSettingsFullPath");
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (publicEventMarshaller == null) throw new ArgumentNullException("publicEventMarshaller");
+            if (taskManager == null) throw new ArgumentNullException("taskManager");
             this.gameSettingsFileInfo = new FileInfo(gameSettingsFullPath);
             if (gameSettingsFileInfo.Directory == null)
             {
@@ -47,14 +45,21 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
             }
             Name = gameSettingsFileInfo.Directory.Name;
 
-            this.logger = logger;
-            this.publicEventMarshaller = publicEventMarshaller;
+            this.taskManager = taskManager;
 
             onConfigChanged = publicEventMarshaller.Create(() => ConfigChanged.SafeInvoke(this),
                 WurmApiTuningParams.PublicEventMarshallerDelay);
 
             this.configReader = new ConfigReader(this);
-            this.configWriter = new ConfigWriter(this);
+
+            try
+            {
+                Refresh();
+            }
+            catch (Exception exception)
+            {
+                logger.Log(LogLevel.Error, "Error at initial config update: " + Name, this, exception);
+            }
 
             configFileWatcher = new FileSystemWatcher(gameSettingsFileInfo.Directory.FullName)
             {
@@ -66,13 +71,17 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
             configFileWatcher.Deleted += ConfigFileWatcherOnChanged;
             configFileWatcher.Renamed += ConfigFileWatcherOnChanged;
             configFileWatcher.EnableRaisingEvents = true;
+
+            taskHandle = new TaskHandle(Refresh, "WurmConfig update: " + Name);
+            taskManager.Add(taskHandle);
+
+            taskHandle.Trigger();
         }
 
         void ConfigFileWatcherOnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
-            this.rebuildPending = 1;
             //Trace.WriteLine(DateTime.Now.ToString("O"));
-            onConfigChanged.Trigger();
+            taskHandle.Trigger();
         }
 
         public string FullConfigFilePath
@@ -90,6 +99,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
 
         public void Dispose()
         {
+            taskManager.Remove(taskHandle);
             onConfigChanged.Detach();
             configFileWatcher.EnableRaisingEvents = false;
             configFileWatcher.Dispose();
@@ -118,7 +128,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                Refresh();
                 return customTimerSource;
             }
         }
@@ -127,7 +136,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                Refresh();
                 return execSource;
             }
         }
@@ -136,7 +144,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                Refresh();
                 return keyBindSource;
             }
         }
@@ -145,7 +152,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                Refresh();
                 return autoRunSource;
             }
         }
@@ -154,7 +160,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                Refresh();
                 return ircLoggingType;
             }
         }
@@ -163,7 +168,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                Refresh();
                 return otherLoggingType;
             }
         }
@@ -172,7 +176,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                Refresh();
                 return eventLoggingType;
             }
         }
@@ -181,7 +184,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                Refresh();
                 return skillGainRate;
             }
         }
@@ -190,7 +192,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                Refresh();
                 return noSkillMessageOnAlignmentChange;
             }
         }
@@ -199,7 +200,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                Refresh();
                 return noSkillMessageOnFavorChange;
             }
         }
@@ -208,7 +208,6 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                Refresh();
                 return saveSkillsOnQuit;
             }
         }
@@ -217,36 +216,34 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Configs
         {
             get
             {
-                Refresh();
                 return timestampMessages;
             }
         }
 
-        private void Refresh()
+        void Refresh()
         {
-            if (rebuildPending == 1)
+            lock (locker)
             {
-                lock (locker)
-                {
-                    if (Interlocked.CompareExchange(ref rebuildPending, 0, 1) == 1)
-                    {
-                        var result = this.configReader.ReadValues();
-                        this.customTimerSource = result.CustomTimerSource;
-                        this.execSource = result.ExecSource;
-                        this.keyBindSource = result.KeyBindSource;
-                        this.autoRunSource = result.AutoRunSource;
-                        this.ircLoggingType = result.IrcLoggingType;
-                        this.otherLoggingType = result.OtherLoggingType;
-                        this.eventLoggingType = result.EventLoggingType;
-                        this.skillGainRate = result.SkillGainRate;
-                        this.noSkillMessageOnAlignmentChange = result.NoSkillMessageOnAlignmentChange;
-                        this.noSkillMessageOnFavorChange = result.NoSkillMessageOnFavorChange;
-                        this.saveSkillsOnQuit = result.SaveSkillsOnQuit;
-                        this.timestampMessages = result.TimestampMessages;
-                    }
-                }
+                var result = this.configReader.ReadValues();
+                this.customTimerSource = result.CustomTimerSource;
+                this.execSource = result.ExecSource;
+                this.keyBindSource = result.KeyBindSource;
+                this.autoRunSource = result.AutoRunSource;
+                this.ircLoggingType = result.IrcLoggingType;
+                this.otherLoggingType = result.OtherLoggingType;
+                this.eventLoggingType = result.EventLoggingType;
+                this.skillGainRate = result.SkillGainRate;
+                this.noSkillMessageOnAlignmentChange = result.NoSkillMessageOnAlignmentChange;
+                this.noSkillMessageOnFavorChange = result.NoSkillMessageOnFavorChange;
+                this.saveSkillsOnQuit = result.SaveSkillsOnQuit;
+                this.timestampMessages = result.TimestampMessages;
+
+                this.HasBeenRead = true;
             }
+            onConfigChanged.Trigger();
         }
+
+        public bool HasBeenRead { get; private set; }
 
         #endregion
     }

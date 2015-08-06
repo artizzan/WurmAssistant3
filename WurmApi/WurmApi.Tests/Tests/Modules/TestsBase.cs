@@ -30,6 +30,12 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules
             TestPaksDirFullPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources", "TestPaks");
         }
 
+        [TearDown]
+        public void BaseTeardown()
+        {
+            if (TimeStub.CurrentScope != null) TimeStub.CurrentScope.Dispose();
+        }
+
         public void DoNothing() { }
         public void DoNothing<T1>(T1 arg1) { }
         public void DoNothing<T1, T2>(T1 arg1, T2 arg2) { }

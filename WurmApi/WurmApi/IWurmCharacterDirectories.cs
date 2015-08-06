@@ -5,8 +5,12 @@ namespace AldurSoft.WurmApi
 {
     public interface IWurmCharacterDirectories
     {
+        /// <summary>
+        /// </summary>
         IEnumerable<string> AllDirectoryNamesNormalized { get; }
 
+        /// <summary>
+        /// </summary>
         IEnumerable<string> AllDirectoriesFullPaths { get; }
 
         /// <summary>
@@ -14,7 +18,9 @@ namespace AldurSoft.WurmApi
         /// </summary>
         /// <param name="characterName">Case insensitive</param>
         /// <returns></returns>
-        /// <exception cref="DataNotFoundException">Character does not exist.</exception>
+        /// <exception cref="DataNotFoundException">
+        /// Directory for this character is not available.
+        /// </exception>
         string GetFullDirPathForCharacter(CharacterName characterName);
 
         /// <summary>

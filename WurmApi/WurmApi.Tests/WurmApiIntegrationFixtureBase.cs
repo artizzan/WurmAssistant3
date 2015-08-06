@@ -52,9 +52,8 @@ namespace AldurSoft.WurmApi.Tests
         }
 
         [TearDown]
-        public override void FixtureTeardown()
+        public void FixtureTeardown()
         {
-            base.FixtureTeardown();
             WurmApiManager.Dispose();
             DataDir.Dispose();
             wurmDir.Dispose();
