@@ -133,8 +133,9 @@ namespace AldurSoft.WurmApi
             WurmServerHistory wurmServerHistory =
                 Wire(new WurmServerHistory(wurmServerHistoryDataDirectory, logsHistory, serverList, logger, logsMonitor, logFiles));
 
+            var wurmServersDataDirectory = Path.Combine(wurmApiDataDirectoryFullPath, "WurmServers");
             WurmServers wurmServers =
-                Wire(new WurmServers(logsHistory, logsMonitor, serverList, httpWebRequests, "WurmServers",
+                Wire(new WurmServers(logsHistory, logsMonitor, serverList, httpWebRequests, wurmServersDataDirectory,
                     characterDirectories, wurmServerHistory, logger));
 
             WurmCharacters characters =

@@ -42,9 +42,14 @@ namespace AldurSoft.WurmApi.Modules.Wurm.LogsHistory
             }
             catch (Exception exception)
             {
-                logger.Log(LogLevel.Error,
-                    string.Format("Error during scan job execution, search params: {0}", logSearchParameters), this,
-                    exception);
+                var canceledException = exception as OperationCanceledException;
+                if (canceledException == null)
+                {
+                    logger.Log(LogLevel.Error,
+                        string.Format("Error during scan job execution, search params: {0}", logSearchParameters),
+                        this,
+                        exception);
+                }
                 throw;
             }
         }
