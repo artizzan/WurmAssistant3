@@ -41,11 +41,12 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
 
         public async Task<ServerName> GetServerAsync(CharacterName character, DateTime exactDate)
         {
-            return await runner.Run(new GetServerAtDateJob(character, exactDate), CancellationToken.None).ConfigureAwait(false);
+            return await GetServerAsync(character, exactDate, CancellationToken.None).ConfigureAwait(false);
         }
 
         public async Task<ServerName> GetServerAsync(CharacterName character, DateTime exactDate, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await runner.Run(new GetServerAtDateJob(character, exactDate), cancellationToken).ConfigureAwait(false);
         }
 
@@ -61,11 +62,12 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
 
         public async Task<ServerName> GetCurrentServerAsync(CharacterName character)
         {
-            return await runner.Run(new GetCurrentServerJob(character), CancellationToken.None).ConfigureAwait(false);
+            return await GetCurrentServerAsync(character, CancellationToken.None).ConfigureAwait(false);
         }
 
         public async Task<ServerName> GetCurrentServerAsync(CharacterName character, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await runner.Run(new GetCurrentServerJob(character), cancellationToken).ConfigureAwait(false);
         }
 

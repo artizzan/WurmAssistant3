@@ -144,6 +144,8 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
                 // no data, we should continue
             }
 
+            jobCancellationManager.ThrowIfCancelled();
+
             bool found = false;
 
             if (persistentData.Entity.AnySearchCompleted)
@@ -196,7 +198,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.ServerHistory
                     DateFrom = dateFrom,
                     DateTo = dateTo,
                     LogType = LogType.Event
-                });
+                }, jobCancellationManager.GetLinkedToken());
 
             UpdateEntity(dateFrom, dateTo);
 

@@ -43,7 +43,7 @@ namespace AldurSoft.WurmApi.Tests.Helpers
             foreach (var logEntry in contents)
             {
                 ValidateEntry(logEntry);
-                var t = "[" + logEntry.Timestamp.ToString("hh:MM:ss") + "] ";
+                var t = "[" + logEntry.Timestamp.ToString("hh:mm:ss") + "] ";
                 var src = !string.IsNullOrEmpty(logEntry.Source) ? "<" + logEntry.Source + "> " : string.Empty;
                 var line = string.Format("{0}{1}{2}", t, src, logEntry.Content);
                 lines.Add(line);

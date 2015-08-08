@@ -69,7 +69,7 @@ namespace AldurSoft.WurmApi.Utility
             return result;
         }
 
-        public IList<LogEntry> ParseLinesFromLogsScan(IReadOnlyList<string> lines, DateTime linesStamp)
+        public IList<LogEntry> ParseLinesFromLogsScan(IReadOnlyList<string> lines, DateTime dayStamp)
         {
             List<LogEntry> result = new List<LogEntry>(lines.Count);
             foreach (var line in lines)
@@ -81,9 +81,9 @@ namespace AldurSoft.WurmApi.Utility
                 TimeSpan span = ParsingHelper.GetTimestampFromLogLine(line);
                 string source = ParsingHelper.TryParseSourceFromLogLine(line);
                 string content = ParsingHelper.TryParseContentFromLogLine(line);
-                DateTime finalStamp = new DateTime(linesStamp.Year,
-                    linesStamp.Month,
-                    linesStamp.Day,
+                DateTime finalStamp = new DateTime(dayStamp.Year,
+                    dayStamp.Month,
+                    dayStamp.Day,
                     span.Hours,
                     span.Minutes,
                     span.Seconds);

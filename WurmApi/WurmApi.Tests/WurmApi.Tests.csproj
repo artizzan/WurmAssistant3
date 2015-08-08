@@ -130,7 +130,7 @@
     <Compile Include="Tests\Modules\Wurm\LogsHistory\WurmLogsHistoryTests.cs" />
     <Compile Include="Tests\Modules\Wurm\LogsMonitor\WurmLogsMonitorTests.cs" />
     <Compile Include="Tests\Modules\Wurm\ServerHistory\SortedServerHistoryTests.cs" />
-    <Compile Include="Tests\WurmServerHistoryTests.cs" />
+    <Compile Include="Tests\Modules\Wurm\ServerHistory\WurmServerHistoryTests.cs" />
     <Compile Include="Tests\WurmServersTests.cs" />
     <Compile Include="WurmApiFixtureBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
