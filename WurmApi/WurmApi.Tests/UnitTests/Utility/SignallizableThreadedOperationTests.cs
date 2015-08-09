@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AldurSoft.WurmApi.Tests.Helpers;
@@ -124,9 +127,15 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Utility
             await Task.Delay(200);
 
             bool wasUnobservedException = false;
+            List<Exception> unobservedExceptions = new List<Exception>();
 
             TaskScheduler.UnobservedTaskException +=
-                (s, args) => wasUnobservedException = true;
+                (s, args) =>
+                {
+                    unobservedExceptions.Add(args.Exception);
+                    wasUnobservedException = true;
+                };
+
 
             op.Dispose();
 
@@ -137,6 +146,12 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Utility
             GC.Collect();
             Expect(wr.IsAlive, False);
             Expect(wasUnobservedException, False);
+            Trace.WriteLine("Unobserved exceptions: " + FormatExceptions(unobservedExceptions));
+        }
+
+        string FormatExceptions(List<Exception> unobservedExceptions)
+        {
+            return string.Join(", ", unobservedExceptions.Select(exception => exception.ToString()));
         }
 
         [Test]
