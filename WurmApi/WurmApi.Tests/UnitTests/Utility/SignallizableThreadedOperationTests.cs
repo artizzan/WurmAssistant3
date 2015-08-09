@@ -132,10 +132,12 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Utility
             TaskScheduler.UnobservedTaskException +=
                 (s, args) =>
                 {
-                    unobservedExceptions.Add(args.Exception);
+                    if (args.Exception != null)
+                    {
+                        unobservedExceptions.Add(args.Exception);
+                    }
                     wasUnobservedException = true;
                 };
-
 
             op.Dispose();
 
@@ -145,8 +147,8 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Utility
             GC.WaitForPendingFinalizers();
             GC.Collect();
             Trace.WriteLine("Unobserved exceptions: " + FormatExceptions(unobservedExceptions));
-            Expect(wr.IsAlive, False);
-            Expect(wasUnobservedException, False); 
+            Expect(wr.IsAlive, False, "Operation is still alive");
+            Expect(wasUnobservedException, False, "There was an unobserved exception on the ThreadPool"); 
         }
 
         string FormatExceptions(List<Exception> unobservedExceptions)
