@@ -146,6 +146,7 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Utility
             GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
+            GC.WaitForFullGCComplete(10000);
             Trace.WriteLine("Unobserved exceptions: " + FormatExceptions(unobservedExceptions));
             Expect(wr.IsAlive, False, "Operation is still alive");
             Expect(wasUnobservedException, False, "There was an unobserved exception on the ThreadPool"); 
