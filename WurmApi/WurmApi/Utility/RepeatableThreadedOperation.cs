@@ -41,7 +41,6 @@ namespace AldurSoft.WurmApi.Utility
                     autoResetEvent.WaitOne();
                     if (exit)
                     {
-                        Trace.WriteLine("exiting");
                         break;
                     }
                     try
