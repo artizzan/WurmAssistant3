@@ -144,9 +144,9 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Utility
             GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
-            Expect(wr.IsAlive, False);
-            Expect(wasUnobservedException, False);
             Trace.WriteLine("Unobserved exceptions: " + FormatExceptions(unobservedExceptions));
+            Expect(wr.IsAlive, False);
+            Expect(wasUnobservedException, False); 
         }
 
         string FormatExceptions(List<Exception> unobservedExceptions)
