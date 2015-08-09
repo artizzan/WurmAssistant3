@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -18,7 +19,6 @@ namespace AldurSoft.WurmApi.Utility
         [CanBeNull]
         readonly IEventMarshaller eventMarshaller;
         readonly Task task;
-        Task delayedSignallingTask;
         volatile bool exit = false;
         readonly AutoResetEvent autoResetEvent = new AutoResetEvent(false);
         readonly TaskCompletionSource<bool> operationCompletedAtLeastOnceAwaiter = new TaskCompletionSource<bool>();
@@ -41,6 +41,7 @@ namespace AldurSoft.WurmApi.Utility
                     autoResetEvent.WaitOne();
                     if (exit)
                     {
+                        Trace.WriteLine("exiting");
                         break;
                     }
                     try
@@ -119,25 +120,6 @@ namespace AldurSoft.WurmApi.Utility
             autoResetEvent.Set();
         }
 
-        // not used, disabled, todo fix race condition between if-check and Signal()
-        ///// <summary>
-        ///// Schedules signal to be sent after specified time interval.
-        ///// If signal is already scheduled, this method does nothing. 
-        ///// </summary>
-        ///// <param name="delay"></param>
-        //public void DelayedSignal(TimeSpan delay)
-        //{
-        //    // preventing possible explosion in thread counts
-        //    if (delayedSignallingTask == null || delayedSignallingTask.IsCompleted)
-        //    {
-        //        delayedSignallingTask = Task.Factory.StartNew(() =>
-        //        {
-        //            Thread.Sleep(delay);
-        //            Signal();
-        //        }, TaskCreationOptions.LongRunning);
-        //    }
-        //}
-
         public void Dispose()
         {
             // stop the operation
@@ -145,13 +127,19 @@ namespace AldurSoft.WurmApi.Utility
             autoResetEvent.Set();
             try
             {
-                task.Wait();
+                if (!task.Wait(50))
+                {
+                    autoResetEvent.Set();
+                    if (task.Wait(10000))
+                    {
+                        task.Dispose();
+                    }
+                }
             }
             catch (AggregateException)
             {
-                // task might be faulted, which is irrelevant for cleanup
+                // task might be faulted, which is ultimately irrelevant for cleanup
             }
-            task.Dispose();
         }
 
         void OnOperationFaulted(ExceptionEventArgs e)

@@ -116,49 +116,6 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Utility
         }
 
         [Test]
-        public async Task FaultedDoesNotCrashOnFinalization()
-        {
-            var op = new RepeatableThreadedOperation(() =>
-            {
-                throw new DummyException();
-            });
-            op.Signal();
-
-            await Task.Delay(200);
-
-            bool wasUnobservedException = false;
-            List<Exception> unobservedExceptions = new List<Exception>();
-
-            TaskScheduler.UnobservedTaskException +=
-                (s, args) =>
-                {
-                    if (args.Exception != null)
-                    {
-                        unobservedExceptions.Add(args.Exception);
-                    }
-                    wasUnobservedException = true;
-                };
-
-            op.Dispose();
-
-            WeakReference wr = new WeakReference(op);
-            op = null;
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
-            GC.WaitForFullGCComplete(10000);
-            Trace.WriteLine("Unobserved exceptions: " + FormatExceptions(unobservedExceptions));
-            Expect(op, Null);
-            Expect(wr.IsAlive, False, "Operation is still alive");
-            Expect(wasUnobservedException, False, "There was an unobserved exception on the ThreadPool"); 
-        }
-
-        string FormatExceptions(List<Exception> unobservedExceptions)
-        {
-            return string.Join(", ", unobservedExceptions.Select(exception => exception.ToString()));
-        }
-
-        [Test]
         public void Disposes()
         {
             var op = new RepeatableThreadedOperation(() =>
@@ -180,21 +137,5 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Utility
             Thread.Sleep(100);
             op.Dispose();
         }
-
-        // disabled due to issue in DelayedSignal method
-        //[Test]
-        //public void DelayedSignals()
-        //{
-        //    int value = 0;
-        //    var op = new RepeatableThreadedOperation(() =>
-        //    {
-        //        value++;
-        //    });
-        //    op.DelayedSignal(TimeSpan.FromMilliseconds(50));
-        //    Thread.Sleep(25);
-        //    Expect(value, EqualTo(0));
-        //    Thread.Sleep(50);
-        //    Expect(value, EqualTo(1));
-        //}
     }
 }
