@@ -27,6 +27,7 @@ namespace AldurSoft.WurmApi.Tests
             WurmApiDataDir = new DirectoryInfo(handle.AbsolutePath);
             WurmClientMock = WurmClientMockBuilder.Create();
             LoggerMock = Mock.Create<ILogger>().RedirectToTraceOut();
+            HttpWebRequestsMock = Mock.Create<IHttpWebRequests>();
         }
 
         public DirectoryInfo WurmApiDataDir { get; private set; }
@@ -46,12 +47,14 @@ namespace AldurSoft.WurmApi.Tests
                         wurmApiManager = new WurmApiManager(
                             WurmApiDataDir.FullName,
                             WurmClientMock.InstallDirectory,
-                            Mock.Create<IHttpWebRequests>(),
+                            HttpWebRequestsMock,
                             LoggerMock);
                     }
                     return wurmApiManager;
                 }
             }
         }
+
+        public IHttpWebRequests HttpWebRequestsMock { get; private set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -93,6 +94,39 @@ namespace AldurSoft.WurmApi
         }
 
         protected WurmGameClientInstallDirectoryValidationException(
+            SerializationInfo info,
+            StreamingContext context)
+            : base(info, context)
+        {
+        }
+    }
+
+    [Serializable]
+    public class HttpWebRequestFailedException : Exception
+    {
+        /// <summary>
+        /// Errors before final retry attempt, if any.
+        /// </summary>
+        public IEnumerable<Exception> PreviousErrors { get; private set; }
+
+        public HttpWebRequestFailedException()
+        {
+            PreviousErrors = new Exception[0];
+        }
+
+        public HttpWebRequestFailedException(string message)
+            : base(message)
+        {
+            PreviousErrors = new Exception[0];
+        }
+
+        public HttpWebRequestFailedException(string message, Exception inner, IEnumerable<Exception> previousExceptions)
+            : base(message, inner)
+        {
+            PreviousErrors = previousExceptions != null ? previousExceptions.ToArray() : new Exception[0];
+        }
+
+        protected HttpWebRequestFailedException(
             SerializationInfo info,
             StreamingContext context)
             : base(info, context)

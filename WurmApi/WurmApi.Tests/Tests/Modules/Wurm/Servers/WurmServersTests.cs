@@ -1,55 +1,62 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AldursLab.Essentials;
 using AldursLab.Testing;
 using AldurSoft.WurmApi.Modules.Networking;
 using AldurSoft.WurmApi.Tests.Helpers;
-
 using NUnit.Framework;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
 
-namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
+namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.Servers
 {
     [TestFixture]
-    class WurmServersTests : WurmApiIntegrationFixtureBase
+    class WurmServersTests : WurmTests
     {
-        protected IWurmServers Servers;
+        protected IWurmServers System { get { return Fixture.WurmApiManager.WurmServers; } }
         public StubbableTime.StubScope Timescope;
         protected readonly CharacterName TestGuyCharacterName = new CharacterName("Testguy");
-        protected DateTime MockedNow = new DateTime(2014, 12, 15, 0, 0, 0);
+        protected DateTime MockedNow = new DateTime(2014, 12, 15, 0, 0, 0, DateTimeKind.Local);
 
         protected DirectoryHandle HtmlWebRequestsDir;
 
         [SetUp]
         public virtual void Setup()
         {
+            Fixture.HttpWebRequestsMock.Arrange(requests => requests.GetResponseAsync(Arg.IsAny<string>()))
+                   .Throws<NotSupportedException>();
+
             HtmlWebRequestsDir =
-                TempDirectoriesFactory.CreateByCopy(Path.Combine(TestPaksDirFullPath, "WurmServerTests-wurmdir-webrequests"));
+                TempDirectoriesFactory.CreateByUnzippingFile(Path.Combine(TestPaksZippedDirFullPath,
+                    "WurmServerTests-wurmdir-webrequests.7z"));
+
+            ClientMock.PopulateFromZip(Path.Combine(TestPaksZippedDirFullPath, "WurmServerTests-wurmdir.7z"));
 
             Timescope = TimeStub.CreateStubbedScope();
             Timescope.SetAllLocalTimes(MockedNow);
+        }
 
-            ConstructApi(Path.Combine(TestPaksDirFullPath, "WurmServerTests-wurmdir"));
-            Servers = WurmApiManager.WurmServers;
+        [TearDown]
+        public void Teardown()
+        {
+            Timescope.Dispose();
         }
 
         [Test]
         public void TryGetByName_Gets()
         {
-            var server = Servers.GetByName(new ServerName("Exodus"));
-            Expect(server, !Null);
+            var server = System.GetByName(new ServerName("Exodus"));
+            Expect(server, Not.Null);
         }
 
         [Test]
         public void All_Gets()
         {
-            var servers = Servers.All.ToArray();
+            var servers = System.All.ToArray();
             Expect(servers.Length, GreaterThan(0));
         }
 
@@ -64,12 +71,17 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
             public override void Setup()
             {
                 base.Setup();
-                server = Servers.GetByName(serverName);
                 event201412Writer =
                     new LogWriter(
-                        Path.Combine(WurmDir.AbsolutePath, "players", "Testguy", "Logs", "_Event.2014-12.txt"),
+                        Path.Combine(ClientMock.InstallDirectory.FullPath,
+                            "players",
+                            "Testguy",
+                            "Logs",
+                            "_Event.2014-12.txt"),
                         new DateTime(2014, 12, 1),
                         true);
+
+                server = System.GetByName(serverName);
             }
 
             [Test]
@@ -100,7 +112,6 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
             [Test]
             public async Task ObtainsServerTimesFromLiveLogs()
             {
-                WurmApiManager.WurmLogsMonitor.Subscribe(TestGuyCharacterName, LogType.Skills, DoNothing);
                 event201412Writer.WriteSection(
                     new Collection<LogEntry>()
                     {
@@ -112,7 +123,9 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
                         new LogEntry(MockedNow, String.Empty,
                             "It is 12:01:40 on day of the Ant in week 2 of the Snake's starfall in the year of 1045.")
                     });
-                //WurmApiManager.Update();
+                
+                Thread.Sleep(1000);
+
                 var uptime = await server.TryGetCurrentUptimeAsync();
                 var datetime = await server.TryGetCurrentTimeAsync();
                 Expect(uptime, EqualTo(new TimeSpan(3, 15, 30, 0)));
@@ -131,7 +144,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmServersImpl
                 responseMock.Arrange(response => response.GetResponseStream())
                     .Returns(() => new MemoryStream(htmlBytes));
                 responseMock.Arrange(response => response.LastModified).Returns(newMockedNow);
-                base.HttpWebRequestsMock.Arrange(requests => requests.GetResponseAsync(Arg.IsAny<string>()))
+                Fixture.HttpWebRequestsMock.Arrange(requests => requests.GetResponseAsync(Arg.IsAny<string>()))
                     .Returns(() => Task.FromResult(responseMock));
 
                 var uptime = await server.TryGetCurrentUptimeAsync();

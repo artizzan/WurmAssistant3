@@ -87,7 +87,7 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Servers
         {
             var result =
                 await
-                    jobRunner.Run(new CurrentWurmDateTimeJob(ServerName), cancellationToken).ConfigureAwait(false);
+                    jobRunner.Run(new CurrentUptimeJob(ServerName), cancellationToken).ConfigureAwait(false);
             return result.Uptime;
         }
 
