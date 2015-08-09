@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules
         {
             TimeStub = new StubbableTime();
             Time.SetProvider(TimeStub);
+
+            Trace.Listeners.Add(new ConsoleTraceListener());
         }
 
         [SetUp]
