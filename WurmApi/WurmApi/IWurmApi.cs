@@ -42,20 +42,5 @@ namespace AldurSoft.WurmApi
         /// API that provides information about wurm servers.
         /// </summary>
         IWurmServers WurmServers { get; }
-
-        /// <summary>
-        /// Total count of errors encountered by WurmApi. Does not include warnings.
-        /// </summary>
-        int Errors { get; }
-
-        /// <summary>
-        /// Total count of warnings encountered by WurmApi.
-        /// </summary>
-        int Warnings { get; }
-        
-        /// <summary>
-        /// Triggered when error or warning is logged by WurmApi.
-        /// </summary>
-        event EventHandler<EventArgs> ErrorOrWarningLogged;
     }
 }

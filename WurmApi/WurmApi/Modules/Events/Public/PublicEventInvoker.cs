@@ -77,9 +77,16 @@ namespace AldurSoft.WurmApi.Modules.Events.Public
         public void Dispose()
         {
             stop = true;
-            schedulingTask.Wait();
-            schedulingTask.Dispose();
+            if (schedulingTask.Wait(10000))
+            {
+                schedulingTask.Dispose();
+            }
             events.Clear();
+        }
+
+        ~PublicEventInvoker()
+        {
+            stop = true;
         }
 
         void RunSchedule()

@@ -34,10 +34,8 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm
         [TearDown]
         public void WurmTestsTeardown()
         {
-            // temp: do not dispose, for debugging results
-
-            //Fixture.WurmApiManager.Dispose();
-            //Fixture.WurmClientMock.Dispose();
+            Fixture.WurmApiManager.Dispose();
+            Fixture.WurmClientMock.Dispose();
         }
 
         protected void WaitUntilTrue(Func<bool> conditionFunc, int timeoutMillis = 5000)

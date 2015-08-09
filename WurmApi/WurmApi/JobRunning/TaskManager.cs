@@ -10,7 +10,7 @@ using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.JobRunning
 {
-    class TaskManager : IDisposable
+    sealed class TaskManager : IDisposable
     {
         readonly ILogger logger;
 
@@ -80,6 +80,12 @@ namespace AldurSoft.WurmApi.JobRunning
             {
                 runner.Dispose();
             }
+            GC.SuppressFinalize(this);
+        }
+
+        ~TaskManager()
+        {
+            stop = true;
         }
     }
 

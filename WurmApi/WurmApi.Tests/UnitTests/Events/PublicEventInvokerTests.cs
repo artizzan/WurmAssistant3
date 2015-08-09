@@ -80,9 +80,6 @@ namespace AldurSoft.WurmApi.Tests.UnitTests.Events
             invoker.Trigger(handle);
             invoker.Trigger(handle);
 
-            Thread.Sleep(20);
-            Expect(eventAwaiter.Invocations.Count(), EqualTo(1));
-
             eventAwaiter.WaitInvocations(2);
 
             Thread.Sleep(500);

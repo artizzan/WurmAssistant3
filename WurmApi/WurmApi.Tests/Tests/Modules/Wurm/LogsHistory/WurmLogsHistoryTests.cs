@@ -23,7 +23,6 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogsHistory
         [SetUp]
         public void Setup()
         {
-            //ClientMock.PopulateFromDir(Path.Combine(TestPaksDirFullPath, "logs-samples-realdata"));
             ClientMock.PopulateFromZip(Path.Combine(TestPaksZippedDirFullPath, "logs-samples-realdata.7z"));
         }
 
@@ -43,8 +42,6 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogsHistory
                 LogType = LogType.Skills
             });
             Expect(results.Any(), True);
-
-            VerifyLoggedErrors(9);
         }
 
         [Test]
@@ -64,8 +61,6 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogsHistory
             Expect(firstResult.Content, EqualTo("First aid increased by 0,0124 to 23,392"));
             Expect(lastResult.Timestamp, EqualTo(new DateTime(2012, 8, 27, 1, 17, 51)));
             Expect(lastResult.Content, EqualTo("Paving increased  to 19"));
-
-            VerifyLoggedErrors(9);
         }
 
         [Test]
@@ -85,8 +80,6 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogsHistory
             Expect(firstResult.Content, EqualTo("Miscellaneous items increased by 0,0105 to 52,467"));
             Expect(lastResult.Timestamp, EqualTo(new DateTime(2012, 8, 19, 23, 53, 27)));
             Expect(lastResult.Content, EqualTo("Mind increased  to 27"));
-
-            VerifyLoggedErrors();
         }
 
         [Test]
@@ -106,8 +99,6 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogsHistory
             Expect(firstResult.Content, EqualTo("Mining increased by 0,104 to 47,472"));
             Expect(lastResult.Timestamp, EqualTo(new DateTime(2012, 9, 22, 22, 51, 57)));
             Expect(lastResult.Content, EqualTo("Healing increased by 0,104 to 12,295"));
-
-            VerifyLoggedErrors();
         }
 
         [Test]
@@ -127,8 +118,6 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogsHistory
             Expect(firstResult.Content, EqualTo("First aid increased by 0,0124 to 23,392"));
             Expect(lastResult.Timestamp, EqualTo(new DateTime(2012, 9, 23, 23, 37, 13)));
             Expect(lastResult.Content, EqualTo("Gardening increased by 0,106 to 26,977"));
-
-            VerifyLoggedErrors(9);
         }
 
         [Test]
@@ -165,8 +154,6 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogsHistory
                 LogType = LogType.Skills
             });
             Expect(results.Any(), True);
-
-            VerifyLoggedErrors(9);
         }
 
         [Test]
@@ -190,14 +177,6 @@ namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.LogsHistory
             {
                 Expect(exception, TypeOf<OperationCanceledException>());
             }
-        }
-
-        private void VerifyLoggedErrors(int count = 0)
-        {
-            Fixture.LoggerMock.Assert(
-                logger1 =>
-                    logger1.Log(Arg.IsAny<LogLevel>(), Arg.IsAny<string>(), Arg.IsAny<object>(), Arg.IsAny<Exception>()),
-                Occurs.Exactly(count));
         }
     }
 }

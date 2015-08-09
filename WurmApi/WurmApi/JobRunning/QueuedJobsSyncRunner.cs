@@ -109,6 +109,20 @@ namespace AldurSoft.WurmApi.JobRunning
                 jobSignaller.Set();
                 searchJobTask.Wait();
             }
+            GC.SuppressFinalize(this);
+        }
+
+        ~QueuedJobsSyncRunner()
+        {
+            try
+            {
+                cancellationTokenSource.Cancel();
+                jobSignaller.Set();
+            }
+            catch (Exception)
+            {
+                // objects may be already disposed
+            }
         }
 
         class ScanJob
