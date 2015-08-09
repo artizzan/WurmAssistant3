@@ -3,17 +3,19 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using AldurSoft.WurmApi.Infrastructure;
+using AldurSoft.WurmApi.JobRunning;
 using AldurSoft.WurmApi.Utility;
 using JetBrains.Annotations;
 
 namespace AldurSoft.WurmApi.Modules.Wurm.Characters
 {
-    public class WurmCharacter : IWurmCharacter, IDisposable
+    class WurmCharacter : IWurmCharacter, IDisposable
     {
         readonly IWurmConfigs wurmConfigs;
         readonly IWurmServers wurmServers;
         readonly IWurmServerHistory wurmServerHistory;
         readonly ILogger logger;
+        readonly TaskManager taskManager;
 
         readonly FileSystemWatcher configFileWatcher;
         readonly string configDefiningFileFullPath;
@@ -21,10 +23,13 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Characters
 
         private const string ConfigDefinerFileName = "config.txt";
 
+        readonly TaskHandle configUpdateTask;
+
         public WurmCharacter([NotNull] CharacterName name, [NotNull] string playerDirectoryFullPath,
             [NotNull] IWurmConfigs wurmConfigs, [NotNull] IWurmServers wurmServers,
             [NotNull] IWurmServerHistory wurmServerHistory,
-            [NotNull] ILogger logger)
+            [NotNull] ILogger logger, 
+            [NotNull] TaskManager taskManager)
         {
             if (name == null) throw new ArgumentNullException("name");
             if (playerDirectoryFullPath == null) throw new ArgumentNullException("playerDirectoryFullPath");
@@ -32,16 +37,23 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Characters
             if (wurmServers == null) throw new ArgumentNullException("wurmServers");
             if (wurmServerHistory == null) throw new ArgumentNullException("wurmServerHistory");
             if (logger == null) throw new ArgumentNullException("logger");
+            if (taskManager == null) throw new ArgumentNullException("taskManager");
 
             this.wurmConfigs = wurmConfigs;
             this.wurmServers = wurmServers;
             this.wurmServerHistory = wurmServerHistory;
             this.logger = logger;
+            this.taskManager = taskManager;
 
             Name = name;
             configDefiningFileFullPath = Path.Combine(playerDirectoryFullPath, ConfigDefinerFileName);
 
-            configFileWatcher = new FileSystemWatcher()
+            RefreshCurrentConfig();
+
+            configUpdateTask = new TaskHandle(RefreshCurrentConfig, "Current config update for player " + Name);
+            taskManager.Add(configUpdateTask);
+
+            configFileWatcher = new FileSystemWatcher(playerDirectoryFullPath)
             {
                 Filter = ConfigDefinerFileName
             };
@@ -50,48 +62,47 @@ namespace AldurSoft.WurmApi.Modules.Wurm.Characters
             configFileWatcher.Deleted += ConfigFileWatcherOnChanged;
             configFileWatcher.Renamed += ConfigFileWatcherOnChanged;
             configFileWatcher.EnableRaisingEvents = true;
-            RefreshCurrentConfig();
+            
+            configUpdateTask.Trigger();
         }
 
         void ConfigFileWatcherOnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
-            RefreshCurrentConfig();
+            configUpdateTask.Trigger();
         }
 
         private void RefreshCurrentConfig()
         {
             if (!File.Exists(configDefiningFileFullPath))
             {
-                logger.Log(LogLevel.Error,
-                    string.Format("{0} is missing for the player {1}, cannot obtain config!", ConfigDefinerFileName,
-                        Name), this, null);
+                throw new WurmApiException(
+                    string.Format("{0} is missing for character {1}, cannot obtain config!",
+                        ConfigDefinerFileName,
+                        Name));
             }
-            else
+
+            currentConfigName = File.ReadAllText(configDefiningFileFullPath).Trim();
+            if (string.IsNullOrWhiteSpace(currentConfigName))
             {
-                currentConfigName = File.ReadAllText(configDefiningFileFullPath).Trim();
-                if (string.IsNullOrWhiteSpace(currentConfigName))
-                {
-                    logger.Log(LogLevel.Error,
-                        string.Format("Could not read config for player {0}, because {1} contains no config name!",
-                            Name, ConfigDefinerFileName), this, null);
-                }
-                else
-                {
-                    try
-                    {
-                        CurrentConfig = wurmConfigs.GetConfig(currentConfigName);
-                    }
-                    catch (Exception exception)
-                    {
-                        logger.Log(LogLevel.Error,
-                            string.Format("Could not read config named {0} for player {1}", currentConfigName, Name), this,
-                            exception);
-                    }
-                }
+                throw new WurmApiException(
+                    string.Format("Could not read config for character {0}, because {1} contains no config name!",
+                        Name,
+                        ConfigDefinerFileName));
+            }
+
+            try
+            {
+                CurrentConfig = wurmConfigs.GetConfig(currentConfigName);
+            }
+            catch (Exception exception)
+            {
+                throw new WurmApiException(
+                    string.Format("Could not read config {0} for player {1}. See inner exception for details.",
+                        currentConfigName,
+                        Name),
+                    exception);
             }
         }
-
-
 
         public CharacterName Name { get; private set; }
 

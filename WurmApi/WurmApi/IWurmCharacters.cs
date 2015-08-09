@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace AldurSoft.WurmApi
@@ -14,7 +15,7 @@ namespace AldurSoft.WurmApi
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        /// <exception cref="DataNotFoundException"></exception>
+        /// <exception cref="Exception">Character could not be initialized.</exception>
         IWurmCharacter Get(CharacterName name);
     }
 }

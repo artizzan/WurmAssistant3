@@ -28,4 +28,15 @@ namespace AldurSoft.WurmApi.Modules.Events.Public
             return publicEventInvoker.GetEventInfoString(this);
         }
     }
+
+    class PublicNullEvent : PublicEvent
+    {
+        public override void Trigger()
+        {
+        }
+
+        public override void Detach()
+        {
+        }
+    }
 }

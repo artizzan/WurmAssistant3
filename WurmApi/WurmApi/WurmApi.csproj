@@ -56,6 +56,7 @@
     <Compile Include="CharacterName.cs" />
     <Compile Include="IEventMarshaller.cs" />
     <Compile Include="JobRunning\ITaskManager.cs" />
+    <Compile Include="Logging\ErrorMonitoredLogger.cs" />
     <Compile Include="Modules\Events\Public\IEventInvoker.cs" />
     <Compile Include="Modules\Wurm\LogsHistory\Heuristics\PersistentModel\WurmCharacterLogsEntity.cs" />
     <Compile Include="Modules\Wurm\LogsHistory\Heuristics\PersistentModel\WurmLogMonthlyFile.cs" />
@@ -219,9 +220,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Logging\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\AldursLab\Lab\Essentials\Essentials.csproj">
       <Project>{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}</Project>

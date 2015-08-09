@@ -121,7 +121,7 @@
     <Compile Include="UnitTests\Events\PublicEventInvokerTests.cs" />
     <Compile Include="UnitTests\Utility\SignallizableThreadedOperationTests.cs" />
     <Compile Include="Tests\Modules\Wurm\CharacterDirectories\WurmCharacterDirectoriesTests.cs" />
-    <Compile Include="Tests\WurmCharactersTests.cs" />
+    <Compile Include="Tests\Modules\Wurm\Characters\WurmCharactersTests.cs" />
     <Compile Include="Tests\Modules\Wurm\ConfigDirectories\WurmConfigDirectoriesTests.cs" />
     <Compile Include="Tests\Modules\Wurm\Configs\WurmConfigsTests.cs" />
     <Compile Include="Tests\Modules\Wurm\LogDefinitions\WurmLogDefinitionsTests.cs" />

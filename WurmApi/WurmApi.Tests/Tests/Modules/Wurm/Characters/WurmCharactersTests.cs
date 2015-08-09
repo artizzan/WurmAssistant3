@@ -1,43 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace AldurSoft.WurmApi.Tests.Tests.WurmCharactersImpl
+namespace AldurSoft.WurmApi.Tests.Tests.Modules.Wurm.Characters
 {
     [TestFixture]
-    class WurmCharactersTests : WurmApiIntegrationFixtureBase
+    class WurmCharactersTests : WurmTests
     {
-        protected IWurmCharacters WurmCharacters;
+        protected IWurmCharacters System { get { return Fixture.WurmApiManager.WurmCharacters; } }
 
         [SetUp]
         public virtual void Setup()
         {
-            ConstructApi(Path.Combine(TestPaksDirFullPath, "WurmCharactersTests-wurmdir"));
-
-            WurmCharacters = WurmApiManager.WurmCharacters;
+            ClientMock.PopulateFromZip(Path.Combine(TestPaksZippedDirFullPath, "WurmCharactersTests-wurmdir.7z"));
         }
 
         [Test]
         public void All_ReturnsAny()
         {
-            var all = WurmCharacters.All;
+            var all = System.All;
             Expect(all.Count(), GreaterThan(0));
         }
 
         [Test]
         public void Get_ReturnsOne()
         {
-            var character = WurmCharacters.Get(new CharacterName("Testguy"));
+            var character = System.Get(new CharacterName("Testguy"));
         }
 
         [Test]
         public void Get_ThrowsOnNotExisting()
         {
-            Assert.Catch<WurmApiException>(() => WurmCharacters.Get(new CharacterName("Idonotexist")));
+            Assert.Catch<WurmApiException>(() => System.Get(new CharacterName("Idonotexist")));
         }
 
         [TestFixture]
@@ -48,7 +44,7 @@ namespace AldurSoft.WurmApi.Tests.Tests.WurmCharactersImpl
             public override void Setup()
             {
                 base.Setup();
-                wurmCharacter = WurmCharacters.Get(new CharacterName("Testguy"));
+                wurmCharacter = System.Get(new CharacterName("Testguy"));
             }
 
             [Test]

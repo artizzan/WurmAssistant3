@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using AldursLab.Essentials.Eventing;
 using AldurSoft.WurmApi.Infrastructure;
 using AldurSoft.WurmApi.JobRunning;
+using AldurSoft.WurmApi.Logging;
 using AldurSoft.WurmApi.Modules.Events;
 using AldurSoft.WurmApi.Modules.Events.Internal;
 using AldurSoft.WurmApi.Modules.Events.Public;
@@ -54,6 +56,8 @@ namespace AldurSoft.WurmApi
         readonly List<IRequireRefresh> requireRefreshes = new List<IRequireRefresh>();
         readonly List<IDisposable> disposables = new List<IDisposable>();
 
+        ErrorMonitoredLogger errorMonitoredLogger;
+
         public WurmApiManager(
             WurmApiDataDirectory dataDirectory,
             WurmInstallDirectory installDirectory,
@@ -92,11 +96,18 @@ namespace AldurSoft.WurmApi
             Wire(installDirectory);
             Wire(httpWebRequests);
 
-            TaskManager taskManager = new TaskManager(logger);
+            if (logger == null) logger = new LoggerStub();
 
-            InternalEventAggregator internalEventAggregator = new InternalEventAggregator();
-            PublicEventInvoker publicEventInvoker = new PublicEventInvoker(publicEventMarshaller, logger);
-            InternalEventInvoker internalEventInvoker = new InternalEventInvoker(internalEventAggregator, logger, internalEventMarshaller);
+            errorMonitoredLogger = Wire(new ErrorMonitoredLogger(logger));
+            logger = errorMonitoredLogger;
+            PublicEventInvoker publicEventInvoker = Wire(new PublicEventInvoker(publicEventMarshaller, logger));
+            errorMonitoredLogger.SetupEvents(publicEventInvoker);
+
+            TaskManager taskManager = Wire(new TaskManager(logger));
+
+            InternalEventAggregator internalEventAggregator = Wire(new InternalEventAggregator());
+
+            InternalEventInvoker internalEventInvoker = Wire(new InternalEventInvoker(internalEventAggregator, logger, internalEventMarshaller));
 
             WurmPaths paths = Wire(new WurmPaths(installDirectory));
 
@@ -139,7 +150,12 @@ namespace AldurSoft.WurmApi
                     characterDirectories, wurmServerHistory, logger));
 
             WurmCharacters characters =
-                Wire(new WurmCharacters(characterDirectories, wurmConfigs, wurmServers, wurmServerHistory, logger));
+                Wire(new WurmCharacters(characterDirectories,
+                    wurmConfigs,
+                    wurmServers,
+                    wurmServerHistory,
+                    logger,
+                    taskManager));
 
             HttpWebRequests = httpWebRequests;
             WurmAutoruns = autoruns;
@@ -166,6 +182,16 @@ namespace AldurSoft.WurmApi
         public IWurmLogsHistory WurmLogsHistory { get; private set; }
         public IWurmLogsMonitor WurmLogsMonitor { get; private set; }
         public IWurmServers WurmServers { get; private set; }
+
+
+        public int Errors { get { return errorMonitoredLogger.ErrorCount; } }
+        public int Warnings { get { return errorMonitoredLogger.WarningCount; } }
+
+        public event EventHandler<EventArgs> ErrorOrWarningLogged
+        {
+            add { errorMonitoredLogger.ErrorOrWarningLogged += value; }
+            remove { errorMonitoredLogger.ErrorOrWarningLogged -= value; }
+        }
 
         public void Dispose()
         {
