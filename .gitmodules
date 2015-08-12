@@ -1,0 +1,6 @@
+[submodule "AldursLab"]
+	path = AldursLab
+	url = https://github.com/PeterAldur/AldursLab
+[submodule "WurmApi"]
+	path = WurmApi
+	url = https://github.com/PeterAldur/WurmApi
