@@ -1,12 +1,8 @@
 using System;
-
-using AldurSoft.WurmApi;
-
 using NLog;
-
 using LogLevel = NLog.LogLevel;
 
-namespace AldurSoft.WurmAssistant3.AppCore
+namespace AldursLab.WurmAssistant3.AppCore
 {
     class WurmApiLogger : ILogger
     {

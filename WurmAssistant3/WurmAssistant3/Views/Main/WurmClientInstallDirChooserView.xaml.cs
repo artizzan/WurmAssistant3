@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Forms;
 
-namespace AldurSoft.WurmAssistant3.Views.Main
+namespace AldursLab.WurmAssistant3.Views.Main
 {
     /// <summary>
     /// Interaction logic for WurmClientInstallDirChooserView.xaml

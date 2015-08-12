@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using AldursLab.Deprec.Core;
 
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.Modules
+namespace AldursLab.WurmAssistant3.Modules
 {
     /// <summary>
     /// Module ID allows only letters and numbers, no whitespaces and is case insensitive.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace AldurSoft.Core
+namespace AldursLab.Deprec.Core
 {
     public static class ReflectionHelper
     {

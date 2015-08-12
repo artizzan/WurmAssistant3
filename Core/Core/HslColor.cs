@@ -4,9 +4,8 @@
 //
 
 using System;
-using System.Drawing;
 
-namespace AldurSoft.Core
+namespace AldursLab.Deprec.Core
 {
     /// <summary>
     /// Color with Hue/Saturation/Luminescense representation.

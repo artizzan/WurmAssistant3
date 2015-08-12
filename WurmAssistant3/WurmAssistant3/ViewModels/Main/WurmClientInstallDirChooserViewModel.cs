@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AldursLab.Deprec.Core;
+using AldursLab.Deprec.Core.AppFramework.Wpf.ViewModels;
+using AldursLab.WurmAssistant3.Systems;
 
-using AldurSoft.WurmApi;
-using AldurSoft.WurmAssistant3.Systems;
-
-using Core.AppFramework.Wpf;
-using Core.AppFramework.Wpf.ViewModels;
-
-namespace AldurSoft.WurmAssistant3.ViewModels.Main
+namespace AldursLab.WurmAssistant3.ViewModels.Main
 {
     public class WurmClientInstallDirChooserViewModel : ViewModelBase
     {
@@ -21,7 +14,7 @@ namespace AldurSoft.WurmAssistant3.ViewModels.Main
         private string _descriptonTextBlock;
 
         public WurmClientInstallDirChooserViewModel(
-            [JetBrains.Annotations.NotNull] IWurmAssistantSettings wurmAssistantSettings)
+            [NotNull] IWurmAssistantSettings wurmAssistantSettings)
         {
             if (wurmAssistantSettings == null) throw new ArgumentNullException("wurmAssistantSettings");
             this.wurmAssistantSettings = wurmAssistantSettings;

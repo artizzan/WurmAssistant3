@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace AldurSoft.Core.AppFramework.Operations
+namespace AldursLab.Deprec.Core.AppFramework.Operations
 {
     public interface IOperation
     {

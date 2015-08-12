@@ -10,7 +10,7 @@
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
 
-namespace JetBrains.Annotations
+namespace AldursLab.Deprec.Core
 {
     /// <summary>
     /// Indicates that the value of the marked element could be <c>null</c> sometimes,

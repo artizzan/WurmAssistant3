@@ -1,53 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
-
-using AldurSoft.SimplePersist;
-using AldurSoft.SimplePersist.Persistence.FlatFiles;
-using AldurSoft.SimplePersist.Serializers.JsonNet;
-using AldurSoft.WurmApi;
-using AldurSoft.WurmAssistant3.Attributes;
-using AldurSoft.WurmAssistant3.DataContext;
-using AldurSoft.WurmAssistant3.Engine.Modules;
-using AldurSoft.WurmAssistant3.Engine.Modules.Calendar;
-using AldurSoft.WurmAssistant3.Engine.Repositories;
-using AldurSoft.WurmAssistant3.Engine.Systems;
-using AldurSoft.WurmAssistant3.Modules;
-using AldurSoft.WurmAssistant3.Modules.Calendar;
-using AldurSoft.WurmAssistant3.Systems;
-using AldurSoft.WurmAssistant3.SystemsCustomBind;
-using AldurSoft.WurmAssistant3.ViewModels;
-using AldurSoft.WurmAssistant3.ViewModels.Main;
-using AldurSoft.WurmAssistant3.ViewModels.Modules;
-using AldurSoft.WurmAssistant3.ViewModels.Modules.Calendar;
-using AldurSoft.WurmAssistant3.Views.Main;
-
+using AldursLab.Deprec.Core.AppFramework.Wpf;
+using AldursLab.Deprec.Core.AppFramework.Wpf.Attributes;
+using AldursLab.WurmAssistant3.Attributes;
+using AldursLab.WurmAssistant3.DataContext;
+using AldursLab.WurmAssistant3.Engine.Modules;
+using AldursLab.WurmAssistant3.Engine.Repositories;
+using AldursLab.WurmAssistant3.Engine.Systems;
+using AldursLab.WurmAssistant3.Modules;
+using AldursLab.WurmAssistant3.Systems;
+using AldursLab.WurmAssistant3.SystemsCustomBind;
+using AldursLab.WurmAssistant3.ViewModels;
+using AldursLab.WurmAssistant3.ViewModels.Main;
+using AldursLab.WurmAssistant3.ViewModels.Modules;
 using Caliburn.Micro;
-
 using Castle.Core.Internal;
-
-using Core.AppFramework.Wpf;
-using Core.AppFramework.Wpf.Attributes;
-
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
 using Ninject.Infrastructure.Language;
-using Ninject.Syntax;
-
 using NLog;
-
-using WurmAssistant3;
-
-using Action = System.Action;
-using Environment = AldurSoft.WurmAssistant3.SystemsCustomBind.Environment;
+using Environment = AldursLab.WurmAssistant3.SystemsCustomBind.Environment;
 using LogManager = NLog.LogManager;
 
-namespace AldurSoft.WurmAssistant3.AppCore
+namespace AldursLab.WurmAssistant3.AppCore
 {
     public class ApplicationBootstrapper : BootstrapperBase, IEnvironmentLifecycle
     {

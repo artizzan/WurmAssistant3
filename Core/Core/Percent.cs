@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AldurSoft.Core
+namespace AldursLab.Deprec.Core
 {
     public struct Percent
     {

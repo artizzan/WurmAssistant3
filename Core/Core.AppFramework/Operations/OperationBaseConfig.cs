@@ -1,6 +1,6 @@
 ﻿using NLog;
 
-namespace AldurSoft.Core.AppFramework.Operations
+namespace AldursLab.Deprec.Core.AppFramework.Operations
 {
     static class OperationBaseConfig
     {

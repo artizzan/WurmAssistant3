@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AldursLab.Deprec.Core;
+using AldursLab.WurmAssistant3.Attributes;
+using AldursLab.WurmAssistant3.Engine.Modules.Sample.Impl;
+using AldursLab.WurmAssistant3.Modules;
+using AldursLab.WurmAssistant3.Modules.Sample;
+using AldursLab.WurmAssistant3.Systems;
 
-using AldurSoft.SimplePersist;
-using AldurSoft.WurmAssistant3.Attributes;
-using AldurSoft.WurmAssistant3.Engine.Modules.Sample.Impl;
-using AldurSoft.WurmAssistant3.Modules;
-using AldurSoft.WurmAssistant3.Modules.Sample;
-using AldurSoft.WurmAssistant3.Systems;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.Engine.Modules.Sample
+namespace AldursLab.WurmAssistant3.Engine.Modules.Sample
 {
     [WurmAssistantModule("Sample")]
     public class SampleModule : ModuleBase, ISampleModule

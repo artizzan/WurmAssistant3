@@ -2,17 +2,13 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-
-using AldurSoft.Core;
-using AldurSoft.WurmAssistant3.Systems;
-
-using JetBrains.Annotations;
-
+using AldursLab.Deprec.Core;
+using AldursLab.WurmAssistant3.Systems;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
 
-namespace AldurSoft.WurmAssistant3.SystemsCustomBind
+namespace AldursLab.WurmAssistant3.SystemsCustomBind
 {
     public class LoggingSystem : ILoggingSystem
     {

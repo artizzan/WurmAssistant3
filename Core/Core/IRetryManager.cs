@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace AldurSoft.Core
+namespace AldursLab.Deprec.Core
 {
     /// <summary>
     /// Defines methods, that allow transparent retry of operation, based on some heuristics.

@@ -1,12 +1,8 @@
 ﻿using System;
+using AldursLab.Deprec.Core;
+using AldursLab.WurmAssistant3.Modules.Triggers;
 
-using AldurSoft.WurmAssistant3.Modules.Triggers;
-
-using Core.AppFramework.Wpf.ViewModels;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.ViewModels.Modules.Triggers
+namespace AldursLab.WurmAssistant3.ViewModels.Modules.Triggers
 {
     public class TriggersToolControlViewModel : ModuleToolControlViewModel
     {

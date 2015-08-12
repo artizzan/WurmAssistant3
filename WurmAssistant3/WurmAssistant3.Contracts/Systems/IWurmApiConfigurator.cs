@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace AldurSoft.WurmAssistant3.Systems
+namespace AldursLab.WurmAssistant3.Systems
 {
     public interface IWurmApiConfigurator
     {

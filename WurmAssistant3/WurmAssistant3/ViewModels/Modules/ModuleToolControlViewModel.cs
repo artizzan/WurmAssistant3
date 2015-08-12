@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AldursLab.Deprec.Core.AppFramework.Wpf.ViewModels;
 
-using Core.AppFramework.Wpf.ViewModels;
-
-namespace AldurSoft.WurmAssistant3.ViewModels.Modules
+namespace AldursLab.WurmAssistant3.ViewModels.Modules
 {
     public abstract class ModuleToolControlViewModel : ViewModelBase
     {

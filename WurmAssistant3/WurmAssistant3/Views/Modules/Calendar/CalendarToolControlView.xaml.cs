@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace AldurSoft.WurmAssistant3.Views.Modules.Calendar
+namespace AldursLab.WurmAssistant3.Views.Modules.Calendar
 {
     /// <summary>
     /// Interaction logic for CalendarToolControlView.xaml

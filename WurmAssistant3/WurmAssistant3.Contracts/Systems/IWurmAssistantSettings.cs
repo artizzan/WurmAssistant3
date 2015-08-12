@@ -1,6 +1,6 @@
-﻿using AldurSoft.WurmAssistant3.DataContext.Entities;
+﻿using AldursLab.WurmAssistant3.DataContext.Entities;
 
-namespace AldurSoft.WurmAssistant3.Systems
+namespace AldursLab.WurmAssistant3.Systems
 {
     public interface IWurmAssistantSettings
     {

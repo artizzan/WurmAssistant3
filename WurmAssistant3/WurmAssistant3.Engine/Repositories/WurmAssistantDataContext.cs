@@ -1,11 +1,9 @@
 ﻿using System;
+using AldursLab.WurmAssistant3.DataContext;
+using AldursLab.WurmAssistant3.DataContext.Entities;
+using AldursLab.WurmAssistant3.Systems;
 
-using AldurSoft.SimplePersist;
-using AldurSoft.WurmAssistant3.DataContext;
-using AldurSoft.WurmAssistant3.DataContext.Entities;
-using AldurSoft.WurmAssistant3.Systems;
-
-namespace AldurSoft.WurmAssistant3.Engine.Repositories
+namespace AldursLab.WurmAssistant3.Engine.Repositories
 {
     public class WurmAssistantDataContext : IWurmAssistantDataContext
     {

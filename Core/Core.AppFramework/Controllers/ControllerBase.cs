@@ -1,4 +1,4 @@
-﻿namespace AldurSoft.Core.AppFramework.Controllers
+﻿namespace AldursLab.Deprec.Core.AppFramework.Controllers
 {
     abstract class ControllerBase : IController
     {

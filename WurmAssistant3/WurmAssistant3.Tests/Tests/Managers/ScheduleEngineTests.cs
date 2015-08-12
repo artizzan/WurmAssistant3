@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AldurSoft.Core;
-using AldurSoft.Core.Testing;
-using AldurSoft.WurmAssistant3.Engine.Systems;
-using AldurSoft.WurmAssistant3.Systems;
-
+using AldursLab.Deprec.Core;
+using AldursLab.Deprec.Core.Testing;
+using AldursLab.WurmAssistant3.Engine.Systems;
+using AldursLab.WurmAssistant3.Systems;
 using Moq;
-
 using NUnit.Framework;
 
-using Ploeh.AutoFixture;
-
-namespace AldurSoft.WurmAssistant3.Tests.Tests.Managers
+namespace AldursLab.WurmAssistant3.Tests.Tests.Managers
 {
     [TestFixture]
     public class ScheduleEngineTests : FixtureBase

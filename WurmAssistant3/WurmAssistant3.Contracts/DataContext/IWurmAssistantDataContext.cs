@@ -1,7 +1,6 @@
-﻿using AldurSoft.SimplePersist;
-using AldurSoft.WurmAssistant3.DataContext.Entities;
+﻿using AldursLab.WurmAssistant3.DataContext.Entities;
 
-namespace AldurSoft.WurmAssistant3.DataContext
+namespace AldursLab.WurmAssistant3.DataContext
 {
     public interface IWurmAssistantDataContext
     {

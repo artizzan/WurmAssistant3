@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AldursLab.Deprec.Core;
+using AldursLab.WurmAssistant3.ViewModels.Modules;
 
-using AldurSoft.WurmAssistant3.ViewModels.Modules;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.ViewModels.Main
+namespace AldursLab.WurmAssistant3.ViewModels.Main
 {
     public class ToolboxViewModel
     {

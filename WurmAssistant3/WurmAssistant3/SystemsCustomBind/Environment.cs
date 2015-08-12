@@ -2,13 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AldursLab.WurmAssistant3.Modules;
+using AldursLab.WurmAssistant3.Systems;
 
-using AldurSoft.Core;
-using AldurSoft.WurmAssistant3.Modules;
-using AldurSoft.WurmAssistant3.Properties;
-using AldurSoft.WurmAssistant3.Systems;
-
-namespace AldurSoft.WurmAssistant3.SystemsCustomBind
+namespace AldursLab.WurmAssistant3.SystemsCustomBind
 {
     public class Environment : IEnvironment
     {

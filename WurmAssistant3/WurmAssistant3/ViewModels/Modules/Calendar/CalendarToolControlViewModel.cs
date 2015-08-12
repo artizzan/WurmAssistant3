@@ -1,12 +1,8 @@
 ﻿using System;
+using AldursLab.Deprec.Core;
+using AldursLab.WurmAssistant3.Modules.Calendar;
 
-using AldurSoft.WurmAssistant3.Modules.Calendar;
-
-using Core.AppFramework.Wpf.ViewModels;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.ViewModels.Modules.Calendar
+namespace AldursLab.WurmAssistant3.ViewModels.Modules.Calendar
 {
     public class CalendarToolControlViewModel : ModuleToolControlViewModel
     {

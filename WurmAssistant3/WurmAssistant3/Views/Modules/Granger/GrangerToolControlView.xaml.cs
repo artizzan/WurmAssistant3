@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace AldurSoft.WurmAssistant3.Views.Modules.Granger
+namespace AldursLab.WurmAssistant3.Views.Modules.Granger
 {
     /// <summary>
     /// Interaction logic for GrangerToolControlView.xaml

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using AldursLab.Deprec.Core;
+using AldursLab.WurmAssistant3.Systems;
 
-using AldurSoft.Core;
-using AldurSoft.WurmAssistant3.Systems;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.Engine.Systems
+namespace AldursLab.WurmAssistant3.Engine.Systems
 {
     public class ScheduleEngine : IScheduleEngine, IDisposable
     {

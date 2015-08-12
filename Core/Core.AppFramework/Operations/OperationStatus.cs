@@ -1,4 +1,4 @@
-﻿namespace AldurSoft.Core.AppFramework.Operations
+﻿namespace AldursLab.Deprec.Core.AppFramework.Operations
 {
     public enum OperationStatus : byte
     {

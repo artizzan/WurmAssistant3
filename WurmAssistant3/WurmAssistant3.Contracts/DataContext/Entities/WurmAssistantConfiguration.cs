@@ -1,8 +1,6 @@
-﻿using AldurSoft.WurmApi;
+﻿using Newtonsoft.Json;
 
-using Newtonsoft.Json;
-
-namespace AldurSoft.WurmAssistant3.DataContext.Entities
+namespace AldursLab.WurmAssistant3.DataContext.Entities
 {
     [JsonObject(MemberSerialization.Fields)]
     public class WurmAssistantConfiguration

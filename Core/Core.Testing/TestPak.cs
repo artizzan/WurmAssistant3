@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using SevenZip;
-
-namespace AldurSoft.Core.Testing
+namespace AldursLab.Deprec.Core.Testing
 {
     public abstract class TestPak
     {

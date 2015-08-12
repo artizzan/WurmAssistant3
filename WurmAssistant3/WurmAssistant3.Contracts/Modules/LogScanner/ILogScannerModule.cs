@@ -1,4 +1,4 @@
-﻿namespace AldurSoft.WurmAssistant3.Modules.LogScanner
+﻿namespace AldursLab.WurmAssistant3.Modules.LogScanner
 {
     public interface ILogScannerModule : IModule
     {

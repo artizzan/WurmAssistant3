@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Core.AppFramework.Wpf.Views
+namespace AldursLab.Deprec.Core.AppFramework.Wpf.Views
 {
     abstract class WindowBase : Window
     {

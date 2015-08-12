@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AldurSoft.Core.Testing
+﻿namespace AldursLab.Deprec.Core.Testing
 {
     public static class TestEnv
     {

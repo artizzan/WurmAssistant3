@@ -7,8 +7,8 @@
     <ProjectGuid>{6E2DB07A-E220-4E96-AC4B-4FDFBD275A21}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AldurSoft.Core.Testing</RootNamespace>
-    <AssemblyName>AldurSoft.Core.Testing</AssemblyName>
+    <RootNamespace>AldursLab.Deprec.Core.Testing</RootNamespace>
+    <AssemblyName>AldursLab.Deprec.Core.Testing</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\WurmApi\</SolutionDir>

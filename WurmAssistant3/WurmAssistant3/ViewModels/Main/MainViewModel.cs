@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AldursLab.Deprec.Core.AppFramework.Wpf.Attributes;
+using AldursLab.Deprec.Core.AppFramework.Wpf.ViewModels;
 
-using AldurSoft.WurmAssistant3.Modules.Calendar;
-
-using Caliburn.Micro;
-
-using Core.AppFramework.Wpf.Attributes;
-using Core.AppFramework.Wpf.ViewModels;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.ViewModels.Main
+namespace AldursLab.WurmAssistant3.ViewModels.Main
 {
     [GlobalViewModel]
     public class MainViewModel : ViewModelBase

@@ -1,4 +1,4 @@
-﻿namespace AldurSoft.WurmAssistant3.Systems
+﻿namespace AldursLab.WurmAssistant3.Systems
 {
     public interface ILoggingSystem
     {

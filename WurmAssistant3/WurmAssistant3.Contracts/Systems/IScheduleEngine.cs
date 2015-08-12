@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AldurSoft.WurmAssistant3.Systems
+namespace AldursLab.WurmAssistant3.Systems
 {
     /// <summary>
     /// Provides methods to execute operations on the application UI thread.

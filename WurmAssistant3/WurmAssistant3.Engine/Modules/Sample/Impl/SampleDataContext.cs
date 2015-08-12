@@ -1,10 +1,7 @@
 ﻿using System;
+using AldursLab.Deprec.Core;
 
-using AldurSoft.SimplePersist;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.Engine.Modules.Sample.Impl
+namespace AldursLab.WurmAssistant3.Engine.Modules.Sample.Impl
 {
     class SampleDataContext
     {

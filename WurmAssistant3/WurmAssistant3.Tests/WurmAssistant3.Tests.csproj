@@ -6,8 +6,8 @@
     <ProjectGuid>{84D98C9C-03C8-4133-A47C-32577D463AB4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AldurSoft.WurmAssistant3.Tests</RootNamespace>
-    <AssemblyName>AldurSoft.WurmAssistant3.Tests</AssemblyName>
+    <RootNamespace>AldursLab.WurmAssistant3.Tests</RootNamespace>
+    <AssemblyName>AldursLab.WurmAssistant3.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace AldurSoft.Core
+namespace AldursLab.Deprec.Core
 {
     /// <summary>
     /// Can be used to copy directory, with subdirectories and optionally using 

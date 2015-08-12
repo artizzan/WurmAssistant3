@@ -1,15 +1,10 @@
-﻿using System;
+﻿using AldursLab.WurmAssistant3.Attributes;
+using AldursLab.WurmAssistant3.Engine.Modules.LogScanner.Impl;
+using AldursLab.WurmAssistant3.Modules;
+using AldursLab.WurmAssistant3.Modules.LogScanner;
+using AldursLab.WurmAssistant3.Systems;
 
-using AldurSoft.SimplePersist;
-using AldurSoft.WurmAssistant3.Attributes;
-using AldurSoft.WurmAssistant3.Engine.Modules.LogScanner.Impl;
-using AldurSoft.WurmAssistant3.Modules;
-using AldurSoft.WurmAssistant3.Modules.LogScanner;
-using AldurSoft.WurmAssistant3.Systems;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.Engine.Modules.LogScanner
+namespace AldursLab.WurmAssistant3.Engine.Modules.LogScanner
 {
     [WurmAssistantModule("LogScanner")]
     public class LogScannerModule : ModuleBase, ILogScannerModule

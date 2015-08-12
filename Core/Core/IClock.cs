@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AldurSoft.Core
+namespace AldursLab.Deprec.Core
 {
     /// <summary>
     /// Controls the time. Who said it's impossible?

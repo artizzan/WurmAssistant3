@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace AldurSoft.WurmAssistant3.Views.Modules.LogScanner
+namespace AldursLab.WurmAssistant3.Views.Modules.LogScanner
 {
     /// <summary>
     /// Interaction logic for LogScannerToolControlView.xaml

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace AldurSoft.WurmAssistant3.Views.Modules.Triggers
+namespace AldursLab.WurmAssistant3.Views.Modules.Triggers
 {
     /// <summary>
     /// Interaction logic for TriggersToolControlView.xaml

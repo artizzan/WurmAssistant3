@@ -1,15 +1,10 @@
-﻿using System;
+﻿using AldursLab.WurmAssistant3.Attributes;
+using AldursLab.WurmAssistant3.Engine.Modules.Timers.Impl;
+using AldursLab.WurmAssistant3.Modules;
+using AldursLab.WurmAssistant3.Modules.Timers;
+using AldursLab.WurmAssistant3.Systems;
 
-using AldurSoft.SimplePersist;
-using AldurSoft.WurmAssistant3.Attributes;
-using AldurSoft.WurmAssistant3.Engine.Modules.Timers.Impl;
-using AldurSoft.WurmAssistant3.Modules;
-using AldurSoft.WurmAssistant3.Modules.Timers;
-using AldurSoft.WurmAssistant3.Systems;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.Engine.Modules.Timers
+namespace AldursLab.WurmAssistant3.Engine.Modules.Timers
 {
     [WurmAssistantModule("Timers")]
     public class TimersModule : ModuleBase, ITimersModule

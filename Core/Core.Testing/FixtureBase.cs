@@ -2,18 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using AldursLab.Deprec.Core.Testing.Automocking;
 
-using AldurSoft.Core.Testing.Automocking;
-
-using Moq;
-
-using NUnit.Framework;
-
-using Ploeh.AutoFixture;
-using Ploeh.AutoFixture.AutoMoq;
-using Ploeh.AutoFixture.Kernel;
-
-namespace AldurSoft.Core.Testing
+namespace AldursLab.Deprec.Core.Testing
 {
     public abstract class FixtureBase : AssertionHelper
     {

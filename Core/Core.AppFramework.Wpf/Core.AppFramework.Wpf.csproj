@@ -7,8 +7,8 @@
     <ProjectGuid>{D2EF2E16-1001-497F-8420-9EAC02AA967F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Core.AppFramework.Wpf</RootNamespace>
-    <AssemblyName>Core.AppFramework.Wpf</AssemblyName>
+    <RootNamespace>AldursLab.Deprec.Core.AppFramework.Wpf</RootNamespace>
+    <AssemblyName>AldursLab.Deprec.Core.AppFramework.Wpf</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

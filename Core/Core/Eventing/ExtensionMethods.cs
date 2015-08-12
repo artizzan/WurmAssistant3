@@ -8,7 +8,7 @@ using System.Reflection;
 #define WinRT
 #endif
 
-namespace AldurSoft.Core.Eventing
+namespace AldursLab.Deprec.Core.Eventing
 {
     /// <summary>
     /// Generic extension methods used by the framework.

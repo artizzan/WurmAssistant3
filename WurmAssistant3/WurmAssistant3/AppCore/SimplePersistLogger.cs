@@ -1,10 +1,7 @@
-﻿using AldurSoft.SimplePersist;
-
-using NLog;
-
+﻿using NLog;
 using LogLevel = NLog.LogLevel;
 
-namespace AldurSoft.WurmAssistant3.AppCore
+namespace AldursLab.WurmAssistant3.AppCore
 {
     class SimplePersistLogger : ISimplePersistLogger
     {

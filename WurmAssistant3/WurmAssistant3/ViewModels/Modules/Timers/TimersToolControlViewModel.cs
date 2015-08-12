@@ -1,12 +1,8 @@
 ﻿using System;
+using AldursLab.Deprec.Core;
+using AldursLab.WurmAssistant3.Modules.Timers;
 
-using AldurSoft.WurmAssistant3.Modules.Timers;
-
-using Core.AppFramework.Wpf.ViewModels;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.ViewModels.Modules.Timers
+namespace AldursLab.WurmAssistant3.ViewModels.Modules.Timers
 {
     public class TimersToolControlViewModel : ModuleToolControlViewModel
     {

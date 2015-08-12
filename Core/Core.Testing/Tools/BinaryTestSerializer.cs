@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace AldurSoft.Core.Testing.Tools
+namespace AldursLab.Deprec.Core.Testing.Tools
 {
     public class BinaryTestSerializer<T>
     {

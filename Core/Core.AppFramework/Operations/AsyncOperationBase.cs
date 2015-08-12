@@ -2,11 +2,9 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-
 using NLog;
-using NLog.Fluent;
 
-namespace AldurSoft.Core.AppFramework.Operations
+namespace AldursLab.Deprec.Core.AppFramework.Operations
 {
     public abstract class AsyncOperationBase<TResult> : IAsyncOperation, IAsyncOperationWithResult<TResult>
     {

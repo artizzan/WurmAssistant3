@@ -1,15 +1,10 @@
-﻿using System;
+﻿using AldursLab.WurmAssistant3.Attributes;
+using AldursLab.WurmAssistant3.Engine.Modules.Granger.Impl;
+using AldursLab.WurmAssistant3.Modules;
+using AldursLab.WurmAssistant3.Modules.Granger;
+using AldursLab.WurmAssistant3.Systems;
 
-using AldurSoft.SimplePersist;
-using AldurSoft.WurmAssistant3.Attributes;
-using AldurSoft.WurmAssistant3.Engine.Modules.Granger.Impl;
-using AldurSoft.WurmAssistant3.Modules;
-using AldurSoft.WurmAssistant3.Modules.Granger;
-using AldurSoft.WurmAssistant3.Systems;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.Engine.Modules.Granger
+namespace AldursLab.WurmAssistant3.Engine.Modules.Granger
 {
     [WurmAssistantModule("Granger")]
     public class GrangerModule : ModuleBase, IGrangerModule

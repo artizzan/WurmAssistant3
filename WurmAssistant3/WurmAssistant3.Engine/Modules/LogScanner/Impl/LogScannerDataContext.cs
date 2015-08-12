@@ -1,12 +1,7 @@
 ﻿using System;
+using AldursLab.Deprec.Core;
 
-using AldurSoft.SimplePersist;
-using AldurSoft.WurmAssistant3.Engine.Repositories;
-using AldurSoft.WurmAssistant3.Systems;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.Engine.Modules.LogScanner.Impl
+namespace AldursLab.WurmAssistant3.Engine.Modules.LogScanner.Impl
 {
     class LogScannerDataContext
     {

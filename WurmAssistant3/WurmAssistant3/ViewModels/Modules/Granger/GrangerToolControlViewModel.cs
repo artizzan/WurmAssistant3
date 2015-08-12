@@ -1,12 +1,8 @@
 ﻿using System;
+using AldursLab.Deprec.Core;
+using AldursLab.WurmAssistant3.Modules.Granger;
 
-using AldurSoft.WurmAssistant3.Modules.Granger;
-
-using Core.AppFramework.Wpf.ViewModels;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.ViewModels.Modules.Granger
+namespace AldursLab.WurmAssistant3.ViewModels.Modules.Granger
 {
     public class GrangerToolControlViewModel : ModuleToolControlViewModel
     {

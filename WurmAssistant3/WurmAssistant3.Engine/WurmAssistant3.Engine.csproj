@@ -7,8 +7,8 @@
     <ProjectGuid>{5BFF4049-2EE2-4CD6-A74A-5FC3011F0CDB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AldurSoft.WurmAssistant3.Engine</RootNamespace>
-    <AssemblyName>AldurSoft.WurmAssistant3.Engine</AssemblyName>
+    <RootNamespace>AldursLab.WurmAssistant3.Engine</RootNamespace>
+    <AssemblyName>AldursLab.WurmAssistant3.Engine</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -70,14 +70,6 @@
     <ProjectReference Include="..\..\Core\Core\Core.csproj">
       <Project>{b9e61cdc-72bd-4158-b77e-6850455a07cd}</Project>
       <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SimplePersist\SimplePersist.Contracts\SimplePersist.Contracts.csproj">
-      <Project>{e3dfe2ca-6523-4a70-a145-22b43cf2de8d}</Project>
-      <Name>SimplePersist.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\WurmApi\WurmApi.Contracts\WurmApi.Contracts.csproj">
-      <Project>{8f480cb0-5ee3-4ad7-a209-21eab461ebb3}</Project>
-      <Name>WurmApi.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\WurmAssistant3.Contracts\WurmAssistant3.Contracts.csproj">
       <Project>{359b3172-892d-4b29-9eac-aebf858cf5fe}</Project>

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
-
 using NLog;
 
-namespace AldurSoft.Core.AppFramework.Operations
+namespace AldursLab.Deprec.Core.AppFramework.Operations
 {
     public abstract class OperationBase<TResult> : IOperationWithResult<TResult>
     {

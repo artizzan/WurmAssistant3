@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AldursLab.Deprec.Core;
+using AldursLab.WurmAssistant3.Modules;
+using AldursLab.WurmAssistant3.Systems;
 
-using AldurSoft.Core;
-using AldurSoft.SimplePersist;
-using AldurSoft.WurmAssistant3.Modules;
-using AldurSoft.WurmAssistant3.Systems;
-
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.Engine.Modules
+namespace AldursLab.WurmAssistant3.Engine.Modules
 {
     public abstract class ModuleBase : IModule
     {

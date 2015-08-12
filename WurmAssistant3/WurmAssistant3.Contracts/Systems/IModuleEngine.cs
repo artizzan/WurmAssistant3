@@ -1,6 +1,6 @@
-﻿using AldurSoft.WurmAssistant3.Modules;
+﻿using AldursLab.WurmAssistant3.Modules;
 
-namespace AldurSoft.WurmAssistant3.Systems
+namespace AldursLab.WurmAssistant3.Systems
 {
     public interface IModuleEngine
     {

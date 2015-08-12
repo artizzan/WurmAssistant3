@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AldurSoft.WurmAssistant3.ViewModels.Main;
-
+using AldursLab.Deprec.Core;
+using AldursLab.WurmAssistant3.ViewModels.Main;
 using Caliburn.Micro;
 
-using JetBrains.Annotations;
-
-namespace AldurSoft.WurmAssistant3.ViewModels
+namespace AldursLab.WurmAssistant3.ViewModels
 {
     public class ApplicationWindowViewModel : Screen
     {

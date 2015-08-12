@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 
-namespace AldurSoft.Core
+namespace AldursLab.Deprec.Core
 {
     public static class AssemblyExtensions
     {

@@ -1,4 +1,4 @@
-﻿namespace AldurSoft.Core.AppFramework.Repositories
+﻿namespace AldursLab.Deprec.Core.AppFramework.Repositories
 {
     interface IRepository
     {

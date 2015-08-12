@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using AldurSoft.Core.Eventing;
-using AldurSoft.WurmApi;
-using AldurSoft.WurmAssistant3.Systems;
-
-using JetBrains.Annotations;
-
+using AldursLab.Deprec.Core;
+using AldursLab.WurmAssistant3.Systems;
 using NLog;
 
-namespace AldurSoft.WurmAssistant3.Engine.Systems
+namespace AldursLab.WurmAssistant3.Engine.Systems
 {
     public class WurmApiConfigurator : IWurmApiConfigurator
     {

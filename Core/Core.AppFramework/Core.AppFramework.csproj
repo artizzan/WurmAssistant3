@@ -7,8 +7,8 @@
     <ProjectGuid>{55119D31-8DAD-4C1E-B74B-A61A291D2E70}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AldurSoft.Core.AppFramework</RootNamespace>
-    <AssemblyName>AldurSoft.Core.AppFramework</AssemblyName>
+    <RootNamespace>AldursLab.Deprec.Core.AppFramework</RootNamespace>
+    <AssemblyName>AldursLab.Deprec.Core.AppFramework</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
