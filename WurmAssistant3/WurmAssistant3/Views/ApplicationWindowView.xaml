@@ -1,8 +1,0 @@
-﻿<Window x:Class="AldursLab.WurmAssistant3.Views.ApplicationWindowView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Wurm Assistant 3" Height="400" Width="700" WindowStartupLocation="CenterScreen">
-    <Grid>
-        <ContentControl x:Name="MainContent"></ContentControl>
-    </Grid>
-</Window>
