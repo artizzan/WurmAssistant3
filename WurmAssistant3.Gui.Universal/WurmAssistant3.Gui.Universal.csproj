@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1D384F24-5C99-4830-AC17-5721AE507BC2}</ProjectGuid>
+    <ProjectGuid>{FD107D4E-312E-4642-8F09-B23BD8688AAC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AldursLab.WurmAssistant3.Gui.LogScanner.Universal</RootNamespace>
-    <AssemblyName>AldursLab.WurmAssistant3.Gui.LogScanner.Universal</AssemblyName>
+    <RootNamespace>AldursLab.WurmAssistant3.Gui.Universal</RootNamespace>
+    <AssemblyName>AldursLab.WurmAssistant3.Gui.Universal</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

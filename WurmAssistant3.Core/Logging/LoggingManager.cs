@@ -11,14 +11,25 @@ namespace AldursLab.WurmAssistant3.Core.Logging
 {
     public class LoggingManager
     {
+        readonly LoggingConfiguration config;
+
         public LoggingManager(string logOutputDirFullPath)
         {
             if (logOutputDirFullPath == null)
                 throw new ArgumentNullException("logOutputDirFullPath");
-            var config = new LoggingConfiguration();
-            LogManager.Configuration = config;
+            
+            config = new LoggingConfiguration();
 
-            // rolling custom archival because NLog options were not sufficient.
+            SetupReadableLogging(logOutputDirFullPath);
+            SetupVerboseLogging(logOutputDirFullPath);
+
+            ApplyLoggingConfig();
+        }
+
+        private void SetupReadableLogging(string logOutputDirFullPath)
+        {
+            logOutputDirFullPath = Path.Combine(logOutputDirFullPath, "Readable");
+
             var currentLogDir = Path.Combine(logOutputDirFullPath);
             if (!Directory.Exists(currentLogDir))
                 Directory.CreateDirectory(currentLogDir);
@@ -31,20 +42,55 @@ namespace AldursLab.WurmAssistant3.Core.Logging
             TrimOlgLogFiles(archiveLogDir, maxMegabytes: 50);
 
             var currentFileName = Time.Get.LocalNow.ToString("yyy-MM-dd_HH-mm-ss-ffffff") + ".txt";
-            FullPathToCurrentLogFile = currentFileName;
+            CurrentReadableLogFileFullPath = currentFileName;
             var fileTarget = new FileTarget
             {
                 ArchiveNumbering = ArchiveNumberingMode.DateAndSequence,
                 KeepFileOpen = true,
                 FileName = Path.Combine(currentLogDir, currentFileName),
+                Layout = "${date:universalTime=true} > ${level} > ${message}${onexception:inner= > ${exception:format=Message:maxInnerExceptionLevel=1:innerFormat=Message}}"
             };
 
             var globalrule = new LoggingRule("*", LogLevel.Debug, fileTarget);
             config.LoggingRules.Add(globalrule);
+        }
+
+        private void SetupVerboseLogging(string logOutputDirFullPath)
+        {
+            logOutputDirFullPath = Path.Combine(logOutputDirFullPath, "Verbose");
+
+            var currentLogDir = Path.Combine(logOutputDirFullPath);
+            if (!Directory.Exists(currentLogDir))
+                Directory.CreateDirectory(currentLogDir);
+
+            var archiveLogDir = Path.Combine(currentLogDir, "Archive");
+            if (!Directory.Exists(archiveLogDir))
+                Directory.CreateDirectory(archiveLogDir);
+
+            MoveOldLogToArchive(currentLogDir, archiveLogDir);
+            TrimOlgLogFiles(archiveLogDir, maxMegabytes: 50);
+
+            var currentFileName = Time.Get.LocalNow.ToString("yyy-MM-dd_HH-mm-ss-ffffff") + ".txt";
+            CurrentVerboseLogFileFullPath = currentFileName;
+            var fileTarget = new FileTarget
+            {
+                ArchiveNumbering = ArchiveNumberingMode.DateAndSequence,
+                KeepFileOpen = true,
+                FileName = Path.Combine(currentLogDir, currentFileName),
+                Layout = "${date:universalTime=true}|${level}|${message}${onexception:inner=|${exception:format=ToString}}"
+            };
+
+            var globalrule = new LoggingRule("*", LogLevel.Debug, fileTarget);
+            config.LoggingRules.Add(globalrule);
+        }
+
+        private void ApplyLoggingConfig()
+        {
             LogManager.Configuration = config;
         }
 
-        public string FullPathToCurrentLogFile { get; private set; }
+        public string CurrentReadableLogFileFullPath { get; private set; }
+        public string CurrentVerboseLogFileFullPath { get; private set; }
 
         private void TrimOlgLogFiles(string archiveLogDir, int maxMegabytes)
         {

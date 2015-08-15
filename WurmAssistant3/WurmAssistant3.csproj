@@ -74,6 +74,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
@@ -87,30 +88,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.5\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.5\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.5\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.5\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.DataGrid, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.5\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit, Version=2.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.5\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -121,8 +98,24 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EventMarshaller.cs" />
-    <Compile Include="AppBootstrapper.cs" />
+    <Compile Include="Infrastructure\CaliburnConventionsHelper.cs" />
+    <Compile Include="Infrastructure\EnvironmentStatus.cs" />
+    <Compile Include="Model\WpfGuiThreadEventMarshaller.cs" />
+    <Compile Include="Infrastructure\AppBootstrapper.cs" />
+    <Compile Include="ReflectionRootAnchor.cs" />
+    <Compile Include="ViewModels\AppHostViewModel.cs" />
+    <Compile Include="Views\AppHostView.xaml.cs">
+      <DependentUpon>AppHostView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AppRunningView.xaml.cs">
+      <DependentUpon>AppRunningView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AppStartView.xaml.cs">
+      <DependentUpon>AppStartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LogOutputView.xaml.cs">
+      <DependentUpon>LogOutputView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -157,6 +150,10 @@
       <Project>{e7e145ed-1938-4c09-b432-dc7d7a2d5ddb}</Project>
       <Name>Essentials</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AldursLab\Lab\Wpf\Wpf.csproj">
+      <Project>{3285f7b4-5f46-4120-8cdb-10cd815d7650}</Project>
+      <Name>Wpf</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WurmApi\WurmApi\WurmApi.csproj">
       <Project>{f23b8ad5-5c3b-4c9a-bc11-3577f1cb3272}</Project>
       <Name>WurmApi</Name>
@@ -165,9 +162,35 @@
       <Project>{da679803-09bd-4d44-9c0b-2dcc4d179f6b}</Project>
       <Name>WurmAssistant3.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant3.Gui.Universal\WurmAssistant3.Gui.Universal.csproj">
+      <Project>{fd107d4e-312e-4642-8f09-b23bd8688aac}</Project>
+      <Name>WurmAssistant3.Gui.Universal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant3.Gui.Windows\WurmAssistant3.Gui.Windows.csproj">
+      <Project>{7dde6905-d4a8-42da-8325-55f8afa394c7}</Project>
+      <Name>WurmAssistant3.Gui.Windows</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="WurmAssistantIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\AppHostView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AppRunningView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AppStartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LogOutputView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

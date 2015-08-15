@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistantLite", "WurmAssistantLite\WurmAssistantLite.csproj", "{290DBFD4-3AC8-444E-94E2-4536B6ADEF68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3.Core", "WurmAssistant3.Core\WurmAssistant3.Core.csproj", "{DA679803-09BD-4D44-9C0B-2DCC4D179F6B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AldursLab", "AldursLab", "{FCDA1A51-ECAE-450C-A3AC-6DCCD4038DFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials", "AldursLab\Lab\Essentials\Essentials.csproj", "{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WurmApi", "WurmApi", "{2ECAA21C-B2C1-4549-B7C5-47CEB9A40348}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmApi", "WurmApi\WurmApi\WurmApi.csproj", "{F23B8AD5-5C3B-4C9A-BC11-3577F1CB3272}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{290DBFD4-3AC8-444E-94E2-4536B6ADEF68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{290DBFD4-3AC8-444E-94E2-4536B6ADEF68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{290DBFD4-3AC8-444E-94E2-4536B6ADEF68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{290DBFD4-3AC8-444E-94E2-4536B6ADEF68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA679803-09BD-4D44-9C0B-2DCC4D179F6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA679803-09BD-4D44-9C0B-2DCC4D179F6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA679803-09BD-4D44-9C0B-2DCC4D179F6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA679803-09BD-4D44-9C0B-2DCC4D179F6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F23B8AD5-5C3B-4C9A-BC11-3577F1CB3272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F23B8AD5-5C3B-4C9A-BC11-3577F1CB3272}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F23B8AD5-5C3B-4C9A-BC11-3577F1CB3272}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F23B8AD5-5C3B-4C9A-BC11-3577F1CB3272}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB} = {FCDA1A51-ECAE-450C-A3AC-6DCCD4038DFA}
+		{F23B8AD5-5C3B-4C9A-BC11-3577F1CB3272} = {2ECAA21C-B2C1-4549-B7C5-47CEB9A40348}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = None
+		$1.ResourceNamePolicy = FileFormatDefault
+		$0.VersionControlPolicy = $2
+		$2.inheritsSet = Mono
+	EndGlobalSection
+EndGlobal

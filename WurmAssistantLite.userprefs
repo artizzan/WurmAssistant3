@@ -1,0 +1,27 @@
+﻿<Properties StartupItem="WurmAssistantLite\WurmAssistantLite.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" ActiveRuntime="Mono 4.0.3 (Visual)" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="WurmAssistant3.Core\Logging\ILogger.cs">
+    <Files>
+      <File FileName="WurmAssistant3.Core\Logging\ILogger.cs" Line="18" Column="46" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="WurmAssistantLite" expanded="True" selected="True">
+            <Node name="AldursLab" expanded="True" />
+            <Node name="WurmApi" expanded="True" />
+            <Node name="WurmAssistant3.Core" expanded="True">
+              <Node name="References" expanded="True" />
+              <Node name="Logging" expanded="True" />
+            </Node>
+            <Node name="WurmAssistantLite" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
