@@ -9,9 +9,9 @@ namespace AldursLab.WurmAssistant3.Model
 {
     public class WpfGuiThreadEventMarshaller : IEventMarshaller
     {
-        readonly IEnvironmentStatus environmentStatus;
+        readonly IEnvironment environmentStatus;
 
-        public WpfGuiThreadEventMarshaller([NotNull] IEnvironmentStatus environmentStatus)
+        public WpfGuiThreadEventMarshaller([NotNull] IEnvironment environmentStatus)
         {
             if (environmentStatus == null) throw new ArgumentNullException("environmentStatus");
             this.environmentStatus = environmentStatus;

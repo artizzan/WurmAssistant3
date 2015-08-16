@@ -7,7 +7,7 @@ using AldursLab.WurmAssistant3.Core.Infrastructure;
 
 namespace AldursLab.WurmAssistant3.Infrastructure
 {
-    public class EnvironmentStatus : IEnvironmentStatus
+    public class Environment : IEnvironment
     {
         bool closing;
         readonly object locker = new object();
@@ -28,6 +28,11 @@ namespace AldursLab.WurmAssistant3.Infrastructure
                     closing = value;
                 }
             }
+        }
+
+        public void RequestRestart()
+        {
+            throw new NotSupportedException("WPF does not support automatic application restart");
         }
     }
 }

@@ -24,7 +24,7 @@ namespace AldursLab.WurmAssistant3.Infrastructure
         WindowManager windowManager;
         readonly Assembly[] viewViewModelAssemblies;
 
-        readonly EnvironmentStatus enviromentStatus = new EnvironmentStatus();
+        readonly Environment enviroment = new Environment();
 
         public AppBootstrapper()
         {
@@ -54,7 +54,7 @@ namespace AldursLab.WurmAssistant3.Infrastructure
         {
             // configure and bind app-specific dependencies
 
-            kernel.Bind<IEnvironmentStatus>().ToConstant(enviromentStatus).InSingletonScope();
+            kernel.Bind<IEnvironment>().ToConstant(enviroment).InSingletonScope();
 
             windowManager = new WindowManager();
             kernel.Bind<WindowManager>().ToConstant(windowManager);
@@ -62,9 +62,10 @@ namespace AldursLab.WurmAssistant3.Infrastructure
 
             kernel.Bind<AppHostViewModel>().ToSelf().InSingletonScope();
 
-            var dataDirPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            var dataDirPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
                 "AldursLab",
-                "WurmAssistant3");
+                "WurmAssistant3",
+                "Data");
 
             if (!Directory.Exists(dataDirPath))
             {
@@ -72,14 +73,13 @@ namespace AldursLab.WurmAssistant3.Infrastructure
             }
 
             var config = new WurmAssistantConfig() {DataDirectoryFullPath = dataDirPath};
-            kernel.Bind<WurmAssistantConfig>().ToConstant(config);
-            var marshaller = new WpfGuiThreadEventMarshaller(enviromentStatus);
-            kernel.Bind<WpfGuiThreadEventMarshaller>().ToConstant(marshaller);
-            kernel.Bind<IEventMarshaller>().To<WpfGuiThreadEventMarshaller>();
+            kernel.Bind<IWurmAssistantConfig>().ToConstant(config);
+            var marshaller = new WpfGuiThreadEventMarshaller(enviroment);
+            kernel.Bind<IEventMarshaller, WpfGuiThreadEventMarshaller>().ToConstant(marshaller);
 
             // create hosting window for the app
             var hostView = kernel.Get<AppHostViewModel>();
-            windowManager.ShowWindow(hostView);
+            windowManager.ShowWindow(hostView, null, new Dictionary<string, object>());
 
             // initialize and resolve the app
             coreBootstrapper = new CoreBootstrapper(kernel);
@@ -91,7 +91,7 @@ namespace AldursLab.WurmAssistant3.Infrastructure
 
             // initialize application
 
-            coreBootstrapper.Bootstrap();
+            coreBootstrapper.BootstrapRuntime();
             globalLogger = kernel.Get<LoggerFactory>().Create();
 
             // show the application running screen
@@ -114,7 +114,7 @@ namespace AldursLab.WurmAssistant3.Infrastructure
 
         protected override void OnExit(object sender, EventArgs e)
         {
-            enviromentStatus.Closing = true;
+            enviroment.Closing = true;
             if (globalLogger != null)
             {
                 globalLogger.Info("Exiting WurmAssistant");

@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace AldursLab.WurmAssistant3.Core.Infrastructure
 {
-    public interface IEnvironmentStatus
+    public interface IEnvironment
     {
         bool Closing { get; }
+
+        void RequestRestart();
     }
 }

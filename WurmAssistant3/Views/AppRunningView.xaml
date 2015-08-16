@@ -10,7 +10,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0">App running (placeholder)</Label>
+        <Label Grid.Row="0" HorizontalAlignment="Center"> --- Placeholder reserved for features GUI --- </Label>
         <ContentControl Grid.Row="1" x:Name="LogOutputViewModel"/>
     </Grid>
 </UserControl>

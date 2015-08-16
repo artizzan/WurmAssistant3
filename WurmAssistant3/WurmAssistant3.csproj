@@ -99,7 +99,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Infrastructure\CaliburnConventionsHelper.cs" />
-    <Compile Include="Infrastructure\EnvironmentStatus.cs" />
+    <Compile Include="Infrastructure\Environment.cs" />
+    <Compile Include="Infrastructure\WurmAssistantConfig.cs" />
     <Compile Include="Model\WpfGuiThreadEventMarshaller.cs" />
     <Compile Include="Infrastructure\AppBootstrapper.cs" />
     <Compile Include="ReflectionRootAnchor.cs" />

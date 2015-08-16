@@ -42,6 +42,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionRootAnchor.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WurmAssistant3.Core\WurmAssistant3.Core.csproj">
+      <Project>{da679803-09bd-4d44-9c0b-2dcc4d179f6b}</Project>
+      <Name>WurmAssistant3.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -20,7 +20,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;MONO</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -33,7 +33,35 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-mono|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug-mono\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;MONO</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-mono|AnyCPU'">
+    <OutputPath>bin\Release-mono\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL" Condition="'$(Configuration)'=='Debug' Or '$(Configuration)'=='Release'">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL" Condition="'$(Configuration)'=='Debug-mono' Or '$(Configuration)'=='Release-mono'">
+      <HintPath>..\lib\Ninject-3.2.0.0-release-mono-4.0\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,17 +82,55 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Bootstrapping\Configurator.cs" />
+    <Compile Include="Bootstrapping\Environment.cs" />
+    <Compile Include="Bootstrapping\Persistent\WurmAssistantLiteSettings.cs" />
+    <Compile Include="Bootstrapping\Persistent\GlobalSettingsEntity.cs" />
+    <Compile Include="Bootstrapping\WinFormsMainThreadEventMarshaller.cs" />
+    <Compile Include="Views\AppRunningView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\AppRunningView.Designer.cs">
+      <DependentUpon>AppRunningView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bootstrapping\AppBootstrapper.cs" />
+    <Compile Include="Views\AppStartView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\AppStartView.Designer.cs">
+      <DependentUpon>AppStartView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LogOutputView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\LogOutputView.Designer.cs">
+      <DependentUpon>LogOutputView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Views\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleViewModel.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Views\WurmAssistantSetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\WurmAssistantSetupForm.Designer.cs">
+      <DependentUpon>WurmAssistantSetupForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Views\AppRunningView.resx">
+      <DependentUpon>AppRunningView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AppStartView.resx">
+      <DependentUpon>AppStartView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\LogOutputView.resx">
+      <DependentUpon>LogOutputView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -76,6 +142,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Views\WurmAssistantSetupForm.resx">
+      <DependentUpon>WurmAssistantSetupForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -95,6 +164,14 @@
       <Project>{e7e145ed-1938-4c09-b432-dc7d7a2d5ddb}</Project>
       <Name>Essentials</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AldursLab\Lab\PersistentObjects.FlatFiles\PersistentObjects.FlatFiles.csproj">
+      <Project>{6322fd00-9aaa-40d9-8c6f-515cc4290b45}</Project>
+      <Name>PersistentObjects.FlatFiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj">
+      <Project>{0962a106-b1b2-4e21-9931-81d68a98ed37}</Project>
+      <Name>PersistentObjects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WurmApi\WurmApi\WurmApi.csproj">
       <Project>{f23b8ad5-5c3b-4c9a-bc11-3577f1cb3272}</Project>
       <Name>WurmApi</Name>
@@ -103,7 +180,12 @@
       <Project>{da679803-09bd-4d44-9c0b-2dcc4d179f6b}</Project>
       <Name>WurmAssistant3.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant3.Gui.Universal\WurmAssistant3.Gui.Universal.csproj">
+      <Project>{fd107d4e-312e-4642-8f09-b23bd8688aac}</Project>
+      <Name>WurmAssistant3.Gui.Universal</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
