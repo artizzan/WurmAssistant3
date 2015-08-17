@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3.Launcher", "WurmAssistant3.Launcher\WurmAssistant3.Launcher.csproj", "{1E636D2D-609A-46BA-9B01-765D48DC40C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant.LauncherCore", "WurmAssistant.LauncherCore\WurmAssistant.LauncherCore.csproj", "{F66720BA-0084-44E4-965C-64891A3C982F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AldursLab", "AldursLab", "{6CA89AB0-9BB0-42E9-9DE7-EA5597828FDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials", "AldursLab\Lab\Essentials\Essentials.csproj", "{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Networking", "AldursLab\Lab\Networking\Networking.csproj", "{CF5FDC21-2FF8-42FB-875F-D9A0701BAE9F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E636D2D-609A-46BA-9B01-765D48DC40C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E636D2D-609A-46BA-9B01-765D48DC40C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E636D2D-609A-46BA-9B01-765D48DC40C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E636D2D-609A-46BA-9B01-765D48DC40C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F66720BA-0084-44E4-965C-64891A3C982F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F66720BA-0084-44E4-965C-64891A3C982F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F66720BA-0084-44E4-965C-64891A3C982F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F66720BA-0084-44E4-965C-64891A3C982F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF5FDC21-2FF8-42FB-875F-D9A0701BAE9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF5FDC21-2FF8-42FB-875F-D9A0701BAE9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF5FDC21-2FF8-42FB-875F-D9A0701BAE9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF5FDC21-2FF8-42FB-875F-D9A0701BAE9F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB} = {6CA89AB0-9BB0-42E9-9DE7-EA5597828FDE}
+		{CF5FDC21-2FF8-42FB-875F-D9A0701BAE9F} = {6CA89AB0-9BB0-42E9-9DE7-EA5597828FDE}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,4 @@
+﻿AldursLabDirName=WurmAssistant3
+WurmAssistantExeFileName=AldursLab.WurmAssistant3.exe
+WebServiceRootUrl=todo
+AppName=Wurm Assistant 3
