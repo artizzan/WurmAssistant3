@@ -5,24 +5,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AldursLab.Essentials.Synchronization;
+using AldursLab.PersistentObjects;
+using AldursLab.PersistentObjects.FlatFiles;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant.LauncherCore
 {
-    public class LauncherSync
+    public class Launcher
     {
         readonly string launcherDataDirPath;
         const string LockFileName = "launcher.lock";
-        const string DataFileName = "launcher.state";
+        const string PersistentDataDirName = "Data";
 
         FileLock fileLock;
 
         readonly JsonSerializer serializer = new JsonSerializer();
-        readonly string dataFilePath;
+
+        readonly PersistentCollectionsLibrary library;
+        readonly LauncherData launcherData;
 
         volatile bool entered;
 
-        public LauncherSync(string launcherDataDirPath)
+        public Launcher(string launcherDataDirPath)
         {
             if (launcherDataDirPath == null) throw new ArgumentNullException("launcherDataDirPath");
             this.launcherDataDirPath = launcherDataDirPath;
@@ -39,8 +44,11 @@ namespace AldursLab.WurmAssistant.LauncherCore
                 Directory.CreateDirectory(launcherDataDirPath);
             }
 
+            var dataDirPath = Path.Combine(launcherDataDirPath, PersistentDataDirName);
+            library = new PersistentCollectionsLibrary(new FlatFilesPersistenceStrategy(dataDirPath));
+            var entity = library.DefaultCollection.GetObject<LauncherDataEntity>("LauncherDataEntity");
 
-            dataFilePath = Path.Combine(launcherDataDirPath, DataFileName);
+            launcherData = new LauncherData(entity);
         }
 
         public void EnterLock()
@@ -52,23 +60,14 @@ namespace AldursLab.WurmAssistant.LauncherCore
             }
         }
 
-        public LauncherData GetLauncherPersistentState()
+        public LauncherData GetPersistentData()
         {
-            if (File.Exists(dataFilePath))
-            {
-                var fileContent = File.ReadAllText(dataFilePath);
-                var deserialized = serializer.Deserialize<LauncherData>(new JsonTextReader(new StringReader(fileContent)));
-                return deserialized;
-            }
-            else return new LauncherData();
+            return launcherData;
         }
 
-        public void SetLauncherPersistentState(LauncherData launcherData)
+        public void SavePersistentData()
         {
-            using (var sw = new StreamWriter(dataFilePath))
-            {
-                serializer.Serialize(sw, launcherData);
-            }
+            library.SaveAll();
         }
 
         public void ReleaseLock()
@@ -87,14 +86,32 @@ namespace AldursLab.WurmAssistant.LauncherCore
         }
     }
 
-    public class LauncherData
+    public class LauncherDataEntity : Entity
     {
-        Version wurmAssistantInstalledVersion;
+        public LauncherDataEntity()
+        {
+            WurmAssistantInstalledVersion = new Version(0, 0, 0, 0);
+        }
 
+        [NotNull]
+        public Version WurmAssistantInstalledVersion { get; set; }
+    }
+
+    public class LauncherData : PersistentEntityBase<LauncherDataEntity>
+    {
+        public LauncherData(IPersistent<LauncherDataEntity> persistent) : base(persistent)
+        {
+        }
+
+        [NotNull]
         public Version WurmAssistantInstalledVersion
         {
-            get { return wurmAssistantInstalledVersion ?? new Version(0,0,0,0); }
-            set { wurmAssistantInstalledVersion = value; }
+            get { return Entity.WurmAssistantInstalledVersion; }
+            set
+            {
+                if (value == null) throw new ArgumentNullException("value");
+                Entity.WurmAssistantInstalledVersion = value;
+            }
         }
     }
 }

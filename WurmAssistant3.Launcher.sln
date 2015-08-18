@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials", "AldursLab\Lab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Networking", "AldursLab\Lab\Networking\Networking.csproj", "{CF5FDC21-2FF8-42FB-875F-D9A0701BAE9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentObjects", "AldursLab\Lab\PersistentObjects\PersistentObjects.csproj", "{0962A106-B1B2-4E21-9931-81D68A98ED37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentObjects.FlatFiles", "AldursLab\Lab\PersistentObjects.FlatFiles\PersistentObjects.FlatFiles.csproj", "{6322FD00-9AAA-40D9-8C6F-515CC4290B45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,14 @@ Global
 		{CF5FDC21-2FF8-42FB-875F-D9A0701BAE9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF5FDC21-2FF8-42FB-875F-D9A0701BAE9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF5FDC21-2FF8-42FB-875F-D9A0701BAE9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0962A106-B1B2-4E21-9931-81D68A98ED37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0962A106-B1B2-4E21-9931-81D68A98ED37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0962A106-B1B2-4E21-9931-81D68A98ED37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0962A106-B1B2-4E21-9931-81D68A98ED37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6322FD00-9AAA-40D9-8C6F-515CC4290B45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6322FD00-9AAA-40D9-8C6F-515CC4290B45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6322FD00-9AAA-40D9-8C6F-515CC4290B45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6322FD00-9AAA-40D9-8C6F-515CC4290B45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,5 +54,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB} = {6CA89AB0-9BB0-42E9-9DE7-EA5597828FDE}
 		{CF5FDC21-2FF8-42FB-875F-D9A0701BAE9F} = {6CA89AB0-9BB0-42E9-9DE7-EA5597828FDE}
+		{0962A106-B1B2-4E21-9931-81D68A98ED37} = {6CA89AB0-9BB0-42E9-9DE7-EA5597828FDE}
+		{6322FD00-9AAA-40D9-8C6F-515CC4290B45} = {6CA89AB0-9BB0-42E9-9DE7-EA5597828FDE}
 	EndGlobalSection
 EndGlobal

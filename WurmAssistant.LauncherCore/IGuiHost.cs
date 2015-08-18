@@ -7,5 +7,6 @@ namespace AldursLab.WurmAssistant.LauncherCore
         void ShowHostWindow();
         void HideHostWindow();
         void SetContent(UserControl userControl);
+        void Close();
     }
 }

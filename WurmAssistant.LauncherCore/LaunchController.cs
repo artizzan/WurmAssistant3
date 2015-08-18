@@ -49,18 +49,18 @@ namespace AldursLab.WurmAssistant.LauncherCore
 
         async Task Run()
         {
-            LauncherSync launcherSync = null;
+            Launcher launcher = null;
             IInstallLocation installLocation = null;
             try
             {
-                launcherSync = new LauncherSync(Path.Combine(config.RootDirFullPath, "Launcher"));
+                launcher = new Launcher(Path.Combine(config.RootDirFullPath, "Launcher"));
                 installLocation = new InstallLocation(Path.Combine(config.RootDirFullPath, "Bin"),
                     config.WurmAssistantExeFileName,
                     new ProcessRunner());
 
-                launcherSync.EnterLock();
+                launcher.EnterLock();
 
-                LauncherData data = launcherSync.GetLauncherPersistentState();
+                LauncherData launcherData = launcher.GetPersistentData();
 
                 IStagingLocation stagingLocation =
                     new StagingLocation(Path.Combine(config.RootDirFullPath, "Staging"));
@@ -75,17 +75,25 @@ namespace AldursLab.WurmAssistant.LauncherCore
                     if (stagingLocation.AnyPackageStaged)
                     {
                         var latestStagedPackage = stagingLocation.GetLatestStagedPackage();
+                        gui.ShowGui();
+                        gui.AddUserMessage("Updating to version " + latestStagedPackage.Version);
+                        gui.SetProgressStatus("Updating...");
+                        gui.SetProgressPercent(null);
                         stagingLocation.ExtractIntoExtractionDir(latestStagedPackage);
                         installLocation.ClearLocation();
                         stagingLocation.MoveExtractionDir(installLocation.InstallLocationPath);
                         stagingLocation.ClearStagingArea();
-                        data.WurmAssistantInstalledVersion = latestStagedPackage.Version;
-                        launcherSync.SetLauncherPersistentState(data);
+                        launcherData.WurmAssistantInstalledVersion = latestStagedPackage.Version;
+                        launcher.SavePersistentData();
+                        gui.AddUserMessage("Update complete");
+                        gui.SetProgressStatus("Update complete");
+                        await Task.Delay(1);
+                        gui.HideGui();
                     }
                     TryRunWurmAssistant(installLocation);
 
                     var remoteVersion = await wurmAssistantService.GetLatestVersionAsync(gui);
-                    if (data.WurmAssistantInstalledVersion < remoteVersion)
+                    if (launcherData.WurmAssistantInstalledVersion < remoteVersion)
                     {
                         await wurmAssistantService.GetPackageAsync(gui, remoteVersion);
                         // done - next run will install this staged version
@@ -99,19 +107,20 @@ namespace AldursLab.WurmAssistant.LauncherCore
                     var latestPackage = await wurmAssistantService.GetPackageAsync(gui, latestVersion);
                     gui.AddUserMessage("Extracting Wurm Assistant version " + latestVersion);
                     latestPackage.ExtractIntoDirectory(installLocation.InstallLocationPath);
-                    data.WurmAssistantInstalledVersion = latestVersion;
-                    launcherSync.SetLauncherPersistentState(data);
+                    launcherData.WurmAssistantInstalledVersion = latestVersion;
+                    launcher.SavePersistentData();
                     gui.AddUserMessage("Installation complete.");
                     gui.AddUserMessage("Starting Wurm Assistant...");
-                    await Task.Delay(TimeSpan.FromSeconds(3));
+                    await Task.Delay(TimeSpan.FromSeconds(1));
                     installLocation.RunWurmAssistant();
                     gui.HideGui();
                     stagingLocation.ClearStagingArea();
                 }
 
-                launcherSync.SetLauncherPersistentState(data);
+                launcher.SavePersistentData();
 
                 gui.HideGui();
+                host.Close();
             }
             catch (LockFailedException)
             {
@@ -125,9 +134,9 @@ namespace AldursLab.WurmAssistant.LauncherCore
             }
             finally
             {
-                if (launcherSync != null)
+                if (launcher != null)
                 {
-                    launcherSync.ReleaseLock();
+                    launcher.ReleaseLock();
                 }
             }
         }
