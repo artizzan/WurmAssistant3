@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Web;
+using AldursLab.WurmAssistantWebService.Model.Entities.Base;
 using AldursLab.WurmAssistantWebService.Validation;
 
 namespace AldursLab.WurmAssistantWebService.Model.Entities

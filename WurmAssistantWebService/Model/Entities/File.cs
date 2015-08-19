@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using AldursLab.WurmAssistantWebService.Model.Entities.Base;
 
 namespace AldursLab.WurmAssistantWebService.Model.Entities
 {
@@ -17,15 +18,7 @@ namespace AldursLab.WurmAssistantWebService.Model.Entities
         [Required, MaxLength(250)]
         public string Name { get; set; }
 
-        [Required, MaxLength(20)]
-        public string Extension { get; set; }
-
-        [NotMapped]
-        public string CombinedName { get { return Name + "." + Extension; } }
-        
         [Required]
-        public Byte[] Contents { get; set; }
-
-        
+        public string StorageFileName { get; set; }
     }
 }

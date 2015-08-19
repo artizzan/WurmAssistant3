@@ -11,8 +11,7 @@ namespace AldursLab.WurmAssistantWebService.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
-            Database.SetInitializer(new DropCreateDatabaseAlways<ApplicationDbContext>());
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(AldursLab.WurmAssistantWebService.Model.ApplicationDbContext context)

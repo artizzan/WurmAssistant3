@@ -20,7 +20,7 @@ namespace AldursLab.WurmAssistantWebService.Validation.Base
             {
                 return new ValidationResult("value is null");
             }
-            if (!(value is ProjectType))
+            if (!(value is TEnum))
             {
                 return
                     new ValidationResult(string.Format("Invalid value type, expected {0}, actual: {1}",

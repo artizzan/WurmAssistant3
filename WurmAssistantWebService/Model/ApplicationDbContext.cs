@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using AldursLab.WurmAssistantWebService.Model.Entities;
 using AldursLab.WurmAssistantWebService.Model.Entities.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -15,6 +16,13 @@ namespace AldursLab.WurmAssistantWebService.Model
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
         }
 
         public DbSet<File> Files { get; set; }

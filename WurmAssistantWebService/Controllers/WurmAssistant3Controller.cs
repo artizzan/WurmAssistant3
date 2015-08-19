@@ -12,6 +12,8 @@ namespace AldursLab.WurmAssistantWebService.Controllers
     [RoutePrefix("api/WurmAssistant3")]
     public class WurmAssistant3Controller : PackageControllerBase
     {
+        private static readonly ProjectType ProjectType = ProjectType.WurmAssistant3;
+
         /// <summary>
         /// Gets latest version of Beta package or "0.0.0.0" if none available
         /// </summary>
@@ -19,7 +21,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         [Route("Beta/LatestVersion")]
         public string GetLatestBetaVersion()
         {
-            return GetLatestVersion(ProjectType.WurmAssistantLite, ReleaseType.Beta);
+            return GetLatestVersion(ProjectType, ReleaseType.Beta);
         }
 
         /// <summary>
@@ -29,7 +31,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         [Route("Stable/LatestVersion")]
         public string GetLatestStableVersion()
         {
-            return GetLatestVersion(ProjectType.WurmAssistantLite, ReleaseType.Stable);
+            return GetLatestVersion(ProjectType, ReleaseType.Stable);
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         [Route("Beta/Package/{versionString}")]
         public HttpResponseMessage GetBetaPackage(string versionString)
         {
-            return GetPackage(ProjectType.WurmAssistantLite, ReleaseType.Beta, versionString);
+            return GetPackage(ProjectType, ReleaseType.Beta, versionString);
         }
 
         /// <summary>
@@ -51,7 +53,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         [Route("Stable/Package/{versionString}")]
         public HttpResponseMessage GetStablePackage(string versionString)
         {
-            return GetPackage(ProjectType.WurmAssistantLite, ReleaseType.Stable, versionString);
+            return GetPackage(ProjectType, ReleaseType.Stable, versionString);
         }
 
         /// <summary>
@@ -63,7 +65,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         [Authorize(Roles = "Publish")]
         public async Task<HttpResponseMessage> PostBetaPackage(string versionString)
         {
-            return await PostPackage(ProjectType.WurmAssistantLite, ReleaseType.Beta, versionString);
+            return await PostPackage(ProjectType, ReleaseType.Beta, versionString);
         }
 
         /// <summary>
@@ -75,7 +77,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         [Authorize(Roles = "Publish")]
         public async Task<HttpResponseMessage> PostStablePackage(string versionString)
         {
-            return await PostPackage(ProjectType.WurmAssistantLite, ReleaseType.Stable, versionString);
+            return await PostPackage(ProjectType, ReleaseType.Stable, versionString);
         }
     }
 }

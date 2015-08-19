@@ -1,4 +1,4 @@
 ﻿AldursLabDirName=WurmAssistant3
 WurmAssistantExeFileName=AldursLab.WurmAssistant3.exe
-WebServiceRootUrl=todo
+WebServiceRootUrl=localhost:54793/WurmAssistant3/Stable
 AppName=Wurm Assistant 3

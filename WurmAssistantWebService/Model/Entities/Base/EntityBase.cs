@@ -2,20 +2,21 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AldursLab.WurmAssistantWebService.Model
+namespace AldursLab.WurmAssistantWebService.Model.Entities.Base
 {
     public abstract class EntityBase
     {
         protected EntityBase()
         {
-            Created = DateTimeOffset.Now;
+            var now = DateTimeOffset.Now;
+            Created = now;
+            Modified = now;
         }
 
         [Required]
-        [Column(TypeName = "datetime2")]
         public DateTimeOffset Created { get; set; }
 
-        [Column(TypeName = "datetime2")]
-        public DateTimeOffset? Modified { get; set; }
+        [Required]
+        public DateTimeOffset Modified { get; set; }
     }
 }

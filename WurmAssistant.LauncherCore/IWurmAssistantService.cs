@@ -25,15 +25,16 @@ namespace AldursLab.WurmAssistant.LauncherCore
 
         readonly JsonSerializer serializer = new JsonSerializer();
 
-        // expected Web API:
-        // http://url/LatestVersion returns string
-        // http://url/Package/[version] where version is Version returns File
-
         public WurmAssistantService(string webServiceRootUrl, IStagingLocation stagingLocation)
         {
             if (webServiceRootUrl == null) throw new ArgumentNullException("webServiceRootUrl");
             if (stagingLocation == null) throw new ArgumentNullException("stagingLocation");
+            if (webServiceRootUrl.EndsWith("/"))
+            {
+                webServiceRootUrl = webServiceRootUrl.Substring(0, webServiceRootUrl.Length - 1);
+            }
             this.webServiceRootUrl = webServiceRootUrl;
+
             this.stagingLocation = stagingLocation;
         }
 
@@ -42,7 +43,7 @@ namespace AldursLab.WurmAssistant.LauncherCore
             HttpClient client = new HttpClient();
             progressReporter.SetProgressPercent(null);
             progressReporter.SetProgressStatus("Obtaining latest version");
-            var response = await client.GetAsync(webServiceRootUrl + "/LatestVersion");
+            var response = await client.GetAsync(string.Format("{0}/LatestVersion", webServiceRootUrl));
             if (!response.IsSuccessStatusCode)
             {
                 using (var stream = await response.Content.ReadAsStreamAsync())
@@ -99,7 +100,7 @@ namespace AldursLab.WurmAssistant.LauncherCore
                         }
                     };
                     webclient.DownloadFileAsync(
-                        new Uri(webServiceRootUrl + "/Package/" + version.ToString().Replace(".", "-")),
+                        new Uri(string.Format("{0}/Package/{1}", webServiceRootUrl, version.ToString().Replace(".", "-"))),
                         tempFile.FullName);
 
                     await tcs.Task;

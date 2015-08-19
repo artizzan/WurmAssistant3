@@ -3,6 +3,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using AldursLab.WurmAssistantWebService.Migrations;
 using AldursLab.WurmAssistantWebService.Model;
 
 namespace AldursLab.WurmAssistantWebService
@@ -16,6 +17,8 @@ namespace AldursLab.WurmAssistantWebService
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Configuration>());
         }
     }
 }

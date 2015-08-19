@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using AldursLab.WurmAssistantWebService.Model;
 using AldursLab.WurmAssistantWebService.Model.Entities;
+using AldursLab.WurmAssistantWebService.Model.Services;
 
 namespace AldursLab.WurmAssistantWebService.Controllers.Base
 {
     public abstract class PackageControllerBase : ApiController
     {
         protected readonly ApplicationDbContext Context = new ApplicationDbContext();
+        protected readonly Files Files = new Files();
 
         protected string GetLatestVersion(ProjectType projectType, ReleaseType releaseType)
         {
@@ -49,14 +51,12 @@ namespace AldursLab.WurmAssistantWebService.Controllers.Base
             {
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
-            var fileContents = package.File.Contents;
-            var fileName = package.File.CombinedName;
 
             var response = new HttpResponseMessage(HttpStatusCode.OK);
-            response.Content = new StreamContent(new System.IO.MemoryStream(fileContents));
+            response.Content = new StreamContent(Files.Read(package.File.FileId));
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = fileName
+                FileName = package.File.Name
             };
             return response;
         }
@@ -79,28 +79,31 @@ namespace AldursLab.WurmAssistantWebService.Controllers.Base
 
             try
             {
-                // Read the form data.
-                var content = await Request.Content.ReadAsByteArrayAsync();
-                var file = new File()
+                var name = string.Format("{0}_{1}_{2}.7z",
+                    projectType,
+                    releaseType,
+                    unescapedVersionString);
+
+                Guid fileId;
+                using (var contentStream = await Request.Content.ReadAsStreamAsync())
                 {
-                    Name =
-                        string.Format("WurmAssistant{0}_{1}_{2}",
-                            projectType,
-                            releaseType,
-                            unescapedVersionString),
-                    Extension = "7z",
-                    Contents = content
-                };
+                    fileId = Files.Create(name, contentStream);
+                }
+
+                var newFile = Context.Files.Single(file => file.FileId == fileId);
+
                 var package = new WurmAssistantPackage()
                 {
                     ProjectType = projectType,
                     ReleaseType = releaseType,
                     VersionString = unescapedVersionString,
-                    File = file
+                    File = newFile
                 };
                 Context.WurmAssistantPackages.Add(package);
-                await RemoveOutdatedPackages();
-                await Context.SaveChangesAsync();
+
+                RemoveOutdatedPackages();
+                Context.SaveChanges();
+
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (System.Exception e)
@@ -109,12 +112,18 @@ namespace AldursLab.WurmAssistantWebService.Controllers.Base
             }
         }
 
-        protected async Task RemoveOutdatedPackages()
+        protected void RemoveOutdatedPackages()
         {
+            var oldDate = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(1));
             var toDelete =
                 Context.WurmAssistantPackages.Where(
-                    package => package.Created < DateTimeOffset.Now.Subtract(TimeSpan.FromDays(1)));
-            Context.WurmAssistantPackages.RemoveRange(toDelete);
+                    package => package.Created < oldDate).ToArray();
+            foreach (var package in toDelete)
+            {
+                Context.WurmAssistantPackages.Remove(package);
+                Context.SaveChanges();
+                Files.Delete(package.FileId);
+            }
         }
     }
 }

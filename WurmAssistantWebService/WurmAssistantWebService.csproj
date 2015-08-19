@@ -32,6 +32,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>App_Data\AldursLab.WurmAssistantWebService.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -254,12 +255,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508191657022_Initial.cs" />
+    <Compile Include="Migrations\201508191657022_Initial.Designer.cs">
+      <DependentUpon>201508191657022_Initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Model\EntityBase.cs" />
+    <Compile Include="Model\Entities\Base\EntityBase.cs" />
     <Compile Include="Model\Entities\Identity\AccountBindingModels.cs" />
     <Compile Include="Model\Entities\Identity\AccountViewModels.cs" />
     <Compile Include="Model\ApplicationDbContext.cs" />
     <Compile Include="Model\Entities\Identity\IdentityModels.cs" />
+    <Compile Include="Model\Services\Files.cs" />
     <Compile Include="Validation\Base\EnumValidator.cs" />
     <Compile Include="Model\Entities\File.cs" />
     <Compile Include="Model\Entities\ProjectType.cs" />
@@ -348,6 +354,11 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201508191657022_Initial.resx">
+      <DependentUpon>201508191657022_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
