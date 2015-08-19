@@ -99,7 +99,7 @@ namespace AldursLab.WurmAssistant.LauncherCore
                         }
                     };
                     webclient.DownloadFileAsync(
-                        new Uri(webServiceRootUrl + "/Package/" + version.ToString()),
+                        new Uri(webServiceRootUrl + "/Package/" + version.ToString().Replace(".", "-")),
                         tempFile.FullName);
 
                     await tcs.Task;
