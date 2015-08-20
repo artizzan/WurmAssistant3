@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant.LauncherCore;
-using AldursLab.WurmAssistant3.Launcher.Properties;
+using AldursLab.WurmAssistant.Launcher.Core;
 
-namespace AldursLab.WurmAssistant3.Launcher
+namespace AldursLab.WurmAssistant.Launcher
 {
     public partial class MainForm : Form, IGuiHost
     {

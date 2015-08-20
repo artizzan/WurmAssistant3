@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AldursLab.Essentials.Synchronization;
 using AldursLab.PersistentObjects;
 using AldursLab.PersistentObjects.FlatFiles;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant.LauncherCore
+namespace AldursLab.WurmAssistant.Launcher.Core
 {
     public class Launcher
     {

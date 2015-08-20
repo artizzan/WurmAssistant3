@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AldursLab.WurmAssistant3.Launcher.Properties {
+namespace AldursLab.WurmAssistant.Launcher.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace AldursLab.WurmAssistant3.Launcher.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AldursLab.WurmAssistant3.Launcher.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AldursLab.WurmAssistant.Launcher.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

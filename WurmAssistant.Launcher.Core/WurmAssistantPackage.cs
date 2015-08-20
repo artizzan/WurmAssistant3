@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using SevenZip;
 
-namespace AldursLab.WurmAssistant.LauncherCore
+namespace AldursLab.WurmAssistant.Launcher.Core
 {
     public interface IStagedPackage
     {

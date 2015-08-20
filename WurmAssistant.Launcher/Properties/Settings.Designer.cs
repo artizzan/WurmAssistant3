@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AldursLab.WurmAssistant3.Launcher.Properties {
+namespace AldursLab.WurmAssistant.Launcher.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

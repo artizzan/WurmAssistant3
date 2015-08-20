@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace AldursLab.WurmAssistant.LauncherCore
+namespace AldursLab.WurmAssistant.Launcher.Core
 {
     public interface IStagingLocation
     {

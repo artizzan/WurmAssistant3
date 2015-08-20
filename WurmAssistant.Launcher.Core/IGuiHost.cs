@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 
-namespace AldursLab.WurmAssistant.LauncherCore
+namespace AldursLab.WurmAssistant.Launcher.Core
 {
     public interface IGuiHost
     {

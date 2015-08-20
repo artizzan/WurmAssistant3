@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net.Http;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using AldursLab.Networking;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant.LauncherCore
+namespace AldursLab.WurmAssistant.Launcher.Core
 {
     public interface IWurmAssistantService
     {

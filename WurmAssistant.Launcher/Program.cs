@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace AldursLab.WurmAssistant3.Launcher
+namespace AldursLab.WurmAssistant.Launcher
 {
     static class Program
     {

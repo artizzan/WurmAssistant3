@@ -1,4 +1,4 @@
-﻿namespace AldursLab.WurmAssistant.LauncherCore
+﻿namespace AldursLab.WurmAssistant.Launcher.Core
 {
     partial class UpdaterGui
     {
