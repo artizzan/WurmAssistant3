@@ -23,7 +23,7 @@ namespace AldursLab.WurmAssistant.Launcher
             {
                 throw new NullReferenceException("assemblyDir is null");
             }
-            var settingsFile = Path.Combine(assemblyDir, "LauncherSettings.cfg");
+            var settingsFile = Path.Combine(assemblyDir, "default.cfg");
 
             IConfig localSettings = new FileSimpleConfig(settingsFile);
             this.Text = localSettings.GetValue("AppName") + " Launcher";
