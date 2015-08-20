@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using AldursLab.Essentials.Configs;
 using AldursLab.WurmAssistant.Launcher.Core;
 
 namespace AldursLab.WurmAssistant.Launcher
@@ -17,17 +18,24 @@ namespace AldursLab.WurmAssistant.Launcher
         {
             HideHostWindow();
 
-            var localSettings = new LocalLauncherSettings();
-            this.Text = localSettings.GetSetting("AppName") + " Launcher";
+            var assemblyDir = Path.GetDirectoryName(this.GetType().Assembly.Location);
+            if (assemblyDir == null)
+            {
+                throw new NullReferenceException("assemblyDir is null");
+            }
+            var settingsFile = Path.Combine(assemblyDir, "LauncherSettings.cfg");
+
+            IConfig localSettings = new FileSimpleConfig(settingsFile);
+            this.Text = localSettings.GetValue("AppName") + " Launcher";
 
             var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var rootDir = Path.Combine(localAppData, "AldursLab", localSettings.GetSetting("AldursLabDirName"));
+            var rootDir = Path.Combine(localAppData, "AldursLab", localSettings.GetValue("AldursLabDirName"));
 
             var config = new ControllerConfig()
             {
                 RootDirFullPath = rootDir,
-                WebServiceRootUrl = localSettings.GetSetting("WebServiceRootUrl"),
-                WurmAssistantExeFileName = localSettings.GetSetting("WurmAssistantExeFileName")
+                WebServiceRootUrl = localSettings.GetValue("WebServiceRootUrl"),
+                WurmAssistantExeFileName = localSettings.GetValue("WurmAssistantExeFileName")
             };
 
             var controller = new LaunchController(this, config);
