@@ -7,8 +7,9 @@ namespace AldursLab.WurmAssistant.PublishRobot
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Console write out");
-            Trace.WriteLine("Console write out");
+            var sampleOut = "args: " + string.Join(", ", args);
+            Console.WriteLine("Console: " + sampleOut);
+            Trace.WriteLine("Trace: " + sampleOut);
         }
     }
 }
