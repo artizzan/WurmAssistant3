@@ -32,7 +32,7 @@ namespace AldursLab.WurmAssistantWebService.Areas.HelpPage.App_Start
             //// Uncomment the following to use the documentation from XML documentation file.
             config.SetDocumentationProvider(
                 new XmlDocumentationProvider(
-                    HttpContext.Current.Server.MapPath("~/App_Data/AldursLab.WurmAssistantWebService.XML")));
+                    HttpContext.Current.Server.MapPath("~/bin/AldursLab.WurmAssistantWebService.XML")));
 
             //// Uncomment the following to use "sample string" as the sample for all actions that have string as the body parameter or return type.
             //// Also, the string arrays will be used for IEnumerable<string>. The sample objects will be serialized into different media type 
