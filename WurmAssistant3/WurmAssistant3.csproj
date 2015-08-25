@@ -102,7 +102,7 @@
     <Compile Include="Infrastructure\Environment.cs" />
     <Compile Include="Infrastructure\WurmAssistantConfig.cs" />
     <Compile Include="Model\WpfGuiThreadEventMarshaller.cs" />
-    <Compile Include="Infrastructure\AppBootstrapper.cs" />
+    <Compile Include="AppBootstrapper.cs" />
     <Compile Include="ReflectionRootAnchor.cs" />
     <Compile Include="ViewModels\AppHostViewModel.cs" />
     <Compile Include="Views\AppHostView.xaml.cs">
