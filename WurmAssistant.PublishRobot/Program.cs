@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using AldursLab.Essentials.Configs;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmAssistant.PublishRobot.Actions;
@@ -25,24 +26,25 @@ namespace AldursLab.WurmAssistant.PublishRobot
             {
                 throw new ArgumentException("config file does not exist, path: " + configPath);
             }
-            IConfig config = new FileSimpleConfig(configPath);
+            
             IOutput output = new ConsoleOutput();
-
-            if (command == "publish-package")
+            if (command == "publish-package-wa3-stable.cfg")
             {
+                IConfig config = new FileSimpleConfig(configPath);
                 var action = new PublishPackage(config, tempDir, output);
                 action.Execute();
             }
-            // 
-
-            Console.ReadKey();
+            else
+            {
+                throw new ArgumentException("*.cfg file name does not match any supported config");
+            }
         }
 
         static void ValidateArgs(string[] args)
         {
-            if (args.Length < 1)
+            if (args.Length < 1 || !Regex.IsMatch(args[0], @"^.+\.cfg$"))
             {
-                throw new ArgumentException("argument for action was not supplied");
+                throw new ArgumentException("First argument should specify *.cfg, actual: " + args[0]);
             }
         }
 
@@ -60,14 +62,6 @@ namespace AldursLab.WurmAssistant.PublishRobot
                 Directory.Delete(dirPath, recursive:true);
             }
             Directory.CreateDirectory(dirPath);
-        }
-    }
-
-    class OperationHandler
-    {
-        public OperationHandler()
-        {
-            
         }
     }
 }
