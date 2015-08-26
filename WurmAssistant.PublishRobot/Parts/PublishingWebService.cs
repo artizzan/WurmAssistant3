@@ -108,7 +108,7 @@ namespace AldursLab.WurmAssistant.PublishRobot.Parts
                         content.Add(fileContent);
                         var publishUrl = string.Format(@"{0}/{1}/{2}",
                                     buildType, "Package", latestVersion.ToString().Replace(".", "-"));
-                        output.Write("Publishing to: " + webServiceRootPath + "/" + publishUrl);
+                        output.Write("Publishing to: " + client.BaseAddress + "/" + publishUrl);
                         var response =
                             client.PostAsync(publishUrl, content)
                                 .Result;

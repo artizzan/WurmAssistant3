@@ -114,15 +114,18 @@ namespace AldursLab.WurmAssistantWebService.Controllers.Base
 
         protected void RemoveOutdatedPackages()
         {
-            var oldDate = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(1));
-            var toDelete =
-                Context.WurmAssistantPackages.Where(
-                    package => package.Created < oldDate).ToArray();
-            foreach (var package in toDelete)
+            var packageCount = Context.WurmAssistantPackages.Count();
+            var toRemove = packageCount - 3;
+            if (toRemove > 0)
             {
-                Context.WurmAssistantPackages.Remove(package);
-                Context.SaveChanges();
-                Files.Delete(package.FileId);
+                var toDelete =
+                    Context.WurmAssistantPackages.OrderByDescending(package => package.Created).Take(toRemove).ToArray();
+                foreach (var package in toDelete)
+                {
+                    Context.WurmAssistantPackages.Remove(package);
+                    Context.SaveChanges();
+                    Files.Delete(package.FileId);
+                }
             }
         }
     }
