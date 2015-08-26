@@ -4,11 +4,11 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant.PublishRobot.Parts
 {
-    class PackageWebPublisher
+    class PublishingWebService
     {
         readonly IOutput output;
 
-        public PackageWebPublisher([NotNull] IOutput output)
+        public PublishingWebService([NotNull] IOutput output)
         {
             if (output == null) throw new ArgumentNullException("output");
             this.output = output;
@@ -21,6 +21,12 @@ namespace AldursLab.WurmAssistant.PublishRobot.Parts
                 zipFile.FullName,
                 latestVersion,
                 buildType));
+        }
+
+        public Version GetLatestVersion(string buildType)
+        {
+            //todo
+            return new Version();
         }
     }
 }
