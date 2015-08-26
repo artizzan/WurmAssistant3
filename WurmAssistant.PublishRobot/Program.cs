@@ -31,6 +31,7 @@ namespace AldursLab.WurmAssistant.PublishRobot
             if (command == "publish-package-wa3-stable.cfg")
             {
                 IConfig config = new FileSimpleConfig(configPath);
+                output.Write(config.ToString());
                 var action = new PublishPackage(config, tempDir, output);
                 action.Execute();
             }
