@@ -52,8 +52,7 @@ namespace AldursLab.WurmAssistant.PublishRobot
         static void PrintArgs(string[] args)
         {
             var formattedArgs = "args: " + string.Join("\r\n", args);
-            Console.WriteLine("Console: " + formattedArgs);
-            Trace.WriteLine("Trace: " + formattedArgs);
+            Console.WriteLine(formattedArgs);
         }
 
         static void ClearDir(string dirPath)
