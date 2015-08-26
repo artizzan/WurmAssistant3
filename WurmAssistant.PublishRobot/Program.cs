@@ -15,13 +15,13 @@ namespace AldursLab.WurmAssistant.PublishRobot
         {
             PrintArgs(args);
 
-            var workDir = Directory.GetCurrentDirectory();
-            var tempDir = Path.Combine(workDir, "temp");
+            var assemblyDir = typeof (Program).Assembly.GetAssemblyLocationFullPath();// Directory.GetCurrentDirectory();
+            var tempDir = Path.Combine(assemblyDir, "temp");
             ClearDir(tempDir);
 
             ValidateArgs(args);
             var command = args[0];
-            var configPath = Path.Combine(workDir, command);
+            var configPath = Path.Combine(assemblyDir, command);
             if (!File.Exists(configPath))
             {
                 throw new ArgumentException("config file does not exist, path: " + configPath);
