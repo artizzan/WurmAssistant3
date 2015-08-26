@@ -23,7 +23,6 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
         readonly string webServiceControllerPath;
         readonly string webServiceLogin;
         readonly string webServicePassword;
-        readonly string teamcityLastPublishedVersionParamName;
         readonly string buildType;
 
         readonly IOutput output;
@@ -41,7 +40,6 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
             webServiceControllerPath = config.GetValue("web service controller path");
             webServiceLogin = config.GetValue("web service login");
             webServicePassword = config.GetValue("web service password");
-            teamcityLastPublishedVersionParamName = config.GetValue("teamcity version param name");
             buildType = config.GetValue("build type");
         }
 
@@ -72,20 +70,12 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
                 zipper.Zip(tempPackageDir, zipFile);
 
                 publisher.Publish(zipFile, latestVersion, buildType);
-
-                UpdateTeamCity(latestVersion);
+                output.Write("Publishing operation completed.");
             }
             else
             {
                 output.Write("latest version was already published, no publish executed");
             }
-        }
-
-        void UpdateTeamCity(Version newVersion)
-        {
-            output.Write(string.Format("##teamcity[setParameter name='{0}' value='{1}']",
-                teamcityLastPublishedVersionParamName,
-                newVersion.ToString()));
         }
 
         ReleaseDirInfo[] GetReleaseDirInfos()
