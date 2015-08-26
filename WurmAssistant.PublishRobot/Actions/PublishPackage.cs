@@ -47,7 +47,7 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
 
         public void Execute()
         {
-            var publisher = new PublishingWebService(output);
+            var publisher = new PublishingWebService(output, webServiceRootUrl, webServiceControllerPath, webServiceLogin, webServicePassword);
             var lastPublishedVersion = publisher.GetLatestVersion(buildType);
             output.Write("last version is " + lastPublishedVersion);
 
@@ -70,7 +70,7 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
                 
                 var zipFile = new FileInfo(Path.Combine(tempDir, "package.7z"));
                 zipper.Zip(tempPackageDir, zipFile);
-                
+
                 publisher.Publish(zipFile, latestVersion, buildType);
 
                 UpdateTeamCity(latestVersion);
