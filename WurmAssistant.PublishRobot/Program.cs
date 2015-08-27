@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using AldursLab.Essentials.Configs;
 using AldursLab.Essentials.Extensions.DotNet;
@@ -26,12 +27,13 @@ namespace AldursLab.WurmAssistant.PublishRobot
             {
                 throw new ArgumentException("config file does not exist, path: " + configPath);
             }
-            
+
             IOutput output = new ConsoleOutput();
-            if (command == "publish-package-wa3-stable.cfg")
+            IConfig config = new FileSimpleConfig(configPath);
+            output.Write(config.ToString());
+            
+            if (command.In("publish-package-wa3-stable.cfg", "publish-package-walite-stable.cfg"))
             {
-                IConfig config = new FileSimpleConfig(configPath);
-                output.Write(config.ToString());
                 var action = new PublishPackage(config, tempDir, output);
                 action.Execute();
             }
