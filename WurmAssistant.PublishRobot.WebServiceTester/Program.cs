@@ -12,7 +12,7 @@ namespace AldursLab.WurmAssistant.PublishRobot.WebServiceTester
             {
                 var client = new PublishingWebService(new ConsoleOutput(),
                     "http://wurmassistant.aldurslab.net",
-                    "api/WurmAssistant3/Stable",
+                    "api/WurmAssistant3/",
                     "wurmassistant@gmail.com",
                     "placeholder");
 
