@@ -101,7 +101,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers.Base
                 };
                 Context.WurmAssistantPackages.Add(package);
 
-                RemoveOutdatedPackages();
+                RemoveOutdatedPackages(projectType, releaseType);
                 Context.SaveChanges();
 
                 return Request.CreateResponse(HttpStatusCode.OK);
@@ -112,14 +112,17 @@ namespace AldursLab.WurmAssistantWebService.Controllers.Base
             }
         }
 
-        protected void RemoveOutdatedPackages()
+        void RemoveOutdatedPackages(ProjectType projectType, ReleaseType releaseType)
         {
-            var packageCount = Context.WurmAssistantPackages.Count();
-            var toRemove = packageCount - 3;
-            if (toRemove > 0)
+            var allPackages =
+                Context.WurmAssistantPackages.Where(
+                    package => package.ProjectType == projectType && package.ReleaseType == releaseType).ToArray();
+
+            var packageCount = allPackages.Count();
+            var countToRemove = packageCount - 3;
+            if (countToRemove > 0)
             {
-                var toDelete =
-                    Context.WurmAssistantPackages.OrderByDescending(package => package.Created).Take(toRemove).ToArray();
+                var toDelete = allPackages.OrderBy(package => package.Created).Take(countToRemove);
                 foreach (var package in toDelete)
                 {
                     Context.WurmAssistantPackages.Remove(package);
