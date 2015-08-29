@@ -23,7 +23,16 @@ namespace AldursLab.WurmAssistant.Launcher
             {
                 throw new NullReferenceException("assemblyDir is null");
             }
-            var settingsFile = Path.Combine(assemblyDir, "default.cfg");
+
+            string configFileName = "debug.cfg";
+#if WA3STABLE
+            configFileName = "wa3-stable.cfg";
+#endif
+#if WALITESTABLE
+            configFileName = "walite-stable.cfg";
+#endif
+
+            var settingsFile = Path.Combine(assemblyDir, configFileName);
 
             IConfig localSettings = new FileSimpleConfig(settingsFile);
             this.Text = localSettings.GetValue("AppName") + " Launcher";

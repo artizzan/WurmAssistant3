@@ -22,6 +22,8 @@ namespace AldursLab.WurmAssistant.Launcher.Core
 
         readonly JsonSerializer serializer = new JsonSerializer();
 
+        static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(60);
+
         public WurmAssistantService(string webServiceRootUrl, IStagingLocation stagingLocation)
         {
             if (webServiceRootUrl == null) throw new ArgumentNullException("webServiceRootUrl");
@@ -38,10 +40,11 @@ namespace AldursLab.WurmAssistant.Launcher.Core
         public async Task<Version> GetLatestVersionAsync(IProgressReporter progressReporter)
         {
             HttpClient client = new HttpClient();
+            client.Timeout = DefaultTimeout;
             progressReporter.SetProgressPercent(null);
             progressReporter.SetProgressStatus("Obtaining latest version");
             var response = await client.GetAsync(string.Format("{0}/LatestVersion", webServiceRootUrl));
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 using (var stream = await response.Content.ReadAsStreamAsync())
                 {
@@ -66,13 +69,13 @@ namespace AldursLab.WurmAssistant.Launcher.Core
             var tempFile = stagingLocation.CreateTempFile();
             try
             {
-                using (var webclient = new ExtendedWebClient())
+                using (var webclient = new ExtendedWebClient((int)DefaultTimeout.TotalMilliseconds))
                 {
                     var tcs = new TaskCompletionSource<bool>();
                     byte lastPercent = 0;
                     webclient.DownloadProgressChanged += (sender, args) =>
                     {
-                        var percent = (byte) (args.BytesReceived/args.TotalBytesToReceive);
+                        var percent = (byte)(((double)args.BytesReceived / (double)args.TotalBytesToReceive) * 100);
                         if (percent > lastPercent)
                         {
                             lastPercent = percent;

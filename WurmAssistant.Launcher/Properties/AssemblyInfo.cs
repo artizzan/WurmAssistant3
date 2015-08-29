@@ -5,14 +5,34 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WurmAssistant3.Launcher")]
+#if WA3STABLE
+[assembly: AssemblyTitle("Wurm Assistant 3 Launcher")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Aldurs Lab")]
 [assembly: AssemblyProduct("WurmAssistant3.Launcher")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+#elif WALITESTABLE
+[assembly: AssemblyTitle("Wurm Assistant Lite Launcher")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("Aldurs Lab")]
+[assembly: AssemblyProduct("WurmAssistantLite.Launcher")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+#else
+[assembly: AssemblyTitle("Wurm Assistant Launcher")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("Aldurs Lab")]
+[assembly: AssemblyProduct("WurmAssistant.Launcher")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+#endif
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

@@ -87,12 +87,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                     }
                     TryRunWurmAssistant(installLocation);
 
-                    var remoteVersion = await wurmAssistantService.GetLatestVersionAsync(gui);
-                    if (launcherData.WurmAssistantInstalledVersion < remoteVersion)
-                    {
-                        await wurmAssistantService.GetPackageAsync(gui, remoteVersion);
-                        // done - next run will install this staged version
-                    }
+                    await CheckAndDownloadLatestPackage(wurmAssistantService, launcher, launcherData);
                 }
                 else
                 {
@@ -132,6 +127,37 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                 if (launcher != null)
                 {
                     launcher.ReleaseLock();
+                }
+            }
+        }
+
+        async Task CheckAndDownloadLatestPackage(IWurmAssistantService wurmAssistantService, Launcher launcher,
+            LauncherData launcherData)
+        {
+            Version remoteVersion = null;
+            try
+            {
+                remoteVersion = await wurmAssistantService.GetLatestVersionAsync(gui);
+            }
+            catch (Exception exception)
+            {
+                launcher.WriteErrorFile(
+                    string.Format("Launcher failed to check latest WA version. Error: {0}",
+                        exception.ToString()));
+            }
+
+            if (remoteVersion != null && launcherData.WurmAssistantInstalledVersion < remoteVersion)
+            {
+                try
+                {
+                    await wurmAssistantService.GetPackageAsync(gui, remoteVersion);
+                    // done - next run will install this staged version
+                }
+                catch (Exception exception)
+                {
+                    launcher.WriteErrorFile(
+                        string.Format("Launcher failed to download latest WA version. Error: {0}",
+                            exception.ToString()));
                 }
             }
         }
