@@ -1,21 +1,24 @@
 ﻿using System;
 using System.IO;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core.Infrastructure;
 using AldursLab.WurmAssistant3.Core.Logging;
 using AldursLab.WurmAssistant3.Core.ViewModels;
 using JetBrains.Annotations;
 using Ninject;
 using ILogger = AldursLab.WurmAssistant3.Core.Logging.ILogger;
 
-namespace AldursLab.WurmAssistant3.Core.Infrastructure
+namespace AldursLab.WurmAssistant3.Core
 {
-    public class CoreBootstrapper
+    public class CoreBootstrapper : IDisposable
     {
         readonly IKernel kernel;
 
         LoggingManager loggingManager;
         ILogger coreLogger;
         IWurmApi wurmApi;
+
+        bool disposed = false;
 
         public CoreBootstrapper([NotNull] IKernel kernel)
         {
@@ -83,11 +86,15 @@ namespace AldursLab.WurmAssistant3.Core.Infrastructure
             return kernel.Get<AppRunningViewModel>();
         }
 
-        public void Close()
+        public void Dispose()
         {
-            if (wurmApi != null)
+            if (!disposed)
             {
-                wurmApi.Dispose();
+                if (wurmApi != null)
+                {
+                    wurmApi.Dispose();
+                }
+                disposed = true;
             }
         }
     }

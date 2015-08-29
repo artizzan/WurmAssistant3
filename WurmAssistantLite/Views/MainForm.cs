@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using AldursLab.Essentials.Synchronization;
 using AldursLab.WurmAssistantLite.Bootstrapping;
 
 namespace AldursLab.WurmAssistantLite.Views
@@ -49,7 +50,7 @@ namespace AldursLab.WurmAssistantLite.Views
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             timer.Stop();
-            bootstrapper.Close();
+            if (bootstrapper != null) bootstrapper.Dispose();
         }
 
         private void timer_Tick(object sender, EventArgs e)

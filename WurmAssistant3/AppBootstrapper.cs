@@ -4,7 +4,9 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
+using AldursLab.Essentials.Synchronization;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core;
 using AldursLab.WurmAssistant3.Core.Infrastructure;
 using AldursLab.WurmAssistant3.Core.Logging;
 using AldursLab.WurmAssistant3.Infrastructure;
@@ -26,7 +28,9 @@ namespace AldursLab.WurmAssistant3
         WindowManager windowManager;
         readonly Assembly[] viewViewModelAssemblies;
 
-        readonly Environment enviroment = new Environment();
+        readonly Environment environment = new Environment();
+
+        SharedDataDirectory sharedDataDirectory;
 
         public AppBootstrapper()
         {
@@ -56,7 +60,7 @@ namespace AldursLab.WurmAssistant3
         {
             // configure and bind app-specific dependencies
 
-            kernel.Bind<IEnvironment>().ToConstant(enviroment).InSingletonScope();
+            kernel.Bind<IEnvironment>().ToConstant(environment).InSingletonScope();
 
             windowManager = new WindowManager();
             kernel.Bind<WindowManager>().ToConstant(windowManager);
@@ -64,19 +68,20 @@ namespace AldursLab.WurmAssistant3
 
             kernel.Bind<AppHostViewModel>().ToSelf().InSingletonScope();
 
-            var dataDirPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
-                "AldursLab",
-                "WurmAssistant3",
-                "Data");
-
-            if (!Directory.Exists(dataDirPath))
+            try
             {
-                Directory.CreateDirectory(dataDirPath);
+                sharedDataDirectory = new SharedDataDirectory();
+            }
+            catch (LockFailedException)
+            {
+                // if cannot obtain exclusive lock on data directory, it means another instance is already running
+                Application.Current.Shutdown();
+                return;
             }
 
-            var config = new WurmAssistantConfig() {DataDirectoryFullPath = dataDirPath};
+            var config = new WurmAssistantConfig() {DataDirectoryFullPath = sharedDataDirectory.FullName};
             kernel.Bind<IWurmAssistantConfig>().ToConstant(config);
-            var marshaller = new WpfGuiThreadEventMarshaller(enviroment);
+            var marshaller = new WpfGuiThreadEventMarshaller(environment);
             kernel.Bind<IEventMarshaller, WpfGuiThreadEventMarshaller>().ToConstant(marshaller);
 
             // create hosting window for the app
@@ -116,11 +121,9 @@ namespace AldursLab.WurmAssistant3
 
         protected override void OnExit(object sender, EventArgs e)
         {
-            enviroment.Closing = true;
-            if (globalLogger != null)
-            {
-                globalLogger.Info("Exiting WurmAssistant");
-            }
+            environment.Closing = true;
+            if (globalLogger != null) globalLogger.Info("Exiting WurmAssistant");
+            if (sharedDataDirectory != null) sharedDataDirectory.Dispose();
         }
 
         #region DI container implementation for Caliburn VM binder

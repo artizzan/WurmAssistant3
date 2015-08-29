@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using AldursLab.Essentials.Synchronization;
 using AldursLab.PersistentObjects;
 using AldursLab.PersistentObjects.FlatFiles;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core;
 using AldursLab.WurmAssistant3.Core.Infrastructure;
 using AldursLab.WurmAssistant3.Core.Logging;
 using AldursLab.WurmAssistantLite.Bootstrapping.Persistent;
@@ -17,8 +18,10 @@ using Ninject;
 
 namespace AldursLab.WurmAssistantLite.Bootstrapping
 {
-    class AppBootstrapper
+    class AppBootstrapper : IDisposable
     {
+        SharedDataDirectory dataDirectory;
+
         readonly MainForm mainForm;
         readonly Environment environment;
         readonly IKernel kernel = new StandardKernel();
@@ -40,27 +43,25 @@ namespace AldursLab.WurmAssistantLite.Bootstrapping
         {
             var marshaller = new WinFormsMainThreadEventMarshaller(mainForm);
 
-            var dataDirPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
-                "AldursLab",
-                "WurmAssistantLite",
-                "Data");
-
-            if (!Directory.Exists(dataDirPath))
+            try
             {
-                Directory.CreateDirectory(dataDirPath);
+                dataDirectory = new SharedDataDirectory();
+            }
+            catch (LockFailedException)
+            {
+                // must have exclusive lock on data directory, else most likely another app instance is using it
+                mainForm.Close();
             }
 
-            
             persistentLibrary = new PersistentCollectionsLibrary(new FlatFilesPersistenceStrategy(
-                Path.Combine(dataDirPath, "GlobalSettings")));
+                Path.Combine(dataDirectory.FullName, "WurmAssistantLiteSettings")));
 
             var globalSettings =
                 new WurmAssistantLiteSettings(
-                    persistentLibrary.DefaultCollection.GetObject<GlobalSettingsEntity>("WurmAssistantLiteSettings"))
+                    persistentLibrary.DefaultCollection.GetObject<GlobalSettingsEntity>("GlobalSettings"))
                 {
-                    DataDirectoryFullPath = dataDirPath
+                    DataDirectoryFullPath = dataDirectory.FullName
                 };
-
 
             var configurator = new Configurator(globalSettings);
 
@@ -115,20 +116,19 @@ namespace AldursLab.WurmAssistantLite.Bootstrapping
             }
         }
 
-        public void Close()
-        {
-            environment.Closing = true;
-            SaveSettings();
-            if (coreBootstrapper != null)
-            {
-                coreBootstrapper.Close();
-            }
-            kernel.Dispose();
-        }
-
         public void Update()
         {
             SaveSettings();
+        }
+
+        public void Dispose()
+        {
+            environment.Closing = true;
+            SaveSettings();
+            if (coreBootstrapper != null) coreBootstrapper.Dispose();
+            kernel.Dispose();
+            // release exclusive lock on data directory
+            if (dataDirectory != null) dataDirectory.Dispose();
         }
     }
 
