@@ -38,7 +38,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         /// Gets beta package for specified version.
         /// </summary>
         /// <param name="versionString">Escaped version string eg. "1-2-3-4" instead of "1.2.3.4"</param>
-        /// <returns>mime multipart file (byte content of 7zip archive file)</returns>
+        /// <returns>mime multipart file (byte content of zip archive file)</returns>
         [Route("Beta/Package/{versionString}")]
         public HttpResponseMessage GetBetaPackage(string versionString)
         {
@@ -49,7 +49,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         /// Gets stable package for specified version.
         /// </summary>
         /// <param name="versionString">Escaped version string eg. "1-2-3-4" instead of "1.2.3.4"</param>
-        /// <returns>mime multipart file (byte content of 7zip archive file)</returns>
+        /// <returns>mime multipart file (byte content of zip archive file)</returns>
         [Route("Stable/Package/{versionString}")]
         public HttpResponseMessage GetStablePackage(string versionString)
         {
@@ -57,7 +57,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         }
 
         /// <summary>
-        /// Posts new beta package. Content of the message should contain bytes of 7zip archive file.
+        /// Posts new beta package. Content of the message should contain bytes of zip archive file.
         /// </summary>
         /// <param name="versionString">Escaped version string eg. "1-2-3-4" instead of "1.2.3.4"</param>
         /// <returns></returns>
@@ -69,7 +69,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         }
 
         /// <summary>
-        /// Posts new stable package. Content of the message should contain bytes of 7zip archive file.
+        /// Posts new stable package. Content of the message should contain bytes of zip archive file.
         /// </summary>
         /// <param name="versionString">Escaped version string eg. "1-2-3-4" instead of "1.2.3.4"</param>
         /// <returns></returns>

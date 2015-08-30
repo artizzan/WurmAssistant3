@@ -16,7 +16,7 @@ namespace AldursLab.WurmAssistant.Launcher
 
         private void MainForm_Load(object sender, System.EventArgs e)
         {
-            HideHostWindow();
+            //HideHostWindow();
 
             var assemblyDir = Path.GetDirectoryName(this.GetType().Assembly.Location);
             if (assemblyDir == null)
@@ -47,33 +47,36 @@ namespace AldursLab.WurmAssistant.Launcher
                 WurmAssistantExeFileName = localSettings.GetValue("WurmAssistantExeFileName")
             };
 
-            var controller = new LaunchController(this, config);
+            IDebug debug = new TextDebug(Path.Combine(config.RootDirFullPath, "Launcher", "debug.txt"));
+            debug.Clear();
+
+            var controller = new LaunchController(this, config, debug);
             controller.Execute();
         }
 
         public void ShowHostWindow()
         {
-            var showing = !Visible;
-            Visible = true;
-            ShowInTaskbar = true;
-            if (showing)
-            {
-                this.WindowState = FormWindowState.Normal;
-                this.BringToFront();
-            }
+            //var showing = !Visible;
+            //Visible = true;
+            //ShowInTaskbar = true;
+            //if (showing)
+            //{
+            //    this.WindowState = FormWindowState.Normal;
+            //    this.BringToFront();
+            //}
         }
 
         public void HideHostWindow()
         {
-            Visible = false;
-            ShowInTaskbar = false;
+            //Visible = false;
+            //ShowInTaskbar = false;
         }
 
         public void SetContent(UserControl userControl)
         {
-            panel.Controls.Clear();
-            userControl.Dock = DockStyle.Fill;
-            panel.Controls.Add(userControl);
+            //panel.Controls.Clear();
+            //userControl.Dock = DockStyle.Fill;
+            //panel.Controls.Add(userControl);
         }
     }
 }

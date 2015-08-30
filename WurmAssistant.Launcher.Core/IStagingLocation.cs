@@ -56,7 +56,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                 .OrderBy(version => version)
                 .First();
             var latestFile = allStagedFiles.Single(info => info.Name.StartsWith(latestVersion.ToString()));
-            return new SevenZipStagedPackage(latestFile.FullName);
+            return new ZippedStagedPackage(latestFile.FullName);
         }
 
         public void ClearStagingArea()
@@ -81,7 +81,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
 
             File.WriteAllBytes(tempPath, zipFileAsBytes);
             File.Move(tempPath, targetPath);
-            return new SevenZipStagedPackage(targetPath);
+            return new ZippedStagedPackage(targetPath);
         }
 
         public FileInfo CreateTempFile()

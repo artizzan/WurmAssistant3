@@ -15,6 +15,19 @@ namespace AldursLab.WurmAssistant.Launcher.Core
         Task<IStagedPackage> GetPackageAsync(IProgressReporter progressReporter, Version version);
     }
 
+    public class WurmAssistantServiceMock : IWurmAssistantService
+    {
+        public async Task<Version> GetLatestVersionAsync(IProgressReporter progressReporter)
+        {
+            return new Version(0,0,0,0);
+        }
+
+        public async Task<IStagedPackage> GetPackageAsync(IProgressReporter progressReporter, Version version)
+        {
+            return new StagedPackageMock();
+        }
+    }
+
     public class WurmAssistantService : IWurmAssistantService
     {
         readonly string webServiceRootUrl;

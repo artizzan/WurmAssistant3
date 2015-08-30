@@ -52,10 +52,6 @@
       <Project>{e7e145ed-1938-4c09-b432-dc7d7a2d5ddb}</Project>
       <Name>Essentials</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AldursLab\Lab\SevenZipper\SevenZipper.csproj">
-      <Project>{80c468cd-7401-44ca-ad01-f03c9b99aa86}</Project>
-      <Name>SevenZipper</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WurmAssistant.PublishRobot\WurmAssistant.PublishRobot.csproj">
       <Project>{858ba67d-b721-4518-8c80-f091813a9a78}</Project>
       <Name>WurmAssistant.PublishRobot</Name>

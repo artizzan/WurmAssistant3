@@ -32,24 +32,24 @@ namespace AldursLab.WurmAssistant.Launcher.Core
 
         public void SetProgressPercent(byte? percent)
         {
-            if (percent == null)
-            {
-                progressBar.Style = ProgressBarStyle.Marquee;
-            }
-            else
-            {
-                if (percent > 100) percent = 100;
-                progressBar.Style = ProgressBarStyle.Continuous;
-                progressBar.Value = percent.Value;
-            }
+            //if (percent == null)
+            //{
+            //    progressBar.Style = ProgressBarStyle.Marquee;
+            //}
+            //else
+            //{
+            //    if (percent > 100) percent = 100;
+            //    progressBar.Style = ProgressBarStyle.Continuous;
+            //    progressBar.Value = percent.Value;
+            //}
         }
 
         public void AddUserMessage(string message)
         {
-            textBox.Text = textBox.Text + "\r\n" + DateTime.Now + " > " + message;
-            textBox.SelectionStart = textBox.Text.Length == 0 ? 0 : textBox.Text.Length - 1;
-            textBox.SelectionLength = 0;
-            textBox.ScrollToCaret();
+            //textBox.Text = textBox.Text + "\r\n" + DateTime.Now + " > " + message;
+            //textBox.SelectionStart = textBox.Text.Length == 0 ? 0 : textBox.Text.Length - 1;
+            //textBox.SelectionLength = 0;
+            //textBox.ScrollToCaret();
         }
 
         public void HideGui()

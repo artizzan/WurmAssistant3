@@ -79,7 +79,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers.Base
 
             try
             {
-                var name = string.Format("{0}_{1}_{2}.7z",
+                var name = string.Format("{0}_{1}_{2}.zip",
                     projectType,
                     releaseType,
                     unescapedVersionString);

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using AldursLab.Essentials.Configs;
 using AldursLab.Essentials.Extensions.DotNet.Collections.Generic;
 using AldursLab.Essentials.FileSystem;
-using AldursLab.SevenZipper;
 using AldursLab.WurmAssistant.PublishRobot.Parts;
+using ICSharpCode.SharpZipLib.Zip;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant.PublishRobot.Actions
@@ -64,10 +64,10 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
 
                 var targetChangelogFile = new FileInfo(Path.Combine(tempPackageDir.FullName, "changelog.txt"));
                 File.WriteAllText(targetChangelogFile.FullName, changelog);
-                var zipper = new Zipper();
-                
-                var zipFile = new FileInfo(Path.Combine(tempDir, "package.7z"));
-                zipper.Zip(tempPackageDir, zipFile);
+
+                var zipper = new FastZip();
+                var zipFile = new FileInfo(Path.Combine(tempDir, "package.zip"));
+                zipper.CreateZip(zipFile.FullName, tempPackageDir.FullName, true, null);
 
                 publisher.Publish(zipFile, latestVersion, buildType);
                 output.Write("Publishing operation completed.");

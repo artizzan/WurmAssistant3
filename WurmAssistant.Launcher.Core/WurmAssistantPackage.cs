@@ -1,6 +1,8 @@
 using System;
 using System.IO;
-using SevenZip;
+using ICSharpCode.SharpZipLib.Zip;
+
+//using SevenZip;
 
 namespace AldursLab.WurmAssistant.Launcher.Core
 {
@@ -11,20 +13,26 @@ namespace AldursLab.WurmAssistant.Launcher.Core
         void ExtractIntoDirectory(string targetDir);
     }
 
-    public class SevenZipStagedPackage : IStagedPackage
+    public class StagedPackageMock : IStagedPackage
+    {
+        public Version Version { get; private set; }
+        public void ExtractIntoDirectory(string targetDir)
+        {
+        }
+    }
+
+    public class ZippedStagedPackage : IStagedPackage
     {
         readonly FileInfo fileInfo;
 
-        public SevenZipStagedPackage(string filePath)
+        public ZippedStagedPackage(string filePath)
         {
             if (filePath == null) throw new ArgumentNullException("filePath");
 
-            if (!filePath.EndsWith(".7z"))
+            if (!filePath.EndsWith(".zip"))
             {
-                throw new InvalidOperationException("Only *.7z packages are supported");
+                throw new InvalidOperationException("Only *.zip packages are supported");
             }
-
-            SevenZipManager.EnsurePathSet();
 
             this.fileInfo = new FileInfo(filePath);
             Version = Version.Parse(Path.GetFileNameWithoutExtension(filePath));
@@ -34,8 +42,9 @@ namespace AldursLab.WurmAssistant.Launcher.Core
 
         public void ExtractIntoDirectory(string targetDir)
         {
-            var extractor = new SevenZipExtractor(fileInfo.FullName);
-            extractor.ExtractArchive(targetDir);
+            FastZip fastZip = new FastZip();
+
+            fastZip.ExtractZip(fileInfo.FullName, targetDir, null);
         }
     }
 }

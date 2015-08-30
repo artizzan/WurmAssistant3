@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using AldursLab.Essentials.Synchronization;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant.Launcher.Core
 {
@@ -11,16 +12,17 @@ namespace AldursLab.WurmAssistant.Launcher.Core
         readonly IGui gui;
 
         readonly ControllerConfig config;
+        readonly IDebug debug;
 
-        public LaunchController(IGuiHost host, ControllerConfig config)
+        public LaunchController(IGuiHost host, ControllerConfig config, [NotNull] IDebug debug)
         {
             if (host == null) throw new ArgumentNullException("host");
             this.host = host;
 
             if (config == null) throw new ArgumentNullException("config");
+            if (debug == null) throw new ArgumentNullException("debug");
             this.config = config;
-
-            SevenZipManager.EnsurePathSet();
+            this.debug = debug;
 
             var updaterGui = new UpdaterGui(host);
             host.SetContent(updaterGui);
@@ -36,6 +38,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
             }
             catch (Exception exception)
             {
+                debug.Write("Error at Execute: " + exception.ToString());
                 gui.SetState(LauncherState.Error);
                 gui.AddUserMessage("Wurm Assistant Launcher has encountered an error:\r\n" + exception.ToString());
                 gui.ShowGui();
@@ -101,7 +104,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                     launcher.SavePersistentData();
                     gui.AddUserMessage("Installation complete.");
                     gui.AddUserMessage("Starting Wurm Assistant...");
-                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await Task.Delay(TimeSpan.FromSeconds(15));
                     installLocation.RunWurmAssistant();
                     gui.HideGui();
                     stagingLocation.ClearStagingArea();
@@ -171,6 +174,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
             }
             catch (Exception exception)
             {
+                debug.Write("Error at TryRunWurmAssistant: " + exception.ToString());
                 gui.ShowGui();
                 gui.AddUserMessage("Error while attempting to start Wurm Assistant: " + exception.ToString());
                 return false;

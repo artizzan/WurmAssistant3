@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AldursLab", "AldursLab", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials", "AldursLab\Lab\Essentials\Essentials.csproj", "{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SevenZipper", "AldursLab\Lab\SevenZipper\SevenZipper.csproj", "{80C468CD-7401-44CA-AD01-F03C9B99AA86}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant.PublishRobot.WebServiceTester", "WurmAssistant.PublishRobot.WebServiceTester\WurmAssistant.PublishRobot.WebServiceTester.csproj", "{BD05FE0E-BD34-4D05-BBB0-DFA9552B5D0E}"
 EndProject
 Global
@@ -27,10 +25,6 @@ Global
 		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{80C468CD-7401-44CA-AD01-F03C9B99AA86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{80C468CD-7401-44CA-AD01-F03C9B99AA86}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{80C468CD-7401-44CA-AD01-F03C9B99AA86}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{80C468CD-7401-44CA-AD01-F03C9B99AA86}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BD05FE0E-BD34-4D05-BBB0-DFA9552B5D0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BD05FE0E-BD34-4D05-BBB0-DFA9552B5D0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD05FE0E-BD34-4D05-BBB0-DFA9552B5D0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,6 +35,5 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB} = {D3166EBD-236B-4E74-850D-FFAAC5C487FE}
-		{80C468CD-7401-44CA-AD01-F03C9B99AA86} = {D3166EBD-236B-4E74-850D-FFAAC5C487FE}
 	EndGlobalSection
 EndGlobal
