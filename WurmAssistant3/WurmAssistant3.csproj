@@ -193,7 +193,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Releases\0.0.0.2\changelog.txt" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Releases\0.0.0.1\changelog.txt" />
   </ItemGroup>
