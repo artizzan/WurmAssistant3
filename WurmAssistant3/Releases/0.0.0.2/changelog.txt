@@ -1,0 +1,1 @@
+﻿- implemented instance locking (only single app can run at once, either WA 3 or WA Lite)
