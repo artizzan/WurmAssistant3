@@ -16,7 +16,7 @@ namespace AldursLab.WurmAssistant.Launcher
 
         private void MainForm_Load(object sender, System.EventArgs e)
         {
-            //HideHostWindow();
+            HideHostWindow();
 
             var assemblyDir = Path.GetDirectoryName(this.GetType().Assembly.Location);
             if (assemblyDir == null)
@@ -56,6 +56,8 @@ namespace AldursLab.WurmAssistant.Launcher
 
         public void ShowHostWindow()
         {
+            this.WindowState = FormWindowState.Normal;
+            this.Refresh();
             //var showing = !Visible;
             //Visible = true;
             //ShowInTaskbar = true;
@@ -68,6 +70,7 @@ namespace AldursLab.WurmAssistant.Launcher
 
         public void HideHostWindow()
         {
+            this.WindowState = FormWindowState.Minimized;
             //Visible = false;
             //ShowInTaskbar = false;
         }
@@ -75,8 +78,8 @@ namespace AldursLab.WurmAssistant.Launcher
         public void SetContent(UserControl userControl)
         {
             //panel.Controls.Clear();
-            //userControl.Dock = DockStyle.Fill;
-            //panel.Controls.Add(userControl);
+            userControl.Dock = DockStyle.Fill;
+            panel.Controls.Add(userControl);
         }
     }
 }

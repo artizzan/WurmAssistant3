@@ -16,21 +16,7 @@ namespace AldursLab.WurmAssistantLite.Views
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            try
-            {
-                bootstrapper = new AppBootstrapper(this);
-                bootstrapper.Bootstrap();
-                timer.Start();
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(
-                    exception.ToString(),
-                    "WurmAssistant initialization error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                this.Close();
-            }
+            initTimer.Enabled = true;
         }
 
         public void SetAppCoreView(UserControl userControl)
@@ -56,6 +42,29 @@ namespace AldursLab.WurmAssistantLite.Views
         private void timer_Tick(object sender, EventArgs e)
         {
             bootstrapper.Update();
+        }
+
+        private void initTimer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                bootstrapper = new AppBootstrapper(this);
+                bootstrapper.Bootstrap();
+                timer.Start();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(
+                    exception.ToString(),
+                    "WurmAssistant initialization error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Close();
+            }
+            finally
+            {
+                initTimer.Enabled = false;
+            }
         }
     }
 }

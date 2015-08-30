@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using AldursLab.Essentials.Synchronization;
 using AldursLab.PersistentObjects;
 using AldursLab.PersistentObjects.FlatFiles;
@@ -50,7 +51,9 @@ namespace AldursLab.WurmAssistantLite.Bootstrapping
             catch (LockFailedException)
             {
                 // must have exclusive lock on data directory, else most likely another app instance is using it
-                mainForm.Close();
+                //mainForm.Close();
+                Application.Exit();
+                return;
             }
 
             persistentLibrary = new PersistentCollectionsLibrary(new FlatFilesPersistenceStrategy(
@@ -69,7 +72,8 @@ namespace AldursLab.WurmAssistantLite.Bootstrapping
             if (!valid)
             {
                 // stopping construction and exiting
-                mainForm.Close();
+                //mainForm.Close();
+                Application.Exit();
                 return;
             }
 

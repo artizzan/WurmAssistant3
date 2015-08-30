@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using AldursLab.Essentials.Synchronization;
 using JetBrains.Annotations;
 
@@ -24,7 +25,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
             this.config = config;
             this.debug = debug;
 
-            var updaterGui = new UpdaterGui(host);
+            var updaterGui = new UpdaterGui(host, debug);
             host.SetContent(updaterGui);
 
             gui = updaterGui;
@@ -42,6 +43,10 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                 gui.SetState(LauncherState.Error);
                 gui.AddUserMessage("Wurm Assistant Launcher has encountered an error:\r\n" + exception.ToString());
                 gui.ShowGui();
+                MessageBox.Show("Launcher has crashed: " + exception.ToString(),
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -104,7 +109,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                     launcher.SavePersistentData();
                     gui.AddUserMessage("Installation complete.");
                     gui.AddUserMessage("Starting Wurm Assistant...");
-                    await Task.Delay(TimeSpan.FromSeconds(15));
+                    await Task.Delay(TimeSpan.FromSeconds(1));
                     installLocation.RunWurmAssistant();
                     gui.HideGui();
                     stagingLocation.ClearStagingArea();
@@ -115,8 +120,9 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                 gui.HideGui();
                 host.Close();
             }
-            catch (LockFailedException)
+            catch (LockFailedException exception)
             {
+                debug.Write("LockFailedException: " + exception.ToString());
                 if (installLocation != null)
                 {
                     if (installLocation.Installed)
@@ -124,6 +130,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                         TryRunWurmAssistant(installLocation);
                     }
                 }
+                host.Close();
             }
             finally
             {

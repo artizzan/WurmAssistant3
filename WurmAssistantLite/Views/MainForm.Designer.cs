@@ -33,6 +33,7 @@
             this.logOutputPanel = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.initTimer = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,6 +76,11 @@
             this.timer.Interval = 500;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
+            // initTimer
+            // 
+            this.initTimer.Interval = 1;
+            this.initTimer.Tick += new System.EventHandler(this.initTimer_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -98,6 +104,7 @@
         private System.Windows.Forms.Panel logOutputPanel;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.Timer initTimer;
 
     }
 }

@@ -70,7 +70,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
 
         public IStagedPackage CreatePackageFromSevenZipByteArray(byte[] zipFileAsBytes, Version version)
         {
-            var targetPath = Path.Combine(stagingDirPath, version.ToString() + ".7z");
+            var targetPath = Path.Combine(stagingDirPath, version.ToString() + ".zip");
 
             if (File.Exists(targetPath))
             {

@@ -36,6 +36,7 @@
             this.panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel.Location = new System.Drawing.Point(0, 0);
             this.panel.Name = "panel";
+            this.panel.Padding = new System.Windows.Forms.Padding(10);
             this.panel.Size = new System.Drawing.Size(687, 321);
             this.panel.TabIndex = 0;
             // 
