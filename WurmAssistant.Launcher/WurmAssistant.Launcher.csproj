@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AldursLab.WurmAssistant.Launcher</RootNamespace>
-    <AssemblyName>AldursLab.WurmAssistant.Launcher.WALite.Stable</AssemblyName>
+    <AssemblyName>AldursLab.WurmAssistant.Launcher.WA3.Stable</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -24,13 +24,13 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://resources.aldurslab.net/WALite-stable-launcher-clickonce/</InstallUrl>
-    <ProductName>Wurm Assistant Lite Launcher</ProductName>
+    <InstallUrl>http://resources.aldurslab.net/WA3-stable-launcher-clickonce/</InstallUrl>
+    <ProductName>Wurm Assistant 3 Launcher</ProductName>
     <PublisherName>Aldur%27s Lab</PublisherName>
-    <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.0.1</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -89,7 +89,7 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>WurmAssistantLiteIcon.ico</ApplicationIcon>
+    <ApplicationIcon>WurmAssistantIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
