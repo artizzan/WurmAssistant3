@@ -42,7 +42,7 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
             webServiceControllerPath = config.GetValue("web service controller path");
             webServiceLogin = config.GetValue("web service login");
             webServicePassword = config.GetValue("web service password");
-            appName = config.GetValue("appName");
+            appName = config.GetValue("app name");
             slackIntegrationSubUrl = config.GetValue("slack integration sub url");
             buildType = config.GetValue("build type");
         }
