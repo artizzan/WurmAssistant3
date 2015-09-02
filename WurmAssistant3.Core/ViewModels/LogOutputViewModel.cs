@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using AldursLab.WurmAssistant3.Core.Logging;
+using AldursLab.WurmAssistant3.Core.Infrastructure.Logging;
 using NLog;
 
 namespace AldursLab.WurmAssistant3.Core.ViewModels

@@ -3,7 +3,7 @@ using AldursLab.WurmApi;
 using JetBrains.Annotations;
 using LogLevel = NLog.LogLevel;
 
-namespace AldursLab.WurmAssistant3.Core.Logging
+namespace AldursLab.WurmAssistant3.Core.Infrastructure.Logging
 {
     public class ThreadMarshalledLogMessageProcessor : ILogMessageProcessor
     {

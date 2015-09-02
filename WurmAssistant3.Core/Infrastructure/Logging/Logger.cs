@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using NLog;
 using LogLevel = NLog.LogLevel;
 
-namespace AldursLab.WurmAssistant3.Core.Logging
+namespace AldursLab.WurmAssistant3.Core.Infrastructure.Logging
 {
     public class Logger : ILogger, WurmApi.ILogger
     {

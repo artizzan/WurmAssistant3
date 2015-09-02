@@ -20,10 +20,19 @@ namespace AldursLab.WurmAssistant3.Infrastructure
             {
                 foreach (var viewModelAssemblyRootAnchor in viewModelAssemblyRootAnchors)
                 {
-                    var vmNs = viewModelAssemblyRootAnchor.Namespace + ".ViewModels";
-                    var vNs = viewAssemblyRootAnchor.Namespace + ".Views";
-                    ViewLocator.AddNamespaceMapping(vmNs, vNs);
-                    ViewModelLocator.AddNamespaceMapping(vNs, vmNs);
+                    //{
+                    //    var vmNs = viewModelAssemblyRootAnchor.Namespace + ".ViewModels";
+                    //    var vNs = viewAssemblyRootAnchor.Namespace + ".Views";
+                    //    ViewLocator.AddNamespaceMapping(vmNs, vNs);
+                    //    ViewModelLocator.AddNamespaceMapping(vNs, vmNs);
+                    //}
+
+                    {
+                        var vmNs = viewModelAssemblyRootAnchor.Namespace + ".ViewModels";
+                        var vNs = viewAssemblyRootAnchor.Namespace + ".Views";
+                        ViewLocator.AddSubNamespaceMapping(vmNs, vNs);
+                        ViewModelLocator.AddSubNamespaceMapping(vNs, vmNs);
+                    }
                 }
             }
 

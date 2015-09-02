@@ -1,12 +1,16 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Infrastructure;
-using AldursLab.WurmAssistant3.Core.Logging;
+using AldursLab.WurmAssistant3.Core.Infrastructure.Logging;
+using AldursLab.WurmAssistant3.Core.Infrastructure.Modules;
+using AldursLab.WurmAssistant3.Core.Modules;
+using AldursLab.WurmAssistant3.Core.Modules.LogSearching;
 using AldursLab.WurmAssistant3.Core.ViewModels;
 using JetBrains.Annotations;
 using Ninject;
-using ILogger = AldursLab.WurmAssistant3.Core.Logging.ILogger;
+using ILogger = AldursLab.WurmAssistant3.Core.Infrastructure.Logging.ILogger;
 
 namespace AldursLab.WurmAssistant3.Core
 {
@@ -54,6 +58,18 @@ namespace AldursLab.WurmAssistant3.Core
             var eventMarshaller = kernel.Get<IEventMarshaller>();
             ConstructWurmApi(config, loggerFactory, eventMarshaller);
             coreLogger.Info("WurmApi ready");
+
+            coreLogger.Info("GUI init");
+            BindViewModels();
+            coreLogger.Info("GUI ready");
+
+            coreLogger.Info("ModuleManager init");
+            var moduleManager = new ModuleManager(new[]
+            {
+                new LogSearcher(kernel.Get<ILogSearcherModuleGui>()), 
+            });
+            kernel.Bind<ModuleManager>().ToConstant(moduleManager);
+            coreLogger.Info("ModuleManager ready");
         }
 
         void ConstructWurmApi(IWurmAssistantConfig config, LoggerFactory loggerFactory, IEventMarshaller eventMarshaller)
@@ -79,6 +95,25 @@ namespace AldursLab.WurmAssistant3.Core
                 wurmInstallDirectory,
                 wurmApiConfig);
             kernel.Bind<IWurmApi>().ToConstant(wurmApi);
+        }
+
+        void BindViewModels()
+        {
+            var viewModels =
+                typeof (ReflectionRootAnchor).Assembly.GetTypes()
+                                             .Where(
+                                                 type =>
+                                                     type.Namespace != null
+                                                     && type.Namespace.StartsWith(typeof (AppRunningViewModel).Namespace)
+                                                     && type.Name.EndsWith("ViewModel"));
+            foreach (var viewModel in viewModels)
+            {
+                // bind only if not yet bound
+                if (!kernel.GetBindings(viewModel).Any())
+                {
+                    kernel.Bind(viewModel).ToSelf();
+                }
+            }
         }
 
         public AppRunningViewModel GetAppRunningViewModel()

@@ -87,22 +87,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\Modules\IModule.cs" />
+    <Compile Include="Infrastructure\Modules\IModuleGui.cs" />
     <Compile Include="Infrastructure\SharedDataDirectory.cs" />
     <Compile Include="Infrastructure\IEnvironment.cs" />
     <Compile Include="Infrastructure\IWurmAssistantConfig.cs" />
     <Compile Include="Infrastructure\WurmInstallDirectoryOverride.cs" />
-    <Compile Include="Logging\ILogger.cs" />
-    <Compile Include="Logging\ILogMessageProcessor.cs" />
-    <Compile Include="Logging\Logger.cs" />
-    <Compile Include="Logging\LoggerFactory.cs" />
-    <Compile Include="Logging\LoggingManager.cs" />
-    <Compile Include="Logging\ThreadMarshalledLogMessageProcessor.cs" />
+    <Compile Include="Infrastructure\Logging\ILogger.cs" />
+    <Compile Include="Infrastructure\Logging\ILogMessageProcessor.cs" />
+    <Compile Include="Infrastructure\Logging\Logger.cs" />
+    <Compile Include="Infrastructure\Logging\LoggerFactory.cs" />
+    <Compile Include="Infrastructure\Logging\LoggingManager.cs" />
+    <Compile Include="Infrastructure\Logging\ThreadMarshalledLogMessageProcessor.cs" />
+    <Compile Include="Modules\LogSearching\LogSearcher.cs" />
+    <Compile Include="Infrastructure\Modules\ModuleManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CoreBootstrapper.cs" />
     <Compile Include="ReflectionRootAnchor.cs" />
     <Compile Include="ViewModels\AppRunningViewModel.cs" />
     <Compile Include="ViewModels\AppStartViewModel.cs" />
     <Compile Include="ViewModels\LogOutputViewModel.cs" />
+    <Compile Include="ViewModels\LogSearching\LogSearcherViewModel.cs" />
+    <Compile Include="ViewModels\ModuleManagement\ModuleControlViewModel.cs" />
+    <Compile Include="ViewModels\ModuleManagement\ModuleManagerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -111,9 +118,6 @@
   <ItemGroup>
     <Folder Include="Attributes\" />
     <Folder Include="Factories\" />
-    <Folder Include="Managers\" />
-    <Folder Include="Modules\" />
-    <Folder Include="Systems\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AldursLab\Lab\Essentials\Essentials.csproj">

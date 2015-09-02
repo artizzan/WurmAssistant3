@@ -8,14 +8,16 @@ using AldursLab.Essentials.Synchronization;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core;
 using AldursLab.WurmAssistant3.Core.Infrastructure;
-using AldursLab.WurmAssistant3.Core.Logging;
+using AldursLab.WurmAssistant3.Core.Infrastructure.Logging;
+using AldursLab.WurmAssistant3.Core.Modules.LogSearching;
+using AldursLab.WurmAssistant3.Gui.Universal.Views.Legacy.LogSearching;
 using AldursLab.WurmAssistant3.Infrastructure;
 using AldursLab.WurmAssistant3.Model;
 using AldursLab.WurmAssistant3.ViewModels;
 using Caliburn.Micro;
 using Ninject;
 using Environment = AldursLab.WurmAssistant3.Infrastructure.Environment;
-using ILogger = AldursLab.WurmAssistant3.Core.Logging.ILogger;
+using ILogger = AldursLab.WurmAssistant3.Core.Infrastructure.Logging.ILogger;
 
 namespace AldursLab.WurmAssistant3
 {
@@ -83,6 +85,9 @@ namespace AldursLab.WurmAssistant3
             kernel.Bind<IWurmAssistantConfig>().ToConstant(config);
             var marshaller = new WpfGuiThreadEventMarshaller(environment);
             kernel.Bind<IEventMarshaller, WpfGuiThreadEventMarshaller>().ToConstant(marshaller);
+
+            // bind app-specific dependencies
+            kernel.Bind<ILogSearcherModuleGui>().To<LogSearcherForm>();
 
             // create hosting window for the app
             var hostView = kernel.Get<AppHostViewModel>();

@@ -7,7 +7,7 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 
-namespace AldursLab.WurmAssistant3.Core.Logging
+namespace AldursLab.WurmAssistant3.Core.Infrastructure.Logging
 {
     public class LoggingManager
     {

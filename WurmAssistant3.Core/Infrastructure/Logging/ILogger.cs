@@ -1,6 +1,6 @@
 using System;
 
-namespace AldursLab.WurmAssistant3.Core.Logging
+namespace AldursLab.WurmAssistant3.Core.Infrastructure.Logging
 {
     public interface ILogger
     {

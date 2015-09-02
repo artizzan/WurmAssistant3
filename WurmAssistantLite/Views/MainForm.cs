@@ -48,9 +48,12 @@ namespace AldursLab.WurmAssistantLite.Views
         {
             try
             {
+                initTimer.Enabled = false;
                 bootstrapper = new AppBootstrapper(this);
                 bootstrapper.Bootstrap();
                 timer.Start();
+                //this forces layout refresh, without it form looks weird on linux
+                this.Width += 1;
             }
             catch (Exception exception)
             {
@@ -60,10 +63,6 @@ namespace AldursLab.WurmAssistantLite.Views
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 this.Close();
-            }
-            finally
-            {
-                initTimer.Enabled = false;
             }
         }
     }

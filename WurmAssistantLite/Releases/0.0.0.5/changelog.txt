@@ -1,0 +1,1 @@
+﻿- imported LogSearcher from WA2 and fixed an array of non-Windows bugs

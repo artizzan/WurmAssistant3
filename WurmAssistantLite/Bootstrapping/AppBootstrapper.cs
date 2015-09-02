@@ -11,7 +11,10 @@ using AldursLab.PersistentObjects.FlatFiles;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core;
 using AldursLab.WurmAssistant3.Core.Infrastructure;
-using AldursLab.WurmAssistant3.Core.Logging;
+using AldursLab.WurmAssistant3.Core.Infrastructure.Logging;
+using AldursLab.WurmAssistant3.Core.Infrastructure.Modules;
+using AldursLab.WurmAssistant3.Core.Modules.LogSearching;
+using AldursLab.WurmAssistant3.Gui.Universal.Views.Legacy.LogSearching;
 using AldursLab.WurmAssistantLite.Bootstrapping.Persistent;
 using AldursLab.WurmAssistantLite.Views;
 using JetBrains.Annotations;
@@ -84,6 +87,7 @@ namespace AldursLab.WurmAssistantLite.Bootstrapping
             kernel.Bind<IWurmAssistantConfig, WurmAssistantConfig>().ToConstant(wurmAssistantConfig);
             kernel.Bind<IEventMarshaller, WinFormsMainThreadEventMarshaller>().ToConstant(marshaller);
             kernel.Bind<IEnvironment, Environment>().ToConstant(environment);
+            kernel.Bind<ILogSearcherModuleGui>().To<LogSearcherForm>();
 
             // bootstrap core
             coreBootstrapper = new CoreBootstrapper(kernel);
