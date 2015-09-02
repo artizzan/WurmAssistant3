@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant.PublishRobot.Parts
 {
-    class PublishingWebService
+    class PublishingWebService : RestServiceBase
     {
         readonly IOutput output;
         readonly string webServiceRootPath;
@@ -120,11 +120,6 @@ namespace AldursLab.WurmAssistant.PublishRobot.Parts
                     }
                 }
             }
-        }
-
-        string FormatHttpError(HttpResponseMessage response)
-        {
-            return string.Format("{0}:{1}:{2}", (int)response.StatusCode, response.StatusCode, response.ReasonPhrase);
         }
     }
 

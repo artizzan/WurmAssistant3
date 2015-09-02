@@ -190,6 +190,8 @@
     <Content Include="Releases\0.0.0.3\changelog.txt" />
     <Content Include="Releases\0.0.0.2\changelog.txt" />
     <Content Include="Releases\0.0.0.4\changelog.txt" />
+    <Content Include="Releases\0.0.0.6\changelog.txt" />
+    <Content Include="Releases\0.0.0.5\changelog.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

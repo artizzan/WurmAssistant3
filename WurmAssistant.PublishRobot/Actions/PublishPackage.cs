@@ -24,6 +24,8 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
         readonly string webServiceLogin;
         readonly string webServicePassword;
         readonly string buildType;
+        readonly string appName;
+        readonly string slackIntegrationSubUrl;
 
         readonly IOutput output;
 
@@ -40,12 +42,20 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
             webServiceControllerPath = config.GetValue("web service controller path");
             webServiceLogin = config.GetValue("web service login");
             webServicePassword = config.GetValue("web service password");
+            appName = config.GetValue("appName");
+            slackIntegrationSubUrl = config.GetValue("slack integration sub url");
             buildType = config.GetValue("build type");
         }
 
         public void Execute()
         {
-            var publisher = new PublishingWebService(output, webServiceRootUrl, webServiceControllerPath, webServiceLogin, webServicePassword);
+            var publisher = new PublishingWebService(output,
+                webServiceRootUrl,
+                webServiceControllerPath,
+                webServiceLogin,
+                webServicePassword);
+            var slacker = new SlackService(output, slackIntegrationSubUrl);
+
             var lastPublishedVersion = publisher.GetLatestVersion(buildType);
             output.Write("last version is " + lastPublishedVersion);
 
@@ -71,6 +81,8 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
 
                 publisher.Publish(zipFile, latestVersion, buildType);
                 output.Write("Publishing operation completed.");
+
+                slacker.SendMessage(string.Format("Published {0} version of {1}.", latestVersion, appName));
             }
             else
             {

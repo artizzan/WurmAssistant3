@@ -59,6 +59,8 @@
     <Compile Include="Actions\PublishPackage.cs" />
     <Compile Include="Parts\IOutput.cs" />
     <Compile Include="Parts\PublishingWebService.cs" />
+    <Compile Include="Parts\RestServiceBase.cs" />
+    <Compile Include="Parts\SlackService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Parts\ChangelogBuilder.cs" />

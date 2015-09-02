@@ -10,24 +10,37 @@ namespace AldursLab.WurmAssistant.PublishRobot.WebServiceTester
         {
             try
             {
-                var client = new PublishingWebService(new ConsoleOutput(),
-                    "http://wurmassistant.aldurslab.net",
-                    "api/WurmAssistant3/",
-                    "wurmassistant@gmail.com",
-                    "placeholder");
-
-                client.Authenticate();
-                client.GetLatestVersion("Stable");
-                var info = new FileInfo("pak.dat");
-                File.WriteAllText(info.FullName, "test");
-                client.Publish(info, new Version(0, 0, 0, 1), "Stable");
+                TestSlacker();
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
             }
+            finally
+            {
+                Console.ReadKey();
+            }
+        }
 
-            Console.ReadKey();
+        static void TestSlacker()
+        {
+            var client = new SlackService(new ConsoleOutput(), "placeholder");
+            client.SendMessage("test message");
+        }
+
+        static void TestPublisher()
+        {
+            var client = new PublishingWebService(new ConsoleOutput(),
+                "http://wurmassistant.aldurslab.net",
+                "api/WurmAssistant3/",
+                "wurmassistant@gmail.com",
+                "placeholder");
+
+            client.Authenticate();
+            client.GetLatestVersion("Stable");
+            var info = new FileInfo("pak.dat");
+            File.WriteAllText(info.FullName, "test");
+            client.Publish(info, new Version(0, 0, 0, 1), "Stable");
         }
     }
 }
