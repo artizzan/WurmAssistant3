@@ -90,7 +90,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                         launcher.SavePersistentData();
                         gui.AddUserMessage("Update complete");
                         gui.SetProgressStatus("Update complete");
-                        await Task.Delay(1);
+                        await Task.Delay(TimeSpan.FromSeconds(1));
                         gui.HideGui();
                     }
                     TryRunWurmAssistant(installLocation);
