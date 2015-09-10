@@ -18,25 +18,11 @@ namespace AldursLab.WurmAssistantWebService.Model.Entities
         [Key, Required, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid WurmAssistantPackageId { get; set; }
 
-        [Required, RegularExpression(@"^\d+\.\d+\.\d+\.\d+$")]
-        public string VersionString { get; set; }
+        [Required, MaxLength(250)]
+        public string BuildCode { get; set; }
 
-        [NotMapped]
-        public Version Version
-        {
-            get { return Version.Parse(VersionString); }
-            set
-            {
-                Debug.Assert(value != null, "value != null");
-                VersionString = value.ToString();
-            }
-        }
-
-        [Required, ProjectTypeValidation(ProjectType.WurmAssistant3, ProjectType.WurmAssistantLite)]
-        public ProjectType ProjectType { get; set; }
-
-        [Required, ReleaseTypeValidation(ReleaseType.Beta, ReleaseType.Stable)]
-        public ReleaseType ReleaseType { get; set; }
+        [Required, MaxLength(250)]
+        public string BuildNumber { get; set; }
 
         [Required]
         public virtual File File { get; set; }

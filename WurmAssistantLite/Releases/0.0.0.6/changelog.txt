@@ -1,1 +1,0 @@
-﻿- testing Slack integration with build server

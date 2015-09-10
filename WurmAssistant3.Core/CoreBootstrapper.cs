@@ -1,136 +1,76 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core.Areas.Config;
+using AldursLab.WurmAssistant3.Core.Areas.Config.Model;
+using AldursLab.WurmAssistant3.Core.Areas.Logging;
+using AldursLab.WurmAssistant3.Core.Areas.Logging.Model;
+using AldursLab.WurmAssistant3.Core.Areas.Logging.ViewModels;
+using AldursLab.WurmAssistant3.Core.Areas.PersistentData;
+using AldursLab.WurmAssistant3.Core.Areas.Root;
+using AldursLab.WurmAssistant3.Core.Areas.Root.ViewModels;
+using AldursLab.WurmAssistant3.Core.Areas.Root.Views;
+using AldursLab.WurmAssistant3.Core.Areas.WurmApi;
 using AldursLab.WurmAssistant3.Core.Infrastructure;
-using AldursLab.WurmAssistant3.Core.Infrastructure.Logging;
-using AldursLab.WurmAssistant3.Core.Infrastructure.Modules;
-using AldursLab.WurmAssistant3.Core.Modules;
-using AldursLab.WurmAssistant3.Core.Modules.LogSearching;
-using AldursLab.WurmAssistant3.Core.ViewModels;
 using JetBrains.Annotations;
 using Ninject;
-using ILogger = AldursLab.WurmAssistant3.Core.Infrastructure.Logging.ILogger;
 
 namespace AldursLab.WurmAssistant3.Core
 {
     public class CoreBootstrapper : IDisposable
     {
-        readonly IKernel kernel;
+        readonly IKernel kernel = new StandardKernel();
 
-        LoggingManager loggingManager;
-        ILogger coreLogger;
-        IWurmApi wurmApi;
-
-        bool disposed = false;
-
-        public CoreBootstrapper([NotNull] IKernel kernel)
+        public CoreBootstrapper([NotNull] MainView mainView, [NotNull] MainViewModel mainViewModel)
         {
-            if (kernel == null) throw new ArgumentNullException("kernel");
-            this.kernel = kernel;
-
-            BootstrapForSetup();
+            if (mainView == null) throw new ArgumentNullException("mainView");
+            if (mainViewModel == null) throw new ArgumentNullException("mainViewModel");
+            kernel.Bind<MainView>().ToConstant(mainView);
+            kernel.Bind<MainViewModel>().ToConstant(mainViewModel);
         }
 
-        private void BootstrapForSetup()
+        public void BootstrapCore()
         {
-            kernel.Bind<LoggerFactory>().ToSelf().InSingletonScope();
-            kernel.Bind<LogOutputViewModel, ILogMessageProcessor>().To<LogOutputViewModel>().InSingletonScope();
-            kernel.Bind<AppRunningViewModel>().ToSelf().InSingletonScope();
-        }
+            RootManager.BindCoreComponents(kernel);
 
-        public AppStartViewModel GetAppStartViewModel()
-        {
-            return kernel.Get<AppStartViewModel>();
+            ConfigManager.BindDataDirectory(kernel);
+            ConfigManager.LockDataDirectory();
         }
 
         public void BootstrapRuntime()
         {
-            var config = kernel.Get<IWurmAssistantConfig>();
+            LoggingManager.BindLoggingFactories(kernel);
+            LoggingManager.BindLoggerAutoResolver(kernel);
+            LoggingManager.EnableLoggingView(kernel);
 
-            loggingManager = new LoggingManager(Path.Combine(config.DataDirectoryFullPath, "Logs"));
-            kernel.Bind<LoggingManager>().ToConstant(loggingManager);
-            var loggerFactory = kernel.Get<LoggerFactory>();
-            coreLogger = loggerFactory.Create("Core");
-            coreLogger.Info("Logging system ready");
+            PersistentDataManager.BindPersistentLibrary(kernel);
+            ConfigManager.BindApplicationSettings(kernel);
 
-            coreLogger.Info("WurmApi init");
-            var eventMarshaller = kernel.Get<IEventMarshaller>();
-            ConstructWurmApi(config, loggerFactory, eventMarshaller);
-            coreLogger.Info("WurmApi ready");
+            WurmApiManager.AutodetectInstallDirectory(kernel);
 
-            coreLogger.Info("GUI init");
-            BindViewModels();
-            coreLogger.Info("GUI ready");
+            // validate configuration and show configuration dialogs if necessary
+            ConfigManager.ConfigureApplication(kernel);
 
-            coreLogger.Info("ModuleManager init");
-            var moduleManager = new ModuleManager(new[]
-            {
-                new LogSearcher(kernel.Get<ILogSearcherModuleGui>()), 
-            });
-            kernel.Bind<ModuleManager>().ToConstant(moduleManager);
-            coreLogger.Info("ModuleManager ready");
-        }
+            WurmApiManager.BindSingletonApi(kernel);
 
-        void ConstructWurmApi(IWurmAssistantConfig config, LoggerFactory loggerFactory, IEventMarshaller eventMarshaller)
-        {
-            IWurmInstallDirectory wurmInstallDirectory = null;
-            if (!string.IsNullOrWhiteSpace(config.WurmGameClientInstallDirectory))
-            {
-                wurmInstallDirectory = new WurmInstallDirectoryOverride()
-                {
-                    FullPath = config.WurmGameClientInstallDirectory
-                };
-            }
-
-            WurmApiConfig wurmApiConfig = null;
-            if (config.RunningPlatform != Platform.Unknown)
-            {
-                wurmApiConfig = new WurmApiConfig {Platform = config.RunningPlatform};
-            }
-
-            wurmApi = WurmApiFactory.Create(Path.Combine(config.DataDirectoryFullPath, "WurmApi"),
-                loggerFactory.CreateWithGuiThreadMarshaller("WurmApi"),
-                eventMarshaller,
-                wurmInstallDirectory,
-                wurmApiConfig);
-            kernel.Bind<IWurmApi>().ToConstant(wurmApi);
-        }
-
-        void BindViewModels()
-        {
-            var viewModels =
-                typeof (ReflectionRootAnchor).Assembly.GetTypes()
-                                             .Where(
-                                                 type =>
-                                                     type.Namespace != null
-                                                     && type.Namespace.StartsWith(typeof (AppRunningViewModel).Namespace)
-                                                     && type.Name.EndsWith("ViewModel"));
-            foreach (var viewModel in viewModels)
-            {
-                // bind only if not yet bound
-                if (!kernel.GetBindings(viewModel).Any())
-                {
-                    kernel.Bind(viewModel).ToSelf();
-                }
-            }
-        }
-
-        public AppRunningViewModel GetAppRunningViewModel()
-        {
-            return kernel.Get<AppRunningViewModel>();
+            //var moduleManager = new ModuleManager(new[]
+            //{
+            //    new LogSearcher(kernel.Get<ILogSearcherModuleGui>()), 
+            //});
+            //kernel.Bind<ModuleManager>().ToConstant(moduleManager);
         }
 
         public void Dispose()
         {
-            if (!disposed)
-            {
-                if (wurmApi != null)
-                {
-                    wurmApi.Dispose();
-                }
-                disposed = true;
-            }
+            ConfigManager.UnlockDataDirectory();
+            kernel.Dispose();
+        }
+
+        public void RunAsyncInits()
+        {
+            // todo
         }
     }
 }

@@ -1,8 +1,13 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
-using AldursLab.WurmAssistantWebService.Controllers.Base;
+using AldursLab.WurmAssistantWebService.Model;
 using AldursLab.WurmAssistantWebService.Model.Entities;
+using AldursLab.WurmAssistantWebService.Model.Services;
 
 namespace AldursLab.WurmAssistantWebService.Controllers
 {
@@ -10,74 +15,162 @@ namespace AldursLab.WurmAssistantWebService.Controllers
     /// Web API for WurmAssistant3
     /// </summary>
     [RoutePrefix("api/WurmAssistant3")]
-    public class WurmAssistant3Controller : PackageControllerBase
+    public class WurmAssistant3Controller : ApiController
     {
-        private static readonly ProjectType ProjectType = ProjectType.WurmAssistant3;
+        protected readonly ApplicationDbContext Context = new ApplicationDbContext();
+        protected readonly Files Files = new Files();
+        protected readonly Logs Logs = new Logs();
 
         /// <summary>
-        /// Gets latest version of Beta package or "0.0.0.0" if none available
+        /// Gets build number of the latest available package for specified build definition.
         /// </summary>
-        /// <returns>String representing version, eg "1.2.3.4"</returns>
-        [Route("Beta/LatestVersion")]
-        public string GetLatestBetaVersion()
+        /// <param name="buildCode">Code representing build definition. Case insensitive.</param>
+        /// <returns>String representing build number. Is not guaranteed to be numeric. Empty string if no packages found.</returns>
+        [Route("LatestBuildNumber/{buildCode}")]
+        public string GetLatestBuildNumber(string buildCode)
         {
-            return GetLatestVersion(ProjectType, ReleaseType.Beta);
+            var latest = (from p in Context.WurmAssistantPackages
+                            where p.BuildCode == buildCode
+                            orderby p.Created descending
+                            select p).FirstOrDefault();
+
+            return latest == null ? string.Empty : latest.BuildNumber;
         }
 
         /// <summary>
-        /// Gets latest version of Stable package or "0.0.0.0" if none available
+        /// Gets package file for specified build code and build number.
         /// </summary>
-        /// <returns>String representing version, eg "1.2.3.4"</returns>
-        [Route("Stable/LatestVersion")]
-        public string GetLatestStableVersion()
+        /// <param name="buildCode">Code representing build definition. Case insensitive.</param>
+        /// <param name="buildNumber">String representing build number. Case insensitive.</param>
+        /// <returns>Single-part mime-multipart file response, containing byte content of the file and original file name.</returns>
+        [Route("Packages/{buildCode}/{buildNumber}")]
+        public HttpResponseMessage GetPackage(string buildCode, string buildNumber)
         {
-            return GetLatestVersion(ProjectType, ReleaseType.Stable);
+            var package = (from p in Context.WurmAssistantPackages
+                           where p.BuildCode == buildCode
+                                 && p.BuildNumber == buildNumber
+                           orderby p.Created descending
+                           select p).FirstOrDefault();
+            if (package == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+            }
+
+            var response = new HttpResponseMessage(HttpStatusCode.OK);
+            response.Content = new StreamContent(Files.Read(package.File.FileId));
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = package.File.Name
+            };
+            return response;
         }
 
         /// <summary>
-        /// Gets beta package for specified version.
+        /// Posts new package. Content of the message should be single part mime-multipart file upload 
+        /// with disposition containing desired file name.
         /// </summary>
-        /// <param name="versionString">Escaped version string eg. "1-2-3-4" instead of "1.2.3.4"</param>
-        /// <returns>mime multipart file (byte content of zip archive file)</returns>
-        [Route("Beta/Package/{versionString}")]
-        public HttpResponseMessage GetBetaPackage(string versionString)
-        {
-            return GetPackage(ProjectType, ReleaseType.Beta, versionString);
-        }
-
-        /// <summary>
-        /// Gets stable package for specified version.
-        /// </summary>
-        /// <param name="versionString">Escaped version string eg. "1-2-3-4" instead of "1.2.3.4"</param>
-        /// <returns>mime multipart file (byte content of zip archive file)</returns>
-        [Route("Stable/Package/{versionString}")]
-        public HttpResponseMessage GetStablePackage(string versionString)
-        {
-            return GetPackage(ProjectType, ReleaseType.Stable, versionString);
-        }
-
-        /// <summary>
-        /// Posts new beta package. Content of the message should contain bytes of zip archive file.
-        /// </summary>
-        /// <param name="versionString">Escaped version string eg. "1-2-3-4" instead of "1.2.3.4"</param>
+        /// <param name="buildCode">Code representing build definition. Case insensitive.</param>
+        /// <param name="buildNumber">String representing build number. Case insensitive.</param>
         /// <returns></returns>
-        [Route("Beta/Package/{versionString}")]
+        [Route("Packages/{buildCode}/{buildNumber}")]
         [Authorize(Roles = "Publish")]
-        public async Task<HttpResponseMessage> PostBetaPackage(string versionString)
+        public async Task<HttpResponseMessage> PostPackage(string buildCode, string buildNumber)
         {
-            return await PostPackage(ProjectType, ReleaseType.Beta, versionString);
+            if (!Request.Content.IsMimeMultipartContent())
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.UnsupportedMediaType,
+                    "Content must be mime multipart");
+            }
+
+            if (string.IsNullOrWhiteSpace(buildCode))
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    ReasonPhrase = "Build code cannot be empty"
+                };
+            }
+            if (string.IsNullOrWhiteSpace(buildNumber))
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    ReasonPhrase = "Build number cannot be empty"
+                };
+            }
+
+            try
+            {
+                var existingPackage =
+                    Context.WurmAssistantPackages
+                           .SingleOrDefault(
+                               assistantPackage =>
+                                   assistantPackage.BuildCode == buildCode
+                                   && assistantPackage.BuildNumber == buildNumber);
+
+                if (existingPackage != null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.Conflict)
+                    {
+                        ReasonPhrase =
+                            string.Format("Package with build code {0} and build number {1} already exists",
+                                buildCode,
+                                buildNumber)
+                    };
+                }
+
+                var name = Request.Content.Headers.ContentDisposition.FileName;
+
+                Guid fileId;
+                using (var contentStream = await Request.Content.ReadAsStreamAsync())
+                {
+                    fileId = Files.Create(name, contentStream);
+                }
+
+                var newFile = Context.Files.Single(file => file.FileId == fileId);
+
+                var package = new WurmAssistantPackage()
+                {
+                    BuildCode = buildCode,
+                    BuildNumber = buildNumber,
+                    File = newFile
+                };
+                Context.WurmAssistantPackages.Add(package);
+
+                RemoveOutdatedPackages(buildCode);
+                Context.SaveChanges();
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (System.Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            }
         }
 
-        /// <summary>
-        /// Posts new stable package. Content of the message should contain bytes of zip archive file.
-        /// </summary>
-        /// <param name="versionString">Escaped version string eg. "1-2-3-4" instead of "1.2.3.4"</param>
-        /// <returns></returns>
-        [Route("Stable/Package/{versionString}")]
-        [Authorize(Roles = "Publish")]
-        public async Task<HttpResponseMessage> PostStablePackage(string versionString)
+        void RemoveOutdatedPackages(string buildCode)
         {
-            return await PostPackage(ProjectType, ReleaseType.Stable, versionString);
+            try
+            {
+                var allPackages =
+                    Context.WurmAssistantPackages.Where(
+                        package => package.BuildCode == buildCode).ToArray();
+
+                var packageCount = allPackages.Count();
+                var countToRemove = packageCount - 3;
+                if (countToRemove > 0)
+                {
+                    var toDelete = allPackages.OrderBy(package => package.Created).Take(countToRemove);
+                    foreach (var package in toDelete)
+                    {
+                        Context.WurmAssistantPackages.Remove(package);
+                        Context.SaveChanges();
+                        Files.Delete(package.FileId);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Logs.Add("WurmAssistant3Controller.RemoveOutdatedPackages", "Error: " + exception.ToString());
+            }
         }
     }
 }

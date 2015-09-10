@@ -22,14 +22,5 @@ namespace AldursLab.WurmAssistant3.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Beta")]
-        public string ReleaseType {
-            get {
-                return ((string)(this["ReleaseType"]));
-            }
-        }
     }
 }

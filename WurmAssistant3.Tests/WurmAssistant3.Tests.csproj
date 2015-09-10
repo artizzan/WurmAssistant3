@@ -70,12 +70,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WurmAssistant3\WurmAssistant3.csproj">
-      <Project>{3c3a7717-408f-44f5-9760-7f8b6141b8f5}</Project>
-      <Name>WurmAssistant3</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

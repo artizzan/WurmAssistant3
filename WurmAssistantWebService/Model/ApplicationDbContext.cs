@@ -27,5 +27,6 @@ namespace AldursLab.WurmAssistantWebService.Model
 
         public DbSet<File> Files { get; set; }
         public DbSet<WurmAssistantPackage> WurmAssistantPackages { get; set; }
+        public DbSet<Log> Logs { get; set; }
     }
 }

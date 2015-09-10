@@ -1,1 +1,0 @@
-﻿- fixed an issue, where closing config dialog would cause Mono runtime to run in circles instead of closing.

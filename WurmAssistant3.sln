@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3", "WurmAssistant3\WurmAssistant3.csproj", "{3C3A7717-408F-44F5-9760-7F8B6141B8F5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3.Core", "WurmAssistant3.Core\WurmAssistant3.Core.csproj", "{DA679803-09BD-4D44-9C0B-2DCC4D179F6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3.Tests", "WurmAssistant3.Tests\WurmAssistant3.Tests.csproj", "{84D98C9C-03C8-4133-A47C-32577D463AB4}"
@@ -23,11 +21,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "AldursLab\Lab\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentObjects.FlatFiles", "AldursLab\Lab\PersistentObjects.FlatFiles\PersistentObjects.FlatFiles.csproj", "{6322FD00-9AAA-40D9-8C6F-515CC4290B45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wpf", "AldursLab\Lab\Wpf\Wpf.csproj", "{3285F7B4-5F46-4120-8CDB-10CD815D7650}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui.Wpf", "AldursLab\Lab\Gui.Wpf\Gui.Wpf.csproj", "{3285F7B4-5F46-4120-8CDB-10CD815D7650}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3.Gui.Windows", "WurmAssistant3.Gui.Windows\WurmAssistant3.Gui.Windows.csproj", "{7DDE6905-D4A8-42DA-8325-55F8AFA394C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui", "AldursLab\Lab\Gui\Gui.csproj", "{1EA6D250-6EA0-4C5D-B681-6BCF9B0A8F02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3.Gui.Universal", "WurmAssistant3.Gui.Universal\WurmAssistant3.Gui.Universal.csproj", "{FD107D4E-312E-4642-8F09-B23BD8688AAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3", "WurmAssistant3\WurmAssistant3.csproj", "{090B405F-748E-4E4E-83AE-BABB93E0821E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +33,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3C3A7717-408F-44F5-9760-7F8B6141B8F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C3A7717-408F-44F5-9760-7F8B6141B8F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C3A7717-408F-44F5-9760-7F8B6141B8F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C3A7717-408F-44F5-9760-7F8B6141B8F5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DA679803-09BD-4D44-9C0B-2DCC4D179F6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DA679803-09BD-4D44-9C0B-2DCC4D179F6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA679803-09BD-4D44-9C0B-2DCC4D179F6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -71,14 +65,14 @@ Global
 		{3285F7B4-5F46-4120-8CDB-10CD815D7650}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3285F7B4-5F46-4120-8CDB-10CD815D7650}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3285F7B4-5F46-4120-8CDB-10CD815D7650}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7DDE6905-D4A8-42DA-8325-55F8AFA394C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7DDE6905-D4A8-42DA-8325-55F8AFA394C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7DDE6905-D4A8-42DA-8325-55F8AFA394C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7DDE6905-D4A8-42DA-8325-55F8AFA394C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FD107D4E-312E-4642-8F09-B23BD8688AAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FD107D4E-312E-4642-8F09-B23BD8688AAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FD107D4E-312E-4642-8F09-B23BD8688AAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FD107D4E-312E-4642-8F09-B23BD8688AAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EA6D250-6EA0-4C5D-B681-6BCF9B0A8F02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EA6D250-6EA0-4C5D-B681-6BCF9B0A8F02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EA6D250-6EA0-4C5D-B681-6BCF9B0A8F02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EA6D250-6EA0-4C5D-B681-6BCF9B0A8F02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{090B405F-748E-4E4E-83AE-BABB93E0821E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{090B405F-748E-4E4E-83AE-BABB93E0821E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{090B405F-748E-4E4E-83AE-BABB93E0821E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{090B405F-748E-4E4E-83AE-BABB93E0821E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,5 +84,6 @@ Global
 		{A0CE70F0-6F13-47F5-9B61-69F6BE1AB082} = {1038DFDD-F4C9-4DBA-A83F-59CDF1D37EF9}
 		{6322FD00-9AAA-40D9-8C6F-515CC4290B45} = {1038DFDD-F4C9-4DBA-A83F-59CDF1D37EF9}
 		{3285F7B4-5F46-4120-8CDB-10CD815D7650} = {1038DFDD-F4C9-4DBA-A83F-59CDF1D37EF9}
+		{1EA6D250-6EA0-4C5D-B681-6BCF9B0A8F02} = {1038DFDD-F4C9-4DBA-A83F-59CDF1D37EF9}
 	EndGlobalSection
 EndGlobal
