@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using AldursLab.WurmAssistantWebService.Filters;
 
 namespace AldursLab.WurmAssistantWebService
 {

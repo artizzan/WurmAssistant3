@@ -10,7 +10,7 @@ namespace AldursLab.WurmAssistant.PublishRobot.WebServiceTester
         {
             try
             {
-                TestSlacker();
+                TestPublisher();
             }
             catch (Exception exception)
             {
@@ -31,16 +31,18 @@ namespace AldursLab.WurmAssistant.PublishRobot.WebServiceTester
         static void TestPublisher()
         {
             var client = new PublishingWebService(new ConsoleOutput(),
-                "http://wurmassistant.aldurslab.net",
+                "http://localhost:54793/",
                 "api/WurmAssistant3/",
                 "wurmassistant@gmail.com",
                 "placeholder");
 
             client.Authenticate();
-            client.GetLatestVersion("Stable");
             var info = new FileInfo("pak.dat");
             File.WriteAllText(info.FullName, "test");
-            client.Publish(info, new Version(0, 0, 0, 1), "Stable");
+            client.Publish(info, "publish-test", "2");
+
+            var version = client.GetLatestVersion("publish-test");
+            Console.WriteLine("latest version: " + version);
         }
     }
 }

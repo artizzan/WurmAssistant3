@@ -97,53 +97,53 @@ namespace AldursLab.WurmAssistantWebService.Controllers
                 };
             }
 
-            try
+
+            var existingPackage =
+                Context.WurmAssistantPackages
+                        .SingleOrDefault(
+                            assistantPackage =>
+                                assistantPackage.BuildCode == buildCode
+                                && assistantPackage.BuildNumber == buildNumber);
+
+            if (existingPackage != null)
             {
-                var existingPackage =
-                    Context.WurmAssistantPackages
-                           .SingleOrDefault(
-                               assistantPackage =>
-                                   assistantPackage.BuildCode == buildCode
-                                   && assistantPackage.BuildNumber == buildNumber);
-
-                if (existingPackage != null)
+                return new HttpResponseMessage(HttpStatusCode.Conflict)
                 {
-                    return new HttpResponseMessage(HttpStatusCode.Conflict)
-                    {
-                        ReasonPhrase =
-                            string.Format("Package with build code {0} and build number {1} already exists",
-                                buildCode,
-                                buildNumber)
-                    };
-                }
-
-                var name = Request.Content.Headers.ContentDisposition.FileName;
-
-                Guid fileId;
-                using (var contentStream = await Request.Content.ReadAsStreamAsync())
-                {
-                    fileId = Files.Create(name, contentStream);
-                }
-
-                var newFile = Context.Files.Single(file => file.FileId == fileId);
-
-                var package = new WurmAssistantPackage()
-                {
-                    BuildCode = buildCode,
-                    BuildNumber = buildNumber,
-                    File = newFile
+                    ReasonPhrase =
+                        string.Format("Package with build code {0} and build number {1} already exists",
+                            buildCode,
+                            buildNumber)
                 };
-                Context.WurmAssistantPackages.Add(package);
-
-                RemoveOutdatedPackages(buildCode);
-                Context.SaveChanges();
-
-                return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch (System.Exception e)
+
+            var parts = await Request.Content.ReadAsMultipartAsync();
+            if (parts.Contents.Count > 1)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+                throw new InvalidOperationException("Expected single part in multipart, actual: " + parts.Contents.Count);
             }
+            var firstContent = parts.Contents.First();
+            var fileName = firstContent.Headers.ContentDisposition.FileName;
+
+            Guid fileId;
+            using (var contentStream = await firstContent.ReadAsStreamAsync())
+            {
+                fileId = Files.Create(fileName, contentStream);
+            }
+
+            var newFile = Context.Files.Single(file => file.FileId == fileId);
+
+            var package = new WurmAssistantPackage()
+            {
+                BuildCode = buildCode,
+                BuildNumber = buildNumber,
+                File = newFile
+            };
+            Context.WurmAssistantPackages.Add(package);
+
+            RemoveOutdatedPackages(buildCode);
+            Context.SaveChanges();
+
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         void RemoveOutdatedPackages(string buildCode)
