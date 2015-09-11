@@ -62,8 +62,6 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
 
             var binDir = new DirectoryInfo(packageBinPath);
 
-            DirectoryOps.CopyRecursively(binDir.FullName, binDir.FullName);
-
             var targetVersionDatFile = new FileInfo(Path.Combine(binDir.FullName, "version.dat"));
             File.WriteAllText(targetVersionDatFile.FullName, BuildVersionDatContents());
 
