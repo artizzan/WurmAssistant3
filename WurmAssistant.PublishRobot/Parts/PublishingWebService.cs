@@ -58,31 +58,30 @@ namespace AldursLab.WurmAssistant.PublishRobot.Parts
             }
         }
 
-        public Version GetLatestVersion(string buildType)
+        public string GetLatestVersion(string buildCode)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(string.Format("{0}/{1}", webServiceRootPath, webServiceControllerPath));
                 client.Timeout = TimeSpan.FromSeconds(30);
                 var path = string.Format(@"{0}/{1}",
-                    buildType, "LatestVersion");
+                    "LatestBuildNumber", buildCode);
                 var response = client.GetAsync(path).Result;
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception("GetLatestVersion failed " + FormatHttpError(response));
                 }
-                var result = response.Content.ReadAsStringAsync().Result.Replace("\"", string.Empty);
-                var version = Version.Parse(result);
-                return version;
+                var result = response.Content.ReadAsStringAsync().Result;
+                return result;
             }
         }
 
-        public void Publish(FileInfo zipFile, Version latestVersion, string buildType)
+        public void Publish(FileInfo zipFile, string buildCode, string buildNumber)
         {
             output.Write(string.Format("Publish args: {0}, {1}, {2}",
                 zipFile.FullName,
-                latestVersion,
-                buildType));
+                buildCode,
+                buildNumber));
 
             if (token == string.Empty)
             {
@@ -107,7 +106,7 @@ namespace AldursLab.WurmAssistant.PublishRobot.Parts
                         };
                         content.Add(fileContent);
                         var publishUrl = string.Format(@"{0}/{1}/{2}",
-                                    buildType, "Package", latestVersion.ToString().Replace(".", "-"));
+                                    "Packages", buildCode, buildNumber);
                         output.Write("Publishing to: " + client.BaseAddress + "/" + publishUrl);
                         var response =
                             client.PostAsync(publishUrl, content)

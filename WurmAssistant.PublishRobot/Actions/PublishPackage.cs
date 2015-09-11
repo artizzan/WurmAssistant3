@@ -17,15 +17,17 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
     {
         readonly string tempDir;
 
-        readonly string releaseLogPath;
+        readonly string buildCode;
+        readonly string buildNumber;
+        readonly string releasesInfoPath;
         readonly string packageBinPath;
         readonly string webServiceRootUrl;
         readonly string webServiceControllerPath;
         readonly string webServiceLogin;
         readonly string webServicePassword;
-        readonly string buildType;
-        readonly string appName;
         readonly string slackIntegrationSubUrl;
+
+        readonly string latestMinorVersionString;
 
         readonly IOutput output;
 
@@ -36,15 +38,17 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
             this.tempDir = tempDir;
             this.output = output;
 
-            releaseLogPath = config.GetValue("release log path");
+            buildCode = config.GetValue("build code");
+            buildNumber = config.GetValue("build number");
+            releasesInfoPath = config.GetValue("releases info path");
             packageBinPath = config.GetValue("package bin path");
             webServiceRootUrl = config.GetValue("web service root url");
             webServiceControllerPath = config.GetValue("web service controller path");
             webServiceLogin = config.GetValue("web service login");
             webServicePassword = config.GetValue("web service password");
-            appName = config.GetValue("app name");
             slackIntegrationSubUrl = config.GetValue("slack integration sub url");
-            buildType = config.GetValue("build type");
+
+            latestMinorVersionString = GetLatestMinorVersionString();
         }
 
         public void Execute()
@@ -56,43 +60,48 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
                 webServicePassword);
             var slacker = new SlackService(output, slackIntegrationSubUrl);
 
-            var lastPublishedVersion = publisher.GetLatestVersion(buildType);
-            output.Write("last version is " + lastPublishedVersion);
+            var binDir = new DirectoryInfo(packageBinPath);
+            var tempPackageDir = new DirectoryInfo(Path.Combine(tempDir, "package"));
 
+            DirectoryOps.CopyRecursively(binDir.FullName, tempPackageDir.FullName);
+
+            var targetVersionDatFile = new FileInfo(Path.Combine(tempPackageDir.FullName, "version.dat"));
+            File.WriteAllText(targetVersionDatFile.FullName, BuildVersionDatContents());
+
+            var zipper = new FastZip();
+            var zipFile = new FileInfo(Path.Combine(tempDir, string.Format("{0}.zip", BuildFileName())));
+            zipper.CreateZip(zipFile.FullName, tempPackageDir.FullName, true, null);
+
+            publisher.Publish(zipFile, buildNumber, buildCode);
+            output.Write("Publishing operation completed.");
+
+            slacker.SendMessage(string.Format("Published {0}", BuildFileName()));
+        }
+
+        string BuildFileName()
+        {
+            return string.Format("WurmAssistant-{0}-{1}-R{2}", latestMinorVersionString, buildCode, buildNumber);
+        }
+
+        string BuildVersionDatContents()
+        {
+            return string.Format("{0}\n{1}\n{2}\n{3}",
+                latestMinorVersionString,
+                buildCode,
+                buildNumber,
+                DateTimeOffset.Now.ToString("O"));
+        }
+
+        string GetLatestMinorVersionString()
+        {
             var releaseDirs = GetReleaseDirInfos();
-
-            var latestVersion = releaseDirs.Max(info => info.Version);
-            output.Write("latest version is " + latestVersion);
-            if (latestVersion > lastPublishedVersion)
-            {
-                var builder = new ChangelogBuilder(releaseDirs, output);
-                var changelog = builder.Build();
-                var binDir = new DirectoryInfo(packageBinPath);
-                var tempPackageDir = new DirectoryInfo(Path.Combine(tempDir, "package"));
-
-                DirectoryOps.CopyRecursively(binDir.FullName, tempPackageDir.FullName);
-
-                var targetChangelogFile = new FileInfo(Path.Combine(tempPackageDir.FullName, "changelog.txt"));
-                File.WriteAllText(targetChangelogFile.FullName, changelog);
-
-                var zipper = new FastZip();
-                var zipFile = new FileInfo(Path.Combine(tempDir, "package.zip"));
-                zipper.CreateZip(zipFile.FullName, tempPackageDir.FullName, true, null);
-
-                publisher.Publish(zipFile, latestVersion, buildType);
-                output.Write("Publishing operation completed.");
-
-                slacker.SendMessage(string.Format("Published {0} version of {1}.", latestVersion, appName));
-            }
-            else
-            {
-                output.Write("latest version was already published, no publish executed");
-            }
+            var version = releaseDirs.Max(info => info.Version);
+            return string.Format("{0}.{1}", version.Major, version.Minor);
         }
 
         ReleaseDirInfo[] GetReleaseDirInfos()
         {
-            var releaseDirInfo = new DirectoryInfo(releaseLogPath);
+            var releaseDirInfo = new DirectoryInfo(releasesInfoPath);
             var releaseDirs = releaseDirInfo.GetDirectories().Select(info =>
             {
                 Version v = null;
