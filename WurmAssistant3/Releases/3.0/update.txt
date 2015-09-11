@@ -1,1 +1,1 @@
-﻿sample file describing 3.0 features
+﻿files in this folder should describe all features of version 3.0
