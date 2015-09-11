@@ -61,18 +61,17 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
             var slacker = new SlackService(output, slackIntegrationSubUrl);
 
             var binDir = new DirectoryInfo(packageBinPath);
-            var tempPackageDir = new DirectoryInfo(Path.Combine(tempDir, "package"));
 
-            DirectoryOps.CopyRecursively(binDir.FullName, tempPackageDir.FullName);
+            DirectoryOps.CopyRecursively(binDir.FullName, binDir.FullName);
 
-            var targetVersionDatFile = new FileInfo(Path.Combine(tempPackageDir.FullName, "version.dat"));
+            var targetVersionDatFile = new FileInfo(Path.Combine(binDir.FullName, "version.dat"));
             File.WriteAllText(targetVersionDatFile.FullName, BuildVersionDatContents());
 
             var zipper = new FastZip();
             var zipFile = new FileInfo(Path.Combine(tempDir, string.Format("{0}.zip", BuildFileName())));
-            zipper.CreateZip(zipFile.FullName, tempPackageDir.FullName, true, null);
+            zipper.CreateZip(zipFile.FullName, binDir.FullName, true, null);
 
-            publisher.Publish(zipFile, buildNumber, buildCode);
+            publisher.Publish(zipFile, buildCode, buildNumber);
             output.Write("Publishing operation completed.");
 
             slacker.SendMessage(string.Format("Published {0}", BuildFileName()));
