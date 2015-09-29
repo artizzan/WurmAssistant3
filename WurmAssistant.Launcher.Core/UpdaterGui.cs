@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 using JetBrains.Annotations;
 
@@ -7,17 +9,26 @@ namespace AldursLab.WurmAssistant.Launcher.Core
 {
     public partial class UpdaterGui : UserControl, IGui, IProgressReporter
     {
-        // important: trying to set .Text property on TextBox or Label results in hangs and crashes under mono (ubuntu).
-        // I have no clue why, it might be related in dynamically adding UserControl to the Host.
-        // I think the simplest fix is to avoid doing this at all at runtime.
-
         readonly IGuiHost host;
         readonly IDebug debug;
+
+        delegate void InvokeDelegate();
+
+        bool skipEnabled = false;
+
+        class OutputMessage
+        {
+            public string Content { get; set; }
+            public Color? Color { get; set; }
+        }
+
+        List<OutputMessage> messages = new List<OutputMessage>(); 
+
+        public Action SkipAction { get; set; }
 
         public UpdaterGui()
         {
             InitializeComponent();
-            listBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
         }
 
         public UpdaterGui(IGuiHost host, [NotNull] IDebug debug)
@@ -31,67 +42,128 @@ namespace AldursLab.WurmAssistant.Launcher.Core
 
         public void ShowGui()
         {
-            host.ShowHostWindow();
+            ThreadSafeInvoke(() => host.ShowHostWindow());
         }
 
         public void SetProgressStatus(string message)
         {
-            AddUserMessage(message);
+            ThreadSafeInvoke(() => AddUserMessage(message));
         }
 
         public void SetProgressPercent(byte? percent)
         {
-            if (percent == null)
+            ThreadSafeInvoke(() =>
             {
-                progressBar.Style = ProgressBarStyle.Marquee;
-            }
-            else
-            {
-                if (percent > 100)
-                    percent = 100;
-                progressBar.Style = ProgressBarStyle.Continuous;
-                progressBar.Value = percent.Value;
-            }
+                if (percent == null)
+                {
+                    progressBar.Style = ProgressBarStyle.Marquee;
+                }
+                else
+                {
+                    if (percent > 100)
+                        percent = 100;
+                    progressBar.Style = ProgressBarStyle.Continuous;
+                    progressBar.Value = percent.Value;
+                }
+            });
         }
 
-        public void AddUserMessage(string message)
+        public void AddUserMessage(string message, Color? textColor = null)
         {
-            debug.Write(message + "\r\n");
-            listBox.Items.Add(DateTime.Now + " > " + message);
+            ThreadSafeInvoke(() =>
+            {
+                debug.Write(message + Environment.NewLine);
+                var newString = DateTime.Now + " > " + message + Environment.NewLine;
+                messages.Add(new OutputMessage()
+                {
+                    Content = newString,
+                    Color = textColor
+                });
+                
+                RebuildOutput();
+            });
+        }
+
+        void RebuildOutput()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var outputMessage in messages)
+            {
+                sb.Append(outputMessage.Content);
+            }
+            richTextBox1.Text = sb.ToString();
+            int index = 0;
+            foreach (var outputMessage in messages)
+            {
+                if (outputMessage.Color.HasValue)
+                {
+                    richTextBox1.Select(index, outputMessage.Content.Length - 1);
+                    richTextBox1.SelectionColor = outputMessage.Color.Value;
+                }
+                index += outputMessage.Content.Length - 1;
+            }
+            richTextBox1.Select(index, 0);
         }
 
         public void HideGui()
         {
-            host.HideHostWindow();
+            ThreadSafeInvoke(() => host.HideHostWindow());
         }
 
         public void SetState(LauncherState state)
         {
-            if (state == LauncherState.Error)
+            ThreadSafeInvoke(() =>
             {
-                if (progressBar.Style == ProgressBarStyle.Marquee)
+                if (state == LauncherState.Error)
                 {
-                    progressBar.Style = ProgressBarStyle.Blocks;
-                    progressBar.Value = 0;
+                    if (progressBar.Style == ProgressBarStyle.Marquee)
+                    {
+                        progressBar.Style = ProgressBarStyle.Blocks;
+                        progressBar.Value = 0;
+                    }
+                    label1.ForeColor = Color.Red;
+                    label1.Text = "Launcher has encountered an error";
                 }
+            });
+        }
+
+        public void EnableSkip()
+        {
+            skipEnabled = true;
+        }
+
+        public void DisableSkip()
+        {
+            skipEnabled = false;
+            SkipUpdateBtn.Visible = false;
+        }
+
+        private void ThreadSafeInvoke(Action action)
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new InvokeDelegate(action));
+            }
+            else
+            {
+                action();
             }
         }
 
-        private void listBox_MeasureItem(object sender, MeasureItemEventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
         {
-            if (e.Index > -1)
+            timer1.Enabled = false;
+            if (skipEnabled && SkipAction != null)
             {
-                e.ItemHeight = (int)e.Graphics.MeasureString(listBox.Items[e.Index].ToString(), listBox.Font, listBox.Width).Height;
+                SkipUpdateBtn.Visible = true;
             }
         }
 
-        private void listBox_DrawItem(object sender, DrawItemEventArgs e)
+        private void SkipUpdateBtn_Click(object sender, EventArgs e)
         {
-            if (e.Index > -1)
+            if (SkipAction != null)
             {
-                e.DrawBackground();
-                e.DrawFocusRectangle();
-                e.Graphics.DrawString(listBox.Items[e.Index].ToString(), e.Font, new SolidBrush(e.ForeColor), e.Bounds);
+                SkipAction();
             }
         }
     }

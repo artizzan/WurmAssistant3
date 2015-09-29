@@ -7,8 +7,8 @@ namespace AldursLab.WurmAssistant.Launcher.Core
     public interface IStagingLocation
     {
         bool AnyPackageStaged { get; }
-        IStagedPackage CreatePackageFromSevenZipByteArray(byte[] zipFileAsBytes, Version version);
-        IStagedPackage GetLatestStagedPackage();
+        IStagedPackage CreatePackageFromZipFile(string filePath);
+        IStagedPackage GetStagedPackage();
         void ClearStagingArea();
         void ClearExtractionDir();
         void ExtractIntoExtractionDir(IStagedPackage package);
@@ -18,95 +18,102 @@ namespace AldursLab.WurmAssistant.Launcher.Core
 
     public class StagingLocation : IStagingLocation
     {
-        readonly string stagingDirPath;
-        readonly string extractionDirPath;
+        readonly DirectoryInfo stageDir;
+        readonly DirectoryInfo extractionDir;
+        readonly DirectoryInfo tempDir;
 
-        public StagingLocation(string stagingDirPath)
+        public StagingLocation(string stagingDirRootPath)
         {
-            if (stagingDirPath == null)
-                throw new ArgumentNullException("stagingDirPath");
-            this.stagingDirPath = stagingDirPath;
+            if (stagingDirRootPath == null)
+                throw new ArgumentNullException("stagingDirRootPath");
 
-            if (!Path.IsPathRooted(stagingDirPath))
+            if (!Path.IsPathRooted(stagingDirRootPath))
             {
                 throw new InvalidOperationException("rootPath must be absolute");
             }
 
-            if (!Directory.Exists(stagingDirPath))
+            if (!Directory.Exists(stagingDirRootPath))
             {
-                Directory.CreateDirectory(stagingDirPath);
+                Directory.CreateDirectory(stagingDirRootPath);
             }
 
-            extractionDirPath = Path.Combine(stagingDirPath, "Extracted");
+            stageDir = new DirectoryInfo(Path.Combine(stagingDirRootPath, "Stage"));
+            stageDir.Create();
+            extractionDir = new DirectoryInfo(Path.Combine(stagingDirRootPath, "Extracted"));
+            extractionDir.Create();
+            tempDir = new DirectoryInfo(Path.Combine(stagingDirRootPath, "Temp"));
+            tempDir.Create();
+            ClearTempDir();
+        }
+
+        void ClearTempDir()
+        {
+            foreach (var fileInfo in tempDir.GetFiles())
+            {
+                fileInfo.Delete();
+            }
         }
 
         public bool AnyPackageStaged
         {
             get
             {
-                return Directory.GetFiles(stagingDirPath).Any();
+                return Directory.GetFiles(stageDir.FullName).Any();
             }
         }
 
-        public IStagedPackage GetLatestStagedPackage()
+        public IStagedPackage GetStagedPackage()
         {
-            var allStagedFiles = Directory.GetFiles(stagingDirPath).Select(s => new FileInfo(s)).ToArray();
-            var latestVersion = allStagedFiles
-                .Select(info => new Version(Path.GetFileNameWithoutExtension(info.Name)))
-                .OrderBy(version => version)
-                .First();
-            var latestFile = allStagedFiles.Single(info => info.Name.StartsWith(latestVersion.ToString()));
-            return new ZippedStagedPackage(latestFile.FullName);
+            var stagedFile = new FileInfo(Directory.GetFiles(stageDir.FullName).Single());
+            return new ZippedStagedPackage(stagedFile.FullName);
         }
 
         public void ClearStagingArea()
         {
-            var allStagedFiles = Directory.GetFiles(stagingDirPath).Select(s => new FileInfo(s)).ToArray();
+            var allStagedFiles = Directory.GetFiles(stageDir.FullName).Select(s => new FileInfo(s)).ToArray();
             foreach (var file in allStagedFiles)
             {
                 file.Delete();
             }
         }
 
-        public IStagedPackage CreatePackageFromSevenZipByteArray(byte[] zipFileAsBytes, Version version)
+        public IStagedPackage CreatePackageFromZipFile(string filePath)
         {
-            var targetPath = Path.Combine(stagingDirPath, version.ToString() + ".zip");
+            var fileInfo = new FileInfo(filePath);
+            var targetPath = Path.Combine(stageDir.FullName, fileInfo.Name);
 
             if (File.Exists(targetPath))
             {
                 File.Delete(targetPath);
             }
 
-            var tempPath = CreateTempFile().FullName;
-
-            File.WriteAllBytes(tempPath, zipFileAsBytes);
-            File.Move(tempPath, targetPath);
+            File.Move(filePath, targetPath);
             return new ZippedStagedPackage(targetPath);
         }
 
         public FileInfo CreateTempFile()
         {
-            var tempPath = Path.Combine(stagingDirPath, Guid.NewGuid().ToString());
+            var tempPath = Path.Combine(tempDir.FullName, Guid.NewGuid().ToString());
             return new FileInfo(tempPath);
         }
 
         public void ClearExtractionDir()
         {
-            if (Directory.Exists(extractionDirPath))
+            if (Directory.Exists(extractionDir.FullName))
             {
-                Directory.Delete(extractionDirPath, true);
+                Directory.Delete(extractionDir.FullName, true);
             }
         }
 
         public void ExtractIntoExtractionDir(IStagedPackage package)
         {
             ClearExtractionDir();
-            package.ExtractIntoDirectory(extractionDirPath);
+            package.ExtractIntoDirectory(extractionDir.FullName);
         }
 
         public void MoveExtractionDir(string newPath)
         {
-            Directory.Move(extractionDirPath, newPath);
+            Directory.Move(extractionDir.FullName, newPath);
         }
     }
 }

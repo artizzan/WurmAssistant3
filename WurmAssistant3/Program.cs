@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using AldursLab.Essentials.Synchronization;
-using AldursLab.WurmAssistant3.Core.Areas.Root.ViewModels;
-using AldursLab.WurmAssistant3.Core.Areas.Root.Views;
+using AldursLab.WurmAssistant3.Core.Root;
 
 namespace AldursLab.WurmAssistant3
 {
@@ -18,7 +17,8 @@ namespace AldursLab.WurmAssistant3
             Application.SetCompatibleTextRenderingDefault(false);
             try
             {
-                Application.Run(new MainView(new MainViewModel()));
+                var mainView = new MainForm();
+                Application.Run(mainView);
             }
             catch (LockFailedException)
             {

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using AldursLab.Essentials.Synchronization;
+using AldursLab.WurmAssistant.Shared;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant.Launcher.Core
 {
@@ -9,7 +12,10 @@ namespace AldursLab.WurmAssistant.Launcher.Core
         bool Installed { get; }
         string InstallLocationPath { get; }
         void ClearLocation();
-        void RunWurmAssistant();
+        void RunWurmAssistant(string args = null);
+        Wa3VersionInfo GetInstalledVersion();
+        void EnterWa3Lock();
+        void ReleaseWa3Lock();
     }
 
     public class InstallLocation : IInstallLocation
@@ -17,6 +23,8 @@ namespace AldursLab.WurmAssistant.Launcher.Core
         readonly string installDirPath;
         readonly string wurmAssistantExeFileName;
         readonly IProcessRunner processRunner;
+
+        FileLock wa3AppLock;
 
         public InstallLocation(string installDirPath, string wurmAssistantExeFileName, IProcessRunner processRunner)
         {
@@ -56,9 +64,36 @@ namespace AldursLab.WurmAssistant.Launcher.Core
             }
         }
 
-        public void RunWurmAssistant()
+        public void RunWurmAssistant(string args = null)
         {
-            processRunner.Start(Path.Combine(installDirPath, wurmAssistantExeFileName));
+            processRunner.Start(Path.Combine(installDirPath, wurmAssistantExeFileName), args);
+        }
+
+        public Wa3VersionInfo GetInstalledVersion()
+        {
+            if (Installed)
+            {
+                var versionFile = new FileInfo(Path.Combine(InstallLocationPath, "version.dat"));
+                if (versionFile.Exists)
+                {
+                    return Wa3VersionInfo.CreateFromVersionDat(File.ReadAllText(versionFile.FullName).Trim());
+                }
+            }
+
+            return null;
+        }
+
+        public void EnterWa3Lock()
+        {
+            if (wa3AppLock == null)
+            {
+                wa3AppLock = FileLock.EnterWithCreate(AppPaths.WurmAssistant3.DataDir.LockFilePath);
+            }
+        }
+
+        public void ReleaseWa3Lock()
+        {
+            if (wa3AppLock != null) wa3AppLock.Dispose();
         }
     }
 }

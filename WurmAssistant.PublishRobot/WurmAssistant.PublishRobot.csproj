@@ -76,6 +76,10 @@
       <Project>{e7e145ed-1938-4c09-b432-dc7d7a2d5ddb}</Project>
       <Name>Essentials</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant.Shared\WurmAssistant.Shared.csproj">
+      <Project>{2375aa6c-6b2c-4c4e-8cf0-8b3c1d406aea}</Project>
+      <Name>WurmAssistant.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

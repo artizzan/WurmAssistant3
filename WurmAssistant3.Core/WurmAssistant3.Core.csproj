@@ -36,6 +36,10 @@
       <HintPath>..\packages\Caliburn.Micro.Core.2.0.2\lib\net45\Caliburn.Micro.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Ninject-3.2.0.0-release-mono-4.0\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -54,12 +58,6 @@
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7" Condition="'$(Configuration)'=='Debug' Or '$(Configuration)'=='Release'">
-      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7" Condition="'$(Configuration)'=='Debug-mono' Or '$(Configuration)'=='Release-mono'">
-      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
     <Reference Include="Ninject.Extensions.Conventions, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7">
       <HintPath>..\packages\Ninject.Extensions.Conventions.3.2.0.0\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
@@ -71,86 +69,140 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\Config\ConfigManager.cs" />
-    <Compile Include="Areas\Config\ViewModels\SetupViewModel.cs" />
-    <Compile Include="Areas\Logging\Model\ILoggerFactory.cs" />
-    <Compile Include="Areas\Logging\Model\ILogMessageHandler.cs" />
-    <Compile Include="Areas\Logging\Model\ILogMessagePublisher.cs" />
-    <Compile Include="Areas\Logging\Model\IWurmApiLoggerFactory.cs" />
-    <Compile Include="Areas\Logging\Model\LogMessageEventArgs.cs" />
-    <Compile Include="Areas\Logging\ViewModels\LogViewModel.cs" />
+    <Compile Include="Areas\Config\Contracts\IWurmAssistantConfig.cs" />
+    <Compile Include="Areas\Config\ConfigSetup.cs" />
+    <Compile Include="Areas\Config\Contracts\ISettingsEditViewFactory.cs" />
+    <Compile Include="Areas\Config\Views\SettingsEditView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Config\Views\SettingsEditView.Designer.cs">
+      <DependentUpon>SettingsEditView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Features\Contracts\IFeature.cs" />
+    <Compile Include="Areas\Features\Contracts\IFeaturesManager.cs" />
+    <Compile Include="Areas\Features\Contracts\IFeatureView.cs" />
+    <Compile Include="Areas\Features\Contracts\IFeatureViewFactory.cs" />
+    <Compile Include="Areas\Features\FeaturesSetup.cs" />
+    <Compile Include="Areas\Features\Views\FeatureView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Features\Views\FeatureView.Designer.cs">
+      <DependentUpon>FeatureView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\LogSearcher\Resources\LogSearcherResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LogSearcherResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\MainMenu\MainMenuSetup.cs" />
+    <Compile Include="Areas\WurmApi\Contracts\IWurmClientValidator.cs" />
+    <Compile Include="Root\Components\BinDirectory.cs" />
+    <Compile Include="Root\Contracts\IWaVersionStringProvider.cs" />
+    <Compile Include="Root\Components\WaVersionStringProvider.cs" />
+    <Compile Include="Root\Contracts\IBinDirectory.cs" />
+    <Compile Include="Root\Contracts\IWaVersion.cs" />
+    <Compile Include="Root\Components\WaVersion.cs" />
+    <Compile Include="Root\Components\WurmAssistantDataDirectory.cs" />
+    <Compile Include="Areas\Logging\Contracts\ILoggerFactory.cs" />
+    <Compile Include="Areas\Logging\Contracts\ILoggingConfig.cs" />
+    <Compile Include="Areas\Logging\Contracts\ILogMessageHandler.cs" />
+    <Compile Include="Areas\Logging\Contracts\ILogMessageFlow.cs" />
+    <Compile Include="Areas\Logging\Contracts\IWurmApiLoggerFactory.cs" />
+    <Compile Include="Areas\Logging\Contracts\LogMessageEventArgs.cs" />
+    <Compile Include="Areas\Logging\LoggingSetup.cs" />
     <Compile Include="Areas\Logging\Views\LogView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Areas\Logging\Views\LogView.Designer.cs">
       <DependentUpon>LogView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\LogSearcher\LogSearcherManager.cs" />
-    <Compile Include="Areas\LogSearcher\Model\SearchParams.cs" />
-    <Compile Include="Areas\LogSearcher\Model\SearchTypeId.cs" />
-    <Compile Include="Areas\LogSearcher\Views\LogSearcher.cs">
+    <Compile Include="Areas\LogSearcher\LogSearcherSetup.cs" />
+    <Compile Include="Areas\LogSearcher\Contracts\SearchParams.cs" />
+    <Compile Include="Areas\LogSearcher\Views\SearchTypeId.cs" />
+    <Compile Include="Areas\LogSearcher\Views\LogSearchView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\LogSearcher\Views\LogSearcher.Designer.cs">
-      <DependentUpon>LogSearcher.cs</DependentUpon>
+    <Compile Include="Areas\LogSearcher\Views\LogSearchView.Designer.cs">
+      <DependentUpon>LogSearchView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\LogSearcher\Views\SingleSearchMatch.cs" />
-    <Compile Include="Areas\ModuleManager\Model\IModule.cs" />
-    <Compile Include="Areas\ModuleManager\Model\IModuleGui.cs" />
-    <Compile Include="Areas\Config\Model\WurmAssistantSettings.cs" />
-    <Compile Include="Areas\ModuleManager\Views\ModulesView.cs">
+    <Compile Include="Areas\Config\Modules\WurmAssistantConfig.cs" />
+    <Compile Include="Areas\Features\Modules\FeaturesManager.cs" />
+    <Compile Include="Areas\Features\Views\FeaturesView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Areas\ModuleManager\Views\ModulesView.Designer.cs">
-      <DependentUpon>ModulesView.cs</DependentUpon>
+    <Compile Include="Areas\Features\Views\FeaturesView.Designer.cs">
+      <DependentUpon>FeaturesView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\PersistentData\Model\IPersistentFactory.cs" />
-    <Compile Include="Areas\PersistentData\Model\IPersistentLibrary.cs" />
-    <Compile Include="Areas\PersistentData\PersistentDataManager.cs" />
-    <Compile Include="Areas\Root\Model\ComponentUpdateManager.cs" />
-    <Compile Include="Areas\Root\Model\WinFormsThreadMarshaller.cs" />
-    <Compile Include="Areas\Root\RootManager.cs" />
-    <Compile Include="Areas\Root\ViewModels\MainViewModel.cs" />
-    <Compile Include="Areas\Config\Model\IWurmAssistantDataDirectory.cs" />
-    <Compile Include="Areas\Root\Model\IHostEnvironment.cs" />
-    <Compile Include="Areas\Config\Views\SetupView.cs">
+    <Compile Include="Areas\Persistence\Contracts\IPersistentObjectResolver.cs" />
+    <Compile Include="Areas\Persistence\Components\PersistentObjectResolver.cs" />
+    <Compile Include="Root\Contracts\IProcessStarter.cs" />
+    <Compile Include="Root\Contracts\ISystemTrayContextMenu.cs" />
+    <Compile Include="Root\Contracts\IUserNotifier.cs" />
+    <Compile Include="Root\Components\ProcessStarter.cs" />
+    <Compile Include="Root\Components\UserNotifier.cs" />
+    <Compile Include="Areas\WurmApi\Modules\WurmClientValidator.cs" />
+    <Compile Include="Areas\WurmApi\Views\ValidationResultView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\Config\Views\SetupView.Designer.cs">
-      <DependentUpon>SetupView.cs</DependentUpon>
+    <Compile Include="Areas\WurmApi\Views\ValidationResultView.Designer.cs">
+      <DependentUpon>ValidationResultView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Logging\Model\ILogger.cs" />
-    <Compile Include="Areas\Logging\Model\Logger.cs" />
-    <Compile Include="Areas\Logging\LoggingManager.cs" />
-    <Compile Include="Areas\Logging\Model\LoggingConfig.cs" />
-    <Compile Include="Areas\Root\ViewModels\MenuViewModel.cs" />
-    <Compile Include="Areas\Root\Views\MainView.cs">
+    <Compile Include="IoC\PreInitializeActionsStrategy.cs" />
+    <Compile Include="Areas\Persistence\PersistenceSetup.cs" />
+    <Compile Include="Root\Contracts\IUpdateLoop.cs" />
+    <Compile Include="Root\Components\WinFormsThreadMarshaller.cs" />
+    <Compile Include="Root\Contracts\IWurmAssistantDataDirectory.cs" />
+    <Compile Include="Root\Contracts\IHostEnvironment.cs" />
+    <Compile Include="Areas\Config\Views\FirstTimeSetupView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\Root\Views\MainView.Designer.cs">
-      <DependentUpon>MainView.cs</DependentUpon>
+    <Compile Include="Areas\Config\Views\FirstTimeSetupView.Designer.cs">
+      <DependentUpon>FirstTimeSetupView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Root\Views\MenuView.cs">
+    <Compile Include="Areas\Logging\Contracts\ILogger.cs" />
+    <Compile Include="Areas\Logging\Modules\Logger.cs" />
+    <Compile Include="Areas\Logging\Modules\LoggingManager.cs" />
+    <Compile Include="Areas\Logging\Modules\LoggingConfig.cs" />
+    <Compile Include="Root\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Root\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\MainMenu\Views\MenuView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Areas\Root\Views\MenuView.Designer.cs">
+    <Compile Include="Areas\MainMenu\Views\MenuView.Designer.cs">
       <DependentUpon>MenuView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\WurmApi\WurmApiManager.cs" />
-    <Compile Include="Areas\WurmApi\Model\WurmInstallDirectoryOverride.cs" />
+    <Compile Include="Areas\WurmApi\WurmApiSetup.cs" />
+    <Compile Include="Areas\WurmApi\Modules\WurmInstallDirectoryOverride.cs" />
     <Compile Include="IoC\KernelExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CoreBootstrapper.cs" />
+    <Compile Include="Root\CoreBootstrapper.cs" />
     <Compile Include="ReflectionRootAnchor.cs" />
-    <Compile Include="Areas\LogSearcher\ViewModels\LogSearcher.cs" />
-    <Compile Include="Areas\ModuleManager\ViewModels\ModuleControl.cs" />
-    <Compile Include="Areas\ModuleManager\ViewModels\ModulesViewModel.cs" />
+    <Compile Include="WinForms\ExtendedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\ExtendedUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinForms\MinimizationManager.cs" />
+    <Compile Include="WinForms\PersistentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\PersistentUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Areas\SoundEngine\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AldursLab\Lab\Essentials\Essentials.csproj">
       <Project>{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}</Project>
@@ -160,10 +212,6 @@
       <Project>{1ea6d250-6ea0-4c5d-b681-6bcf9b0a8f02}</Project>
       <Name>Gui</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AldursLab\Lab\PersistentObjects.FlatFiles\PersistentObjects.FlatFiles.csproj">
-      <Project>{6322fd00-9aaa-40d9-8c6f-515cc4290b45}</Project>
-      <Name>PersistentObjects.FlatFiles</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj">
       <Project>{0962a106-b1b2-4e21-9931-81d68a98ed37}</Project>
       <Name>PersistentObjects</Name>
@@ -172,20 +220,62 @@
       <Project>{f23b8ad5-5c3b-4c9a-bc11-3577f1cb3272}</Project>
       <Name>WurmApi</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant.Shared\WurmAssistant.Shared.csproj">
+      <Project>{2375aa6c-6b2c-4c4e-8cf0-8b3c1d406aea}</Project>
+      <Name>WurmAssistant.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Areas\Config\Views\SettingsEditView.resx">
+      <DependentUpon>SettingsEditView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Features\Views\FeaturesView.resx">
+      <DependentUpon>FeaturesView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Features\Views\FeatureView.resx">
+      <DependentUpon>FeatureView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Areas\Logging\Views\LogView.resx">
       <DependentUpon>LogView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\LogSearcher\Views\LogSearcher.resx">
-      <DependentUpon>LogSearcher.cs</DependentUpon>
+    <EmbeddedResource Include="Areas\LogSearcher\Resources\LogSearcherResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LogSearcherResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Config\Views\SetupView.resx">
-      <DependentUpon>SetupView.cs</DependentUpon>
+    <EmbeddedResource Include="Areas\LogSearcher\Views\LogSearchView.resx">
+      <DependentUpon>LogSearchView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Root\Views\MainView.resx">
-      <DependentUpon>MainView.cs</DependentUpon>
+    <EmbeddedResource Include="Areas\Config\Views\FirstTimeSetupView.resx">
+      <DependentUpon>FirstTimeSetupView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Areas\MainMenu\Views\MenuView.resx">
+      <DependentUpon>MenuView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Root\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\WurmApi\Views\ValidationResultView.resx">
+      <DependentUpon>ValidationResultView.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\beer.png" />
+    <Content Include="Resources\close_icon.gif" />
+    <Content Include="Resources\DeleteRed.png" />
+    <Content Include="Resources\DeleteRed_small.png" />
+    <None Include="Resources\icon.png" />
+    <Content Include="Resources\irrklang_small.png" />
+    <Content Include="Resources\lampsFlow.png" />
+    <Content Include="Resources\paypal_donate.png" />
+    <Content Include="Resources\SoundDisabled.png" />
+    <Content Include="Resources\SoundDisabledSmall.png" />
+    <Content Include="Resources\SoundEnabled.png" />
+    <Content Include="Resources\SoundEnabledSmall.png" />
+    <Content Include="Resources\transp_placeholder.png" />
+    <Content Include="Resources\WurmAssistantIcon.ico" />
+    <Content Include="Resources\WurmAssistantIcon.png" />
+    <Content Include="Resources\WurmAssistantImage.bmp" />
+    <Content Include="Resources\WurmAssistantLiteIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

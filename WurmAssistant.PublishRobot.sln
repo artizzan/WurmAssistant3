@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials", "AldursLab\Lab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant.PublishRobot.WebServiceTester", "WurmAssistant.PublishRobot.WebServiceTester\WurmAssistant.PublishRobot.WebServiceTester.csproj", "{BD05FE0E-BD34-4D05-BBB0-DFA9552B5D0E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant.Shared", "WurmAssistant.Shared\WurmAssistant.Shared.csproj", "{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{BD05FE0E-BD34-4D05-BBB0-DFA9552B5D0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD05FE0E-BD34-4D05-BBB0-DFA9552B5D0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD05FE0E-BD34-4D05-BBB0-DFA9552B5D0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

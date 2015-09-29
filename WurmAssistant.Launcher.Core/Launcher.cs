@@ -3,8 +3,6 @@ using System.IO;
 using System.Linq;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.Essentials.Synchronization;
-using AldursLab.PersistentObjects;
-using AldursLab.PersistentObjects.FlatFiles;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
@@ -20,8 +18,6 @@ namespace AldursLab.WurmAssistant.Launcher.Core
 
         readonly JsonSerializer serializer = new JsonSerializer();
 
-        readonly PersistentCollectionsLibrary library;
-        readonly LauncherData launcherData;
         readonly DirectoryInfo errorMessagesOutputDir;
 
         volatile bool entered;
@@ -51,10 +47,6 @@ namespace AldursLab.WurmAssistant.Launcher.Core
             }
 
             var dataDirPath = Path.Combine(launcherDataDirPath, PersistentDataDirName);
-            library = new PersistentCollectionsLibrary(new FlatFilesPersistenceStrategy(dataDirPath));
-            var entity = library.DefaultCollection.GetObject<LauncherDataEntity>("LauncherDataEntity");
-
-            launcherData = new LauncherData(entity);
         }
 
         public void WriteErrorFile(string message)
@@ -111,16 +103,6 @@ namespace AldursLab.WurmAssistant.Launcher.Core
             }
         }
 
-        public LauncherData GetPersistentData()
-        {
-            return launcherData;
-        }
-
-        public void SavePersistentData()
-        {
-            library.SaveAll();
-        }
-
         public void ReleaseLock()
         {
             if (entered)
@@ -133,35 +115,6 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                 {
                     entered = false;
                 }
-            }
-        }
-    }
-
-    public class LauncherDataEntity : Entity
-    {
-        public LauncherDataEntity()
-        {
-            WurmAssistantInstalledVersion = new Version(0, 0, 0, 0);
-        }
-
-        [NotNull]
-        public Version WurmAssistantInstalledVersion { get; set; }
-    }
-
-    public class LauncherData : PersistentEntityBase<LauncherDataEntity>
-    {
-        public LauncherData(IPersistent<LauncherDataEntity> persistent) : base(persistent)
-        {
-        }
-
-        [NotNull]
-        public Version WurmAssistantInstalledVersion
-        {
-            get { return Entity.WurmAssistantInstalledVersion; }
-            set
-            {
-                if (value == null) throw new ArgumentNullException("value");
-                Entity.WurmAssistantInstalledVersion = value;
             }
         }
     }

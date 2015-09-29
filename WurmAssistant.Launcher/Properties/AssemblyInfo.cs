@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Wurm Assistant Launcher")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Aldurs Lab")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("WurmAssistant.Launcher")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]

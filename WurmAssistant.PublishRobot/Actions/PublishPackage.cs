@@ -8,6 +8,7 @@ using AldursLab.Essentials.Configs;
 using AldursLab.Essentials.Extensions.DotNet.Collections.Generic;
 using AldursLab.Essentials.FileSystem;
 using AldursLab.WurmAssistant.PublishRobot.Parts;
+using AldursLab.WurmAssistant.Shared;
 using ICSharpCode.SharpZipLib.Zip;
 using JetBrains.Annotations;
 
@@ -17,8 +18,6 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
     {
         readonly string tempDir;
 
-        readonly string buildCode;
-        readonly string buildNumber;
         readonly string releasesInfoPath;
         readonly string packageBinPath;
         readonly string webServiceRootUrl;
@@ -27,7 +26,7 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
         readonly string webServicePassword;
         readonly string slackIntegrationSubUrl;
 
-        readonly string latestMinorVersionString;
+        readonly Wa3VersionInfo version;
 
         readonly IOutput output;
 
@@ -38,8 +37,8 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
             this.tempDir = tempDir;
             this.output = output;
 
-            buildCode = config.GetValue("build code");
-            buildNumber = config.GetValue("build number");
+            var buildCode = config.GetValue("build code");
+            var buildNumber = config.GetValue("build number");
             releasesInfoPath = config.GetValue("releases info path");
             packageBinPath = config.GetValue("package bin path");
             webServiceRootUrl = config.GetValue("web service root url");
@@ -48,7 +47,13 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
             webServicePassword = config.GetValue("web service password");
             slackIntegrationSubUrl = config.GetValue("slack integration sub url");
 
-            latestMinorVersionString = GetLatestMinorVersionString();
+            var latestMinorVersionString = GetLatestMinorVersionString();
+
+            version = new Wa3VersionInfo(
+                buildCode,
+                buildNumber,
+                latestMinorVersionString,
+                DateTimeOffset.Now);
         }
 
         public void Execute()
@@ -63,13 +68,13 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
             var binDir = new DirectoryInfo(packageBinPath);
 
             var targetVersionDatFile = new FileInfo(Path.Combine(binDir.FullName, "version.dat"));
-            File.WriteAllText(targetVersionDatFile.FullName, BuildVersionDatContents());
+            File.WriteAllText(targetVersionDatFile.FullName, version.ConvertIntoVersionDatContents());
 
             var zipper = new FastZip();
             var zipFile = new FileInfo(Path.Combine(tempDir, string.Format("{0}.zip", BuildFileName())));
             zipper.CreateZip(zipFile.FullName, binDir.FullName, true, null);
 
-            publisher.Publish(zipFile, buildCode, buildNumber);
+            publisher.Publish(zipFile, version.BuildCode, version.BuildNumber);
             output.Write("Publishing operation completed.");
 
             slacker.SendMessage(string.Format("Published {0}", BuildFileName()));
@@ -77,23 +82,14 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
 
         string BuildFileName()
         {
-            return string.Format("WurmAssistant-{0}-{1}-R{2}", latestMinorVersionString, buildCode, buildNumber);
-        }
-
-        string BuildVersionDatContents()
-        {
-            return string.Format("{0}\n{1}\n{2}\n{3}",
-                latestMinorVersionString,
-                buildCode,
-                buildNumber,
-                DateTimeOffset.Now.ToString("O"));
+            return string.Format("WurmAssistant-{0}-{1}-R{2}", version.MinorVersion, version.BuildCode, version.BuildNumber);
         }
 
         string GetLatestMinorVersionString()
         {
             var releaseDirs = GetReleaseDirInfos();
-            var version = releaseDirs.Max(info => info.Version);
-            return string.Format("{0}.{1}", version.Major, version.Minor);
+            var minorVersion = releaseDirs.Max(info => info.Version);
+            return string.Format("{0}.{1}", minorVersion.Major, minorVersion.Minor);
         }
 
         ReleaseDirInfo[] GetReleaseDirInfos()

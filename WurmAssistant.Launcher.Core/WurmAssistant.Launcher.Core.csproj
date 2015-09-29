@@ -92,13 +92,13 @@
       <Project>{cf5fdc21-2ff8-42fb-875f-d9a0701bae9f}</Project>
       <Name>Networking</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AldursLab\Lab\PersistentObjects.FlatFiles\PersistentObjects.FlatFiles.csproj">
-      <Project>{6322fd00-9aaa-40d9-8c6f-515cc4290b45}</Project>
-      <Name>PersistentObjects.FlatFiles</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj">
       <Project>{0962a106-b1b2-4e21-9931-81d68a98ed37}</Project>
       <Name>PersistentObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant.Shared\WurmAssistant.Shared.csproj">
+      <Project>{2375aa6c-6b2c-4c4e-8cf0-8b3c1d406aea}</Project>
+      <Name>WurmAssistant.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

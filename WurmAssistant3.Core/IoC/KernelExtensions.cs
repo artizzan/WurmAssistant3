@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AldursLab.WurmAssistant3.Core.Areas.Logging.Model;
+using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Core.IoC

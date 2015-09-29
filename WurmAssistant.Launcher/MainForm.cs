@@ -8,8 +8,11 @@ namespace AldursLab.WurmAssistant.Launcher
 {
     public partial class MainForm : Form, IGuiHost
     {
-        public MainForm()
+        readonly string[] args;
+
+        public MainForm(string[] args)
         {
+            this.args = args ?? new string[0];
             InitializeComponent();
             ShowInTaskbar = true;
         }
@@ -24,27 +27,18 @@ namespace AldursLab.WurmAssistant.Launcher
                 throw new NullReferenceException("assemblyDir is null");
             }
 
-            string configFileName = "debug.cfg";
-#if WA3STABLE
-            configFileName = "wa3-stable.cfg";
-#endif
-#if WALITESTABLE
-            configFileName = "walite-stable.cfg";
-#endif
-
-            var settingsFile = Path.Combine(assemblyDir, configFileName);
-
-            IConfig localSettings = new FileSimpleConfig(settingsFile);
-            this.Text = localSettings.GetValue("AppName") + " Launcher";
+            this.Text = "Wurm Assistant 3 Launcher";
 
             var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var rootDir = Path.Combine(localAppData, "AldursLab", localSettings.GetValue("AldursLabDirName"));
+            var rootDir = Path.Combine(localAppData, "AldursLab", "WurmAssistant3");
 
             var config = new ControllerConfig()
             {
                 RootDirFullPath = rootDir,
-                WebServiceRootUrl = localSettings.GetValue("WebServiceRootUrl"),
-                WurmAssistantExeFileName = localSettings.GetValue("WurmAssistantExeFileName")
+                WebServiceRootUrl = Properties.Settings.Default.WurmAssistantWebServiceUrl,
+                WurmAssistantExeFileName = "AldursLab.WurmAssistant3.exe",
+                BuildCode = args.Length > 0 ? args[0] : "stable-win",
+                BuildNumber = args.Length > 1 ? args[1] : null
             };
 
             IDebug debug = new TextDebug(Path.Combine(config.RootDirFullPath, "Launcher", "debug.txt"));
