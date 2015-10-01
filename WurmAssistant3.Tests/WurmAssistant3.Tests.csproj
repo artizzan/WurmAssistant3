@@ -50,6 +50,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="Telerik.JustMock, Version=2015.3.929.5, Culture=neutral, PublicKeyToken=721b6c5bc0326b3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\JustMock.2015.3.929.5\lib\Net35\Telerik.JustMock.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -65,12 +69,43 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Unit\Areas\LogSearcher\WurmSeasonDefinitionTests.cs" />
+    <Compile Include="Unit\Root\ChangelogManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\AldursLab\Lab\Essentials\Essentials.csproj">
+      <Project>{e7e145ed-1938-4c09-b432-dc7d7a2d5ddb}</Project>
+      <Name>Essentials</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj">
+      <Project>{0962a106-b1b2-4e21-9931-81d68a98ed37}</Project>
+      <Name>PersistentObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AldursLab\Lab\Testing\Testing.csproj">
+      <Project>{a0ce70f0-6f13-47f5-9b61-69f6be1ab082}</Project>
+      <Name>Testing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmApi\WurmApi\WurmApi.csproj">
+      <Project>{f23b8ad5-5c3b-4c9a-bc11-3577f1cb3272}</Project>
+      <Name>WurmApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant.Shared\WurmAssistant.Shared.csproj">
+      <Project>{2375aa6c-6b2c-4c4e-8cf0-8b3c1d406aea}</Project>
+      <Name>WurmAssistant.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant3.Core\WurmAssistant3.Core.csproj">
+      <Project>{da679803-09bd-4d44-9c0b-2dcc4d179f6b}</Project>
+      <Name>WurmAssistant3.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant3\WurmAssistant3.csproj">
+      <Project>{090b405f-748e-4e4e-83ae-babb93e0821e}</Project>
+      <Name>WurmAssistant3</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

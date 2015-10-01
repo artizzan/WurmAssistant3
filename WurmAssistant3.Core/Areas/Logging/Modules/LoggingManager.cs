@@ -37,7 +37,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Logging.Modules
             return new Logger(this, category);
         }
 
-        AldursLab.WurmApi.ILogger IWurmApiLoggerFactory.Create()
+        AldursLab.WurmApi.IWurmApiLogger IWurmApiLoggerFactory.Create()
         {
             return new Logger(this, "WurmApi");
         }

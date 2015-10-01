@@ -3,6 +3,7 @@ using System.Linq;
 using AldursLab.Essentials.Eventing;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core.Areas.Calendar;
 using AldursLab.WurmAssistant3.Core.Areas.Config;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Modules;
@@ -10,11 +11,14 @@ using AldursLab.WurmAssistant3.Core.Areas.Features;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Logging;
+using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Views;
 using AldursLab.WurmAssistant3.Core.Areas.LogSearcher;
 using AldursLab.WurmAssistant3.Core.Areas.MainMenu;
 using AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence;
+using AldursLab.WurmAssistant3.Core.Areas.SoundEngine;
+using AldursLab.WurmAssistant3.Core.Areas.TrayPopups;
 using AldursLab.WurmAssistant3.Core.Areas.WurmApi;
 using AldursLab.WurmAssistant3.Core.IoC;
 using AldursLab.WurmAssistant3.Core.Root.Components;
@@ -41,21 +45,23 @@ namespace AldursLab.WurmAssistant3.Core.Root
             
             dataDirectory = new WurmAssistantDataDirectory();
             dataDirectory.Lock();
-            kernel.ProhibitGet<WurmAssistantDataDirectory>();
 
             kernel.Bind<WurmAssistantConfig, IWurmAssistantConfig>().To<WurmAssistantConfig>().InSingletonScope();
-            kernel.Bind<WurmAssistantDataDirectory, IWurmAssistantDataDirectory>().ToConstant(dataDirectory);
-            kernel.Bind<MainForm>().ToConstant(mainForm);
 
-            kernel.Bind<IThreadMarshaller, IWurmApiEventMarshaller>().ToConstant(new WinFormsThreadMarshaller(mainForm));
-            kernel.Bind<IHostEnvironment>().ToConstant(mainForm);
-            kernel.Bind<IUpdateLoop>().ToConstant(mainForm);
-            kernel.Bind<IProcessStarter>().To<ProcessStarter>().InSingletonScope();
-            kernel.Bind<IUserNotifier>().To<UserNotifier>().InSingletonScope();
-            kernel.Bind<ISystemTrayContextMenu>().ToConstant(mainForm);
-            kernel.Bind<IBinDirectory>().To<BinDirectory>().InSingletonScope();
-            kernel.Bind<IWaVersion>().To<WaVersion>().InSingletonScope();
-            kernel.Bind<IWaVersionStringProvider>().To<WaVersionStringProvider>().InSingletonScope();
+            kernel.Bind<IWurmAssistantDataDirectory>().ToConstant(dataDirectory);
+            kernel.ProhibitGet<WurmAssistantDataDirectory>();
+
+            kernel.Bind<WinFormsThreadMarshaller, IThreadMarshaller, IWurmApiEventMarshaller>()
+                  .ToConstant(new WinFormsThreadMarshaller(mainForm));
+
+            kernel.Bind<MainForm, IHostEnvironment, IUpdateLoop, ISystemTrayContextMenu>().ToConstant(mainForm);
+
+            kernel.Bind<ProcessStarter, IProcessStarter>().To<ProcessStarter>().InSingletonScope();
+            kernel.Bind<UserNotifier, IUserNotifier>().To<UserNotifier>().InSingletonScope();
+            kernel.Bind<BinDirectory, IBinDirectory>().To<BinDirectory>().InSingletonScope();
+            kernel.Bind<WaVersion, IWaVersion>().To<WaVersion>().InSingletonScope();
+            kernel.Bind<WaExecutionInfoProvider, IWaExecutionInfoProvider>().To<WaExecutionInfoProvider>().InSingletonScope();
+            kernel.Bind<ChangelogManager, IChangelogManager>().To<ChangelogManager>().InSingletonScope();
 
             LoggingSetup.Setup(kernel);
             mainForm.SetLogView(kernel.Get<LogView>());
@@ -97,7 +103,11 @@ namespace AldursLab.WurmAssistant3.Core.Root
             WurmApiSetup.BindSingletonApi(kernel);
             WurmApiSetup.ValidateWurmGameClientConfig(kernel);
 
+            TrayPopupsSetup.BindTrayPopups(kernel);
+            SoundEngineSetup.BindSoundEngine(kernel);
+
             LogSearcherSetup.BindLogSearcher(kernel);
+            CalendarSetup.BindCalendar(kernel);
 
             FeaturesSetup.BindFeaturesManager(kernel);
             MainMenuSetup.BindMenu(kernel);
@@ -105,11 +115,34 @@ namespace AldursLab.WurmAssistant3.Core.Root
             mainForm.SetMenuView(kernel.Get<MenuView>());
             mainForm.SetModulesView(kernel.Get<FeaturesView>());
 
-            var prov = kernel.Get<IWaVersionStringProvider>();
+            var prov = kernel.Get<IWaExecutionInfoProvider>();
             mainForm.Text += string.Format(" ({0})", prov.Get());
 
             var featureManager = kernel.Get<IFeaturesManager>();
             featureManager.InitFeatures();
+
+            ShowChangelog();
+        }
+
+        void ShowChangelog()
+        {
+            var changelogManager = kernel.Get<IChangelogManager>();
+            var userNotify = kernel.Get<IUserNotifier>();
+            var logger = kernel.Get<ILogger>();
+            try
+            {
+                var changes = changelogManager.GetNewChanges();
+                if (!string.IsNullOrWhiteSpace(changes))
+                {
+                    changelogManager.ShowChanges(changes);
+                    changelogManager.UpdateLastChangeDate();
+                }
+            }
+            catch (Exception exception)
+            {
+                logger.Warn(exception, "Error at parsing or opening changelog");
+                userNotify.NotifyWithMessageBox("Error opening changelog, see logs for details.", NotifyKind.Warning);
+            }
         }
 
         public void Dispose()

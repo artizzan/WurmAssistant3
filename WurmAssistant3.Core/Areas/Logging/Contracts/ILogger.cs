@@ -8,5 +8,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts
         void Error(Exception exception, string message);
         void Info(string message);
         void Info(Exception exception, string message);
+        void Warn(string message);
+        void Warn(Exception exception, string message);
     }
 }

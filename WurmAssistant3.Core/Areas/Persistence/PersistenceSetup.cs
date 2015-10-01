@@ -4,6 +4,7 @@ using System.Linq;
 using AldursLab.PersistentObjects;
 using AldursLab.PersistentObjects.Persistence;
 using AldursLab.PersistentObjects.Serialization;
+using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence.Components;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence.Contracts;
 using AldursLab.WurmAssistant3.Core.IoC;
@@ -35,13 +36,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence
             // Data saving relies on application events, wired via PersistentDataManager.
 
             var dataDir = kernel.Get<IWurmAssistantDataDirectory>();
-
+            var logger = kernel.Get<ILogger>();
             var config = new PersistenceManagerConfig()
             {
                 DataStoreDirectoryPath = Path.Combine(dataDir.DirectoryPath, "Data")
             };
+            var errorStrategy = new JsonExtendedErrorHandlingStrategy(logger);
+            var serializationStrategy = new JsonSerializationStrategy
+            {
+                ErrorStrategy = errorStrategy
+            };
             var persistenceManager = new PersistenceManager(config,
-                new JsonSerializationStrategy(),
+                serializationStrategy,
                 new FlatFilesPersistenceStrategy(config));
 
             kernel.Bind<PersistenceManager>().ToConstant(persistenceManager);

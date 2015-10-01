@@ -9,6 +9,7 @@ using AldursLab.WurmAssistant3.Core.Areas.Features.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Views;
 using AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
+using AldursLab.WurmAssistant3.Core.Root.Views;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
@@ -214,7 +215,14 @@ namespace AldursLab.WurmAssistant3.Core.Root
                 }
                 catch (Exception exception)
                 {
-                    MessageBox.Show("Application must close due to exception: " + exception.ToString());
+                    var view = new UniversalTextDisplayView()
+                    {
+                        Text = "OH NO!!",
+                        ContentText = 
+                            "Application startup was interrupted by an ugly error! " + Environment.NewLine
+                            + Environment.NewLine + exception.ToString()
+                    };
+                    view.ShowDialog();
                     Shutdown();
                     return;
                 }

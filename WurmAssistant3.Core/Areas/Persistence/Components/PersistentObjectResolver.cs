@@ -39,6 +39,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Components
             return obj;
         }
 
+        public T GetDefault()
+        {
+            return Get("");
+        }
+
         /// <summary>
         /// Stops tracking the object. 
         /// The object becomes eligible for GC and a future Get will start the tracking proces again.

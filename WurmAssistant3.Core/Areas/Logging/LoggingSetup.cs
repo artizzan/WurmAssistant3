@@ -30,8 +30,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Logging
             {
                 // create logger with category matching target type name
                 var factory = context.Kernel.Get<ILoggerFactory>();
-                var type = context.Request.Target.Member.DeclaringType;
-                return factory.Create(type != null ? type.FullName : string.Empty);
+                if (context.Request.Target != null)
+                {
+                    var type = context.Request.Target.Member.DeclaringType;
+                    return factory.Create(type != null ? type.FullName : string.Empty);
+                }
+                else
+                {
+                    return factory.Create("");
+                }
             });
         }
     }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Resources;
+using AldursLab.WurmAssistant3.Core.Resources;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
 using ILogger = AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts.ILogger;
@@ -70,7 +70,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
 
         string IFeature.Name { get { return "Log Searcher"; } }
 
-        Image IFeature.Icon { get { return LogSearcherResources.icon; } }
+        Image IFeature.Icon { get { return WaResources.LogSearcherIcon; } }
 
         async Task IFeature.InitAsync()
         {

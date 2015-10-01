@@ -158,12 +158,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Logging.Views
 
         private void reportBug_Click(object sender, EventArgs e)
         {
-            userNotifier.Notify("Not yet implemented");
+            userNotifier.NotifyWithMessageBox("Not yet implemented");
         }
 
         private void sendFeedback_Click(object sender, EventArgs e)
         {
-            userNotifier.Notify("Not yet implemented");
+            userNotifier.NotifyWithMessageBox("Not yet implemented");
         }
     }
 }

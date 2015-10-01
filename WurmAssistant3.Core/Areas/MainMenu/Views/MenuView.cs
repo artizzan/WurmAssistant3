@@ -32,32 +32,32 @@ namespace AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views
 
         private void officialForumToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            userNotifier.Notify("Not yet implemented");
+            userNotifier.NotifyWithMessageBox("Not yet implemented");
         }
 
         private void wikiToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            userNotifier.Notify("Not yet implemented");
+            userNotifier.NotifyWithMessageBox("Not yet implemented");
         }
 
         private void pMAldurToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            userNotifier.Notify("Not yet implemented");
+            userNotifier.NotifyWithMessageBox("Not yet implemented");
         }
 
         private void contributorsToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            userNotifier.Notify("Not yet implemented");
+            userNotifier.NotifyWithMessageBox("Not yet implemented");
         }
 
         private void donatorsToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            userNotifier.Notify("Not yet implemented");
+            userNotifier.NotifyWithMessageBox("Not yet implemented");
         }
 
         private void viewRoadmapToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            userNotifier.Notify("Not yet implemented");
+            userNotifier.NotifyWithMessageBox("Not yet implemented");
         }
     }
 }

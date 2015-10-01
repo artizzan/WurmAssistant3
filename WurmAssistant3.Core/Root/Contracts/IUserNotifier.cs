@@ -2,6 +2,18 @@
 {
     public interface IUserNotifier
     {
-        void Notify(string text);
+        /// <summary>
+        /// Shows a notification to the user with MessageBox.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="notifyKind"></param>
+        void NotifyWithMessageBox(string text, NotifyKind notifyKind = NotifyKind.Info);
+    }
+
+    public enum NotifyKind
+    {
+        Info = 0, // default
+        Warning,
+        Error
     }
 }

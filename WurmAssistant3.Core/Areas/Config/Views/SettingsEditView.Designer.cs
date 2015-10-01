@@ -31,6 +31,7 @@
             this.firstTimeSetupAgain = new System.Windows.Forms.CheckBox();
             this.cleanWurmApiCaches = new System.Windows.Forms.CheckBox();
             this.MinimizeToTray = new System.Windows.Forms.CheckBox();
+            this.validateConfigButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // firstTimeSetupAgain
@@ -66,11 +67,22 @@
             this.MinimizeToTray.UseVisualStyleBackColor = true;
             this.MinimizeToTray.CheckedChanged += new System.EventHandler(this.MinimizeToTray_CheckedChanged);
             // 
+            // validateConfigButton
+            // 
+            this.validateConfigButton.Location = new System.Drawing.Point(12, 97);
+            this.validateConfigButton.Name = "validateConfigButton";
+            this.validateConfigButton.Size = new System.Drawing.Size(246, 23);
+            this.validateConfigButton.TabIndex = 3;
+            this.validateConfigButton.Text = "Validate Wurm game client config";
+            this.validateConfigButton.UseVisualStyleBackColor = true;
+            this.validateConfigButton.Click += new System.EventHandler(this.validateConfigButton_Click);
+            // 
             // SettingsEditView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(420, 132);
+            this.ClientSize = new System.Drawing.Size(420, 139);
+            this.Controls.Add(this.validateConfigButton);
             this.Controls.Add(this.MinimizeToTray);
             this.Controls.Add(this.cleanWurmApiCaches);
             this.Controls.Add(this.firstTimeSetupAgain);
@@ -89,5 +101,6 @@
         private System.Windows.Forms.CheckBox firstTimeSetupAgain;
         private System.Windows.Forms.CheckBox cleanWurmApiCaches;
         private System.Windows.Forms.CheckBox MinimizeToTray;
+        private System.Windows.Forms.Button validateConfigButton;
     }
 }

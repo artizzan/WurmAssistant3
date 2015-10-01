@@ -6,6 +6,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Contracts
     {
         T Get(string persistentObjectId);
 
+        T GetDefault();
+
         void Unload(T @object);
     }
 }

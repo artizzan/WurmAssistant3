@@ -131,6 +131,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="changelog-raw.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Releases\3.0\update.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

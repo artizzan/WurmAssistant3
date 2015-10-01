@@ -5,8 +5,7 @@ namespace AldursLab.WurmAssistant3.Core.Root.Contracts
     public interface IUpdateLoop
     {
         /// <summary>
-        /// Interval for this event should be 500 ms.
-        /// Events should always be triggered on UI thread.
+        /// Triggered regularly in 500 ms intervals, always on UI thread.
         /// </summary>
         event EventHandler<EventArgs> Updated;
     }

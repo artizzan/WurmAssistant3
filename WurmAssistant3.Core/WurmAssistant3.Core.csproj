@@ -69,6 +69,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Calendar\CalendarSetup.cs" />
+    <Compile Include="Areas\Calendar\Modules\CalendarFeature.cs" />
+    <Compile Include="Areas\Calendar\Contracts\WurmSeasonDefinition.cs" />
+    <Compile Include="Areas\Calendar\Modules\WurmSeasonsManager.cs" />
+    <Compile Include="Areas\Calendar\Views\FormCalendar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Calendar\Views\FormCalendar.Designer.cs">
+      <DependentUpon>FormCalendar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Calendar\Views\FormChooseSeasons.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Calendar\Views\FormChooseSeasons.Designer.cs">
+      <DependentUpon>FormChooseSeasons.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Calendar\Views\SeasonsEditView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Calendar\Views\SeasonsEditView.Designer.cs">
+      <DependentUpon>SeasonsEditView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\Config\Contracts\IWurmAssistantConfig.cs" />
     <Compile Include="Areas\Config\ConfigSetup.cs" />
     <Compile Include="Areas\Config\Contracts\ISettingsEditViewFactory.cs" />
@@ -89,17 +111,47 @@
     <Compile Include="Areas\Features\Views\FeatureView.Designer.cs">
       <DependentUpon>FeatureView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\LogSearcher\Resources\LogSearcherResources.Designer.cs">
+    <Compile Include="Areas\MainMenu\MainMenuSetup.cs" />
+    <Compile Include="Areas\Persistence\Components\JsonExtendedErrorHandlingStrategy.cs" />
+    <Compile Include="Areas\SoundEngine\Contracts\ISoundEngine.cs" />
+    <Compile Include="Areas\SoundEngine\Contracts\IPlayingSoundHandle.cs" />
+    <Compile Include="Areas\SoundEngine\Contracts\ISoundResource.cs" />
+    <Compile Include="Areas\SoundEngine\Modules\SoundEngine.cs" />
+    <Compile Include="Areas\SoundEngine\SoundEngineSetup.cs" />
+    <Compile Include="Areas\TrayPopups\Contracts\ITrayPopups.cs" />
+    <Compile Include="Areas\TrayPopups\Views\PopupNotifier.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Areas\TrayPopups\Views\PopupNotifierForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\TrayPopups\Modules\PopupManager.cs" />
+    <Compile Include="Areas\TrayPopups\Modules\PopupMessage.cs" />
+    <Compile Include="Areas\TrayPopups\Modules\TrayPopups.cs" />
+    <Compile Include="Areas\TrayPopups\Resources\TrayPopupsResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>LogSearcherResources.resx</DependentUpon>
+      <DependentUpon>TrayPopupsResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Areas\MainMenu\MainMenuSetup.cs" />
+    <Compile Include="Areas\TrayPopups\TrayPopupsSetup.cs" />
+    <Compile Include="Areas\TrayPopups\Views\FormPopupContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\TrayPopups\Views\FormPopupContainer.Designer.cs">
+      <DependentUpon>FormPopupContainer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\WurmApi\Contracts\IWurmClientValidator.cs" />
+    <Compile Include="Legacy\OperatingSystemInfo.cs" />
+    <Compile Include="Resources\WaResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WaResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Root\Components\BinDirectory.cs" />
-    <Compile Include="Root\Contracts\IWaVersionStringProvider.cs" />
-    <Compile Include="Root\Components\WaVersionStringProvider.cs" />
+    <Compile Include="Root\Components\ChangelogManager.cs" />
+    <Compile Include="Root\Components\WaExecutionInfoProvider.cs" />
     <Compile Include="Root\Contracts\IBinDirectory.cs" />
+    <Compile Include="Root\Contracts\IChangelogManager.cs" />
     <Compile Include="Root\Contracts\IWaVersion.cs" />
     <Compile Include="Root\Components\WaVersion.cs" />
     <Compile Include="Root\Components\WurmAssistantDataDirectory.cs" />
@@ -152,6 +204,7 @@
     <Compile Include="Areas\Persistence\PersistenceSetup.cs" />
     <Compile Include="Root\Contracts\IUpdateLoop.cs" />
     <Compile Include="Root\Components\WinFormsThreadMarshaller.cs" />
+    <Compile Include="Root\Contracts\IWaExecutionInfoProvider.cs" />
     <Compile Include="Root\Contracts\IWurmAssistantDataDirectory.cs" />
     <Compile Include="Root\Contracts\IHostEnvironment.cs" />
     <Compile Include="Areas\Config\Views\FirstTimeSetupView.cs">
@@ -182,6 +235,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Root\CoreBootstrapper.cs" />
     <Compile Include="ReflectionRootAnchor.cs" />
+    <Compile Include="Root\Views\UniversalTextDisplayView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Root\Views\UniversalTextDisplayView.Designer.cs">
+      <DependentUpon>UniversalTextDisplayView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\ListViewNf.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WinForms\ExtendedForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -195,13 +257,18 @@
     <Compile Include="WinForms\PersistentUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="WinForms\TextBoxNf.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\SoundEngine\" />
+    <Folder Include="Areas\Granger\" />
+    <Folder Include="Areas\Timers\" />
+    <Folder Include="Areas\Triggers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AldursLab\Lab\Essentials\Essentials.csproj">
@@ -226,6 +293,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Areas\Calendar\Views\FormCalendar.resx">
+      <DependentUpon>FormCalendar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Calendar\Views\FormChooseSeasons.resx">
+      <DependentUpon>FormChooseSeasons.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Calendar\Views\SeasonsEditView.resx">
+      <DependentUpon>SeasonsEditView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Areas\Config\Views\SettingsEditView.resx">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
     </EmbeddedResource>
@@ -238,10 +314,6 @@
     <EmbeddedResource Include="Areas\Logging\Views\LogView.resx">
       <DependentUpon>LogView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\LogSearcher\Resources\LogSearcherResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>LogSearcherResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Areas\LogSearcher\Views\LogSearchView.resx">
       <DependentUpon>LogSearchView.cs</DependentUpon>
     </EmbeddedResource>
@@ -251,11 +323,25 @@
     <EmbeddedResource Include="Areas\MainMenu\Views\MenuView.resx">
       <DependentUpon>MenuView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Areas\TrayPopups\Resources\TrayPopupsResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TrayPopupsResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\TrayPopups\Views\FormPopupContainer.resx">
+      <DependentUpon>FormPopupContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\WaResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WaResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Root\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\WurmApi\Views\ValidationResultView.resx">
       <DependentUpon>ValidationResultView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Root\Views\UniversalTextDisplayView.resx">
+      <DependentUpon>UniversalTextDisplayView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -263,14 +349,21 @@
     <Content Include="Resources\close_icon.gif" />
     <Content Include="Resources\DeleteRed.png" />
     <Content Include="Resources\DeleteRed_small.png" />
-    <None Include="Resources\icon.png" />
+    <None Include="Resources\CalendarIcon.png" />
+    <None Include="Resources\Grip.png" />
+    <None Include="Resources\GrangerIcon.png" />
     <Content Include="Resources\irrklang_small.png" />
     <Content Include="Resources\lampsFlow.png" />
+    <None Include="Resources\LegacyModFile.txt" />
+    <None Include="Resources\LogSearcherIcon.png" />
+    <None Include="Resources\LegacyCalendarModFile.txt" />
     <Content Include="Resources\paypal_donate.png" />
     <Content Include="Resources\SoundDisabled.png" />
     <Content Include="Resources\SoundDisabledSmall.png" />
     <Content Include="Resources\SoundEnabled.png" />
     <Content Include="Resources\SoundEnabledSmall.png" />
+    <None Include="Resources\SoundNotifyIcon.png" />
+    <None Include="Resources\TimersIcon.png" />
     <Content Include="Resources\transp_placeholder.png" />
     <Content Include="Resources\WurmAssistantIcon.ico" />
     <Content Include="Resources\WurmAssistantIcon.png" />

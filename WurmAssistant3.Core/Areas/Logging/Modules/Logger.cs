@@ -7,7 +7,7 @@ using LogLevel = NLog.LogLevel;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Logging.Modules
 {
-    public class Logger : ILogger, AldursLab.WurmApi.ILogger
+    public class Logger : ILogger, AldursLab.WurmApi.IWurmApiLogger
     {
         readonly ILogMessageHandler logMessageHandler;
         readonly string category;
@@ -101,6 +101,24 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Logging.Modules
             {
                 logger.Info(exception, message);
                 logMessageHandler.HandleEvent(LogLevel.Info, message, exception, category);
+            }
+        }
+
+        public void Warn(string message)
+        {
+            if (logger.IsWarnEnabled)
+            {
+                logger.Warn(message);
+                logMessageHandler.HandleEvent(LogLevel.Warn, message, null, category);
+            }
+        }
+
+        public void Warn(Exception exception, string message)
+        {
+            if (logger.IsWarnEnabled)
+            {
+                logger.Warn(exception, message);
+                logMessageHandler.HandleEvent(LogLevel.Warn, message, exception, category);
             }
         }
     }
