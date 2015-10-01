@@ -132,12 +132,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
             catch (OperationCanceledException exception)
             {
                 // cancelled
-                //todo log
                 logger.Info(exception, "Search cancelled.");
             }
             catch (Exception exception)
             {
-                //todo logging, error display
                 logger.Error(exception, "Search error, params: " + (searchParams != null ? searchParams.ToString() : "NULL"));
                 MessageBox.Show(exception.ToString());
             }
