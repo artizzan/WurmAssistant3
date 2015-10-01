@@ -18,6 +18,7 @@ namespace AldursLab.WurmAssistant.PublishRobot.Parts
                 {
                     currentTry++;
                     action();
+                    break;
                 }
                 catch (Exception exception)
                 {
