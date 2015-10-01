@@ -10,7 +10,7 @@ namespace AldursLab.WurmAssistant.PublishRobot.WebServiceTester
         {
             try
             {
-                TestPublisher();
+                RetryTest();
             }
             catch (Exception exception)
             {
@@ -20,6 +20,18 @@ namespace AldursLab.WurmAssistant.PublishRobot.WebServiceTester
             {
                 Console.ReadKey();
             }
+        }
+
+        static void RetryTest()
+        {
+            int count = 0;
+            Action action = () =>
+            {
+                count++;
+                throw new Exception("123");
+            };
+
+            RetryManager.AutoRetry(action);
         }
 
         static void TestSlacker()

@@ -74,10 +74,10 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
             var zipFile = new FileInfo(Path.Combine(tempDir, string.Format("{0}.zip", BuildFileName())));
             zipper.CreateZip(zipFile.FullName, binDir.FullName, true, null);
 
-            publisher.Publish(zipFile, version.BuildCode, version.BuildNumber);
+            RetryManager.AutoRetry(() => publisher.Publish(zipFile, version.BuildCode, version.BuildNumber));
             output.Write("Publishing operation completed.");
 
-            slacker.SendMessage(string.Format("Published {0}", BuildFileName()));
+            RetryManager.AutoRetry(() => slacker.SendMessage(string.Format("Published {0}", BuildFileName())));
         }
 
         string BuildFileName()
