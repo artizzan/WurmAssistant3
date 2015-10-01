@@ -216,12 +216,21 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                     gui.AddUserMessage("Update complete");
                     gui.SetProgressStatus("Update complete");
                 }
-                catch (Exception exception)
+                catch (LockFailedException exception)
                 {
                     gui.AddUserMessage(
                         "Could not enter WA3 lock, if the app is running, it must be closed before update. Exact error: "
-                        + exception.ToStringMessagesOnly(), Color.Red);
+                        + exception.ToStringMessagesOnly(),
+                        Color.Red);
                     debug.Write("App lock failed: " + exception.ToString());
+                }
+                catch (Exception exception)
+                {
+                    gui.AddUserMessage(
+                        "General launcher error: "
+                        + exception.ToStringMessagesOnly(),
+                        Color.Red);
+                    debug.Write("General launcher error: " + exception.ToString());
                 }
                 finally
                 {

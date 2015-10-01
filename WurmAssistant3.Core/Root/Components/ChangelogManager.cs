@@ -75,7 +75,7 @@ namespace AldursLab.WurmAssistant3.Core.Root.Components
             var lastChange =
                 GetNewChangelogEntries(changelogPath)
                     .OrderByDescending(change => change.Date)
-                    .SingleOrDefault();
+                    .FirstOrDefault();
             if (lastChange != null) LastKnownChangeDate = lastChange.Date;
         }
 
