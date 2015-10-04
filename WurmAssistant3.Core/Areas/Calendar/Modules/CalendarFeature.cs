@@ -212,7 +212,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
 
                 useWurmTimeForDisplay = false;
                 soundWarning = false;
-                soundName = "";
+                soundId = Guid.Empty;
                 popupWarning = false;
                 trackedSeasons = new string[0];
                 serverName = "";
@@ -221,7 +221,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
 
             [JsonProperty] bool useWurmTimeForDisplay;
             [JsonProperty] bool soundWarning;
-            [JsonProperty] string soundName;
+            [JsonProperty] Guid soundId;
             [JsonProperty] bool popupWarning;
             [JsonProperty(IsReference = false)] string[] trackedSeasons;
             [JsonProperty] string serverName;
@@ -247,14 +247,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
                 }
             }
 
-            public string SoundName
+            public Guid SoundId
             {
-                get { return soundName; }
+                get { return soundId; }
                 set
                 {
-                    soundName = value;
+                    soundId = value;
                     calendarFeature.FlagAsChanged();
                 }
+            }
+
+            public ISoundResource Sound
+            {
+                get { return calendarFeature.soundEngine.GetSoundById(soundId); }
             }
 
             public bool PopupWarning
@@ -495,7 +500,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
 
         void TriggerSoundWarning()
         {
-            soundEngine.PlayOneShot(settings.SoundName);
+            soundEngine.PlayOneShot(settings.SoundId);
         }
 
         void TriggerPopupWarning(string text)

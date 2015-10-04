@@ -83,9 +83,29 @@ namespace AldursLab.WurmAssistant3.Core.Resources {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap irrklang_small {
+            get {
+                object obj = ResourceManager.GetObject("irrklang_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap LogSearcherIcon {
             get {
                 object obj = ResourceManager.GetObject("LogSearcherIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SoundManagerIcon {
+            get {
+                object obj = ResourceManager.GetObject("SoundManagerIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

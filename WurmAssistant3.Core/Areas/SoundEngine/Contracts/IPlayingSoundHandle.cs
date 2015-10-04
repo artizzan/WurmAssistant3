@@ -6,5 +6,11 @@
     /// </summary>
     public interface IPlayingSoundHandle
     {
+        void Pause();
+        void Resume();
+        void Stop();
+        bool IsFinished { get; }
+        bool IsPaused { get; }
+        float CurrentVolume { get; set; }
     }
 }

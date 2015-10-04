@@ -36,6 +36,9 @@
       <HintPath>..\packages\Caliburn.Micro.Core.2.0.2\lib\net45\Caliburn.Micro.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="irrKlang.NET4">
+      <HintPath>..\lib\irrKlang-32bit-1.5.0\irrKlang-1.5.0\bin\dotnet-4\irrKlang.NET4.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Ninject-3.2.0.0-release-mono-4.0\Ninject.dll</HintPath>
@@ -116,8 +119,30 @@
     <Compile Include="Areas\SoundEngine\Contracts\ISoundEngine.cs" />
     <Compile Include="Areas\SoundEngine\Contracts\IPlayingSoundHandle.cs" />
     <Compile Include="Areas\SoundEngine\Contracts\ISoundResource.cs" />
+    <Compile Include="Areas\SoundEngine\Contracts\ISoundsLibrary.cs" />
+    <Compile Include="Areas\SoundEngine\Modules\PlayingSoundHandle.cs" />
     <Compile Include="Areas\SoundEngine\Modules\SoundEngine.cs" />
+    <Compile Include="Areas\SoundEngine\Modules\SoundResource.cs" />
+    <Compile Include="Areas\SoundEngine\Modules\SoundsLibrary.cs" />
     <Compile Include="Areas\SoundEngine\SoundEngineSetup.cs" />
+    <Compile Include="Areas\SoundEngine\Views\ChooseSoundView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SoundEngine\Views\ChooseSoundView.Designer.cs">
+      <DependentUpon>ChooseSoundView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SoundEngine\Views\SoundManagerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SoundEngine\Views\SoundManagerView.Designer.cs">
+      <DependentUpon>SoundManagerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SoundEngine\Views\SoundRenameView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SoundEngine\Views\SoundRenameView.Designer.cs">
+      <DependentUpon>SoundRenameView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\TrayPopups\Contracts\ITrayPopups.cs" />
     <Compile Include="Areas\TrayPopups\Views\PopupNotifier.cs">
       <SubType>Component</SubType>
@@ -142,6 +167,11 @@
     </Compile>
     <Compile Include="Areas\WurmApi\Contracts\IWurmClientValidator.cs" />
     <Compile Include="Legacy\OperatingSystemInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\WaResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -323,12 +353,25 @@
     <EmbeddedResource Include="Areas\MainMenu\Views\MenuView.resx">
       <DependentUpon>MenuView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SoundEngine\Views\ChooseSoundView.resx">
+      <DependentUpon>ChooseSoundView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SoundEngine\Views\SoundManagerView.resx">
+      <DependentUpon>SoundManagerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SoundEngine\Views\SoundRenameView.resx">
+      <DependentUpon>SoundRenameView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Areas\TrayPopups\Resources\TrayPopupsResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>TrayPopupsResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\TrayPopups\Views\FormPopupContainer.resx">
       <DependentUpon>FormPopupContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\WaResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -345,6 +388,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ikpFlac.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ikpMP3.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\beer.png" />
     <Content Include="Resources\close_icon.gif" />
     <Content Include="Resources\DeleteRed.png" />
@@ -354,9 +403,7 @@
     <None Include="Resources\GrangerIcon.png" />
     <Content Include="Resources\irrklang_small.png" />
     <Content Include="Resources\lampsFlow.png" />
-    <None Include="Resources\LegacyModFile.txt" />
     <None Include="Resources\LogSearcherIcon.png" />
-    <None Include="Resources\LegacyCalendarModFile.txt" />
     <Content Include="Resources\paypal_donate.png" />
     <Content Include="Resources\SoundDisabled.png" />
     <Content Include="Resources\SoundDisabledSmall.png" />
@@ -364,6 +411,7 @@
     <Content Include="Resources\SoundEnabledSmall.png" />
     <None Include="Resources\SoundNotifyIcon.png" />
     <None Include="Resources\TimersIcon.png" />
+    <None Include="Resources\SoundManagerIcon.png" />
     <Content Include="Resources\transp_placeholder.png" />
     <Content Include="Resources\WurmAssistantIcon.ico" />
     <Content Include="Resources\WurmAssistantIcon.png" />

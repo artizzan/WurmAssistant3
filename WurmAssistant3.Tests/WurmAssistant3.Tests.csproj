@@ -70,11 +70,16 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit\Areas\LogSearcher\WurmSeasonDefinitionTests.cs" />
+    <Compile Include="Unit\Areas\SoundEngine\SoundsLibraryTests.cs" />
     <Compile Include="Unit\Root\ChangelogManagerTests.cs" />
+    <Compile Include="Unit\UnitTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <Content Include="Resources\sounds_wav.7z">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AldursLab\Lab\Essentials\Essentials.csproj">

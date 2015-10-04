@@ -1,5 +1,5 @@
-﻿using System.Windows.Forms;
-using AldursLab.Essentials.Debugging;
+﻿using System.Diagnostics;
+using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
 
 namespace AldursLab.WurmAssistant3.Core.Root.Components
@@ -20,11 +20,10 @@ namespace AldursLab.WurmAssistant3.Core.Root.Components
                     MessageBox.Show(text, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
                  default:
-                    Assertions.ThrowIfDebug();
+                    Debug.Fail("unexpected NotifyKind");
                     MessageBox.Show(text);
                     break;
             }
-            
         }
     }
 }

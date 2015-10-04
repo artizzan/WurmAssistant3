@@ -24,6 +24,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
 
         bool _WindowInitCompleted = false;
         bool serverListCreated = false;
+
+
         public FormCalendar([NotNull] CalendarFeature parentModule, [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger,
             [NotNull] ISoundEngine soundEngine)
         {
@@ -42,7 +44,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             radioButtonRealTime.Checked = !ParentModule.Settings.UseWurmTimeForDisplay;
             checkBoxSoundWarning.Checked = ParentModule.Settings.SoundWarning;
             checkBoxPopupWarning.Checked = ParentModule.Settings.PopupWarning;
-            textBoxChosenSound.Text = ParentModule.Settings.SoundName;
+            textBoxChosenSound.Text = ParentModule.Settings.Sound.Name;
 
             CreateServerListAsync();
             _WindowInitCompleted = true;
@@ -134,16 +136,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             var result = soundEngine.ChooseSound();
             if (result.ActionResult == ActionResult.Ok)
             {
-                ParentModule.Settings.SoundName = result.SoundResource.Name;
-                textBoxChosenSound.Text = ParentModule.Settings.SoundName;
+                ParentModule.Settings.SoundId = result.SoundResource.Id;
+                textBoxChosenSound.Text = result.SoundResource.Name;
             }
 
         }
 
         private void buttonClearSound_Click(object sender, EventArgs e)
         {
-            ParentModule.Settings.SoundName = "";
-            textBoxChosenSound.Text = ParentModule.Settings.SoundName;
+            ParentModule.Settings.SoundId = Guid.Empty;
+            textBoxChosenSound.Text = ParentModule.Settings.Sound.Name;
         }
 
         private void checkBoxSoundWarning_CheckedChanged(object sender, EventArgs e)

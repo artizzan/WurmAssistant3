@@ -7,21 +7,17 @@ using System.Windows.Forms;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts
 {
-    /// <summary>
-    /// An engine that can be used to play sounds and manage sounds library
-    /// </summary>
     public interface ISoundEngine
     {
-        /// <summary>
-        /// Immediatelly plays a sound with given name, if sound exists.
-        /// Names are case-insensitive.
-        /// Returns a handle that enables control over playing sound. 
-        /// Handle is never null, if sound was not found, methods on handle do nothing.
-        /// </summary>
-        /// <param name="soundName">case-insensitive</param>
-        IPlayingSoundHandle PlayOneShot(string soundName);
+        IPlayingSoundHandle PlayOneShot(Guid soundId);
+
+        IPlayingSoundHandle PlayOneShot(ISoundResource soundResource);
 
         ChooseSoundResult ChooseSound();
+        void ShowSoundManager();
+        void StopAllSounds();
+        float GlobalVolume { get; set; }
+        ISoundResource GetSoundById(Guid soundId);
     }
 
     public class ChooseSoundResult

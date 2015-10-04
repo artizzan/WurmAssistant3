@@ -1,5 +1,5 @@
 using System;
-using AldursLab.Essentials.Debugging;
+using System.Diagnostics;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmApi;
 using Newtonsoft.Json;
@@ -32,7 +32,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Contracts
             get { return seasonName; }
             set
             {
-                if (value == null) Assertions.ThrowIfDebug();
+                Debug.Assert(value != null);
 
                 seasonName = value ?? string.Empty;
             }
@@ -43,7 +43,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Contracts
             get { return dayBegin; }
             set
             {
-                if (value > WurmCalendar.DaysInYear || value < 0) Assertions.ThrowIfDebug();
+                Debug.Assert(value > 0 && value < WurmCalendar.DaysInYear);
 
                 dayBegin = value.ConstrainToRange(0,WurmCalendar.DaysInYear);
             }
@@ -54,7 +54,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Contracts
             get { return dayEnd; }
             set
             {
-                if (value > WurmCalendar.DaysInYear || value < 0) Assertions.ThrowIfDebug();
+                Debug.Assert(value > 0 && value < WurmCalendar.DaysInYear);
 
                 dayEnd = value.ConstrainToRange(0, WurmCalendar.DaysInYear);
             }
@@ -78,7 +78,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Contracts
             get { return id; }
             set
             {
-                if (value == Guid.Empty) Assertions.ThrowIfDebug();
+                Debug.Assert(value != Guid.Empty);
                 id = value;
             }
         }
