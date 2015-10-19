@@ -121,5 +121,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Logging.Modules
                 logMessageHandler.HandleEvent(LogLevel.Warn, message, exception, category);
             }
         }
+
+        public void Debug(string message)
+        {
+            if (logger.IsDebugEnabled)
+            {
+                logger.Debug(message);
+                logMessageHandler.HandleEvent(LogLevel.Debug, message, null, category);
+            }
+        }
     }
 }

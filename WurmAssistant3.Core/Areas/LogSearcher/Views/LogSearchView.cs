@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
-using AldursLab.WurmAssistant3.Core.Resources;
+using AldursLab.WurmAssistant3.Core.Properties;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
 using ILogger = AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts.ILogger;
@@ -70,7 +70,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
 
         string IFeature.Name { get { return "Log Searcher"; } }
 
-        Image IFeature.Icon { get { return WaResources.LogSearcherIcon; } }
+        Image IFeature.Icon { get { return Resources.LogSearcherIcon; } }
 
         async Task IFeature.InitAsync()
         {
@@ -116,10 +116,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
                 searchParams = new LogSearchParameters()
                 {
                     LogType = GetLogType(),
-                    CharacterName = new CharacterName(GetCharacter()),
-                    DateFrom = dateTimePickerTimeFrom.Value,
-                    DateTo = dateTimePickerTimeTo.Value,
-                    PmCharacterName = pmCharacter != null ? new CharacterName(pmCharacter) : null
+                    CharacterName = GetCharacter(),
+                    MinDate = dateTimePickerTimeFrom.Value,
+                    MaxDate = dateTimePickerTimeTo.Value,
+                    PmRecipientName = pmCharacter
                 };
 
                 var searchType = GetSearchType();
@@ -306,11 +306,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
         {
             if (searchParams.LogType == LogType.Pm)
             {
-                if (searchParams.PmCharacterName != null && !searchParams.PmCharacterName.IsEmpty)
+                if (!string.IsNullOrEmpty(searchParams.PmRecipientName))
                 {
                     result =
                         result.Where(
-                            s => s.PmConversationRecipient.Equals(searchParams.PmCharacterName)).ToArray();
+                            s =>
+                                s.PmConversationRecipient.Normalized.Equals(
+                                    searchParams.PmRecipientName.ToUpperInvariant())).ToArray();
                 }
             }
             return result;

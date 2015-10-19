@@ -1,20 +1,161 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.ExceptionServices;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence.Contracts;
+using AldursLab.WurmAssistant3.Core.IoC;
 using JetBrains.Annotations;
 using Ninject;
 using Ninject.Parameters;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Components
 {
+    public class PersistentObjectResolver : IPersistentObjectResolver
+    {
+        // assuming that Resolvers<T> are singletons,
+        // not required, but resolve of new instance can be costly in Ninject
+
+        // opt: reflection magic may be optimized, do only if necessary
+
+        readonly ISuperFactory kernel;
+
+        public PersistentObjectResolver([NotNull] ISuperFactory kernel)
+        {
+            if (kernel == null) throw new ArgumentNullException("kernel");
+            this.kernel = kernel;
+        }
+
+        public T Get<T>(string persistentObjectId) where T : class, IPersistentObject
+        {
+            return GetInternal<T>(persistentObjectId);
+        }
+
+        public object Get([NotNull] string persistentObjectId, [NotNull] Type objectType)
+        {
+            if (persistentObjectId == null) throw new ArgumentNullException("persistentObjectId");
+            if (objectType == null) throw new ArgumentNullException("objectType");
+            ThrowIfNotSupported(objectType);
+            MethodInfo genericMethod = GetLocalGenericMethod("GetInternal", objectType);
+            return InvokeThis(genericMethod, persistentObjectId);
+        }
+
+        public T GetInternal<T>(string persistentObjectId) where T : class, IPersistentObject
+        {
+            var resolver = GetResolver<T>();
+            return resolver.Get(persistentObjectId);
+        }
+
+
+        public T GetDefault<T>() where T : class, IPersistentObject
+        {
+            return GetDefaultInternal<T>();
+        }
+
+        public object GetDefault([NotNull] Type objectType)
+        {
+            if (objectType == null) throw new ArgumentNullException("objectType");
+            ThrowIfNotSupported(objectType);
+            MethodInfo genericMethod = GetLocalGenericMethod("GetDefaultInternal", objectType);
+            return InvokeThis(genericMethod);
+        }
+
+        public T GetDefaultInternal<T>() where T : class, IPersistentObject
+        {
+            var resolver = GetResolver<T>();
+            return resolver.GetDefault();
+        }
+
+
+        public void Unload<T>([NotNull] T @object) where T : class, IPersistentObject
+        {
+            UnloadInternal(@object);
+        }
+
+        public void Unload([NotNull] object @object)
+        {
+            if (@object == null) throw new ArgumentNullException("object");
+            var runtimeType = @object.GetType();
+            ThrowIfNotSupported(runtimeType);
+            MethodInfo genericMethod = GetLocalGenericMethod("UnloadInternal", runtimeType);
+            InvokeThis(genericMethod, @object);
+        }
+
+        public void UnloadInternal<T>([NotNull] T @object) where T : class, IPersistentObject
+        {
+            if (@object == null) throw new ArgumentNullException("object");
+            var resolver = GetResolver<T>();
+            resolver.Unload(@object);
+        }
+
+        public void StartTracking<T>([NotNull] T @object) where T : class, IPersistentObject
+        {
+            StartTrackingInternal(@object);
+        }
+
+        public void StartTracking([NotNull] object @object)
+        {
+            if (@object == null) throw new ArgumentNullException("object");
+            var runtimeType = @object.GetType();
+            ThrowIfNotSupported(runtimeType);
+            MethodInfo genericMethod = GetLocalGenericMethod("StartTrackingInternal", runtimeType);
+            InvokeThis(genericMethod, @object);
+        }
+
+        public void StartTrackingInternal<T>([NotNull] T @object) where T : class, IPersistentObject
+        {
+            if (@object == null) throw new ArgumentNullException("object");
+            var resolver = GetResolver<T>();
+            resolver.StartTracking(@object);
+        }
+
+
+        IPersistentObjectResolver<T> GetResolver<T>() where T : class, IPersistentObject
+        {
+            return kernel.Get<IPersistentObjectResolver<T>>();
+        }
+
+        void ThrowIfNotSupported(Type objectType)
+        {
+            if ((objectType.GetInterface(typeof(IPersistentObject).FullName) == null))
+            {
+                throw new UnsupportedObjectTypeException(string.Format("Object type {0} must implement {1}",
+                    objectType,
+                    typeof(IPersistentObject).FullName));
+            }
+        }
+
+        MethodInfo GetLocalGenericMethod(string name, Type objectType)
+        {
+            MethodInfo method = typeof(PersistentObjectResolver).GetMethod(name);
+            MethodInfo genericMethod = method.MakeGenericMethod(objectType);
+            return genericMethod;
+        }
+
+        object InvokeThis(MethodInfo method, params object[] parameterValues)
+        {
+            try
+            {
+                return method.Invoke(this, parameterValues);
+            }
+            catch (TargetInvocationException exception)
+            {
+                ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
+                return null;
+            }
+        }
+
+    }
+
     public class PersistentObjectResolver<T> : IPersistentObjectResolver<T> where T : class, IPersistentObject
     {
-        readonly Dictionary<string, T> cache = new Dictionary<string, T>(); 
-        readonly IKernel kernel;
+        // note: caching removed, because actual object type may be different from generic type, causing cache misses
+
+        readonly ISuperFactory kernel;
         readonly PersistenceManager persistenceManager;
 
-        public PersistentObjectResolver([NotNull] IKernel kernel, [NotNull] PersistenceManager persistenceManager)
+        public PersistentObjectResolver([NotNull] ISuperFactory kernel, [NotNull] PersistenceManager persistenceManager)
         {
             if (kernel == null) throw new ArgumentNullException("kernel");
             if (persistenceManager == null) throw new ArgumentNullException("persistenceManager");
@@ -22,20 +163,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Components
             this.persistenceManager = persistenceManager;
         }
 
-        /// <summary>
-        /// Returns persistent object of given Id. If the object is not yet being tracked, it is created and loaded.
-        /// </summary>
-        /// <param name="persistentObjectId"></param>
-        /// <returns></returns>
         public T Get(string persistentObjectId)
         {
-            T obj;
-            if (!cache.TryGetValue(persistentObjectId, out obj))
-            {
-                var persistentObjectIdParam = new ConstructorArgument("persistentObjectId", persistentObjectId);
-                obj = kernel.Get<T>(persistentObjectIdParam);
-                cache.Add(persistentObjectId, obj);
-            }
+            var persistentObjectIdParam = new ConstructorArgument("persistentObjectId", persistentObjectId);
+            var obj = kernel.Get<T>(persistentObjectIdParam);
             return obj;
         }
 
@@ -44,15 +175,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Components
             return Get("");
         }
 
-        /// <summary>
-        /// Stops tracking the object. 
-        /// The object becomes eligible for GC and a future Get will start the tracking proces again.
-        /// </summary>
-        /// <param name="object"></param>
         public void Unload(T @object)
         {
             persistenceManager.StopTracking(@object);
-            cache.Remove(@object.PersistentObjectId);
+        }
+
+        public void StartTracking(T @object)
+        {
+            persistenceManager.LoadAndStartTracking(@object);
         }
     }
 }

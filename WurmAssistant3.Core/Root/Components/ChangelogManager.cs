@@ -64,10 +64,24 @@ namespace AldursLab.WurmAssistant3.Core.Root.Components
                         sb.AppendLine("By " + source.Author + ":");
                         lastAuthor = source.Author;
                     }
-                    sb.AppendLine("- " + source.ChangeText);
+                    SplitChangeText(sb, source.ChangeText, "; ");
                 }
             }
             return sb.ToString();
+        }
+
+        void SplitChangeText(StringBuilder sb, string changeText, string delimiter)
+        {
+            changeText = changeText.Trim();
+            while (changeText.EndsWith(";"))
+            {
+                changeText = changeText.Substring(0, changeText.Length - 1);
+            }
+            var lines = changeText.Split(new[] {delimiter}, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var line in lines)
+            {
+                sb.AppendLine("- " + line);
+            }
         }
 
         public void UpdateLastChangeDate()

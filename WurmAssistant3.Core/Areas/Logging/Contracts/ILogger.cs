@@ -10,5 +10,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts
         void Info(Exception exception, string message);
         void Warn(string message);
         void Warn(Exception exception, string message);
+        void Debug(string message);
     }
 }

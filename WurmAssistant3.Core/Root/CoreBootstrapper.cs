@@ -18,6 +18,7 @@ using AldursLab.WurmAssistant3.Core.Areas.MainMenu;
 using AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine;
+using AldursLab.WurmAssistant3.Core.Areas.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups;
 using AldursLab.WurmAssistant3.Core.Areas.WurmApi;
 using AldursLab.WurmAssistant3.Core.IoC;
@@ -46,6 +47,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
             dataDirectory = new WurmAssistantDataDirectory();
             dataDirectory.Lock();
 
+            kernel.Bind<ISuperFactory>().To<SuperFactory>().InSingletonScope();
             kernel.Bind<WurmAssistantConfig, IWurmAssistantConfig>().To<WurmAssistantConfig>().InSingletonScope();
 
             kernel.Bind<IWurmAssistantDataDirectory>().ToConstant(dataDirectory);
@@ -108,6 +110,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
 
             LogSearcherSetup.BindLogSearcher(kernel);
             CalendarSetup.BindCalendar(kernel);
+            TimersSetup.BindTimers(kernel);
 
             FeaturesSetup.BindFeaturesManager(kernel);
             MainMenuSetup.BindMenu(kernel);

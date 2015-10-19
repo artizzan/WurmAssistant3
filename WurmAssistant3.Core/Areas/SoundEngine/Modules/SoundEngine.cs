@@ -10,7 +10,7 @@ using AldursLab.PersistentObjects;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views;
-using AldursLab.WurmAssistant3.Core.Resources;
+using AldursLab.WurmAssistant3.Core.Properties;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Ninject;
@@ -124,7 +124,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
 
         Image IFeature.Icon
         {
-            get { return WaResources.SoundManagerIcon; }
+            get { return Resources.SoundManagerIcon; }
         }
 
         async Task IFeature.InitAsync()

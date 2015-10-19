@@ -231,6 +231,7 @@
             // 
             // irrklangImage
             // 
+            this.irrklangImage.Image = global::AldursLab.WurmAssistant3.Core.Properties.Resources.irrklang_small;
             this.irrklangImage.Location = new System.Drawing.Point(337, 18);
             this.irrklangImage.Name = "irrklangImage";
             this.irrklangImage.Size = new System.Drawing.Size(169, 50);

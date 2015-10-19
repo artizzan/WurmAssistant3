@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials.Tests", "AldursL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmApi.Tests", "WurmApi\WurmApi.Tests\WurmApi.Tests.csproj", "{D5FCD526-1C19-410F-8CE4-2B4C4C5B12CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentObjects.Tests", "AldursLab\Lab\PersistentObjects.Tests\PersistentObjects.Tests.csproj", "{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{D5FCD526-1C19-410F-8CE4-2B4C4C5B12CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5FCD526-1C19-410F-8CE4-2B4C4C5B12CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5FCD526-1C19-410F-8CE4-2B4C4C5B12CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,5 +104,6 @@ Global
 		{1EA6D250-6EA0-4C5D-B681-6BCF9B0A8F02} = {1038DFDD-F4C9-4DBA-A83F-59CDF1D37EF9}
 		{65549F72-59C5-416A-8B71-5757BAE8B35D} = {1038DFDD-F4C9-4DBA-A83F-59CDF1D37EF9}
 		{D5FCD526-1C19-410F-8CE4-2B4C4C5B12CA} = {A2CD4209-4E7D-4F53-AF08-15E8E7DE8324}
+		{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9} = {1038DFDD-F4C9-4DBA-A83F-59CDF1D37EF9}
 	EndGlobalSection
 EndGlobal

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
-using AldursLab.WurmAssistant3.Core.Resources;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
 
@@ -22,8 +21,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
             this.soundsLibrary = soundsLibrary;
 
             InitializeComponent();
-
-            irrklangImage.Image = WaResources.irrklang_small;
 
             trackBarAdjustedVolume.Enabled = false;
             RefreshSoundsList();

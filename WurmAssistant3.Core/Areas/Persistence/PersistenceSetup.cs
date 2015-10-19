@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using AldursLab.PersistentObjects;
@@ -37,11 +38,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence
 
             var dataDir = kernel.Get<IWurmAssistantDataDirectory>();
             var logger = kernel.Get<ILogger>();
+            var host = kernel.Get<IHostEnvironment>();
+            var updateLoop = kernel.Get<IUpdateLoop>();
+
             var config = new PersistenceManagerConfig()
             {
                 DataStoreDirectoryPath = Path.Combine(dataDir.DirectoryPath, "Data")
             };
-            var errorStrategy = new JsonExtendedErrorHandlingStrategy(logger);
+            var errorStrategy = new JsonExtendedErrorHandlingStrategy(logger, host);
             var serializationStrategy = new JsonSerializationStrategy
             {
                 ErrorStrategy = errorStrategy
@@ -58,12 +62,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence
                           .GetAll<IActivationStrategy>().Single(strategy => strategy is PreInitializeActionsStrategy);
 
             var persistentDataManager = new PersistenceSetup(persistenceManager,
-                kernel.Get<IHostEnvironment>(),
-                kernel.Get<IUpdateLoop>());
+                host, updateLoop);
             persistentDataManager.SetupPersistenceActivation(str);
 
             kernel.Bind<PersistenceSetup>().ToConstant(persistentDataManager);
 
+            kernel.Bind<IPersistentObjectResolver>().To<PersistentObjectResolver>().InSingletonScope();
             kernel.Bind(typeof (IPersistentObjectResolver<>)).To(typeof (PersistentObjectResolver<>)).InSingletonScope();
         }
 
@@ -76,8 +80,23 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence
             if (persistenceManager == null)
                 throw new ArgumentNullException("persistenceManager");
             this.persistenceManager = persistenceManager;
-            updateLoop.Updated += (sender, args) => persistenceManager.SavePending();
-            hostEnvironment.HostClosing += (sender, args) => persistenceManager.SaveAll();
+            updateLoop.Updated += UpdateLoopOnUpdated;
+            hostEnvironment.HostClosing += HostEnvironmentOnHostClosing;
+        }
+
+        void UpdateLoopOnUpdated(object sender, EventArgs eventArgs)
+        {
+            persistenceManager.SavePending();
+        }
+
+        void HostEnvironmentOnHostClosing(object sender, EventArgs eventArgs)
+        {
+            // for debugging save only changed, so issues can be spotted.
+#if DEBUG
+            persistenceManager.SavePending();
+#else
+            persistenceManager.SaveAll();
+#endif
         }
 
         void SetupPersistenceActivation(PreInitializeActionsStrategy str)
@@ -92,7 +111,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence
                 var @object = instanceReference.Instance as IPersistentObject;
                 if (@object != null)
                 {
-                    persistenceManager.LoadAndStartTracking(@object);
+                    @object = persistenceManager.LoadAndStartTracking(@object, returnExistingInsteadOfException: true);
+                    instanceReference.Instance = @object;
                 }
             }
         }

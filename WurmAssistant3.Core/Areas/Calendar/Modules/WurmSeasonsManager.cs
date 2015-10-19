@@ -17,8 +17,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
     {
         List<WurmSeasonDefinition> defaultDefinitions = new EditableList<WurmSeasonDefinition>();
 
-        [JsonProperty(IsReference = false)]
-        List<WurmSeasonDefinition> definitions = new List<WurmSeasonDefinition>();
+        [JsonProperty] 
+        readonly List<WurmSeasonDefinition> definitions = new List<WurmSeasonDefinition>();
 
         public WurmSeasonsManager()
         {

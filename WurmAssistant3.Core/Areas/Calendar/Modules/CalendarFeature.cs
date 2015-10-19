@@ -11,10 +11,11 @@ using AldursLab.WurmAssistant3.Core.Areas.Calendar.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
-using AldursLab.WurmAssistant3.Core.Resources;
+using AldursLab.WurmAssistant3.Core.Properties;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using Ninject;
 using ILogger = AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts.ILogger;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
@@ -203,13 +204,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
         [JsonObject(MemberSerialization.OptIn)]
         public class CalendarSettings
         {
-            [JsonProperty] readonly CalendarFeature calendarFeature;
+            public CalendarFeature CalendarFeature { get; set; }
 
-            public CalendarSettings([NotNull] CalendarFeature calendarFeature)
+            public CalendarSettings()
             {
-                if (calendarFeature == null) throw new ArgumentNullException("calendarFeature");
-                this.calendarFeature = calendarFeature;
-
                 useWurmTimeForDisplay = false;
                 soundWarning = false;
                 soundId = Guid.Empty;
@@ -233,7 +231,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
                 set
                 {
                     useWurmTimeForDisplay = value;
-                    calendarFeature.FlagAsChanged();
+                    CalendarFeature.FlagAsChanged();
                 }
             }
 
@@ -243,7 +241,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
                 set
                 {
                     soundWarning = value;
-                    calendarFeature.FlagAsChanged();
+                    CalendarFeature.FlagAsChanged();
                 }
             }
 
@@ -253,13 +251,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
                 set
                 {
                     soundId = value;
-                    calendarFeature.FlagAsChanged();
+                    CalendarFeature.FlagAsChanged();
                 }
             }
 
             public ISoundResource Sound
             {
-                get { return calendarFeature.soundEngine.GetSoundById(soundId); }
+                get { return CalendarFeature.soundEngine.GetSoundById(soundId); }
             }
 
             public bool PopupWarning
@@ -268,7 +266,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
                 set
                 {
                     popupWarning = value;
-                    calendarFeature.FlagAsChanged();
+                    CalendarFeature.FlagAsChanged();
                 }
             }
 
@@ -278,7 +276,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
                 set
                 {
                     trackedSeasons = value;
-                    calendarFeature.FlagAsChanged();
+                    CalendarFeature.FlagAsChanged();
                 }
             }
 
@@ -288,8 +286,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
                 set
                 {
                     serverName = value;
-                    calendarFeature.FlagAsChanged();
-                    calendarFeature.ObtainWdtForCurrentServer();
+                    CalendarFeature.FlagAsChanged();
+                    CalendarFeature.ObtainWdtForCurrentServer();
                 }
             }
 
@@ -299,7 +297,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
                 set
                 {
                     mainWindowSize = value;
-                    calendarFeature.FlagAsChanged();
+                    CalendarFeature.FlagAsChanged();
                 }
             }
         }
@@ -325,7 +323,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
             this.soundEngine = soundEngine;
             this.trayPopups = trayPopups;
             this.seasonsManager = seasonsManager;
-            settings = new CalendarSettings(this);
+            settings = new CalendarSettings();
 
             updateLoop.Updated += (sender, args) =>
             {
@@ -342,6 +340,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
 
         protected override void OnPersistentDataLoaded()
         {
+            Settings.CalendarFeature = this;
+
             CalendarUI = new FormCalendar(this, wurmApi, logger, soundEngine);
             CalendarUI.UpdateTrackedSeasonsList(settings.TrackedSeasons);
 
@@ -369,7 +369,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
 
         string IFeature.Name { get { return "Calendar"; } }
 
-        Image IFeature.Icon { get { return WaResources.CalendarIcon; } }
+        Image IFeature.Icon { get { return Resources.CalendarIcon; } }
 
         async Task IFeature.InitAsync()
         {

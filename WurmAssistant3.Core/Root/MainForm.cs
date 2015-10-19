@@ -13,7 +13,7 @@ using AldursLab.WurmAssistant3.Core.Root.Views;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
-using MessageBox = System.Windows.Forms.MessageBox;
+using Ninject;
 
 namespace AldursLab.WurmAssistant3.Core.Root
 {
@@ -23,8 +23,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
         [JsonObject(MemberSerialization.OptIn)]
         class Settings
         {
-            [JsonProperty]
-            readonly MainForm mainForm;
+            public MainForm MainForm { get; set; }
 
             [JsonProperty]
             int savedWidth;
@@ -33,29 +32,22 @@ namespace AldursLab.WurmAssistant3.Core.Root
             [JsonProperty]
             bool baloonTrayTooltipShown;
 
-            public Settings([NotNull] MainForm mainForm)
-            {
-                if (mainForm == null)
-                    throw new ArgumentNullException("mainForm");
-                this.mainForm = mainForm;
-            }
-
             public int SavedWidth
             {
                 get { return savedWidth; }
-                set { savedWidth = value; mainForm.FlagAsChanged(); }
+                set { savedWidth = value; MainForm.FlagAsChanged(); }
             }
 
             public int SavedHeight
             {
                 get { return savedHeight; }
-                set { savedHeight = value; mainForm.FlagAsChanged(); }
+                set { savedHeight = value; MainForm.FlagAsChanged(); }
             }
 
             public bool BaloonTrayTooltipShown
             {
                 get { return baloonTrayTooltipShown; }
-                set { baloonTrayTooltipShown = value; mainForm.FlagAsChanged(); }
+                set { baloonTrayTooltipShown = value; MainForm.FlagAsChanged(); }
             }
         }
 
@@ -148,7 +140,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
         {
             InitializeComponent();
 
-            settings = new Settings(this);
+            settings = new Settings();
 
             minimizationManager = new MinimizationManager(this);
             trayManager = new TrayManager(this);
@@ -160,6 +152,11 @@ namespace AldursLab.WurmAssistant3.Core.Root
             trayManager.SetupTrayContextMenu();
 
             systemTrayNotifyIcon.Visible = true;
+        }
+
+        protected override void OnPersistentDataLoaded()
+        {
+            settings.MainForm = this;
         }
 
         public void AfterPersistentStateLoaded()
@@ -251,6 +248,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
 
         private void MainView_FormClosing(object sender, FormClosingEventArgs e)
         {
+            OnHostClosing();
             UpdateTimer.Enabled = false;
         }
 
@@ -264,14 +262,12 @@ namespace AldursLab.WurmAssistant3.Core.Root
 
         public void Restart()
         {
-            AppClosing = true;
             OnHostClosing();
             Application.Restart();
         }
 
         public void Shutdown()
         {
-            AppClosing = true;
             OnHostClosing();
             Application.Exit();
         }
@@ -280,6 +276,9 @@ namespace AldursLab.WurmAssistant3.Core.Root
 
         protected virtual void OnHostClosing()
         {
+            if (AppClosing) return;
+
+            AppClosing = true;
             var handler = HostClosing;
             if (handler != null)
                 handler(this, EventArgs.Empty);
