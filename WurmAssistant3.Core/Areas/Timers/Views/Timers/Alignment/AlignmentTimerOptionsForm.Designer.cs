@@ -172,7 +172,6 @@
             this.Name = "AlignmentTimerOptionsForm";
             this.ShowIcon = false;
             this.Text = "Alignment Timer Options";
-            this.Load += new System.EventHandler(this.AlignmentTimerOptions_Load);
             this.groupBoxLight.ResumeLayout(false);
             this.groupBoxLight.PerformLayout();
             this.groupBoxReligion.ResumeLayout(false);

@@ -96,7 +96,6 @@
             this.Name = "CustomTimersManagerForm";
             this.ShowIcon = false;
             this.Text = "Custom Timers Conjurer";
-            this.Load += new System.EventHandler(this.CustomTimersManager_Load);
             this.ResumeLayout(false);
 
         }

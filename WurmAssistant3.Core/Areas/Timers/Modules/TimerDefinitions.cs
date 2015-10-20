@@ -5,6 +5,7 @@ using System.Linq;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom;

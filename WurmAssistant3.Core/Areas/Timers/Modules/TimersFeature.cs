@@ -79,7 +79,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             {
                 foreach (var timergroup in timerGroups)
                 {
-                    timergroup.Update(false);
+                    timergroup.Update();
                 };
             };
         }

@@ -133,7 +133,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
 
         private void buttonChooseSound_Click(object sender, EventArgs e)
         {
-            var result = soundEngine.ChooseSound();
+            var result = soundEngine.ChooseSound(this);
             if (result.ActionResult == ActionResult.Ok)
             {
                 ParentModule.Settings.SoundId = result.SoundResource.Id;

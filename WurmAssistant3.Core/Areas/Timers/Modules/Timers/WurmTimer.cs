@@ -6,7 +6,9 @@ using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Profiling.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
@@ -37,7 +39,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         [JsonProperty]
         bool persistentPopup;
         [JsonProperty]
-        string soundName;
+        Guid soundId;
         [JsonProperty]
         bool popupOnWaLaunch;
         [JsonProperty]
@@ -78,7 +80,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
                 SoundEnabled = SoundNotify,
                 PopupEnabled = PopupNotify,
                 PersistentPopup = PersistentPopup,
-                SoundName = SoundName
+                SoundId = SoundId
             };
             if (PopupOnWaLaunch) CDNotify.ResetShownAndPlayed();
 
@@ -104,10 +106,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             set { persistentPopup = value; CDNotify.PersistentPopup = value; FlagAsChanged(); }
         }
 
-        public string SoundName
+        public Guid SoundId
         {
-            get { return soundName; }
-            set { soundName = value; CDNotify.SoundName = value; FlagAsChanged(); }
+            get { return soundId; }
+            set { soundId = value; CDNotify.SoundId = value; FlagAsChanged(); }
         }
 
         public bool PopupOnWaLaunch
@@ -157,9 +159,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             character.LogInOrCurrentServerPotentiallyChanged -= _handleServerChange;
         }
 
-        public virtual void Update(bool engineSleeping)
+        public virtual void Update()
         {
-            CDNotify.Update(engineSleeping);
+            CDNotify.Update();
         }
 
         /// <summary>
@@ -271,7 +273,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         public void OpenTimerConfig()
         {
             TimerDefaultSettingsForm ui = new TimerDefaultSettingsForm(this, SoundEngine);
-            ui.ShowDialog();
+            ui.ShowDialogCenteredOnForm(this.GetModuleUi());
         }
 
         public TimersFeature TimersFeature { get { return playerTimersGroup.TimersFeature; } }
@@ -306,7 +308,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             try
             {
                 DateTime currentTime = DateTime.Now;
-                DateTime cooldownResetDate = currentTime;
 
                 var server = WurmApi.Servers.GetByName(playerTimersGroup.GroupToServerMap[TimerDefinitionId.ServerGroupId]);
 
@@ -317,7 +318,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
                     TimeSpan daysSinceLastServerReset = new TimeSpan(timeSinceLastServerReset.Days, 0, 0, 0);
                     timeSinceLastServerReset = timeSinceLastServerReset.Subtract(daysSinceLastServerReset);
 
-                    cooldownResetDate = currentTime - timeSinceLastServerReset;
+                    var cooldownResetDate = currentTime - timeSinceLastServerReset;
                     return cooldownResetDate;
                 }
                 else
@@ -333,6 +334,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
                         Name, TimerDefinitionId, playerTimersGroup.CurrentServerName, Player));
                 return DateTime.MinValue;
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Player: {0}, Name: {1}", Player, Name);
         }
     }
 }

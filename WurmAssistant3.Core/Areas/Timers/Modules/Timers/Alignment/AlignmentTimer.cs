@@ -6,6 +6,7 @@ using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Alignment;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
@@ -286,16 +287,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment
             }
         }
 
-        public override void Update(bool engineSleeping)
+        public override void Update()
         {
-            base.Update(engineSleeping);
+            base.Update();
             if (TimerDisplayView.Visible) TimerDisplayView.UpdateCooldown(DateOfNextAlignment);
         }
 
         public override void OpenMoreOptions(TimerDefaultSettingsForm form)
         {
             AlignmentTimerOptionsForm ui = new AlignmentTimerOptionsForm(this, form);
-            if (ui.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (ui.ShowDialogCenteredOnForm(form) == System.Windows.Forms.DialogResult.OK)
             {
                 SetLightAndReligion(ui.WhiteLighter, ui.Religion);
             }

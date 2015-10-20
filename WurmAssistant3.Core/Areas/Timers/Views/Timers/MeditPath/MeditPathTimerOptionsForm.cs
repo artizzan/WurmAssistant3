@@ -20,7 +20,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.MeditPath
 
         private void MeditPathTimerOptions_Load(object sender, EventArgs e)
         {
-            if (this.Visible) this.Location = GetCenteredChildPositionRelativeToParentWorkAreaBoundEx(this, defaultSettingsForm);
             if (meditPathTimer.NextQuestionAttemptOverridenUntil != DateTime.MinValue) ManualCDSet = true;
             RefreshButtonText();
         }

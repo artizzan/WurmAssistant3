@@ -3,7 +3,7 @@ using AldursLab.WurmApi;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
+namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class TimerDefinitionId : IEquatable<TimerDefinitionId>

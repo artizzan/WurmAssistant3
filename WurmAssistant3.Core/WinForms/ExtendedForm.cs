@@ -62,8 +62,7 @@ namespace AldursLab.WurmAssistant3.Core.WinForms
             FitWindowIntoWorkAreaEx(this);
         }
 
-        //todo reimpl: is non-private, because this is needed by some legacy code, should be changed.
-        protected static Point GetCenteredChildPositionRelativeToParentWorkAreaBoundEx(Form parent, Form child)
+        static Point GetCenteredChildPositionRelativeToParentWorkAreaBoundEx(Form parent, Form child)
         {
             Size newFormSize = child.Size;
             Size parentFormSize = parent.Size;
@@ -116,9 +115,9 @@ namespace AldursLab.WurmAssistant3.Core.WinForms
             form.Location = newLoc;
         }
 
-        static void SetCenteredOnParentOnLoadWorkAreaBoundEx(Form parent, Form child)
+        static void SetCenteredOnParentOnLoadWorkAreaBoundEx(Form child, Form parent)
         {
-            child.Load += (sender, args) => child.Location = GetCenteredChildPositionRelativeToParentWorkAreaBoundEx(child, parent);
+            child.Load += (sender, args) => child.Location = GetCenteredChildPositionRelativeToParentWorkAreaBoundEx(parent, child);
         }
 
         static void SetFormShapeWorkAreaBoundEx(Form form, Rectangle shape)

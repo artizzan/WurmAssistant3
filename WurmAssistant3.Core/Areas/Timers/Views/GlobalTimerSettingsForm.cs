@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
+using AldursLab.WurmAssistant3.Core.WinForms;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
 {
-    public partial class GlobalTimerSettingsForm : Form
+    public partial class GlobalTimerSettingsForm : ExtendedForm
     {
         private readonly TimersForm timersView;
 

@@ -101,10 +101,10 @@ namespace AldursLab.WurmAssistant3.Core.Root.Components
             view.Show();
         }
 
-        ICollection<Change> GetNewChangelogEntries(string changelogPath)
+        ICollection<Change> GetNewChangelogEntries(string filePath)
         {
             List<Change> newChanges = new List<Change>();
-            using (StreamReader sr = new StreamReader(changelogPath))
+            using (StreamReader sr = new StreamReader(filePath))
             {
                 string line;
                 while ((line = sr.ReadLine()) != null)

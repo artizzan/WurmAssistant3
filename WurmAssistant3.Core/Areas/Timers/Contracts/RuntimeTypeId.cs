@@ -1,4 +1,4 @@
-namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
+namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts
 {
     public enum RuntimeTypeId
     {

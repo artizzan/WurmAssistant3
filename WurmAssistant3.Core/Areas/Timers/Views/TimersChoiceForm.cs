@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules;
 using AldursLab.WurmAssistant3.Core.WinForms;
 
@@ -34,11 +35,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
                 Result.Add((TimerDefinition)item);
             }
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
-        }
-
-        private void FormChooseTimers_Load(object sender, EventArgs e)
-        {
-            if (this.Visible) this.Location = GetCenteredChildPositionRelativeToParentWorkAreaBoundEx(this, parentForm);
         }
     }
 }

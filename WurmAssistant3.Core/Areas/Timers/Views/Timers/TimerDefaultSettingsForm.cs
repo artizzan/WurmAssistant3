@@ -24,7 +24,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
             this.checkBoxPopup.Checked = ParentTimer.PopupNotify;
             this.checkBoxSound.Checked = ParentTimer.SoundNotify;
             this.checkBoxPopupPersistent.Checked = ParentTimer.PersistentPopup;
-            this.textBoxSoundName.Text = ParentTimer.SoundName;
+            this.textBoxSoundName.Text = soundEngine.GetSoundById(ParentTimer.SoundId).Name;
             this.checkBoxOnAssistantLaunch.Checked = ParentTimer.PopupOnWaLaunch;
             int popupDurationMillis = ParentTimer.PopupDurationMillis;
             this.numericUpDownPopupDuration.Value =
@@ -35,8 +35,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
 
         private void FormTimerSettingsDefault_Load(object sender, EventArgs e)
         {
-            if (this.Visible)
-                this.Location = GetCenteredChildPositionRelativeToParentWorkAreaBoundEx(this, ParentTimer.GetModuleUi());
             this.toolTip1.SetToolTip(this.checkBoxPopupPersistent, "Popup must be closed manually");
             this.toolTip1.SetToolTip(this.buttonTurnOff, "Turn off this timer (your settings will be preserved)");
         }
@@ -93,12 +91,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
         {
             if (isInited)
             {
-                var result = soundEngine.ChooseSound();
+                var result = soundEngine.ChooseSound(this);
                 if (result.ActionResult == ActionResult.Ok)
                 {
-                    string newsound = result.SoundResource.Id.ToString();
-                    textBoxSoundName.Text = newsound;
-                    ParentTimer.SoundName = newsound;
+                    var newsound = result.SoundResource;
+                    textBoxSoundName.Text = newsound.Name;
+                    ParentTimer.SoundId = newsound.Id;
                 }
             }
         }

@@ -68,7 +68,6 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Choose Timers";
-            this.Load += new System.EventHandler(this.FormChooseTimers_Load);
             this.ResumeLayout(false);
 
         }

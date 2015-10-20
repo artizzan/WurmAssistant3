@@ -2,11 +2,12 @@
 using System.Linq;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
 {
-    public partial class ChooseSoundView : Form
+    public partial class ChooseSoundView : ExtendedForm
     {
         readonly ISoundsLibrary soundsLibrary;
         readonly ISoundEngine soundEngine;

@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules;
+using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
 
@@ -50,7 +51,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
 
         private void CustomTimersManagerEditWindow_Load(object sender, EventArgs e)
         {
-            if (this.Visible) this.Location = GetCenteredChildPositionRelativeToParentWorkAreaBoundEx(this, parentForm);
             toolTip1.SetToolTip(textBoxCond, "if not used as Regex, timer will start if this text is found in chosen log");
             toolTip1.SetToolTip(checkBoxAsRegex, "tip: use Log Searcher to test your Regex patterns.\r\nRegex pattern is raw and thus CASE-SENSITIVE (same as in Log Searcher)");
         }

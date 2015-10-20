@@ -25,16 +25,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Prayer
             numericUpDownFavorWhenThis.Value =
                 ((decimal) prayerTimer.FavorSettings.FavorNotifyOnLevel).ConstrainToRange(0M, 100M);
             checkBoxPopupPersist.Checked = prayerTimer.FavorSettings.FavorNotifyPopupPersist;
-            textBoxSoundName.Text = prayerTimer.FavorSettings.FavorNotifySoundName;
+            textBoxSoundName.Text = soundEngine.GetSoundById(prayerTimer.FavorSettings.FavorNotifySoundId).Name;
             checkBoxNotifySound.Checked = prayerTimer.FavorSettings.FavorNotifySound;
             checkBoxNotifyPopup.Checked = prayerTimer.FavorSettings.FavorNotifyPopup;
-            checkBoxFavorWhenMAX.Checked = prayerTimer.FavorSettings.FavorNotifyWhenMAX;
+            checkBoxFavorWhenMAX.Checked = prayerTimer.FavorSettings.FavorNotifyWhenMax;
             checkBoxShowFaithSkill.Checked = prayerTimer.ShowFaithSkillOnTimer;
-        }
-
-        private void PrayerTimerOptions_Load(object sender, EventArgs e)
-        {
-            if (this.Visible) this.Location = GetCenteredChildPositionRelativeToParentWorkAreaBoundEx(this, formSettings);
         }
 
         private void checkBoxNotifySound_CheckedChanged(object sender, EventArgs e)
@@ -56,14 +51,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Prayer
 
         private void buttonChangeSound_Click(object sender, EventArgs e)
         {
-            var result = soundEngine.ChooseSound();
+            var result = soundEngine.ChooseSound(this);
             if (result.ActionResult == ActionResult.Ok)
             {
-                //todo reimpl: use guid not string
-                var soundName = result.SoundResource.Id.ToString();
-                textBoxSoundName.Text = soundName;
-                prayerTimer.FavorSettings.FavorNotifySoundName = soundName;
-                prayerTimer.ForceUpdateFavorNotify(soundName);
+                textBoxSoundName.Text = result.SoundResource.Name;
+                prayerTimer.FavorSettings.FavorNotifySoundId = result.SoundResource.Id;
+                prayerTimer.ForceUpdateFavorNotify(result.SoundResource.Id);
                 prayerTimer.FlagAsChanged();
             }
         }
@@ -85,7 +78,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Prayer
         private void checkBoxFavorWhenMAX_CheckedChanged(object sender, EventArgs e)
         {
             numericUpDownFavorWhenThis.Enabled = !checkBoxFavorWhenMAX.Checked;
-            prayerTimer.FavorSettings.FavorNotifyWhenMAX = checkBoxFavorWhenMAX.Checked;
+            prayerTimer.FavorSettings.FavorNotifyWhenMax = checkBoxFavorWhenMAX.Checked;
             prayerTimer.FlagAsChanged();
         }
 

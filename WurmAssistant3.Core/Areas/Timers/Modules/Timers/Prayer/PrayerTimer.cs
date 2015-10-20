@@ -7,6 +7,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters.Skills;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Prayer;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
@@ -214,14 +215,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
             }
         }
 
-        public void ForceUpdateFavorNotify(string soundName = null, bool? popupPersistent = null)
+        public void ForceUpdateFavorNotify(Guid? soundId = null, bool? popupPersistent = null)
         {
-            FavorNotify.ForceUpdateNotifyHandler(soundName, popupPersistent);
+            FavorNotify.ForceUpdateNotifyHandler(soundId, popupPersistent);
         }
 
-        public override void Update(bool engineSleeping)
+        public override void Update()
         {
-            base.Update(engineSleeping);
+            base.Update();
             if (TimerDisplayView.Visible) TimerDisplayView.UpdateCooldown(NextPrayDate);
             FavorNotify.Update();
         }
@@ -234,7 +235,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
         public override void OpenMoreOptions(TimerDefaultSettingsForm form)
         {
             PrayerTimerOptionsForm ui = new PrayerTimerOptionsForm(this, form, SoundEngine);
-            ui.ShowDialog();
+            ui.ShowDialogCenteredOnForm(form);
         }
 
         public override void HandleNewEventLogLine(LogEntry line)
@@ -414,9 +415,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
                 [JsonProperty]
                 public bool FavorNotifyPopup = false;
                 [JsonProperty]
-                public string FavorNotifySoundName = null;
+                public Guid FavorNotifySoundId;
                 [JsonProperty]
-                public bool FavorNotifyWhenMAX = false;
+                public bool FavorNotifyWhenMax = false;
                 [JsonProperty]
                 public float FavorNotifyOnLevel = 0;
                 [JsonProperty]
@@ -456,7 +457,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
 
                 FavorHandler = new NotifyHandler(
                     logger, soundEngine, trayPopups,
-                    Settings.FavorNotifySoundName,
+                    Settings.FavorNotifySoundId,
                     player,
                     "",
                     Settings.FavorNotifyPopupPersist);
@@ -464,11 +465,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
                 
             }
 
-            public void ForceUpdateNotifyHandler(string soundName = null, bool? persistPopup = null)
+            public void ForceUpdateNotifyHandler(Guid? soundId, bool? persistPopup = null)
             {
-                if (soundName != null)
+                if (soundId != null)
                 {
-                    FavorHandler.SoundName = soundName;
+                    FavorHandler.SoundId = soundId.Value;
                 }
                 if (persistPopup != null)
                 {
@@ -481,7 +482,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
                 if (Settings.FavorNotifySound || Settings.FavorNotifyPopup)
                 {
                     bool notify = false;
-                    if (Settings.FavorNotifyWhenMAX)
+                    if (Settings.FavorNotifyWhenMax)
                     {
                         if (oldFavor < CurrentFavorMAX && newFavor > CurrentFavorMAX) notify = true;
                     }

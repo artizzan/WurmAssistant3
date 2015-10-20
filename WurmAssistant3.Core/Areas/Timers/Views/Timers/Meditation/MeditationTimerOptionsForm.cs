@@ -30,7 +30,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Meditation
         {
             if (this.Visible)
             {
-                this.Location = GetCenteredChildPositionRelativeToParentWorkAreaBoundEx(this, parentForm);
                 UpdateSleepBonusPanelVisibility();
             }
             toolTip1.SetToolTip(checkBoxRemindSleepBonus, "If sleep bonus was turned on just before meditation,\r\nthis will pop a reminder once it can be turned off");

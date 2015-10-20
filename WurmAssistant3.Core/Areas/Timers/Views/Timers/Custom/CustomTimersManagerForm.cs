@@ -39,7 +39,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
         {
             //display window to add
             CustomTimersManagerEditForm ui = new CustomTimersManagerEditForm(this, wurmApi, timerDefinitions);
-            ui.Show();
+            ui.ShowCenteredOnForm(this);
             ui.FormClosed += OnTimerAdded;
         }
 
@@ -54,7 +54,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
             {
                 CustomTimersManagerEditForm ui = new CustomTimersManagerEditForm(this, wurmApi, timerDefinitions, listBox1.SelectedItem.ToString());
                 ui.FormClosed += OnTimerAdded;
-                ui.Show();
+                ui.ShowCenteredOnForm(this);
             }
         }
 
@@ -69,11 +69,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-        }
-
-        private void CustomTimersManager_Load(object sender, EventArgs e)
-        {
-            if (this.Visible) this.Location = GetCenteredChildPositionRelativeToParentWorkAreaBoundEx(this, parentForm);
         }
     }
 }

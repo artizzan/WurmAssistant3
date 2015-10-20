@@ -175,7 +175,6 @@
             this.Name = "PrayerTimerOptionsForm";
             this.ShowIcon = false;
             this.Text = "Prayer Timer Options";
-            this.Load += new System.EventHandler(this.PrayerTimerOptions_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFavorWhenThis)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -123,6 +123,7 @@
     <Compile Include="Areas\Persistence\Views\DeserializationErrorResolverView.Designer.cs">
       <DependentUpon>DeserializationErrorResolverView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Areas\Profiling\Modules\Profiler.cs" />
     <Compile Include="Areas\SoundEngine\Contracts\ISoundEngine.cs" />
     <Compile Include="Areas\SoundEngine\Contracts\IPlayingSoundHandle.cs" />
     <Compile Include="Areas\SoundEngine\Contracts\ISoundResource.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Areas\Timers\Modules\Timers\Custom\CustomTimerOptionsTemplate.cs" />
     <Compile Include="Areas\Timers\Modules\Timers\Alignment\AlignmentTimer.cs" />
     <Compile Include="Areas\Timers\Contracts\RuntimeTypeId.cs" />
+    <Compile Include="Areas\Timers\Modules\Timers\NotifyHandler.cs" />
     <Compile Include="Areas\Timers\Modules\TimerTypes.cs" />
     <Compile Include="Areas\Timers\Views\Timers\Alignment\AlignmentTimerOptionsForm.cs">
       <SubType>Form</SubType>

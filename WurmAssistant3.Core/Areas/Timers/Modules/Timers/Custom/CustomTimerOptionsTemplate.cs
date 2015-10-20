@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using AldursLab.WurmApi;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
+namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
 {
     [JsonObject(MemberSerialization.OptIn)] //set of options used to init custom timers behavior
     public class CustomTimerOptionsTemplate

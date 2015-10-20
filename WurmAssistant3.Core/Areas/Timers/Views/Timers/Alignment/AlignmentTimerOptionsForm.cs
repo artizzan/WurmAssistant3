@@ -55,11 +55,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Alignment
             else if (radioButtonLib.Checked) Religion = AlignmentTimer.WurmReligions.Libila;
         }
 
-        private void AlignmentTimerOptions_Load(object sender, EventArgs e)
-        {
-            if (this.Visible) this.Location = GetCenteredChildPositionRelativeToParentWorkAreaBoundEx(this, settingsForm);
-        }
-
         private void buttonVerifyList_Click(object sender, EventArgs e)
         {
             alignmentTimer.ShowVerifyList();

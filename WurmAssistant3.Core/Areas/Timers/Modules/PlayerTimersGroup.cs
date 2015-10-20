@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -7,7 +8,9 @@ using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Profiling.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views;
@@ -190,7 +193,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             var availableTimers = timerDefinitions.GetDefinitionsOfUnusedTimers(ActiveTimerDefinitions);
             // choose some
             TimersChoiceForm ui = new TimersChoiceForm(availableTimers, timersFeature.GetModuleUi());
-            if (ui.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (ui.ShowDialogCenteredOnForm(timersFeature.GetModuleUi()) == System.Windows.Forms.DialogResult.OK)
             {
                 InitTimers(ui.Result);
             }
@@ -268,12 +271,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             layoutControl.UnregisterTimerDisplay(ControlTimer);
         }
 
-        internal void Update(bool engineSleeping)
+        internal void Update()
         {
             foreach (var timer in wurmTimers)
             {
-                if (timer.InitCompleted) timer.Update(engineSleeping);
-                else if (timer.RunUpdateRegardlessOfInitCompleted) timer.Update(engineSleeping);
+                if (timer.InitCompleted) timer.Update();
+                else if (timer.RunUpdateRegardlessOfInitCompleted) timer.Update();
             }
         }
 

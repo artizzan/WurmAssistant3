@@ -7,6 +7,7 @@ using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using JetBrains.Annotations;
@@ -82,9 +83,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
             }
         }
 
-        public override void Update(bool engineSleeping)
+        public override void Update()
         {
-            base.Update(engineSleeping);
+            base.Update();
             if (TimerDisplayView.Visible) TimerDisplayView.UpdateCooldown(CooldownTo);
         }
 

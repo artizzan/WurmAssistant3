@@ -4,6 +4,7 @@ using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using Newtonsoft.Json;
 
@@ -32,9 +33,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.JunkSale
             InitCompleted = true;
         }
 
-        public override void Update(bool engineSleeping)
+        public override void Update()
         {
-            base.Update(engineSleeping);
+            base.Update();
             if (TimerDisplayView.Visible)
                 TimerDisplayView.UpdateCooldown(cooldownUntil - DateTime.Now);
             VerifyMoneyAmountAgainstCd();

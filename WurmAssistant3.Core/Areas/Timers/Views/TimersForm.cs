@@ -160,21 +160,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
 
         }
 
-        private CustomTimersManagerForm CustomTimersManagerUI = null;
+        private CustomTimersManagerForm customTimersManagerUi;
 
         private void buttonCustomTimers_Click(object sender, EventArgs e)
         {
             try
             {
-                if (CustomTimersManagerUI.WindowState == FormWindowState.Minimized)
-                    CustomTimersManagerUI.WindowState = FormWindowState.Normal;
-                CustomTimersManagerUI.Show();
-                CustomTimersManagerUI.BringToFront();
+                if (customTimersManagerUi.WindowState == FormWindowState.Minimized)
+                    customTimersManagerUi.WindowState = FormWindowState.Normal;
+                customTimersManagerUi.Show();
+                customTimersManagerUi.BringToFront();
             }
             catch
             {
-                CustomTimersManagerUI = new CustomTimersManagerForm(this, wurmApi, timerDefinitions);
-                CustomTimersManagerUI.Show();
+                customTimersManagerUi = new CustomTimersManagerForm(this, wurmApi, timerDefinitions);
+                customTimersManagerUi.ShowCenteredOnForm(this);
             }
         }
 
@@ -189,7 +189,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
         private void buttonOptions_Click(object sender, EventArgs e)
         {
             var ui = new GlobalTimerSettingsForm(this);
-            ui.ShowDialog();
+            ui.ShowDialogCenteredOnForm(this);
         }
 
         public bool WidgetModeEnabled

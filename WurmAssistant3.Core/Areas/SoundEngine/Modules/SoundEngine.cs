@@ -89,8 +89,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
 
         public ChooseSoundResult ChooseSound()
         {
+            return ChooseSound(null);
+        }
+
+        public ChooseSoundResult ChooseSound(Form parentForm)
+        {
             var choiceView = new ChooseSoundView(soundsLibrary, this);
-            var result = choiceView.ShowDialog();
+            DialogResult result;
+            if (parentForm != null)
+            {
+                result = choiceView.ShowDialogCenteredOnForm(parentForm);
+            }
+            else
+            {
+                result = choiceView.ShowDialog();
+            }
             return new ChooseSoundResult(result == DialogResult.OK ? ActionResult.Ok : ActionResult.Cancel,
                 choiceView.ChosenSound);
         }
