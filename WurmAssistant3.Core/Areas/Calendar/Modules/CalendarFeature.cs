@@ -21,7 +21,7 @@ using ILogger = AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts.ILogger;
 namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
 {
     [PersistentObject("CalendarFeature")]
-    public class CalendarFeature : PersistentObjectBase, IFeature
+    public sealed class CalendarFeature : PersistentObjectBase, IFeature
     {
         readonly IWurmApi wurmApi;
         readonly ILogger logger;

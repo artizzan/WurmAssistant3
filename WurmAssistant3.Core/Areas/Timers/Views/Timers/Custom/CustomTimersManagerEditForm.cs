@@ -11,15 +11,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
 {
     public partial class CustomTimersManagerEditForm : ExtendedForm
     {
-        string EditingNameID = null;
-        Form parentForm;
+        readonly string editingNameId = null;
+
         readonly TimerDefinitions timerDefinitions;
 
-        public CustomTimersManagerEditForm(Form parent, IWurmApi wurmApi,
+        public CustomTimersManagerEditForm(IWurmApi wurmApi,
             [NotNull] TimerDefinitions timerDefinitions)
         {
             if (timerDefinitions == null) throw new ArgumentNullException("timerDefinitions");
-            this.parentForm = parent;
+
             this.timerDefinitions = timerDefinitions;
             InitializeComponent();
             foreach (var type in  wurmApi.LogDefinitions.AllLogTypes)
@@ -27,12 +27,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
             comboBoxLogType.SelectedItem = LogType.Event;
         }
 
-        public CustomTimersManagerEditForm(Form parent, IWurmApi wurmApi, TimerDefinitions timerDefinitions, string nameID)
-            : this(parent, wurmApi, timerDefinitions)
+        public CustomTimersManagerEditForm(IWurmApi wurmApi, TimerDefinitions timerDefinitions, string nameID)
+            : this(wurmApi, timerDefinitions)
         {
 
-            EditingNameID = nameID;
-            CustomTimerOptionsTemplate options = timerDefinitions.GetOptionsTemplateForCustomTimer(nameID);
+            editingNameId = nameID;
+            CustomTimerConfig options = timerDefinitions.GetOptionsTemplateForCustomTimer(nameID);
             textBoxNameID.Text = nameID;
             textBoxNameID.Enabled = false;
             if (options.TriggerConditions != null)
@@ -45,7 +45,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
                 else checkBoxAsRegex.Checked = true;
                 comboBoxLogType.SelectedItem = options.TriggerConditions[0].LogType;
             }
-            if (options.Duration != null) timeInputUControl2.Value = options.Duration;
+            timeInputUControl2.Value = options.Duration;
             checkBoxUptimeReset.Checked = options.ResetOnUptime;
         }
 
@@ -60,13 +60,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
             //validate
             if (IsValidData())
             {
-                CustomTimerOptionsTemplate options = new CustomTimerOptionsTemplate();
+                CustomTimerConfig options = new CustomTimerConfig();
                 options.AddTrigger(textBoxCond.Text, (LogType)comboBoxLogType.SelectedItem, checkBoxAsRegex.Checked);
                 options.Duration = timeInputUControl2.Value;
                 options.ResetOnUptime = checkBoxUptimeReset.Checked;
-                if (EditingNameID != null)
+                if (editingNameId != null)
                 {
-                    timerDefinitions.RemoveCustomTimerDefinition(EditingNameID);
+                    timerDefinitions.RemoveCustomTimerDefinition(editingNameId);
                 }
                 timerDefinitions.AddCustomTimerDefinition(textBoxNameID.Text, options);
                 this.Close();
@@ -81,7 +81,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
                 valid = false;
                 MessageBox.Show("Timer name cannot be empty");
             }
-            else if (EditingNameID == null && !timerDefinitions.IsNameUnique(textBoxNameID.Text))
+            else if (editingNameId == null && !timerDefinitions.IsNameUnique(textBoxNameID.Text))
             {
                 valid = false;
                 MessageBox.Show("Timer with this name already exists");

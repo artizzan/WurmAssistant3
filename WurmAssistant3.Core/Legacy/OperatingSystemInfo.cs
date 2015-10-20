@@ -37,7 +37,7 @@ namespace AldursLab.WurmAssistant3.Core.Legacy
                 else
                     RunningOS = OStype.Other;
             }
-            catch (Exception _e)
+            catch (Exception)
             {
                 RunningOS = OStype.Unknown;
             }

@@ -7,22 +7,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Meditation
 {
     public partial class MeditationTimerOptionsForm : ExtendedForm
     {
-        MeditationTimer MedTimer;
-        TimerDefaultSettingsForm parentForm;
-        bool inited = false;
-        public MeditationTimerOptionsForm(MeditationTimer timer, TimerDefaultSettingsForm parent)
+        readonly MeditationTimer meditationTimer;
+        readonly bool inited;
+
+        public MeditationTimerOptionsForm(MeditationTimer timer)
         {
-            MedTimer = timer;
-            parentForm = parent;
+            meditationTimer = timer;
             InitializeComponent();
-            checkBoxRemindSleepBonus.Checked = MedTimer.SleepBonusReminder;
-            int popupDurationMillis = MedTimer.SleepBonusPopupDuration;
+            checkBoxRemindSleepBonus.Checked = meditationTimer.SleepBonusReminder;
+            int popupDurationMillis = meditationTimer.SleepBonusPopupDurationMillis;
             this.numericUpDownPopupDuration.Value = (
                 popupDurationMillis/1000).ConstrainToRange(
                     (int) numericUpDownPopupDuration.Minimum,
                     (int) numericUpDownPopupDuration.Maximum);
-            checkBoxShowMeditSkill.Checked = MedTimer.ShowMeditSkill;
-            checkBoxCount.Checked = MedTimer.ShowMeditCount;
+            checkBoxShowMeditSkill.Checked = meditationTimer.ShowMeditSkill;
+            checkBoxCount.Checked = meditationTimer.ShowMeditCount;
             inited = true;
         }
 
@@ -44,22 +43,22 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Meditation
         private void checkBoxRemindSleepBonus_CheckedChanged(object sender, EventArgs e)
         {
             UpdateSleepBonusPanelVisibility();
-            if (inited) MedTimer.SleepBonusReminder = checkBoxRemindSleepBonus.Checked;
+            if (inited) meditationTimer.SleepBonusReminder = checkBoxRemindSleepBonus.Checked;
         }
 
         private void numericUpDownPopupDuration_ValueChanged(object sender, EventArgs e)
         {
-            if (inited) MedTimer.SleepBonusPopupDuration = ((int)numericUpDownPopupDuration.Value) * 1000;
+            if (inited) meditationTimer.SleepBonusPopupDurationMillis = ((int)numericUpDownPopupDuration.Value) * 1000;
         }
 
         private void checkBoxShowMeditSkill_CheckedChanged(object sender, EventArgs e)
         {
-            if (inited) MedTimer.ShowMeditSkill = checkBoxShowMeditSkill.Checked;
+            if (inited) meditationTimer.ShowMeditSkill = checkBoxShowMeditSkill.Checked;
         }
 
         private void checkBoxCount_CheckedChanged(object sender, EventArgs e)
         {
-            if (inited) MedTimer.ShowMeditCount = checkBoxCount.Checked;
+            if (inited) meditationTimer.ShowMeditCount = checkBoxCount.Checked;
         }
     }
 }

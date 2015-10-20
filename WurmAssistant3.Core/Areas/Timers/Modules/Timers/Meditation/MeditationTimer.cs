@@ -122,7 +122,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
         bool sleepBonusReminder;
 
         [JsonProperty]
-        int sleepBonusPopupDuration = 4000;
+        int sleepBonusPopupDurationMillis = 4000;
 
         [JsonProperty]
         bool showMeditSkill;
@@ -286,16 +286,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
             }
         }
 
-        /// <summary>
-        /// milliseconds
-        /// </summary>
-        public int SleepBonusPopupDuration
+        public int SleepBonusPopupDurationMillis
         {
-            get { return sleepBonusPopupDuration; }
+            get { return sleepBonusPopupDurationMillis; }
             set
             {
                 sleepNotify.PopupDuration = value;
-                sleepBonusPopupDuration = value;
+                sleepBonusPopupDurationMillis = value;
                 FlagAsChanged();
             }
         }
@@ -357,10 +354,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
             if (TimerDisplayView.Visible) TimerDisplayView.UpdateCooldown(NextMeditationDate - DateTime.Now);
         }
 
-        //this happens only if new server is of current group
-
-        //this includes when player is coming back to this timer group!
-
         protected override void HandleServerChange()
         {
             cooldownUpdateOperation.Trigger();
@@ -368,7 +361,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
 
         public override void OpenMoreOptions(TimerDefaultSettingsForm form)
         {
-            MeditationTimerOptionsForm moreOptUi = new MeditationTimerOptionsForm(this, form);
+            MeditationTimerOptionsForm moreOptUi = new MeditationTimerOptionsForm(this);
             moreOptUi.ShowDialogCenteredOnForm(form);
         }
 
@@ -380,10 +373,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
                 cooldownUpdateOperation.Trigger();
                 sleepNotify.MeditationHappened();
             }
-            else if (line.Content.StartsWith("The server has been up", StringComparison.Ordinal)) //"The server has been up 14 hours and 22 minutes."
+            else if (line.Content.StartsWith("The server has been up", StringComparison.Ordinal)) 
+            //"The server has been up 14 hours and 22 minutes."
             {
-                //this is no longer needed because of HandleServerChange
-                //which fires every time player logs into a server (start new wurm or relog or server travel)
                 cooldownUpdateOperation.Trigger();
             }
             else if (line.Content.StartsWith("You start using the sleep bonus", StringComparison.Ordinal))

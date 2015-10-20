@@ -34,8 +34,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         readonly HashSet<TimerDefinition> defaultDefinitions = new HashSet<TimerDefinition>();
 
         [JsonProperty]
-        readonly Dictionary<string, CustomTimerOptionsTemplate> customTimerOptionsTemplates =
-            new Dictionary<string, CustomTimerOptionsTemplate>();
+        readonly Dictionary<string, CustomTimerConfig> customTimerOptionsTemplates =
+            new Dictionary<string, CustomTimerConfig>();
         
         [JsonProperty] 
         readonly HashSet<TimerDefinition> customDefinitions = new HashSet<TimerDefinition>();
@@ -82,10 +82,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         }
 
         public void AddCustomTimerDefinition([NotNull] string nameId,
-            [NotNull] CustomTimerOptionsTemplate optionsTemplate)
+            [NotNull] CustomTimerConfig config)
         {
             if (nameId == null) throw new ArgumentNullException("nameId");
-            if (optionsTemplate == null) throw new ArgumentNullException("optionsTemplate");
+            if (config == null) throw new ArgumentNullException("config");
             foreach (var serverGroup in wurmApi.ServerGroups.All)
             {
                 TimerDefinition timertype = new TimerDefinition(
@@ -93,7 +93,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                     RuntimeTypeId.LegacyCustom);
                 customDefinitions.Add(timertype);
                 allDefinitions.Add(timertype);
-                customTimerOptionsTemplates[nameId] = optionsTemplate;
+                customTimerOptionsTemplates[nameId] = config;
                 FlagAsChanged();
             }
         }
@@ -116,7 +116,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             }
         }
 
-        public CustomTimerOptionsTemplate GetOptionsTemplateForCustomTimer([NotNull] string nameId)
+        public CustomTimerConfig GetOptionsTemplateForCustomTimer([NotNull] string nameId)
         {
             if (nameId == null) throw new ArgumentNullException("nameId");
             return customTimerOptionsTemplates[nameId];

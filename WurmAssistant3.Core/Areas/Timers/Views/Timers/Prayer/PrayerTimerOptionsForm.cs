@@ -9,7 +9,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Prayer
 {
     public partial class PrayerTimerOptionsForm : ExtendedForm
     {
-        private PrayerTimer prayerTimer;
+        private readonly PrayerTimer prayerTimer;
         private TimerDefaultSettingsForm formSettings;
         readonly ISoundEngine soundEngine;
 

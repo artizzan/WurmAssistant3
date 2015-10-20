@@ -7,7 +7,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.MeditPath
     public partial class MeditPathTimerOptionsForm : ExtendedForm
     {
         private TimerDefaultSettingsForm defaultSettingsForm;
-        private MeditPathTimer meditPathTimer;
+        private readonly MeditPathTimer meditPathTimer;
+
+        bool manualCooldownSet = false;
 
         public MeditPathTimerOptionsForm(TimerDefaultSettingsForm defaultSettingsForm, MeditPathTimer meditPathTimer)
         {
@@ -16,30 +18,28 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.MeditPath
             InitializeComponent();
         }
 
-        bool ManualCDSet = false;
-
         private void MeditPathTimerOptions_Load(object sender, EventArgs e)
         {
-            if (meditPathTimer.NextQuestionAttemptOverridenUntil != DateTime.MinValue) ManualCDSet = true;
+            if (meditPathTimer.NextQuestionAttemptOverridenUntil != DateTime.MinValue) manualCooldownSet = true;
             RefreshButtonText();
         }
 
         private void buttonManualCD_Click(object sender, EventArgs e)
         {
-            if (ManualCDSet)
+            if (manualCooldownSet)
             {
                 meditPathTimer.NextQuestionAttemptOverridenUntil = DateTime.MinValue;
-                ManualCDSet = false;
+                manualCooldownSet = false;
                 RefreshButtonText();
                 meditPathTimer.UpdateCooldown();
             }
             else
             {
-                ChooseQuestionTimerManuallyForm ui = new ChooseQuestionTimerManuallyForm(meditPathTimer);
+                ChooseQuestionTimerManuallyForm ui = new ChooseQuestionTimerManuallyForm();
                 if (ui.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     meditPathTimer.SetManualQTimer(ui.GetResultMeditLevel(), ui.GetResultOriginDate());
-                    ManualCDSet = true;
+                    manualCooldownSet = true;
                     RefreshButtonText();
                 }
             }
@@ -47,7 +47,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.MeditPath
 
         void RefreshButtonText()
         {
-            if (ManualCDSet) buttonManualCD.Text = "Manual cooldown is set\r\nClick to remove";
+            if (manualCooldownSet) buttonManualCD.Text = "Manual cooldown is set\r\nClick to remove";
             else buttonManualCD.Text = "Set cooldown manually";
         }
     }

@@ -9,24 +9,25 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
 {
     public partial class TimerDefaultSettingsForm : ExtendedForm
     {
-        WurmTimer ParentTimer;
+        readonly WurmTimer parentTimer;
         readonly ISoundEngine soundEngine;
-        bool isInited = false;
+        readonly bool isInited = false;
+
         public TimerDefaultSettingsForm(WurmTimer wurmTimer, [NotNull] ISoundEngine soundEngine)
         {
             if (soundEngine == null) throw new ArgumentNullException("soundEngine");
-            ParentTimer = wurmTimer;
+            parentTimer = wurmTimer;
             this.soundEngine = soundEngine;
             InitializeComponent();
             if (wurmTimer.MoreOptionsAvailable) buttonMoreOptions.Visible = true;
             this.Text = wurmTimer.Name;
             //set all options values
-            this.checkBoxPopup.Checked = ParentTimer.PopupNotify;
-            this.checkBoxSound.Checked = ParentTimer.SoundNotify;
-            this.checkBoxPopupPersistent.Checked = ParentTimer.PersistentPopup;
-            this.textBoxSoundName.Text = soundEngine.GetSoundById(ParentTimer.SoundId).Name;
-            this.checkBoxOnAssistantLaunch.Checked = ParentTimer.PopupOnWaLaunch;
-            int popupDurationMillis = ParentTimer.PopupDurationMillis;
+            this.checkBoxPopup.Checked = parentTimer.PopupNotify;
+            this.checkBoxSound.Checked = parentTimer.SoundNotify;
+            this.checkBoxPopupPersistent.Checked = parentTimer.PersistentPopup;
+            this.textBoxSoundName.Text = soundEngine.GetSoundById(parentTimer.SoundId).Name;
+            this.checkBoxOnAssistantLaunch.Checked = parentTimer.PopupOnWaLaunch;
+            int popupDurationMillis = parentTimer.PopupDurationMillis;
             this.numericUpDownPopupDuration.Value =
                 (popupDurationMillis/1000).ConstrainToRange((int) numericUpDownPopupDuration.Minimum,
                     (int) numericUpDownPopupDuration.Maximum);
@@ -49,7 +50,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
 
         private void buttonMoreOptions_Click(object sender, EventArgs e)
         {
-            ParentTimer.OpenMoreOptions(this);
+            parentTimer.OpenMoreOptions(this);
         }
 
         private void checkBoxPopup_CheckedChanged(object sender, EventArgs e)
@@ -57,7 +58,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
             UpdatePanels();
             if (isInited)
             {
-                ParentTimer.PopupNotify = checkBoxPopup.Checked;
+                parentTimer.PopupNotify = checkBoxPopup.Checked;
             }
         }
 
@@ -66,7 +67,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
             UpdatePanels();
             if (isInited)
             {
-                ParentTimer.SoundNotify = checkBoxSound.Checked;
+                parentTimer.SoundNotify = checkBoxSound.Checked;
             }
         }
 
@@ -83,7 +84,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
 
             if (isInited)
             {
-                ParentTimer.PersistentPopup = checkBoxPopupPersistent.Checked;
+                parentTimer.PersistentPopup = checkBoxPopupPersistent.Checked;
             }
         }
 
@@ -96,14 +97,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
                 {
                     var newsound = result.SoundResource;
                     textBoxSoundName.Text = newsound.Name;
-                    ParentTimer.SoundId = newsound.Id;
+                    parentTimer.SoundId = newsound.Id;
                 }
             }
         }
 
         private void buttonTurnOff_Click(object sender, EventArgs e)
         {
-            ParentTimer.TurnOff();
+            parentTimer.TurnOff();
             this.Close();
         }
 
@@ -111,7 +112,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
         {
             if (isInited)
             {
-                ParentTimer.PopupOnWaLaunch = checkBoxOnAssistantLaunch.Checked;
+                parentTimer.PopupOnWaLaunch = checkBoxOnAssistantLaunch.Checked;
             }
         }
 
@@ -119,7 +120,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
         {
             if (isInited)
             {
-                ParentTimer.PopupDurationMillis = ((int)numericUpDownPopupDuration.Value) * 1000;
+                parentTimer.PopupDurationMillis = ((int)numericUpDownPopupDuration.Value) * 1000;
             }
         }
     }

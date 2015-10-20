@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
 {
     [JsonObject(MemberSerialization.OptIn)] //set of options used to init custom timers behavior
-    public class CustomTimerOptionsTemplate
+    public class CustomTimerConfig
     {
         [JsonObject(MemberSerialization.OptIn)]
         public struct Condition

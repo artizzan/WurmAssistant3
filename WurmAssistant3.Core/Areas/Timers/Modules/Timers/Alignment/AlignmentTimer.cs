@@ -17,8 +17,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment
     [PersistentObject("TimersFeature_AlignmentTimer")]
     public class AlignmentTimer : WurmTimer
     {
-        public enum WurmReligions { Vynora, Magranon, Fo, Libila };
-
         private static class AlignmentVerifier
         {
             public static bool CheckConditions(LogEntry line, bool isWhiteLight, WurmReligions religion)
@@ -178,11 +176,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment
 
         class AlignmentHistoryEntry : IComparable<AlignmentHistoryEntry>
         {
-            public DateTime EntryDateTime;
-            public bool AlwaysValid = false;
-            public bool Valid = false;
-            public string Reason;
-            public bool ComesFromLiveLogs = false;
+            public DateTime EntryDateTime { get; private set; }
+            public bool AlwaysValid { get; private set; }
+            public string Reason { get; private set; }
+            public bool ComesFromLiveLogs { get; private set; }
+            public bool Valid { get; set; }
 
             public AlignmentHistoryEntry(DateTime date, bool alwaysValid = false, string reason = null, bool comesfromlivelogs = false)
             {
@@ -194,33 +192,28 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment
 
             public int CompareTo(AlignmentHistoryEntry dtlm)
             {
-                return this.EntryDateTime.CompareTo(dtlm.EntryDateTime);
+                return this.EntryDateTime.CompareTo((DateTime) dtlm.EntryDateTime);
             }
         }
+
+        public enum WurmReligions { Vynora, Magranon, Fo, Libila };
+
+        static readonly TimeSpan AlignmentCooldown = new TimeSpan(0, 30, 0);
+
+        [JsonProperty]
+        bool isWhiteLighter = true;
+
+        [JsonProperty]
+        WurmReligions playerReligion;
+
+        DateTime dateOfNextAlignment = DateTime.MinValue;
+        readonly List<AlignmentHistoryEntry> alignmentHistory = new List<AlignmentHistoryEntry>();
 
         public AlignmentTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundEngine soundEngine,
             ITrayPopups trayPopups)
             : base(persistentObjectId, trayPopups, logger, wurmApi, soundEngine)
         {
         }
-
-        [JsonProperty]
-        public bool isWhiteLighter = true;
-        [JsonProperty]
-        public WurmReligions playerReligion;
-
-        public static TimeSpan AlignmentCooldown = new TimeSpan(0, 30, 0);
-
-        DateTime _dateOfNextAlignment = DateTime.MinValue;
-        DateTime DateOfNextAlignment
-        {
-            get { return _dateOfNextAlignment; }
-            set { _dateOfNextAlignment = value; CDNotify.CooldownTo = value; }
-        }
-
-        List<AlignmentHistoryEntry> AlignmentHistory = new List<AlignmentHistoryEntry>();
-
-        //DateTime _cooldownResetSince = DateTime.MinValue;
 
         public override void Initialize(PlayerTimersGroup parentGroup, string player, TimerDefinition definition)
         {
@@ -229,6 +222,39 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment
             MoreOptionsAvailable = true;
 
             PerformAsyncInits();
+        }
+
+        async void PerformAsyncInits()
+        {
+            try
+            {
+                InitCompleted = false;
+                alignmentHistory.Clear();
+
+                List<LogEntry> lines = await GetLogLinesFromLogHistoryAsync(LogType.Event, TimeSpan.FromDays(3));
+
+                foreach (LogEntry line in lines)
+                {
+                    if (AlignmentVerifier.CheckConditions(line, IsWhiteLighter, PlayerReligion))
+                    {
+                        alignmentHistory.Add(new AlignmentHistoryEntry(line.Timestamp, reason: line.Content));
+                    }
+                }
+
+                UpdateAlignmentCooldown();
+
+                InitCompleted = true;
+            }
+            catch (Exception _e)
+            {
+                Logger.Error(_e, "init error");
+            }
+        }
+
+        DateTime DateOfNextAlignment
+        {
+            get { return dateOfNextAlignment; }
+            set { dateOfNextAlignment = value; CDNotify.CooldownTo = value; }
         }
 
         public bool IsWhiteLighter
@@ -250,40 +276,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment
             }
         }
 
-        public void SetLightAndReligion(bool whiteLighter, WurmReligions religion)
+        void SetLightAndReligion(bool whiteLighter, WurmReligions religion)
         {
             if (whiteLighter != IsWhiteLighter || religion != PlayerReligion)
             {
                 IsWhiteLighter = whiteLighter;
                 PlayerReligion = religion;
                 PerformAsyncInits();
-            }
-        }
-
-        async Task PerformAsyncInits()
-        {
-            try
-            {
-                InitCompleted = false;
-                AlignmentHistory.Clear();
-                
-                List<LogEntry> lines = await GetLogLinesFromLogHistoryAsync(LogType.Event, TimeSpan.FromDays(3));
-
-                foreach (LogEntry line in lines)
-                {
-                    if (AlignmentVerifier.CheckConditions(line, IsWhiteLighter, PlayerReligion))
-                    {
-                        AlignmentHistory.Add(new AlignmentHistoryEntry(line.Timestamp, reason: line.Content));
-                    }
-                }
-
-                UpdateAlignmentCooldown();
-
-                InitCompleted = true;
-            }
-            catch (Exception _e)
-            {
-                Logger.Error(_e, "init error");
             }
         }
 
@@ -295,7 +294,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment
 
         public override void OpenMoreOptions(TimerDefaultSettingsForm form)
         {
-            AlignmentTimerOptionsForm ui = new AlignmentTimerOptionsForm(this, form);
+            AlignmentTimerOptionsForm ui = new AlignmentTimerOptionsForm(this);
             if (ui.ShowDialogCenteredOnForm(form) == System.Windows.Forms.DialogResult.OK)
             {
                 SetLightAndReligion(ui.WhiteLighter, ui.Religion);
@@ -305,7 +304,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment
         public void ShowVerifyList()
         {
             var allalignments = new List<string>();
-            foreach (AlignmentHistoryEntry entry in AlignmentHistory)
+            foreach (AlignmentHistoryEntry entry in alignmentHistory)
             {
                 if (entry.EntryDateTime > DateTime.Now - TimeSpan.FromMinutes(31))
                 {
@@ -333,7 +332,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment
         {
             if (line.Content.StartsWith("Alignment increased", StringComparison.Ordinal))
             {
-                AlignmentHistory.Add(new AlignmentHistoryEntry(DateTime.Now, true));
+                alignmentHistory.Add(new AlignmentHistoryEntry(DateTime.Now, true));
                 UpdateAlignmentCooldown();
             }
         }
@@ -342,69 +341,52 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment
         {
             if (AlignmentVerifier.CheckConditions(line, IsWhiteLighter, PlayerReligion))
             {
-                AlignmentHistory.Add(new AlignmentHistoryEntry(DateTime.Now, reason: line.Content, comesfromlivelogs: true));
+                alignmentHistory.Add(new AlignmentHistoryEntry(DateTime.Now, reason: line.Content, comesfromlivelogs: true));
                 UpdateAlignmentCooldown();
             }
         }
 
         void UpdateAlignmentCooldown()
         {
-            //UpdateDateOfLastCooldownReset();
             RevalidateAlignmentHistory();
             UpdateNextAlignmentDate();
         }
 
-        //void UpdateDateOfLastCooldownReset()
-        //{
-        //    var result = GetLatestUptimeCooldownResetDate();
-        //    if (result > DateTime.MinValue) _cooldownResetSince = result;
-        //}
-
         void RevalidateAlignmentHistory()
         {
-            AlignmentHistory.Sort();
+            alignmentHistory.Sort();
 
             var lastValidEntry = new DateTime(0);
             // validate entries
-            foreach (AlignmentHistoryEntry entry in AlignmentHistory)
+            foreach (AlignmentHistoryEntry entry in alignmentHistory)
             {
                 entry.Valid = false;
+
                 // all entries are default invalid
-                // discard any entry prior to cooldown reset => this is no longer true
-                //if (entry.EntryDateTime > _cooldownResetSince)
-                //{
-                    if (entry.AlwaysValid)
-                    {
-                        entry.Valid = true;
-                        lastValidEntry = entry.EntryDateTime;
-                    }
-                    //if entry date is later, than last valid + cooldown period
-                    else if (entry.EntryDateTime > lastValidEntry + AlignmentCooldown)
-                    {
-                        entry.Valid = true;
-                        //lastValidEntry = entry.EntryDateTime;  //this will never be accurate enough to qualify for validity
-                    }
-                //}
+                if (entry.AlwaysValid)
+                {
+                    entry.Valid = true;
+                    lastValidEntry = entry.EntryDateTime;
+                }
+                else if (entry.EntryDateTime > lastValidEntry + AlignmentCooldown)
+                {
+                    entry.Valid = true;
+                }
             }
         }
 
         void UpdateNextAlignmentDate()
         {
             DateOfNextAlignment = FindLastValidAlignmentInHistory() + AlignmentCooldown;
-
-            //if (DateOfNextAlignment > _cooldownResetSince + TimeSpan.FromDays(1))
-            //{
-            //    DateOfNextAlignment = _cooldownResetSince + TimeSpan.FromDays(1);
-            //}
         }
 
         DateTime FindLastValidAlignmentInHistory()
         {
-            if (AlignmentHistory.Count > 0)
+            if (alignmentHistory.Count > 0)
             {
-                for (int i = AlignmentHistory.Count - 1; i >= 0; i--)
+                for (int i = alignmentHistory.Count - 1; i >= 0; i--)
                 {
-                    if (AlignmentHistory[i].Valid) return AlignmentHistory[i].EntryDateTime;
+                    if (alignmentHistory[i].Valid) return alignmentHistory[i].EntryDateTime;
                 }
             }
             return new DateTime(0);

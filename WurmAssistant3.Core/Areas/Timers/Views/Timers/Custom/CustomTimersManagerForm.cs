@@ -9,16 +9,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
 {
     public partial class CustomTimersManagerForm : ExtendedForm
     {
-        Form parentForm;
         readonly IWurmApi wurmApi;
         readonly TimerDefinitions timerDefinitions;
 
-        public CustomTimersManagerForm(Form parent, [NotNull] IWurmApi wurmApi,
+        public CustomTimersManagerForm([NotNull] IWurmApi wurmApi,
             [NotNull] TimerDefinitions timerDefinitions)
         {
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (timerDefinitions == null) throw new ArgumentNullException("timerDefinitions");
-            parentForm = parent;
             this.wurmApi = wurmApi;
             this.timerDefinitions = timerDefinitions;
             InitializeComponent();
@@ -38,7 +36,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             //display window to add
-            CustomTimersManagerEditForm ui = new CustomTimersManagerEditForm(this, wurmApi, timerDefinitions);
+            CustomTimersManagerEditForm ui = new CustomTimersManagerEditForm(wurmApi, timerDefinitions);
             ui.ShowCenteredOnForm(this);
             ui.FormClosed += OnTimerAdded;
         }
@@ -52,7 +50,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
         {
             if (listBox1.SelectedIndex > -1)
             {
-                CustomTimersManagerEditForm ui = new CustomTimersManagerEditForm(this, wurmApi, timerDefinitions, listBox1.SelectedItem.ToString());
+                CustomTimersManagerEditForm ui = new CustomTimersManagerEditForm(wurmApi,
+                    timerDefinitions,
+                    listBox1.SelectedItem.ToString());
                 ui.FormClosed += OnTimerAdded;
                 ui.ShowCenteredOnForm(this);
             }

@@ -7,7 +7,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
 {
     public partial class TimerDisplayView : UserControl
     {
-        private WurmTimer WurmTimer;
+        private readonly WurmTimer wurmTimer;
+
+        TimeSpan cooldownLength = TimeSpan.Zero;
+
+        string timerName = string.Empty;
+        string skillLevel = "0";
+        private string meditCount = "0";
+
+        /// <summary>
+        /// show skill in () after timer name
+        /// </summary>
+        public bool ShowSkill = false;
 
         public TimerDisplayView()
         {
@@ -16,29 +27,33 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
 
         public TimerDisplayView(WurmTimer wurmTimer) : this()
         {
-            this.WurmTimer = wurmTimer;
+            this.wurmTimer = wurmTimer;
             SetName(wurmTimer.ShortName);
         }
 
-        TimeSpan CooldownLength = TimeSpan.Zero;
+        /// <summary>
+        /// set to display extra info appended to remaining time,
+        /// set null or empty to disable
+        /// </summary>
+        public string ExtraInfo { get; set; }
 
-        string TimerName = string.Empty;
-        string SkillLevel = "0";
-        private string MeditCount = "0";
+        public bool ShowMeditCount { get; set; }
+
+        public WidgetModeManager WidgetManager { get; set; }
 
         public void SetName(string text)
         {
-            TimerName = text;
-            labelName.Text = TimerName;
+            timerName = text;
+            labelName.Text = timerName;
         }
 
         /// <summary>
         /// Sets the duration of a cooldown, as displayed on progress bar. If actual cooldown is longer, it will show as empty progress bar.
         /// </summary>
-        /// <param name="cd_length"></param>
-        public void SetCooldown(TimeSpan cd_length)
+        /// <param name="length"></param>
+        public void SetCooldown(TimeSpan length)
         {
-            CooldownLength = cd_length;
+            this.cooldownLength = length;
         }
 
         public void UpdateCooldown(DateTime cooldownTo)
@@ -52,7 +67,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
         /// <param name="skillValue"></param>
         public void UpdateSkill(float skillValue)
         {
-            SkillLevel = skillValue.ToString("F2");
+            skillLevel = skillValue.ToString("F2");
         }
 
         /// <summary>
@@ -61,48 +76,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
         /// <param name="txt"></param>
         public void SetCustomStringAsSkill(string txt)
         {
-            SkillLevel = txt;
+            skillLevel = txt;
         }
 
         public void SetMeditCount(int count)
         {
-            MeditCount = count.ToString();
-        }
-
-        /// <summary>
-        /// show skill in () after timer name
-        /// </summary>
-        public bool ShowSkill = false;
-
-        private WidgetModeManager _widgetManager;
-
-        /// <summary>
-        /// set to display extra info appended to remaining time,
-        /// set null or empty to disable
-        /// </summary>
-        public string ExtraInfo { get; set; }
-
-        public bool ShowMeditCount { get; set; }
-
-        public WidgetModeManager WidgetManager
-        {
-            private get { return _widgetManager; }
-            set 
-            { 
-                _widgetManager = value;
-                //_widgetManager.WidgetModeChanging += _widgetManager_WidgetModeChanging; 
-            }
-        }
-
-        void _widgetManager_WidgetModeChanging(object sender, WidgetModeEventArgs e)
-        {
+            meditCount = count.ToString();
         }
 
         public void UpdateCooldown(TimeSpan cd_remaining)
         {
-            string presentation = TimerName;
-            if (ShowSkill) presentation += " ("+SkillLevel+")";
-            if (ShowMeditCount) presentation += " " + MeditCount;
+            string presentation = timerName;
+            if (ShowSkill) presentation += " ("+skillLevel+")";
+            if (ShowMeditCount) presentation += " " + meditCount;
             labelName.Text = presentation;
 
             if (cd_remaining.Ticks < 0)
@@ -112,7 +98,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
             }
             else
             {
-                int value = (int)((cd_remaining.TotalSeconds / CooldownLength.TotalSeconds) * progressBar1.Maximum);
+                int value = (int)((cd_remaining.TotalSeconds / cooldownLength.TotalSeconds) * progressBar1.Maximum);
                 if (value > progressBar1.Maximum) value = progressBar1.Maximum;
                 else if (value < 0) value = 0;
 
@@ -154,7 +140,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
             {
                 return;
             }
-            if (e.Button == MouseButtons.Right) WurmTimer.OpenTimerConfig();
+            if (e.Button == MouseButtons.Right) wurmTimer.OpenTimerConfig();
         }
 
         private void tableLayoutPanel2_MouseClick(object sender, MouseEventArgs e)

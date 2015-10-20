@@ -17,7 +17,7 @@ using ILogger = AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts.ILogger;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
 {
-    public partial class LogSearchView : ExtendedForm, IFeature
+    public sealed partial class LogSearchView : ExtendedForm, IFeature
     {
         readonly IWurmApi wurmApi;
         readonly ILogger logger;

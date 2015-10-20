@@ -15,17 +15,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Sermon
     {
         private static readonly TimeSpan SermonPreacherCooldown = new TimeSpan(3, 0, 0);
 
-        DateTime _dateOfNextSermon = DateTime.MinValue;
-        DateTime DateOfNextSermon
-        {
-            get { return _dateOfNextSermon; }
-            set {
-                _dateOfNextSermon = value; 
-                CDNotify.CooldownTo = value; 
-            }
-        }
-
-        //DateTime CooldownResetSince = DateTime.MinValue;
+        DateTime dateOfNextSermon = DateTime.MinValue;
 
         public SermonTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundEngine soundEngine,
             ITrayPopups trayPopups)
@@ -41,7 +31,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Sermon
             PerformAsyncInits();
         }
 
-        async Task PerformAsyncInits()
+        async void PerformAsyncInits()
         {
             try
             {
@@ -57,7 +47,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Sermon
                 }
                 if (lastSermonLine != null)
                 {
-                    UpdateDateOfNextSermon(lastSermonLine, false);
+                    UpdateDateOfNextSermon(lastSermonLine);
                 }
 
                 InitCompleted = true;
@@ -68,40 +58,32 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Sermon
             }
         }
 
+        DateTime DateOfNextSermon
+        {
+            get { return dateOfNextSermon; }
+            set {
+                dateOfNextSermon = value; 
+                CDNotify.CooldownTo = value; 
+            }
+        }
+
         public override void Update()
         {
             base.Update();
             if (TimerDisplayView.Visible) TimerDisplayView.UpdateCooldown(DateOfNextSermon);
         }
 
-        protected override void HandleServerChange()
-        {
-            //UpdateDateOfLastCooldownReset();
-        }
-
         public override void HandleNewEventLogLine(LogEntry line)
         {
             if (line.Content.StartsWith("You finish this sermon", StringComparison.Ordinal))
             {
-                UpdateDateOfNextSermon(line, true);
+                UpdateDateOfNextSermon(line);
             }
         }
 
-        void UpdateDateOfNextSermon(LogEntry line, bool liveLogs)
+        void UpdateDateOfNextSermon(LogEntry line)
         {
-            //UpdateDateOfLastCooldownReset();
             DateOfNextSermon = line.Timestamp + SermonPreacherCooldown;
-
-            //if (DateOfNextSermon > CooldownResetSince + TimeSpan.FromDays(1))
-            //{
-            //    DateOfNextSermon = CooldownResetSince + TimeSpan.FromDays(1);
-            //}
         }
-
-        //void UpdateDateOfLastCooldownReset()
-        //{
-        //    var result = GetLatestUptimeCooldownResetDate();
-        //    if (result > DateTime.MinValue) CooldownResetSince = result;
-        //}
     }
 }

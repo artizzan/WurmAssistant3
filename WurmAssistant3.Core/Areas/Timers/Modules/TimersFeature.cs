@@ -21,7 +21,7 @@ using Ninject;
 namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
 {
     [PersistentObject("TimersFeature")]
-    public class TimersFeature : PersistentObjectBase, IFeature, IInitializable
+    public sealed class TimersFeature : PersistentObjectBase, IFeature, IInitializable
     {
         readonly IHostEnvironment host;
         readonly ILogger logger;

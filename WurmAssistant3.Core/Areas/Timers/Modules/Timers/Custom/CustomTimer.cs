@@ -18,19 +18,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
     public class CustomTimer : WurmTimer
     {
         readonly ILogger logger;
-        CustomTimerOptionsTemplate Options;
 
-        DateTime _cooldownTo = DateTime.MinValue;
-        DateTime CooldownTo
-        {
-            get { return _cooldownTo; }
-            set
-            {
-                _cooldownTo = value;
-                CDNotify.CooldownTo = value;
-            }
-        }
-        DateTime UptimeResetSince = DateTime.MinValue;
+        CustomTimerConfig config;
+        DateTime cooldownTo = DateTime.MinValue;
+        DateTime uptimeResetSince = DateTime.MinValue;
 
         public CustomTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundEngine soundEngine,
             ITrayPopups trayPopups)
@@ -40,17 +31,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
             this.logger = logger;
         }
 
-        //happens before Initialize
-        public void ApplyCustomTimerOptions(CustomTimerOptionsTemplate options)
-        {
-            Options = options;
-        }
-
         public override void Initialize(PlayerTimersGroup parentGroup, string player, TimerDefinition definition)
         {
             base.Initialize(parentGroup, player, definition);
-            //MoreOptionsAvailable = true;
-            TimerDisplayView.SetCooldown(Options.Duration);
+            TimerDisplayView.SetCooldown(config.Duration);
 
             PerformAsyncInits();
         }
@@ -62,16 +46,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
                 await UpdateDateOfLastCooldownReset();
 
                 HashSet<LogType> condLogTypes = new HashSet<LogType>(
-                    Options.TriggerConditions.Select(x => x.LogType));
+                    config.TriggerConditions.Select(x => x.LogType));
 
                 foreach (var type in condLogTypes)
                 {
                     LogType captType = type;
                     List<LogEntry> lines = await GetLogLinesFromLogHistoryAsync(captType,
-                        DateTime.Now - Options.Duration - TimeSpan.FromDays(2));
-                    foreach (var cond in Options.TriggerConditions)
+                        DateTime.Now - config.Duration - TimeSpan.FromDays(2));
+                    foreach (var cond in config.TriggerConditions)
                     {
-                        if (cond.LogType == captType) ProcessLinesForCooldownTriggers(lines, cond, false);
+                        if (cond.LogType == captType) ProcessLinesForCooldownTriggers(lines, cond);
                     }
                 }
 
@@ -83,40 +67,44 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
             }
         }
 
+        DateTime CooldownTo
+        {
+            get { return cooldownTo; }
+            set
+            {
+                cooldownTo = value;
+                CDNotify.CooldownTo = value;
+            }
+        }
+
+        public void ApplyCustomTimerOptions(CustomTimerConfig customTimerConfig)
+        {
+            this.config = customTimerConfig;
+        }
+
         public override void Update()
         {
             base.Update();
             if (TimerDisplayView.Visible) TimerDisplayView.UpdateCooldown(CooldownTo);
         }
 
-        public override void Stop()
-        {
-
-            base.Stop();
-        }
-
         public override void HandleAnyLogLine(LogsMonitorEventArgs container)
         {
-            foreach (var cond in Options.TriggerConditions)
+            foreach (var cond in config.TriggerConditions)
             {
                 if (cond.LogType == container.LogType)
                 {
-                    ProcessLinesForCooldownTriggers(container.WurmLogEntries.ToList(), cond, true);
+                    ProcessLinesForCooldownTriggers(container.WurmLogEntries.ToList(), cond);
                 }
             }
         }
 
-        public override void OpenMoreOptions(TimerDefaultSettingsForm form)
-        {
-            base.OpenMoreOptions(form);
-        }
-
         protected override void HandleServerChange()
         {
-            UpdateDateOfLastCooldownReset();
+            BeginUpdateDateOfLastCooldownReset();
             try
             {
-                TriggerCooldown(CooldownTo - Options.Duration);
+                TriggerCooldown(CooldownTo - config.Duration);
             }
             catch (Exception _e)
             {
@@ -131,12 +119,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
             }
         }
 
-        void ProcessLinesForCooldownTriggers(List<LogEntry> lines, CustomTimerOptionsTemplate.Condition condition, bool liveLogs)
+        void ProcessLinesForCooldownTriggers(List<LogEntry> lines, CustomTimerConfig.Condition condition)
         {
             foreach (LogEntry line in lines)
             {
                 RegexOptions opt = new RegexOptions();
-                if (!Options.IsRegex) opt = RegexOptions.IgnoreCase;
+                if (!config.IsRegex) opt = RegexOptions.IgnoreCase;
                 if (Regex.IsMatch(line.Content, condition.RegexPattern, opt))
                 {
                     TriggerCooldown(line.Timestamp);
@@ -146,24 +134,37 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
 
         void TriggerCooldown(DateTime startDate)
         {
-            if (Options.ResetOnUptime && startDate > UptimeResetSince)
+            if (config.ResetOnUptime && startDate > uptimeResetSince)
             {
-                DateTime cd_to = startDate + Options.Duration;
-                DateTime NextUptimeReset = UptimeResetSince + TimeSpan.FromDays(1);
-                if (cd_to > NextUptimeReset)
-                    cd_to = NextUptimeReset;
-                CooldownTo = cd_to;
+                DateTime cdTo = startDate + config.Duration;
+                DateTime nextUptimeReset = uptimeResetSince + TimeSpan.FromDays(1);
+                if (cdTo > nextUptimeReset)
+                    cdTo = nextUptimeReset;
+                CooldownTo = cdTo;
             }
             else
             {
-                CooldownTo = startDate + Options.Duration;
+                CooldownTo = startDate + config.Duration;
             }
+        }
+
+        async void BeginUpdateDateOfLastCooldownReset()
+        {
+            try
+            {
+                await UpdateDateOfLastCooldownReset();
+            }
+            catch (Exception exception)
+            {
+                logger.Error(exception, "Error during UpdateDateOfLastCooldownReset at timer " + this.ToString());
+            }
+
         }
 
         async Task UpdateDateOfLastCooldownReset()
         {
             var result = await GetLatestUptimeCooldownResetDate();
-            if (result > DateTime.MinValue) UptimeResetSince = result;
+            if (result > DateTime.MinValue) uptimeResetSince = result;
         }
     }
 }

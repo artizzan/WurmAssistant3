@@ -6,17 +6,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Alignment
 {
     public partial class AlignmentTimerOptionsForm : ExtendedForm
     {
-        private AlignmentTimer alignmentTimer;
-        private TimerDefaultSettingsForm settingsForm;
+        private readonly AlignmentTimer alignmentTimer;
 
         public bool WhiteLighter { get; private set; }
         public AlignmentTimer.WurmReligions Religion { get; private set; }
 
-        public AlignmentTimerOptionsForm(AlignmentTimer alignmentTimer, TimerDefaultSettingsForm form)
+        public AlignmentTimerOptionsForm(AlignmentTimer alignmentTimer)
         {
             this.alignmentTimer = alignmentTimer;
-            this.settingsForm = form;
-
+ 
             InitializeComponent();
 
             if (alignmentTimer.IsWhiteLighter) radioButtonWL.Checked = true;

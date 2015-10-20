@@ -19,7 +19,7 @@ using ISoundEngine = AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts.I
 namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
 {
     [PersistentObject("SoundEngine")]
-    public class SoundEngine : PersistentObjectBase, ISoundEngine, IInitializable, IFeature
+    public sealed class SoundEngine : PersistentObjectBase, ISoundEngine, IInitializable, IFeature
     {
         readonly ISoundsLibrary soundsLibrary;
         readonly IrrKlang.ISoundEngine engine;

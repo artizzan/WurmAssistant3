@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Windows.Forms;
+using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.MeditPath;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.MeditPath
 {
     public partial class ChooseQuestionTimerManuallyForm : Form
     {
-        MeditPathTimer ParentTimer;
-
-        public ChooseQuestionTimerManuallyForm(MeditPathTimer parentTimer)
+        public ChooseQuestionTimerManuallyForm()
         {
-            this.ParentTimer = parentTimer;
             InitializeComponent();
             InitializeChoiceList();
         }
 
         void InitializeChoiceList()
         {
-            foreach (var keyval in MeditPathTimer.MeditPathHelper.LevelToTitlesMap)
+            foreach (var keyval in MeditationPaths.GetLevelToTitlesPairs())
             {
                 string level = keyval.Key.ToString();
                 string titles = "";

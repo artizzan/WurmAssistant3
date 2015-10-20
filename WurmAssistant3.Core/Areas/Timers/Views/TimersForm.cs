@@ -173,7 +173,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
             }
             catch
             {
-                customTimersManagerUi = new CustomTimersManagerForm(this, wurmApi, timerDefinitions);
+                customTimersManagerUi = new CustomTimersManagerForm(wurmApi, timerDefinitions);
                 customTimersManagerUi.ShowCenteredOnForm(this);
             }
         }

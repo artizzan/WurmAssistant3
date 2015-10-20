@@ -14,9 +14,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.JunkSale
     public class JunkSaleTimer : WurmTimer
     {
         [JsonProperty]
-        public DateTime cooldownUntil;
+        DateTime cooldownUntil;
         [JsonProperty]
-        public int currentTotalAmount;
+        int currentTotalAmount;
 
         public JunkSaleTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundEngine soundEngine,
             ITrayPopups trayPopups)

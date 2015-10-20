@@ -50,7 +50,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             _WindowInitCompleted = true;
         }
 
-        private async Task CreateServerListAsync()
+        private async void CreateServerListAsync()
         {
             try
             {

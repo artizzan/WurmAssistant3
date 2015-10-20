@@ -7,29 +7,28 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
 {
     public partial class PlayerLayoutView : UserControl
     {
-        private PlayerTimersGroup ParentGroup;
-        private WidgetModeManager _widgetManager;
+        private readonly PlayerTimersGroup parentGroup;
+        private WidgetModeManager widgetManager;
 
         public PlayerLayoutView()
         {
             InitializeComponent();
-            //this.BackColor = DefaultBackColor;
         }
 
         public PlayerLayoutView(PlayerTimersGroup playerTimersGroup)
             : this()
         {
-            this.ParentGroup = playerTimersGroup;
-            this.label1.Text = ParentGroup.CharacterName + " (conjuring, please wait)";
+            this.parentGroup = playerTimersGroup;
+            this.label1.Text = parentGroup.CharacterName + " (conjuring, please wait)";
         }
 
         public WidgetModeManager WidgetManager
         {
-            private get { return _widgetManager; }
+            private get { return widgetManager; }
             set
             {
-                _widgetManager = value;
-                _widgetManager.WidgetModeChanging += _widgetManager_WidgetModeChanging;
+                widgetManager = value;
+                widgetManager.WidgetModeChanging += _widgetManager_WidgetModeChanging;
             }
         }
 
@@ -38,8 +37,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
             buttonAdd.Visible = !e.WidgetMode;
             if (e.WidgetMode)
             {
-                this.BackColor = ParentGroup.TimersFeature.WidgetBgColor;
-                this.ForeColor = ParentGroup.TimersFeature.WidgetForeColor;
+                this.BackColor = parentGroup.TimersFeature.WidgetBgColor;
+                this.ForeColor = parentGroup.TimersFeature.WidgetForeColor;
             }
             else
             {
@@ -54,7 +53,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            ParentGroup.AddNewTimer();
+            parentGroup.AddNewTimer();
         }
 
         internal void RegisterNewTimerDisplay(TimerDisplayView ControlTimer)
@@ -71,7 +70,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
 
         internal void EnableAddingTimers()
         {
-            this.label1.Text = ParentGroup.CharacterName;
+            this.label1.Text = parentGroup.CharacterName;
             buttonAdd.Enabled = true;
         }
     }
