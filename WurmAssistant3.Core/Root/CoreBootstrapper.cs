@@ -20,6 +20,7 @@ using AldursLab.WurmAssistant3.Core.Areas.Persistence;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine;
 using AldursLab.WurmAssistant3.Core.Areas.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups;
+using AldursLab.WurmAssistant3.Core.Areas.Triggers;
 using AldursLab.WurmAssistant3.Core.Areas.WurmApi;
 using AldursLab.WurmAssistant3.Core.IoC;
 using AldursLab.WurmAssistant3.Core.Root.Components;
@@ -111,6 +112,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
             LogSearcherSetup.BindLogSearcher(kernel);
             CalendarSetup.BindCalendar(kernel);
             TimersSetup.BindTimers(kernel);
+            TriggersSetup.BindTriggers(kernel);
 
             FeaturesSetup.BindFeaturesManager(kernel);
             MainMenuSetup.BindMenu(kernel);

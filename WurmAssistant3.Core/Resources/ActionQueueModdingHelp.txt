@@ -1,0 +1,56 @@
+Action Queue Trigger modding how-to
+
+Trigger parses new log events from the game logs, matching them against all configured conditions.
+After each bunch of events, it will make a decision whether action was started or finished. 
+Based on that, it schedules notifications.
+
+
+There are following types of checks (Condition Types), that can be adjusted:
+
+ActionStart -  
+	flags the log event as starting an in-game action 
+	NOTE: Every time ActionStart is found, it resets the script, eg. resets notification schedule.
+ActionFalstart - 
+	checked after ActionStart, if matched, will override ActionStart (event is not seen as starting action)
+
+ActionEnd - 
+	flags the log event as ending an in-game action, notification is scheduled with configured delay
+ActionFalsEnd - 
+	checked after ActionEnd, if matched, will override ActionEnd (event is not seen as ending any action)
+
+ActionFalsEndPreviousEvent - 
+	this works similar to ActionFalsEnd, except it looks at an event logged right before current one
+
+LevelingStart - 
+	this is a special condition, that checks for Leveling action start (both surface and underground).
+	NOTE: Leveling is handled a bit differently, due to it's channeled nature, but this condition purpose is similar ActionStart
+
+LevelingEnd - 
+	decides if leveling has been finished, purpose similar to ActionEnd
+
+
+Additionally, there are 3 types of string matching strategies. These decide, how to to treat content of the wurm log entry:
+
+StartsWithCaseSensitiveOrdinal -
+	checks if the log event content starts with the pattern, is case sensitive and uses ordinal string matching
+	NOTE: log events do not include timestamp and source, 
+	eg event: 
+		[12:34:56] <Abc> You do something special.
+	is seen as: 
+		You do something special.
+
+ContainsCaseSensitiveOrdinal -
+	checks if the log event content contains the pattern, is case sensitive and uses ordinal string matching
+
+RegexDefaultOptions -
+	very flexible condition, checks if the log event content matches a Regular Expression pattern,
+	pattern is matched using default C# .NET options,
+	NOTE: regex checks, especially complex ones, are slow and should not be overused
+
+
+Final notes:
+-	Conditions marked with "default" should not be deleted, but disabled instead. 
+	If deleted, they will be readded on next app start, with default options.
+	They can be edited, changes will not be overwritten.
+-	All conditions can be exported to a CSV text file, and openen in excel for easier analysis.
+	There is no import option.

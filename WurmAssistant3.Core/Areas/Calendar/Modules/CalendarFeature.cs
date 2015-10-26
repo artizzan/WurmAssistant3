@@ -25,7 +25,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
     {
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
-        readonly IUpdateLoop updateLoop;
         readonly ISoundEngine soundEngine;
         readonly ITrayPopups trayPopups;
 
@@ -201,109 +200,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
             }
         }
 
-        [JsonObject(MemberSerialization.OptIn)]
-        public class CalendarSettings
-        {
-            public CalendarFeature CalendarFeature { get; set; }
-
-            public CalendarSettings()
-            {
-                useWurmTimeForDisplay = false;
-                soundWarning = false;
-                soundId = Guid.Empty;
-                popupWarning = false;
-                trackedSeasons = new string[0];
-                serverName = "";
-                mainWindowSize = new System.Drawing.Size(487, 414);
-            }
-
-            [JsonProperty] bool useWurmTimeForDisplay;
-            [JsonProperty] bool soundWarning;
-            [JsonProperty] Guid soundId;
-            [JsonProperty] bool popupWarning;
-            [JsonProperty(IsReference = false)] string[] trackedSeasons;
-            [JsonProperty] string serverName;
-            [JsonProperty] System.Drawing.Size mainWindowSize;
-
-            public bool UseWurmTimeForDisplay
-            {
-                get { return useWurmTimeForDisplay; }
-                set
-                {
-                    useWurmTimeForDisplay = value;
-                    CalendarFeature.FlagAsChanged();
-                }
-            }
-
-            public bool SoundWarning
-            {
-                get { return soundWarning; }
-                set
-                {
-                    soundWarning = value;
-                    CalendarFeature.FlagAsChanged();
-                }
-            }
-
-            public Guid SoundId
-            {
-                get { return soundId; }
-                set
-                {
-                    soundId = value;
-                    CalendarFeature.FlagAsChanged();
-                }
-            }
-
-            public ISoundResource Sound
-            {
-                get { return CalendarFeature.soundEngine.GetSoundById(soundId); }
-            }
-
-            public bool PopupWarning
-            {
-                get { return popupWarning; }
-                set
-                {
-                    popupWarning = value;
-                    CalendarFeature.FlagAsChanged();
-                }
-            }
-
-            public string[] TrackedSeasons
-            {
-                get { return trackedSeasons; }
-                set
-                {
-                    trackedSeasons = value;
-                    CalendarFeature.FlagAsChanged();
-                }
-            }
-
-            public string ServerName
-            {
-                get { return serverName; }
-                set
-                {
-                    serverName = value;
-                    CalendarFeature.FlagAsChanged();
-                    CalendarFeature.ObtainWdtForCurrentServer();
-                }
-            }
-
-            public Size MainWindowSize
-            {
-                get { return mainWindowSize; }
-                set
-                {
-                    mainWindowSize = value;
-                    CalendarFeature.FlagAsChanged();
-                }
-            }
-        }
-
         [JsonProperty]
-        readonly CalendarSettings settings;
+        bool useWurmTimeForDisplay;
+        [JsonProperty]
+        bool soundWarning;
+        [JsonProperty]
+        Guid soundId;
+        [JsonProperty]
+        bool popupWarning;
+        [JsonProperty(IsReference = false)]
+        string[] trackedSeasons;
+        [JsonProperty]
+        string serverName;
+        [JsonProperty]
+        Size mainWindowSize;
 
         readonly WurmSeasonsManager seasonsManager;
 
@@ -319,11 +229,17 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
             if (seasonsManager == null) throw new ArgumentNullException("seasonsManager");
             this.wurmApi = wurmApi;
             this.logger = logger;
-            this.updateLoop = updateLoop;
             this.soundEngine = soundEngine;
             this.trayPopups = trayPopups;
             this.seasonsManager = seasonsManager;
-            settings = new CalendarSettings();
+
+            useWurmTimeForDisplay = false;
+            soundWarning = false;
+            soundId = Guid.Empty;
+            popupWarning = false;
+            trackedSeasons = new string[0];
+            serverName = "";
+            mainWindowSize = new System.Drawing.Size(487, 414);
 
             updateLoop.Updated += (sender, args) =>
             {
@@ -333,6 +249,82 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
             seasonsManager.DataChanged += SeasonsManagerOnDataChanged;
         }
 
+        public bool UseWurmTimeForDisplay
+        {
+            get { return useWurmTimeForDisplay; }
+            set
+            {
+                useWurmTimeForDisplay = value;
+                FlagAsChanged();
+            }
+        }
+
+        public bool SoundWarning
+        {
+            get { return soundWarning; }
+            set
+            {
+                soundWarning = value;
+                FlagAsChanged();
+            }
+        }
+
+        public Guid SoundId
+        {
+            get { return soundId; }
+            set
+            {
+                soundId = value;
+                FlagAsChanged();
+            }
+        }
+
+        public ISoundResource Sound
+        {
+            get { return soundEngine.GetSoundById(soundId); }
+        }
+
+        public bool PopupWarning
+        {
+            get { return popupWarning; }
+            set
+            {
+                popupWarning = value;
+                FlagAsChanged();
+            }
+        }
+
+        public string[] TrackedSeasons
+        {
+            get { return trackedSeasons; }
+            set
+            {
+                trackedSeasons = value;
+                FlagAsChanged();
+            }
+        }
+
+        public string ServerName
+        {
+            get { return serverName; }
+            set
+            {
+                serverName = value;
+                FlagAsChanged();
+                ObtainWdtForCurrentServer();
+            }
+        }
+
+        public Size MainWindowSize
+        {
+            get { return mainWindowSize; }
+            set
+            {
+                mainWindowSize = value;
+                FlagAsChanged();
+            }
+        }
+
         void SeasonsManagerOnDataChanged(object sender, EventArgs eventArgs)
         {
             ReInitSeasonData();
@@ -340,10 +332,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
 
         protected override void OnPersistentDataLoaded()
         {
-            Settings.CalendarFeature = this;
-
             CalendarUI = new FormCalendar(this, wurmApi, logger, soundEngine);
-            CalendarUI.UpdateTrackedSeasonsList(settings.TrackedSeasons);
+            CalendarUI.UpdateTrackedSeasonsList(TrackedSeasons);
 
             ReInitSeasonData();
 
@@ -379,11 +369,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
 
         #endregion
 
-        public CalendarSettings Settings
-        {
-            get { return settings; }
-        }
-
         internal void ReInitSeasonData()
         {
             WurmSeasonOutput.Clear();
@@ -407,9 +392,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
             {
                 while (true)
                 {
-                    if (!String.IsNullOrEmpty(settings.ServerName))
+                    if (!String.IsNullOrEmpty(ServerName))
                     {
-                        var server = wurmApi.Servers.GetByName(new ServerName(settings.ServerName));
+                        var server = wurmApi.Servers.GetByName(new ServerName(ServerName));
                         var result = await server.TryGetCurrentTimeAsync();
                         if (result != null)
                         {
@@ -424,7 +409,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
             }
             catch (Exception exception)
             {
-                logger.Error(exception, "Error for server name: " + (settings.ServerName ?? "NULL"));
+                logger.Error(exception, "Error for server name: " + (ServerName ?? "NULL"));
             }
             finally
             {
@@ -432,28 +417,28 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
             }
         }
 
-        List<KeyValuePair<string, DateTime>> PopupQueue = new List<KeyValuePair<string, DateTime>>();
+        readonly List<KeyValuePair<string, DateTime>> popupQueue = new List<KeyValuePair<string, DateTime>>();
         bool popupScheduled = false;
 
         public void UpdateOutputList()
         {
-            if (settings.PopupWarning || settings.SoundWarning || CalendarUI.Visible)
+            if (PopupWarning || SoundWarning || CalendarUI.Visible)
             {
                 foreach (WurmSeasonOutputItem item in WurmSeasonOutput)
                 {
                     item.Update(cachedWDT);
                     if (item.ShouldNotifyUser())
                     {
-                        if (item.IsItemTracked(settings.TrackedSeasons))
+                        if (item.IsItemTracked(TrackedSeasons))
                         {
-                            if (settings.SoundWarning)
+                            if (SoundWarning)
                             {
                                 TriggerSoundWarning();
                                 item.UserNotified();
                             }
-                            if (settings.PopupWarning)
+                            if (PopupWarning)
                             {
-                                PopupQueue.Add(new KeyValuePair<string, DateTime>(item.GetSeasonName(), item.GetSeasonEndDate()));
+                                popupQueue.Add(new KeyValuePair<string, DateTime>(item.GetSeasonName(), item.GetSeasonEndDate()));
                                 popupScheduled = true;
                                 item.UserNotified();
                             }
@@ -463,12 +448,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
                 if (CalendarUI.Visible)
                 {
                     WurmSeasonOutput.Sort();
-                    CalendarUI.UpdateSeasonOutput(WurmSeasonOutput, settings.UseWurmTimeForDisplay);
+                    CalendarUI.UpdateSeasonOutput(WurmSeasonOutput, UseWurmTimeForDisplay);
                 }
                 if (popupScheduled)
                 {
                     string output = "";
-                    foreach (var item in PopupQueue)
+                    foreach (var item in popupQueue)
                     {
                         //var endsAt = item.Value.ToString("dd-MM-yyyy hh:mm");
                         TimeSpan endsIn = item.Value - DateTime.Now;
@@ -476,31 +461,31 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
                     }
                     TriggerPopupWarning(output);
                     popupScheduled = false;
-                    PopupQueue.Clear();
+                    popupQueue.Clear();
                 }
             }
         }
 
         public void ChooseTrackedSeasons()
         {
-            var trackedSeasons = settings.TrackedSeasons;
+            var seasons = TrackedSeasons;
 
             FormChooseSeasons seasonsDialog = new FormChooseSeasons(
-                seasonsManager.AllNotDisabled.Select(x => x.SeasonName).Distinct().ToArray(), trackedSeasons);
+                seasonsManager.AllNotDisabled.Select(x => x.SeasonName).Distinct().ToArray(), seasons);
             seasonsDialog.ShowDialog();
             var newTrackedSeasons = new List<string>();
             foreach (var item in seasonsDialog.checkedListBox1.CheckedItems)
             {
                 newTrackedSeasons.Add(item.ToString());
             }
-            settings.TrackedSeasons = newTrackedSeasons.ToArray();
+            TrackedSeasons = newTrackedSeasons.ToArray();
 
-            CalendarUI.UpdateTrackedSeasonsList(settings.TrackedSeasons);
+            CalendarUI.UpdateTrackedSeasonsList(TrackedSeasons);
         }
 
         void TriggerSoundWarning()
         {
-            soundEngine.PlayOneShot(settings.SoundId);
+            soundEngine.PlayOneShot(SoundId);
         }
 
         void TriggerPopupWarning(string text)

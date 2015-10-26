@@ -1,0 +1,67 @@
+﻿## Introduction
+#
+# use this file to add or disable certain events from triggering queue sound
+# every event is evaluated separately by Sound Notify and events are already stripped of timestamp
+# example lines as they are processed by Sound Notify:
+#
+# You start to push the oven.
+# You stop pushing.
+# 
+# This file will extend hardcoded list of events. You can use it to add new conditions and disable existing ones.
+# For the list of current conditions check the LogQueueParseHelper.cs under this link:
+# https://github.com/PeterAldur/WurmAssistant2/blob/master/WurmAssistant2/Modules/SoundNotify/Notifier/LogQueueParseHelper.cs
+#
+## Modding HOW-TO
+#
+# Simply add a sentence under one of the groups below, one sentence per line.
+# Sentence should contain text from single log event and is CASE SENSITIVE!
+# examples:
+# 
+# +ACTION_START
+# You begin reading Old Dusty Tome of Engineering
+#
+# +ACTION_START_CONTAINS
+# creating I-win button
+# 
+# +ACTION_END_CONTAINS
+# created I-lose button instead
+# 
+#
+# If you want to disable a certain hardcoded sentence, prefix it with =DISABLE
+# example:
+#
+# +ACTION_FALSEND
+# =DISABLE A high guard tower
+# =DISABLE A tool for
+#
+#
+# You will need to restart wurm assistant for these changes to take effect
+#
+##
+
+
+# if an event starts with these, it informs Sound Notify that action has started
++ACTION_START
+
+# below is analogous to ACTION_START, 
+# with the exception that it searches for this sentence in entire event line
+# and not just at the beginning
++ACTION_START_CONTAINS
+
+# if an event starts with these, it informs Sound Notify this is actually not start of an action
++ACTION_FALSTART
+
+# if an event starts with these, it informs Sound Notify that action has finished 
++ACTION_END
+
+# below is analogous to ACTION_END, 
+# with the exception that it searches for this sentence in entire event line
+# and not just at the beginning
++ACTION_END_CONTAINS
+
+# if an event starts with these, it informs Sound Notify this is actually not an end of action
++ACTION_FALSEND
+
+# this is analogous to ActionFalsEnd, with the exception that
+# these will be checked against previous log line parsed by Sound Notify
++ACTION_FALSEND_LAST_EVENT

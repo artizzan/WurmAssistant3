@@ -45,6 +45,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
             get { return soundHandle.Volume; }
             set { soundHandle.Volume = value; }
         }
+
+        public bool IsNullSound { get { return false; } }
     }
 
     class PlayingSoundHandleNullObject : IPlayingSoundHandle
@@ -66,5 +68,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
         public bool IsFinished { get { return true; } }
         public bool IsPaused { get; private set; }
         public float CurrentVolume { get; set; }
+        public bool IsNullSound { get { return true; } }
     }
 }

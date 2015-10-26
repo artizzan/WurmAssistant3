@@ -8,7 +8,6 @@ using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.Profiling.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers;
@@ -161,7 +160,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                     FlagAsChanged();
                 }
 
-                //init timers here!
                 InitTimers(ActiveTimerDefinitions);
 
                 layoutControl.EnableAddingTimers();
@@ -185,13 +183,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
 
         internal void AddNewTimer()
         {
-            // test
-            //MeditationTimer timer = new MeditationTimer();
-            //timer.Initialize(this, Player, "Meditation", ServerInfo.ServerGroup.Freedom);
-            //WurmTimers.Add(timer);
-            // get list of all available timers
             var availableTimers = timerDefinitions.GetDefinitionsOfUnusedTimers(ActiveTimerDefinitions);
-            // choose some
+            
             TimersChoiceForm ui = new TimersChoiceForm(availableTimers, timersFeature.GetModuleUi());
             if (ui.ShowDialogCenteredOnForm(timersFeature.GetModuleUi()) == System.Windows.Forms.DialogResult.OK)
             {
@@ -239,10 +232,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                     ActiveTimerDefinitions.Add(timerDefinition);
                     FlagAsChanged();
                 }
-                catch (InvalidOperationException)
+                catch (Exception exception)
                 {
-                    //bugfix: tried to initialize timer that didn't exist any more
                     ActiveTimerDefinitions.Remove(timerDefinition);
+                    logger.Error(exception, "Error at InitTimers for timer " + timerDefinition.ToDebugString());
                     FlagAsChanged();
                 }
             }
@@ -261,14 +254,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             }
         }
 
-        internal void RegisterNewControlTimer(TimerDisplayView ControlTimer)
+        internal void RegisterNewControlTimer(TimerDisplayView timerView)
         {
-            layoutControl.RegisterNewTimerDisplay(ControlTimer);
+            layoutControl.RegisterNewTimerDisplay(timerView);
         }
 
-        internal void UnregisterControlTimer(TimerDisplayView ControlTimer)
+        internal void UnregisterControlTimer(TimerDisplayView timerView)
         {
-            layoutControl.UnregisterTimerDisplay(ControlTimer);
+            layoutControl.UnregisterTimerDisplay(timerView);
         }
 
         internal void Update()

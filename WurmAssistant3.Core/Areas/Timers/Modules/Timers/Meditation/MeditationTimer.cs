@@ -6,7 +6,6 @@ using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters.Skills;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.Profiling.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers;

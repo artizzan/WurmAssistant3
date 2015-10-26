@@ -7,10 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AldursLab.WurmAssistant3.Core.WinForms;
 
 namespace AldursLab.WurmAssistant3.Core.Root.Views
 {
-    public partial class UniversalTextDisplayView : Form
+    public partial class UniversalTextDisplayView : ExtendedForm
     {
         public UniversalTextDisplayView()
         {

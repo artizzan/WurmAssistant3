@@ -44,6 +44,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Ninject-3.2.0.0-release-mono-4.0\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="ObjectListView">
+      <HintPath>..\lib\ObjectListView\ObjectListView.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -123,7 +126,123 @@
     <Compile Include="Areas\Persistence\Views\DeserializationErrorResolverView.Designer.cs">
       <DependentUpon>DeserializationErrorResolverView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Profiling\Modules\Profiler.cs" />
+    <Compile Include="Areas\Triggers\Data\ActiveTriggers.cs" />
+    <Compile Include="Areas\Triggers\Data\TriggerData.cs" />
+    <Compile Include="Areas\Triggers\Data\TriggerKind.cs" />
+    <Compile Include="Areas\Triggers\Modules\ActionQueueParsing\Condition.cs" />
+    <Compile Include="Areas\Triggers\Contracts\ActionQueueParsing\ConditionKind.cs" />
+    <Compile Include="Areas\Triggers\Modules\ActionQueueParsing\ConditionsManager.cs" />
+    <Compile Include="Areas\Triggers\Contracts\ActionQueueParsing\IActionQueueConditions.cs" />
+    <Compile Include="Areas\Triggers\Contracts\ActionQueueParsing\IActionQueueParsingCondition.cs" />
+    <Compile Include="Areas\Triggers\Contracts\ActionQueueParsing\MatchingKind.cs" />
+    <Compile Include="Areas\Triggers\Modules\TriggersManager\ActionQueueTrigger.cs" />
+    <Compile Include="Areas\Triggers\Modules\TriggersManager\ITrigger.cs" />
+    <Compile Include="Areas\Triggers\Modules\TriggersManager\RegexTrigger.cs" />
+    <Compile Include="Areas\Triggers\Modules\TriggersManager\SimpleConditionTriggerBase.cs" />
+    <Compile Include="Areas\Triggers\Modules\TriggersManager\SimpleTrigger.cs" />
+    <Compile Include="Areas\Triggers\Modules\TriggersManager\TriggerAbstract.cs" />
+    <Compile Include="Areas\Triggers\Modules\TriggersManager\TriggerBase.cs" />
+    <Compile Include="Areas\Triggers\Modules\TriggersManager\TriggerException.cs" />
+    <Compile Include="Areas\Triggers\Views\ActionQueueParsing\EditGui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\ActionQueueParsing\EditGui.Designer.cs">
+      <DependentUpon>EditGui.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\EditTrigger.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\EditTrigger.Designer.cs">
+      <DependentUpon>EditTrigger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\FormChoosePlayer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\FormChoosePlayer.Designer.cs">
+      <DependentUpon>FormChoosePlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\FormTriggersConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\FormTriggersConfig.Designer.cs">
+      <DependentUpon>FormTriggersConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\FormTriggersMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\FormTriggersMain.Designer.cs">
+      <DependentUpon>FormTriggersMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Modules\TriggersFeature.cs" />
+    <Compile Include="Areas\Triggers\Views\Notifiers\ChooseNotifierType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\Notifiers\ChooseNotifierType.Designer.cs">
+      <DependentUpon>ChooseNotifierType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Modules\Notifiers\INotifier.cs" />
+    <Compile Include="Areas\Triggers\Views\Notifiers\MessageConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\Notifiers\MessageConfig.Designer.cs">
+      <DependentUpon>MessageConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Modules\Notifiers\NotifierAbstract.cs" />
+    <Compile Include="Areas\Triggers\Modules\Notifiers\NotifierBase.cs" />
+    <Compile Include="Areas\Triggers\Modules\Notifiers\NotifierException.cs" />
+    <Compile Include="Areas\Triggers\Views\Notifiers\PopupConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\Notifiers\PopupConfig.Designer.cs">
+      <DependentUpon>PopupConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Modules\Notifiers\PopupNotifier.cs" />
+    <Compile Include="Areas\Triggers\Views\Notifiers\SoundConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\Notifiers\SoundConfig.Designer.cs">
+      <DependentUpon>SoundConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Modules\Notifiers\SoundNotifier.cs" />
+    <Compile Include="Areas\Triggers\Modules\TriggerManager.cs" />
+    <Compile Include="Areas\Triggers\Views\TriggersManager\ActionQueueTriggerConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\ActionQueueTriggerConfig.Designer.cs">
+      <DependentUpon>ActionQueueTriggerConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\RegexTriggerConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\RegexTriggerConfig.Designer.cs">
+      <DependentUpon>RegexTriggerConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\SimpleConditionTriggerBaseConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\SimpleConditionTriggerBaseConfig.Designer.cs">
+      <DependentUpon>SimpleConditionTriggerBaseConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\TriggerBaseConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\TriggerBaseConfig.Designer.cs">
+      <DependentUpon>TriggerBaseConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\TriggerChoice.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\TriggerChoice.Designer.cs">
+      <DependentUpon>TriggerChoice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\UcPlayerTriggersController.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\UcPlayerTriggersController.Designer.cs">
+      <DependentUpon>UcPlayerTriggersController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\TriggersSetup.cs" />
+    <Compile Include="Profiling\Profiler.cs" />
     <Compile Include="Areas\SoundEngine\Contracts\ISoundEngine.cs" />
     <Compile Include="Areas\SoundEngine\Contracts\IPlayingSoundHandle.cs" />
     <Compile Include="Areas\SoundEngine\Contracts\ISoundResource.cs" />
@@ -262,7 +381,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Areas\TrayPopups\Modules\PopupManager.cs" />
-    <Compile Include="Areas\TrayPopups\Modules\PopupMessage.cs" />
+    <Compile Include="Areas\TrayPopups\Contracts\PopupMessage.cs" />
     <Compile Include="Areas\TrayPopups\Modules\TrayPopups.cs" />
     <Compile Include="Areas\TrayPopups\Resources\TrayPopupsResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -374,10 +493,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Root\CoreBootstrapper.cs" />
     <Compile Include="ReflectionRootAnchor.cs" />
-    <Compile Include="Root\Views\UniversalTextDisplayView.cs">
+    <Compile Include="WinForms\Reusables\UniversalTextDisplayView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Root\Views\UniversalTextDisplayView.Designer.cs">
+    <Compile Include="WinForms\Reusables\UniversalTextDisplayView.Designer.cs">
       <DependentUpon>UniversalTextDisplayView.cs</DependentUpon>
     </Compile>
     <Compile Include="WinForms\LabelAutowrap.cs">
@@ -422,7 +541,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Granger\" />
-    <Folder Include="Areas\Triggers\" />
+    <Folder Include="Root\Views\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AldursLab\Lab\Essentials\Essentials.csproj">
@@ -538,6 +657,51 @@
     <EmbeddedResource Include="Areas\TrayPopups\Views\FormPopupContainer.resx">
       <DependentUpon>FormPopupContainer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\ActionQueueParsing\EditGui.resx">
+      <DependentUpon>EditGui.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\EditTrigger.resx">
+      <DependentUpon>EditTrigger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\FormChoosePlayer.resx">
+      <DependentUpon>FormChoosePlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\FormTriggersConfig.resx">
+      <DependentUpon>FormTriggersConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\FormTriggersMain.resx">
+      <DependentUpon>FormTriggersMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\Notifiers\ChooseNotifierType.resx">
+      <DependentUpon>ChooseNotifierType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\Notifiers\MessageConfig.resx">
+      <DependentUpon>MessageConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\Notifiers\PopupConfig.resx">
+      <DependentUpon>PopupConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\Notifiers\SoundConfig.resx">
+      <DependentUpon>SoundConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\TriggersManager\ActionQueueTriggerConfig.resx">
+      <DependentUpon>ActionQueueTriggerConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\TriggersManager\RegexTriggerConfig.resx">
+      <DependentUpon>RegexTriggerConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\TriggersManager\SimpleConditionTriggerBaseConfig.resx">
+      <DependentUpon>SimpleConditionTriggerBaseConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\TriggersManager\TriggerBaseConfig.resx">
+      <DependentUpon>TriggerBaseConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\TriggersManager\TriggerChoice.resx">
+      <DependentUpon>TriggerChoice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\TriggersManager\UcPlayerTriggersController.resx">
+      <DependentUpon>UcPlayerTriggersController.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -548,7 +712,7 @@
     <EmbeddedResource Include="Areas\WurmApi\Views\ValidationResultView.resx">
       <DependentUpon>ValidationResultView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Root\Views\UniversalTextDisplayView.resx">
+    <EmbeddedResource Include="WinForms\Reusables\UniversalTextDisplayView.resx">
       <DependentUpon>UniversalTextDisplayView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinForms\TimeSpanInput.resx">
@@ -565,6 +729,7 @@
     <Content Include="ikpMP3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\ActionQueueModdingHelp.txt" />
     <Content Include="Resources\beer.png" />
     <Content Include="Resources\close_icon.gif" />
     <Content Include="Resources\DeleteRed.png" />
@@ -576,6 +741,9 @@
     <Content Include="Resources\lampsFlow.png" />
     <None Include="Resources\LogSearcherIcon.png" />
     <Content Include="Resources\paypal_donate.png" />
+    <Content Include="Resources\QueueSoundMod.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\SoundDisabled.png" />
     <Content Include="Resources\SoundDisabledSmall.png" />
     <Content Include="Resources\SoundEnabled.png" />
@@ -584,6 +752,7 @@
     <None Include="Resources\TimersIcon.png" />
     <None Include="Resources\SoundManagerIcon.png" />
     <Content Include="Resources\transp_placeholder.png" />
+    <None Include="Resources\triggersicon.png" />
     <Content Include="Resources\WurmAssistantIcon.ico" />
     <Content Include="Resources\WurmAssistantIcon.png" />
     <Content Include="Resources\WurmAssistantImage.bmp" />

@@ -68,7 +68,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
 
         public IPlayingSoundHandle PlayOneShot(ISoundResource soundResource)
         {
-            return PlayOneShot(soundResource.Id);
+            return PlayOneShot(soundResource != null ? soundResource.Id : Guid.Empty);
         }
 
         public IPlayingSoundHandle PlayOneShot(Guid soundId)

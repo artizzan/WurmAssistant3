@@ -12,5 +12,6 @@
         bool IsFinished { get; }
         bool IsPaused { get; }
         float CurrentVolume { get; set; }
+        bool IsNullSound { get; }
     }
 }

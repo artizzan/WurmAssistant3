@@ -17,12 +17,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
 {
     public partial class FormCalendar : ExtendedForm
     {
-        CalendarFeature ParentModule;
+        readonly CalendarFeature parentModule;
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
         readonly ISoundEngine soundEngine;
 
-        bool _WindowInitCompleted = false;
+        readonly bool windowInitCompleted = false;
         bool serverListCreated = false;
 
 
@@ -33,32 +33,34 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
             if (soundEngine == null) throw new ArgumentNullException("soundEngine");
-            InitializeComponent();
-            this.ParentModule = parentModule;
+            this.parentModule = parentModule;
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.soundEngine = soundEngine;
 
-            this.Size = ParentModule.Settings.MainWindowSize;
-            radioButtonWurmTime.Checked = ParentModule.Settings.UseWurmTimeForDisplay;
-            radioButtonRealTime.Checked = !ParentModule.Settings.UseWurmTimeForDisplay;
-            checkBoxSoundWarning.Checked = ParentModule.Settings.SoundWarning;
-            checkBoxPopupWarning.Checked = ParentModule.Settings.PopupWarning;
-            textBoxChosenSound.Text = ParentModule.Settings.Sound.Name;
+            InitializeComponent();
+
+            this.Size = this.parentModule.MainWindowSize;
+            radioButtonWurmTime.Checked = this.parentModule.UseWurmTimeForDisplay;
+            radioButtonRealTime.Checked = !this.parentModule.UseWurmTimeForDisplay;
+            checkBoxSoundWarning.Checked = this.parentModule.SoundWarning;
+            checkBoxPopupWarning.Checked = this.parentModule.PopupWarning;
+            textBoxChosenSound.Text = this.parentModule.Sound.Name;
 
             CreateServerListAsync();
-            _WindowInitCompleted = true;
+            windowInitCompleted = true;
         }
 
         private async void CreateServerListAsync()
         {
             try
             {
-                string[] allServers = wurmApi.Servers.All.Select(server => server.ServerName.Original).ToArray(); 
+                var allServers =
+                    wurmApi.Servers.All.Select(server => server.ServerName.Original).Cast<object>().ToArray();
                 comboBoxChooseServer.Items.AddRange(allServers);
                 serverListCreated = true;
                 comboBoxChooseServer.Enabled = true;
-                comboBoxChooseServer.Text = ParentModule.Settings.ServerName;
+                comboBoxChooseServer.Text = parentModule.ServerName;
             }
             catch (Exception _e)
             {
@@ -68,7 +70,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
 
         private void comboBoxChooseServer_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ParentModule.Settings.ServerName = comboBoxChooseServer.Text;
+            parentModule.ServerName = comboBoxChooseServer.Text;
         }
 
         public void UpdateSeasonOutput(List<CalendarFeature.WurmSeasonOutputItem> outputList, bool wurmTime)
@@ -85,7 +87,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             //wurm date debug
             try
             {
-                if (serverListCreated) textBoxWurmDate.Text = ParentModule.cachedWDT.ToString();
+                if (serverListCreated) textBoxWurmDate.Text = parentModule.cachedWDT.ToString();
             }
             catch
             {
@@ -97,7 +99,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
         {
             if (radioButtonWurmTime.Checked)
             {
-                ParentModule.Settings.UseWurmTimeForDisplay = true;
+                parentModule.UseWurmTimeForDisplay = true;
                 labelDisplayTimeMode.Text = "Showing times as wurm time";
             }
         }
@@ -106,14 +108,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
         {
             if (radioButtonRealTime.Checked)
             {
-                ParentModule.Settings.UseWurmTimeForDisplay = false;
+                parentModule.UseWurmTimeForDisplay = false;
                 labelDisplayTimeMode.Text = "Showing times as real time";
             }
         }
 
         private void buttonChooseSeasons_Click(object sender, EventArgs e)
         {
-            ParentModule.ChooseTrackedSeasons();
+            parentModule.ChooseTrackedSeasons();
         }
 
         public void UpdateTrackedSeasonsList(string[] trackedSeasons)
@@ -136,7 +138,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             var result = soundEngine.ChooseSound(this);
             if (result.ActionResult == ActionResult.Ok)
             {
-                ParentModule.Settings.SoundId = result.SoundResource.Id;
+                parentModule.SoundId = result.SoundResource.Id;
                 textBoxChosenSound.Text = result.SoundResource.Name;
             }
 
@@ -144,18 +146,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
 
         private void buttonClearSound_Click(object sender, EventArgs e)
         {
-            ParentModule.Settings.SoundId = Guid.Empty;
-            textBoxChosenSound.Text = ParentModule.Settings.Sound.Name;
+            parentModule.SoundId = Guid.Empty;
+            textBoxChosenSound.Text = parentModule.Sound.Name;
         }
 
         private void checkBoxSoundWarning_CheckedChanged(object sender, EventArgs e)
         {
-            ParentModule.Settings.SoundWarning = checkBoxSoundWarning.Checked;
+            parentModule.SoundWarning = checkBoxSoundWarning.Checked;
         }
 
         private void checkBoxPopupWarning_CheckedChanged(object sender, EventArgs e)
         {
-            ParentModule.Settings.PopupWarning = checkBoxPopupWarning.Checked;
+            parentModule.PopupWarning = checkBoxPopupWarning.Checked;
         }
 
         private void FormCalendar_FormClosing(object sender, FormClosingEventArgs e)
@@ -184,16 +186,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
 
         private void buttonModSeasonList_Click(object sender, EventArgs e)
         {
-            ParentModule.ModifySeasons();
+            parentModule.ModifySeasons();
         }
 
         private void FormCalendar_Resize(object sender, EventArgs e)
         {
             try
             {
-                if (_WindowInitCompleted)
+                if (windowInitCompleted)
                 {
-                    ParentModule.Settings.MainWindowSize = this.Size;
+                    parentModule.MainWindowSize = this.Size;
                 }
             }
             catch (Exception _e)
