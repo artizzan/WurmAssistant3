@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.Advisor.Default;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Granger
@@ -17,6 +18,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger
             kernel.Bind<IFeature>().To<GrangerFeature>().InSingletonScope().Named("Granger");
             kernel.Bind<GrangerSettings>().ToSelf().InSingletonScope();
             kernel.Bind<DefaultBreedingEvaluatorOptions>().ToSelf().InSingletonScope();
+            kernel.Bind<GrangerSimpleDb>().ToSelf().InSingletonScope();
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
 using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Config.Modules
