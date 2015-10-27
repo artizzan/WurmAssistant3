@@ -26,5 +26,11 @@ namespace AldursLab.WurmAssistant3.Core.Root.Contracts
         Platform Platform { get; }
 
         event EventHandler<EventArgs> HostClosing;
+
+        /// <summary>
+        /// Called after HostClosing. 
+        /// Note: This is used for persistent object saving and should not be used otherwise.
+        /// </summary>
+        event EventHandler<EventArgs> LateHostClosing;
     }
 }

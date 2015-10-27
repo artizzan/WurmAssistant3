@@ -37,8 +37,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Features.Modules
             foreach (var f in features)
             {
                 var feature = f;
-                // this class controls context menu, because it is on MainForm, which isn't really resolved via DI and it's just a mess
-                // consider: redesign
                 systemTrayContextMenu.AddMenuItem(f.Name, () => feature.Show(), f.Icon);
             }
         }

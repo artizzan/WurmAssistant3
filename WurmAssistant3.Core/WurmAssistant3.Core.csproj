@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <NuGetPackageImportStamp>17662937</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,6 +37,12 @@
       <HintPath>..\packages\Caliburn.Micro.Core.2.0.2\lib\net45\Caliburn.Micro.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DbLinq">
+      <HintPath>..\lib\DbLinq\DbLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="DbLinq.Sqlite">
+      <HintPath>..\lib\DbLinq\DbLinq.Sqlite.dll</HintPath>
+    </Reference>
     <Reference Include="irrKlang.NET4, Version=1.0.5235.17346, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\irrKlang-32bit-1.5.0\irrKlang-1.5.0\dotnet-4\irrKlang.NET4.dll</HintPath>
@@ -49,6 +56,15 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.SQLite, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\DbLinq\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\DbLinq\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -117,6 +133,145 @@
     </Compile>
     <Compile Include="Areas\Features\Views\FeatureView.Designer.cs">
       <DependentUpon>FeatureView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\GrangerSetup.cs" />
+    <Compile Include="Areas\Granger\Legacy\Advisor\BreedingAdvisor.cs" />
+    <Compile Include="Areas\Granger\Legacy\Advisor\BreedingEvaluator.cs" />
+    <Compile Include="Areas\Granger\Legacy\Advisor\Default\BreedingEvaluatorDefaultConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\Advisor\Default\BreedingEvaluatorDefaultConfig.Designer.cs">
+      <DependentUpon>BreedingEvaluatorDefaultConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\Advisor\Default\ColorWeight.cs" />
+    <Compile Include="Areas\Granger\Legacy\Advisor\Default\DefaultBreedingEvaluator.cs" />
+    <Compile Include="Areas\Granger\Legacy\Advisor\Default\DefaultBreedingEvaluatorOptions.cs" />
+    <Compile Include="Areas\Granger\Legacy\Advisor\Disabled\DisabledBreedingEvaluator.cs" />
+    <Compile Include="Areas\Granger\Legacy\DBlayer\GrangerContext.cs" />
+    <Compile Include="Areas\Granger\Legacy\DBlayer\HerdEntity.cs" />
+    <Compile Include="Areas\Granger\Legacy\DBlayer\HorseEntity.cs" />
+    <Compile Include="Areas\Granger\Legacy\DBlayer\Schema.cs" />
+    <Compile Include="Areas\Granger\Legacy\DBlayer\TraitValueEntity.cs" />
+    <Compile Include="Areas\Granger\Legacy\Enums.cs" />
+    <Compile Include="Areas\Granger\Legacy\Exceptions.cs" />
+    <Compile Include="Areas\Granger\Legacy\FormChooseHerd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormChooseHerd.Designer.cs">
+      <DependentUpon>FormChooseHerd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormChoosePlayers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormChoosePlayers.Designer.cs">
+      <DependentUpon>FormChoosePlayers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormEditComments.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormEditComments.Designer.cs">
+      <DependentUpon>FormEditComments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormGrangerGeneralOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormGrangerGeneralOptions.Designer.cs">
+      <DependentUpon>FormGrangerGeneralOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormGrangerImportExport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormGrangerImportExport.Designer.cs">
+      <DependentUpon>FormGrangerImportExport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormGrangerMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormGrangerMain.Designer.cs">
+      <DependentUpon>FormGrangerMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormGrangerNewInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormGrangerNewInfo.Designer.cs">
+      <DependentUpon>FormGrangerNewInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormGrangerOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormGrangerOptions.Designer.cs">
+      <DependentUpon>FormGrangerOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormHerdMerge.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormHerdMerge.Designer.cs">
+      <DependentUpon>FormHerdMerge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormHerdName.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\FormHerdName.Designer.cs">
+      <DependentUpon>FormHerdName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\GrangerSettings.cs" />
+    <Compile Include="Areas\Granger\Legacy\Horse.cs" />
+    <Compile Include="Areas\Granger\Legacy\HorseEdit\FormHorseViewEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\HorseEdit\FormHorseViewEdit.Designer.cs">
+      <DependentUpon>FormHorseViewEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\HorseEdit\HorseViewEditOpType.cs" />
+    <Compile Include="Areas\Granger\Legacy\HorseTrait.cs" />
+    <Compile Include="Areas\Granger\Legacy\ImportExport.cs" />
+    <Compile Include="Areas\Granger\Legacy\LogFeedManager\GrangerDebugLogger.cs" />
+    <Compile Include="Areas\Granger\Legacy\LogFeedManager\GrangerHelpers.cs" />
+    <Compile Include="Areas\Granger\Legacy\LogFeedManager\HorseProcessor.cs" />
+    <Compile Include="Areas\Granger\Legacy\LogFeedManager\HorseUpdatesManager.cs" />
+    <Compile Include="Areas\Granger\Legacy\LogFeedManager\LogFeedManager.cs" />
+    <Compile Include="Areas\Granger\Legacy\LogFeedManager\PlayerManager.cs" />
+    <Compile Include="Areas\Granger\Legacy\LogFeedManager\WurmEventParser.cs" />
+    <Compile Include="Areas\Granger\Legacy\GrangerFeature.cs" />
+    <Compile Include="Areas\Granger\Legacy\TraitViewManager.cs" />
+    <Compile Include="Areas\Granger\Legacy\UCGrangerHerdList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\UCGrangerHerdList.Designer.cs">
+      <DependentUpon>UCGrangerHerdList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\UCGrangerHorseList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\UCGrangerHorseList.Designer.cs">
+      <DependentUpon>UCGrangerHorseList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\UCGrangerTraitView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\UCGrangerTraitView.Designer.cs">
+      <DependentUpon>UCGrangerTraitView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\Utils\Sqlitehelper.cs" />
+    <Compile Include="Areas\Granger\Legacy\ValuePreset\FormEditValuePresets.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\ValuePreset\FormEditValuePresets.Designer.cs">
+      <DependentUpon>FormEditValuePresets.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\ValuePreset\FormEditValuePresetsNewNameDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\ValuePreset\FormEditValuePresetsNewNameDialog.Designer.cs">
+      <DependentUpon>FormEditValuePresetsNewNameDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\ValuePreset\TraitValuator.cs" />
+    <Compile Include="Areas\Granger\Legacy\ValuePreset\TraitValueMap.cs" />
+    <Compile Include="Areas\Granger\Legacy\ValuePreset\UCGrangerTraitValueEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Legacy\ValuePreset\UCGrangerTraitValueEdit.Designer.cs">
+      <DependentUpon>UCGrangerTraitValueEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\MainMenu\MainMenuSetup.cs" />
     <Compile Include="Areas\Persistence\Components\JsonExtendedErrorHandlingStrategy.cs" />
@@ -540,7 +695,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Granger\" />
     <Folder Include="Root\Views\" />
   </ItemGroup>
   <ItemGroup>
@@ -583,6 +737,60 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Features\Views\FeatureView.resx">
       <DependentUpon>FeatureView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\Advisor\Default\BreedingEvaluatorDefaultConfig.resx">
+      <DependentUpon>BreedingEvaluatorDefaultConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\FormChooseHerd.resx">
+      <DependentUpon>FormChooseHerd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\FormChoosePlayers.resx">
+      <DependentUpon>FormChoosePlayers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\FormEditComments.resx">
+      <DependentUpon>FormEditComments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\FormGrangerGeneralOptions.resx">
+      <DependentUpon>FormGrangerGeneralOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\FormGrangerImportExport.resx">
+      <DependentUpon>FormGrangerImportExport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\FormGrangerMain.resx">
+      <DependentUpon>FormGrangerMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\FormGrangerNewInfo.resx">
+      <DependentUpon>FormGrangerNewInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\FormGrangerOptions.resx">
+      <DependentUpon>FormGrangerOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\FormHerdMerge.resx">
+      <DependentUpon>FormHerdMerge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\FormHerdName.resx">
+      <DependentUpon>FormHerdName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\HorseEdit\FormHorseViewEdit.resx">
+      <DependentUpon>FormHorseViewEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\UCGrangerHerdList.resx">
+      <DependentUpon>UCGrangerHerdList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\UCGrangerHorseList.resx">
+      <DependentUpon>UCGrangerHorseList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\UCGrangerTraitView.resx">
+      <DependentUpon>UCGrangerTraitView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\ValuePreset\FormEditValuePresets.resx">
+      <DependentUpon>FormEditValuePresets.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\ValuePreset\FormEditValuePresetsNewNameDialog.resx">
+      <DependentUpon>FormEditValuePresetsNewNameDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Legacy\ValuePreset\UCGrangerTraitValueEdit.resx">
+      <DependentUpon>UCGrangerTraitValueEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Logging\Views\LogView.resx">
       <DependentUpon>LogView.cs</DependentUpon>
@@ -727,6 +935,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ikpMP3.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x64\SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\ActionQueueModdingHelp.txt" />

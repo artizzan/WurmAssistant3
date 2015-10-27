@@ -81,7 +81,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence
                 throw new ArgumentNullException("persistenceManager");
             this.persistenceManager = persistenceManager;
             updateLoop.Updated += UpdateLoopOnUpdated;
-            hostEnvironment.HostClosing += HostEnvironmentOnHostClosing;
+            hostEnvironment.LateHostClosing += HostEnvironmentOnHostClosing;
         }
 
         void UpdateLoopOnUpdated(object sender, EventArgs eventArgs)

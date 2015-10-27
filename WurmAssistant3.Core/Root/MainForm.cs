@@ -6,6 +6,7 @@ using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Views;
+using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Views;
 using AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
@@ -123,6 +124,8 @@ namespace AldursLab.WurmAssistant3.Core.Root
             }
         }
 
+        readonly ILogger logger;
+
         readonly CoreBootstrapper bootstrapper;
         bool bootstrapped = false;
 
@@ -147,6 +150,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
 
             bootstrapper = new CoreBootstrapper(this);
             wurmAssistantConfig = bootstrapper.WurmAssistantConfig;
+            logger = bootstrapper.GetCoreLogger();
             InitTimer.Enabled = true;
 
             trayManager.SetupTrayContextMenu();
@@ -253,6 +257,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
         }
 
         public event EventHandler<EventArgs> HostClosing;
+        public event EventHandler<EventArgs> LateHostClosing;
 
         bool AppClosing { get; set; }
         bool IHostEnvironment.Closing
@@ -278,10 +283,21 @@ namespace AldursLab.WurmAssistant3.Core.Root
         {
             if (AppClosing) return;
 
-            AppClosing = true;
-            var handler = HostClosing;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
+            try
+            {
+                AppClosing = true;
+                var handler = HostClosing;
+                if (handler != null)
+                    handler(this, EventArgs.Empty);
+            }
+            catch (Exception exception)
+            {
+                logger.Error(exception, "HostClosing event has thrown an unhandled exception!");
+            }
+            finally
+            {
+                OnLateHostClosing();
+            }
         }
 
         private void MainView_FormClosed(object sender, FormClosedEventArgs e)
@@ -311,6 +327,12 @@ namespace AldursLab.WurmAssistant3.Core.Root
                 }
             }
             trayManager.HandleMinimizeToTray();
+        }
+
+        protected virtual void OnLateHostClosing()
+        {
+            var handler = LateHostClosing;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
     }
 }

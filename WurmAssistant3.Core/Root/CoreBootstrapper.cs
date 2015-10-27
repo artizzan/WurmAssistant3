@@ -10,6 +10,7 @@ using AldursLab.WurmAssistant3.Core.Areas.Config.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.Features;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Views;
+using AldursLab.WurmAssistant3.Core.Areas.Granger;
 using AldursLab.WurmAssistant3.Core.Areas.Logging;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Views;
@@ -113,6 +114,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
             CalendarSetup.BindCalendar(kernel);
             TimersSetup.BindTimers(kernel);
             TriggersSetup.BindTriggers(kernel);
+            GrangerSetup.BindGranger(kernel);
 
             FeaturesSetup.BindFeaturesManager(kernel);
             MainMenuSetup.BindMenu(kernel);
@@ -160,6 +162,11 @@ namespace AldursLab.WurmAssistant3.Core.Root
             {
                 dataDirectory.Unlock();
             }
+        }
+
+        public ILogger GetCoreLogger()
+        {
+            return kernel.Get<ILogger>();
         }
     }
 }
