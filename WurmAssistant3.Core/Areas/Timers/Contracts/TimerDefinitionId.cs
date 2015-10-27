@@ -8,9 +8,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts
     [JsonObject(MemberSerialization.OptIn)]
     public class TimerDefinitionId : IEquatable<TimerDefinitionId>
     {
-        public TimerDefinitionId([NotNull] string name, ServerGroupId serverGroupId)
+        public TimerDefinitionId([NotNull] string name, [NotNull] string serverGroupId)
         {
             if (name == null) throw new ArgumentNullException("name");
+            if (serverGroupId == null) throw new ArgumentNullException("serverGroupId");
             Name = name;
             ServerGroupId = serverGroupId;
         }
@@ -19,13 +20,28 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts
         public string Name { get; private set; }
 
         [JsonProperty("serverGroupId")]
-        public ServerGroupId ServerGroupId { get; private set; }
+        public string ServerGroupId { get; private set; }
+
+        public override string ToString()
+        {
+            return Name + " (" + ServerGroupId.ToString() + ")";
+        }
+
+        public string ToCompactString()
+        {
+            return string.Format("{0} ({1})", Name, ServerGroupId.ToString().Substring(0, 1));
+        }
+
+        public string ToPersistentIdString()
+        {
+            return Name + "-" + ServerGroupId;
+        }
 
         public bool Equals(TimerDefinitionId other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return String.Equals(Name, (string) other.Name) && ServerGroupId == other.ServerGroupId;
+            return string.Equals(Name, other.Name) && string.Equals(ServerGroupId, other.ServerGroupId);
         }
 
         public override bool Equals(object obj)
@@ -40,7 +56,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts
         {
             unchecked
             {
-                return (Name.GetHashCode()*397) ^ (int) ServerGroupId;
+                return ((Name != null ? Name.GetHashCode() : 0)*397) ^ (ServerGroupId != null ? ServerGroupId.GetHashCode() : 0);
             }
         }
 
@@ -52,21 +68,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts
         public static bool operator !=(TimerDefinitionId left, TimerDefinitionId right)
         {
             return !Equals(left, right);
-        }
-
-        public override string ToString()
-        {
-            return Name + " (" + ServerGroupId.ToString() + ")";
-        }
-
-        public string ToCompactString()
-        {
-            return string.Format("{0} ({1})", Name, ServerGroupId.ToString().Substring(0, 1));
-        }
-
-        public string ToPersistentIdString()
-        {
-            return Name + "-" + (int)ServerGroupId;
         }
     }
 }

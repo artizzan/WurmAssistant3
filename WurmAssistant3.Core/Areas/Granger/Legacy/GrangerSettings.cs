@@ -196,48 +196,48 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
         // quickly fixed until refactoring
         [JsonProperty] readonly List<AhSkillInfo> ahSkillInfos;
 
-        public bool TryGetAHSkill([NotNull] string player, ServerGroupId serverGroupId, out float result)
+        public bool TryGetAHSkill([NotNull] string player, ServerGroup serverGroup, out float result)
         {
             if (player == null) throw new ArgumentNullException("player");
-            var info = GetSkillInfo(player, serverGroupId);
+            var info = GetSkillInfo(player, serverGroup);
             result = info.SkillValue;
             return result != 0f;
         }
 
-        public void SetAHSkill([NotNull] string player, ServerGroupId serverGroupId, float AHValue)
+        public void SetAHSkill([NotNull] string player, ServerGroup serverGroup, float AHValue)
         {
             if (player == null) throw new ArgumentNullException("player");
-            var info = GetSkillInfo(player, serverGroupId);
+            var info = GetSkillInfo(player, serverGroup);
             info.SkillValue = AHValue;
             FlagAsChanged();
         }
 
-        public bool TryGetAHCheckDate([NotNull] string player, ServerGroupId serverGroupId, out DateTime result)
+        public bool TryGetAHCheckDate([NotNull] string player, ServerGroup serverGroup, out DateTime result)
         {
             if (player == null) throw new ArgumentNullException("player");
-            var info = GetSkillInfo(player, serverGroupId);
+            var info = GetSkillInfo(player, serverGroup);
             result = info.LastCheck;
             return result != DateTime.MinValue;
         }
 
-        public void SetAHCheckDate([NotNull] string player, ServerGroupId serverGroupId, DateTime AHValue)
+        public void SetAHCheckDate([NotNull] string player, ServerGroup serverGroup, DateTime AHValue)
         {
             if (player == null) throw new ArgumentNullException("player");
-            var info = GetSkillInfo(player, serverGroupId);
+            var info = GetSkillInfo(player, serverGroup);
             info.LastCheck = AHValue;
             FlagAsChanged();
         }
 
-        AhSkillInfo GetSkillInfo(string player, ServerGroupId serverGroupId)
+        AhSkillInfo GetSkillInfo(string player, ServerGroup serverGroup)
         {
             var info =
                 ahSkillInfos.FirstOrDefault(
                     x =>
                         x.PlayerName.ToUpperInvariant().Equals(player.ToUpperInvariant())
-                        && x.ServerGroupId == serverGroupId);
+                        && x.ServerGroupId == serverGroup.ServerGroupId);
             if (info == null)
             {
-                info = new AhSkillInfo(serverGroupId, player, 0, DateTime.MinValue);
+                info = new AhSkillInfo(serverGroup.ServerGroupId, player, 0, DateTime.MinValue);
                 ahSkillInfos.Add(info);
             }
             return info;

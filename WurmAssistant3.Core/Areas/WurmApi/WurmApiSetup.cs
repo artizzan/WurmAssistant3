@@ -59,6 +59,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.WurmApi
             IWurmApiEventMarshaller eventMarshaller = kernel.Get<IWurmApiEventMarshaller>();
 
             IWurmClientInstallDirectory wurmInstallDirectory = kernel.Get<IWurmClientInstallDirectory>();
+            ServerInfoManager serverInfoManager = kernel.Get<ServerInfoManager>();
 
             WurmApiConfig wurmApiConfig;
             if (config.RunningPlatform != Platform.Unknown)
@@ -66,8 +67,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.WurmApi
                 wurmApiConfig = new WurmApiConfig
                 {
                     Platform = config.RunningPlatform,
-                    ClearAllCaches = config.DropAllWurmApiCachesToggle
+                    ClearAllCaches = config.DropAllWurmApiCachesToggle,
                 };
+                serverInfoManager.UpdateWurmApiConfigDictionary(wurmApiConfig.ServerInfoMap);
             }
             else
             {

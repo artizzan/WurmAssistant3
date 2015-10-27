@@ -28,7 +28,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
             set
             {
                 _ahFreedomSkill = value;
-                _parentModule.Settings.SetAHSkill(PlayerName, ServerGroupId.Freedom, value);
+                _parentModule.Settings.SetAHSkill(PlayerName, new ServerGroup(ServerGroup.FreedomId), value);
             }
         }
 
@@ -39,7 +39,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
             set
             {
                 _ahEpicSkill = value;
-                _parentModule.Settings.SetAHSkill(PlayerName, ServerGroupId.Epic, value);
+                _parentModule.Settings.SetAHSkill(PlayerName, new ServerGroup(ServerGroup.EpicId), value);
             }
         }
 
@@ -95,13 +95,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
         /// </summary>
         /// <param name="serverGroup"></param>
         /// <returns></returns>
-        public float? GetAhSkill(ServerGroupId serverGroup)
+        public float? GetAhSkill(ServerGroup serverGroup)
         {
             if (!_skillObtainedFlag) return null;
 
-            if (serverGroup == ServerGroupId.Epic)
+            if (serverGroup.ServerGroupId == ServerGroup.EpicId)
                 return AhEpicSkill;
-            else if (serverGroup == ServerGroupId.Freedom)
+            else if (serverGroup.ServerGroupId == ServerGroup.FreedomId)
                 return AhFreedomSkill;
             else
             {
@@ -110,12 +110,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
             }
         }
 
-        public ServerGroupId GetCurrentServerGroup()
+        public ServerGroup GetCurrentServerGroup()
         {
             //todo: this is a blocking call, refactor?
             var currentServer = character.TryGetCurrentServer();
-            if (currentServer == null) return ServerGroupId.Unknown;
-            return currentServer.ServerGroup.ServerGroupId;
+            if (currentServer == null) return new ServerGroup(ServerGroup.UnknownId);
+            return currentServer.ServerGroup;
         }
 
         public event EventHandler<LogFeedManager.SkillObtainedEventArgs> SkillObtained;
@@ -147,11 +147,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
             //todo: blocking calls...
             AhFreedomSkill = character.Skills.TryGetCurrentSkillLevel(
                 "Animal husbandry",
-                ServerGroupId.Freedom,
+                new ServerGroup(ServerGroup.FreedomId),
                 TimeSpan.FromDays(90)) ?? 0;
             AhEpicSkill = character.Skills.TryGetCurrentSkillLevel(
                 "Animal husbandry",
-                ServerGroupId.Epic,
+                new ServerGroup(ServerGroup.EpicId),
                 TimeSpan.FromDays(90)) ?? 0;
         }
 

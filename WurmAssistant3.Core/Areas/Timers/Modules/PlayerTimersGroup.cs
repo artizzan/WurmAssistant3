@@ -29,9 +29,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         [JsonProperty]
         HashSet<TimerDefinition> activeTimerDefinitions = new HashSet<TimerDefinition>();
         [JsonProperty] //saved to figure, on which servers is current character, in each group
-        Dictionary<ServerGroupId, string> groupToServerMap = new Dictionary<ServerGroupId, string>();
+        Dictionary<string, string> groupIdToServerMap = new Dictionary<string, string>();
         [JsonProperty] //saved to remember last group this char was on
-        ServerGroupId currentServerGroup = ServerGroupId.Unknown;
+        string currentServerGroupId = ServerGroup.UnknownId;
         [JsonProperty] //saved to make init searches quicker
         DateTime lastServerGroupCheckup = DateTime.MinValue;
         [JsonProperty] //last server this char was on
@@ -70,8 +70,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
 
             if (activeTimerDefinitions == null)
                 activeTimerDefinitions = new HashSet<TimerDefinition>();
-            if (groupToServerMap == null)
-                groupToServerMap = new Dictionary<ServerGroupId, string>();
+            if (groupIdToServerMap == null)
+                groupIdToServerMap = new Dictionary<string, string>();
 
             layoutControl = new PlayerLayoutView(this);
             this.timersFeature.RegisterTimersGroup(layoutControl);
@@ -84,16 +84,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             set { activeTimerDefinitions = value; FlagAsChanged(); }
         }
 
-        public Dictionary<ServerGroupId, string> GroupToServerMap
+        public Dictionary<string, string> GroupIdToServerMap
         {
-            get { return groupToServerMap; }
-            set { groupToServerMap = value; FlagAsChanged(); }
+            get { return groupIdToServerMap; }
+            set { groupIdToServerMap = value; FlagAsChanged(); }
         }
 
-        public ServerGroupId CurrentServerGroup
+        public string CurrentServerGroupId
         {
-            get { return currentServerGroup; }
-            set { currentServerGroup = value; FlagAsChanged(); }
+            get { return currentServerGroupId; }
+            set { currentServerGroupId = value; FlagAsChanged(); }
         }
 
         public DateTime LastServerGroupCheckup
@@ -127,7 +127,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                     CharacterName = CharacterName,
                 });
 
-                ServerGroupId mostRecentGroup = ServerGroupId.Unknown;
+                string mostRecentGroup = ServerGroup.UnknownId;
                 string mostRecentServerName = null;
 
                 foreach (var line in lgs)
@@ -135,12 +135,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                     if (line.Content.Contains("You are on"))
                     {
                         string serverName;
-                        ServerGroupId group = GetServerGroupFromLine(line.Content, out serverName);
-                        if (group != ServerGroupId.Unknown)
+                        string group = GetServerGroupFromLine(line.Content, out serverName);
+                        if (group != ServerGroup.UnknownId)
                         {
                             if (!String.IsNullOrEmpty(serverName))
                             {
-                                GroupToServerMap[group] = serverName;
+                                GroupIdToServerMap[group] = serverName;
                                 FlagAsChanged();
                             }
                             mostRecentServerName = serverName;
@@ -151,9 +151,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                     }
                 }
 
-                if (mostRecentGroup != ServerGroupId.Unknown && !currentServerGroupFound)
+                if (mostRecentGroup != ServerGroup.UnknownId && !currentServerGroupFound)
                 {
-                    CurrentServerGroup = mostRecentGroup;
+                    CurrentServerGroupId = mostRecentGroup;
                     if (mostRecentServerName != null) CurrentServerName = mostRecentServerName;
                     currentServerGroupFound = true;
                     LastServerGroupCheckup = DateTime.Now;
@@ -280,7 +280,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         /// <param name="line"></param>
         /// <param name="serverName"></param>
         /// <returns></returns>
-        ServerGroupId GetServerGroupFromLine(string line, out string serverName)
+        string GetServerGroupFromLine(string line, out string serverName)
         {
             //[15:14:17] 75 other players are online. You are on Exodus (774 totally in Wurm).
             Match match = Regex.Match(line, @"\d+ other players are online.*\. You are on (.+) \(", RegexOptions.Compiled);
@@ -298,14 +298,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                         serverName,
                         line ?? "NULL LINE"));
                     serverName = null;
-                    return ServerGroupId.Unknown;
+                    return ServerGroup.UnknownId;
                 }
             }
             else
             {
                 serverName = null;
                 logger.Error("could not match server name from line: " + (line ?? "NULL"));
-                return ServerGroupId.Unknown;
+                return ServerGroup.UnknownId;
             }
         }
 
@@ -322,14 +322,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                         if (entry.Content.Contains("You are on"))
                         {
                             string serverName;
-                            ServerGroupId group = GetServerGroupFromLine(entry.Content, out serverName);
-                            if (group != ServerGroupId.Unknown)
+                            string group = GetServerGroupFromLine(entry.Content, out serverName);
+                            if (group != ServerGroup.UnknownId)
                             {
                                 if (!String.IsNullOrEmpty(serverName))
                                 {
-                                    GroupToServerMap[group] = serverName;
+                                    GroupIdToServerMap[group] = serverName;
                                 }
-                                CurrentServerGroup = group;
+                                CurrentServerGroupId = group;
                                 currentServerGroupFound = true;
                                 LastServerGroupCheckup = DateTime.Now;
                                 CurrentServerName = serverName;
@@ -345,7 +345,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
 
                 foreach (var timer in wurmTimers)
                 {
-                    if (timer.InitCompleted && CurrentServerGroup == timer.TimerDefinitionId.ServerGroupId)
+                    if (timer.InitCompleted && CurrentServerGroupId == timer.TimerDefinitionId.ServerGroupId)
                     {
                         foreach (var entry in e.WurmLogEntries)
                         {
@@ -359,7 +359,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                 //call all timers with wurmskill handler
                 foreach (var timer in wurmTimers)
                 {
-                    if (timer.InitCompleted && CurrentServerGroup == timer.TimerDefinitionId.ServerGroupId)
+                    if (timer.InitCompleted && CurrentServerGroupId == timer.TimerDefinitionId.ServerGroupId)
                     {
                         foreach (var line in e.WurmLogEntries)
                         {
@@ -371,7 +371,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
 
             foreach (var timer in wurmTimers)
             {
-                if (timer.InitCompleted && CurrentServerGroup == timer.TimerDefinitionId.ServerGroupId)
+                if (timer.InitCompleted && CurrentServerGroupId == timer.TimerDefinitionId.ServerGroupId)
                 {
                     timer.HandleAnyLogLine(e);
                 }

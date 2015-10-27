@@ -172,8 +172,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         /// <returns></returns>
         protected async Task<float> TryGetSkillFromLogHistoryAsync(string skillName, TimeSpan since)
         {
-            float skillLevel = await character.Skills.TryGetCurrentSkillLevelAsync(skillName, TimerDefinitionId.ServerGroupId, since)
-                               ?? 0;
+            float skillLevel =
+                await
+                    character.Skills.TryGetCurrentSkillLevelAsync(skillName,
+                        new ServerGroup(TimerDefinitionId.ServerGroupId),
+                        since) ?? 0;
 
             return skillLevel;
         }
@@ -191,7 +194,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             float skillLevel =
                 await
                     character.Skills.TryGetCurrentSkillLevelAsync(skillName,
-                        TimerDefinitionId.ServerGroupId,
+                        new ServerGroup(TimerDefinitionId.ServerGroupId),
                         HowLongAgoWasThisDate(lastCheckup)) ?? 0;
 
             return skillLevel;
@@ -209,7 +212,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             var results = await character.Logs.ScanLogsServerGroupRestrictedAsync(DateTime.Now - since,
                 DateTime.Now,
                 logType,
-                TimerDefinitionId.ServerGroupId);
+                new ServerGroup(TimerDefinitionId.ServerGroupId));
 
             var result = results.ToList();
             return result;
@@ -308,7 +311,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             {
                 DateTime currentTime = DateTime.Now;
 
-                var server = WurmApi.Servers.GetByName(playerTimersGroup.GroupToServerMap[TimerDefinitionId.ServerGroupId]);
+                var server = WurmApi.Servers.GetByName(playerTimersGroup.GroupIdToServerMap[TimerDefinitionId.ServerGroupId]);
 
                 var serverUptime = await server.TryGetCurrentUptimeAsync();
                 if (serverUptime != null)

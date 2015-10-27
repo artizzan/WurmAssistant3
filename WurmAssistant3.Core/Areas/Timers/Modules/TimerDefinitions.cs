@@ -73,7 +73,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         void BuildDefaultDescriptor([NotNull] string nameId, RuntimeTypeId typeId)
         {
             if (nameId == null) throw new ArgumentNullException("nameId");
-            foreach (var serverGroup in wurmApi.ServerGroups.All)
+            foreach (var serverGroup in wurmApi.ServerGroups.AllKnown)
             {
                 TimerDefinition timertype = new TimerDefinition(new TimerDefinitionId(nameId, serverGroup.ServerGroupId), typeId);
                 defaultDefinitions.Add(timertype);
@@ -86,7 +86,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         {
             if (nameId == null) throw new ArgumentNullException("nameId");
             if (config == null) throw new ArgumentNullException("config");
-            foreach (var serverGroup in wurmApi.ServerGroups.All)
+            foreach (var serverGroup in wurmApi.ServerGroups.AllKnown)
             {
                 TimerDefinition timertype = new TimerDefinition(
                     new TimerDefinitionId(nameId, serverGroup.ServerGroupId),

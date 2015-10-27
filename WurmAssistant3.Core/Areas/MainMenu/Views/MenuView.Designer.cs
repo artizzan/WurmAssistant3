@@ -32,14 +32,15 @@
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.officialForumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wikiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.roadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pMAldurToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contributorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donatorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.roadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewRoadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pMAldurToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modifyServersListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,7 +60,8 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.changeSettingsToolStripMenuItem});
+            this.changeSettingsToolStripMenuItem,
+            this.modifyServersListToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -67,7 +69,7 @@
             // changeSettingsToolStripMenuItem
             // 
             this.changeSettingsToolStripMenuItem.Name = "changeSettingsToolStripMenuItem";
-            this.changeSettingsToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.changeSettingsToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.changeSettingsToolStripMenuItem.Text = "Change settings";
             this.changeSettingsToolStripMenuItem.Click += new System.EventHandler(this.changeSettingsToolStripMenuItem_Click);
             // 
@@ -81,6 +83,27 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
+            // officialForumToolStripMenuItem
+            // 
+            this.officialForumToolStripMenuItem.Name = "officialForumToolStripMenuItem";
+            this.officialForumToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.officialForumToolStripMenuItem.Text = "Official Forum";
+            this.officialForumToolStripMenuItem.Click += new System.EventHandler(this.officialForumToolStripMenuItem_Click);
+            // 
+            // wikiToolStripMenuItem
+            // 
+            this.wikiToolStripMenuItem.Name = "wikiToolStripMenuItem";
+            this.wikiToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.wikiToolStripMenuItem.Text = "Wiki";
+            this.wikiToolStripMenuItem.Click += new System.EventHandler(this.wikiToolStripMenuItem_Click);
+            // 
+            // pMAldurToolStripMenuItem
+            // 
+            this.pMAldurToolStripMenuItem.Name = "pMAldurToolStripMenuItem";
+            this.pMAldurToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.pMAldurToolStripMenuItem.Text = "PM Aldur";
+            this.pMAldurToolStripMenuItem.Click += new System.EventHandler(this.pMAldurToolStripMenuItem_Click);
+            // 
             // creditsToolStripMenuItem
             // 
             this.creditsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -90,19 +113,19 @@
             this.creditsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.creditsToolStripMenuItem.Text = "Credits";
             // 
-            // officialForumToolStripMenuItem
+            // contributorsToolStripMenuItem
             // 
-            this.officialForumToolStripMenuItem.Name = "officialForumToolStripMenuItem";
-            this.officialForumToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.officialForumToolStripMenuItem.Text = "Official Forum";
-            this.officialForumToolStripMenuItem.Click += new System.EventHandler(this.officialForumToolStripMenuItem_Click);
+            this.contributorsToolStripMenuItem.Name = "contributorsToolStripMenuItem";
+            this.contributorsToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.contributorsToolStripMenuItem.Text = "Contributors";
+            this.contributorsToolStripMenuItem.Click += new System.EventHandler(this.contributorsToolStripMenuItem_Click);
             // 
-            // wikiToolStripMenuItem
+            // donatorsToolStripMenuItem
             // 
-            this.wikiToolStripMenuItem.Name = "wikiToolStripMenuItem";
-            this.wikiToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.wikiToolStripMenuItem.Text = "Wiki";
-            this.wikiToolStripMenuItem.Click += new System.EventHandler(this.wikiToolStripMenuItem_Click);
+            this.donatorsToolStripMenuItem.Name = "donatorsToolStripMenuItem";
+            this.donatorsToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.donatorsToolStripMenuItem.Text = "Donators";
+            this.donatorsToolStripMenuItem.Click += new System.EventHandler(this.donatorsToolStripMenuItem_Click);
             // 
             // roadmapToolStripMenuItem
             // 
@@ -112,33 +135,19 @@
             this.roadmapToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
             this.roadmapToolStripMenuItem.Text = "Roadmap";
             // 
-            // contributorsToolStripMenuItem
-            // 
-            this.contributorsToolStripMenuItem.Name = "contributorsToolStripMenuItem";
-            this.contributorsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.contributorsToolStripMenuItem.Text = "Contributors";
-            this.contributorsToolStripMenuItem.Click += new System.EventHandler(this.contributorsToolStripMenuItem_Click);
-            // 
-            // donatorsToolStripMenuItem
-            // 
-            this.donatorsToolStripMenuItem.Name = "donatorsToolStripMenuItem";
-            this.donatorsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.donatorsToolStripMenuItem.Text = "Donators";
-            this.donatorsToolStripMenuItem.Click += new System.EventHandler(this.donatorsToolStripMenuItem_Click);
-            // 
             // viewRoadmapToolStripMenuItem
             // 
             this.viewRoadmapToolStripMenuItem.Name = "viewRoadmapToolStripMenuItem";
-            this.viewRoadmapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.viewRoadmapToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.viewRoadmapToolStripMenuItem.Text = "View roadmap";
             this.viewRoadmapToolStripMenuItem.Click += new System.EventHandler(this.viewRoadmapToolStripMenuItem_Click);
             // 
-            // pMAldurToolStripMenuItem
+            // modifyServersListToolStripMenuItem
             // 
-            this.pMAldurToolStripMenuItem.Name = "pMAldurToolStripMenuItem";
-            this.pMAldurToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.pMAldurToolStripMenuItem.Text = "PM Aldur";
-            this.pMAldurToolStripMenuItem.Click += new System.EventHandler(this.pMAldurToolStripMenuItem_Click);
+            this.modifyServersListToolStripMenuItem.Name = "modifyServersListToolStripMenuItem";
+            this.modifyServersListToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.modifyServersListToolStripMenuItem.Text = "Modify servers list";
+            this.modifyServersListToolStripMenuItem.Click += new System.EventHandler(this.modifyServersListToolStripMenuItem_Click);
             // 
             // MenuView
             // 
@@ -168,5 +177,6 @@
         private System.Windows.Forms.ToolStripMenuItem donatorsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem roadmapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewRoadmapToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem modifyServersListToolStripMenuItem;
     }
 }

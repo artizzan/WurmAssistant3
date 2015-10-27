@@ -512,11 +512,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
             }
         }
 
-        private HorseEntity[] GetHorseToUpdate(string horseName, ServerGroupId serverGroup)
+        private HorseEntity[] GetHorseToUpdate(string horseName, ServerGroup serverGroup)
         {
             bool isEpic;
-            if (serverGroup == ServerGroupId.Epic) isEpic = true;
-            else if (serverGroup == ServerGroupId.Freedom) isEpic = false;
+            if (serverGroup.ServerGroupId == ServerGroup.EpicId) isEpic = true;
+            else if (serverGroup.ServerGroupId == ServerGroup.FreedomId) isEpic = false;
             else return new HorseEntity[0];
 
             IEnumerable<HerdEntity> query = _context.Herds;

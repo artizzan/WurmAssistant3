@@ -43,7 +43,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
             public float InspectSkill;
             public bool IsMale;
             public DateTime PregnantUntil = DateTime.MinValue;
-            public ServerGroupId ServerGroup;
+            public ServerGroup ServerGroup;
             public HorseEntity.SecondaryInfoTag SecondaryInfo = HorseEntity.SecondaryInfoTag.None;
         }
 
@@ -341,14 +341,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
                             }
                         }
                         //is new horse server group not within allowed ones?
-                        if (_newHorse.ServerGroup == ServerGroupId.Unknown)
+                        if (_newHorse.ServerGroup.ServerGroupId == ServerGroup.UnknownId)
                         {
                             sanityFail = true;
                             sanityFailReason = "New creature data had unsupported server group: " + _newHorse.ServerGroup;
                         }
                         //if old horse isEpic != new horse isEpic
                         bool oldIsEpic = oldHorse.EpicCurve ?? false;
-                        bool newIsEpic = _newHorse.ServerGroup == ServerGroupId.Epic;
+                        bool newIsEpic = _newHorse.ServerGroup.ServerGroupId == ServerGroup.EpicId;
                         if (oldIsEpic != newIsEpic)
                         {
                             sanityFail = true;
@@ -508,11 +508,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
                 SecondaryInfoTagSetter = newHorse.SecondaryInfo
             };
 
-            newEntity.EpicCurve = newHorse.ServerGroup == ServerGroupId.Epic;
-            if (newHorse.ServerGroup == ServerGroupId.Unknown)
-            {
-                logger.Error("Adding creature with unknown server group, name: "+newHorse.Name);
-            }
+            newEntity.EpicCurve = newHorse.ServerGroup.ServerGroupId == ServerGroup.EpicId;
 
             _context.InsertHorse(newEntity);
             _grangerDebug.Log("successfully inserted creature to db");
@@ -559,7 +555,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
                     _grangerDebug.Log("object asumed to be a creature");
                     var ahSkill = _playerMan.GetAhSkill();
                     var currentGroup = _playerMan.GetCurrentServerGroup();
-                    if (ahSkill != null && currentGroup != ServerGroupId.Unknown)
+                    if (ahSkill != null)
                     {
                         _grangerDebug.Log("building new creature object and moving to processor");
 

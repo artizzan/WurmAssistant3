@@ -116,7 +116,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
     public class AhSkillInfo
     {
         [JsonProperty]
-        readonly ServerGroupId serverGroupId;
+        readonly string serverGroupId;
         [JsonProperty]
         readonly string playerName;
         [JsonProperty]
@@ -124,7 +124,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
         [JsonProperty] 
         DateTime lastCheck;
 
-        public AhSkillInfo(ServerGroupId serverGroupId, string playerName, float skillValue, DateTime lastCheck)
+        public AhSkillInfo(string serverGroupId, string playerName, float skillValue, DateTime lastCheck)
         {
             this.serverGroupId = serverGroupId;
             this.playerName = playerName;
@@ -132,7 +132,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
             this.lastCheck = lastCheck;
         }
 
-        public ServerGroupId ServerGroupId
+        public string ServerGroupId
         {
             get { return serverGroupId; }
         }

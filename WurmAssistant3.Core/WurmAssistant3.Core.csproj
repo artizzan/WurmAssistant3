@@ -114,9 +114,18 @@
     <Compile Include="Areas\Calendar\Views\SeasonsEditView.Designer.cs">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Areas\Config\Contracts\IServersEditorViewFactory.cs" />
     <Compile Include="Areas\Config\Contracts\IWurmAssistantConfig.cs" />
     <Compile Include="Areas\Config\ConfigSetup.cs" />
     <Compile Include="Areas\Config\Contracts\ISettingsEditViewFactory.cs" />
+    <Compile Include="Areas\Config\Modules\ServerInfoManager.cs" />
+    <Compile Include="Areas\Config\Modules\ServerInformation.cs" />
+    <Compile Include="Areas\Config\Views\ServersEditorView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Config\Views\ServersEditorView.Designer.cs">
+      <DependentUpon>ServersEditorView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\Config\Views\SettingsEditView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -728,6 +737,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Calendar\Views\SeasonsEditView.resx">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Config\Views\ServersEditorView.resx">
+      <DependentUpon>ServersEditorView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Config\Views\SettingsEditView.resx">
       <DependentUpon>SettingsEditView.cs</DependentUpon>

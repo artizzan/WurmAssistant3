@@ -22,6 +22,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config
         {
             kernel.Bind<ISettingsEditViewFactory>().ToFactory();
             kernel.Bind<SettingsEditView>().ToSelf();
+
+            kernel.Bind<IServersEditorViewFactory>().ToFactory();
+            kernel.Bind<ServerInfoManager>().ToSelf().InSingletonScope();
         }
 
         public static void ConfigureApplication(IKernel kernel)

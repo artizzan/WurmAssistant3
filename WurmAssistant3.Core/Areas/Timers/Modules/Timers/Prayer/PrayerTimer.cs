@@ -75,11 +75,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
                 }
             }
 
-            readonly ServerGroupId serverGroupId;
+            readonly string serverGroupId;
 
             readonly SkillEntryParser skillEntryParser;
 
-            public FavorTimerNotify(PrayerTimer timer, string player, ServerGroupId serverGroupId, ILogger logger,
+            public FavorTimerNotify(PrayerTimer timer, string player, string serverGroupId, ILogger logger,
                 ISoundEngine soundEngine, ITrayPopups trayPopups, [NotNull] SkillEntryParser skillEntryParser)
             {
                 if (skillEntryParser == null)
