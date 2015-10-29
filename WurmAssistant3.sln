@@ -33,6 +33,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmApi.Tests", "WurmApi\Wu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentObjects.Tests", "AldursLab\Lab\PersistentObjects.Tests\PersistentObjects.Tests.csproj", "{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{834E44A1-4276-4102-8F03-2AB1F9B21747}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,5 +110,8 @@ Global
 		{65549F72-59C5-416A-8B71-5757BAE8B35D} = {1038DFDD-F4C9-4DBA-A83F-59CDF1D37EF9}
 		{D5FCD526-1C19-410F-8CE4-2B4C4C5B12CA} = {A2CD4209-4E7D-4F53-AF08-15E8E7DE8324}
 		{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9} = {1038DFDD-F4C9-4DBA-A83F-59CDF1D37EF9}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
