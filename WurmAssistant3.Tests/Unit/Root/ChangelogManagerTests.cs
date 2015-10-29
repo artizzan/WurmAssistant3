@@ -35,7 +35,8 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Root
         public void ParsingResultShouldMatchExpectedOutput()
         {
             var changes = container.Instance.GetNewChanges();
-            Expect(changes, Contains(ExpectedOutput));
+            Expect(changes, Contains(ExpectedOutput1));
+            Expect(changes, Contains(ExpectedOutput2));
         }
 
         [Test]
@@ -43,7 +44,8 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Root
         {
             container.Instance.LastKnownChangeDate = new DateTimeOffset(2015, 9, 29, 21, 18, 39, TimeSpan.FromHours(2));
             var changes = container.Instance.GetNewChanges();
-            Expect(changes, Contains(ExpectedPartialOutput));
+            Expect(changes, Contains(ExpectedPartialOutput1));
+            Expect(changes, Contains(ExpectedPartialOutput2));
         }
 
         void WriteSampleChangelog()
@@ -62,33 +64,27 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Root
             File.AppendAllLines(Path.Combine(tempDir.FullName, fileName), lines, Encoding.UTF8);
         }
 
-        const string ExpectedOutput = @"
-2015-09-30
-By Jack:
-- 
+        const string ExpectedOutput1 = 
+@"By Jack:
 - change six complete
 - change five complete
 By Anna:
-- change four complete|extra
-
-2015-09-29
-By Anna:
+- change four complete|extra";
+        const string ExpectedOutput2 = 
+@"By Anna:
 - change three complete
 - change two complete
 By Jack:
 - change one complete";
 
-        const string ExpectedPartialOutput = @"
-2015-09-30
-By Jack:
-- 
+        const string ExpectedPartialOutput1 = 
+@"By Jack:
 - change six complete
 - change five complete
 By Anna:
-- change four complete|extra
-
-2015-09-29
-By Anna:
+- change four complete|extra";
+        const string ExpectedPartialOutput2 = 
+@"By Anna:
 - change three complete";
     }
 }
