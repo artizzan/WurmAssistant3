@@ -204,7 +204,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         {
             var group = timerGroups.First(x => x.Id == groupId);
             group.Stop();
-            playerTimersGroupsResolver.Unload(group);
+            group.RemoveAllTimers();
+            playerTimersGroupsResolver.UnloadAndDeleteData(group);
             timerGroups.Remove(group);
             currentGroupsIds.Remove(groupId);
 

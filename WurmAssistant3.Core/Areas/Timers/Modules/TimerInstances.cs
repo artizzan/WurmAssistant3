@@ -60,7 +60,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             return (WurmTimer)newTimer;
         }
 
-        public void UnloadTimer([NotNull] WurmTimer timer)
+        public void UnloadAndDeleteTimer([NotNull] WurmTimer timer)
         {
             if (timer == null)
                 throw new ArgumentNullException("timer");

@@ -16,13 +16,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Logging.Views
         readonly ILoggingConfig loggingConfig;
         readonly IProcessStarter processStarter;
         readonly IUserNotifier userNotifier;
+        readonly ISendBugReportViewFactory sendBugReportViewFactory;
 
         private List<string> messages = new List<string>();
 
         bool logChanged = false;
 
         public LogView([NotNull] ILogMessageFlow logMessageFlow, [NotNull] ILoggingConfig loggingConfig,
-            [NotNull] IProcessStarter processStarter, [NotNull] IUserNotifier userNotifier) 
+            [NotNull] IProcessStarter processStarter, [NotNull] IUserNotifier userNotifier,
+            [NotNull] ISendBugReportViewFactory sendBugReportViewFactory) 
         {
             if (logMessageFlow == null)
                 throw new ArgumentNullException("logMessageFlow");
@@ -32,11 +34,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Logging.Views
                 throw new ArgumentNullException("processStarter");
             if (userNotifier == null)
                 throw new ArgumentNullException("userNotifier");
+            if (sendBugReportViewFactory == null) throw new ArgumentNullException("sendBugReportViewFactory");
 
             this.logMessageFlow = logMessageFlow;
             this.loggingConfig = loggingConfig;
             this.processStarter = processStarter;
             this.userNotifier = userNotifier;
+            this.sendBugReportViewFactory = sendBugReportViewFactory;
 
             logMessageFlow.EventLogged += LogMessagePublisherOnEventLogged;
             logMessageFlow.ErrorCountChanged += LogMessagePublisherOnErrorCountChanged;
@@ -158,12 +162,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Logging.Views
 
         private void reportBug_Click(object sender, EventArgs e)
         {
-            userNotifier.NotifyWithMessageBox("Not yet implemented");
-        }
-
-        private void sendFeedback_Click(object sender, EventArgs e)
-        {
-            userNotifier.NotifyWithMessageBox("Not yet implemented");
+            var view = sendBugReportViewFactory.CreateSendBugReportView();
+            var parentForm = FindForm();
+            if (parentForm != null)
+            {
+                view.ShowCenteredOnForm(parentForm);
+            }
+            else
+            {
+                view.Show();
+            }
         }
     }
 }

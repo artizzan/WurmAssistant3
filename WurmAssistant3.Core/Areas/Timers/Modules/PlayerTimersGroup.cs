@@ -69,7 +69,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
 
         readonly List<WurmTimer> timers = new List<WurmTimer>();
 
-        readonly PlayerLayoutView layoutControl;
+        PlayerLayoutView layoutControl;
         readonly TimersFeature timersFeature;
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
@@ -99,18 +99,26 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             this.logger = logger;
             this.timerDefinitions = timerDefinitions;
             this.timerInstances = timerInstances;
-
-            layoutControl = new PlayerLayoutView(this);
-
-            
         }
 
         public void Initialize()
         {
-            this.timersFeature.RegisterTimersGroup(layoutControl);
-            wurmApi.LogsMonitor.Subscribe(CharacterName, LogType.AllLogs, OnNewLogEvents);
-            character = wurmApi.Characters.Get(CharacterName);
-            character.LogInOrCurrentServerPotentiallyChanged += CharacterOnLogInOrCurrentServerPotentiallyChanged;
+            try
+            {
+                layoutControl = new PlayerLayoutView(this);
+                this.timersFeature.RegisterTimersGroup(layoutControl);
+                wurmApi.LogsMonitor.Subscribe(CharacterName, LogType.AllLogs, OnNewLogEvents);
+                character = wurmApi.Characters.Get(CharacterName);
+                character.LogInOrCurrentServerPotentiallyChanged += CharacterOnLogInOrCurrentServerPotentiallyChanged;
+            }
+            catch (Exception)
+            {
+                if (layoutControl != null)
+                {
+                    layoutControl.SetInitializationError();
+                }
+                throw;
+            }
             PerformAsyncInits();
         }
 
@@ -156,6 +164,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             catch (Exception _e)
             {
                 logger.Error(_e, "problem updating current server group");
+                if (layoutControl != null)
+                {
+                    layoutControl.SetInitializationError();
+                }
             }
         }
 
@@ -233,7 +245,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
 
         internal void RemoveTimer(WurmTimer timer)
         {
-            timerInstances.UnloadTimer(timer);
+            timerInstances.UnloadAndDeleteTimer(timer);
             timers.Remove(timer);
 
             var toRemove =
@@ -334,6 +346,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         public override string ToString()
         {
             return string.Format("{0} ({1})", CharacterName, ServerGroupId);
+        }
+
+        public void RemoveAllTimers()
+        {
+            foreach (var wurmTimer in timers.ToArray())
+            {
+                RemoveTimer(wurmTimer);
+            }
         }
     }
 }

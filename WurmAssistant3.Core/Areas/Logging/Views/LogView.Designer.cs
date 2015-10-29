@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.sendFeedback = new System.Windows.Forms.Button();
             this.reportBug = new System.Windows.Forms.Button();
             this.shopAppLogDetailed = new System.Windows.Forms.Button();
             this.logOutput = new System.Windows.Forms.TextBox();
@@ -54,7 +53,6 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.sendFeedback, 4, 0);
             this.tableLayoutPanel1.Controls.Add(this.reportBug, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.shopAppLogDetailed, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.logOutput, 0, 1);
@@ -68,17 +66,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(502, 346);
             this.tableLayoutPanel1.TabIndex = 3;
-            // 
-            // sendFeedback
-            // 
-            this.sendFeedback.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sendFeedback.Location = new System.Drawing.Point(403, 3);
-            this.sendFeedback.Name = "sendFeedback";
-            this.sendFeedback.Size = new System.Drawing.Size(94, 34);
-            this.sendFeedback.TabIndex = 7;
-            this.sendFeedback.Text = "Send feedback";
-            this.sendFeedback.UseVisualStyleBackColor = true;
-            this.sendFeedback.Click += new System.EventHandler(this.sendFeedback_Click);
             // 
             // reportBug
             // 
@@ -160,7 +147,6 @@
         private System.Windows.Forms.TextBox errorCounter;
         private System.Windows.Forms.Button showAppLog;
         private System.Windows.Forms.Button shopAppLogDetailed;
-        private System.Windows.Forms.Button sendFeedback;
         private System.Windows.Forms.Button reportBug;
         private System.Windows.Forms.TextBox logOutput;
     }

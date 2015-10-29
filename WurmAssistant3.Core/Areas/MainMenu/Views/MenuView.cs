@@ -36,35 +36,41 @@ namespace AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views
 
         private void officialForumToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            userNotifier.NotifyWithMessageBox("Not yet implemented");
+            processStarter.StartSafe(
+                "http://forum.wurmonline.com/index.php?/topic/68031-wurm-assistant-enrich-your-wurm-experience/?view=getnewpost");
         }
 
         private void wikiToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            userNotifier.NotifyWithMessageBox("Not yet implemented");
+            processStarter.StartSafe(
+                "http://wurmassistant.wikia.com/wiki/Wurm_Assistant_Wiki");
         }
 
         private void pMAldurToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            userNotifier.NotifyWithMessageBox("Not yet implemented");
+            processStarter.StartSafe(
+                "http://forum.wurmonline.com/index.php?/user/6302-aldur/");
         }
 
         private void contributorsToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            userNotifier.NotifyWithMessageBox("Not yet implemented");
+            processStarter.StartSafe(
+                "http://blog.aldurcraft.com/WurmAssistant/page/Contributors-and-Supporters");
         }
 
         private void donatorsToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            userNotifier.NotifyWithMessageBox("Not yet implemented");
+            processStarter.StartSafe(
+                "http://blog.aldurcraft.com/WurmAssistant/page/Contributors-and-Supporters");
         }
 
         private void viewRoadmapToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            userNotifier.NotifyWithMessageBox("Not yet implemented");
+             processStarter.StartSafe(
+                "https://trello.com/b/FlIPQ7TW/wurm-assistant-3-roadmap");
         }
 
-        private void modifyServersListToolStripMenuItem_Click(object sender, EventArgs e)
+        void modifyServersListToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var view = serversEditorViewFactory.CreateServersEditorView();
             view.ShowDialog();

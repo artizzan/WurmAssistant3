@@ -14,7 +14,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
         public FormChoosePlayers(string[] currentPlayers, IWurmApi wurmApi)
         {
             InitializeComponent();
-            string[] allPlayers = wurmApi.Characters.All.Select(character => character.Name.Capitalized).ToArray();
+            string[] allPlayers = wurmApi.Characters.All.Select(character => character.Name.Capitalized)
+                                         .Union(currentPlayers).Distinct().ToArray();
             foreach (var player in allPlayers)
             {
                 checkedListBoxPlayers.Items.Add(player, currentPlayers.Contains(player));

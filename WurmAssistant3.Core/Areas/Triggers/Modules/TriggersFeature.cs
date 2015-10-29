@@ -68,11 +68,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
         public void AddActiveCharacter(string characterName)
         {
             activeCharacterNames.Add(characterName);
+            FlagAsChanged();
         }
 
         public void RemoveActiveCharacter(string characterName)
         {
             activeCharacterNames.Remove(characterName);
+            FlagAsChanged();
         }
 
         public ICollection<string> GetAllActiveCharacters()
@@ -90,10 +92,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
 
         public void Stop()
         {
-            foreach (var notifier in triggerManagers.Values.ToArray())
-            {
-                notifier.Stop(new object(), new EventArgs());
-            }
+            // do not clean notifiers, they clean themselves on host closing.
         }
 
         public void AddNewNotifier()

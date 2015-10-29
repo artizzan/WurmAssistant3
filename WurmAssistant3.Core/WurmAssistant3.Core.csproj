@@ -267,6 +267,13 @@
     <Compile Include="Areas\Granger\Views\ValuePreset\UCGrangerTraitValueEdit.Designer.cs">
       <DependentUpon>UCGrangerTraitValueEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Root\Contracts\ISendBugReportViewFactory.cs" />
+    <Compile Include="Root\Views\SendBugReportView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Root\Views\SendBugReportView.Designer.cs">
+      <DependentUpon>SendBugReportView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\MainMenu\MainMenuSetup.cs" />
     <Compile Include="Areas\Persistence\Components\JsonExtendedErrorHandlingStrategy.cs" />
     <Compile Include="Areas\Persistence\Views\DeserializationErrorResolverView.cs">
@@ -696,7 +703,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Granger\Contracts\" />
-    <Folder Include="Root\Views\" />
+    <Folder Include="Areas\MainMenu\Contracts\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AldursLab\Lab\Essentials\Essentials.csproj">
@@ -798,6 +805,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Logging\Views\LogView.resx">
       <DependentUpon>LogView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Root\Views\SendBugReportView.resx">
+      <DependentUpon>SendBugReportView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\LogSearcher\Views\LogSearchView.resx">
       <DependentUpon>LogSearchView.cs</DependentUpon>

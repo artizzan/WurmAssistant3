@@ -76,7 +76,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
 
             TriggerListState = new byte[0];
 
-            hostEnvironment.HostClosing += Stop;
+            hostEnvironment.HostClosing += Cleanup;
         }
 
         public void Initialize()
@@ -94,7 +94,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
             controlUi.label1.Text = CharacterName;
             controlUi.buttonMute.Click += ToggleMute;
             controlUi.buttonConfigure.Click += Configure;
-            controlUi.buttonRemove.Click += Stop;
+            controlUi.buttonRemove.Click += StopAndRemove;
 
             wurmApi.LogsMonitor.Subscribe(this.CharacterName, LogType.AllLogs, OnNewLogEvents);
         }
@@ -166,10 +166,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
             ToggleUi();
         }
 
-        public void Stop(object sender, EventArgs e)
+        void Cleanup(object sender, EventArgs e)
+        {
+            wurmApi.LogsMonitor.Unsubscribe(this.CharacterName, OnNewLogEvents);
+            hostEnvironment.HostClosing -= Cleanup;
+
+            controlUi.Dispose();
+            triggersConfigUi.Close();
+        }
+
+        public void StopAndRemove(object sender, EventArgs e)
         {
             wurmApi.LogsMonitor.Unsubscribe(this.CharacterName, OnNewLogEvents);
             TriggersFeature.RemoveManager(this);
+            hostEnvironment.HostClosing -= Cleanup;
 
             controlUi.Dispose();
             triggersConfigUi.Close();

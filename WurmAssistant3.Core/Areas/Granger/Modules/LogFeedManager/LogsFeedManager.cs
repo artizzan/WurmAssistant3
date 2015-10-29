@@ -41,11 +41,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
             this.trayPopups = trayPopups;
         }
 
-        public void RegisterPlayer(string playerName)
+        public void TryRegisterPlayer(string playerName)
         {
             if (!playerManagers.ContainsKey(playerName))
             {
-                playerManagers[playerName] = new PlayerManager(parentModule, context, playerName, wurmApi, logger, trayPopups);
+                try
+                {
+                    playerManagers[playerName] = new PlayerManager(parentModule, context, playerName, wurmApi, logger, trayPopups);
+                }
+                catch (Exception exception)
+                {
+                    logger.Error(exception, "Count not register PlayerManager for player name: " + playerName);
+                }
             }
         }
 
@@ -91,7 +98,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
             {
                 if (!playerManagers.ContainsKey(player))
                 {
-                    RegisterPlayer(player);
+                    TryRegisterPlayer(player);
                 }
             }
 

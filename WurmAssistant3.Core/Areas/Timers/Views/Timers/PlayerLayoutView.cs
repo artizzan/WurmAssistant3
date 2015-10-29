@@ -71,6 +71,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
             this.flowLayoutPanel1.Controls.Remove(ControlTimer);
         }
 
+        internal void SetInitializationError()
+        {
+            this.label1.Text = string.Format("{0} - ERROR!", parentGroup.CharacterName);
+        }
+
         internal void EnableAddingTimers()
         {
             this.label1.Text = string.Format("{0} ({1})", parentGroup.CharacterName, SimplifyServerGroup(parentGroup.ServerGroupId));

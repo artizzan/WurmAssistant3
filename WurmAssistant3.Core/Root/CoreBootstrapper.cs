@@ -26,9 +26,11 @@ using AldursLab.WurmAssistant3.Core.Areas.WurmApi;
 using AldursLab.WurmAssistant3.Core.IoC;
 using AldursLab.WurmAssistant3.Core.Root.Components;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
+using AldursLab.WurmAssistant3.Core.Root.Views;
 using JetBrains.Annotations;
 using Ninject;
 using Ninject.Activation.Strategies;
+using Ninject.Extensions.Factory;
 
 namespace AldursLab.WurmAssistant3.Core.Root
 {
@@ -66,6 +68,9 @@ namespace AldursLab.WurmAssistant3.Core.Root
             kernel.Bind<WaVersion, IWaVersion>().To<WaVersion>().InSingletonScope();
             kernel.Bind<WaExecutionInfoProvider, IWaExecutionInfoProvider>().To<WaExecutionInfoProvider>().InSingletonScope();
             kernel.Bind<ChangelogManager, IChangelogManager>().To<ChangelogManager>().InSingletonScope();
+
+            kernel.Bind<SendBugReportView>().ToSelf();
+            kernel.Bind<ISendBugReportViewFactory>().ToFactory();
 
             LoggingSetup.Setup(kernel);
             mainForm.SetLogView(kernel.Get<LogView>());
