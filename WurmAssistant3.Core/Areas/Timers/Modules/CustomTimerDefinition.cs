@@ -4,10 +4,10 @@ using System.Text.RegularExpressions;
 using AldursLab.WurmApi;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
+namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
 {
     [JsonObject(MemberSerialization.OptIn)] //set of options used to init custom timers behavior
-    public class CustomTimerConfig
+    public class CustomTimerDefinition
     {
         [JsonObject(MemberSerialization.OptIn)]
         public struct Condition
@@ -69,6 +69,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
             }
             else
                 ResetConditions = new Condition[] { cond };
+        }
+
+        public void ClearTriggers()
+        {
+            TriggerConditions = new Condition[0];
         }
     }
 }

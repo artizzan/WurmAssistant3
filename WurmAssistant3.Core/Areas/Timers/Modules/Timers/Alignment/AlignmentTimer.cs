@@ -218,7 +218,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment
         public override void Initialize(PlayerTimersGroup parentGroup, string player, TimerDefinition definition)
         {
             base.Initialize(parentGroup, player, definition);
-            TimerDisplayView.SetCooldown(AlignmentCooldown);
+            View.SetCooldown(AlignmentCooldown);
             MoreOptionsAvailable = true;
 
             PerformAsyncInits();
@@ -289,7 +289,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment
         public override void Update()
         {
             base.Update();
-            if (TimerDisplayView.Visible) TimerDisplayView.UpdateCooldown(DateOfNextAlignment);
+            if (View.Visible)
+            {
+                View.SetCooldown(AlignmentCooldown);
+                View.UpdateCooldown(DateOfNextAlignment);
+            }
         }
 
         public override void OpenMoreOptions(TimerDefaultSettingsForm form)

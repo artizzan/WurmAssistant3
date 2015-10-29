@@ -26,7 +26,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Sermon
         public override void Initialize(PlayerTimersGroup parentGroup, string player, TimerDefinition definition)
         {
             base.Initialize(parentGroup, player, definition);
-            TimerDisplayView.SetCooldown(SermonPreacherCooldown);
+            View.SetCooldown(SermonPreacherCooldown);
 
             PerformAsyncInits();
         }
@@ -70,7 +70,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Sermon
         public override void Update()
         {
             base.Update();
-            if (TimerDisplayView.Visible) TimerDisplayView.UpdateCooldown(DateOfNextSermon);
+            if (View.Visible)
+            {
+                View.SetCooldown(SermonPreacherCooldown);
+                View.UpdateCooldown(DateOfNextSermon);
+            }
         }
 
         public override void HandleNewEventLogLine(LogEntry line)

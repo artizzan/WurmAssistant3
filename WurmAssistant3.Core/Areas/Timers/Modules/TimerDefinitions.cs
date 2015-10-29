@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AldursLab.Essentials.Extensions.DotNet.Collections.Generic;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence.Contracts;
@@ -24,151 +25,81 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
     [PersistentObject("TimersFeature_WurmTimerDescriptors")]
     public class TimerDefinitions : PersistentObjectBase, IInitializable
     {
-        // default timer kinds are hardcoded
-        // custom timers are functionally one kind but are configured by users
-
-        readonly IPersistentObjectResolver persistentObjectResolver;
-        readonly TimerTypes timerTypes;
-        readonly IWurmApi wurmApi;
-
-        readonly HashSet<TimerDefinition> defaultDefinitions = new HashSet<TimerDefinition>();
-
-        [JsonProperty]
-        readonly Dictionary<string, CustomTimerConfig> customTimerOptionsTemplates =
-            new Dictionary<string, CustomTimerConfig>();
-        
         [JsonProperty] 
-        readonly HashSet<TimerDefinition> customDefinitions = new HashSet<TimerDefinition>();
-
-        readonly HashSet<TimerDefinition> allDefinitions = new HashSet<TimerDefinition>();
+        readonly Dictionary<Guid, TimerDefinition> timerDefinitions = new Dictionary<Guid, TimerDefinition>();
 
         public event EventHandler<CustomTimerRemovedEventArgs> CustomTimerRemoved;
 
-        public TimerDefinitions([NotNull] IPersistentObjectResolver persistentObjectResolver,
-            [NotNull] TimerTypes timerTypes, [NotNull] IWurmApi wurmApi)
-        {
-            if (persistentObjectResolver == null) throw new ArgumentNullException("persistentObjectResolver");
-            if (timerTypes == null) throw new ArgumentNullException("timerTypes");
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            this.persistentObjectResolver = persistentObjectResolver;
-            this.timerTypes = timerTypes;
-            this.wurmApi = wurmApi;
-
-            BuildDefaultDescriptor("Meditation", RuntimeTypeId.Meditation);
-            BuildDefaultDescriptor("Path Question", RuntimeTypeId.MeditPath);
-            BuildDefaultDescriptor("Prayer", RuntimeTypeId.Prayer);
-            BuildDefaultDescriptor("Sermon", RuntimeTypeId.Sermon);
-            BuildDefaultDescriptor("Alignment", RuntimeTypeId.Alignment);
-            BuildDefaultDescriptor("Junk Sale", RuntimeTypeId.JunkSale);
-        }
-
         public void Initialize()
         {
-            foreach (var custom in customDefinitions)
+            OverwriteDefaultDefinition(new TimerDefinition(new Guid("a420f74d-4c3c-474a-89ab-477caf501d8c"))
             {
-                allDefinitions.Add(custom);
-            }
-        }
-
-        void BuildDefaultDescriptor([NotNull] string nameId, RuntimeTypeId typeId)
-        {
-            if (nameId == null) throw new ArgumentNullException("nameId");
-            foreach (var serverGroup in wurmApi.ServerGroups.AllKnown)
+                Name = "Meditation",
+                RuntimeTypeId = RuntimeTypeId.Meditation
+            });
+            OverwriteDefaultDefinition(new TimerDefinition(new Guid("eb0df9dd-f91c-4dad-8aa0-44bf2243d2a2"))
             {
-                TimerDefinition timertype = new TimerDefinition(new TimerDefinitionId(nameId, serverGroup.ServerGroupId), typeId);
-                defaultDefinitions.Add(timertype);
-                allDefinitions.Add(timertype);
-            }
-        }
-
-        public void AddCustomTimerDefinition([NotNull] string nameId,
-            [NotNull] CustomTimerConfig config)
-        {
-            if (nameId == null) throw new ArgumentNullException("nameId");
-            if (config == null) throw new ArgumentNullException("config");
-            foreach (var serverGroup in wurmApi.ServerGroups.AllKnown)
+                Name = "Path Question",
+                RuntimeTypeId = RuntimeTypeId.MeditPath
+            });
+            OverwriteDefaultDefinition(new TimerDefinition(new Guid("52caa2c2-fa72-4d57-8887-d06b8b1db898"))
             {
-                TimerDefinition timertype = new TimerDefinition(
-                    new TimerDefinitionId(nameId, serverGroup.ServerGroupId),
-                    RuntimeTypeId.LegacyCustom);
-                customDefinitions.Add(timertype);
-                allDefinitions.Add(timertype);
-                customTimerOptionsTemplates[nameId] = config;
-                FlagAsChanged();
-            }
-        }
-
-        public void RemoveCustomTimerDefinition([NotNull] string nameId)
-        {
-            if (nameId == null) throw new ArgumentNullException("nameId");
-
-            allDefinitions.RemoveWhere(x => x.TimerDefinitionId.Name == nameId);
-            customDefinitions.RemoveWhere(x => x.TimerDefinitionId.Name == nameId);
-            FlagAsChanged();
-
-            try
+                Name = "Prayer",
+                RuntimeTypeId = RuntimeTypeId.Prayer
+            });
+            OverwriteDefaultDefinition(new TimerDefinition(new Guid("d080c694-f1d1-43d9-b1b2-6edf0147fbf3"))
             {
-                OnCustomTimerRemoved(new CustomTimerRemovedEventArgs(nameId));
-            }
-            finally
+                Name = "Sermon",
+                RuntimeTypeId = RuntimeTypeId.Sermon
+            });
+            OverwriteDefaultDefinition(new TimerDefinition(new Guid("6e989db6-d49a-4f1d-956a-a83f4192b058"))
             {
-                customTimerOptionsTemplates.Remove(nameId);
-            }
-        }
-
-        public CustomTimerConfig GetOptionsTemplateForCustomTimer([NotNull] string nameId)
-        {
-            if (nameId == null) throw new ArgumentNullException("nameId");
-            return customTimerOptionsTemplates[nameId];
-        }
-
-        public TimerDefinition FindDefinitionForTimer([NotNull] WurmTimer timer)
-        {
-            if (timer == null) throw new ArgumentNullException("timer");
-            return allDefinitions.First(x => x.TimerDefinitionId == timer.TimerDefinitionId);
-        }
-
-        public HashSet<TimerDefinition> GetDefinitionsOfUnusedTimers(
-            [NotNull] HashSet<TimerDefinition> currentActiveTimers)
-        {
-            if (currentActiveTimers == null) throw new ArgumentNullException("currentActiveTimers");
-            HashSet<TimerDefinition> result = new HashSet<TimerDefinition>();
-            foreach (var item in allDefinitions)
+                Name = "Alignment",
+                RuntimeTypeId = RuntimeTypeId.Alignment
+            });
+            OverwriteDefaultDefinition(new TimerDefinition(new Guid("f1238677-3139-41ba-bbee-3b61186a11ab"))
             {
-                if (!currentActiveTimers.Contains(item)) result.Add(item);
-            }
-            return result;
+                Name = "Junk Sale",
+                RuntimeTypeId = RuntimeTypeId.JunkSale
+            });
         }
 
-        public WurmTimer NewTimerFactory([NotNull] TimerDefinition timerDefinition, [NotNull] string characterName)
+        void OverwriteDefaultDefinition(TimerDefinition timerDefinition)
+        {
+            timerDefinitions[timerDefinition.Id] = timerDefinition;
+        }
+
+        public void AddTimerDefinition([NotNull] TimerDefinition timerDefinition)
         {
             if (timerDefinition == null) throw new ArgumentNullException("timerDefinition");
-            if (characterName == null) throw new ArgumentNullException("characterName");
-            ThrowIfNoDefinition(timerDefinition);
-
-            var persistentId = characterName + "-" + timerDefinition.ToPersistentIdString();
-
-            object newTimer = persistentObjectResolver.Get(persistentId, timerTypes.GetTypeForId(timerDefinition.RuntimeTypeId));
-
-            var timer = newTimer as CustomTimer;
-            if (timer != null)
+            if (timerDefinitions.ContainsKey(timerDefinition.Id))
             {
-                var latestOptionsTemplate = customTimerOptionsTemplates[timerDefinition.TimerDefinitionId.Name];
-                timer.ApplyCustomTimerOptions(latestOptionsTemplate);
+                throw new ApplicationException(string.Format((string) "Timer with id {0} already registered.", timerDefinition.Id));
             }
-            return (WurmTimer)newTimer;
+            timerDefinitions[timerDefinition.Id] = timerDefinition;
+            FlagAsChanged();
         }
 
-        public bool IsNameUnique([NotNull] string nameId)
+        public void AddTimerDefinitionIfNotExists([NotNull] TimerDefinition timerDefinition)
         {
-            if (nameId == null) throw new ArgumentNullException("nameId");
-            return allDefinitions.All(x => x.TimerDefinitionId.Name != nameId);
+            if (!timerDefinitions.ContainsKey(timerDefinition.Id))
+            {
+                AddTimerDefinition(timerDefinition);
+            }
+            FlagAsChanged();
         }
 
-        public void Unload([NotNull] WurmTimer timer)
+        public void RemoveCustomTimerDefinition(Guid id)
         {
-            if (timer == null) throw new ArgumentNullException("timer");
-            persistentObjectResolver.Unload(timer);
+            bool removed = timerDefinitions.Remove(id);
+            FlagAsChanged();
+            if (removed) OnCustomTimerRemoved(new CustomTimerRemovedEventArgs(id));
+        }
+
+        [CanBeNull]
+        public CustomTimerDefinition TryGetOptionsTemplateForCustomTimer(Guid id)
+        {
+            return timerDefinitions[id].CustomTimerConfig;
         }
 
         protected virtual void OnCustomTimerRemoved(CustomTimerRemovedEventArgs e)
@@ -177,27 +108,29 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             if (handler != null) handler(this, e);
         }
 
-        public void ThrowIfNoDefinition([NotNull] TimerDefinition timerDefinition)
+        public IEnumerable<TimerDefinition> GetCustomTimerDefinitions()
         {
-            if (timerDefinition == null) throw new ArgumentNullException("timerDefinition");
-            if (!allDefinitions.Contains(timerDefinition))
-            {
-                throw new InvalidOperationException("No descriptor found for timerDefintion " + timerDefinition.ToDebugString());
-            }
+            return timerDefinitions.Values.Where(definition => definition.RuntimeTypeId == RuntimeTypeId.LegacyCustom).ToArray();
         }
 
-        public IEnumerable GetNamesOfAllCustomTimers()
+        public IEnumerable<TimerDefinition> GetDefinitionsOfUnusedTimers(IEnumerable<Guid> existingDefinitionIds)
         {
-            return customDefinitions.Select(definition => definition.TimerDefinitionId.Name).Distinct().ToArray();
+            var hashset = existingDefinitionIds.ToHashSet();
+            return timerDefinitions.Values.Where(definition => !hashset.Contains(definition.Id)).ToArray();
+        }
+
+        public TimerDefinition GetById(Guid definitionId)
+        {
+            return timerDefinitions[definitionId];
         }
     }
 
     public class CustomTimerRemovedEventArgs : EventArgs
     {
-        public string NameId { get; private set; }
-        public CustomTimerRemovedEventArgs(string nameId)
+        public Guid DefinitionId { get; private set; }
+        public CustomTimerRemovedEventArgs(Guid definitionId)
         {
-            NameId = nameId;
+            DefinitionId = definitionId;
         }
     }
 }

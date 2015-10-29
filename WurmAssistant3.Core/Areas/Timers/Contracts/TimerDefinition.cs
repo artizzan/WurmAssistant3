@@ -1,4 +1,6 @@
 using System;
+using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules;
+using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
@@ -7,46 +9,33 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts
     [JsonObject(MemberSerialization.OptIn)]
     public sealed class TimerDefinition : IEquatable<TimerDefinition>
     {
-        // note: equality is still limited to TimerDefinitionId, due to legacy code
+        public TimerDefinition(Guid id)
+        {
+            Id = id;
+        }
+
+        [JsonProperty("id")]
+        public Guid Id { get; private set; }
 
         [JsonProperty("typeId")]
-        public RuntimeTypeId RuntimeTypeId { get; private set; }
+        public RuntimeTypeId RuntimeTypeId { get; set; }
 
-        [JsonProperty("timerDefinitionId")]
-        public TimerDefinitionId TimerDefinitionId { get; private set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
 
-        public TimerDefinition([NotNull] TimerDefinitionId timerDefinitionId, RuntimeTypeId runtimeTypeId)
-        {
-            if (timerDefinitionId == null) throw new ArgumentNullException("timerDefinitionId");
-            RuntimeTypeId = runtimeTypeId;
-            TimerDefinitionId = timerDefinitionId;
-        }
+        [JsonProperty("customTimerConfig"), CanBeNull]
+        public CustomTimerDefinition CustomTimerConfig { get; set; }
 
         public override string ToString()
         {
-            return TimerDefinitionId.ToString();
-        }
-
-        public string ToCompactString()
-        {
-            return TimerDefinitionId.ToCompactString();
-        }
-
-        public object ToDebugString()
-        {
-            return TimerDefinitionId.ToString() + ", Runtime Type Id " + RuntimeTypeId;
-        }
-
-        public string ToPersistentIdString()
-        {
-            return TimerDefinitionId.ToPersistentIdString();
+            return Name;
         }
 
         public bool Equals(TimerDefinition other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return TimerDefinitionId.Equals(other.TimerDefinitionId);
+            return Id.Equals(other.Id);
         }
 
         public override bool Equals(object obj)
@@ -58,7 +47,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts
 
         public override int GetHashCode()
         {
-            return TimerDefinitionId.GetHashCode();
+            return Id.GetHashCode();
         }
 
         public static bool operator ==(TimerDefinition left, TimerDefinition right)

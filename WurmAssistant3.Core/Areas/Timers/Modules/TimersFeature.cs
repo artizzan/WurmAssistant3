@@ -30,11 +30,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         readonly ITrayPopups trayPopups;
         readonly TimerDefinitions timerDefinitions;
         readonly IPersistentObjectResolver<PlayerTimersGroup> playerTimersGroupsResolver;
+        readonly TimerInstances timerInstances;
 
         readonly List<PlayerTimersGroup> timerGroups = new List<PlayerTimersGroup>();
 
-        [JsonProperty]
-        HashSet<string> activePlayers = new HashSet<string>();
+        [JsonProperty] 
+        readonly HashSet<Guid> currentGroupsIds = new HashSet<Guid>();
         [JsonProperty]
         Point savedWindowSize;
         [JsonProperty]
@@ -49,7 +50,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         public TimersFeature([NotNull] IHostEnvironment host, IUpdateLoop updateLoop, [NotNull] ILogger logger,
             [NotNull] IWurmApi wurmApi, [NotNull] ISoundEngine soundEngine, [NotNull] ITrayPopups trayPopups,
             [NotNull] TimerDefinitions timerDefinitions,
-            [NotNull] IPersistentObjectResolver<PlayerTimersGroup> playerTimersGroupsResolver)
+            [NotNull] IPersistentObjectResolver<PlayerTimersGroup> playerTimersGroupsResolver,
+            [NotNull] TimerInstances timerInstances)
         {
             if (host == null) throw new ArgumentNullException("host");
             if (logger == null) throw new ArgumentNullException("logger");
@@ -58,6 +60,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (timerDefinitions == null) throw new ArgumentNullException("timerDefinitions");
             if (playerTimersGroupsResolver == null) throw new ArgumentNullException("playerTimersGroupsResolver");
+            if (timerInstances == null) throw new ArgumentNullException("timerInstances");
             this.host = host;
             this.logger = logger;
             this.wurmApi = wurmApi;
@@ -65,6 +68,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             this.trayPopups = trayPopups;
             this.timerDefinitions = timerDefinitions;
             this.playerTimersGroupsResolver = playerTimersGroupsResolver;
+            this.timerInstances = timerInstances;
 
             host.HostClosing += (sender, args) =>
             {
@@ -82,12 +86,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                     timergroup.Update();
                 };
             };
-        }
-
-        public HashSet<string> ActivePlayers
-        {
-            get { return activePlayers; }
-            set { activePlayers = value; FlagAsChanged(); }
         }
 
         public Point SavedWindowSize
@@ -119,9 +117,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         {
             timerDefinitions.CustomTimerRemoved += TimerDefinitionsRemovedCustomTimer;
             timersForm = new TimersForm(this, logger, wurmApi, timerDefinitions);
-            foreach (string player in ActivePlayers)
+            foreach (Guid groupId in currentGroupsIds)
             {
-                AddNewPlayerGroup(player);
+                try
+                {
+                    RestoreGroup(groupId);
+                }
+                catch (Exception exception)
+                {
+                    logger.Error(exception, "Error during initialization of server group id " + groupId);
+                }
             }
         }
 
@@ -129,7 +134,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         {
             foreach (var timergroup in timerGroups)
             {
-                timergroup.RemoveDeletedCustomTimer(e.NameId);
+                timergroup.StopAndRemoveMatchingTimerDefinition(e.DefinitionId);
             }
         }
 
@@ -143,39 +148,66 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             timersForm.UnregisterTimersGroup(layoutControl);
         }
 
-        internal string[] GetActivePlayerGroups()
+        internal IEnumerable<PlayerTimersGroup> GetActivePlayerGroups()
         {
-            var result = new List<string>();
-            foreach (var name in ActivePlayers)
-            {
-                result.Add(name);
-            }
-            return result.ToArray();
+            return timerGroups.ToArray();
         }
 
-        internal void AddNewPlayerGroup(string player)
+        internal void CreateGroup(Guid groupId, string characterName, string serverGroupId)
         {
-            var group = new PlayerTimersGroup(this,
-                player,
+            var group = new PlayerTimersGroup(groupId.ToString(),
+                            this,
+                            wurmApi,
+                            logger,
+                            soundEngine,
+                            trayPopups,
+                            timerDefinitions,
+                            timerInstances);
+            playerTimersGroupsResolver.LoadAndStartTracking(group);
+
+            group.CharacterName = characterName;
+            group.ServerGroupId = serverGroupId;
+
+            group.Initialize();
+
+            timerGroups.Add(group);
+            currentGroupsIds.Add(groupId);
+
+            FlagAsChanged();
+        }
+
+        internal void RestoreGroup(Guid groupId)
+        {
+            var group = new PlayerTimersGroup(groupId.ToString(),
+                this,
                 wurmApi,
                 logger,
                 soundEngine,
                 trayPopups,
-                timerDefinitions);
-            playerTimersGroupsResolver.StartTracking(group);
-            group.Initialize();
-            timerGroups.Add(group);
-            ActivePlayers.Add(player);
-            FlagAsChanged();
+                timerDefinitions,
+                timerInstances);
+            playerTimersGroupsResolver.LoadAndStartTracking(group);
+            try
+            {
+                group.Initialize();
+            }
+            finally 
+            {
+                if (!timerGroups.Contains(group)) timerGroups.Add(group);
+                currentGroupsIds.Add(groupId);
+
+                FlagAsChanged();
+            }
         }
 
-        internal void RemovePlayerGroup(string player)
+        internal void RemovePlayerGroup(Guid groupId)
         {
-            var group = timerGroups.First(x => x.CharacterName == player);
+            var group = timerGroups.First(x => x.Id == groupId);
             group.Stop();
             playerTimersGroupsResolver.Unload(group);
             timerGroups.Remove(group);
-            ActivePlayers.Remove(player);
+            currentGroupsIds.Remove(groupId);
+
             FlagAsChanged();
         }
 
@@ -213,5 +245,45 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         }
 
         #endregion IFeature
+
+        public void IncreaseSortingOrder(PlayerTimersGroup selectedGroup)
+        {
+            var list = timerGroups.OrderBy(@group => @group.SortingOrder).ToList();
+            var index = list.IndexOf(selectedGroup);
+            if (index >= 0)
+            {
+                var prevIndex = index - 1;
+                if (prevIndex >= 0)
+                {
+                    var prevItem = list[prevIndex];
+                    list[prevIndex] = list[index];
+                    list[index] = prevItem;
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        list[i].SortingOrder = i;
+                    }
+                }
+            }
+        }
+
+        public void ReduceSortingOrder(PlayerTimersGroup selectedGroup)
+        {
+            var list = timerGroups.OrderBy(@group => @group.SortingOrder).ToList();
+            var index = list.IndexOf(selectedGroup);
+            if (index >= 0)
+            {
+                var nextIndex = index + 1;
+                if (nextIndex <= list.Count - 1)
+                {
+                    var nextItem = list[nextIndex];
+                    list[nextIndex] = list[index];
+                    list[index] = nextItem;
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        list[i].SortingOrder = i;
+                    }
+                }
+            }
+        }
     }
 }

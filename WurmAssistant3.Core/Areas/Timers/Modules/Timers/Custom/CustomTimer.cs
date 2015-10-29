@@ -19,7 +19,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
     {
         readonly ILogger logger;
 
-        CustomTimerConfig config;
+        CustomTimerDefinition config;
         DateTime cooldownTo = DateTime.MinValue;
         DateTime uptimeResetSince = DateTime.MinValue;
 
@@ -34,7 +34,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
         public override void Initialize(PlayerTimersGroup parentGroup, string player, TimerDefinition definition)
         {
             base.Initialize(parentGroup, player, definition);
-            TimerDisplayView.SetCooldown(config.Duration);
+            View.SetCooldown(config.Duration);
 
             PerformAsyncInits();
         }
@@ -77,7 +77,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
             }
         }
 
-        public void ApplyCustomTimerOptions(CustomTimerConfig customTimerConfig)
+        public void ApplyCustomTimerOptions(CustomTimerDefinition customTimerConfig)
         {
             this.config = customTimerConfig;
         }
@@ -85,7 +85,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
         public override void Update()
         {
             base.Update();
-            if (TimerDisplayView.Visible) TimerDisplayView.UpdateCooldown(CooldownTo);
+            if (View.Visible)
+            {
+                View.SetCooldown(config.Duration);
+                View.UpdateCooldown(CooldownTo);
+            }
         }
 
         public override void HandleAnyLogLine(LogsMonitorEventArgs container)
@@ -119,7 +123,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
             }
         }
 
-        void ProcessLinesForCooldownTriggers(List<LogEntry> lines, CustomTimerConfig.Condition condition)
+        void ProcessLinesForCooldownTriggers(List<LogEntry> lines, CustomTimerDefinition.Condition condition)
         {
             foreach (LogEntry line in lines)
             {

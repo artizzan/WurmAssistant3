@@ -15,7 +15,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
 
         TimersForm parentForm;
 
-        public TimersChoiceForm(HashSet<TimerDefinition> availableTypes, TimersForm parent)
+        public TimersChoiceForm(IEnumerable<TimerDefinition> availableTypes, TimersForm parent)
             : this()
         {
             parentForm = parent;

@@ -16,6 +16,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers
             kernel.Bind<TimerTypes>().ToSelf().InSingletonScope();
             kernel.Bind<TimerDefinitions>().ToSelf().InSingletonScope();
             kernel.Bind<IFeature>().To<TimersFeature>().InSingletonScope().Named("Timers");
+            kernel.Bind<TimerInstances>().ToSelf().InSingletonScope();
         }
     }
 }

@@ -26,6 +26,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.MeditPath
         [JsonProperty]
         DateTime nextQuestionAttemptOverridenUntil = DateTime.MinValue;
 
+        readonly TimeSpan pathCooldown = TimeSpan.FromDays(1);
+
         public MeditPathTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundEngine soundEngine,
             ITrayPopups trayPopups)
             : base(persistentObjectId, trayPopups, logger, wurmApi, soundEngine)
@@ -35,7 +37,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.MeditPath
         public override void Initialize(PlayerTimersGroup parentGroup, string player, TimerDefinition definition)
         {
             base.Initialize(parentGroup, player, definition);
-            TimerDisplayView.SetCooldown(TimeSpan.FromDays(1));
+            View.SetCooldown(pathCooldown);
 
             MoreOptionsAvailable = true;
 
@@ -124,7 +126,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.MeditPath
         public override void Update()
         {
             base.Update();
-            if (TimerDisplayView.Visible) TimerDisplayView.UpdateCooldown(GetCooldownDate());
+            if (View.Visible)
+            {
+                View.SetCooldown(pathCooldown);
+                View.UpdateCooldown(GetCooldownDate());
+            }
         }
 
         public override void HandleNewEventLogLine(LogEntry line)

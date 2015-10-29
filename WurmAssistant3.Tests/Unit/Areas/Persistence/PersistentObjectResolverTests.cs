@@ -80,7 +80,7 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Areas.Persistence
         [Test]
         public void StartTrackingGeneric()
         {
-            Kernel.Arrange<IPersistentObjectResolver<Sample>>(resolver => resolver.StartTracking(sample)).OccursOnce();
+            Kernel.Arrange<IPersistentObjectResolver<Sample>>(resolver => resolver.LoadAndStartTracking(sample)).OccursOnce();
             Service.StartTracking<Sample>(sample);
             Kernel.AssertAll();
         }
@@ -88,7 +88,7 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Areas.Persistence
         [Test]
         public void StartTrackingNonGeneric()
         {
-            Kernel.Arrange<IPersistentObjectResolver<Sample>>(resolver => resolver.StartTracking(sample)).OccursOnce();
+            Kernel.Arrange<IPersistentObjectResolver<Sample>>(resolver => resolver.LoadAndStartTracking(sample)).OccursOnce();
             Service.StartTracking((object)sample);
             Kernel.AssertAll();
         }
@@ -99,7 +99,7 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Areas.Persistence
             Kernel.Arrange<IPersistentObjectResolver<Sample>>(resolver => resolver.Get(PersistentObjectId)).Throws<TestfulException>();
             Kernel.Arrange<IPersistentObjectResolver<Sample>>(resolver => resolver.GetDefault()).Throws<TestfulException>();
             Kernel.Arrange<IPersistentObjectResolver<Sample>>(resolver => resolver.Unload(sample)).Throws<TestfulException>();
-            Kernel.Arrange<IPersistentObjectResolver<Sample>>(resolver => resolver.StartTracking(sample)).Throws<TestfulException>();
+            Kernel.Arrange<IPersistentObjectResolver<Sample>>(resolver => resolver.LoadAndStartTracking(sample)).Throws<TestfulException>();
             Assert.Throws<TestfulException>(() => Service.Get(PersistentObjectId, typeof (Sample)));
             Assert.Throws<TestfulException>(() => Service.GetDefault(typeof(Sample)));
             Assert.Throws<TestfulException>(() => Service.Unload(sample));

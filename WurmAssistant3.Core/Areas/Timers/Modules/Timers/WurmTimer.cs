@@ -23,7 +23,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         protected readonly IWurmApi WurmApi;
         protected readonly ISoundEngine SoundEngine;
 
-        protected TimerDisplayView TimerDisplayView;
         PlayerTimersGroup playerTimersGroup;
         protected string Player;
 
@@ -49,6 +48,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         public WurmTimer(string persistentObjectId, [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger,
             [NotNull] IWurmApi wurmApi, [NotNull] ISoundEngine soundEngine) : base(persistentObjectId)
         {
+            Id = Guid.Parse(persistentObjectId);
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (logger == null) throw new ArgumentNullException("logger");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
@@ -57,19 +57,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             this.Logger = logger;
             this.WurmApi = wurmApi;
             this.SoundEngine = soundEngine;
+
         }
 
         public virtual void Initialize(PlayerTimersGroup parentGroup, string player, TimerDefinition definition)
         {
             //derived must call this base before their own inits!
+            TimerDefinition = definition;
             Name = definition.ToString();
-            ShortName = definition.ToCompactString();
+            ShortName = definition.ToString();
             playerTimersGroup = parentGroup;
             Player = player;
-            TimerDefinitionId = definition.TimerDefinitionId;
 
-            TimerDisplayView = new TimerDisplayView(this);
-            this.playerTimersGroup.RegisterNewControlTimer(TimerDisplayView);
+            View = new TimerDisplayView(this);
 
             CDNotify = new CooldownHandler(Logger, SoundEngine, TrayPopups)
             {
@@ -86,6 +86,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             character = WurmApi.Characters.Get(new CharacterName(player));
             character.LogInOrCurrentServerPotentiallyChanged += _handleServerChange;
         }
+
+        public TimerDisplayView View { get; private set; }
+
+        public Guid Id { get; private set; }
+
+        public TimerDefinition TimerDefinition { get; private set; }
+
+        public TimersFeature TimersFeature { get { return playerTimersGroup.TimersFeature; } }
+
+        public string ServerGroupId { get { return playerTimersGroup.ServerGroupId; } }
 
         public bool SoundNotify
         {
@@ -129,8 +139,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             set { lastUptimeSnapshot = value; FlagAsChanged(); }
         }
 
-        public TimerDefinitionId TimerDefinitionId { get; private set; }
-
         public string Name { get; private set; }
 
         public string ShortName { get; private set; }
@@ -153,8 +161,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         public virtual void Stop()
         {
             //children should basecall this after their own cleanup
-            playerTimersGroup.UnregisterControlTimer(TimerDisplayView);
-            TimerDisplayView.Dispose();
+            playerTimersGroup.StopTimer(this);
+            View.Dispose();
             character.LogInOrCurrentServerPotentiallyChanged -= _handleServerChange;
         }
 
@@ -175,7 +183,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             float skillLevel =
                 await
                     character.Skills.TryGetCurrentSkillLevelAsync(skillName,
-                        new ServerGroup(TimerDefinitionId.ServerGroupId),
+                        new ServerGroup(playerTimersGroup.ServerGroupId),
                         since) ?? 0;
 
             return skillLevel;
@@ -194,7 +202,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             float skillLevel =
                 await
                     character.Skills.TryGetCurrentSkillLevelAsync(skillName,
-                        new ServerGroup(TimerDefinitionId.ServerGroupId),
+                        new ServerGroup(playerTimersGroup.ServerGroupId),
                         HowLongAgoWasThisDate(lastCheckup)) ?? 0;
 
             return skillLevel;
@@ -212,7 +220,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             var results = await character.Logs.ScanLogsServerGroupRestrictedAsync(DateTime.Now - since,
                 DateTime.Now,
                 logType,
-                new ServerGroup(TimerDefinitionId.ServerGroupId));
+                new ServerGroup(playerTimersGroup.ServerGroupId));
 
             var result = results.ToList();
             return result;
@@ -278,8 +286,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             ui.ShowDialogCenteredOnForm(this.GetModuleUi());
         }
 
-        public TimersFeature TimersFeature { get { return playerTimersGroup.TimersFeature; } }
-
         /// <summary>
         /// override to show "more options" window
         /// </summary>
@@ -311,29 +317,47 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             {
                 DateTime currentTime = DateTime.Now;
 
-                var server = WurmApi.Servers.GetByName(playerTimersGroup.GroupIdToServerMap[TimerDefinitionId.ServerGroupId]);
+                var server = playerTimersGroup.CurrentServerOnTheGroup;
 
-                var serverUptime = await server.TryGetCurrentUptimeAsync();
-                if (serverUptime != null)
+                if (server != null)
                 {
-                    TimeSpan timeSinceLastServerReset = serverUptime.Value;
-                    TimeSpan daysSinceLastServerReset = new TimeSpan(timeSinceLastServerReset.Days, 0, 0, 0);
-                    timeSinceLastServerReset = timeSinceLastServerReset.Subtract(daysSinceLastServerReset);
+                    var serverUptime = await server.TryGetCurrentUptimeAsync();
+                    if (serverUptime != null)
+                    {
+                        TimeSpan timeSinceLastServerReset = serverUptime.Value;
+                        TimeSpan daysSinceLastServerReset = new TimeSpan(timeSinceLastServerReset.Days, 0, 0, 0);
+                        timeSinceLastServerReset = timeSinceLastServerReset.Subtract(daysSinceLastServerReset);
 
-                    var cooldownResetDate = currentTime - timeSinceLastServerReset;
-                    return cooldownResetDate;
+                        var cooldownResetDate = currentTime - timeSinceLastServerReset;
+                        return cooldownResetDate;
+                    }
+                    else
+                    {
+                        Logger.Info(
+                            string.Format(
+                                "could not get server uptime, timerID: {0}, group: {1}, server: {2}, player: {3}",
+                                Name,
+                                TimerDefinition,
+                                playerTimersGroup.CurrentServerOnTheGroup,
+                                Player));
+                        return DateTime.MinValue;
+                    }
                 }
                 else
                 {
-                    Logger.Info(string.Format("could not get server uptime, timerID: {0}, group: {1}, server: {2}, player: {3}", 
-                        Name, TimerDefinitionId, playerTimersGroup.CurrentServerName, Player));
+                    Logger.Info(
+                        string.Format(
+                            "could not establish server for this server group, timerID: {0}, group: {1}, player: {2}",
+                            Name,
+                            TimerDefinition,
+                            Player));
                     return DateTime.MinValue;
                 }
             }
             catch (Exception exception)
             {
                 Logger.Info(exception, string.Format("could not get server uptime, timerID: {0}, group: {1}, server: {2}, player: {3}",
-                        Name, TimerDefinitionId, playerTimersGroup.CurrentServerName, Player));
+                        Name, TimerDefinition, playerTimersGroup.CurrentServerOnTheGroup, Player));
                 return DateTime.MinValue;
             }
         }

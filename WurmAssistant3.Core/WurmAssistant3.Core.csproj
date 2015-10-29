@@ -275,6 +275,13 @@
     <Compile Include="Areas\Persistence\Views\DeserializationErrorResolverView.Designer.cs">
       <DependentUpon>DeserializationErrorResolverView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Areas\Timers\Modules\TimerInstances.cs" />
+    <Compile Include="Areas\Timers\Views\EditTimerGroups.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Views\EditTimerGroups.Designer.cs">
+      <DependentUpon>EditTimerGroups.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\Triggers\Data\ActiveTriggers.cs" />
     <Compile Include="Areas\Triggers\Data\TriggerData.cs" />
     <Compile Include="Areas\Triggers\Data\TriggerKind.cs" />
@@ -420,8 +427,7 @@
       <DependentUpon>SoundRenameView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Timers\Contracts\TimerDefinition.cs" />
-    <Compile Include="Areas\Timers\Contracts\TimerDefinitionId.cs" />
-    <Compile Include="Areas\Timers\Modules\Timers\Custom\CustomTimerConfig.cs" />
+    <Compile Include="Areas\Timers\Modules\CustomTimerDefinition.cs" />
     <Compile Include="Areas\Timers\Modules\Timers\Alignment\AlignmentTimer.cs" />
     <Compile Include="Areas\Timers\Contracts\RuntimeTypeId.cs" />
     <Compile Include="Areas\Timers\Modules\Timers\NotifyHandler.cs" />
@@ -813,6 +819,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\SoundEngine\Views\SoundRenameView.resx">
       <DependentUpon>SoundRenameView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Views\EditTimerGroups.resx">
+      <DependentUpon>EditTimerGroups.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Timers\Views\Timers\Alignment\AlignmentTimerOptionsForm.resx">
       <DependentUpon>AlignmentTimerOptionsForm.cs</DependentUpon>

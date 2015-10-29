@@ -27,7 +27,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.JunkSale
         public override void Initialize(PlayerTimersGroup parentGroup, string player, TimerDefinition definition)
         {
             base.Initialize(parentGroup, player, definition);
-            TimerDisplayView.ShowSkill = true;
+            View.ShowSkill = true;
             VerifyMoneyAmountAgainstCd();
             UpdateMoneyCounter();
             InitCompleted = true;
@@ -36,8 +36,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.JunkSale
         public override void Update()
         {
             base.Update();
-            if (TimerDisplayView.Visible)
-                TimerDisplayView.UpdateCooldown(cooldownUntil - DateTime.Now);
+            if (View.Visible)
+                View.UpdateCooldown(cooldownUntil - DateTime.Now);
             VerifyMoneyAmountAgainstCd();
         }
 
@@ -80,7 +80,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.JunkSale
 
         private void UpdateMoneyCounter()
         {
-            TimerDisplayView.SetCustomStringAsSkill(PrepareStrDisplayForMoneyAmount(currentTotalAmount));
+            View.SetCustomStringAsSkill(PrepareStrDisplayForMoneyAmount(currentTotalAmount));
         }
 
         string PrepareStrDisplayForMoneyAmount(int amount)

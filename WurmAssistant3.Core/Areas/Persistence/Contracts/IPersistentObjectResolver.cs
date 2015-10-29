@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using AldursLab.PersistentObjects;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Contracts
 {
@@ -81,6 +82,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Contracts
         /// </exception>
         /// <exception cref="UnsupportedObjectTypeException">Type does not implement IPersistentObject</exception>
         void StartTracking(object @object);
+
+        void UnloadAndDeleteData<T>([NotNull] T @object) where T : class, IPersistentObject;
+        void UnloadAndDeleteData([NotNull] object @object);
     }
 
     [Serializable]
@@ -142,6 +146,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Contracts
         /// <exception cref="PersistentObjectAlreadyTracked">
         /// Object of this type and id is already cached. Use Get method instead.
         /// </exception>
-        void StartTracking(T @object);
+        void LoadAndStartTracking(T @object);
+
+        void UnloadAndDeleteData(T @object);
     }
 }

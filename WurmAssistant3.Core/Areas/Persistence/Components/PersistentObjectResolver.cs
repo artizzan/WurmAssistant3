@@ -67,10 +67,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Components
             return resolver.GetDefault();
         }
 
-
         public void Unload<T>([NotNull] T @object) where T : class, IPersistentObject
         {
-            UnloadInternal(@object);
+            UnloadInternal(@object, false);
+        }
+
+        public void UnloadAndDeleteData<T>(T @object) where T : class, IPersistentObject
+        {
+            UnloadInternal(@object, true);
         }
 
         public void Unload([NotNull] object @object)
@@ -79,14 +83,25 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Components
             var runtimeType = @object.GetType();
             ThrowIfNotSupported(runtimeType);
             MethodInfo genericMethod = GetLocalGenericMethod("UnloadInternal", runtimeType);
-            InvokeThis(genericMethod, @object);
+            InvokeThis(genericMethod, @object, false);
         }
 
-        public void UnloadInternal<T>([NotNull] T @object) where T : class, IPersistentObject
+        public void UnloadAndDeleteData(object @object)
+        {
+            if (@object == null)
+                throw new ArgumentNullException("object");
+            var runtimeType = @object.GetType();
+            ThrowIfNotSupported(runtimeType);
+            MethodInfo genericMethod = GetLocalGenericMethod("UnloadInternal", runtimeType);
+            InvokeThis(genericMethod, @object, true);
+        }
+
+        public void UnloadInternal<T>([NotNull] T @object, bool deleteData) where T : class, IPersistentObject
         {
             if (@object == null) throw new ArgumentNullException("object");
             var resolver = GetResolver<T>();
-            resolver.Unload(@object);
+            if (deleteData) resolver.UnloadAndDeleteData(@object);
+            else resolver.Unload(@object);
         }
 
         public void StartTracking<T>([NotNull] T @object) where T : class, IPersistentObject
@@ -107,7 +122,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Components
         {
             if (@object == null) throw new ArgumentNullException("object");
             var resolver = GetResolver<T>();
-            resolver.StartTracking(@object);
+            resolver.LoadAndStartTracking(@object);
         }
 
 
@@ -180,7 +195,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Components
             persistenceManager.StopTracking(@object);
         }
 
-        public void StartTracking(T @object)
+        public void UnloadAndDeleteData(T @object)
+        {
+            persistenceManager.StopTracking(@object, deleteData:true);
+        }
+
+        public void LoadAndStartTracking(T @object)
         {
             persistenceManager.LoadAndStartTracking(@object);
         }

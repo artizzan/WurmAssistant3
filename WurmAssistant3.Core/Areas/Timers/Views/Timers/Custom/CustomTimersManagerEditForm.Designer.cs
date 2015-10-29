@@ -40,7 +40,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBoxNameID = new System.Windows.Forms.TextBox();
+            this.textBoxTimerName = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.timeInputUControl2 = new TimeSpanInput();
             this.SuspendLayout();
@@ -130,10 +130,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
             // 
             // textBoxNameID
             // 
-            this.textBoxNameID.Location = new System.Drawing.Point(12, 29);
-            this.textBoxNameID.Name = "textBoxNameID";
-            this.textBoxNameID.Size = new System.Drawing.Size(308, 22);
-            this.textBoxNameID.TabIndex = 0;
+            this.textBoxTimerName.Location = new System.Drawing.Point(12, 29);
+            this.textBoxTimerName.Name = "textBoxTimerName";
+            this.textBoxTimerName.Size = new System.Drawing.Size(308, 22);
+            this.textBoxTimerName.TabIndex = 0;
             // 
             // toolTip1
             // 
@@ -156,7 +156,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(657, 325);
             this.Controls.Add(this.timeInputUControl2);
-            this.Controls.Add(this.textBoxNameID);
+            this.Controls.Add(this.textBoxTimerName);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
@@ -188,7 +188,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBoxNameID;
+        private System.Windows.Forms.TextBox textBoxTimerName;
         private TimeSpanInput timeInputUControl2;
         private System.Windows.Forms.ToolTip toolTip1;
     }

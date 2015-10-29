@@ -32,11 +32,8 @@
             this.buttonCustomTimers = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonAddRemoveChars = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.checkedListBoxPlayers = new System.Windows.Forms.CheckedListBox();
             this.buttonOptions = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,7 +58,7 @@
             this.buttonCustomTimers.Name = "buttonCustomTimers";
             this.buttonCustomTimers.Size = new System.Drawing.Size(72, 38);
             this.buttonCustomTimers.TabIndex = 1;
-            this.buttonCustomTimers.Text = "Custom\r\nTimers";
+            this.buttonCustomTimers.Text = "Edit Custom\r\nTimers";
             this.buttonCustomTimers.UseVisualStyleBackColor = true;
             this.buttonCustomTimers.Click += new System.EventHandler(this.buttonCustomTimers_Click);
             // 
@@ -84,34 +81,9 @@
             this.buttonAddRemoveChars.Name = "buttonAddRemoveChars";
             this.buttonAddRemoveChars.Size = new System.Drawing.Size(71, 38);
             this.buttonAddRemoveChars.TabIndex = 3;
-            this.buttonAddRemoveChars.Text = "Add\r\nRemove";
+            this.buttonAddRemoveChars.Text = "Modify\r\nGroups";
             this.buttonAddRemoveChars.UseVisualStyleBackColor = true;
             this.buttonAddRemoveChars.Click += new System.EventHandler(this.buttonAddRemoveChars_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.checkedListBoxPlayers);
-            this.panel1.Location = new System.Drawing.Point(3, 2);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(148, 138);
-            this.panel1.TabIndex = 4;
-            this.panel1.Visible = false;
-            // 
-            // checkedListBoxPlayers
-            // 
-            this.checkedListBoxPlayers.CheckOnClick = true;
-            this.checkedListBoxPlayers.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkedListBoxPlayers.FormattingEnabled = true;
-            this.checkedListBoxPlayers.Location = new System.Drawing.Point(0, 0);
-            this.checkedListBoxPlayers.Margin = new System.Windows.Forms.Padding(2);
-            this.checkedListBoxPlayers.Name = "checkedListBoxPlayers";
-            this.checkedListBoxPlayers.Size = new System.Drawing.Size(146, 136);
-            this.checkedListBoxPlayers.TabIndex = 0;
-            this.checkedListBoxPlayers.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBoxPlayers_ItemCheck);
-            this.checkedListBoxPlayers.SelectedIndexChanged += new System.EventHandler(this.checkedListBoxPlayers_SelectedIndexChanged);
             // 
             // buttonOptions
             // 
@@ -128,7 +100,6 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.buttonOptions);
-            this.panel2.Controls.Add(this.panel1);
             this.panel2.Controls.Add(this.flowLayoutPanel1);
             this.panel2.Controls.Add(this.buttonAddRemoveChars);
             this.panel2.Controls.Add(this.buttonCustomTimers);
@@ -156,7 +127,6 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormTimers_FormClosing);
             this.Load += new System.EventHandler(this.FormTimers_Load);
             this.Resize += new System.EventHandler(this.FormTimers_Resize);
-            this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
@@ -169,8 +139,6 @@
         private System.Windows.Forms.Button buttonCustomTimers;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonAddRemoveChars;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.CheckedListBox checkedListBoxPlayers;
         private System.Windows.Forms.Button buttonOptions;
         private System.Windows.Forms.Panel panel2;
     }

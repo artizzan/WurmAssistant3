@@ -149,16 +149,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
         {
             base.Initialize(parentGroup, player, definition);
 
-            TimerDisplayView.SetCooldown(ShortMeditCooldown);
+            View.SetCooldown(ShortMeditCooldown);
 
             skillEntryParser = new SkillEntryParser(WurmApi);
 
             sleepNotify = new SleepBonusNotify(Logger, SoundEngine, TrayPopups, Player, "Can turn off sleep bonus now");
             sleepNotify.Enabled = SleepBonusReminder;
 
-            TimerDisplayView.UpdateSkill(MeditationSkill);
-            TimerDisplayView.ShowSkill = ShowMeditSkill;
-            TimerDisplayView.ShowMeditCount = ShowMeditCount;
+            View.UpdateSkill(MeditationSkill);
+            View.ShowSkill = ShowMeditSkill;
+            View.ShowMeditCount = ShowMeditCount;
 
             MoreOptionsAvailable = true;
             PerformAsyncInits();
@@ -225,7 +225,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
             get { return showMeditCount; }
             set
             {
-                TimerDisplayView.ShowMeditCount = value;
+                View.ShowMeditCount = value;
                 showMeditCount = value;
                 FlagAsChanged();
             }
@@ -252,8 +252,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
 
         void SetMeditationSkill(float newValue, bool triggerCooldownUpdate = true)
         {
-            Logger.Info(string.Format("{0} meditation skill is now {1} on {2}", Player, newValue, TimerDefinitionId));
-            TimerDisplayView.UpdateSkill(newValue);
+            Logger.Info(string.Format("{0} meditation skill is now {1} on {2}", Player, newValue, ServerGroupId));
+            View.UpdateSkill(newValue);
             if (newValue < 20f)
             {
                 if (meditState != MeditationStates.Unlimited)
@@ -306,7 +306,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
             {
                 showMeditSkill = value;
                 FlagAsChanged();
-                TimerDisplayView.ShowSkill = value;
+                View.ShowSkill = value;
             }
         }
 
@@ -327,14 +327,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
                         string.Format(
                             "while preparing medit timer for player: {0} server group: {1}, skill appears to be 0, attempting wider search",
                             Player,
-                            TimerDefinitionId));
+                            ServerGroupId));
                     skill = await TryGetSkillFromLogHistoryAsync("Meditating", TimeSpan.FromDays(365));
                     if (skill < FloatAboveZeroCompareValue)
                     {
                         skill = await TryGetSkillFromLogHistoryAsync("Meditating", TimeSpan.FromDays(1460));
                         if (skill < FloatAboveZeroCompareValue)
                         {
-                            Logger.Info(string.Format("could not get any meditation skill for player: {0} server group: {1}", Player, TimerDefinitionId));
+                            Logger.Info(string.Format("could not get any meditation skill for player: {0} server group: {1}", Player, ServerGroupId));
                         }
                     }
                 }
@@ -350,7 +350,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
         {
             base.Update();
             sleepNotify.Update();
-            if (TimerDisplayView.Visible) TimerDisplayView.UpdateCooldown(NextMeditationDate - DateTime.Now);
+            if (View.Visible)
+                View.UpdateCooldown(NextMeditationDate - DateTime.Now);
         }
 
         protected override void HandleServerChange()
@@ -433,19 +434,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
                     else
                         Logger.Warn(string.Format("no server uptime found for server: {0}, Timer: {1}, Player: {2}",
                             currentServer.ServerName,
-                            TimerDefinitionId,
+                            TimerDefinition,
                             Player));
                 }
                 else
                 {
                     Logger.Warn(string.Format("no current server found for Timer: {0}, Player: {1}",
-                        TimerDefinitionId,
+                        TimerDefinition,
                         Player));
                 }
             }
             catch (Exception exception)
             {
-                Logger.Error(exception, "Error during UpdateDateOfLastCooldownReset, " + TimerDefinitionId + ", " + Player);
+                Logger.Error(exception, "Error during UpdateDateOfLastCooldownReset, " + TimerDefinition + ", " + Player);
             }
         }
 
@@ -484,7 +485,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
                     countThisReset++;
                 }
             }
-            TimerDisplayView.SetMeditCount(countThisReset);
+            View.SetMeditCount(countThisReset);
 
             if (currentCooldownTimeSpan == ShortMeditCooldown) this.isLongMeditCooldown = false;
 

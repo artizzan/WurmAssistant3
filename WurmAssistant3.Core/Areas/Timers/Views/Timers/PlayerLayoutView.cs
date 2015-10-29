@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules;
 using AldursLab.WurmAssistant3.Core.WinForms;
 
@@ -31,6 +32,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
                 widgetManager.WidgetModeChanging += _widgetManager_WidgetModeChanging;
             }
         }
+
+        public int SortingOrder { get { return parentGroup.SortingOrder; } }
 
         void _widgetManager_WidgetModeChanging(object sender, WidgetModeEventArgs e)
         {
@@ -70,8 +73,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
 
         internal void EnableAddingTimers()
         {
-            this.label1.Text = parentGroup.CharacterName;
-            buttonAdd.Enabled = true;
+            this.label1.Text = string.Format("{0} ({1})", parentGroup.CharacterName, SimplifyServerGroup(parentGroup.ServerGroupId));
+            buttonAdd.Enabled = true; 
+        }
+
+        private string SimplifyServerGroup(string serverGroupId)
+        {
+            string simpleName = serverGroupId;
+            bool isServerScoped = false;
+            if (serverGroupId.StartsWith("SERVERSCOPED:"))
+            {
+                isServerScoped = true;
+                simpleName = serverGroupId.Remove(0, 13);
+            }
+            simpleName = simpleName.ToLowerInvariant().Capitalize();
+            return isServerScoped ? ("S:" + simpleName) : simpleName;
         }
     }
 }

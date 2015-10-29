@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom;
 using AldursLab.WurmAssistant3.Core.WinForms;
@@ -11,30 +12,30 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
 {
     public partial class CustomTimersManagerEditForm : ExtendedForm
     {
-        readonly string editingNameId = null;
-
+        readonly IWurmApi wurmApi;
         readonly TimerDefinitions timerDefinitions;
+        readonly TimerDefinition definition;
 
-        public CustomTimersManagerEditForm(IWurmApi wurmApi,
+        public CustomTimersManagerEditForm([NotNull] IWurmApi wurmApi, [NotNull] TimerDefinition definition,
             [NotNull] TimerDefinitions timerDefinitions)
         {
+            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
+            if (definition == null) throw new ArgumentNullException("definition");
             if (timerDefinitions == null) throw new ArgumentNullException("timerDefinitions");
-
+            this.wurmApi = wurmApi;
             this.timerDefinitions = timerDefinitions;
+            this.definition = definition;
+
             InitializeComponent();
-            foreach (var type in  wurmApi.LogDefinitions.AllLogTypes)
+
+            foreach (var type in wurmApi.LogDefinitions.AllLogTypes)
+            {
                 comboBoxLogType.Items.Add(type);
+            }
             comboBoxLogType.SelectedItem = LogType.Event;
-        }
 
-        public CustomTimersManagerEditForm(IWurmApi wurmApi, TimerDefinitions timerDefinitions, string nameID)
-            : this(wurmApi, timerDefinitions)
-        {
-
-            editingNameId = nameID;
-            CustomTimerConfig options = timerDefinitions.GetOptionsTemplateForCustomTimer(nameID);
-            textBoxNameID.Text = nameID;
-            textBoxNameID.Enabled = false;
+            CustomTimerDefinition options = definition.CustomTimerConfig ?? new CustomTimerDefinition();
+            textBoxTimerName.Text = definition.Name;
             if (options.TriggerConditions != null)
             {
                 textBoxCond.Text = options.TriggerConditions[0].RegexPattern;
@@ -51,8 +52,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
 
         private void CustomTimersManagerEditWindow_Load(object sender, EventArgs e)
         {
-            toolTip1.SetToolTip(textBoxCond, "if not used as Regex, timer will start if this text is found in chosen log");
-            toolTip1.SetToolTip(checkBoxAsRegex, "tip: use Log Searcher to test your Regex patterns.\r\nRegex pattern is raw and thus CASE-SENSITIVE (same as in Log Searcher)");
+            toolTip1.SetToolTip(textBoxCond, "when Regex is disabled, timer will trigger if this text is logged in any selected log");
+            toolTip1.SetToolTip(checkBoxAsRegex,
+                "tip: use Log Searcher to test your Regex patterns.\r\nRegex pattern uses default C# settings, eg. is case sensitive (same as in Log Searcher)");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -60,15 +62,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
             //validate
             if (IsValidData())
             {
-                CustomTimerConfig options = new CustomTimerConfig();
-                options.AddTrigger(textBoxCond.Text, (LogType)comboBoxLogType.SelectedItem, checkBoxAsRegex.Checked);
-                options.Duration = timeInputUControl2.Value;
-                options.ResetOnUptime = checkBoxUptimeReset.Checked;
-                if (editingNameId != null)
-                {
-                    timerDefinitions.RemoveCustomTimerDefinition(editingNameId);
-                }
-                timerDefinitions.AddCustomTimerDefinition(textBoxNameID.Text, options);
+                if (definition.CustomTimerConfig == null) definition.CustomTimerConfig = new CustomTimerDefinition();
+
+                definition.Name = textBoxTimerName.Text;
+                definition.CustomTimerConfig.ClearTriggers();
+                definition.CustomTimerConfig.AddTrigger(textBoxCond.Text, (LogType)comboBoxLogType.SelectedItem, checkBoxAsRegex.Checked);
+                definition.CustomTimerConfig.Duration = timeInputUControl2.Value;
+                definition.CustomTimerConfig.ResetOnUptime = checkBoxUptimeReset.Checked;
+                timerDefinitions.AddTimerDefinitionIfNotExists(definition);
                 this.Close();
             }
         }
@@ -76,15 +77,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
         bool IsValidData()
         {
             bool valid = true;
-            if (textBoxNameID.Text.Trim() == string.Empty)
+            if (textBoxTimerName.Text.Trim() == string.Empty)
             {
                 valid = false;
-                MessageBox.Show("Timer name cannot be empty");
-            }
-            else if (editingNameId == null && !timerDefinitions.IsNameUnique(textBoxNameID.Text))
-            {
-                valid = false;
-                MessageBox.Show("Timer with this name already exists");
+                MessageBox.Show("Give your timer a name.");
             }
             return valid;
         }

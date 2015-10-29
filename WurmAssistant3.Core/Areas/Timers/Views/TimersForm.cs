@@ -20,7 +20,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
         readonly IWurmApi wurmApi;
         readonly TimerDefinitions timerDefinitions;
 
-        private readonly Dictionary<string, int> playerToListBoxIndexMap = new Dictionary<string, int>();
         private bool formInited = false;
         private readonly WidgetModeManager widgetManager;
 
@@ -53,19 +52,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
                 this.Size = new Size(timersFeature.SavedWindowSize);
             try
             {
-                if (panel1.Visible) panel1.Visible = false;
-                string[] players = wurmApi.Characters.All.Select(character => character.Name.Capitalized).ToArray();
-
-                int index = 0;
-                foreach (var player in players)
-                {
-                    checkedListBoxPlayers.Items.Add(player);
-                    playerToListBoxIndexMap.Add(player, index);
-                    index++;
-                }
-
-                UpdateSelectedPlayers();
-
                 widgetManager.Set(timersFeature.WidgetModeEnabled);
 
                 formInited = true;
@@ -73,53 +59,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
             catch (Exception exception)
             {
                 logger.Error(exception, "form load error");
-            }
-        }
-
-        private void UpdateSelectedPlayers()
-        {
-            try
-            {
-                var selectedPlayers = timersFeature.GetActivePlayerGroups();
-                for (int i = 0; i < checkedListBoxPlayers.Items.Count; i++)
-                {
-                    object item = checkedListBoxPlayers.Items[i];
-                    try
-                    {
-                        if (selectedPlayers.Contains(item.ToString()))
-                        {
-                            checkedListBoxPlayers.SetItemChecked(playerToListBoxIndexMap[item.ToString()], true);
-                        }
-                        else
-                        {
-                            checkedListBoxPlayers.SetItemChecked(playerToListBoxIndexMap[item.ToString()], false);
-                        }
-                    }
-                    catch (Exception _e)
-                    {
-                        logger.Error(_e, "problem updating player list");
-                    }
-                }
-            }
-            catch (Exception _e)
-            {
-                logger.Error(_e, "form load error");
-            }
-        }
-
-        private void checkedListBoxPlayers_ItemCheck(object sender, ItemCheckEventArgs e)
-        {
-            if (formInited)
-            {
-                string player = checkedListBoxPlayers.Items[e.Index].ToString();
-                if (e.NewValue == CheckState.Checked)
-                {
-                    timersFeature.AddNewPlayerGroup(player);
-                }
-                else
-                {
-                    timersFeature.RemovePlayerGroup(player);
-                }
             }
         }
 
@@ -132,32 +71,26 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
             }
         }
 
-        public void RestoreFromMin()
-        {
-            if (this.WindowState == FormWindowState.Minimized) this.WindowState = FormWindowState.Normal;
-        }
-
         internal void RegisterTimersGroup(PlayerLayoutView layoutControl)
         {
             layoutControl.WidgetManager = widgetManager;
             flowLayoutPanel1.Controls.Add(layoutControl);
+            ApplyTimerGroupsOrdering();
             widgetManager.ResetMouseEvents();
         }
 
         internal void UnregisterTimersGroup(PlayerLayoutView layoutControl)
         {
             flowLayoutPanel1.Controls.Remove(layoutControl);
+            ApplyTimerGroupsOrdering();
             widgetManager.ResetMouseEvents();
         }
 
         private void buttonAddRemoveChars_Click(object sender, EventArgs e)
         {
-            panel1.Visible = !panel1.Visible;
-        }
-
-        private void checkedListBoxPlayers_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
+            var view = new EditTimerGroups(timersFeature, wurmApi);
+            view.ShowDialogCenteredOnForm(this);
+            ApplyTimerGroupsOrdering();
         }
 
         private CustomTimersManagerForm customTimersManagerUi;
@@ -217,6 +150,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
             set
             {
                 timersFeature.WidgetForeColor = value;
+            }
+        }
+
+        void ApplyTimerGroupsOrdering()
+        {
+            List<PlayerLayoutView> views = new List<PlayerLayoutView>();
+            foreach (var control in flowLayoutPanel1.Controls)
+            {
+                views.Add((PlayerLayoutView)control);
+            }
+            views = views.OrderBy(view => view.SortingOrder).ToList();
+            flowLayoutPanel1.Controls.Clear();
+            foreach (var playerLayoutView in views)
+            {
+                flowLayoutPanel1.Controls.Add(playerLayoutView);
             }
         }
     }

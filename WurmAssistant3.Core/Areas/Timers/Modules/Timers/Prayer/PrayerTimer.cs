@@ -188,15 +188,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
         public override void Initialize(PlayerTimersGroup parentGroup, string player, TimerDefinition definition)
         {
             base.Initialize(parentGroup, player, definition);
-            TimerDisplayView.SetCooldown(PrayCooldown);
+            View.SetCooldown(PrayCooldown);
             MoreOptionsAvailable = true;
 
             skillEntryParser = new SkillEntryParser(WurmApi);
 
-            favorNotify = new FavorTimerNotify(this, Player, TimerDefinitionId.ServerGroupId, Logger, SoundEngine, TrayPopups, skillEntryParser);
+            favorNotify = new FavorTimerNotify(this, Player, ServerGroupId, Logger, SoundEngine, TrayPopups, skillEntryParser);
 
-            TimerDisplayView.UpdateSkill(FaithLevel);
-            TimerDisplayView.ShowSkill = ShowFaithSkillOnTimer;
+            View.UpdateSkill(FaithLevel);
+            View.ShowSkill = ShowFaithSkillOnTimer;
 
             PerformAsyncInits();
         }
@@ -286,8 +286,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
             {
                 nextPrayDate = value; 
                 CDNotify.CooldownTo = value;
-                if (isPrayCountMax) TimerDisplayView.ExtraInfo = " (max)";
-                else TimerDisplayView.ExtraInfo = null;
+                if (isPrayCountMax)
+                    View.ExtraInfo = " (max)";
+                else
+                    View.ExtraInfo = null;
             }
         }
 
@@ -298,9 +300,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
             {
                 faithLevel = value;
                 favorNotify.CurrentFavorMax = value;
-                TimerDisplayView.UpdateSkill(value);
+                View.UpdateSkill(value);
                 FlagAsChanged();
-                Logger.Info(string.Format("{0} faith level is now {1} on {2}", Player, value, TimerDefinitionId));
+                Logger.Info(string.Format("{0} faith level is now {1} on {2}", Player, value, ServerGroupId));
             }
         }
 
@@ -323,7 +325,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
             set
             {
                 showFaithSkill = value;
-                TimerDisplayView.ShowSkill = value;
+                View.ShowSkill = value;
                 FlagAsChanged();
             }
         }
@@ -341,7 +343,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
         public override void Update()
         {
             base.Update();
-            if (TimerDisplayView.Visible) TimerDisplayView.UpdateCooldown(NextPrayDate);
+            if (View.Visible)
+            {
+                View.SetCooldown(PrayCooldown);
+                View.UpdateCooldown(NextPrayDate);
+            }
             favorNotify.Update();
         }
 

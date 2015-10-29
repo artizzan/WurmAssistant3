@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
@@ -26,19 +27,23 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
         void ReloadList()
         {
             listBox1.Items.Clear();
-            var customtimers = timerDefinitions.GetNamesOfAllCustomTimers();
-            foreach (var timer in customtimers)
+            var definitions = timerDefinitions.GetCustomTimerDefinitions();
+            foreach (var definition in definitions)
             {
-                listBox1.Items.Add(timer);
+                listBox1.Items.Add(definition);
             }
         }
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             //display window to add
-            CustomTimersManagerEditForm ui = new CustomTimersManagerEditForm(wurmApi, timerDefinitions);
-            ui.ShowCenteredOnForm(this);
+            CustomTimersManagerEditForm ui = new CustomTimersManagerEditForm(wurmApi,
+                new TimerDefinition(Guid.NewGuid())
+                {
+                    RuntimeTypeId = RuntimeTypeId.LegacyCustom
+                }, timerDefinitions);
             ui.FormClosed += OnTimerAdded;
+            ui.ShowCenteredOnForm(this);
         }
 
         private void OnTimerAdded(object sender, EventArgs e)
@@ -51,8 +56,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
             if (listBox1.SelectedIndex > -1)
             {
                 CustomTimersManagerEditForm ui = new CustomTimersManagerEditForm(wurmApi,
-                    timerDefinitions,
-                    listBox1.SelectedItem.ToString());
+                    (TimerDefinition)listBox1.SelectedItem, timerDefinitions);
                 ui.FormClosed += OnTimerAdded;
                 ui.ShowCenteredOnForm(this);
             }
@@ -60,15 +64,23 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Custom
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            //remove timer
             if (listBox1.SelectedIndex > -1)
-                timerDefinitions.RemoveCustomTimerDefinition(listBox1.SelectedItem.ToString());
-            ReloadList();
+            {
+                if (
+                    MessageBox.Show(
+                        "Selected timer will be removed, along with any such timers among all groups, together with their settings. Confirm?",
+                        "Confirm removal",
+                        MessageBoxButtons.YesNoCancel,
+                        MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    timerDefinitions.RemoveCustomTimerDefinition(((TimerDefinition) listBox1.SelectedItem).Id);
+                    ReloadList();
+                }
+            }
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
         }
     }
 }

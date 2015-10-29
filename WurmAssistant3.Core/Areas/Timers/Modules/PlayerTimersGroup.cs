@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
+using AldursLab.WurmApi.Modules.Wurm.Characters;
+using AldursLab.WurmApi.Modules.Wurm.ServerHistory;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
@@ -24,143 +26,130 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
     [PersistentObject("TimersFeature_PlayerTimersGroup")]
     public class PlayerTimersGroup : PersistentObjectBase, IInitializable
     {
-        // note: player name is the persistent object id
+        [JsonObject(MemberSerialization.OptIn)]
+        public class ActiveTimer
+        {
+            [JsonProperty("definitionId")]
+            public Guid DefinitionId { get; set; }
+            [JsonProperty("timerId")]
+            public Guid TimerId { get; set; }
+
+            public override string ToString()
+            {
+                return string.Format("DefinitionId: {0}, TimerId: {1}", DefinitionId, TimerId);
+            }
+        }
+
+        [JsonProperty] 
+        readonly List<ActiveTimer> activeTimerDefinitions = new List<ActiveTimer>();
 
         [JsonProperty]
-        HashSet<TimerDefinition> activeTimerDefinitions = new HashSet<TimerDefinition>();
-        [JsonProperty] //saved to figure, on which servers is current character, in each group
-        Dictionary<string, string> groupIdToServerMap = new Dictionary<string, string>();
-        [JsonProperty] //saved to remember last group this char was on
-        string currentServerGroupId = ServerGroup.UnknownId;
-        [JsonProperty] //saved to make init searches quicker
-        DateTime lastServerGroupCheckup = DateTime.MinValue;
-        [JsonProperty] //last server this char was on
-        string currentServerName = null;
+        string characterName;
+        public string CharacterName
+        {
+            get { return characterName; }
+            set { characterName = value; FlagAsChanged(); }
+        }
 
-        readonly List<WurmTimer> wurmTimers = new List<WurmTimer>();
+        [JsonProperty]
+        string serverGroupId;
+        public string ServerGroupId
+        {
+            get { return serverGroupId; }
+            set { serverGroupId = value; FlagAsChanged(); }
+        }
 
-        public string CharacterName { get; private set; }
+        [JsonProperty]
+        int sortingOrder;
+        public int SortingOrder
+        {
+            get { return sortingOrder; }
+            set { sortingOrder = value; FlagAsChanged(); }
+        }
+
+        readonly List<WurmTimer> timers = new List<WurmTimer>();
 
         readonly PlayerLayoutView layoutControl;
         readonly TimersFeature timersFeature;
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
         readonly TimerDefinitions timerDefinitions;
-
-        bool currentServerGroupFound;
+        readonly TimerInstances timerInstances;
 
         public TimersFeature TimersFeature { get { return timersFeature; } }
 
-        public PlayerTimersGroup(TimersFeature timersFeature, string characterName, [NotNull] IWurmApi wurmApi,
-            [NotNull] ILogger logger, [NotNull] ISoundEngine soundEngine, [NotNull] ITrayPopups trayPopups,
-            [NotNull] TimerDefinitions timerDefinitions)
-            : base(characterName) 
+        IWurmCharacter character;
+        IWurmServer currentServerOnTheGroup;
+
+        public PlayerTimersGroup(string persistentObjectId, TimersFeature timersFeature, 
+            [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger, [NotNull] ISoundEngine soundEngine, 
+            [NotNull] ITrayPopups trayPopups, [NotNull] TimerDefinitions timerDefinitions,
+            [NotNull] TimerInstances timerInstances)
+            : base(persistentObjectId) 
         {
-            if (characterName == null) throw new ArgumentNullException("characterName");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
             if (soundEngine == null) throw new ArgumentNullException("soundEngine");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (timerDefinitions == null) throw new ArgumentNullException("timerDefinitions");
-            this.CharacterName = characterName;
+            if (timerInstances == null) throw new ArgumentNullException("timerInstances");
+            this.Id = Guid.Parse(persistentObjectId);
             this.timersFeature = timersFeature;
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.timerDefinitions = timerDefinitions;
-
-            if (activeTimerDefinitions == null)
-                activeTimerDefinitions = new HashSet<TimerDefinition>();
-            if (groupIdToServerMap == null)
-                groupIdToServerMap = new Dictionary<string, string>();
+            this.timerInstances = timerInstances;
 
             layoutControl = new PlayerLayoutView(this);
-            this.timersFeature.RegisterTimersGroup(layoutControl);
-            wurmApi.LogsMonitor.Subscribe(CharacterName, LogType.AllLogs, OnNewLogEvents);
-        }
 
-        public HashSet<TimerDefinition> ActiveTimerDefinitions
-        {
-            get { return activeTimerDefinitions; }
-            set { activeTimerDefinitions = value; FlagAsChanged(); }
-        }
-
-        public Dictionary<string, string> GroupIdToServerMap
-        {
-            get { return groupIdToServerMap; }
-            set { groupIdToServerMap = value; FlagAsChanged(); }
-        }
-
-        public string CurrentServerGroupId
-        {
-            get { return currentServerGroupId; }
-            set { currentServerGroupId = value; FlagAsChanged(); }
-        }
-
-        public DateTime LastServerGroupCheckup
-        {
-            get { return lastServerGroupCheckup; }
-            private set { lastServerGroupCheckup = value; FlagAsChanged(); }
-        }
-
-        public string CurrentServerName
-        {
-            get { return currentServerName; }
-            private set { currentServerName = value; FlagAsChanged(); }
+            
         }
 
         public void Initialize()
         {
-            PerformAsyncInits(LastServerGroupCheckup);
+            this.timersFeature.RegisterTimersGroup(layoutControl);
+            wurmApi.LogsMonitor.Subscribe(CharacterName, LogType.AllLogs, OnNewLogEvents);
+            character = wurmApi.Characters.Get(CharacterName);
+            character.LogInOrCurrentServerPotentiallyChanged += CharacterOnLogInOrCurrentServerPotentiallyChanged;
+            PerformAsyncInits();
         }
 
-        private async void PerformAsyncInits(DateTime lastCheckup)
+        public Guid Id { get; private set; }
+
+        [CanBeNull]
+        public IWurmServer CurrentServerOnTheGroup
+        {
+            get { return currentServerOnTheGroup; }
+        }
+
+        private async void PerformAsyncInits()
         {
             try
             {
-                TimeSpan timeToCheck = (DateTime.Now - lastCheckup).ConstrainToRange(TimeSpan.FromDays(7), TimeSpan.FromDays(120));
+                await AttemptToEstablishCurrentServer(TimeSpan.FromDays(120));
 
-                var lgs = await wurmApi.LogsHistory.ScanAsync(new LogSearchParameters()
+                if (currentServerOnTheGroup == null)
                 {
-                    LogType = LogType.Event,
-                    MinDate = DateTime.Now - timeToCheck,
-                    MaxDate = DateTime.Now,
-                    CharacterName = CharacterName,
-                });
+                    await AttemptToEstablishCurrentServer(TimeSpan.FromDays(365));
+                }
 
-                string mostRecentGroup = ServerGroup.UnknownId;
-                string mostRecentServerName = null;
-
-                foreach (var line in lgs)
+                foreach (var activeTimer in activeTimerDefinitions)
                 {
-                    if (line.Content.Contains("You are on"))
+                    try
                     {
-                        string serverName;
-                        string group = GetServerGroupFromLine(line.Content, out serverName);
-                        if (group != ServerGroup.UnknownId)
-                        {
-                            if (!String.IsNullOrEmpty(serverName))
-                            {
-                                GroupIdToServerMap[group] = serverName;
-                                FlagAsChanged();
-                            }
-                            mostRecentServerName = serverName;
-                            mostRecentGroup = group;
-                            // we've got what we needed
-                            break;
-                        }
+                        var definition = timerDefinitions.GetById(activeTimer.DefinitionId);
+                        WurmTimer timer = timerInstances.GetTimer(activeTimer.DefinitionId, activeTimer.TimerId);
+                        timer.Initialize(this, CharacterName, definition);
+                        layoutControl.RegisterNewTimerDisplay(timer.View);
+                        timers.Add(timer);
+                        FlagAsChanged();
+                    }
+                    catch (Exception exception)
+                    {
+                        logger.Error(exception, "Error at InitTimers for timer " + activeTimer);
+                        FlagAsChanged();
                     }
                 }
-
-                if (mostRecentGroup != ServerGroup.UnknownId && !currentServerGroupFound)
-                {
-                    CurrentServerGroupId = mostRecentGroup;
-                    if (mostRecentServerName != null) CurrentServerName = mostRecentServerName;
-                    currentServerGroupFound = true;
-                    LastServerGroupCheckup = DateTime.Now;
-                    FlagAsChanged();
-                }
-
-                InitTimers(ActiveTimerDefinitions);
 
                 layoutControl.EnableAddingTimers();
             }
@@ -170,217 +159,181 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             }
         }
 
+        async Task AttemptToEstablishCurrentServer(TimeSpan timestampToSearch)
+        {
+            var scanResults =
+                await
+                    character.Logs.ScanLogsServerGroupRestrictedAsync(DateTime.Now - timestampToSearch,
+                        DateTime.Now,
+                        LogType.Event,
+                        new ServerGroup(ServerGroupId),
+                        ScanResultOrdering.Descending);
+
+            foreach (var entry in scanResults)
+            {
+                var serverStamp = entry.TryGetServerFromLogEntry();
+                if (serverStamp != null)
+                {
+                    var server = wurmApi.Servers.GetByName(serverStamp.ServerName);
+                    if (server.ServerGroup.ServerGroupId == ServerGroupId)
+                    {
+                        currentServerOnTheGroup = server;
+                        break;
+                    }
+                }
+            }
+        }
+
+        internal void AddNewTimer()
+        {
+            var availableTimers =
+                timerDefinitions.GetDefinitionsOfUnusedTimers(activeTimerDefinitions.Select(timer => timer.DefinitionId));
+            
+            TimersChoiceForm ui = new TimersChoiceForm(availableTimers, timersFeature.GetModuleUi());
+            if (ui.ShowDialogCenteredOnForm(timersFeature.GetModuleUi()) == System.Windows.Forms.DialogResult.OK)
+            {
+                foreach (var definition in ui.Result)
+                {
+                    try
+                    {
+                        WurmTimer newTimer = timerInstances.CreateTimer(definition.Id);
+                        newTimer.Initialize(this, CharacterName, definition);
+                        activeTimerDefinitions.Add(new ActiveTimer()
+                        {
+                            DefinitionId = definition.Id,
+                            TimerId = newTimer.Id
+                        });
+                        layoutControl.RegisterNewTimerDisplay(newTimer.View);
+                        timers.Add(newTimer);
+                        FlagAsChanged();
+                    }
+                    catch (Exception exception)
+                    {
+                        logger.Error(exception, "Error at InitTimers for timer " + definition);
+                    }
+                }
+            }
+        }
+
         public void Stop()
         {
             wurmApi.LogsMonitor.Unsubscribe(CharacterName, OnNewLogEvents);
+
             timersFeature.UnregisterTimersGroup(layoutControl);
-            foreach (var timer in wurmTimers)
+            if (character != null)
+            {
+                character.LogInOrCurrentServerPotentiallyChanged -= CharacterOnLogInOrCurrentServerPotentiallyChanged;
+            }
+            foreach (var timer in timers)
             {
                 timer.Stop();
             }
             layoutControl.Dispose();
         }
 
-        internal void AddNewTimer()
-        {
-            var availableTimers = timerDefinitions.GetDefinitionsOfUnusedTimers(ActiveTimerDefinitions);
-            
-            TimersChoiceForm ui = new TimersChoiceForm(availableTimers, timersFeature.GetModuleUi());
-            if (ui.ShowDialogCenteredOnForm(timersFeature.GetModuleUi()) == System.Windows.Forms.DialogResult.OK)
-            {
-                InitTimers(ui.Result);
-            }
-        }
-
         internal void RemoveTimer(WurmTimer timer)
         {
-            try
+            timerInstances.UnloadTimer(timer);
+            timers.Remove(timer);
+
+            var toRemove =
+                activeTimerDefinitions.Where(activeTimer => activeTimer.DefinitionId == timer.TimerDefinition.Id).ToArray();
+            foreach (var activeTimer in toRemove)
             {
-                var type = timerDefinitions.FindDefinitionForTimer(timer);
-                ActiveTimerDefinitions.Remove(type);
-                FlagAsChanged();
+                activeTimerDefinitions.Remove(activeTimer);
             }
-            catch (InvalidOperationException _e)
-            {
-                if (timer is CustomTimer)
-                {
-                    logger.Info("there was an issue with removing custom timer, attempting fix now");
-                    ActiveTimerDefinitions.RemoveWhere(x => timer.TimerDefinitionId.Name == x.TimerDefinitionId.Name);
-                    logger.Info("fixed");
-                    FlagAsChanged();
-                }
-                else
-                {
-                    logger.Error(_e, "problem removing timer from active list, ID: " + timer.Name);
-                }
-            }
-            timerDefinitions.Unload(timer);
-            wurmTimers.Remove(timer);
+
+            FlagAsChanged();
+
             timer.Stop();
         }
 
-        void InitTimers(HashSet<TimerDefinition> definitions)
+        public void StopTimer(WurmTimer wurmTimer)
         {
-            var definitionsArray = definitions.ToArray();
-            foreach (var timerDefinition in definitionsArray)
-            {
-                try
-                {
-                    WurmTimer newTimer = timerDefinitions.NewTimerFactory(timerDefinition, CharacterName);
-                    newTimer.Initialize(this, CharacterName, timerDefinition);
-                    wurmTimers.Add(newTimer);
-                    ActiveTimerDefinitions.Add(timerDefinition);
-                    FlagAsChanged();
-                }
-                catch (Exception exception)
-                {
-                    ActiveTimerDefinitions.Remove(timerDefinition);
-                    logger.Error(exception, "Error at InitTimers for timer " + timerDefinition.ToDebugString());
-                    FlagAsChanged();
-                }
-            }
-        }
-
-        public void RemoveDeletedCustomTimer(string nameId)
-        {
-            var timers = wurmTimers.ToArray();
-            foreach (var timer in timers)
-            {
-                if (timer.TimerDefinitionId.Name == nameId)
-                {
-                    timerDefinitions.Unload(timer);
-                    RemoveTimer(timer);
-                }
-            }
-        }
-
-        internal void RegisterNewControlTimer(TimerDisplayView timerView)
-        {
-            layoutControl.RegisterNewTimerDisplay(timerView);
-        }
-
-        internal void UnregisterControlTimer(TimerDisplayView timerView)
-        {
-            layoutControl.UnregisterTimerDisplay(timerView);
+            layoutControl.UnregisterTimerDisplay(wurmTimer.View);
         }
 
         internal void Update()
         {
-            foreach (var timer in wurmTimers)
+            foreach (var timer in timers)
             {
                 if (timer.InitCompleted) timer.Update();
                 else if (timer.RunUpdateRegardlessOfInitCompleted) timer.Update();
             }
         }
 
-        /// <summary>
-        /// Attempts to extract correct server group from a wurm log entry. If no group could be extracted,
-        /// will return Unknown and out serverName will be null.
-        /// </summary>
-        /// <param name="line"></param>
-        /// <param name="serverName"></param>
-        /// <returns></returns>
-        string GetServerGroupFromLine(string line, out string serverName)
+        void CharacterOnLogInOrCurrentServerPotentiallyChanged(object sender, PotentialServerChangeEventArgs potentialServerChangeEventArgs)
         {
-            //[15:14:17] 75 other players are online. You are on Exodus (774 totally in Wurm).
-            Match match = Regex.Match(line, @"\d+ other players are online.*\. You are on (.+) \(", RegexOptions.Compiled);
-            if (match.Success)
-            {
-                serverName = match.Groups[1].Value;
-                try
-                {
-                    var server = wurmApi.Servers.GetByName(new ServerName(serverName));
-                    return server.ServerGroup.ServerGroupId;
-                }
-                catch (DataNotFoundException)
-                {
-                    logger.Error(string.Format("no server found in IWurmApi for name: {0}, line: {1}",
-                        serverName,
-                        line ?? "NULL LINE"));
-                    serverName = null;
-                    return ServerGroup.UnknownId;
-                }
-            }
-            else
-            {
-                serverName = null;
-                logger.Error("could not match server name from line: " + (line ?? "NULL"));
-                return ServerGroup.UnknownId;
-            }
+            currentServerOnTheGroup = wurmApi.Servers.GetByName(potentialServerChangeEventArgs.ServerName);
         }
 
         void OnNewLogEvents(object sender, LogsMonitorEventArgs e)
         {
-            //Logger.LogDebug("events received", this);
-            if (e.LogType == LogType.Event)
+            try
             {
-                foreach (var entry in e.WurmLogEntries)
+                var currentServer = currentServerOnTheGroup;
+                if (currentServer != null && currentServer.ServerGroup.ServerGroupId == ServerGroupId)
                 {
-                    try
+                    if (e.LogType == LogType.Event)
                     {
-                        //detect server travel and update information
-                        if (entry.Content.Contains("You are on"))
+                        foreach (var timer in timers)
                         {
-                            string serverName;
-                            string group = GetServerGroupFromLine(entry.Content, out serverName);
-                            if (group != ServerGroup.UnknownId)
+                            if (timer.InitCompleted)
                             {
-                                if (!String.IsNullOrEmpty(serverName))
+                                foreach (var entry in e.WurmLogEntries)
                                 {
-                                    GroupIdToServerMap[group] = serverName;
+                                    timer.HandleNewEventLogLine(entry);
                                 }
-                                CurrentServerGroupId = group;
-                                currentServerGroupFound = true;
-                                LastServerGroupCheckup = DateTime.Now;
-                                CurrentServerName = serverName;
-                                FlagAsChanged();
                             }
                         }
                     }
-                    catch (Exception _e)
+                    if (e.LogType == LogType.Skills)
                     {
-                        logger.Error(_e, "problem parsing line while updating current server group, line: " + entry);
-                    }
-                }
-
-                foreach (var timer in wurmTimers)
-                {
-                    if (timer.InitCompleted && CurrentServerGroupId == timer.TimerDefinitionId.ServerGroupId)
-                    {
-                        foreach (var entry in e.WurmLogEntries)
+                        //call all timers with wurmskill handler
+                        foreach (var timer in timers)
                         {
-                            timer.HandleNewEventLogLine(entry);
+                            if (timer.InitCompleted)
+                            {
+                                foreach (var line in e.WurmLogEntries)
+                                {
+                                    timer.HandleNewSkillLogLine(line);
+                                }
+                            }
+                        }
+                    }
+
+                    foreach (var timer in timers)
+                    {
+                        if (timer.InitCompleted)
+                        {
+                            timer.HandleAnyLogLine(e);
                         }
                     }
                 }
             }
-            if (e.LogType == LogType.Skills)
+            catch (Exception exception)
             {
-                //call all timers with wurmskill handler
-                foreach (var timer in wurmTimers)
-                {
-                    if (timer.InitCompleted && CurrentServerGroupId == timer.TimerDefinitionId.ServerGroupId)
-                    {
-                        foreach (var line in e.WurmLogEntries)
-                        {
-                            timer.HandleNewSkillLogLine(line);
-                        }
-                    }
-                }
-            }
-
-            foreach (var timer in wurmTimers)
-            {
-                if (timer.InitCompleted && CurrentServerGroupId == timer.TimerDefinitionId.ServerGroupId)
-                {
-                    timer.HandleAnyLogLine(e);
-                }
+                logger.Error(exception, "Error during OnNewLogEvents at timers group " + this.ToString());
             }
         }
 
         internal TimersForm GetModuleUI()
         {
             return timersFeature.GetModuleUi();
+        }
+
+        public void StopAndRemoveMatchingTimerDefinition(Guid definitionId)
+        {
+            var matching = timers.Where(timer => timer.TimerDefinition.Id == definitionId).ToArray();
+            foreach (var timer in matching)
+            {
+                RemoveTimer(timer);
+            }
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0} ({1})", CharacterName, ServerGroupId);
         }
     }
 }
