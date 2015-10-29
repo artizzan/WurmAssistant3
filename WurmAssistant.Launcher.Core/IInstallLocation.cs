@@ -13,7 +13,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
         string InstallLocationPath { get; }
         void ClearLocation();
         void RunWurmAssistant(string args = null);
-        Wa3VersionInfo GetInstalledVersion();
+        Wa3VersionInfo TryGetInstalledVersion();
         void EnterWa3Lock();
         void ReleaseWa3Lock();
     }
@@ -69,7 +69,8 @@ namespace AldursLab.WurmAssistant.Launcher.Core
             processRunner.Start(Path.Combine(installDirPath, wurmAssistantExeFileName), args);
         }
 
-        public Wa3VersionInfo GetInstalledVersion()
+        [CanBeNull]
+        public Wa3VersionInfo TryGetInstalledVersion()
         {
             if (Installed)
             {

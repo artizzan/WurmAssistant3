@@ -83,7 +83,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                     };
                 }
 
-                var localVersion = installLocation.GetInstalledVersion();
+                var localVersion = installLocation.TryGetInstalledVersion();
                 gui.AddUserMessage("Local version is: " + (localVersion != null ? localVersion.ToString() : "None"));
 
                 Wa3VersionInfo targetVersion = null;
@@ -212,7 +212,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                     installLocation.ClearLocation();
                     stagingLocation.MoveExtractionDir(installLocation.InstallLocationPath);
                     stagingLocation.ClearStagingArea();
-                    gui.AddUserMessage("Updated to version: " + installLocation.GetInstalledVersion().ToString());
+                    gui.AddUserMessage("Updated to version: " + installLocation.TryGetInstalledVersion().ToString());
                     gui.AddUserMessage("Update complete");
                     gui.SetProgressStatus("Update complete");
                 }
@@ -246,9 +246,15 @@ namespace AldursLab.WurmAssistant.Launcher.Core
 
             if (installLocation.Installed)
             {
-                var installedVersion = installLocation.GetInstalledVersion();
-                if (
-                    installedVersion.BuildCode != targetBuildCode ||
+                var installedVersion = installLocation.TryGetInstalledVersion();
+                if (installedVersion == null)
+                {
+                    gui.AddUserMessage("Installed WA version could not be read.");
+                    gui.AddUserMessage("Attempting to launch installed version...");
+                    return false;
+                }
+
+                if (installedVersion.BuildCode != targetBuildCode ||
                     (!string.IsNullOrEmpty(targetBuildNumber) && targetBuildNumber != installedVersion.BuildNumber))
                 {
                     gui.AddUserMessage(
