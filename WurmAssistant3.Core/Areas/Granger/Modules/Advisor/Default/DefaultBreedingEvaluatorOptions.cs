@@ -15,14 +15,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default
             ignorePregnant = true;
             IgnoreRecentlyPregnant = true;
             IgnoreOtherHerds = false;
-            IgnorePairedHorses = false;
+            IgnorePairedCreatures = false;
             IgnoreSold = false;
 
             IgnoreFoals = true;
             IgnoreYoung = true;
             IgnoreAdolescent = false;
 
-            AgeIgnoreOnlyOtherHorses = false;
+            AgeIgnoreOnlyOtherCreatures = false;
 
             IncludePotentialValue = false;
             PotentialValuePositiveWeight = 1.0;
@@ -37,7 +37,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default
             DiscardOnInbreeding = true;
             InbreedingPenaltyWeight = 1.0;
 
-            horseColorValues = new Dictionary<HorseColorId, float>();
+            creatureColorValues = new Dictionary<CreatureColorId, float>();
         }
 
         protected override void OnPersistentDataLoaded()
@@ -47,11 +47,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default
 
         void BuildInitialColorValuesDict()
         {
-            foreach (var currentColor in HorseColor.GetAll())
+            foreach (var currentColor in CreatureColor.GetAll())
             {
-                if (!horseColorValues.ContainsKey(currentColor.HorseColorId))
+                if (!creatureColorValues.ContainsKey(currentColor.CreatureColorId))
                 {
-                    horseColorValues.Add(currentColor.HorseColorId, 1.0f);
+                    creatureColorValues.Add(currentColor.CreatureColorId, 1.0f);
                 }
             }
         }
@@ -93,12 +93,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default
         }
 
         [JsonProperty]
-        bool ignorePairedHorses;
+        bool ignorePairedCreatures;
 
-        public bool IgnorePairedHorses
+        public bool IgnorePairedCreatures
         {
-            get { return ignorePairedHorses; }
-            set { ignorePairedHorses = value; FlagAsChanged(); }
+            get { return ignorePairedCreatures; }
+            set { ignorePairedCreatures = value; FlagAsChanged(); }
         }
 
         [JsonProperty]
@@ -147,12 +147,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default
         }
 
         [JsonProperty]
-        bool ageIgnoreOnlyOtherHorses;
+        bool ageIgnoreOnlyOtherCreatures;
 
-        public bool AgeIgnoreOnlyOtherHorses
+        public bool AgeIgnoreOnlyOtherCreatures
         {
-            get { return ageIgnoreOnlyOtherHorses; }
-            set { ageIgnoreOnlyOtherHorses = value; FlagAsChanged(); }
+            get { return ageIgnoreOnlyOtherCreatures; }
+            set { ageIgnoreOnlyOtherCreatures = value; FlagAsChanged(); }
         }
 
         [JsonProperty]
@@ -290,25 +290,25 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default
         }
 
         [JsonProperty]
-        readonly Dictionary<HorseColorId, float> horseColorValues;
+        readonly Dictionary<CreatureColorId, float> creatureColorValues;
 
-        public IEnumerable<ColorWeight> HorseColorValues
+        public IEnumerable<ColorWeight> CreatureColorValues
         {
-            get { return horseColorValues.Select(x => new ColorWeight(new HorseColor(x.Key), x.Value)).ToArray(); }
+            get { return creatureColorValues.Select(x => new ColorWeight(new CreatureColor(x.Key), x.Value)).ToArray(); }
             set
             {
                 foreach (var colorWeight in value)
                 {
-                    horseColorValues[colorWeight.Color.HorseColorId] = colorWeight.Weight;
+                    creatureColorValues[colorWeight.Color.CreatureColorId] = colorWeight.Weight;
                 }
                 FlagAsChanged();
             }
         }
 
-        public float GetValueForColor(HorseColor color)
+        public float GetValueForColor(CreatureColor color)
         {
             float result = 1.0f;
-            horseColorValues.TryGetValue(color.HorseColorId, out result);
+            creatureColorValues.TryGetValue(color.CreatureColorId, out result);
             return result;
         }
     }

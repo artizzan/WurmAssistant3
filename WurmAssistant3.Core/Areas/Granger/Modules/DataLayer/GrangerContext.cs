@@ -16,9 +16,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
             this.grangerSimpleDb = grangerSimpleDb;
         }
 
-        public IEnumerable<HorseEntity> Horses
+        public IEnumerable<CreatureEntity> Creatures
         {
-            get { return grangerSimpleDb.Horses.Values.ToArray(); }
+            get { return grangerSimpleDb.Creatures.Values.ToArray(); }
         }
 
         public IEnumerable<TraitValueEntity> TraitValues
@@ -33,7 +33,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
 
         public event EventHandler<EventArgs> OnHerdsModified;
         public event EventHandler<EventArgs> OnTraitValuesModified;
-        public event EventHandler<EventArgs> OnHorsesModified;
+        public event EventHandler<EventArgs> OnEntitiesModified;
 
         #region HERD OPS
 
@@ -71,8 +71,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
             newHerd.HerdID = newHerdName;
             grangerSimpleDb.Herds[newHerdName] = newHerd;
 
-            List<HorseEntity> horsesInThisHerd = Horses.Where(x => x.Herd == renamingHerd).ToList();
-            horsesInThisHerd.ForEach(x => x.Herd = newHerdName);
+            List<CreatureEntity> creaturesInThisHerd = Creatures.Where(x => x.Herd == renamingHerd).ToList();
+            creaturesInThisHerd.ForEach(x => x.Herd = newHerdName);
 
             grangerSimpleDb.Herds.Remove(oldherd.HerdID);
             grangerSimpleDb.Save();
@@ -86,59 +86,57 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
         internal void DeleteHerd(string herdName)
         {
             HerdEntity herd = Herds.Single(x => x.HerdID == herdName);
-            HorseEntity[] horsesInThisHerd = Horses.Where(x => x.Herd == herdName).ToArray();
-            foreach (var horseEntity in horsesInThisHerd)
+            CreatureEntity[] creaturesInThisHerd = Creatures.Where(x => x.Herd == herdName).ToArray();
+            foreach (var creatureEntity in creaturesInThisHerd)
             {
-                grangerSimpleDb.Horses.Remove(horseEntity.Id);
+                grangerSimpleDb.Creatures.Remove(creatureEntity.Id);
             }
             grangerSimpleDb.Herds.Remove(herd.HerdID);
             grangerSimpleDb.Save();
             if (OnHerdsModified != null) OnHerdsModified(this, new EventArgs());
         }
 
-        public class DuplicateHorseIdentityException : Exception
+        public class DuplicateCreatureIdentityException : Exception
         {
-            public DuplicateHorseIdentityException(string message)
+            public DuplicateCreatureIdentityException(string message)
                 : base(message)
             {
             }
         }
 
-        /// <summary>
-        /// throws DuplicateHorseIdentityException
-        /// </summary>
-        /// <param name="sourceHerd"></param>
-        /// <param name="destinationHerd"></param>
+        /// <param name="sourceHerdName"></param>
+        /// <param name="destinationHerdName"></param>
+        /// <exception cref="DuplicateCreatureIdentityException"></exception>
         internal void MergeHerds(string sourceHerdName, string destinationHerdName)
         {
             HerdEntity sourceHerd = Herds.Single(x => x.HerdID == sourceHerdName);
             HerdEntity destinationHerd = Herds.Single(x => x.HerdID == destinationHerdName);
 
-            HorseEntity[] horsesInSource = Horses.Where(x => x.Herd == sourceHerd.HerdID).ToArray();
-            HorseEntity[] horsesInDestination = Horses.Where(x => x.Herd == destinationHerd.HerdID).ToArray();
+            CreatureEntity[] creaturesInSource = Creatures.Where(x => x.Herd == sourceHerd.HerdID).ToArray();
+            CreatureEntity[] creaturesInDestination = Creatures.Where(x => x.Herd == destinationHerd.HerdID).ToArray();
 
-            List<HorseEntity> nonUniqueIdentityHorses = new List<HorseEntity>();
-            foreach (var sourcehorse in horsesInSource)
+            List<CreatureEntity> nonUniqueIdentityCreatures = new List<CreatureEntity>();
+            foreach (var sourceCreatures in creaturesInSource)
             {
-                foreach (var destinationhorse in horsesInDestination)
+                foreach (var destinationCreature in creaturesInDestination)
                 {
-                    if (sourcehorse.IsDifferentIdentityThan(destinationhorse) == false)
-                        nonUniqueIdentityHorses.Add(sourcehorse);
+                    if (sourceCreatures.IsDifferentIdentityThan(destinationCreature) == false)
+                        nonUniqueIdentityCreatures.Add(sourceCreatures);
                 }
             }
 
-            if (nonUniqueIdentityHorses.Any())
+            if (nonUniqueIdentityCreatures.Any())
             {
-                throw new DuplicateHorseIdentityException("target herd: "
+                throw new DuplicateCreatureIdentityException("target herd: "
                     + destinationHerd.HerdID
-                    + " already contains horse(s) of same identity: "
-                    + string.Join(", ", nonUniqueIdentityHorses));
+                    + " already contains creature(s) of same identity: "
+                    + string.Join(", ", nonUniqueIdentityCreatures));
             }
             else
             {
-                foreach (var horse in horsesInSource)
+                foreach (var creature in creaturesInSource)
                 {
-                    horse.Herd = destinationHerd.HerdID;
+                    creature.Herd = destinationHerd.HerdID;
                 }
                 grangerSimpleDb.Herds.Remove(sourceHerd.HerdID);
                 grangerSimpleDb.Save();
@@ -156,9 +154,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
 
         #endregion
 
-        internal void UpdateOrCreateTraitValueMap(Dictionary<HorseTrait.TraitEnum, int> valueMap, string traitValueMapID)
+        internal void UpdateOrCreateTraitValueMap(Dictionary<CreatureTrait.TraitEnum, int> valueMap, string traitValueMapId)
         {
-            var entities = TraitValues.Where(x => x.ValueMapID == traitValueMapID).ToArray();
+            var entities = TraitValues.Where(x => x.ValueMapID == traitValueMapId).ToArray();
             if (entities.Length > 0)
             {
                 foreach (var traitValueEntity in entities)
@@ -173,9 +171,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
                 TraitValueEntity newentity = new TraitValueEntity()
                 {
                     ID = nextIndex,
-                    Trait = new HorseTrait(keyval.Key),
+                    Trait = new CreatureTrait(keyval.Key),
                     Value = keyval.Value,
-                    ValueMapID = traitValueMapID
+                    ValueMapID = traitValueMapId
                 };
                 grangerSimpleDb.TraitValues[newentity.ID] = newentity;
                 nextIndex++;
@@ -185,9 +183,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
             if (OnTraitValuesModified != null) OnTraitValuesModified(this, new EventArgs());
         }
 
-        internal void DeleteTraitValueMap(string traitValueMapID)
+        internal void DeleteTraitValueMap(string traitValueMapId)
         {
-            var entities = TraitValues.Where(x => x.ValueMapID == traitValueMapID).ToArray();
+            var entities = TraitValues.Where(x => x.ValueMapID == traitValueMapId).ToArray();
             if (entities.Length > 0)
             {
                 foreach (var traitValueEntity in entities)
@@ -199,32 +197,28 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
             if (OnTraitValuesModified != null) OnTraitValuesModified(this, new EventArgs());
         }
 
-        /// <summary>
-        /// throws DuplicateKeyException
-        /// </summary>
-        /// <param name="horse"></param>
-        public void InsertHorse(HorseEntity horse)
+        public void InsertCreature(CreatureEntity creature)
         {
-            grangerSimpleDb.Horses[horse.Id] = horse;
+            grangerSimpleDb.Creatures[creature.Id] = creature;
             grangerSimpleDb.Save();
-            if (OnHorsesModified != null) OnHorsesModified(this, new EventArgs());
+            if (OnEntitiesModified != null) OnEntitiesModified(this, new EventArgs());
         }
 
-        internal void SubmitChangesToHorses()
+        internal void SubmitChanges()
         {
-            // Horses are updated directly now, but we still need this method for event
+            // Creatures are updated directly now, but we still need this method for event
             grangerSimpleDb.Save();
-            if (OnHorsesModified != null) OnHorsesModified(this, new EventArgs());
+            if (OnEntitiesModified != null) OnEntitiesModified(this, new EventArgs());
         }
 
-        internal void DeleteHorses(HorseEntity[] horses)
+        internal void DeleteCreatures(CreatureEntity[] creatures)
         {
-            foreach (var horseEntity in horses)
+            foreach (var creatureEntity in creatures)
             {
-                grangerSimpleDb.Horses.Remove(horseEntity.Id);
+                grangerSimpleDb.Creatures.Remove(creatureEntity.Id);
             }
             grangerSimpleDb.Save();
-            if (OnHorsesModified != null) OnHorsesModified(this, new EventArgs());
+            if (OnEntitiesModified != null) OnEntitiesModified(this, new EventArgs());
         }
     }
 }

@@ -24,18 +24,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             DISEASED = "diseased",
             FAT = "fat";
 
-        public static string[] HorseAges = 
+        public static string[] CreatureAges = 
         {
             YOUNG, ADOLESCENT, MATURE, AGED, OLD, VENERABLE
         };
 
-        public static string[] HorseAgesUpcase;
+        public static string[] CreatureAgesUpcase;
 
         /// <summary>
         /// check for these names is ToUpperInvariant
         /// </summary>
         static string[] WildCreatureNames = 
         {
+            //todo: this is no longer useful, remove functionality
             "Horse", "Hell horse", "deer", "cow", "bull", "bison", 
         };
 
@@ -48,26 +49,26 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 
         static GrangerHelpers()
         {
-            HorseAgesUpcase = HorseAges.Select(x => x.ToUpperInvariant()).ToArray();
+            CreatureAgesUpcase = CreatureAges.Select(x => x.ToUpperInvariant()).ToArray();
 
             var allnameprefixesBuilder = new List<string>();
-            allnameprefixesBuilder.AddRange(HorseAges);
+            allnameprefixesBuilder.AddRange(CreatureAges);
             allnameprefixesBuilder.AddRange(OtherNamePrefixes);
             AllNamePrefixes = allnameprefixesBuilder.ToArray<string>();
         }
 
-        public static string RemoveAllPrefixes(string horseName)
+        public static string RemoveAllPrefixes(string creatureName)
         {
             foreach (string prefix in AllNamePrefixes)
             {
-                horseName = horseName.Replace(prefix, string.Empty);
+                creatureName = creatureName.Replace(prefix, string.Empty);
             }
-            horseName = horseName.Trim();
-            return horseName;
+            creatureName = creatureName.Trim();
+            return creatureName;
         }
 
         /// <summary>
-        /// capitalizes lower-case horse name
+        /// capitalizes lower-case creature name
         /// </summary>
         /// <param name="lowercasename"></param>
         /// <returns></returns>
@@ -82,9 +83,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         static TimeSpan _LongestPregnancyPossible = TimeSpan.FromHours(273);
         public static TimeSpan LongestPregnancyPossible { get { return _LongestPregnancyPossible; } }
 
-        public static HorseAge ExtractHorseAge(string prefixedObjectName)
+        public static CreatureAge ExtractCreatureAge(string prefixedObjectName)
         {
-            return HorseAge.CreateAgeFromRawHorseNameStartsWith(prefixedObjectName);
+            return CreatureAge.CreateAgeFromRawCreatureNameStartsWith(prefixedObjectName);
         }
 
         /// <summary>
@@ -108,21 +109,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         /// <summary>
         /// Checks if provided string is EQUAL to blacklisted (wild) creature name.
         /// </summary>
-        /// <param name="fixedHorseName"></param>
+        /// <param name="fixedCreatureName"></param>
         /// <returns></returns>
-        public static bool IsBlacklistedCreatureName_EqualCheck(string fixedHorseName)
+        public static bool IsBlacklistedCreatureName_EqualCheck(string fixedCreatureName)
         {
-            fixedHorseName = fixedHorseName.ToUpperInvariant();
+            fixedCreatureName = fixedCreatureName.ToUpperInvariant();
             foreach (string name in WildCreatureNames)
             {
-                if (fixedHorseName == name.ToUpperInvariant()) return true;
+                if (fixedCreatureName == name.ToUpperInvariant()) return true;
             }
             return false;
         }
 
         public static bool HasAgeInName(string prefixedObjectName, bool ignoreCase = false)
         {
-            foreach (string age in HorseAges)
+            foreach (string age in CreatureAges)
             {
                 if (ignoreCase)
                 {
@@ -136,41 +137,41 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             return false;
         }
 
-        public static string ExtractHorseName(string prefixedObjectName)
+        public static string ExtractCreatureName(string prefixedObjectName)
         {
             return RemoveAllPrefixes(prefixedObjectName);
         }
 
         /// <summary>
-        /// Returns possible horse name if line contains DISEASED. Null if no matches.
+        /// Returns possible creature name if line contains DISEASED. Null if no matches.
         /// </summary>
         /// <param name="inputLine"></param>
         /// <returns></returns>
         public static string LineContainsDiseased(string inputLine)
         {
-            // try to match for [age] diseased [horsename]
+            // try to match for [age] diseased [creaturename]
             return LineContains(inputLine, DISEASED);
         }
 
         /// <summary>
-        /// Returns possible horse name if line contains FAT. Null if no matches.
+        /// Returns possible creature name if line contains FAT. Null if no matches.
         /// </summary>
         /// <param name="inputLine"></param>
         /// <returns></returns>
         public static string LineContainsFat(string inputLine)
         {
-            // try to match for [age] diseased [horsename]
+            // try to match for [age] diseased [creaturename]
             return LineContains(inputLine, FAT);
         }
 
         /// <summary>
-        /// Returns possible horse name if line contains STARVING. Null if no matches.
+        /// Returns possible creature name if line contains STARVING. Null if no matches.
         /// </summary>
         /// <param name="inputLine"></param>
         /// <returns></returns>
         public static string LineContainsStarving(string inputLine)
         {
-            // try to match for [age] diseased [horsename]
+            // try to match for [age] diseased [creaturename]
             return LineContains(inputLine, STARVING);
         }
 
@@ -179,16 +180,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             Match match = Regex.Match(input, value + @" (\w+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
             if (match.Success)
             {
-                string possibleHorseName = match.Groups[1].Value;
-                return FixCase(possibleHorseName);
+                string possibleCreatureName = match.Groups[1].Value;
+                return FixCase(possibleCreatureName);
             }
             else return null;
         }
 
-        public static HorseTrait[] GetTraitsFromLine(string line)
+        public static CreatureTrait[] GetTraitsFromLine(string line)
         {
-            List<HorseTrait> result = new List<HorseTrait>();
-            foreach (var trait in HorseTrait.GetAllPossibleTraits())
+            List<CreatureTrait> result = new List<CreatureTrait>();
+            foreach (var trait in CreatureTrait.GetAllPossibleTraits())
             {
                 if (line.Contains(trait.ToString()))
                 {

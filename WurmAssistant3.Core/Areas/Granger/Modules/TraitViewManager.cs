@@ -15,7 +15,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         {
             public TraitDisplayMode DisplayMode = TraitDisplayMode.Full;
 
-            public HorseTrait Trait;
+            public CreatureTrait Trait;
             public bool Exists;
             public bool Unknown;
             public int Value;
@@ -71,7 +71,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         GrangerContext Context;
 
         List<TraitItem> Items = new List<TraitItem>();
-        HorseTrait[] AllTraits;
+        CreatureTrait[] AllTraits;
 
         public TraitViewManager(FormGrangerMain mainForm, GrangerContext context, ObjectListView listview)
         {
@@ -81,17 +81,17 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 
             OLV.FormatRow += OLV_FormatRow;
 
-            AllTraits = HorseTrait.GetAllTraitEnums().Select(x => new HorseTrait(x)).ToArray();
+            AllTraits = CreatureTrait.GetAllTraitEnums().Select(x => new CreatureTrait(x)).ToArray();
             BuildClearTraitView();
 
             listview.SetObjects(Items);
             Decide();
 
-            MainForm.Granger_SelectedSingleHorseChanged += MainForm_Granger_SelectedHorsesChanged;
+            MainForm.Granger_SelectedSingleCreatureChanged += MainFormGrangerSelectedCreaturesChanged;
             MainForm.Granger_ValuatorChanged += MainForm_Granger_ValuatorChanged;
             MainForm.Granger_TraitViewDisplayModeChanged += MainForm_Granger_TraitViewDisplayModeChanged;
             Context.OnHerdsModified += Context_OnHerdsModified;
-            Context.OnHorsesModified += Context_OnHorsesModified;
+            Context.OnEntitiesModified += ContextOnEntitiesModified;
             Context.OnTraitValuesModified += Context_OnTraitValuesModified;
         }
 
@@ -112,7 +112,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             Decide();
         }
 
-        void Context_OnHorsesModified(object sender, EventArgs e)
+        void ContextOnEntitiesModified(object sender, EventArgs e)
         {
             Decide();
         }
@@ -127,14 +127,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             Decide();
         }
 
-        void MainForm_Granger_SelectedHorsesChanged(object sender, EventArgs e)
+        void MainFormGrangerSelectedCreaturesChanged(object sender, EventArgs e)
         {
             Decide();
         }
 
         void Decide()
         {
-            var selected = MainForm.SelectedSingleHorse;
+            var selected = MainForm.SelectedSingleCreature;
             if (selected != null)
             {
                 BuildTraitView(selected);
@@ -146,9 +146,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             OLV.BuildList();
         }
 
-        private void BuildTraitView(Horse horse)
+        private void BuildTraitView(Creature creature)
         {
-            HorseTrait[] currentHorseTraits = horse.Traits;
+            CreatureTrait[] currentCreatureTraits = creature.Traits;
             Items.Clear();
             foreach (var trait in AllTraits)
             {
@@ -156,8 +156,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
                 {
                     DisplayMode = MainForm.TraitViewDisplayMode,
                     Trait = trait,
-                    Exists = currentHorseTraits.Contains(trait),
-                    Unknown = trait.IsUnknownForThisHorse(horse),
+                    Exists = currentCreatureTraits.Contains(trait),
+                    Unknown = trait.IsUnknownForThisCreature(creature),
                     Value = trait.GetTraitValue(MainForm.CurrentValuator),
                     DisableBackgroundColors = MainForm.Settings.DisableRowColoring
                 });

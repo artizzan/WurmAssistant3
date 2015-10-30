@@ -6,16 +6,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
 {
     public partial class FormEditComments : ExtendedForm
     {
-        private string HorseComments;
+        private string CreatureComments;
         private FormGrangerMain formGrangerMain;
 
-        public FormEditComments(FormGrangerMain formGrangerMain, string horseComments, string horseName)
+        public FormEditComments(FormGrangerMain formGrangerMain, string creatureComments, string creatureName)
         {
             this.formGrangerMain = formGrangerMain;
-            this.HorseComments = horseComments;
+            this.CreatureComments = creatureComments;
             InitializeComponent();
-            this.Text = "Edit comments for: " + horseName;
-            this.textBox1.Text = HorseComments;
+            this.Text = "Edit comments for: " + creatureName;
+            this.textBox1.Text = CreatureComments;
             textBox1.Select();
         }
 

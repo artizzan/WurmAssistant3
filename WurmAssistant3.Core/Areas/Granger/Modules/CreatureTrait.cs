@@ -5,7 +5,7 @@ using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 {
-    public class HorseTrait
+    public class CreatureTrait
     {
         //note: enum numbering is used for database persistence and must be maintained after publish!
         public enum TraitEnum
@@ -207,7 +207,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
                 DefaultTraitValues.Add(TraitEnum.CertainSpark, 0);
             }
 
-            internal static float MinSkillForTheseTraits(HorseTrait[] traits, bool epicCurve)
+            internal static float MinSkillForTheseTraits(CreatureTrait[] traits, bool epicCurve)
             {
                 float result = 0;
                 foreach (var trait in traits)
@@ -219,23 +219,23 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
                 return result;
             }
 
-            internal static float GetAhSkillForThisTrait(HorseTrait horseTrait, bool epicCurve)
+            internal static float GetAhSkillForThisTrait(CreatureTrait creatureTrait, bool epicCurve)
             {
-                if (epicCurve) return EnumToAhSkillMapEpic[horseTrait.Trait];
-                else return EnumToAhSkillMapFreedom[horseTrait.Trait];
+                if (epicCurve) return EnumToAhSkillMapEpic[creatureTrait.Trait];
+                else return EnumToAhSkillMapFreedom[creatureTrait.Trait];
             }
 
-            internal static HorseTrait[] ExtractTraitsFromLine(string line)
+            internal static CreatureTrait[] ExtractTraitsFromLine(string line)
             {
-                List<HorseTrait> traits = new List<HorseTrait>();
+                List<CreatureTrait> traits = new List<CreatureTrait>();
                 foreach (var keyval in NameToEnumMap)
                 {
                     if (line.Contains(keyval.Key))
                     {
-                        traits.Add(new HorseTrait(keyval.Value));
+                        traits.Add(new CreatureTrait(keyval.Value));
                     }
                 }
-                return traits.ToArray<HorseTrait>();
+                return traits.ToArray<CreatureTrait>();
             }
 
             internal static bool CanThisBeTraitLine(string line)
@@ -247,7 +247,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             {
                 try
                 {
-                    return HorseTrait.Helper.EnumToNameMap[trait];
+                    return CreatureTrait.Helper.EnumToNameMap[trait];
                 }
                 catch (KeyNotFoundException)
                 {
@@ -279,7 +279,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
                 }
             }
 
-            internal static int GetDefaultValue(HorseTrait trait)
+            internal static int GetDefaultValue(CreatureTrait trait)
             {
                 int result;
                 if (!DefaultTraitValues.TryGetValue(trait.Trait, out result))
@@ -310,12 +310,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
                 return NameToEnumMap[text];
             }
 
-            internal static string GetCompactNameForTrait(HorseTrait horseTrait)
+            internal static string GetCompactNameForTrait(CreatureTrait creatureTrait)
             {
-                return EnumToCompactNameMap[horseTrait.Trait];
+                return EnumToCompactNameMap[creatureTrait.Trait];
             }
 
-            internal static string GetShortcutForTrait(HorseTrait trait, int value)
+            internal static string GetShortcutForTrait(CreatureTrait trait, int value)
             {
                 string prefix = string.Empty;
                 if (value > 0) prefix = "+";
@@ -323,15 +323,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
                 return prefix + EnumToShortcutMap[trait.Trait];
             }
 
-            internal static HorseTrait[] GetMissingTraits(HorseTrait[] horseTraits, float inspectSkill, bool epicCurve)
+            internal static CreatureTrait[] GetMissingTraits(CreatureTrait[] creatureTraits, float inspectSkill, bool epicCurve)
             {
                 var correctDict = (epicCurve ? EnumToAhSkillMapEpic : EnumToAhSkillMapFreedom);
-                List<HorseTrait> missingTraits = new List<HorseTrait>();
+                List<CreatureTrait> missingTraits = new List<CreatureTrait>();
 
                 foreach (var keyval in correctDict)
                 {
-                    if (inspectSkill < keyval.Value && horseTraits.All(x => x.Trait != keyval.Key))
-                        missingTraits.Add(new HorseTrait(keyval.Key));
+                    if (inspectSkill < keyval.Value && creatureTraits.All(x => x.Trait != keyval.Key))
+                        missingTraits.Add(new CreatureTrait(keyval.Key));
                 }
 
                 return missingTraits.ToArray();
@@ -362,15 +362,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
                 }
             }
 
-            internal static HorseTrait[] GetTraitsUpToSkillLevel(float skillLevel, bool isEpic)
+            internal static CreatureTrait[] GetTraitsUpToSkillLevel(float skillLevel, bool isEpic)
             {
                 Dictionary<TraitEnum, float> correctDict;
                 if (isEpic) correctDict = EnumToAhSkillMapEpic;
                 else correctDict = EnumToAhSkillMapFreedom;
-                List<HorseTrait> result = new List<HorseTrait>();
+                List<CreatureTrait> result = new List<CreatureTrait>();
                 foreach (var keyval in correctDict)
                 {
-                    if (keyval.Value < skillLevel) result.Add(new HorseTrait(keyval.Key));
+                    if (keyval.Value < skillLevel) result.Add(new CreatureTrait(keyval.Key));
                 }
                 return result.ToArray();
             }
@@ -378,17 +378,17 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 
         public static class DbHelper
         {
-            public static List<HorseTrait> FromStrIntRepresentation(string strINTRepresentation)
+            public static List<CreatureTrait> FromStrIntRepresentation(string strINTRepresentation)
             {
-                if (strINTRepresentation == "TRAITLESS") return new List<HorseTrait>();
+                if (strINTRepresentation == "TRAITLESS") return new List<CreatureTrait>();
                 if (strINTRepresentation == null) strINTRepresentation = string.Empty;
-                return new List<HorseTrait>(strINTRepresentation.Split(',')
-                    .Select(x => HorseTrait.FromEnumIntStr(x)));
+                return new List<CreatureTrait>(strINTRepresentation.Split(',')
+                    .Select(x => CreatureTrait.FromEnumIntStr(x)));
             }
 
-            public static string ToIntStrRepresentation(List<HorseTrait> traits)
+            public static string ToIntStrRepresentation(List<CreatureTrait> traits)
             {
-                if (!(traits is List<HorseTrait>)) throw new ArgumentException("this is not HorseTrait list!");
+                if (!(traits is List<CreatureTrait>)) throw new ArgumentException("this is not CreatureTrait list!");
                 if (traits.Count == 0) return "TRAITLESS";
                 return string.Join(",", traits.Select(x => (int)x.Trait));
             }
@@ -399,22 +399,22 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         /// <summary>
         /// Create blank trait with Trait value of Unknown
         /// </summary>
-        public HorseTrait(TraitEnum enumval)
+        public CreatureTrait(TraitEnum enumval)
         {
             Trait = enumval;
         }
 
-        public static HorseTrait FromEnumIntStr(string enumIntStr)
+        public static CreatureTrait FromEnumIntStr(string enumIntStr)
         {
-            return new HorseTrait(Helper.GetEnumFromEnumInt(enumIntStr));
+            return new CreatureTrait(Helper.GetEnumFromEnumInt(enumIntStr));
         }
 
-        internal static HorseTrait FromWurmTextRepr(string text)
+        internal static CreatureTrait FromWurmTextRepr(string text)
         {
-            return new HorseTrait(Helper.GetEnumFromWurmTextRepr(text));
+            return new CreatureTrait(Helper.GetEnumFromWurmTextRepr(text));
         }
 
-        public static int GetDefaultValue(HorseTrait trait)
+        public static int GetDefaultValue(CreatureTrait trait)
         {
             return Helper.GetDefaultValue(trait);
         }
@@ -462,12 +462,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             return Helper.GetTextForTrait(trait);
         }
 
-        internal static float GetMinSkillForTraits(HorseTrait[] traitlist, bool epicCurve)
+        internal static float GetMinSkillForTraits(CreatureTrait[] traitlist, bool epicCurve)
         {
             return Helper.MinSkillForTheseTraits(traitlist, epicCurve);
         }
 
-        internal static string GetShortString(HorseTrait[] traits, TraitValuator valuator)
+        internal static string GetShortString(CreatureTrait[] traits, TraitValuator valuator)
         {
             List<string> shorts = new List<string>();
             foreach (var trait in traits)
@@ -479,21 +479,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             return string.Join(",", shorts.OrderBy(x => x));
         }
 
-        internal static HorseTrait[] GetMissingTraits(HorseTrait[] horseTraits, float inspectSkill, bool epicCurve)
+        internal static CreatureTrait[] GetMissingTraits(CreatureTrait[] creatureTraits, float inspectSkill, bool epicCurve)
         {
-            return Helper.GetMissingTraits(horseTraits, inspectSkill, epicCurve);
+            return Helper.GetMissingTraits(creatureTraits, inspectSkill, epicCurve);
         }
 
-        internal bool IsUnknownForThisHorse(Horse horse)
+        internal bool IsUnknownForThisCreature(Creature creature)
         {
-            if (HorseTrait.GetSkillForTrait(this, horse.EpicCurve) > horse.TraitsInspectSkill)
+            if (CreatureTrait.GetSkillForTrait(this, creature.EpicCurve) > creature.TraitsInspectSkill)
                 return true;
             else return false;
         }
 
-        private static float GetSkillForTrait(HorseTrait horseTrait, bool epicCurve)
+        private static float GetSkillForTrait(CreatureTrait creatureTrait, bool epicCurve)
         {
-            return Helper.GetAhSkillForThisTrait(horseTrait, epicCurve);
+            return Helper.GetAhSkillForThisTrait(creatureTrait, epicCurve);
         }
 
         public override bool Equals(System.Object obj)
@@ -505,7 +505,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             }
 
             // If parameter cannot be cast to Point return false.
-            HorseTrait p = obj as HorseTrait;
+            CreatureTrait p = obj as CreatureTrait;
             if ((System.Object)p == null)
             {
                 return false;
@@ -515,7 +515,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             return this.Trait == p.Trait;
         }
 
-        public bool Equals(HorseTrait p)
+        public bool Equals(CreatureTrait p)
         {
             // If parameter is null return false:
             if ((object)p == null)
@@ -559,28 +559,28 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             return Helper.GetShortcutForTrait(this, 0);
         }
 
-        internal static HorseTrait[] GetGoodTraits(HorseTrait[] traits, TraitValuator traitValuator)
+        internal static CreatureTrait[] GetGoodTraits(CreatureTrait[] traits, TraitValuator traitValuator)
         {
             return traits.Where(x => x.GetTraitValue(traitValuator) > 0).ToArray();
         }
 
-        internal static HorseTrait[] GetBadTraits(HorseTrait[] traits, TraitValuator traitValuator)
+        internal static CreatureTrait[] GetBadTraits(CreatureTrait[] traits, TraitValuator traitValuator)
         {
             return traits.Where(x => x.GetTraitValue(traitValuator) < 0).ToArray();
         }
 
-        static HorseTrait[] CachedInbreedBadTraits;
+        static CreatureTrait[] CachedInbreedBadTraits;
 
-        internal static HorseTrait[] GetInbreedBadTraits()
+        internal static CreatureTrait[] GetInbreedBadTraits()
         {
             if (CachedInbreedBadTraits == null)
-                CachedInbreedBadTraits = new HorseTrait[]
+                CachedInbreedBadTraits = new CreatureTrait[]
                     {
-                        new HorseTrait(TraitEnum.ConstantlyHungry),
-                        new HorseTrait(TraitEnum.FeebleAndUnhealthy),
-                        new HorseTrait(TraitEnum.HasSomeIllness),
-                        new HorseTrait(TraitEnum.LegsOfDifferentLength),
-                        new HorseTrait(TraitEnum.VeryUnmotivated),
+                        new CreatureTrait(TraitEnum.ConstantlyHungry),
+                        new CreatureTrait(TraitEnum.FeebleAndUnhealthy),
+                        new CreatureTrait(TraitEnum.HasSomeIllness),
+                        new CreatureTrait(TraitEnum.LegsOfDifferentLength),
+                        new CreatureTrait(TraitEnum.VeryUnmotivated),
                     };
             return CachedInbreedBadTraits;
         }
@@ -590,26 +590,26 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             return Helper.GetFullTraitVisibilityCap(epicCurve);
         }
 
-        static HorseTrait[] CachedAllTraits;
+        static CreatureTrait[] CachedAllTraits;
 
         /// <summary>
         /// includes the "unknown" trait
         /// </summary>
         /// <returns></returns>
-        internal static HorseTrait[] GetAllTraits()
+        internal static CreatureTrait[] GetAllTraits()
         {
             if (CachedAllTraits == null)
-                CachedAllTraits = ((TraitEnum[])Enum.GetValues(typeof(TraitEnum))).Select(x => new HorseTrait(x)).ToArray();
+                CachedAllTraits = ((TraitEnum[])Enum.GetValues(typeof(TraitEnum))).Select(x => new CreatureTrait(x)).ToArray();
             return CachedAllTraits;
         }
 
-        static HorseTrait[] CachedAllPossibleTraits;
+        static CreatureTrait[] CachedAllPossibleTraits;
 
         /// <summary>
         /// excludes the "unknown" trait
         /// </summary>
         /// <returns></returns>
-        internal static HorseTrait[] GetAllPossibleTraits()
+        internal static CreatureTrait[] GetAllPossibleTraits()
         {
             if (CachedAllPossibleTraits == null)
                 CachedAllPossibleTraits = GetAllTraits().Where(x => x.Trait != TraitEnum.Unknown).ToArray();
@@ -621,7 +621,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             return Helper.CanThisBeTraitLine(message);
         }
 
-        internal static HorseTrait[] GetTraitsUpToSkillLevel(float skillLevel, bool isEpic)
+        internal static CreatureTrait[] GetTraitsUpToSkillLevel(float skillLevel, bool isEpic)
         {
             return Helper.GetTraitsUpToSkillLevel(skillLevel, isEpic);
         }

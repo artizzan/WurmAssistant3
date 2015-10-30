@@ -6,39 +6,39 @@ using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.HorseEdit;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.CreatureEdit;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit
 {
-    public partial class FormHorseViewEdit : ExtendedForm
+    public partial class FormCreatureViewEdit : ExtendedForm
     {
-        Horse horse;
+        Creature creature;
         GrangerContext Context;
         FormGrangerMain MainForm;
 
-        HorseViewEditOpType _opType;
+        CreatureViewEditOpType _opType;
         private string HerdID;
         readonly ILogger logger;
 
-        HorseViewEditOpType OpMode
+        CreatureViewEditOpType OpMode
         {
             get { return _opType; }
             set
             {
                 _opType = value;
-                if (value == HorseViewEditOpType.Edit)
+                if (value == CreatureViewEditOpType.Edit)
                 {
                     prepareFieldsForEdit();
                 }
-                else if (value == HorseViewEditOpType.New)
+                else if (value == CreatureViewEditOpType.New)
                 {
                     prepareFieldsForNew();
                 }
-                else if (value == HorseViewEditOpType.View)
+                else if (value == CreatureViewEditOpType.View)
                 {
                     prepareFieldsForView();
                 }
@@ -46,12 +46,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
             }
         }
 
-        public FormHorseViewEdit(FormGrangerMain mainForm, Horse horse, GrangerContext context, HorseViewEditOpType optype, string herdID,
+        public FormCreatureViewEdit(FormGrangerMain mainForm, Creature creature, GrangerContext context, CreatureViewEditOpType optype, string herdID,
             [NotNull] ILogger logger)
         {
             if (logger == null) throw new ArgumentNullException("logger");
             this.MainForm = mainForm;
-            this.horse = horse;
+            this.creature = creature;
             this.Context = context;
             this.HerdID = herdID;
             this.logger = logger;
@@ -60,18 +60,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
             disableAllFields();
 
             List<string> list = new List<string>();
-            list.AddRange(Context.Horses.Select(x => x.Name));
-            list.AddRange(Context.Horses.Select(x => x.MotherName));
-            list.AddRange(Context.Horses.Select(x => x.FatherName));
-            string[] allHorseNamesInDatabase = list.Distinct().Where(x => x != null).ToArray();
+            list.AddRange(Context.Creatures.Select(x => x.Name));
+            list.AddRange(Context.Creatures.Select(x => x.MotherName));
+            list.AddRange(Context.Creatures.Select(x => x.FatherName));
+            string[] allCreatureNamesInDatabase = list.Distinct().Where(x => x != null).ToArray();
 
-            comboBoxFather.Items.AddRange(allHorseNamesInDatabase);
-            comboBoxMother.Items.AddRange(allHorseNamesInDatabase);
+            comboBoxFather.Items.AddRange(allCreatureNamesInDatabase);
+            comboBoxMother.Items.AddRange(allCreatureNamesInDatabase);
 
-            comboBoxColor.Items.AddRange(HorseColor.GetColorsEnumStrArray());
-            comboBoxColor.Text = HorseColor.GetDefaultColorStr();
-            comboBoxAge.Items.AddRange(HorseAge.GetColorsEnumStrArray());
-            comboBoxAge.Text = HorseAge.GetDefaultAgeStr();
+            comboBoxColor.Items.AddRange(CreatureColor.GetColorsEnumStrArray());
+            comboBoxColor.Text = CreatureColor.GetDefaultColorStr();
+            comboBoxAge.Items.AddRange(CreatureAge.GetColorsEnumStrArray());
+            comboBoxAge.Text = CreatureAge.GetDefaultAgeStr();
 
             this.OpMode = optype;
         }
@@ -96,53 +96,53 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
         {
             buildTraits();
 
-            textBoxName.Text = horse.NameAspect;
-            comboBoxMother.Text = horse.MotherAspect;
-            comboBoxFather.Text = horse.FatherAspect;
-            if (horse.IsMale) radioButtonMale.Checked = true; else radioButtonFemale.Checked = true;
-            try { dateTimePickerBred.Value = horse.NotInMoodUntil; }
+            textBoxName.Text = creature.NameAspect;
+            comboBoxMother.Text = creature.MotherAspect;
+            comboBoxFather.Text = creature.FatherAspect;
+            if (creature.IsMale) radioButtonMale.Checked = true; else radioButtonFemale.Checked = true;
+            try { dateTimePickerBred.Value = creature.NotInMoodUntil; }
             catch { dateTimePickerBred.Value = DateTimePicker.MinimumDateTime; }
-            try { dateTimePickerGroomed.Value = horse.GroomedOn; }
+            try { dateTimePickerGroomed.Value = creature.GroomedOn; }
             catch { dateTimePickerGroomed.Value = DateTimePicker.MinimumDateTime; }
-            try { dateTimePickerPregnant.Value = horse.PregnantUntil; }
+            try { dateTimePickerPregnant.Value = creature.PregnantUntil; }
             catch { dateTimePickerPregnant.Value = DateTimePicker.MinimumDateTime; }
-            try { dateTimePickerBirthDate.Value = horse.BirthDate; }
+            try { dateTimePickerBirthDate.Value = creature.BirthDate; }
             catch { dateTimePickerBirthDate.Value = DateTimePicker.MinimumDateTime; }
-            checkBoxDead.Checked = horse.CheckTag("dead");
-            checkBoxDiseased.Checked = horse.CheckTag("diseased");
-            checkBoxSold.Checked = horse.CheckTag("sold");
-            numericUpDownAHskill.Value = (decimal)(horse.TraitsInspectSkill.ConstrainToRange(0F, 100F));
-            checkBoxEpic.Checked = horse.EpicCurve;
-            textBoxBrandedFor.Text = horse.BrandedForAspect;
-            textBoxCaredForBy.Text = horse.TakenCareOfByAspect;
-            textBoxComment.Text = horse.CommentsAspect;
-            comboBoxColor.Text = horse.Color.HorseColorId.ToString();
-            comboBoxAge.Text = horse.Age.HorseAgeId.ToString();
-            Horse mate = horse.GetMate();
+            checkBoxDead.Checked = creature.CheckTag("dead");
+            checkBoxDiseased.Checked = creature.CheckTag("diseased");
+            checkBoxSold.Checked = creature.CheckTag("sold");
+            numericUpDownAHskill.Value = (decimal)(creature.TraitsInspectSkill.ConstrainToRange(0F, 100F));
+            checkBoxEpic.Checked = creature.EpicCurve;
+            textBoxBrandedFor.Text = creature.BrandedForAspect;
+            textBoxCaredForBy.Text = creature.TakenCareOfByAspect;
+            textBoxComment.Text = creature.CommentsAspect;
+            comboBoxColor.Text = creature.Color.CreatureColorId.ToString();
+            comboBoxAge.Text = creature.Age.CreatureAgeId.ToString();
+            Creature mate = creature.GetMate();
             if (mate != null) textBoxMate.Text = mate.ToString();
 
-            this.Text = "Viewing creature: " + horse.NameAspect + " in herd: " + HerdID;
+            this.Text = "Viewing creature: " + creature.NameAspect + " in herd: " + HerdID;
         }
 
         void prepareFieldsForEdit()
         {
             prepareFieldsForView();
             enableAllFields();
-            this.Text = "Editing creature: " + horse.NameAspect + " in herd: " + HerdID;
-            ValidateHorseIdentity();
+            this.Text = "Editing creature: " + creature.NameAspect + " in herd: " + HerdID;
+            ValidateCreatureIdentity();
         }
 
         void buildTraits()
         {
             checkedListBoxTraits.Items.Clear();
 
-            var traits = horse.Traits;
-            var allTraits = HorseTrait.GetAllTraitEnums();
+            var traits = creature.Traits;
+            var allTraits = CreatureTrait.GetAllTraitEnums();
 
             foreach (var trait in allTraits)
             {
                 checkedListBoxTraits.Items.Add(
-                    HorseTrait.GetWurmTextForTrait(trait),
+                    CreatureTrait.GetWurmTextForTrait(trait),
                     traits.Where(x => x.Trait == trait).Count() == 1);
             }
         }
@@ -150,7 +150,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
         void prepareFieldsForNew()
         {
             checkedListBoxTraits.Items.Clear();
-            checkedListBoxTraits.Items.AddRange(HorseTrait.GetAllTraitWurmText());
+            checkedListBoxTraits.Items.AddRange(CreatureTrait.GetAllTraitWurmText());
 
             enableAllFields();
             this.Text = "Adding new creature to herd: " + HerdID;
@@ -158,7 +158,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            if (!ValidateHorseIdentity())
+            if (!ValidateCreatureIdentity())
             {
                 this.DialogResult = System.Windows.Forms.DialogResult.None;
             }
@@ -166,18 +166,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
             {
                 try
                 {
-                    if (OpMode == HorseViewEditOpType.New)
+                    if (OpMode == CreatureViewEditOpType.New)
                     {
-                        var newEntity = new HorseEntity() { Id = HorseEntity.GenerateNewHorseId(Context) };
-                        horse = new Horse(MainForm, newEntity, Context);
+                        var newEntity = new CreatureEntity() { Id = CreatureEntity.GenerateNewCreatureId(Context) };
+                        creature = new Creature(MainForm, newEntity, Context);
                     }
 
-                    List<HorseTrait> traitlist = new List<HorseTrait>();
+                    List<CreatureTrait> traitlist = new List<CreatureTrait>();
                     foreach (var item in checkedListBoxTraits.CheckedItems)
                     {
                         try
                         {
-                            traitlist.Add(HorseTrait.FromWurmTextRepr(item.ToString()));
+                            traitlist.Add(CreatureTrait.FromWurmTextRepr(item.ToString()));
                         }
                         catch (Exception _e)
                         {
@@ -186,42 +186,42 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
                     }
                     var traitlistArray = traitlist.ToArray();
 
-                    horse.Name = textBoxName.Text;
-                    horse.Father = comboBoxFather.Text;
-                    horse.Mother = comboBoxMother.Text;
-                    horse.TakenCareOfBy = textBoxCaredForBy.Text;
-                    horse.BrandedFor = textBoxBrandedFor.Text;
+                    creature.Name = textBoxName.Text;
+                    creature.Father = comboBoxFather.Text;
+                    creature.Mother = comboBoxMother.Text;
+                    creature.TakenCareOfBy = textBoxCaredForBy.Text;
+                    creature.BrandedFor = textBoxBrandedFor.Text;
 
-                    horse.Traits = traitlistArray;
+                    creature.Traits = traitlistArray;
 
-                    horse.TraitsInspectSkill = (float)numericUpDownAHskill.Value;
-                    float traitSkill = HorseTrait.GetMinSkillForTraits(traitlistArray, checkBoxEpic.Checked);
-                    if (horse.TraitsInspectSkill < traitSkill)
-                        horse.TraitsInspectSkill = traitSkill;
-                    horse.EpicCurve = checkBoxEpic.Checked;
+                    creature.TraitsInspectSkill = (float)numericUpDownAHskill.Value;
+                    float traitSkill = CreatureTrait.GetMinSkillForTraits(traitlistArray, checkBoxEpic.Checked);
+                    if (creature.TraitsInspectSkill < traitSkill)
+                        creature.TraitsInspectSkill = traitSkill;
+                    creature.EpicCurve = checkBoxEpic.Checked;
 
-                    horse.Comments = textBoxComment.Text;
-                    horse.IsMale = radioButtonMale.Checked;
-                    horse.Color = HorseColor.CreateColorFromEnumString(comboBoxColor.Text);
-                    horse.Age = HorseAge.CreateAgeFromEnumString(comboBoxAge.Text);
+                    creature.Comments = textBoxComment.Text;
+                    creature.IsMale = radioButtonMale.Checked;
+                    creature.Color = CreatureColor.CreateColorFromEnumString(comboBoxColor.Text);
+                    creature.Age = CreatureAge.CreateAgeFromEnumString(comboBoxAge.Text);
 
-                    horse.NotInMoodUntil = dateTimePickerBred.Value;
-                    horse.GroomedOn = dateTimePickerGroomed.Value;
-                    horse.PregnantUntil = dateTimePickerPregnant.Value;
-                    horse.BirthDate = dateTimePickerBirthDate.Value;
+                    creature.NotInMoodUntil = dateTimePickerBred.Value;
+                    creature.GroomedOn = dateTimePickerGroomed.Value;
+                    creature.PregnantUntil = dateTimePickerPregnant.Value;
+                    creature.BirthDate = dateTimePickerBirthDate.Value;
 
-                    horse.SetTag("diseased", checkBoxDiseased.Checked);
-                    horse.SetTag("dead", checkBoxDead.Checked);
-                    horse.SetTag("sold", checkBoxSold.Checked);
+                    creature.SetTag("diseased", checkBoxDiseased.Checked);
+                    creature.SetTag("dead", checkBoxDead.Checked);
+                    creature.SetTag("sold", checkBoxSold.Checked);
 
-                    if (OpMode == HorseViewEditOpType.New)
+                    if (OpMode == CreatureViewEditOpType.New)
                     {
-                        horse.Herd = HerdID;
-                        Context.InsertHorse(horse.Entity);
+                        creature.Herd = HerdID;
+                        Context.InsertCreature(creature.Entity);
                     }
                     else
                     {
-                        Context.SubmitChangesToHorses();
+                        Context.SubmitChanges();
                     }
                     this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 }
@@ -236,13 +236,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
 
         private void buttonEdit_Click(object sender, EventArgs e)
         {
-            OpMode = HorseViewEditOpType.Edit;
+            OpMode = CreatureViewEditOpType.Edit;
             prepareFieldsForEdit();
         }
 
         private void textBoxName_Validating(object sender, CancelEventArgs e)
         {
-            ValidateHorseIdentity();
+            ValidateCreatureIdentity();
         }
 
         private bool IsMale
@@ -254,9 +254,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
             }
         }
 
-        private bool ValidateHorseIdentity()
+        private bool ValidateCreatureIdentity()
         {
-            if (this.OpMode == HorseViewEditOpType.View) return false;
+            if (this.OpMode == CreatureViewEditOpType.View) return false;
 
             labelWarn.Visible = false;
 
@@ -268,11 +268,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
                 return false;
             }
 
-            var otherHorses = Context.Horses.Where(x => x.Herd == HerdID).ToArray();
-            var nonuniques = otherHorses.Where(x => x.Name == textBoxName.Text).ToArray();
+            var otherCreatures = Context.Creatures.Where(x => x.Herd == HerdID).ToArray();
+            var nonuniques = otherCreatures.Where(x => x.Name == textBoxName.Text).ToArray();
 
-            if (OpMode == HorseViewEditOpType.Edit)
-                nonuniques = nonuniques.Where(x => x != horse.Entity).ToArray();
+            if (OpMode == CreatureViewEditOpType.Edit)
+                nonuniques = nonuniques.Where(x => x != creature.Entity).ToArray();
 
             if (nonuniques.Length > 0)
             {
@@ -287,7 +287,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
             return true;
         }
 
-        private string RefactorHorseName(string input)
+        private string RefactorCreatureName(string input)
         {
             input = GrangerHelpers.RemoveAllPrefixes(input);
             input = input.Trim();
@@ -300,22 +300,22 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
 
         private void comboBoxMother_Validating(object sender, CancelEventArgs e)
         {
-            ValidateHorseIdentity();
+            ValidateCreatureIdentity();
         }
 
         private void comboBoxFather_Validating(object sender, CancelEventArgs e)
         {
-            ValidateHorseIdentity();
+            ValidateCreatureIdentity();
         }
 
         private void radioButtonMale_CheckedChanged(object sender, EventArgs e)
         {
-            ValidateHorseIdentity();
+            ValidateCreatureIdentity();
         }
 
         private void radioButtonFemale_CheckedChanged(object sender, EventArgs e)
         {
-            ValidateHorseIdentity();
+            ValidateCreatureIdentity();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -323,20 +323,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
 
         }
 
-        private void FormHorseViewEdit_Load(object sender, EventArgs e)
+        private void FormCreatureViewEdit_Load(object sender, EventArgs e)
         {
             //TODO can't use this, top bar can appear above upper edge of screen, needs tweaking
             //this.Location = FormHelper.GetCenteredChildPositionRelativeToParentWorkAreaBound(this, MainForm);
         }
 
         bool _textBoxPasteUpdate_selfUpdating = false;
-        HorseTrait[] CurrentParsedTraits = null;
+        CreatureTrait[] CurrentParsedTraits = null;
         private void textBoxPasteUpdate_TextChanged(object sender, EventArgs e)
         {
             if (!_textBoxPasteUpdate_selfUpdating)
             {
                 _textBoxPasteUpdate_selfUpdating = true;
-                HorseTrait[] parsedTraits = GrangerHelpers.GetTraitsFromLine(textBoxPasteUpdate.Text);
+                CreatureTrait[] parsedTraits = GrangerHelpers.GetTraitsFromLine(textBoxPasteUpdate.Text);
                 if (parsedTraits.Length == 0)
                 {
                     textBoxPasteUpdate.Text = "> no traits found in text <";

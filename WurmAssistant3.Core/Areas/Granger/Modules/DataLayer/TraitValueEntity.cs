@@ -16,11 +16,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
         public string ValueMapID;
         [JsonProperty("traitid")]
         string _TraitEnumINTStr;
-        public HorseTrait Trait
+        public CreatureTrait Trait
         {
             get
             {
-                return HorseTrait.FromEnumIntStr(_TraitEnumINTStr);
+                return CreatureTrait.FromEnumIntStr(_TraitEnumINTStr);
             }
             set
             {

@@ -71,7 +71,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         /// </summary>
         /// <param name="playerName"></param>
         /// <returns></returns>
-        public float? GetSkillForPlayer(string playerName)
+        [CanBeNull]
+        public float? TryGetSkillForPlayer(string playerName)
         {
             PlayerManager ph;
             if (playerManagers.TryGetValue(playerName, out ph))

@@ -37,12 +37,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 
             herdViewSplitterPosition = 250;
 
-            ahSkillInfos = new List<AhSkillInfo>();
-
             genesisLog = new Dictionary<string, DateTime>();
 
             showGroomingTime = TimeSpan.FromMinutes(60);
-            updateHorseDataFromAnyEventLine = true;
+            updateCreatureDataFromAnyEventLine = true;
         }
 
         [JsonProperty]
@@ -55,8 +53,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         }
 
         /// <summary>
-        /// By default horses can't be updated if wrong herds are selected.
-        /// This option makes update possible as long, as horse name
+        /// By default creatures can't be updated if wrong herds are selected.
+        /// This option makes update possible as long, as creature name
         /// is unique in entire database
         /// </summary>
         [JsonProperty]
@@ -69,12 +67,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         }
 
         [JsonProperty]
-        bool updateHorseDataFromAnyEventLine;
+        bool updateCreatureDataFromAnyEventLine;
 
-        public bool UpdateHorseDataFromAnyEventLine
+        public bool UpdateCreatureDataFromAnyEventLine
         {
-            get { return updateHorseDataFromAnyEventLine; }
-            set { updateHorseDataFromAnyEventLine = value; FlagAsChanged(); }
+            get { return updateCreatureDataFromAnyEventLine; }
+            set { updateCreatureDataFromAnyEventLine = value; FlagAsChanged(); }
         }
 
         [JsonProperty]
@@ -139,12 +137,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         }
 
         [JsonProperty]
-        byte[] horseListState;
+        byte[] creatureListState;
 
-        public byte[] HorseListState
+        public byte[] CreatureListState
         {
-            get { return horseListState; }
-            set { horseListState = value; FlagAsChanged(); }
+            get { return creatureListState; }
+            set { creatureListState = value; FlagAsChanged(); }
         }
 
         [JsonProperty]
@@ -192,62 +190,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             set { adjustForDarkThemes = value; FlagAsChanged(); }
         }
 
-        // todo: json.net does not allow composite dictionary keys without type converted
-        // quickly fixed until refactoring
-        [JsonProperty] 
-        readonly List<AhSkillInfo> ahSkillInfos;
-
-        public bool TryGetAhSkill([NotNull] string player, ServerGroup serverGroup, out float result)
-        {
-            if (player == null) throw new ArgumentNullException("player");
-            var info = GetSkillInfo(player, serverGroup);
-            result = info.SkillValue;
-            return result != 0f;
-        }
-
-        public void SetAhSkill([NotNull] string player, ServerGroup serverGroup, float AHValue)
-        {
-            if (player == null) throw new ArgumentNullException("player");
-            var info = GetSkillInfo(player, serverGroup);
-            info.SkillValue = AHValue;
-            FlagAsChanged();
-        }
-
-        public bool TryGetAhCheckDate([NotNull] string player, ServerGroup serverGroup, out DateTime result)
-        {
-            if (player == null) throw new ArgumentNullException("player");
-            var info = GetSkillInfo(player, serverGroup);
-            result = info.LastCheck;
-            return result != DateTime.MinValue;
-        }
-
-        public void SetAhCheckDate([NotNull] string player, ServerGroup serverGroup, DateTime AHValue)
-        {
-            if (player == null) throw new ArgumentNullException("player");
-            var info = GetSkillInfo(player, serverGroup);
-            info.LastCheck = AHValue;
-            FlagAsChanged();
-        }
-
-        AhSkillInfo GetSkillInfo(string player, ServerGroup serverGroup)
-        {
-            var info =
-                ahSkillInfos.FirstOrDefault(
-                    x =>
-                        x.PlayerName.ToUpperInvariant().Equals(player.ToUpperInvariant())
-                        && x.ServerGroupId == serverGroup.ServerGroupId);
-            if (info == null)
-            {
-                info = new AhSkillInfo(serverGroup.ServerGroupId, player, 0, DateTime.MinValue);
-                ahSkillInfos.Add(info);
-            }
-            return info;
-        }
-
         [JsonProperty] 
         readonly Dictionary<string, DateTime> genesisLog;
 
-        internal void AddGenesisCast(DateTime castDate, string horseName)
+        internal void AddGenesisCast(DateTime castDate, string creatureName)
         {
             List<string> keysToRemove = null;
             var dtTreshhold = DateTime.Now - TimeSpan.FromHours(1);
@@ -262,20 +208,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             }
             if (keysToRemove != null)
             {
-                foreach (var horsename in keysToRemove)
+                foreach (var creaturename in keysToRemove)
                 {
-                    genesisLog.Remove(horsename);
-                    logger.Info(string.Format("Removed cached genesis cast data for {0}", horsename));
+                    genesisLog.Remove(creaturename);
+                    logger.Info(string.Format("Removed cached genesis cast data for {0}", creaturename));
                 }
             }
-            genesisLog[horseName] = castDate;
+            genesisLog[creatureName] = castDate;
             FlagAsChanged();
         }
 
-        internal bool HasGenesisCast(string horseName)
+        internal bool HasGenesisCast(string creatureName)
         {
             DateTime castTime;
-            if (genesisLog.TryGetValue(horseName, out castTime))
+            if (genesisLog.TryGetValue(creatureName, out castTime))
             {
                 if (castTime > DateTime.Now - TimeSpan.FromHours(1))
                 {
@@ -285,9 +231,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             return false;
         }
 
-        internal void RemoveGenesisCast(string horseName)
+        internal void RemoveGenesisCast(string creatureName)
         {
-            genesisLog.Remove(horseName);
+            genesisLog.Remove(creatureName);
             FlagAsChanged();
         }
 

@@ -34,7 +34,7 @@
             this.checkBoxSkipNotInMood = new System.Windows.Forms.CheckBox();
             this.checkBoxSkipPregnant = new System.Windows.Forms.CheckBox();
             this.checkBoxSkipGaveBirthInLast24h = new System.Windows.Forms.CheckBox();
-            this.checkBoxSkipHorsesInOtherHerds = new System.Windows.Forms.CheckBox();
+            this.checkBoxSkipCreaturesInOtherHerds = new System.Windows.Forms.CheckBox();
             this.checkBoxIncludePotentialValue = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBoxDiscardWithBadTraits = new System.Windows.Forms.CheckBox();
@@ -146,16 +146,16 @@
             this.checkBoxSkipGaveBirthInLast24h.UseVisualStyleBackColor = true;
             this.checkBoxSkipGaveBirthInLast24h.CheckedChanged += new System.EventHandler(this.checkBoxSkipGaveBirthInLast24h_CheckedChanged);
             // 
-            // checkBoxSkipHorsesInOtherHerds
+            // checkBoxSkipCreaturesInOtherHerds
             // 
-            this.checkBoxSkipHorsesInOtherHerds.AutoSize = true;
-            this.checkBoxSkipHorsesInOtherHerds.Location = new System.Drawing.Point(4, 83);
-            this.checkBoxSkipHorsesInOtherHerds.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBoxSkipHorsesInOtherHerds.Name = "checkBoxSkipHorsesInOtherHerds";
-            this.checkBoxSkipHorsesInOtherHerds.Size = new System.Drawing.Size(277, 17);
-            this.checkBoxSkipHorsesInOtherHerds.TabIndex = 5;
-            this.checkBoxSkipHorsesInOtherHerds.Text = "Skip creatures in other herds than evaluated creature";
-            this.checkBoxSkipHorsesInOtherHerds.UseVisualStyleBackColor = true;
+            this.checkBoxSkipCreaturesInOtherHerds.AutoSize = true;
+            this.checkBoxSkipCreaturesInOtherHerds.Location = new System.Drawing.Point(4, 83);
+            this.checkBoxSkipCreaturesInOtherHerds.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxSkipCreaturesInOtherHerds.Name = "checkBoxSkipCreaturesInOtherHerds";
+            this.checkBoxSkipCreaturesInOtherHerds.Size = new System.Drawing.Size(277, 17);
+            this.checkBoxSkipCreaturesInOtherHerds.TabIndex = 5;
+            this.checkBoxSkipCreaturesInOtherHerds.Text = "Skip creatures in other herds than evaluated creature";
+            this.checkBoxSkipCreaturesInOtherHerds.UseVisualStyleBackColor = true;
             // 
             // checkBoxIncludePotentialValue
             // 
@@ -353,7 +353,7 @@
             this.groupBox3.Controls.Add(this.checkBoxSkipNotInMood);
             this.groupBox3.Controls.Add(this.checkBoxSkipPregnant);
             this.groupBox3.Controls.Add(this.checkBoxSkipGaveBirthInLast24h);
-            this.groupBox3.Controls.Add(this.checkBoxSkipHorsesInOtherHerds);
+            this.groupBox3.Controls.Add(this.checkBoxSkipCreaturesInOtherHerds);
             this.groupBox3.Location = new System.Drawing.Point(9, 10);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
@@ -579,7 +579,7 @@
             this.labelAutowrap1.Name = "labelAutowrap1";
             this.labelAutowrap1.Size = new System.Drawing.Size(204, 39);
             this.labelAutowrap1.TabIndex = 19;
-            this.labelAutowrap1.Text = "Total breeding value will be multiplied by an average of both horses color weight" +
+            this.labelAutowrap1.Text = "Total breeding value will be multiplied by an average of both creatures color weight" +
     "s. ex: (1.5 + 1.2 ) / 2 = 1.35";
             // 
             // BreedingEvaluatorDefaultConfig
@@ -634,7 +634,7 @@
         private System.Windows.Forms.CheckBox checkBoxSkipNotInMood;
         private System.Windows.Forms.CheckBox checkBoxSkipPregnant;
         private System.Windows.Forms.CheckBox checkBoxSkipGaveBirthInLast24h;
-        private System.Windows.Forms.CheckBox checkBoxSkipHorsesInOtherHerds;
+        private System.Windows.Forms.CheckBox checkBoxSkipCreaturesInOtherHerds;
         private System.Windows.Forms.CheckBox checkBoxIncludePotentialValue;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label2;

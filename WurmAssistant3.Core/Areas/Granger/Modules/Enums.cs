@@ -6,217 +6,217 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 {
-    public enum HorseColorId { Unknown = 0, Black = 1, White = 2, Grey = 3, Brown = 4, Gold = 5 }
+    public enum CreatureColorId { Unknown = 0, Black = 1, White = 2, Grey = 3, Brown = 4, Gold = 5 }
 
     /// <summary>
     /// equal and operator overloaded to compare underlying enum
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    public class HorseColor
+    public class CreatureColor
     {
         [JsonProperty] 
-        readonly HorseColorId horseColorId;
+        readonly CreatureColorId creatureColorId;
 
-        public HorseColor(HorseColorId horseColorId)
+        public CreatureColor(CreatureColorId creatureColorId)
         {
-            this.horseColorId = horseColorId;
+            this.creatureColorId = creatureColorId;
         }
 
-        public HorseColor(string DBValue)
+        public CreatureColor(string DBValue)
         {
-            if (string.IsNullOrEmpty(DBValue)) horseColorId = HorseColorId.Unknown;
-            else horseColorId = (HorseColorId)int.Parse(DBValue);
+            if (string.IsNullOrEmpty(DBValue)) creatureColorId = CreatureColorId.Unknown;
+            else creatureColorId = (CreatureColorId)int.Parse(DBValue);
         }
 
-        public HorseColorId HorseColorId
+        public CreatureColorId CreatureColorId
         {
-            get { return horseColorId; }
+            get { return creatureColorId; }
         }
 
-        public static HorseColor GetDefaultColor()
+        public static CreatureColor GetDefaultColor()
         {
-            return new HorseColor(HorseColorId.Unknown);
+            return new CreatureColor(CreatureColorId.Unknown);
         }
 
         public static string[] GetColorsEnumStrArray()
         {
-            return Enum.GetNames(typeof(HorseColorId));
+            return Enum.GetNames(typeof(CreatureColorId));
         }
 
-        public static IEnumerable<HorseColor> GetAll()
+        public static IEnumerable<CreatureColor> GetAll()
         {
-            return Enum.GetValues(typeof (HorseColorId)).Cast<HorseColorId>().Select(x => new HorseColor(x));
+            return Enum.GetValues(typeof (CreatureColorId)).Cast<CreatureColorId>().Select(x => new CreatureColor(x));
         }
 
         public override string ToString()
         {
-            return horseColorId.ToString();
+            return creatureColorId.ToString();
         }
 
         public string ToDbValue()
         {
-            return ((int)horseColorId).ToString();
+            return ((int)creatureColorId).ToString();
         }
 
-        public bool Equals(HorseColor other)
+        public bool Equals(CreatureColor other)
         {
-            return horseColorId.Equals(other.horseColorId);
+            return creatureColorId.Equals(other.creatureColorId);
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is HorseColor)) return false;
-            HorseColor other = (HorseColor)obj;
+            if (!(obj is CreatureColor)) return false;
+            CreatureColor other = (CreatureColor)obj;
             return Equals(other);
         }
 
         public override int GetHashCode()
         {
-            return horseColorId.GetHashCode();
+            return creatureColorId.GetHashCode();
         }
 
-        public static bool operator ==(HorseColor left, HorseColor right)
+        public static bool operator ==(CreatureColor left, CreatureColor right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(HorseColor left, HorseColor right)
+        public static bool operator !=(CreatureColor left, CreatureColor right)
         {
             return !(left == right);
         }
 
-        internal static HorseColor CreateColorFromEnumString(string enumStr)
+        internal static CreatureColor CreateColorFromEnumString(string enumStr)
         {
             try
             {
-                return new HorseColor((HorseColorId)Enum.Parse(typeof(HorseColorId), enumStr));
+                return new CreatureColor((CreatureColorId)Enum.Parse(typeof(CreatureColorId), enumStr));
             }
             catch (Exception _e)
             {
-                //Aldurcraft.Utility.Logger.LogError("Parse error for HorseColor from enumStr: " + enumStr, "HorseColor", _e);
-                return new HorseColor(HorseColorId.Unknown);
+                //Aldurcraft.Utility.Logger.LogError("Parse error for CreatureColor from enumStr: " + enumStr, "CreatureColor", _e);
+                return new CreatureColor(CreatureColorId.Unknown);
             }
         }
 
         internal static string GetDefaultColorStr()
         {
-            return Enum.GetName(typeof(HorseColorId), HorseColorId.Unknown);
+            return Enum.GetName(typeof(CreatureColorId), CreatureColorId.Unknown);
         }
 
         internal System.Drawing.Color? ToSystemDrawingColor()
         {
-            switch (horseColorId)
+            switch (creatureColorId)
             {
-                case HorseColorId.Unknown:
+                case CreatureColorId.Unknown:
                     return null;
-                case HorseColorId.White:
+                case CreatureColorId.White:
                     return System.Drawing.Color.GhostWhite;
-                case HorseColorId.Black:
+                case CreatureColorId.Black:
                     return System.Drawing.Color.DarkSlateGray;
-                case HorseColorId.Brown:
+                case CreatureColorId.Brown:
                     return System.Drawing.Color.Brown;
-                case HorseColorId.Gold:
+                case CreatureColorId.Gold:
                     return System.Drawing.Color.Gold;
-                case HorseColorId.Grey:
+                case CreatureColorId.Grey:
                     return System.Drawing.Color.LightGray;
                 default:
-                    //Aldurcraft.Utility.Logger.LogError("no ARGB match for HorseColor: " + EnumVal, this);
+                    //Aldurcraft.Utility.Logger.LogError("no ARGB match for CreatureColor: " + EnumVal, this);
                     return null;
             }
         }
     }
 
     [JsonObject(MemberSerialization.OptIn)]
-    public class HorseAge : IComparable, IComparable<HorseAge>
+    public class CreatureAge : IComparable, IComparable<CreatureAge>
     {
         //enum int value is used for comparable, this is limited design but whatever
 
-        static readonly Dictionary<string, HorseAge> WurmStringToAgeMap = new Dictionary<string, HorseAge>();
+        static readonly Dictionary<string, CreatureAge> WurmStringToAgeMap = new Dictionary<string, CreatureAge>();
 
         [JsonProperty]
-        HorseAgeId horseAgeId;
+        CreatureAgeId creatureAgeId;
 
-        static HorseAge()
+        static CreatureAge()
         {
-            WurmStringToAgeMap.Add(GrangerHelpers.YOUNG.ToUpperInvariant(), new HorseAge(HorseAgeId.Young));
-            WurmStringToAgeMap.Add(GrangerHelpers.ADOLESCENT.ToUpperInvariant(), new HorseAge(HorseAgeId.Adolescent));
-            WurmStringToAgeMap.Add(GrangerHelpers.MATURE.ToUpperInvariant(), new HorseAge(HorseAgeId.Mature));
-            WurmStringToAgeMap.Add(GrangerHelpers.AGED.ToUpperInvariant(), new HorseAge(HorseAgeId.Aged));
-            WurmStringToAgeMap.Add(GrangerHelpers.OLD.ToUpperInvariant(), new HorseAge(HorseAgeId.Old));
-            WurmStringToAgeMap.Add(GrangerHelpers.VENERABLE.ToUpperInvariant(), new HorseAge(HorseAgeId.Venerable));
+            WurmStringToAgeMap.Add(GrangerHelpers.YOUNG.ToUpperInvariant(), new CreatureAge(Modules.CreatureAgeId.Young));
+            WurmStringToAgeMap.Add(GrangerHelpers.ADOLESCENT.ToUpperInvariant(), new CreatureAge(Modules.CreatureAgeId.Adolescent));
+            WurmStringToAgeMap.Add(GrangerHelpers.MATURE.ToUpperInvariant(), new CreatureAge(Modules.CreatureAgeId.Mature));
+            WurmStringToAgeMap.Add(GrangerHelpers.AGED.ToUpperInvariant(), new CreatureAge(Modules.CreatureAgeId.Aged));
+            WurmStringToAgeMap.Add(GrangerHelpers.OLD.ToUpperInvariant(), new CreatureAge(Modules.CreatureAgeId.Old));
+            WurmStringToAgeMap.Add(GrangerHelpers.VENERABLE.ToUpperInvariant(), new CreatureAge(Modules.CreatureAgeId.Venerable));
         }
 
-        public HorseAge(HorseAgeId horseAgeId)
+        public CreatureAge(CreatureAgeId creatureAgeId)
         {
-            this.horseAgeId = horseAgeId;
+            this.creatureAgeId = creatureAgeId;
         }
 
-        public HorseAge(string DBValue)
+        public CreatureAge(string DBValue)
         {
-            if (string.IsNullOrEmpty(DBValue)) horseAgeId = HorseAgeId.Unknown;
-            else horseAgeId = (HorseAgeId)int.Parse(DBValue);
+            if (string.IsNullOrEmpty(DBValue)) creatureAgeId = Modules.CreatureAgeId.Unknown;
+            else creatureAgeId = (CreatureAgeId)int.Parse(DBValue);
         }
 
-        public HorseAgeId HorseAgeId
+        public CreatureAgeId CreatureAgeId
         {
-            get { return horseAgeId; }
+            get { return creatureAgeId; }
         }
 
         public static string[] GetColorsEnumStrArray()
         {
-            return Enum.GetNames(typeof(HorseAgeId));
+            return Enum.GetNames(typeof(CreatureAgeId));
         }
 
         public override string ToString()
         {
-            return horseAgeId.ToString();
+            return creatureAgeId.ToString();
         }
 
         public string ToDbValue()
         {
-            return ((int)horseAgeId).ToString();
+            return ((int)creatureAgeId).ToString();
         }
 
-        public bool Equals(HorseAge other)
+        public bool Equals(CreatureAge other)
         {
-            return horseAgeId == other.horseAgeId;
+            return creatureAgeId == other.creatureAgeId;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is HorseAge)) return false;
-            HorseAge other = (HorseAge)obj;
+            if (!(obj is CreatureAge)) return false;
+            CreatureAge other = (CreatureAge)obj;
             return Equals(other);
         }
 
         public override int GetHashCode()
         {
             //todo: remove mutable field as hashcode, not touching for now
-            return (int)horseAgeId;
+            return (int)creatureAgeId;
         }
 
-        internal static HorseAge CreateAgeFromEnumString(string enumStr)
+        internal static CreatureAge CreateAgeFromEnumString(string enumStr)
         {
             try
             {
-                return new HorseAge((HorseAgeId)Enum.Parse(typeof(HorseAgeId), enumStr));
+                return new CreatureAge((CreatureAgeId)Enum.Parse(typeof(CreatureAgeId), enumStr));
             }
             catch (Exception _e)
             {
-                //Aldurcraft.Utility.Logger.LogError("Parse error for HorseAge from enumStr: " + enumStr, "HorseColor", _e);
-                return new HorseAge(HorseAgeId.Unknown);
+                //Aldurcraft.Utility.Logger.LogError("Parse error for CreatureAge from enumStr: " + enumStr, "CreatureColor", _e);
+                return new CreatureAge(CreatureAgeId.Unknown);
             }
         }
 
         internal static string GetDefaultAgeStr()
         {
-            return Enum.GetName(typeof(HorseAgeId), HorseAgeId.Unknown);
+            return Enum.GetName(typeof(CreatureAgeId), CreatureAgeId.Unknown);
         }
 
-        internal static HorseAge CreateAgeFromRawHorseName(string objectname)
+        internal static CreatureAge CreateAgeFromRawCreatureName(string objectname)
         {
             objectname = objectname.ToUpperInvariant();
-            foreach (var agestring in GrangerHelpers.HorseAgesUpcase)
+            foreach (var agestring in GrangerHelpers.CreatureAgesUpcase)
             {
                 if (objectname.Contains(agestring))
                 {
@@ -224,13 +224,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
                 }
             }
 
-            return new HorseAge(HorseAgeId.Unknown);
+            return new CreatureAge(CreatureAgeId.Unknown);
         }
 
-        internal static HorseAge CreateAgeFromRawHorseNameStartsWith(string prefixedobjectname)
+        internal static CreatureAge CreateAgeFromRawCreatureNameStartsWith(string prefixedobjectname)
         {
             prefixedobjectname = prefixedobjectname.ToUpperInvariant();
-            foreach (var agestring in GrangerHelpers.HorseAgesUpcase)
+            foreach (var agestring in GrangerHelpers.CreatureAgesUpcase)
             {
                 if (prefixedobjectname.StartsWith(agestring, StringComparison.InvariantCulture))
                 {
@@ -238,62 +238,62 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
                 }
             }
 
-            return new HorseAge(HorseAgeId.Unknown);
+            return new CreatureAge(CreatureAgeId.Unknown);
         }
 
         public void Foalize()
         {
-            if (this.horseAgeId == HorseAgeId.Young)
-                this.horseAgeId = HorseAgeId.YoungFoal;
-            else if (this.horseAgeId == HorseAgeId.Adolescent)
-                this.horseAgeId = HorseAgeId.AdolescentFoal;
-            else throw new InvalidOperationException("foals do not come with this age type! " + this.horseAgeId.ToString());
+            if (this.creatureAgeId == CreatureAgeId.Young)
+                this.creatureAgeId = CreatureAgeId.YoungFoal;
+            else if (this.creatureAgeId == CreatureAgeId.Adolescent)
+                this.creatureAgeId = CreatureAgeId.AdolescentFoal;
+            else throw new InvalidOperationException("foals do not come with this age type! " + this.creatureAgeId.ToString());
         }
 
-        public int CompareTo(HorseAge other)
+        public int CompareTo(CreatureAge other)
         {
-            return ((int)horseAgeId).CompareTo((int)other.horseAgeId);
+            return ((int)creatureAgeId).CompareTo((int)other.creatureAgeId);
         }
 
         public int CompareTo(object obj)
         {
             if (obj == null) return 1;
 
-            if (obj is HorseAge)
+            if (obj is CreatureAge)
             {
-                HorseAge other = (HorseAge)obj;
+                CreatureAge other = (CreatureAge)obj;
                 return CompareTo(other);
             }
-            else throw new ArgumentException("Object is not a HorseAge");
+            else throw new ArgumentException("Object is not a CreatureAge");
         }
 
-        public static bool operator <(HorseAge left, HorseAge right)
+        public static bool operator <(CreatureAge left, CreatureAge right)
         {
             return left.CompareTo(right) < 0;
         }
-        public static bool operator >(HorseAge left, HorseAge right)
+        public static bool operator >(CreatureAge left, CreatureAge right)
         {
             return left.CompareTo(right) > 0;
         }
-        public static bool operator <=(HorseAge left, HorseAge right)
+        public static bool operator <=(CreatureAge left, CreatureAge right)
         {
             return left.CompareTo(right) <= 0;
         }
-        public static bool operator >=(HorseAge left, HorseAge right)
+        public static bool operator >=(CreatureAge left, CreatureAge right)
         {
             return left.CompareTo(right) >= 0;
         }
-        public static bool operator ==(HorseAge left, HorseAge right)
+        public static bool operator ==(CreatureAge left, CreatureAge right)
         {
             return left.Equals(right);
         }
-        public static bool operator !=(HorseAge left, HorseAge right)
+        public static bool operator !=(CreatureAge left, CreatureAge right)
         {
             return !(left == right);
         }
     }
 
-    public enum HorseAgeId : int
+    public enum CreatureAgeId : int
     { 
         Unknown=0, YoungFoal=100, AdolescentFoal=200, Young=300, Adolescent=400, Mature=500, Aged=600, Old=700, Venerable=800 
     }

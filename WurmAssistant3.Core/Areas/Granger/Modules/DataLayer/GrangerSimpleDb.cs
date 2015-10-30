@@ -9,14 +9,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
     {
         public GrangerSimpleDb()
         {
-            Horses = new Dictionary<int, HorseEntity>();
+            Creatures = new Dictionary<int, CreatureEntity>();
             Herds = new Dictionary<string, HerdEntity>();
             TraitValues = new Dictionary<int, TraitValueEntity>();
         }
 
-        [JsonProperty("horses")]
-        public Dictionary<int, HorseEntity> Horses { get; private set; }
-        [JsonProperty("gerds")]
+        [JsonProperty("creatures")]
+        public Dictionary<int, CreatureEntity> Creatures { get; private set; }
+        [JsonProperty("herds")]
         public Dictionary<string, HerdEntity> Herds { get; private set; }
         [JsonProperty("traitValues")]
         public Dictionary<int, TraitValueEntity> TraitValues { get; private set; }

@@ -32,7 +32,7 @@
             this.contextMenuStripHerds = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.addHorseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addCreatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.combineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,7 +49,7 @@
             this.contextMenuStripHerds.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addNewToolStripMenuItem,
             this.toolStripSeparator2,
-            this.addHorseToolStripMenuItem,
+            this.addCreatureToolStripMenuItem,
             this.toolStripSeparator3,
             this.renameToolStripMenuItem,
             this.combineToolStripMenuItem,
@@ -70,12 +70,12 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(202, 6);
             // 
-            // addHorseToolStripMenuItem
+            // addCreatureToolStripMenuItem
             // 
-            this.addHorseToolStripMenuItem.Name = "addHorseToolStripMenuItem";
-            this.addHorseToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
-            this.addHorseToolStripMenuItem.Text = "Add creature to this herd";
-            this.addHorseToolStripMenuItem.Click += new System.EventHandler(this.addHorseToolStripMenuItem_Click);
+            this.addCreatureToolStripMenuItem.Name = "addCreatureToolStripMenuItem";
+            this.addCreatureToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.addCreatureToolStripMenuItem.Text = "Add creature to this herd";
+            this.addCreatureToolStripMenuItem.Click += new System.EventHandler(this.addCreatureToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -166,7 +166,7 @@
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem addHorseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addCreatureToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private BrightIdeasSoftware.ObjectListView objectListView1;
         private BrightIdeasSoftware.OLVColumn olvColumnHerd;

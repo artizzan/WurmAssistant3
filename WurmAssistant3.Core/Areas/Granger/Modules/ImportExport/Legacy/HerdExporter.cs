@@ -12,46 +12,46 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ImportExport.Legac
         {
             if (herdName == null) throw new GrangerException("No herd specified");
 
-            var horses = context.Horses.Where(x => x.Herd == herdName).ToArray();
+            var creatures = context.Creatures.Where(x => x.Herd == herdName).ToArray();
 
-            if (horses.Length == 0)
+            if (creatures.Length == 0)
             {
                 throw new GrangerException(string.Format("No creatures found in {0} herd or herd did not exist", herdName));
             }
 
             XElement root = new XElement("Herd", new XAttribute("OriginalHerdName", herdName));
 
-            foreach (HorseEntity horseEntity in horses)
+            foreach (CreatureEntity creatureEntity in creatures)
             {
-                var horse =
-                    new XElement("Horse",
-                        new XElement("Name", horseEntity.Name),
-                        new XElement("Father", horseEntity.FatherName),
-                        new XElement("Mother", horseEntity.MotherName),
-                        new XElement("Traits", GetTraitListXML(horseEntity)),
+                var creature =
+                    new XElement("Creature",
+                        new XElement("Name", creatureEntity.Name),
+                        new XElement("Father", creatureEntity.FatherName),
+                        new XElement("Mother", creatureEntity.MotherName),
+                        new XElement("Traits", GetTraitListXML(creatureEntity)),
                         new XElement("NotInMoodUntil",
-                            horseEntity.NotInMood.HasValue
-                                ? horseEntity.NotInMood.Value.ToString(CultureInfo.InvariantCulture)
+                            creatureEntity.NotInMood.HasValue
+                                ? creatureEntity.NotInMood.Value.ToString(CultureInfo.InvariantCulture)
                                 : string.Empty),
                         new XElement("PregnantUntil",
-                            horseEntity.PregnantUntil.HasValue
-                                ? horseEntity.PregnantUntil.Value.ToString(
+                            creatureEntity.PregnantUntil.HasValue
+                                ? creatureEntity.PregnantUntil.Value.ToString(
                                     CultureInfo.InvariantCulture)
                                 : string.Empty),
                         new XElement("GroomedOn",
-                            horseEntity.GroomedOn.HasValue
-                                ? horseEntity.GroomedOn.Value.ToString(CultureInfo.InvariantCulture)
+                            creatureEntity.GroomedOn.HasValue
+                                ? creatureEntity.GroomedOn.Value.ToString(CultureInfo.InvariantCulture)
                                 : string.Empty),
-                        new XElement("Gender", GetGender(horseEntity)),
-                        new XElement("CaredBy", horseEntity.TakenCareOfBy),
-                        new XElement("InspectSkill", horseEntity.TraitsInspectedAtSkill,
-                            new XAttribute("IsEpic", horseEntity.EpicCurve.HasValue ? horseEntity.EpicCurve.ToString() : bool.FalseString)),
-                        new XElement("Age", horseEntity.Age),
-                        new XElement("Color", horseEntity.Color),
-                        new XElement("Comments", horseEntity.Comments),
-                        new XElement("Tags", horseEntity.SpecialTagsRaw),
-                        new XElement("BrandedFor", horseEntity.BrandedFor));
-                root.Add(horse);
+                        new XElement("Gender", GetGender(creatureEntity)),
+                        new XElement("CaredBy", creatureEntity.TakenCareOfBy),
+                        new XElement("InspectSkill", creatureEntity.TraitsInspectedAtSkill,
+                            new XAttribute("IsEpic", creatureEntity.EpicCurve.HasValue ? creatureEntity.EpicCurve.ToString() : bool.FalseString)),
+                        new XElement("Age", creatureEntity.Age),
+                        new XElement("Color", creatureEntity.Color),
+                        new XElement("Comments", creatureEntity.Comments),
+                        new XElement("Tags", creatureEntity.SpecialTagsRaw),
+                        new XElement("BrandedFor", creatureEntity.BrandedFor));
+                root.Add(creature);
             }
 
             return new XDocument(
@@ -59,20 +59,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ImportExport.Legac
                 root);
         }
 
-        IEnumerable<XElement> GetTraitListXML(HorseEntity horseEntity)
+        IEnumerable<XElement> GetTraitListXML(CreatureEntity creatureEntity)
         {
             var result = new List<XElement>();
-            foreach (var trait in horseEntity.Traits)
+            foreach (var trait in creatureEntity.Traits)
             {
                 result.Add(new XElement("Trait", new XAttribute("TraitId", (int)trait.Trait), trait.ToString()));
             }
             return result;
         }
 
-        string GetGender(HorseEntity horseEntity)
+        string GetGender(CreatureEntity creatureEntity)
         {
-            if (horseEntity.IsMale == null) return string.Empty;
-            else return horseEntity.IsMale.Value ? "male" : "female";
+            if (creatureEntity.IsMale == null) return string.Empty;
+            else return creatureEntity.IsMale.Value ? "male" : "female";
         }
     }
 }

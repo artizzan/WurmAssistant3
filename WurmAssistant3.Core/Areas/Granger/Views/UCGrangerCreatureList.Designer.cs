@@ -1,6 +1,6 @@
 ﻿namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
 {
-    partial class UCGrangerHorseList
+    partial class UCGrangerCreatureList
     {
         /// <summary> 
         /// Required designer variable.
@@ -37,7 +37,7 @@
             this.brownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.goldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.notAHorseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notACreatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diseasedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -122,7 +122,7 @@
             this.brownToolStripMenuItem,
             this.goldToolStripMenuItem,
             this.toolStripSeparator3,
-            this.notAHorseToolStripMenuItem});
+            this.notACreatureToolStripMenuItem});
             this.setColorToolStripMenuItem.Name = "setColorToolStripMenuItem";
             this.setColorToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.setColorToolStripMenuItem.Text = "Set color";
@@ -167,12 +167,12 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(105, 6);
             // 
-            // notAHorseToolStripMenuItem
+            // notACreatureToolStripMenuItem
             // 
-            this.notAHorseToolStripMenuItem.Name = "notAHorseToolStripMenuItem";
-            this.notAHorseToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
-            this.notAHorseToolStripMenuItem.Text = "None";
-            this.notAHorseToolStripMenuItem.Click += new System.EventHandler(this.notAHorseToolStripMenuItem_Click);
+            this.notACreatureToolStripMenuItem.Name = "notACreatureToolStripMenuItem";
+            this.notACreatureToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.notACreatureToolStripMenuItem.Text = "None";
+            this.notACreatureToolStripMenuItem.Click += new System.EventHandler(this.notACreatureToolStripMenuItem_Click);
             // 
             // toggleTagToolStripMenuItem
             // 
@@ -605,16 +605,16 @@
             this.timer1.Interval = 60000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // UCGrangerHorseList
+            // UCGrangerCreatureList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "UCGrangerHorseList";
+            this.Name = "UCGrangerCreatureList";
             this.Size = new System.Drawing.Size(366, 316);
-            this.Load += new System.EventHandler(this.UCGrangerHorseList_Load);
-            this.VisibleChanged += new System.EventHandler(this.UCGrangerHorseList_VisibleChanged);
+            this.Load += new System.EventHandler(this.UCGrangerCreatureList_Load);
+            this.VisibleChanged += new System.EventHandler(this.UCGrangerCreatureList_VisibleChanged);
             this.contextMenuStrip1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
@@ -665,7 +665,7 @@
         private System.Windows.Forms.ToolStripMenuItem brownToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem goldToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem notAHorseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem notACreatureToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toggleTagToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem diseasedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deadToolStripMenuItem;

@@ -23,16 +23,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ImportExport.Legac
             }
 
             XDocument doc = XDocument.Load(xmlFilePath);
-            var horseEntities = new List<HorseEntity>();       
-            var elements = doc.Root.Elements("Horse");
+            var creatureEntities = new List<CreatureEntity>();       
+            var elements = doc.Root.Elements("Creature");
             foreach (var x in elements)
             {
-                var entity = new HorseEntity();
+                var entity = new CreatureEntity();
                 entity.Herd = newHerdName;
                 entity.Name = x.Element("Name").Value;
 
                 // verify this name is not present in current list
-                if (horseEntities.Any(y => y.Name.Equals(entity.Name, StringComparison.InvariantCultureIgnoreCase)))
+                if (creatureEntities.Any(y => y.Name.Equals(entity.Name, StringComparison.InvariantCultureIgnoreCase)))
                 {
                     throw new GrangerException(string.Format("Creature named {0} was already added from this XML file. Review the file for any errors.", entity.Name));
                 }
@@ -78,29 +78,29 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ImportExport.Legac
                 if (string.IsNullOrEmpty(xInspectAttr.Value)) entity.EpicCurve = null;
                 else entity.EpicCurve = bool.Parse(xInspectAttr.Value);
 
-                entity.Age = HorseAge.CreateAgeFromEnumString(x.Element("Age").Value);
-                entity.Color = HorseColor.CreateColorFromEnumString(x.Element("Color").Value);
+                entity.Age = CreatureAge.CreateAgeFromEnumString(x.Element("Age").Value);
+                entity.Color = CreatureColor.CreateColorFromEnumString(x.Element("Color").Value);
                 entity.Comments = x.Element("Comments").Value;
                 entity.SpecialTagsRaw = x.Element("Tags").Value;
                 entity.BrandedFor = x.Element("BrandedFor").Value;
 
-                horseEntities.Add(entity);
+                creatureEntities.Add(entity);
             }
 
             context.InsertHerd(newHerdName);
-            foreach (var horseEntity in horseEntities)
+            foreach (var creatureEntity in creatureEntities)
             {
-                horseEntity.Id = HorseEntity.GenerateNewHorseId(context);
-                context.InsertHorse(horseEntity);
+                creatureEntity.Id = CreatureEntity.GenerateNewCreatureId(context);
+                context.InsertCreature(creatureEntity);
             }
         }
 
-        List<HorseTrait> GetTraitsFromXML(XElement xTraits)
+        List<CreatureTrait> GetTraitsFromXML(XElement xTraits)
         {
-            var result = new List<HorseTrait>();
+            var result = new List<CreatureTrait>();
             foreach (var xTrait in xTraits.Elements("Trait"))
             {
-                result.Add(HorseTrait.FromEnumIntStr(xTrait.Attribute("TraitId").Value));
+                result.Add(CreatureTrait.FromEnumIntStr(xTrait.Attribute("TraitId").Value));
             }
             return result;
         }

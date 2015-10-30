@@ -26,7 +26,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             InitializeComponent();
             textBoxFromHerd.Text = SourceHerdName;
             comboBoxToHerd.Items.AddRange(Context.Herds.Where(x => x.HerdID != sourceHerdName).ToArray());
-            listBoxFromHerd.Items.AddRange(Context.Horses.Where(x => x.Herd == SourceHerdName).ToArray());
+            listBoxFromHerd.Items.AddRange(Context.Creatures.Where(x => x.Herd == SourceHerdName).ToArray());
         }
 
         private void comboBoxToHerd_SelectedIndexChanged(object sender, EventArgs e)
@@ -35,7 +35,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             {
                 listBoxToHerd.Items.Clear();
                 listBoxToHerd.Items.AddRange(
-                    Context.Horses.Where(x => x.Herd == comboBoxToHerd.SelectedItem.ToString()).ToArray());
+                    Context.Creatures.Where(x => x.Herd == comboBoxToHerd.SelectedItem.ToString()).ToArray());
                 buttonOK.Enabled = true;
             }
             else buttonOK.Enabled = false;
@@ -50,7 +50,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             catch (Exception _e)
             {
                 MessageBox.Show("there was a problem with merging herds:\r\n" + _e.Message);
-                if (_e is GrangerContext.DuplicateHorseIdentityException)
+                if (_e is GrangerContext.DuplicateCreatureIdentityException)
                 {
                     logger.Info(_e, "merging herds failed due non-unique creatures");
                 }
@@ -63,12 +63,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
 
         private void listBoxFromHerd_DoubleClick(object sender, EventArgs e)
         {
-            //TODO show horse info
+            //TODO show creature info
         }
 
         private void listBoxToHerd_DoubleClick(object sender, EventArgs e)
         {
-            //TODO show horse info
+            //TODO show creature info
         }
     }
 }

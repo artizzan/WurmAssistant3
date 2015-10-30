@@ -139,7 +139,7 @@
     <Compile Include="Areas\Granger\Modules\DataLayer\GrangerContext.cs" />
     <Compile Include="Areas\Granger\Modules\DataLayer\GrangerSimpleDb.cs" />
     <Compile Include="Areas\Granger\Modules\DataLayer\HerdEntity.cs" />
-    <Compile Include="Areas\Granger\Modules\DataLayer\HorseEntity.cs" />
+    <Compile Include="Areas\Granger\Modules\DataLayer\CreatureEntity.cs" />
     <Compile Include="Areas\Granger\Modules\DataLayer\TraitValueEntity.cs" />
     <Compile Include="Areas\Granger\Modules\Enums.cs" />
     <Compile Include="Areas\Granger\Modules\Exceptions.cs" />
@@ -204,20 +204,20 @@
       <DependentUpon>FormHerdName.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Granger\Modules\GrangerSettings.cs" />
-    <Compile Include="Areas\Granger\Modules\Horse.cs" />
-    <Compile Include="Areas\Granger\Views\HorseEdit\FormHorseViewEdit.cs">
+    <Compile Include="Areas\Granger\Modules\Creature.cs" />
+    <Compile Include="Areas\Granger\Views\HorseEdit\FormCreatureViewEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\Granger\Views\HorseEdit\FormHorseViewEdit.Designer.cs">
-      <DependentUpon>FormHorseViewEdit.cs</DependentUpon>
+    <Compile Include="Areas\Granger\Views\HorseEdit\FormCreatureViewEdit.Designer.cs">
+      <DependentUpon>FormCreatureViewEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Modules\HorseEdit\HorseViewEditOpType.cs" />
-    <Compile Include="Areas\Granger\Modules\HorseTrait.cs" />
+    <Compile Include="Areas\Granger\Modules\HorseEdit\CreatureViewEditOpType.cs" />
+    <Compile Include="Areas\Granger\Modules\CreatureTrait.cs" />
     <Compile Include="Areas\Granger\Modules\ImportExport\Legacy\HerdImporter.cs" />
     <Compile Include="Areas\Granger\Modules\LogFeedManager\GrangerDebugLogger.cs" />
     <Compile Include="Areas\Granger\Modules\LogFeedManager\GrangerHelpers.cs" />
-    <Compile Include="Areas\Granger\Modules\LogFeedManager\HorseProcessor.cs" />
-    <Compile Include="Areas\Granger\Modules\LogFeedManager\HorseUpdatesManager.cs" />
+    <Compile Include="Areas\Granger\Modules\LogFeedManager\CreatureProcessor.cs" />
+    <Compile Include="Areas\Granger\Modules\LogFeedManager\CreatureUpdatesManager.cs" />
     <Compile Include="Areas\Granger\Modules\LogFeedManager\LogsFeedManager.cs" />
     <Compile Include="Areas\Granger\Modules\LogFeedManager\PlayerManager.cs" />
     <Compile Include="Areas\Granger\Modules\GrangerFeature.cs" />
@@ -228,11 +228,11 @@
     <Compile Include="Areas\Granger\Views\UCGrangerHerdList.Designer.cs">
       <DependentUpon>UCGrangerHerdList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\UCGrangerHorseList.cs">
+    <Compile Include="Areas\Granger\Views\UCGrangerCreatureList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Areas\Granger\Views\UCGrangerHorseList.Designer.cs">
-      <DependentUpon>UCGrangerHorseList.cs</DependentUpon>
+    <Compile Include="Areas\Granger\Views\UCGrangerCreatureList.Designer.cs">
+      <DependentUpon>UCGrangerCreatureList.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Granger\Views\UCGrangerTraitView.cs">
       <SubType>UserControl</SubType>
@@ -764,14 +764,14 @@
     <EmbeddedResource Include="Areas\Granger\Views\FormHerdName.resx">
       <DependentUpon>FormHerdName.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Granger\Views\HorseEdit\FormHorseViewEdit.resx">
-      <DependentUpon>FormHorseViewEdit.cs</DependentUpon>
+    <EmbeddedResource Include="Areas\Granger\Views\HorseEdit\FormCreatureViewEdit.resx">
+      <DependentUpon>FormCreatureViewEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Granger\Views\UCGrangerHerdList.resx">
       <DependentUpon>UCGrangerHerdList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Granger\Views\UCGrangerHorseList.resx">
-      <DependentUpon>UCGrangerHorseList.cs</DependentUpon>
+    <EmbeddedResource Include="Areas\Granger\Views\UCGrangerCreatureList.resx">
+      <DependentUpon>UCGrangerCreatureList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Granger\Views\UCGrangerTraitView.resx">
       <DependentUpon>UCGrangerTraitView.cs</DependentUpon>

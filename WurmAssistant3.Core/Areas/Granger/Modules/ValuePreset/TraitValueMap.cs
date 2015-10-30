@@ -8,7 +8,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset
     class TraitValueMap
     {
         readonly string traitValueMapId;
-        public readonly Dictionary<HorseTrait.TraitEnum, int> ValueMap;
+        public readonly Dictionary<CreatureTrait.TraitEnum, int> ValueMap;
         readonly GrangerContext context;
 
         public bool ReadOnly {get;private set;}
@@ -18,7 +18,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset
             this.context = context;
             this.traitValueMapId = traitValueMapId;
 
-            ValueMap = HorseTrait.GetAllDefaultValues();
+            ValueMap = CreatureTrait.GetAllDefaultValues();
 
             if (traitValueMapId == TraitValuator.DefaultId)
             {
@@ -35,7 +35,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset
             }
         }
 
-        public void ModifyTraitValue(HorseTrait.TraitEnum trait, int newValue)
+        public void ModifyTraitValue(CreatureTrait.TraitEnum trait, int newValue)
         {
             if (ReadOnly) throw new InvalidOperationException("this list is read-only");
 

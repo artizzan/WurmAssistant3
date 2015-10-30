@@ -46,19 +46,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor
             }
         }
 
-        internal BreedingEvalResults? GetBreedingValue(Horse horse)
+        internal BreedingEvalResults? GetBreedingValue(Creature creature)
         {
             if (IsDisabled) return null;
-            if (MainForm.SelectedSingleHorse != null) //this is cached value
+            if (MainForm.SelectedSingleCreature != null) //this is cached value
             {
-                // this is the currently user-selected horse, while parameter horses are iterated by display process
-                Horse evaluatedHorse = MainForm.SelectedSingleHorse;
-                return BreedEvalutator.Evaluate(evaluatedHorse, horse, MainForm.CurrentValuator);
+                // this is the currently user-selected creature, while parameter creatures are iterated by display process
+                Creature evaluatedCreature = MainForm.SelectedSingleCreature;
+                return BreedEvalutator.Evaluate(evaluatedCreature, creature, MainForm.CurrentValuator);
             }
             else return null;
         }
 
-        internal System.Drawing.Color? GetColorForThisValue(int? CompareValue)
+        internal System.Drawing.Color? GetColorForThisValue(int? compareValue)
         {
             return null;
         }
@@ -86,12 +86,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor
             }
         }
 
-        internal System.Drawing.Color? GetHintColor(Horse horse, double minBreedValue, double maxBreedValue)
+        internal System.Drawing.Color? GetHintColor(Creature creature, double minBreedValue, double maxBreedValue)
         {
             if (BreedEvalutator == null) return null;
             else
             {
-                return BreedEvalutator.GetHintColor(horse, minBreedValue, maxBreedValue);
+                return BreedEvalutator.GetHintColor(creature, minBreedValue, maxBreedValue);
             }
         }
     }

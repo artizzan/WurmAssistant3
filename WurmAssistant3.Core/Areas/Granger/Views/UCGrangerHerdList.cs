@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.HorseEdit;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.CreatureEdit;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using JetBrains.Annotations;
 
@@ -84,9 +84,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             if (selHerd == null) MessageBox.Show("select a herd first");
             else
             {
-                HorseEntity[] horses = Context.Horses.Where(x => x.Herd == selHerd.HerdID).ToArray();
+                CreatureEntity[] creatures = Context.Creatures.Where(x => x.Herd == selHerd.HerdID).ToArray();
                 if (MessageBox.Show("Following herd will be deleted: " + selHerd + "\r\n" + "all creatures in this herd will also be deleted:" + "\r\n"
-                    + (horses.Length == 0 ? "no creatures in this herd" : string.Join(", ", (IEnumerable<HorseEntity>)horses)) + "\r\n\r\n" +
+                    + (creatures.Length == 0 ? "no creatures in this herd" : string.Join(", ", (IEnumerable<CreatureEntity>)creatures)) + "\r\n\r\n" +
                     "Continue?", "confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
                 {
                     Context.DeleteHerd(selHerd.HerdID);
@@ -96,13 +96,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
 
         HerdEntity selectedHerd { get { return (HerdEntity)objectListView1.SelectedObject; } }
 
-        private void addHorseToolStripMenuItem_Click(object sender, EventArgs e)
+        private void addCreatureToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var selHerd = selectedHerd;
             if (selHerd == null) MessageBox.Show("select a herd first");
             else
             {
-                FormHorseViewEdit ui = new FormHorseViewEdit(MainForm, null, Context, HorseViewEditOpType.New, selHerd.HerdID, logger);
+                FormCreatureViewEdit ui = new FormCreatureViewEdit(MainForm, null, Context, CreatureViewEditOpType.New, selHerd.HerdID, logger);
                 ui.ShowDialog();
             }
         }
@@ -117,14 +117,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
         {
             if (e.Model == null)
             {
-                addHorseToolStripMenuItem.Enabled = false;
+                addCreatureToolStripMenuItem.Enabled = false;
                 deleteToolStripMenuItem.Enabled = false;
                 combineToolStripMenuItem.Enabled = false;
                 renameToolStripMenuItem.Enabled = false;
             }
             else
             {
-                addHorseToolStripMenuItem.Enabled = true;
+                addCreatureToolStripMenuItem.Enabled = true;
                 deleteToolStripMenuItem.Enabled = true;
                 combineToolStripMenuItem.Enabled = true;
                 renameToolStripMenuItem.Enabled = true;

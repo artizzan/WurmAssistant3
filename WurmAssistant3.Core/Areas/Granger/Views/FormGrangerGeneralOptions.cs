@@ -20,7 +20,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
         {
             checkBoxAlwaysUpdateUnlessMultiples.Checked = _settings.DoNotBlockDataUpdateUnlessMultiplesInEntireDb;
             timeSpanInputGroomingTime.Value = _settings.ShowGroomingTime;
-            checkBoxUpdateAgeHealthAllEvents.Checked = _settings.UpdateHorseDataFromAnyEventLine;
+            checkBoxUpdateAgeHealthAllEvents.Checked = _settings.UpdateCreatureDataFromAnyEventLine;
             checkBoxDisableRowColoring.Checked = _settings.DisableRowColoring;
             checkBoxAdjustForDarkThemes.Checked = _settings.AdjustForDarkThemes;
         }
@@ -29,7 +29,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
         {
             _settings.DoNotBlockDataUpdateUnlessMultiplesInEntireDb = checkBoxAlwaysUpdateUnlessMultiples.Checked;
             _settings.ShowGroomingTime = timeSpanInputGroomingTime.Value;
-            _settings.UpdateHorseDataFromAnyEventLine = checkBoxUpdateAgeHealthAllEvents.Checked;
+            _settings.UpdateCreatureDataFromAnyEventLine = checkBoxUpdateAgeHealthAllEvents.Checked;
             _settings.DisableRowColoring = checkBoxDisableRowColoring.Checked;
             _settings.AdjustForDarkThemes = checkBoxAdjustForDarkThemes.Checked;
         }

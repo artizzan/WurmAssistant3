@@ -14,35 +14,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
 
-        readonly HorseUpdatesManager horseUpdateManager;
+        readonly CreatureUpdatesManager creatureUpdateManager;
 
         readonly IWurmCharacter character;
 
         public string PlayerName { get; private set; }
 
-        private float ahFreedomSkill;
-        public float AhFreedomSkill
-        {
-            get { return ahFreedomSkill; }
-            set
-            {
-                ahFreedomSkill = value;
-                parentModule.Settings.SetAhSkill(PlayerName, new ServerGroup(ServerGroup.FreedomId), value);
-            }
-        }
+        public float AhFreedomSkill { get; private set; }
+        public float AhEpicSkill { get; private set; }
 
-        private float ahEpicSkill;
-        public float AhEpicSkill
-        {
-            get { return ahEpicSkill; }
-            set
-            {
-                ahEpicSkill = value;
-                parentModule.Settings.SetAhSkill(PlayerName, new ServerGroup(ServerGroup.EpicId), value);
-            }
-        }
-
-        bool _skillObtainedFlag = false;
+        bool skillObtainedFlag = false;
 
         public PlayerManager(GrangerFeature parentModule, GrangerContext context, string playerName,
             [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger, [NotNull] ITrayPopups trayPopups)
@@ -56,8 +37,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             this.logger = logger;
             this.PlayerName = playerName;
 
-            //SGManager = new ManualServerGroupManager(PlayerName);
-            horseUpdateManager = new HorseUpdatesManager(this.parentModule, this.context, this, trayPopups, logger);
+            creatureUpdateManager = new CreatureUpdatesManager(this.parentModule, this.context, this, trayPopups, logger);
 
             wurmApi.LogsMonitor.Subscribe(PlayerName, LogType.AllLogs, OnNewLogEvents);
 
@@ -67,26 +47,33 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             BeginInitSkill();
         }
 
-        public void Update()
-        {
-            horseUpdateManager.Update();
-        }
-
         async void BeginInitSkill()
         {
             try
             {
-                UpdateSkill();
+                var freedomskill = await character.Skills.TryGetCurrentSkillLevelAsync(
+                    "Animal husbandry",
+                    new ServerGroup(ServerGroup.FreedomId),
+                    TimeSpan.FromDays(90));
+                AhFreedomSkill = freedomskill != null ? freedomskill.Value : 0;
 
-                _skillObtainedFlag = true;
+                var epicskill = await character.Skills.TryGetCurrentSkillLevelAsync(
+                    "Animal husbandry",
+                    new ServerGroup(ServerGroup.EpicId),
+                    TimeSpan.FromDays(90));
+                AhEpicSkill = epicskill != null ? epicskill.Value : 0;
 
-                var eh = SkillObtained;
-                if (eh != null) eh(this, new LogsFeedManager.SkillObtainedEventArgs(PlayerName));
+                skillObtainedFlag = true;
             }
             catch (Exception _e)
             {
                 logger.Error(_e, "Something went wrong while trying to get AH skill for " + PlayerName);
             }
+        }
+
+        public void Update()
+        {
+            creatureUpdateManager.Update();
         }
 
         /// <summary>
@@ -96,7 +83,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         /// <returns></returns>
         public float? GetAhSkill(ServerGroup serverGroup)
         {
-            if (!_skillObtainedFlag) return null;
+            if (!skillObtainedFlag) return null;
 
             if (serverGroup.ServerGroupId == ServerGroup.EpicId)
                 return AhEpicSkill;
@@ -117,8 +104,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             return currentServer.ServerGroup;
         }
 
-        public event EventHandler<LogsFeedManager.SkillObtainedEventArgs> SkillObtained;
-
         private void OnNewLogEvents(object sender, LogsMonitorEventArgs e)
         {
             if (e.LogType == LogType.Event)
@@ -127,7 +112,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 {
                     if (parentModule.Settings.LogCaptureEnabled)
                     {
-                        horseUpdateManager.ProcessEventForHorseUpdates(wurmLogEntry);
+                        creatureUpdateManager.ProcessEventForCreatureUpdates(wurmLogEntry);
                     }
                 }
             }
@@ -135,26 +120,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 
         void SkillsOnSkillsChanged(object sender, SkillsChangedEventArgs skillsChangedEventArgs)
         {
-            if (skillsChangedEventArgs.HasSkillChanged("Animal husbandry"))
+            foreach (var skillInfo in skillsChangedEventArgs.SkillChanges)
             {
-                UpdateSkill();
+                if (skillInfo.IsSkillName("Animal husbandry") && skillInfo.Server != null)
+                {
+                    if (skillInfo.Server.ServerGroup.ServerGroupId == ServerGroup.FreedomId)
+                    {
+                        AhFreedomSkill = skillInfo.Value;
+                    }
+                    else if (skillInfo.Server.ServerGroup.ServerGroupId == ServerGroup.FreedomId)
+                    {
+                        AhEpicSkill = skillInfo.Value;
+                    }
+                }
             }
-        }
-
-        private void UpdateSkill()
-        {
-            //todo: blocking calls... refactor
-            var freedomskill = character.Skills.TryGetCurrentSkillLevel(
-                "Animal husbandry",
-                new ServerGroup(ServerGroup.FreedomId),
-                TimeSpan.FromDays(90));
-            AhFreedomSkill = freedomskill != null ? freedomskill.Value : 0;
-
-            var epicskill = character.Skills.TryGetCurrentSkillLevel(
-                "Animal husbandry",
-                new ServerGroup(ServerGroup.EpicId),
-                TimeSpan.FromDays(90));
-            AhFreedomSkill = epicskill != null ? epicskill.Value : 0;
         }
 
         public void Dispose()

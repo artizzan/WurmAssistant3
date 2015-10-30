@@ -140,6 +140,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.WurmApi.Modules
                     AddIssue(
                         "\"Skillgain tab updates\" option should be set to as frequent as possible. Recommended setting is \"Always\" or \"Per 0.001 increase\". This is especially important at very high skill levels.");
                 }
+
+                if (config.SaveSkillsOnQuit != true)
+                {
+                    AddIssue("\"Save skills on quit\" option should be enabled. It greatly helps in finding all skill levels.");
+                }
             }
 
             void AddIssue(string issue)

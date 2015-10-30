@@ -20,7 +20,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset
         readonly FormGrangerMain mainForm;
         public string ValueMapId { get; private set; }
 
-        readonly Dictionary<HorseTrait, int> valueMap = new Dictionary<HorseTrait, int>();
+        readonly Dictionary<CreatureTrait, int> valueMap = new Dictionary<CreatureTrait, int>();
         bool usingDefault = false;
         bool thisValueMapIsNoMore = false;
         /// <summary>
@@ -62,7 +62,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset
             {
                 foreach (var traitvalue in traitvalues)
                 { 
-                    valueMap.Add(new HorseTrait(traitvalue.Trait.Trait), traitvalue.Value); 
+                    valueMap.Add(new CreatureTrait(traitvalue.Trait.Trait), traitvalue.Value); 
                 }
                 var goodtraits = valueMap.Select(x => x.Value).Where(x => x > 0);
                 MaxPossibleValue = goodtraits.Sum();
@@ -75,7 +75,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset
             }
         }
 
-        public int GetValueForTrait(HorseTrait trait)
+        public int GetValueForTrait(CreatureTrait trait)
         {
             if (thisValueMapIsNoMore)
             {
@@ -83,14 +83,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset
                 mainForm.InvalidateTraitValuator();
             }
 
-            if (usingDefault) return HorseTrait.GetDefaultValue(trait);
+            if (usingDefault) return CreatureTrait.GetDefaultValue(trait);
 
             int result = 0;
             valueMap.TryGetValue(trait, out result);
             return result;
         }
 
-        internal int Evaluate(HorseTrait[] traits)
+        internal int Evaluate(CreatureTrait[] traits)
         {
             int result = 0;
             foreach (var trait in traits)
@@ -100,7 +100,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset
             return result;
         }
 
-        internal int Evaluate(HorseTrait[] traits, bool positiveOnly)
+        internal int Evaluate(CreatureTrait[] traits, bool positiveOnly)
         {
             int result = 0;
             foreach (var trait in traits)
@@ -112,25 +112,25 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset
             return result;
         }
 
-        internal int GetValueForHorse(Horse horse)
+        internal int GetValueForCreature(Creature creature)
         {
-            return Evaluate(horse.Traits);
+            return Evaluate(creature.Traits);
         }
 
-        int GetPotentialValueForHorse(Horse horse, bool positive)
+        int GetPotentialValueForCreature(Creature creature, bool positive)
         {
-            var missingTraits = HorseTrait.GetMissingTraits(horse.Traits, horse.TraitsInspectSkill, horse.EpicCurve);
+            var missingTraits = CreatureTrait.GetMissingTraits(creature.Traits, creature.TraitsInspectSkill, creature.EpicCurve);
             return Evaluate(missingTraits, positive);
         }
 
-        internal int GetPotentialPositiveValueForHorse(Horse horse)
+        internal int GetPotentialPositiveValueForCreature(Creature creature)
         {
-            return GetPotentialValueForHorse(horse, true);
+            return GetPotentialValueForCreature(creature, true);
         }
 
-        internal int GetPotentialNegativeValueForHorse(Horse horse)
+        internal int GetPotentialNegativeValueForCreature(Creature creature)
         {
-            return GetPotentialValueForHorse(horse, false);
+            return GetPotentialValueForCreature(creature, false);
         }
 
         public int MaxPossibleValue { get; private set; }

@@ -8,7 +8,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
     public partial class FormChooseHerd : ExtendedForm
     {
         private GrangerContext Context;
-        private UCGrangerHorseList ControlGrangerHorseList;
+        private UCGrangerCreatureList controlGrangerCreatureList;
         private FormGrangerMain MainForm;
         public string Result
         {

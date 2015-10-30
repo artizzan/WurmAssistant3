@@ -35,7 +35,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
         public event EventHandler Granger_AdvisorChanged;
 
         public event EventHandler Granger_PlayerListChanged;
-        public event EventHandler Granger_SelectedSingleHorseChanged;
+        public event EventHandler Granger_SelectedSingleCreatureChanged;
         public event EventHandler Granger_TraitViewDisplayModeChanged;
 
         public GrangerSettings Settings;
@@ -50,9 +50,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
         public BreedingAdvisor CurrentAdvisor { get; private set; }
 
         /// <summary>
-        /// null if none or more horses selected, else ref to horse
+        /// null if none or more creatures selected, else ref to creature
         /// </summary>
-        public Horse SelectedSingleHorse { get { return ucGrangerHorseList1.SelectedSingleHorse; } }
+        public Creature SelectedSingleCreature { get { return ucGrangerCreatureList1.SelectedSingleCreature; } }
 
         bool _WindowInitCompleted = false;
         public FormGrangerMain(GrangerFeature grangerFeature, GrangerSettings settings, GrangerContext context,
@@ -78,7 +78,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             RefreshAdvisor();
 
             ucGrangerHerdList1.Init(this, context, logger);
-            ucGrangerHorseList1.Init(this, context, logger);
+            ucGrangerCreatureList1.Init(this, context, logger);
             ucGrangerTraitView1.Init(this, context, logger);
 
             Context.OnTraitValuesModified += Context_OnTraitValuesModified;
@@ -93,12 +93,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
         }
 
         /// <summary>
-        /// triggers Granger_SelectedSingleHorseChanged event
+        /// triggers Granger_SelectedSingleCreatureChanged event
         /// </summary>
-        internal void TriggerSelectedSingleHorseChanged()
+        internal void TriggerSelectedSingleCreatureChanged()
         {
-            if (Granger_SelectedSingleHorseChanged != null) 
-                Granger_SelectedSingleHorseChanged(this, EventArgs.Empty);
+            if (Granger_SelectedSingleCreatureChanged != null) 
+                Granger_SelectedSingleCreatureChanged(this, EventArgs.Empty);
         }
 
         #region TRAIT VALUES
@@ -296,7 +296,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                 {
                     //show panel if hidden, so correct SplitterDistance can be saved
                     ucGrangerTraitView1.SaveStateToSettings();
-                    ucGrangerHorseList1.SaveStateToSettings();
+                    ucGrangerCreatureList1.SaveStateToSettings();
                     splitContainer2.Panel2Collapsed = false;
                     Settings.HerdViewSplitterPosition = splitContainer2.SplitterDistance;
                 }

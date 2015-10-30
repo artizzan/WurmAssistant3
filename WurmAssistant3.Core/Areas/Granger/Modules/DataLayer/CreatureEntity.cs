@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class HorseEntity
+    public class CreatureEntity
     {
         //primary key
         [JsonProperty("id")]
@@ -26,15 +26,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
         [JsonProperty("traits")]
         string traits;
 
-        public List<HorseTrait> Traits
+        public List<CreatureTrait> Traits
         {
             get
             {
-                return HorseTrait.DbHelper.FromStrIntRepresentation(traits);
+                return CreatureTrait.DbHelper.FromStrIntRepresentation(traits);
             }
             set
             {
-                traits = HorseTrait.DbHelper.ToIntStrRepresentation(value);
+                traits = CreatureTrait.DbHelper.ToIntStrRepresentation(value);
             }
         }
 
@@ -54,16 +54,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
         public bool? EpicCurve;
         [JsonProperty("age")]
         string age;
-        public HorseAge Age
+        public CreatureAge Age
         {
-            get { return new HorseAge(age); }
+            get { return new CreatureAge(age); }
             set { age = value.ToDbValue(); }
         }
         [JsonProperty("color")]
         string color;
-        public HorseColor Color
+        public CreatureColor Color
         {
-            get { return new HorseColor(color); }
+            get { return new CreatureColor(color); }
             set { color = value.ToDbValue(); }
         }
         [JsonProperty("comments")]
@@ -137,11 +137,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
         [JsonProperty("brandedfor")]
         public string BrandedFor;
 
-        static public int GenerateNewHorseId(GrangerContext context)
+        static public int GenerateNewCreatureId(GrangerContext context)
         {
             try
             {
-                return context.Horses.Max(x => x.Id) + 1;
+                return context.Creatures.Max(x => x.Id) + 1;
             }
             catch (InvalidOperationException)
             {
@@ -154,9 +154,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
             return string.Format("{0} ({1}, {2})", Name, GenderAspect, Herd);
         }
 
-        public bool IsDifferentIdentityThan(HorseEntity otherHorse)
+        public bool IsDifferentIdentityThan(CreatureEntity otherCreature)
         {
-            return this.Name != otherHorse.Name;
+            return this.Name != otherCreature.Name;
         }
 
         public string GenderAspect

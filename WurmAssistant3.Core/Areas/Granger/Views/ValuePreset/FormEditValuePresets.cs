@@ -61,7 +61,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.ValuePreset
             {
                 foreach (var keyval in CurrentTraitValueMap.ValueMap)
                 {
-                    HorseTrait trait = new HorseTrait(keyval.Key);
+                    CreatureTrait trait = new CreatureTrait(keyval.Key);
                     var control = new UCGrangerTraitValueEditBox()
                     {
                         Trait = trait,

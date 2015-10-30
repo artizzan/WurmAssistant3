@@ -6,7 +6,7 @@ using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 {
-    public class Horse
+    public class Creature
     {
         public struct TraitsInspectedContainer : IComparable
         {
@@ -42,7 +42,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         readonly GrangerContext context;
         private readonly FormGrangerMain mainForm;
 
-        public Horse(FormGrangerMain mainForm, HorseEntity entity, GrangerContext context)
+        public Creature(FormGrangerMain mainForm, CreatureEntity entity, GrangerContext context)
         {
             BreedHintColor = null;
             this.mainForm = mainForm;
@@ -50,13 +50,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             this.context = context;
         }
 
-        public HorseEntity Entity { get; private set; }
+        public CreatureEntity Entity { get; private set; }
 
-        public int Value { get { return mainForm.CurrentValuator.GetValueForHorse(this); } }
+        public int Value { get { return mainForm.CurrentValuator.GetValueForCreature(this); } }
 
-        public int PotentialPositiveValue { get { return mainForm.CurrentValuator.GetPotentialPositiveValueForHorse(this); } }
+        public int PotentialPositiveValue { get { return mainForm.CurrentValuator.GetPotentialPositiveValueForCreature(this); } }
 
-        public int PotentialNegativeValue { get { return mainForm.CurrentValuator.GetPotentialNegativeValueForHorse(this); } }
+        public int PotentialNegativeValue { get { return mainForm.CurrentValuator.GetPotentialNegativeValueForCreature(this); } }
         
         double? BreedValue 
         { 
@@ -94,16 +94,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         /// <summary>
         /// null if candidate is not best, else contains default best candidate color
         /// </summary>
-        public System.Drawing.Color? HorseBestCandidateColor { get; set; }
+        public System.Drawing.Color? CreatureBestCandidateColor { get; set; }
 
         public void RefreshBreedHintColor(double minBreedValue, double maxBreedValue)
         {
             if (CachedBreedValue == maxBreedValue)
             {
-                HorseBestCandidateColor = DefaultBestBreedHintColor;
+                CreatureBestCandidateColor = DefaultBestBreedHintColor;
             }
 
-            if (mainForm.SelectedSingleHorse != null)
+            if (mainForm.SelectedSingleCreature != null)
             {
                 BreedHintColor = mainForm.CurrentAdvisor.GetHintColor(this, minBreedValue, maxBreedValue);
             }
@@ -112,20 +112,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         public void ClearColorHints()
         {
             BreedHintColor = null;
-            HorseBestCandidateColor = null;
+            CreatureBestCandidateColor = null;
         }
 
-        public System.Drawing.Color? HorseColorBkColor
+        public System.Drawing.Color? CreatureColorBkColor
         {
             get
             {
-                HorseColor hcolor = Color;
-                if (hcolor == HorseColor.GetDefaultColor()) return null;
+                CreatureColor hcolor = Color;
+                if (hcolor == CreatureColor.GetDefaultColor()) return null;
                 else return hcolor.ToSystemDrawingColor();
             }
         }
 
-        public HorseTrait[] Traits
+        public CreatureTrait[] Traits
         {
             get { return Entity.Traits.ToArray(); }
             set
@@ -139,7 +139,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             return Entity.ToString();
         }
 
-        public HorseColor Color
+        public CreatureColor Color
         {
             get { return Entity.Color; }
             set
@@ -148,11 +148,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             }
         }
 
-        public Horse GetMate()
+        public Creature GetMate()
         {
             if (!HasMate()) return null;
 
-            var mate = context.Horses.Where(x => x.Id == this.Entity.PairedWith).Select(x => new Horse(mainForm, x, context)).ToArray();
+            var mate = context.Creatures.Where(x => x.Id == this.Entity.PairedWith).Select(x => new Creature(mainForm, x, context)).ToArray();
             if (mate.Length == 1) 
                 return mate.First();
             else if (mate.Length == 0) 
@@ -166,7 +166,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             else return true;
         }
 
-        public void SetMate(Horse value)
+        public void SetMate(Creature value)
         {
             if (value == null)
             {
@@ -233,7 +233,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             set { Entity.EpicCurve = value; }
         }
 
-        public HorseAge Age
+        public CreatureAge Age
         {
             get { return Entity.Age; }
             set { Entity.Age = value; }
@@ -258,11 +258,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             {
                 if (this.Herd == value) return;
 
-                var targetHerd = context.Horses.Where(x => x.Herd == value).Select(x => new Horse(mainForm, x, context));
+                var targetHerd = context.Creatures.Where(x => x.Herd == value).Select(x => new Creature(mainForm, x, context));
 
-                foreach (var horse in targetHerd)
+                foreach (var creature in targetHerd)
                 {
-                    if (horse.IsIdenticalIdentity(this))
+                    if (creature.IsIdenticalIdentity(this))
                     {
                         throw new Exception("can not change herd because nonunique creatures already exists in target herd");
                     }
@@ -273,11 +273,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         }
 
         /// <summary>
-        /// Updated: this now only compares horse names due to issues with name+gender setup
+        /// Updated: this now only compares creature names due to issues with name+gender setup
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool IsIdenticalIdentity(Horse other)
+        public bool IsIdenticalIdentity(Creature other)
         {
             return !this.Entity.IsDifferentIdentityThan(other.Entity);
         }
@@ -286,7 +286,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         public string NameAspect { get { return Entity.Name; } }
         public string FatherAspect { get { return Entity.FatherName; } }
         public string MotherAspect { get { return Entity.MotherName; } }
-        public string TraitsAspect { get { return HorseTrait.GetShortString(Entity.Traits.ToArray(), mainForm.CurrentValuator); } }
+        public string TraitsAspect { get { return CreatureTrait.GetShortString(Entity.Traits.ToArray(), mainForm.CurrentValuator); } }
 
         public TimeSpan NotInMoodForAspect
         {
@@ -359,12 +359,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         }
 
 
-        public HorseAge AgeAspect { get { return this.Age; } }
+        public CreatureAge AgeAspect { get { return this.Age; } }
         public string ColorAspect
         {
             get
             {
-                return Entity.Color.HorseColorId == HorseColorId.Unknown ? string.Empty : Entity.Color.ToString();
+                return Entity.Color.CreatureColorId == CreatureColorId.Unknown ? string.Empty : Entity.Color.ToString();
             }
         }
         public string TagsAspect { get { return string.Join(", ", Entity.SpecialTags.OrderBy(x => x)); } }
@@ -402,7 +402,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         {
             get
             {
-                Horse mate = GetMate();
+                Creature mate = GetMate();
                 if (mate == null) return string.Empty;
                 return mate.ToString();
             }
@@ -425,7 +425,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             }
 
             // If parameter cannot be cast to Point return false.
-            Horse p = obj as Horse;
+            Creature p = obj as Creature;
             if ((System.Object)p == null)
             {
                 return false;
@@ -435,7 +435,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             return this.Entity.Id == p.Entity.Id;
         }
 
-        public bool Equals(Horse p)
+        public bool Equals(Creature p)
         {
             // If parameter is null return false:
             if ((object)p == null)
@@ -452,7 +452,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             return this.Entity.Id;
         }
 
-        public static bool operator ==(Horse a, Horse b)
+        public static bool operator ==(Creature a, Creature b)
         {
             // If both are null, or both are same instance, return true.
             if (System.Object.ReferenceEquals(a, b))
@@ -470,7 +470,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             return a.Equals(b);
         }
 
-        public static bool operator !=(Horse a, Horse b)
+        public static bool operator !=(Creature a, Creature b)
         {
             return !(a == b);
         }
@@ -483,21 +483,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 
         public bool PregnantInLast24H { get { return this.PregnantUntil > DateTime.Now - TimeSpan.FromHours(24); } }
 
-        internal bool IsInbreedWith(Horse otherHorse)
+        internal bool IsInbreedWith(Creature otherCreature)
         {
-            if (   Name == otherHorse.Mother
-                || Name == otherHorse.Father
-                || Mother == otherHorse.Name
-                || Father == otherHorse.Name
-                || (!string.IsNullOrEmpty(Mother) && Mother == otherHorse.Mother)
-                || (!string.IsNullOrEmpty(Father) && Father == otherHorse.Father))
+            if (   Name == otherCreature.Mother
+                || Name == otherCreature.Father
+                || Mother == otherCreature.Name
+                || Father == otherCreature.Name
+                || (!string.IsNullOrEmpty(Mother) && Mother == otherCreature.Mother)
+                || (!string.IsNullOrEmpty(Father) && Father == otherCreature.Father))
                 return true;
             else return false;
         }
 
         internal bool IsFoal()
         {
-            return Age.HorseAgeId == HorseAgeId.YoungFoal || Age.HorseAgeId == HorseAgeId.AdolescentFoal;
+            return Age.CreatureAgeId == CreatureAgeId.YoungFoal || Age.CreatureAgeId == CreatureAgeId.AdolescentFoal;
         }
     }
 }

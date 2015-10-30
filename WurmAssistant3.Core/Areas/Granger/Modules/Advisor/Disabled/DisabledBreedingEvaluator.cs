@@ -33,12 +33,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Disabled
         /// </summary>
         /// <param name="valuator"></param>
         /// <returns></returns>
-        public override BreedingEvalResults? Evaluate(Horse horse1, Horse horse2, TraitValuator valuator)
+        public override BreedingEvalResults? Evaluate(Creature creature1, Creature creature2, TraitValuator valuator)
         {
             return null;
         }
 
-        public override System.Drawing.Color? GetHintColor(Horse horse, double minBreedValue, double maxBreedValue)
+        public override System.Drawing.Color? GetHintColor(Creature creature, double minBreedValue, double maxBreedValue)
         {
             return null;
         }

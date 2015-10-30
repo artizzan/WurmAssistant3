@@ -12,7 +12,7 @@ using JetBrains.Annotations;
 namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 {
 
-    class HorseUpdatesManager
+    class CreatureUpdatesManager
     {
         private readonly GrangerFeature parentModule;
         private readonly GrangerContext context;
@@ -20,15 +20,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         readonly ITrayPopups trayPopups;
         readonly ILogger logger;
 
-        readonly HorseProcessor processor;
+        readonly CreatureProcessor processor;
 
         DateTime lastBreedingOn;
-        HorseEntity lastBreedingFemale;
-        HorseEntity lastBreedingMale;
+        CreatureEntity lastBreedingFemale;
+        CreatureEntity lastBreedingMale;
 
         readonly GrangerDebugLogger grangerDebug;
 
-        public HorseUpdatesManager(GrangerFeature parentModule, GrangerContext context, PlayerManager playerManager,
+        public CreatureUpdatesManager(GrangerFeature parentModule, GrangerContext context, PlayerManager playerManager,
             [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger)
         {
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
@@ -41,46 +41,46 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 
             grangerDebug = new GrangerDebugLogger(logger);
 
-            processor = new HorseProcessor(this.parentModule, this.context, playerMan, grangerDebug, trayPopups, logger);
+            processor = new CreatureProcessor(this.parentModule, this.context, playerMan, grangerDebug, trayPopups, logger);
         }
 
         //this should not be called if user disabled capturing data from logs
         //this should not contain any update logic that has tu run regardless of above setting
-        internal void ProcessEventForHorseUpdates(LogEntry line)
+        internal void ProcessEventForCreatureUpdates(LogEntry line)
         {
             //this runs if updating on any event is enabled
-            if (HorseUpdateAnyEvent && MaybeHorseAgeLine(line.Content))
+            if (CreatureUpdateAnyEvent && MaybeCreatureAgeLine(line.Content))
             {
                 // first try selected herds
-                HorseData data = GetHorseDataFromAnyLogEvent(line.Content, false);
+                CreatureData data = GetCreatureDataFromAnyLogEvent(line.Content, false);
 
                 bool cont = true;
 
-                if (data != null && data.TooManyHorsesFound)
+                if (data != null && data.TooManyCreaturesFound)
                 {
                     // if we found too many same named in selected, can't continue
                     var partialMessage = "selected herds";
                     trayPopups.Schedule(
-                        "HORSE UPDATE PROBLEM",
+                        "CREATURE UPDATE PROBLEM",
                         String.Format(
-                            "There are multiple horses named {0} in {1}, can't update health/age!",
-                            data.Horse.Name, partialMessage),
+                            "There are multiple creatures named {0} in {1}, can't update health/age!",
+                            data.Creature.Name, partialMessage),
                         5000);
                     cont = false;
                 }
                 else if (data == null && EntireDbSetting)
                 {
                     // if we found nothing but EDS is set, try searching entire db
-                    data = GetHorseDataFromAnyLogEvent(line.Content, true);
-                    if (data != null && data.TooManyHorsesFound)
+                    data = GetCreatureDataFromAnyLogEvent(line.Content, true);
+                    if (data != null && data.TooManyCreaturesFound)
                     {
                         // again if multiple found in db, we can't continue
                         var partialMessage = "database";
                         trayPopups.Schedule(
-                            "HORSE UPDATE PROBLEM",
+                            "CREATURE UPDATE PROBLEM",
                             String.Format(
-                                "There are multiple horses named {0} in {1}, can't update health/age!",
-                                data.Horse.Name, partialMessage),
+                                "There are multiple creatures named {0} in {1}, can't update health/age!",
+                                data.Creature.Name, partialMessage),
                             5000);
                         cont = false;
                     }
@@ -97,41 +97,41 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         string notify = null;
                         if (data.SecondaryInfo == String.Empty)
                         {
-                            if (data.Horse.CheckTag("diseased")
-                                || data.Horse.CheckTag("starving")
-                                || data.Horse.CheckTag("fat"))
+                            if (data.Creature.CheckTag("diseased")
+                                || data.Creature.CheckTag("starving")
+                                || data.Creature.CheckTag("fat"))
                             {
                                 notify = "cleared";
                             }
-                            data.Horse.SetSecondaryInfoTag(HorseEntity.SecondaryInfoTag.None);
+                            data.Creature.SetSecondaryInfoTag(CreatureEntity.SecondaryInfoTag.None);
                         }
                         else if (data.SecondaryInfo == "diseased")
                         {
-                            if (!data.Horse.CheckTag("diseased"))
+                            if (!data.Creature.CheckTag("diseased"))
                             {
                                 notify = "diseased";
                             }
-                            data.Horse.SetSecondaryInfoTag(HorseEntity.SecondaryInfoTag.Diseased);
+                            data.Creature.SetSecondaryInfoTag(CreatureEntity.SecondaryInfoTag.Diseased);
                         }
                         else if (data.SecondaryInfo == "starving")
                         {
-                            if (!data.Horse.CheckTag("starving"))
+                            if (!data.Creature.CheckTag("starving"))
                             {
                                 notify = "starving";
                             }
-                            data.Horse.SetSecondaryInfoTag(HorseEntity.SecondaryInfoTag.Starving);
+                            data.Creature.SetSecondaryInfoTag(CreatureEntity.SecondaryInfoTag.Starving);
                         }
                         else if (data.SecondaryInfo == "fat")
                         {
-                            if (!data.Horse.CheckTag("fat"))
+                            if (!data.Creature.CheckTag("fat"))
                             {
                                 notify = "fat";
                             }
-                            data.Horse.SetSecondaryInfoTag(HorseEntity.SecondaryInfoTag.Fat);
+                            data.Creature.SetSecondaryInfoTag(CreatureEntity.SecondaryInfoTag.Fat);
                         }
 
 
-                        bool ageChanged = data.Age > data.Horse.Age;
+                        bool ageChanged = data.Age > data.Creature.Age;
 
                         if (notify != null || ageChanged)
                         {
@@ -151,12 +151,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                             string age = null;
                             if (ageChanged) age = "updated age to " + data.Age;
 
-                            trayPopups.Schedule("HEALTH/AGE UPDATE", data.Horse + ": " + health + " " + age);
+                            trayPopups.Schedule("HEALTH/AGE UPDATE", data.Creature + ": " + health + " " + age);
                         }
                         
-                        data.Horse.Age = data.Age;
+                        data.Creature.Age = data.Age;
                     }
-                    context.SubmitChangesToHorses();
+                    context.SubmitChanges();
                 }
             }
 
@@ -184,22 +184,22 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 {
                     grangerDebug.Log("LIVETRACKER: applying groomed flag due to: " + line);
                     string prefixedName = match.Groups[1].Value;
-                    HorseAge newAge = GrangerHelpers.ExtractHorseAge(prefixedName);
+                    CreatureAge newAge = GrangerHelpers.ExtractCreatureAge(prefixedName);
                     string fixedName = GrangerHelpers.RemoveAllPrefixes(prefixedName);
-                    HorseEntity[] horses = GetHorseToUpdate(fixedName, playerMan.GetCurrentServerGroup());
-                    if (EntireDbSetting && horses.Length > 1)
+                    CreatureEntity[] creatureEntities = GetCreatureToUpdate(fixedName, playerMan.GetCurrentServerGroup());
+                    if (EntireDbSetting && creatureEntities.Length > 1)
                     {
                         trayPopups.Schedule(
                             "GROOMING ISSUE DETECTED",
                             String.Format(
-                                "There are multiple horses named {0} in database, going to mark them all!",
+                                "There are multiple creatures named {0} in database, going to mark them all!",
                                 fixedName),
                             6000);
                     }
-                    foreach (var horse in horses)
+                    foreach (var creature in creatureEntities)
                     {
-                        horse.GroomedOn = DateTime.Now;
-                        context.SubmitChangesToHorses();
+                        creature.GroomedOn = DateTime.Now;
+                        context.SubmitChanges();
                     }
                 }
             }
@@ -218,11 +218,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                     string name2 = match.Groups[2].Value;
                     string fixedName1 = GrangerHelpers.RemoveAllPrefixes(name1);
                     string fixedName2 = GrangerHelpers.RemoveAllPrefixes(name2);
-                    HorseEntity[] horses1 = GetHorseToUpdate(fixedName1, playerMan.GetCurrentServerGroup());
-                    HorseEntity[] horses2 = GetHorseToUpdate(fixedName2, playerMan.GetCurrentServerGroup());
+                    CreatureEntity[] creatures1 = GetCreatureToUpdate(fixedName1, playerMan.GetCurrentServerGroup());
+                    CreatureEntity[] creatures2 = GetCreatureToUpdate(fixedName2, playerMan.GetCurrentServerGroup());
 
-                    ExtractBreedingPairHorse(fixedName1, horses1);
-                    ExtractBreedingPairHorse(fixedName2, horses2);
+                    ExtractBreedingPairCreature(fixedName1, creatures1);
+                    ExtractBreedingPairCreature(fixedName2, creatures2);
                 }
             }
             //The Old fat Ebonycloud will probably give birth in a while!
@@ -233,7 +233,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 {
                     grangerDebug.Log("LIVETRACKER: applying breeding update due to: " + line);
 
-                    // we don't need to requery female horse entity, because any other changes done to this horse
+                    // we don't need to requery female creature entity, because any other changes done to this creature
                     // will be reflected on current entity. 
                     // This is true only as long, as entire module uses only a single GrangerContext !!!
 
@@ -252,7 +252,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                                     "BREED UPDATE",
                                     String.Format("({0}) is now marked as pregnant. Be sure to smilexamine to get more accurate pregnancy duration!", lastBreedingFemale.Name),
                                     6000);
-                                context.SubmitChangesToHorses();
+                                context.SubmitChanges();
                             }
                             else
                             {
@@ -267,9 +267,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                             lastBreedingMale.NotInMood = DateTime.Now + GrangerHelpers.Breeding_NotInMood_Duration;
                             trayPopups.Schedule(
                                 "BREED UPDATE",
-                                String.Format("({0}) is now marked as Not In Mood. You can't breed this horse for next 45 minutes.", lastBreedingMale.Name),
+                                String.Format("({0}) is now marked as Not In Mood. You can't breed this creature for next 45 minutes.", lastBreedingMale.Name),
                                 6000);
-                            context.SubmitChangesToHorses();
+                            context.SubmitChanges();
                         }
                     }
 
@@ -291,8 +291,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         trayPopups.Schedule(
                             "BREED UPDATE",
                             String.Format("Breeding appears to have failed, {0} and {1} will be Not In Mood for next 45 minutes.",
-                                lastBreedingMale == null ? "Some horse" : lastBreedingMale.Name,
-                                lastBreedingFemale == null ? "Some horse" : lastBreedingFemale.Name),
+                                lastBreedingMale == null ? "Some creature" : lastBreedingMale.Name,
+                                lastBreedingFemale == null ? "Some creature" : lastBreedingFemale.Name),
                             6000);
                     }
                 }
@@ -302,20 +302,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             string diseaseCheck = GrangerHelpers.LineContainsDiseased(line.Content);
             if ((diseaseCheck) != null)
             {
-                string possibleHorseName = diseaseCheck;
-                var horsesToUpdate = context.Horses.Where(x => x.Name == possibleHorseName).ToArray();
-                if (horsesToUpdate.Length > 0)
+                string possibleCreatureName = diseaseCheck;
+                var creaturesToUpdate = context.Creatures.Where(x => x.Name == possibleCreatureName).ToArray();
+                if (creaturesToUpdate.Length > 0)
                 {
-                    foreach (var horse in horsesToUpdate)
+                    foreach (var creature in creaturesToUpdate)
                     {
-                        grangerDebug.Log("Marking horse diseased: " + horse);
-                        horse.SetTag("diseased", true);
+                        grangerDebug.Log("Marking creature diseased: " + creature);
+                        creature.SetTag("diseased", true);
                     }
-                    context.SubmitChangesToHorses();
+                    context.SubmitChanges();
                 }
             }
-            // genesis handling (add a horse to dict after genesis cast, 
-            // ignore horse for smile-examine trait sanity check next time
+            // genesis handling (add a creature to dict after genesis cast, 
+            // ignore creature for smile-examine trait sanity check next time
             //[2013-08-02] [23:08:54] You cast 'Genesis' on Old fat Jollyhalim.
             if (line.Content.Contains("You cast"))
             {
@@ -324,10 +324,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 if (match.Success)
                 {
 
-                    string prefixedHorseName = match.Groups[1].Value;
-                    string horseName = GrangerHelpers.ExtractHorseName(prefixedHorseName);
-                    grangerDebug.Log(string.Format("Recognized Genesis cast on: {0} (raw name: {1})", horseName, prefixedHorseName));
-                    parentModule.Settings.AddGenesisCast(DateTime.Now, horseName);
+                    string prefixedCreatureName = match.Groups[1].Value;
+                    string creatureName = GrangerHelpers.ExtractCreatureName(prefixedCreatureName);
+                    grangerDebug.Log(string.Format("Recognized Genesis cast on: {0} (raw name: {1})", creatureName, prefixedCreatureName));
+                    parentModule.Settings.AddGenesisCast(DateTime.Now, creatureName);
                 }
             }
         }
@@ -336,35 +336,35 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         {
             if (match.Success)
             {
-                grangerDebug.Log("LIVETRACKER: R.I.P. log line detected, checking if it's a horse from herds, line: " + line);
+                grangerDebug.Log("LIVETRACKER: R.I.P. log line detected, checking if it's a creature from herds, line: " + line);
                 string lowercasename = match.Groups[1].Value;
                 string fixedName = GrangerHelpers.FixCase(lowercasename);
-                HorseEntity[] horses = GetHorseToUpdate(fixedName, playerMan.GetCurrentServerGroup());
-                //its perfectly possible for this to set few horses as dead,
+                CreatureEntity[] creatures = GetCreatureToUpdate(fixedName, playerMan.GetCurrentServerGroup());
+                //its perfectly possible for this to set few creatures as dead,
                 //but this tag is just informative, so it's ok
-                foreach (var horse in horses)
+                foreach (var creature in creatures)
                 {
-                    grangerDebug.Log("LIVETRACKER: applying maybedead flag to "+horse+" due to: " + line);
-                    horse.SetTagDead();
-                    context.SubmitChangesToHorses();
+                    grangerDebug.Log("LIVETRACKER: applying maybedead flag to "+creature+" due to: " + line);
+                    creature.SetTagDead();
+                    context.SubmitChanges();
                 }
             }
         }
 
-        private bool MaybeHorseAgeLine(string line)
+        private bool MaybeCreatureAgeLine(string line)
         {
             if (GrangerHelpers.HasAgeInName(line, true)) return true;
             else return false;
         }
 
-        private class HorseData
+        private class CreatureData
         {
-            public HorseEntity Horse = null;
-            public HorseAge Age = new HorseAge(HorseAgeId.Unknown);
+            public CreatureEntity Creature = null;
+            public CreatureAge Age = new CreatureAge(CreatureAgeId.Unknown);
             public string SecondaryInfo = null;
 
             public string ErrorMessage = null;
-            public bool TooManyHorsesFound;
+            public bool TooManyCreaturesFound;
         }
 
         /// <summary>
@@ -373,66 +373,66 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         /// <param name="line"></param>
         /// <param name="entireDbSetting">false to try selected herds, true to try entire DB</param>
         /// <returns></returns>
-        private HorseData GetHorseDataFromAnyLogEvent(string line, bool entireDbSetting)
+        private CreatureData GetCreatureDataFromAnyLogEvent(string line, bool entireDbSetting)
         {
-            HorseEntity[] horses = context.Horses.ToArray();
+            CreatureEntity[] creatures = context.Creatures.ToArray();
             if (!entireDbSetting)
             {
                 var selectedHerds = context.Herds.AsEnumerable().Where(x => x.Selected).Select(x => x.HerdID).ToArray();
-                horses = horses.Where(x => selectedHerds.Contains(x.Herd)).ToArray();
+                creatures = creatures.Where(x => selectedHerds.Contains(x.Herd)).ToArray();
             }
 
-            horses = horses.Where(x => line.Contains(x.Name, StringComparison.OrdinalIgnoreCase)).ToArray();
+            creatures = creatures.Where(x => line.Contains(x.Name, StringComparison.OrdinalIgnoreCase)).ToArray();
 
-            var result = new HorseData();
-            foreach (HorseEntity horseEntity in horses)
+            var result = new CreatureData();
+            foreach (CreatureEntity creatureEntity in creatures)
             {
-                // it is possible we have found event lines that simply contain horse name
+                // it is possible we have found event lines that simply contain creature name
                 // in a totally unrelated context
-                // attempting to get horse age should fail for those and loop continues
+                // attempting to get creature age should fail for those and loop continues
                 result.SecondaryInfo = null;
-                Match match = Regex.Match(line, @"(\w+) (\w+) " + horseEntity.Name, RegexOptions.IgnoreCase);
+                Match match = Regex.Match(line, @"(\w+) (\w+) " + creatureEntity.Name, RegexOptions.IgnoreCase);
                 if (match.Success)
                 {
-                    result.Age = HorseAge.CreateAgeFromRawHorseName(match.Groups[1].Value);
-                    if (result.Age.HorseAgeId != HorseAgeId.Unknown)
+                    result.Age = CreatureAge.CreateAgeFromRawCreatureName(match.Groups[1].Value);
+                    if (result.Age.CreatureAgeId != CreatureAgeId.Unknown)
                     {
                         result.SecondaryInfo = match.Groups[2].Value;
                     }
                     else
                     {
-                        match = Regex.Match(line, @"(\w+) " + horseEntity.Name, RegexOptions.IgnoreCase);
+                        match = Regex.Match(line, @"(\w+) " + creatureEntity.Name, RegexOptions.IgnoreCase);
                         if (match.Success)
                         {
-                            result.Age = HorseAge.CreateAgeFromRawHorseName(match.Groups[1].Value);
-                            if (result.Age.HorseAgeId != HorseAgeId.Unknown)
+                            result.Age = CreatureAge.CreateAgeFromRawCreatureName(match.Groups[1].Value);
+                            if (result.Age.CreatureAgeId != CreatureAgeId.Unknown)
                             {
                                 result.SecondaryInfo = String.Empty;
                             }
                         }
                     }
-                    if (result.Age.HorseAgeId != HorseAgeId.Unknown)
+                    if (result.Age.CreatureAgeId != CreatureAgeId.Unknown)
                     {
-                        // we have found the correct horse data
-                        result.Horse = horseEntity;
-                        // possibly existing horse is a foal
-                        var prevAge = result.Horse.Age.HorseAgeId;
-                        var newAge = result.Age.HorseAgeId;
-                        // since adding horse for first time gets correct age
-                        // we can asume here that horse can't be younger than it is
+                        // we have found the correct creature data
+                        result.Creature = creatureEntity;
+                        // possibly existing creature is a foal
+                        var prevAge = result.Creature.Age.CreatureAgeId;
+                        var newAge = result.Age.CreatureAgeId;
+                        // since adding creature for first time gets correct age
+                        // we can asume here that creature can't be younger than it is
                         // and go for foal status where applicable
-                        if (prevAge == HorseAgeId.YoungFoal)
+                        if (prevAge == CreatureAgeId.YoungFoal)
                         {
-                            if (newAge == HorseAgeId.Young) 
-                                result.Age = new HorseAge(HorseAgeId.YoungFoal);
-                            if (newAge == HorseAgeId.Adolescent)
-                                result.Age = new HorseAge(HorseAgeId.AdolescentFoal);
+                            if (newAge == CreatureAgeId.Young) 
+                                result.Age = new CreatureAge(CreatureAgeId.YoungFoal);
+                            if (newAge == CreatureAgeId.Adolescent)
+                                result.Age = new CreatureAge(CreatureAgeId.AdolescentFoal);
                         }
-                        if (prevAge == HorseAgeId.AdolescentFoal)
+                        if (prevAge == CreatureAgeId.AdolescentFoal)
                         {
                             // here we allow updating to regular Young
-                            if (newAge == HorseAgeId.Adolescent) 
-                                result.Age = new HorseAge(HorseAgeId.AdolescentFoal);
+                            if (newAge == CreatureAgeId.Adolescent) 
+                                result.Age = new CreatureAge(CreatureAgeId.AdolescentFoal);
                         }
 
                         break;
@@ -440,18 +440,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 }
             }
 
-            if (result.Horse == null)
+            if (result.Creature == null)
             {
                 return null;
             }
-            var existingHorsesInQuery = horses.Where(x => x.Name == result.Horse.Name).ToArray();
-            if (existingHorsesInQuery.Length == 1)
+            var existingCreaturesInQuery = creatures.Where(x => x.Name == result.Creature.Name).ToArray();
+            if (existingCreaturesInQuery.Length == 1)
             {
                 return result;
             }
-            else if (existingHorsesInQuery.Length > 1)
+            else if (existingCreaturesInQuery.Length > 1)
             {
-                result.TooManyHorsesFound = true;
+                result.TooManyCreaturesFound = true;
                 return result;
             }
             return null;
@@ -465,59 +465,59 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             }
         }
 
-        bool HorseUpdateAnyEvent
+        bool CreatureUpdateAnyEvent
         {
             get
             {
-                return parentModule.Settings.UpdateHorseDataFromAnyEventLine;
+                return parentModule.Settings.UpdateCreatureDataFromAnyEventLine;
             }
         }
 
-        private void ExtractBreedingPairHorse(string fixedName, HorseEntity[] horses)
+        private void ExtractBreedingPairCreature(string fixedName, CreatureEntity[] creatures)
         {
-            if (horses.Length == 1)
+            if (creatures.Length == 1)
             {
-                HorseEntity horse = horses[0];
-                if (horse.IsMale ?? false)
+                CreatureEntity creature = creatures[0];
+                if (creature.IsMale ?? false)
                 {
-                    lastBreedingMale = horse;
+                    lastBreedingMale = creature;
                 }
                 else
                 {
-                    lastBreedingFemale = horse;
+                    lastBreedingFemale = creature;
                 }
             }
             else
             {
                 string title = null;
                 string message = null;
-                if (horses.Length > 1)
+                if (creatures.Length > 1)
                 {
                     message = (EntireDbSetting ? "Database has" : "Selected herds have")
-                              + " more than one horse named: " + fixedName;
+                              + " more than one creature named: " + fixedName;
                 }
-                else if (horses.Length == 0)
+                else if (creatures.Length == 0)
                 {
                     if (GrangerHelpers.IsBlacklistedCreatureName_EqualCheck(fixedName))
                     {
-                        grangerDebug.Log("Discared breeding candidate due not a horse: " + fixedName);
+                        grangerDebug.Log("Discared breeding candidate due not a creature: " + fixedName);
                     }
                     else
                     {
-                        message = "Not a horse or " + (EntireDbSetting ? "" : "selected")
-                                  + " herds don't have a horse named: " + fixedName;
+                        message = "Not a creature or " + (EntireDbSetting ? "" : "selected")
+                                  + " herds don't have a creature named: " + fixedName;
                     }
                 }
                 if (message != null) trayPopups.Schedule(title ?? "BREED UPDATE PROBLEM", message, 6000);
             }
         }
 
-        private HorseEntity[] GetHorseToUpdate(string horseName, ServerGroup serverGroup)
+        private CreatureEntity[] GetCreatureToUpdate(string creatureName, ServerGroup serverGroup)
         {
             bool isEpic;
             if (serverGroup.ServerGroupId == ServerGroup.EpicId) isEpic = true;
             else if (serverGroup.ServerGroupId == ServerGroup.FreedomId) isEpic = false;
-            else return new HorseEntity[0];
+            else return new CreatureEntity[0];
 
             IEnumerable<HerdEntity> query = context.Herds;
             if (parentModule.Settings.DoNotBlockDataUpdateUnlessMultiplesInEntireDb == false)
@@ -525,12 +525,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 query = query.Where(x => x.Selected);
             }
             var herdsToCheck = query.Select(x => x.HerdID).ToArray();
-            //var step0 = _context.Horses.ToArray();
-            //var step1 = step0.Where(x => x.Name == horseName).ToArray();
+            //var step0 = _context.Creatures.ToArray();
+            //var step1 = step0.Where(x => x.Name == creatureName).ToArray();
             //var step2 = step1.Where(x => selectedHerds.Contains(x.Herd)).ToArray();
             //var step3 = step2.Where(x => x.EpicCurve == isEpic).ToArray();
-            var foundHorses = context.Horses.Where(x => x.Name == horseName && herdsToCheck.Contains(x.Herd) && (x.EpicCurve ?? false) == isEpic).ToArray();
-            return foundHorses;
+            var foundCreatures = context.Creatures.Where(x => x.Name == creatureName && herdsToCheck.Contains(x.Herd) && (x.EpicCurve ?? false) == isEpic).ToArray();
+            return foundCreatures;
         }
 
         internal void Update()

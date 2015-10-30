@@ -1,6 +1,6 @@
-﻿namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
+﻿namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit
 {
-    partial class FormHorseViewEdit
+    partial class FormCreatureViewEdit
     {
         /// <summary>
         /// Required designer variable.
@@ -587,7 +587,7 @@
             this.buttonEdit.Visible = false;
             this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
             // 
-            // FormHorseViewEdit
+            // FormCreatureViewEdit
             // 
             this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -603,11 +603,11 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FormHorseViewEdit";
+            this.Name = "FormCreatureViewEdit";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Creature";
-            this.Load += new System.EventHandler(this.FormHorseViewEdit_Load);
+            this.Load += new System.EventHandler(this.FormCreatureViewEdit_Load);
             this.groupBoxGender.ResumeLayout(false);
             this.groupBoxGender.PerformLayout();
             this.panel1.ResumeLayout(false);
