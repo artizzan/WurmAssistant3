@@ -32,12 +32,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.MenuViewPanel = new System.Windows.Forms.Panel();
-            this.ModulesViewPanel = new System.Windows.Forms.Panel();
             this.LogViewPanel = new System.Windows.Forms.Panel();
+            this.featuresFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.InitTimer = new System.Windows.Forms.Timer(this.components);
             this.systemTrayNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.TrayContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,8 +47,8 @@
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.MenuViewPanel, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.ModulesViewPanel, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.LogViewPanel, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.featuresFlowPanel, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -66,15 +67,6 @@
             this.MenuViewPanel.Size = new System.Drawing.Size(600, 24);
             this.MenuViewPanel.TabIndex = 0;
             // 
-            // ModulesViewPanel
-            // 
-            this.ModulesViewPanel.AutoSize = true;
-            this.ModulesViewPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ModulesViewPanel.Location = new System.Drawing.Point(3, 33);
-            this.ModulesViewPanel.Name = "ModulesViewPanel";
-            this.ModulesViewPanel.Size = new System.Drawing.Size(600, 0);
-            this.ModulesViewPanel.TabIndex = 1;
-            // 
             // LogViewPanel
             // 
             this.LogViewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -82,6 +74,17 @@
             this.LogViewPanel.Name = "LogViewPanel";
             this.LogViewPanel.Size = new System.Drawing.Size(600, 371);
             this.LogViewPanel.TabIndex = 2;
+            // 
+            // featuresFlowPanel
+            // 
+            this.featuresFlowPanel.AutoScroll = true;
+            this.featuresFlowPanel.AutoSize = true;
+            this.featuresFlowPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.featuresFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.featuresFlowPanel.Location = new System.Drawing.Point(3, 33);
+            this.featuresFlowPanel.Name = "featuresFlowPanel";
+            this.featuresFlowPanel.Size = new System.Drawing.Size(600, 1);
+            this.featuresFlowPanel.TabIndex = 3;
             // 
             // UpdateTimer
             // 
@@ -128,11 +131,12 @@
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel MenuViewPanel;
-        private System.Windows.Forms.Panel ModulesViewPanel;
         private System.Windows.Forms.Panel LogViewPanel;
         private System.Windows.Forms.Timer UpdateTimer;
         private System.Windows.Forms.Timer InitTimer;
         private System.Windows.Forms.NotifyIcon systemTrayNotifyIcon;
         private System.Windows.Forms.ContextMenuStrip TrayContextMenuStrip;
+        private System.Windows.Forms.FlowLayoutPanel featuresFlowPanel;
+        private System.Windows.Forms.ToolTip toolTips;
     }
 }

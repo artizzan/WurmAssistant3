@@ -31,12 +31,15 @@
             this.components = new System.ComponentModel.Container();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.reportBug = new System.Windows.Forms.Button();
-            this.shopAppLogDetailed = new System.Windows.Forms.Button();
             this.logOutput = new System.Windows.Forms.TextBox();
+            this.logViewButtonsFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.errorCounter = new System.Windows.Forms.TextBox();
             this.showAppLog = new System.Windows.Forms.Button();
+            this.shopAppLogDetailed = new System.Windows.Forms.Button();
+            this.reportBug = new System.Windows.Forms.Button();
+            this.buyBeerBtn = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
+            this.logViewButtonsFlowPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // timer
@@ -46,6 +49,8 @@
             // 
             // tableLayoutPanel1
             // 
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel1.ColumnCount = 6;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
@@ -53,41 +58,16 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.reportBug, 3, 0);
-            this.tableLayoutPanel1.Controls.Add(this.shopAppLogDetailed, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.logOutput, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.errorCounter, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.showAppLog, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.logViewButtonsFlowPanel, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(502, 346);
             this.tableLayoutPanel1.TabIndex = 3;
-            // 
-            // reportBug
-            // 
-            this.reportBug.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.reportBug.Location = new System.Drawing.Point(303, 3);
-            this.reportBug.Name = "reportBug";
-            this.reportBug.Size = new System.Drawing.Size(94, 34);
-            this.reportBug.TabIndex = 6;
-            this.reportBug.Text = "Report a bug";
-            this.reportBug.UseVisualStyleBackColor = true;
-            this.reportBug.Click += new System.EventHandler(this.reportBug_Click);
-            // 
-            // shopAppLogDetailed
-            // 
-            this.shopAppLogDetailed.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.shopAppLogDetailed.Location = new System.Drawing.Point(203, 3);
-            this.shopAppLogDetailed.Name = "shopAppLogDetailed";
-            this.shopAppLogDetailed.Size = new System.Drawing.Size(94, 34);
-            this.shopAppLogDetailed.TabIndex = 5;
-            this.shopAppLogDetailed.Text = "Show app log\r\n(with trace)";
-            this.shopAppLogDetailed.UseVisualStyleBackColor = true;
-            this.shopAppLogDetailed.Click += new System.EventHandler(this.shopAppLogDetailed_Click);
             // 
             // logOutput
             // 
@@ -102,10 +82,27 @@
             this.logOutput.TabIndex = 2;
             this.logOutput.TabStop = false;
             // 
+            // logViewButtonsFlowPanel
+            // 
+            this.logViewButtonsFlowPanel.AutoScroll = true;
+            this.logViewButtonsFlowPanel.AutoSize = true;
+            this.logViewButtonsFlowPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel1.SetColumnSpan(this.logViewButtonsFlowPanel, 6);
+            this.logViewButtonsFlowPanel.Controls.Add(this.errorCounter);
+            this.logViewButtonsFlowPanel.Controls.Add(this.showAppLog);
+            this.logViewButtonsFlowPanel.Controls.Add(this.shopAppLogDetailed);
+            this.logViewButtonsFlowPanel.Controls.Add(this.reportBug);
+            this.logViewButtonsFlowPanel.Controls.Add(this.buyBeerBtn);
+            this.logViewButtonsFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logViewButtonsFlowPanel.Location = new System.Drawing.Point(0, 0);
+            this.logViewButtonsFlowPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.logViewButtonsFlowPanel.Name = "logViewButtonsFlowPanel";
+            this.logViewButtonsFlowPanel.Size = new System.Drawing.Size(502, 40);
+            this.logViewButtonsFlowPanel.TabIndex = 7;
+            // 
             // errorCounter
             // 
             this.errorCounter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.errorCounter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorCounter.Location = new System.Drawing.Point(3, 3);
             this.errorCounter.Multiline = true;
             this.errorCounter.Name = "errorCounter";
@@ -118,7 +115,6 @@
             // 
             // showAppLog
             // 
-            this.showAppLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.showAppLog.Location = new System.Drawing.Point(103, 3);
             this.showAppLog.Name = "showAppLog";
             this.showAppLog.Size = new System.Drawing.Size(94, 34);
@@ -126,6 +122,39 @@
             this.showAppLog.Text = "Show app log";
             this.showAppLog.UseVisualStyleBackColor = true;
             this.showAppLog.Click += new System.EventHandler(this.showAppLog_Click);
+            // 
+            // shopAppLogDetailed
+            // 
+            this.shopAppLogDetailed.Location = new System.Drawing.Point(203, 3);
+            this.shopAppLogDetailed.Name = "shopAppLogDetailed";
+            this.shopAppLogDetailed.Size = new System.Drawing.Size(94, 34);
+            this.shopAppLogDetailed.TabIndex = 5;
+            this.shopAppLogDetailed.Text = "Show app log\r\n(with trace)";
+            this.shopAppLogDetailed.UseVisualStyleBackColor = true;
+            this.shopAppLogDetailed.Click += new System.EventHandler(this.shopAppLogDetailed_Click);
+            // 
+            // reportBug
+            // 
+            this.reportBug.Location = new System.Drawing.Point(303, 3);
+            this.reportBug.Name = "reportBug";
+            this.reportBug.Size = new System.Drawing.Size(94, 34);
+            this.reportBug.TabIndex = 6;
+            this.reportBug.Text = "Report a bug";
+            this.reportBug.UseVisualStyleBackColor = true;
+            this.reportBug.Click += new System.EventHandler(this.reportBug_Click);
+            // 
+            // buyBeerBtn
+            // 
+            this.buyBeerBtn.Image = global::AldursLab.WurmAssistant3.Core.Properties.Resources.beer;
+            this.buyBeerBtn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buyBeerBtn.Location = new System.Drawing.Point(403, 3);
+            this.buyBeerBtn.Name = "buyBeerBtn";
+            this.buyBeerBtn.Size = new System.Drawing.Size(94, 34);
+            this.buyBeerBtn.TabIndex = 7;
+            this.buyBeerBtn.Text = "Buy Aldy \r\na beer!   ";
+            this.buyBeerBtn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buyBeerBtn.UseVisualStyleBackColor = true;
+            this.buyBeerBtn.Click += new System.EventHandler(this.buyBeerBtn_Click);
             // 
             // LogView
             // 
@@ -136,7 +165,10 @@
             this.Size = new System.Drawing.Size(502, 346);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.logViewButtonsFlowPanel.ResumeLayout(false);
+            this.logViewButtonsFlowPanel.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -149,5 +181,7 @@
         private System.Windows.Forms.Button shopAppLogDetailed;
         private System.Windows.Forms.Button reportBug;
         private System.Windows.Forms.TextBox logOutput;
+        private System.Windows.Forms.FlowLayoutPanel logViewButtonsFlowPanel;
+        private System.Windows.Forms.Button buyBeerBtn;
     }
 }

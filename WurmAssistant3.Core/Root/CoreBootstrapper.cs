@@ -9,7 +9,6 @@ using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.Features;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.Features.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Granger;
 using AldursLab.WurmAssistant3.Core.Areas.Logging;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
@@ -125,7 +124,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
             MainMenuSetup.BindMenu(kernel);
 
             mainForm.SetMenuView(kernel.Get<MenuView>());
-            mainForm.SetModulesView(kernel.Get<FeaturesView>());
+            mainForm.SetFeaturesManager(kernel.Get<IFeaturesManager>());
 
             var prov = kernel.Get<IWaExecutionInfoProvider>();
             mainForm.Text += string.Format(" ({0})", prov.Get());

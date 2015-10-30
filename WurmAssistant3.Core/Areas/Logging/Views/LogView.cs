@@ -173,5 +173,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Logging.Views
                 view.Show();
             }
         }
+
+        private void buyBeerBtn_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe("http://blog.aldurcraft.com/WurmAssistant/page/Buy-me-a-beer");
+        }
     }
 }

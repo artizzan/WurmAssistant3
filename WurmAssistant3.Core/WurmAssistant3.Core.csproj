@@ -120,15 +120,7 @@
     </Compile>
     <Compile Include="Areas\Features\Contracts\IFeature.cs" />
     <Compile Include="Areas\Features\Contracts\IFeaturesManager.cs" />
-    <Compile Include="Areas\Features\Contracts\IFeatureView.cs" />
-    <Compile Include="Areas\Features\Contracts\IFeatureViewFactory.cs" />
     <Compile Include="Areas\Features\FeaturesSetup.cs" />
-    <Compile Include="Areas\Features\Views\FeatureView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Areas\Features\Views\FeatureView.Designer.cs">
-      <DependentUpon>FeatureView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Areas\Granger\GrangerSetup.cs" />
     <Compile Include="Areas\Granger\Modules\Advisor\BreedingAdvisor.cs" />
     <Compile Include="Areas\Granger\Modules\Advisor\BreedingEvaluator.cs" />
@@ -600,12 +592,6 @@
     <Compile Include="Areas\LogSearcher\Views\SingleSearchMatch.cs" />
     <Compile Include="Areas\Config\Modules\WurmAssistantConfig.cs" />
     <Compile Include="Areas\Features\Modules\FeaturesManager.cs" />
-    <Compile Include="Areas\Features\Views\FeaturesView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Areas\Features\Views\FeaturesView.Designer.cs">
-      <DependentUpon>FeaturesView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Areas\Persistence\Contracts\IPersistentObjectResolver.cs" />
     <Compile Include="Areas\Persistence\Components\PersistentObjectResolver.cs" />
     <Compile Include="Root\Contracts\IProcessStarter.cs" />
@@ -702,6 +688,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Features\Views\" />
     <Folder Include="Areas\Granger\Contracts\" />
     <Folder Include="Areas\MainMenu\Contracts\" />
   </ItemGroup>
@@ -742,12 +729,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Config\Views\SettingsEditView.resx">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Features\Views\FeaturesView.resx">
-      <DependentUpon>FeaturesView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Features\Views\FeatureView.resx">
-      <DependentUpon>FeatureView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Granger\Views\Advisor\Default\BreedingEvaluatorDefaultConfig.resx">
       <DependentUpon>BreedingEvaluatorDefaultConfig.cs</DependentUpon>
@@ -956,7 +937,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\ActionQueueModdingHelp.txt" />
-    <Content Include="Resources\beer.png" />
+    <None Include="Resources\beer.png" />
     <Content Include="Resources\close_icon.gif" />
     <Content Include="Resources\DeleteRed.png" />
     <Content Include="Resources\DeleteRed_small.png" />

@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.Features.Views;
+using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Views;
 using AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views;
+using AldursLab.WurmAssistant3.Core.Native.Win32;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using AldursLab.WurmAssistant3.Core.Root.Views;
 using AldursLab.WurmAssistant3.Core.WinForms;
@@ -21,6 +24,8 @@ namespace AldursLab.WurmAssistant3.Core.Root
     [PersistentObject("MainForm")]
     public partial class MainForm : PersistentForm, IUpdateLoop, IHostEnvironment, ISystemTrayContextMenu
     {
+        readonly MouseDragManager mouseDragManager;
+
         [JsonObject(MemberSerialization.OptIn)]
         class Settings
         {
@@ -143,6 +148,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
         {
             InitializeComponent();
 
+            mouseDragManager = new MouseDragManager(this);
             settings = new Settings();
 
             minimizationManager = new MinimizationManager(this);
@@ -190,11 +196,26 @@ namespace AldursLab.WurmAssistant3.Core.Root
             LogViewPanel.Controls.Add(logView);
         }
 
-        public void SetModulesView(FeaturesView featuresView)
+        public void SetFeaturesManager(IFeaturesManager featuresManager)
         {
-            ModulesViewPanel.Controls.Clear();
-            featuresView.Dock = DockStyle.Top;
-            ModulesViewPanel.Controls.Add(featuresView);
+            featuresFlowPanel.Controls.Clear();
+
+            var features = featuresManager.Features;
+
+            foreach (var f in features)
+            {
+                var feature = f;
+                Button btn = new Button
+                {
+                    Size = new Size(80, 80),
+                    BackgroundImageLayout = ImageLayout.Stretch,
+                    BackgroundImage = feature.Icon
+                };
+
+                btn.Click += (o, args) => feature.Show();
+                toolTips.SetToolTip(btn, feature.Name);
+                featuresFlowPanel.Controls.Add(btn);
+            }
         }
 
         public void SetMenuView(MenuView menuView)
@@ -219,13 +240,17 @@ namespace AldursLab.WurmAssistant3.Core.Root
                     var view = new UniversalTextDisplayView()
                     {
                         Text = "OH NO!!",
-                        ContentText = 
+                        ContentText =
                             "Application startup was interrupted by an ugly error! " + Environment.NewLine
                             + Environment.NewLine + exception.ToString()
                     };
                     view.ShowDialog();
                     Shutdown();
                     return;
+                }
+                finally
+                {
+                    mouseDragManager.Hook();
                 }
 
                 bootstrapped = true;
@@ -333,6 +358,54 @@ namespace AldursLab.WurmAssistant3.Core.Root
         {
             var handler = LateHostClosing;
             if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        class MouseDragManager
+        {
+            [DllImport("user32.dll")]
+            private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+            [DllImport("user32.dll")]
+            private static extern bool ReleaseCapture();
+
+
+            readonly MainForm mainForm;
+
+            public MouseDragManager([NotNull] MainForm mainForm)
+            {
+                if (mainForm == null) throw new ArgumentNullException("mainForm");
+                this.mainForm = mainForm;
+            }
+
+            public void Hook()
+            {
+                var logViewButtonsPanel = mainForm.LogViewPanel.Controls.Find("logViewButtonsFlowPanel", true).FirstOrDefault();
+
+                WireControls(mainForm.featuresFlowPanel,
+                    mainForm.LogViewPanel,
+                    mainForm.MenuViewPanel,
+                    logViewButtonsPanel);
+            }
+
+            void WireControls(params object[] objects)
+            {
+                foreach (var obj in objects)
+                {
+                    var control = obj as Control;
+                    if (control != null)
+                    {
+                        control.MouseDown += OnMouseDownHandler;
+                    }
+                }
+            }
+
+            void OnMouseDownHandler(object sender, MouseEventArgs mouseEventArgs)
+            {
+                if (mouseEventArgs.Button == MouseButtons.Left)
+                {
+                    ReleaseCapture();
+                    SendMessage(mainForm.Handle, Win32Hooks.WM_NCLBUTTONDOWN, Win32Hooks.HT_CAPTION, 0);
+                }
+            }
         }
     }
 }

@@ -16,6 +16,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Features.Contracts
         string Name { get; }
 
         Image Icon { get; }
+
         Task InitAsync();
     }
 }

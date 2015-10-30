@@ -61,11 +61,32 @@ namespace AldursLab.WurmAssistant3.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Action Queue Trigger modding how-to
+        ///
+        ///Trigger parses new log events from the game logs, matching them against all configured conditions.
+        ///After each bunch of events, it will make a decision whether action was started or finished. 
+        ///Based on that, it schedules notifications.
+        ///
+        ///
+        ///There are following types of checks (Condition Types), that can be adjusted:
+        ///
+        ///ActionStart -  
+        ///	flags the log event as starting an in-game action 
+        ///	NOTE: Every time ActionStart is found, it resets the script, eg. resets notifica [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ActionQueueModdingHelp {
             get {
                 return ResourceManager.GetString("ActionQueueModdingHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap beer {
+            get {
+                object obj = ResourceManager.GetObject("beer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

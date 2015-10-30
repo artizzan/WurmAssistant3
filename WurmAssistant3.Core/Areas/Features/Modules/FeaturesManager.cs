@@ -11,7 +11,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Features.Modules
 {
     public class FeaturesManager : IFeaturesManager, IInitializable
     {
-        readonly IFeatureViewFactory featureViewFactory;
         readonly ISystemTrayContextMenu systemTrayContextMenu;
         readonly IEnumerable<IFeature> features;
         readonly ILogger logger;
@@ -19,14 +18,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Features.Modules
         bool asyncInitStarted = false;
 
         public FeaturesManager([NotNull] IEnumerable<IFeature> features,
-            [NotNull] IFeatureViewFactory featureViewFactory, [NotNull] ISystemTrayContextMenu systemTrayContextMenu,
+            [NotNull] ISystemTrayContextMenu systemTrayContextMenu,
             [NotNull] ILogger logger)
         {
-            if (featureViewFactory == null) throw new ArgumentNullException("featureViewFactory");
             if (systemTrayContextMenu == null) throw new ArgumentNullException("systemTrayContextMenu");
             if (features == null) throw new ArgumentNullException("features");
             if (logger == null) throw new ArgumentNullException("logger");
-            this.featureViewFactory = featureViewFactory;
             this.systemTrayContextMenu = systemTrayContextMenu;
             this.features = features;
             this.logger = logger;
