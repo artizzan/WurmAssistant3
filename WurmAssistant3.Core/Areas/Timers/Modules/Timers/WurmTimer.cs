@@ -180,13 +180,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         /// <returns></returns>
         protected async Task<float> TryGetSkillFromLogHistoryAsync(string skillName, TimeSpan since)
         {
-            float skillLevel =
+            var skillLevel =
                 await
                     character.Skills.TryGetCurrentSkillLevelAsync(skillName,
                         new ServerGroup(playerTimersGroup.ServerGroupId),
-                        since) ?? 0;
+                        since);
 
-            return skillLevel;
+            return skillLevel != null ? skillLevel.Value : 0;
         }
 
         /// <summary>
@@ -199,13 +199,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         protected async Task<float> TryGetSkillFromLogHistoryAsync(string skillName, DateTime lastCheckup)
         {
 
-            float skillLevel =
+            var skillLevel =
                 await
                     character.Skills.TryGetCurrentSkillLevelAsync(skillName,
                         new ServerGroup(playerTimersGroup.ServerGroupId),
-                        HowLongAgoWasThisDate(lastCheckup)) ?? 0;
+                        HowLongAgoWasThisDate(lastCheckup));
 
-            return skillLevel;
+            return skillLevel != null ? skillLevel.Value : 0;
         }
 
         /// <summary>

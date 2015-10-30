@@ -4,8 +4,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.HorseEdit;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
@@ -166,7 +168,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
                 {
                     if (OpMode == HorseViewEditOpType.New)
                     {
-                        var newEntity = new HorseEntity() { ID = HorseEntity.GenerateNewHorseID(Context) };
+                        var newEntity = new HorseEntity() { Id = HorseEntity.GenerateNewHorseId(Context) };
                         horse = new Horse(MainForm, newEntity, Context);
                     }
 

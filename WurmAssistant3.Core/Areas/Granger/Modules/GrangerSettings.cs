@@ -4,12 +4,12 @@ using System.Drawing;
 using System.Linq;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 {
     [PersistentObject("GrangerFeature_GrangerSettings")]
     public class GrangerSettings : PersistentObjectBase

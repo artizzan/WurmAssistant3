@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ImportExport.Legacy;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet.Drawing;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.ValuePreset;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.Advisor.Default;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.Advisor.Default
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default
 {
     public class DefaultBreedingEvaluator : BreedingEvaluator
     {

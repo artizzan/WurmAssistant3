@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 {
     class HorseProcessor
     {
@@ -493,7 +493,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
         {
             var newEntity = new HorseEntity
             {
-                ID = HorseEntity.GenerateNewHorseID(_context),
+                Id = HorseEntity.GenerateNewHorseId(_context),
                 Name = newHorse.Name,
                 Herd = selectedHerd,
                 Age = _newHorse.Age,

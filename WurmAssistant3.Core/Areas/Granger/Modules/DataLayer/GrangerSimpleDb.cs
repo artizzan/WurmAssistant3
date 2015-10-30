@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using AldursLab.PersistentObjects;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
 {
     [PersistentObject("GrangerFeature_GrangerSimpleDb")]
     public class GrangerSimpleDb : PersistentObjectBase

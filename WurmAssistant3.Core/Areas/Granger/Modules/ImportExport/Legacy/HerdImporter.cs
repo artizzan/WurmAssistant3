@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ImportExport.Legacy
 {
     public class HerdImporter
     {
@@ -90,7 +90,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             context.InsertHerd(newHerdName);
             foreach (var horseEntity in horseEntities)
             {
-                horseEntity.ID = HorseEntity.GenerateNewHorseID(context);
+                horseEntity.Id = HorseEntity.GenerateNewHorseId(context);
                 context.InsertHorse(horseEntity);
             }
         }

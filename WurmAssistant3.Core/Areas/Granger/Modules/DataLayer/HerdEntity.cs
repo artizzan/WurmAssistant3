@@ -1,7 +1,7 @@
-﻿using System.Data.Linq.Mapping;
+﻿using JetBrains.Annotations;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class HerdEntity
@@ -25,7 +25,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer
 
         internal HerdEntity CloneMe(string newHerdName)
         {
-            return new HerdEntity() { _Selected = this._Selected, HerdID = newHerdName };
+            var newEntity = (HerdEntity)this.MemberwiseClone();
+            newEntity.HerdID = newHerdName;
+            return newEntity;
         }
 
         public string HerdIDAspect

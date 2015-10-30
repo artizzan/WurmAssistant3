@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.ValuePreset
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset
 {
     public class TraitValuator
     {

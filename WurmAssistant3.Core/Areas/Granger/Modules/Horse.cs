@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using AldursLab.Essentials.Extensions.DotNet.Drawing;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 {
     public class Horse
     {
@@ -152,7 +152,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
         {
             if (!HasMate()) return null;
 
-            var mate = context.Horses.Where(x => x.ID == this.Entity.PairedWith).Select(x => new Horse(mainForm, x, context)).ToArray();
+            var mate = context.Horses.Where(x => x.Id == this.Entity.PairedWith).Select(x => new Horse(mainForm, x, context)).ToArray();
             if (mate.Length == 1) 
                 return mate.First();
             else if (mate.Length == 0) 
@@ -176,8 +176,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             }
             else
             {
-                this.Entity.PairedWith = value.Entity.ID;
-                value.Entity.PairedWith = this.Entity.ID;
+                this.Entity.PairedWith = value.Entity.Id;
+                value.Entity.PairedWith = this.Entity.Id;
             }
         }
 
@@ -432,7 +432,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             }
 
             // Return true if the fields match:
-            return this.Entity.ID == p.Entity.ID;
+            return this.Entity.Id == p.Entity.Id;
         }
 
         public bool Equals(Horse p)
@@ -444,12 +444,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             }
 
             // Return true if the fields match:
-            return this.Entity.ID == p.Entity.ID;
+            return this.Entity.Id == p.Entity.Id;
         }
 
         public override int GetHashCode()
         {
-            return this.Entity.ID;
+            return this.Entity.Id;
         }
 
         public static bool operator ==(Horse a, Horse b)

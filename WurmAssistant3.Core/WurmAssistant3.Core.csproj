@@ -125,6 +125,7 @@
     <Compile Include="Areas\Granger\Modules\Advisor\BreedingAdvisor.cs" />
     <Compile Include="Areas\Granger\Modules\Advisor\BreedingEvaluator.cs" />
     <Compile Include="Areas\Granger\Modules\ImportExport\Legacy\HerdExporter.cs" />
+    <Compile Include="Areas\Granger\Modules\LogFeedManager\AhSkillInfo.cs" />
     <Compile Include="Areas\Granger\Views\Advisor\Default\BreedingEvaluatorDefaultConfig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,11 +136,11 @@
     <Compile Include="Areas\Granger\Modules\Advisor\Default\DefaultBreedingEvaluator.cs" />
     <Compile Include="Areas\Granger\Modules\Advisor\Default\DefaultBreedingEvaluatorOptions.cs" />
     <Compile Include="Areas\Granger\Modules\Advisor\Disabled\DisabledBreedingEvaluator.cs" />
-    <Compile Include="Areas\Granger\Modules\DBlayer\GrangerContext.cs" />
-    <Compile Include="Areas\Granger\Modules\DBlayer\GrangerSimpleDb.cs" />
-    <Compile Include="Areas\Granger\Modules\DBlayer\HerdEntity.cs" />
-    <Compile Include="Areas\Granger\Modules\DBlayer\HorseEntity.cs" />
-    <Compile Include="Areas\Granger\Modules\DBlayer\TraitValueEntity.cs" />
+    <Compile Include="Areas\Granger\Modules\DataLayer\GrangerContext.cs" />
+    <Compile Include="Areas\Granger\Modules\DataLayer\GrangerSimpleDb.cs" />
+    <Compile Include="Areas\Granger\Modules\DataLayer\HerdEntity.cs" />
+    <Compile Include="Areas\Granger\Modules\DataLayer\HorseEntity.cs" />
+    <Compile Include="Areas\Granger\Modules\DataLayer\TraitValueEntity.cs" />
     <Compile Include="Areas\Granger\Modules\Enums.cs" />
     <Compile Include="Areas\Granger\Modules\Exceptions.cs" />
     <Compile Include="Areas\Granger\Views\FormChooseHerd.cs">

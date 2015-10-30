@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ImportExport.Legacy
 {
     public class HerdExporter
     {

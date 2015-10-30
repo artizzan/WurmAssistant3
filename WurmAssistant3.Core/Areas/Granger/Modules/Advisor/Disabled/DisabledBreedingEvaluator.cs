@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.ValuePreset;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.Advisor.Disabled
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Disabled
 {
     public class DisabledBreedingEvaluator : BreedingEvaluator
     {

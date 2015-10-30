@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using AldursLab.Essentials.Extensions.DotNet;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 {
     public static class GrangerHelpers
     {

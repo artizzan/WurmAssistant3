@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Drawing;
-using System.IO;
 using System.Threading.Tasks;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.Advisor.Default;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
@@ -15,7 +15,7 @@ using AldursLab.WurmAssistant3.Core.Properties;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 {
     [PersistentObject("GrangerFeature")]
     public class GrangerFeature : PersistentObjectBase, IFeature

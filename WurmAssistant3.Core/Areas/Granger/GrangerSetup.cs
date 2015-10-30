@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.Advisor.Default;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Granger

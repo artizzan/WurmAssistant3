@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.ValuePreset;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 {
     public class HorseTrait
     {

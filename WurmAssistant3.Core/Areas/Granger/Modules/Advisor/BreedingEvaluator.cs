@@ -1,6 +1,7 @@
-﻿using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.ValuePreset;
+﻿using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.Advisor
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor
 {
     public abstract class BreedingEvaluator
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 {
     public enum HorseColorId { Unknown = 0, Black = 1, White = 2, Grey = 3, Brown = 4, Gold = 5 }
 

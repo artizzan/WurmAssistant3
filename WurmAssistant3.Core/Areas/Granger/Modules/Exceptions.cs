@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 {
     public class GrangerException : Exception
     {

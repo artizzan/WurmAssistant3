@@ -1,4 +1,4 @@
-﻿namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit
+﻿namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.HorseEdit
 {
     public enum HorseViewEditOpType
     {

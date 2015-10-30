@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.Essentials.Extensions.DotNet.Drawing;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;

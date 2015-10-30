@@ -1,11 +1,11 @@
 ﻿using System;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 {
     class PlayerManager
     {
@@ -14,7 +14,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
 
-        //ManualServerGroupManager SGManager;
         readonly HorseUpdatesManager horseUpdateManager;
 
         readonly IWurmCharacter character;
@@ -144,15 +143,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
 
         private void UpdateSkill()
         {
-            //todo: blocking calls...
-            AhFreedomSkill = character.Skills.TryGetCurrentSkillLevel(
+            //todo: blocking calls... refactor
+            var freedomskill = character.Skills.TryGetCurrentSkillLevel(
                 "Animal husbandry",
                 new ServerGroup(ServerGroup.FreedomId),
-                TimeSpan.FromDays(90)) ?? 0;
-            AhEpicSkill = character.Skills.TryGetCurrentSkillLevel(
+                TimeSpan.FromDays(90));
+            AhFreedomSkill = freedomskill != null ? freedomskill.Value : 0;
+
+            var epicskill = character.Skills.TryGetCurrentSkillLevel(
                 "Animal husbandry",
                 new ServerGroup(ServerGroup.EpicId),
-                TimeSpan.FromDays(90)) ?? 0;
+                TimeSpan.FromDays(90));
+            AhFreedomSkill = epicskill != null ? epicskill.Value : 0;
         }
 
         public void Dispose()

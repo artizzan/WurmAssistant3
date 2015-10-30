@@ -2,7 +2,7 @@
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.LogFeedManager
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 {
     class GrangerDebugLogger
     {

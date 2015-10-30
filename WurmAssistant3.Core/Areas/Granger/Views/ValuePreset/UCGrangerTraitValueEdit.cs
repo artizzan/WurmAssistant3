@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.ValuePreset
 {

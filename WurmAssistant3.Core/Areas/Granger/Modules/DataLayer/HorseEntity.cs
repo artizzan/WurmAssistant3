@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Linq.Mapping;
 using System.Linq;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class HorseEntity
     {
         //primary key
         [JsonProperty("id")]
-        public int ID;
+        public int Id;
         [JsonProperty("herd")]
         public string Herd;
 
@@ -23,17 +24,17 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer
         public string MotherName;
 
         [JsonProperty("traits")]
-        string _Traits;
+        string traits;
 
         public List<HorseTrait> Traits
         {
             get
             {
-                return HorseTrait.DbHelper.FromStrIntRepresentation(_Traits);
+                return HorseTrait.DbHelper.FromStrIntRepresentation(traits);
             }
             set
             {
-                _Traits = HorseTrait.DbHelper.ToIntStrRepresentation(value);
+                traits = HorseTrait.DbHelper.ToIntStrRepresentation(value);
             }
         }
 
@@ -52,31 +53,31 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer
         [JsonProperty("epiccurve")]
         public bool? EpicCurve;
         [JsonProperty("age")]
-        string _Age;
+        string age;
         public HorseAge Age
         {
-            get { return new HorseAge(_Age); }
-            set { _Age = value.ToDbValue(); }
+            get { return new HorseAge(age); }
+            set { age = value.ToDbValue(); }
         }
         [JsonProperty("color")]
-        string _Color;
+        string color;
         public HorseColor Color
         {
-            get { return new HorseColor(_Color); }
-            set { _Color = value.ToDbValue(); }
+            get { return new HorseColor(color); }
+            set { color = value.ToDbValue(); }
         }
         [JsonProperty("comments")]
         public string Comments;
 
         [JsonProperty("specialtags")]
-        string _SpecialTags;
+        string specialTags;
         public HashSet<string> SpecialTags
         {
             get
             {
                 var result = new HashSet<string>();
-                if (_SpecialTags == null) return result;
-                foreach (var tag in _SpecialTags.Split(','))
+                if (specialTags == null) return result;
+                foreach (var tag in specialTags.Split(','))
                 {
                     if (!string.IsNullOrEmpty(tag)) result.Add(tag);
                 }
@@ -84,14 +85,17 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer
             }
             set
             {
-                _SpecialTags = string.Join(",", value);
+                specialTags = string.Join(",", value);
             }
         }
 
+        [JsonProperty("serverName"), CanBeNull]
+        public string ServerName { get; set; }
+
         public string SpecialTagsRaw
         {
-            get { return _SpecialTags; }
-            set { _SpecialTags = value; }
+            get { return specialTags; }
+            set { specialTags = value; }
         }
 
         public bool CheckTag(string name)
@@ -133,11 +137,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer
         [JsonProperty("brandedfor")]
         public string BrandedFor;
 
-        static public int GenerateNewHorseID(GrangerContext context)
+        static public int GenerateNewHorseId(GrangerContext context)
         {
             try
             {
-                return context.Horses.Max(x => x.ID) + 1;
+                return context.Horses.Max(x => x.Id) + 1;
             }
             catch (InvalidOperationException)
             {

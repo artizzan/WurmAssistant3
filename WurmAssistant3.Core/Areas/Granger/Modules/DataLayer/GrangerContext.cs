@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Linq;
 using System.Linq;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
 {
     public class GrangerContext
     {
@@ -90,7 +89,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer
             HorseEntity[] horsesInThisHerd = Horses.Where(x => x.Herd == herdName).ToArray();
             foreach (var horseEntity in horsesInThisHerd)
             {
-                grangerSimpleDb.Horses.Remove(horseEntity.ID);
+                grangerSimpleDb.Horses.Remove(horseEntity.Id);
             }
             grangerSimpleDb.Herds.Remove(herd.HerdID);
             grangerSimpleDb.Save();
@@ -206,7 +205,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer
         /// <param name="horse"></param>
         public void InsertHorse(HorseEntity horse)
         {
-            grangerSimpleDb.Horses[horse.ID] = horse;
+            grangerSimpleDb.Horses[horse.Id] = horse;
             grangerSimpleDb.Save();
             if (OnHorsesModified != null) OnHorsesModified(this, new EventArgs());
         }
@@ -222,7 +221,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer
         {
             foreach (var horseEntity in horses)
             {
-                grangerSimpleDb.Horses.Remove(horseEntity.ID);
+                grangerSimpleDb.Horses.Remove(horseEntity.Id);
             }
             grangerSimpleDb.Save();
             if (OnHorsesModified != null) OnHorsesModified(this, new EventArgs());

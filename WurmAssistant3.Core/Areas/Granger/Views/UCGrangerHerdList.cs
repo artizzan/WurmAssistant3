@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.HorseEdit;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.HorseEdit;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using JetBrains.Annotations;
 

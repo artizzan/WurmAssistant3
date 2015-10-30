@@ -1,11 +1,12 @@
 ﻿using System;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.Advisor.Default;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.Advisor.Disabled;
-using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Disabled;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.Advisor
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor
 {
     public class BreedingAdvisor
     {

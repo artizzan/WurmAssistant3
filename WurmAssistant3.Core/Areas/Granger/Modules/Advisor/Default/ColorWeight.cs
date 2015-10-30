@@ -1,4 +1,4 @@
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.Advisor.Default
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default
 {
     public class ColorWeight
     {

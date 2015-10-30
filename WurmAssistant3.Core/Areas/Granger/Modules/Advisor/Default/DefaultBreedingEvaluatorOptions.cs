@@ -4,7 +4,7 @@ using System.Linq;
 using AldursLab.PersistentObjects;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.Advisor.Default
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default
 {
     [PersistentObject("GrangerFeature_DefaultBreedingEvaluatorOptions")]
     public class DefaultBreedingEvaluatorOptions : PersistentObjectBase

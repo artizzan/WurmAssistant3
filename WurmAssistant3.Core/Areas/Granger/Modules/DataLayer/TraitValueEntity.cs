@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Data.Linq.Mapping;
 using System.Linq;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.DBlayer
+namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
 {
     [JsonObject(MemberSerialization.OptIn)]
     public class TraitValueEntity
