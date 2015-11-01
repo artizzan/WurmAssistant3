@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using AldursLab.WurmApi;
+using AldursLab.WurmApi.Modules.Wurm.Characters;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
@@ -9,8 +12,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 {
     class PlayerManager
     {
-        private readonly GrangerFeature parentModule;
-        private readonly GrangerContext context;
+        readonly GrangerFeature parentModule;
+        readonly GrangerContext context;
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
 
@@ -18,12 +21,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 
         readonly IWurmCharacter character;
 
-        public string PlayerName { get; private set; }
-
-        public float AhFreedomSkill { get; private set; }
-        public float AhEpicSkill { get; private set; }
-
-        bool skillObtainedFlag = false;
+        readonly Dictionary<ServerGroup, float> serverGroupToAhSkillMap = new Dictionary<ServerGroup, float>();
 
         public PlayerManager(GrangerFeature parentModule, GrangerContext context, string playerName,
             [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger, [NotNull] ITrayPopups trayPopups)
@@ -39,36 +37,66 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 
             creatureUpdateManager = new CreatureUpdatesManager(this.parentModule, this.context, this, trayPopups, logger);
 
-            wurmApi.LogsMonitor.Subscribe(PlayerName, LogType.AllLogs, OnNewLogEvents);
+            wurmApi.LogsMonitor.Subscribe(PlayerName, LogType.Event, OnNewEventLogEvents);
 
             character = wurmApi.Characters.Get(PlayerName);
+            character.LogInOrCurrentServerPotentiallyChanged += CharacterOnLogInOrCurrentServerPotentiallyChanged;
             character.Skills.SkillsChanged += SkillsOnSkillsChanged;
 
-            BeginInitSkill();
+            BeginUpdateSkillInfo();
         }
 
-        async void BeginInitSkill()
+        public string PlayerName { get; private set; }
+
+        [CanBeNull]
+        public IWurmServer CurrentServer { get; private set; }
+
+        [CanBeNull]
+        public float? CurrentServerAhSkill
+        {
+            get
+            {
+                var server = CurrentServer;
+                if (server == null) return null;
+                float skill;
+                if (serverGroupToAhSkillMap.TryGetValue(server.ServerGroup, out skill))
+                {
+                    return skill;
+                }
+                else return null;
+            }
+        }
+
+        private void CharacterOnLogInOrCurrentServerPotentiallyChanged(object sender, PotentialServerChangeEventArgs potentialServerChangeEventArgs)
+        {
+            BeginUpdateSkillInfo();
+        }
+
+        async void BeginUpdateSkillInfo()
         {
             try
             {
-                var freedomskill = await character.Skills.TryGetCurrentSkillLevelAsync(
-                    "Animal husbandry",
-                    new ServerGroup(ServerGroup.FreedomId),
-                    TimeSpan.FromDays(90));
-                AhFreedomSkill = freedomskill != null ? freedomskill.Value : 0;
-
-                var epicskill = await character.Skills.TryGetCurrentSkillLevelAsync(
-                    "Animal husbandry",
-                    new ServerGroup(ServerGroup.EpicId),
-                    TimeSpan.FromDays(90));
-                AhEpicSkill = epicskill != null ? epicskill.Value : 0;
-
-                skillObtainedFlag = true;
+                await UpdateSkillInfoAsync();
             }
-            catch (Exception _e)
+            catch (Exception exception)
             {
-                logger.Error(_e, "Something went wrong while trying to get AH skill for " + PlayerName);
+                logger.Error(exception, "Something went wrong while updating AH skill for " + PlayerName);
             }
+        }
+
+        private async Task UpdateSkillInfoAsync()
+        {
+            var server = await character.TryGetCurrentServerAsync();
+            if (server != null)
+            {
+                var skill = await character.Skills.TryGetCurrentSkillLevelAsync("Animal husbandry", server.ServerGroup,
+                    TimeSpan.FromDays(90));
+                if (skill != null)
+                {
+                    serverGroupToAhSkillMap[server.ServerGroup] = skill.Value;
+                }
+            }
+            this.CurrentServer = server;
         }
 
         public void Update()
@@ -76,44 +104,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             creatureUpdateManager.Update();
         }
 
-        /// <summary>
-        /// returns null if no skill data available yet
-        /// </summary>
-        /// <param name="serverGroup"></param>
-        /// <returns></returns>
-        public float? GetAhSkill(ServerGroup serverGroup)
+        private void OnNewEventLogEvents(object sender, LogsMonitorEventArgs e)
         {
-            if (!skillObtainedFlag) return null;
-
-            if (serverGroup.ServerGroupId == ServerGroup.EpicId)
-                return AhEpicSkill;
-            else if (serverGroup.ServerGroupId == ServerGroup.FreedomId)
-                return AhFreedomSkill;
-            else
+            foreach (var wurmLogEntry in e.WurmLogEntries)
             {
-                logger.Debug("unknown server group for ah skill request, returning null, player: " + PlayerName);
-                return null;
-            }
-        }
-
-        public ServerGroup GetCurrentServerGroup()
-        {
-            //todo: this is a blocking call, refactor?
-            var currentServer = character.TryGetCurrentServer();
-            if (currentServer == null) return new ServerGroup(ServerGroup.UnknownId);
-            return currentServer.ServerGroup;
-        }
-
-        private void OnNewLogEvents(object sender, LogsMonitorEventArgs e)
-        {
-            if (e.LogType == LogType.Event)
-            {
-                foreach (var wurmLogEntry in e.WurmLogEntries)
+                if (parentModule.Settings.LogCaptureEnabled)
                 {
-                    if (parentModule.Settings.LogCaptureEnabled)
-                    {
-                        creatureUpdateManager.ProcessEventForCreatureUpdates(wurmLogEntry);
-                    }
+                    creatureUpdateManager.ProcessEventForCreatureUpdates(wurmLogEntry);
                 }
             }
         }
@@ -124,31 +121,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             {
                 if (skillInfo.IsSkillName("Animal husbandry") && skillInfo.Server != null)
                 {
-                    if (skillInfo.Server.ServerGroup.ServerGroupId == ServerGroup.FreedomId)
-                    {
-                        AhFreedomSkill = skillInfo.Value;
-                    }
-                    else if (skillInfo.Server.ServerGroup.ServerGroupId == ServerGroup.FreedomId)
-                    {
-                        AhEpicSkill = skillInfo.Value;
-                    }
+                    serverGroupToAhSkillMap[skillInfo.Server.ServerGroup] = skillInfo.Value;
                 }
             }
         }
 
         public void Dispose()
         {
+            character.LogInOrCurrentServerPotentiallyChanged -= CharacterOnLogInOrCurrentServerPotentiallyChanged;
             character.Skills.SkillsChanged -= SkillsOnSkillsChanged;
-            wurmApi.LogsMonitor.Unsubscribe(PlayerName, OnNewLogEvents);
-        }
-
-        /// <summary>
-        /// returns null if ah skill not yet found or server group not established
-        /// </summary>
-        /// <returns></returns>
-        internal float? GetAhSkill()
-        {
-            return GetAhSkill(GetCurrentServerGroup());
+            wurmApi.LogsMonitor.Unsubscribe(PlayerName, OnNewEventLogEvents);
         }
     }
 }

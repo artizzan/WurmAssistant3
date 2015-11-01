@@ -490,7 +490,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
 
         void TriggerPopupWarning(string text)
         {
-            trayPopups.Schedule("Wurm Season Notify", text);
+            trayPopups.Schedule(text, "Wurm Season Notify");
         }
 
         public void ModifySeasons()

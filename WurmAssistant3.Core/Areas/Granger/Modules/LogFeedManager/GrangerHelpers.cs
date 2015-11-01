@@ -89,24 +89,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         }
 
         /// <summary>
-        /// Checks if provided string contains blacklisted (wild) creature name
-        /// </summary>
-        /// <param name="prefixedObjectName"></param>
-        /// <returns></returns>
-        public static bool IsBlacklistedCreatureName(string prefixedObjectName)
-        {
-            // allow adding any creature
-            return false;
-
-            //prefixedObjectName = prefixedObjectName.ToUpperInvariant();
-            //foreach (string name in WildCreatureNames)
-            //{
-            //    if (prefixedObjectName.Contains(name.ToUpperInvariant())) return true;
-            //}
-            //return false;
-        }
-
-        /// <summary>
         /// Checks if provided string is EQUAL to blacklisted (wild) creature name.
         /// </summary>
         /// <param name="fixedCreatureName"></param>

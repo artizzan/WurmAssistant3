@@ -11,15 +11,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 {
     public class LogsFeedManager : IDisposable
     {
-        public class SkillObtainedEventArgs : EventArgs
-        {
-            public readonly string PlayerName;
-            public SkillObtainedEventArgs(string playerName)
-            {
-                this.PlayerName = playerName;
-            }
-        }
-
         readonly GrangerContext context;
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
@@ -64,22 +55,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 ph.Dispose();
                 playerManagers.Remove(playerName);
             }
-        }
-
-        /// <summary>
-        /// null if no skill available yet (ah skill search not finished or server group not established)
-        /// </summary>
-        /// <param name="playerName"></param>
-        /// <returns></returns>
-        [CanBeNull]
-        public float? TryGetSkillForPlayer(string playerName)
-        {
-            PlayerManager ph;
-            if (playerManagers.TryGetValue(playerName, out ph))
-            {
-                return ph.GetAhSkill();
-            }
-            else return null;
         }
 
         public void Dispose()

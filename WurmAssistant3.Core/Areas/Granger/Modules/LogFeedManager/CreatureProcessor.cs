@@ -15,7 +15,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         struct ProcessorVerifyList
         {
             public bool Name;
-            //public bool Age; //not needed
             public bool Parents;
             public bool Traits;
             public bool Gender;
@@ -43,7 +42,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             public float InspectSkill;
             public bool IsMale;
             public DateTime PregnantUntil = DateTime.MinValue;
-            public ServerGroup ServerGroup;
+            public IWurmServer Server;
             public CreatureEntity.SecondaryInfoTag SecondaryInfo = CreatureEntity.SecondaryInfoTag.None;
         }
 
@@ -63,8 +62,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         private readonly GrangerContext _context;
         private readonly PlayerManager _playerMan;
 
-        //float? AHSkill = null;
-
         public CreatureProcessor(GrangerFeature parentModule, GrangerContext context, PlayerManager playerMan,
             GrangerDebugLogger debugLogger,
             [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger)
@@ -79,16 +76,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             _playerMan = playerMan;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="line">event log line</param>
-        /// <param name="moreData">extra data parsed out of the line, if applicable</param>
         public void HandleLogEvent(string line)
         {
-            //TODO all line parsing should be moved to WurmEventParser, when it is needed more than just here!
-            //keep this DRY
-
             //attempt to start building new creature data
             if (line.StartsWith("You smile at", StringComparison.Ordinal))
             {
@@ -115,9 +104,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         var message =
                             String.Format(
                                 "{0} ({1}) can see traits, but Granger found no Animal Husbandry skill for him. Is this a bug? Creature will be added anyway.",
-                                _playerMan.PlayerName, _newCreature.ServerGroup);
+                                _playerMan.PlayerName, _newCreature.Server);
                         logger.Error(message);
-                        trayPopups.Schedule("POSSIBLE PROBLEM", message, 5000);
+                        trayPopups.Schedule(message, "POSSIBLE PROBLEM", 5000);
                     }
                 }
                 //[20:23:18] She is very strong and has a good reserve of fat.
@@ -340,20 +329,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                                     _newCreature.Name));
                             }
                         }
-                        //is new creature server group not within allowed ones?
-                        if (_newCreature.ServerGroup.ServerGroupId == ServerGroup.UnknownId)
-                        {
-                            sanityFail = true;
-                            sanityFailReason = "New creature data had unsupported server group: " + _newCreature.ServerGroup;
-                        }
-                        //if old creature isEpic != new creature isEpic
-                        bool oldIsEpic = oldCreature.EpicCurve ?? false;
-                        bool newIsEpic = _newCreature.ServerGroup.ServerGroupId == ServerGroup.EpicId;
-                        if (oldIsEpic != newIsEpic)
-                        {
-                            sanityFail = true;
-                            sanityFailReason = "Old creature is of different server group than current player server group";
-                        }
 
                         #endregion
 
@@ -361,8 +336,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         {
                             _grangerDebug.Log("sanity check failed for creature update: " + oldCreature + ". Reason: " +
                                               sanityFailReason);
-                            trayPopups.Schedule("COULD NOT UPDATE CREATURE",
-                                "There was data mismatch when trying to update creature, reason: " + sanityFailReason, 8000);
+                            trayPopups.Schedule("There was data mismatch when trying to update creature, reason: " + sanityFailReason,
+                                "COULD NOT UPDATE CREATURE", 8000);
                         }
                         else
                         {
@@ -388,7 +363,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 
                             _context.SubmitChanges();
                             _grangerDebug.Log("successfully updated creature in db");
-                            trayPopups.Schedule("CREATURE UPDATED", String.Format("Updated creature: {0}", oldCreature));
+                            trayPopups.Schedule(String.Format("Updated creature: {0}", oldCreature), "CREATURE UPDATED");
                         }
 
                         _newCreature = null;
@@ -420,7 +395,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                             {
                                 var message = "Creature with name: " + _newCreature.Name +
                                               " already exists in herd: " + herd;
-                                trayPopups.Schedule("CAN'T ADD CREATURE", message, 4000);
+                                trayPopups.Schedule(message, "CAN'T ADD CREATURE", 4000);
                                 _grangerDebug.Log(message);
                             }
 
@@ -434,7 +409,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                             string message = "Creature with name: " + _newCreature.Name +
                                              " already exists in active herd";
 
-                            trayPopups.Schedule("CAN'T ADD CREATURE", message, 4000);
+                            trayPopups.Schedule(message, "CAN'T ADD CREATURE", 4000);
                             _grangerDebug.Log(message);
                         }
                     }
@@ -446,8 +421,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         var partialMessage = allHerdSearch ? "database" : "selected herds";
                         _grangerDebug.Log("many creatures named " + _newCreature.Name + " found in " + partialMessage +
                                           ", add/update aborted");
-                        trayPopups.Schedule("CAN'T ADD OR UPDATE CREATE",
-                            partialMessage + " contain many creatures named " + _newCreature.Name + ", narrow herd selection",
+                        trayPopups.Schedule(partialMessage + " contain many creatures named " + _newCreature.Name + ", narrow herd selection",
+                            "CAN'T ADD OR UPDATE CREATE",
                             6000);
                         //notify user to narrow the herd selection
                     }
@@ -455,13 +430,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                     {
                         const string message = "exactly one herd has to be active to add new creature";
                         _grangerDebug.Log(message);
-                        trayPopups.Schedule("CAN'T ADD OR UPDATE CREATE", message, 4000);
+                        trayPopups.Schedule(message, "CAN'T ADD OR UPDATE CREATE", 4000);
                     }
                     else if (entireDB && selectedHerds.Length == 0)
                     {
                         const string message = "at least one herd must be select to add new creature";
                         _grangerDebug.Log(message);
-                        trayPopups.Schedule("CAN'T ADD OR UPDATE CREATE", message, 4000);
+                        trayPopups.Schedule(message, "CAN'T ADD OR UPDATE CREATE", 4000);
                     }
                     else
                     {
@@ -469,7 +444,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         const string message = "add/update creature failed for unknown reasons";
                         _grangerDebug.Log(message);
                         logger.Error(message);
-                        trayPopups.Schedule("CAN'T ADD OR UPDATE CREATE", message, 4000);
+                        trayPopups.Schedule(message, "CAN'T ADD OR UPDATE CREATE", 4000);
                     }
                 }
                 else
@@ -508,11 +483,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 SecondaryInfoTagSetter = newCreature.SecondaryInfo
             };
 
-            newEntity.EpicCurve = newCreature.ServerGroup.ServerGroupId == ServerGroup.EpicId;
+            newEntity.EpicCurve = newCreature.Server.ServerGroup.ServerGroupId == ServerGroup.EpicId;
 
             _context.InsertCreature(newEntity);
             _grangerDebug.Log("successfully inserted creature to db");
-            trayPopups.Schedule("CREATURE ADDED", String.Format("Added new creature to herd {0}: {1}", selectedHerd, newEntity));
+            trayPopups.Schedule(String.Format("Added new creature to herd {0}: {1}", selectedHerd, newEntity), "CREATURE ADDED");
         }
 
         private string[] GetAllHerds()
@@ -550,12 +525,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 //[20:48:42] You smile at Adolescent diseased Mountainheart.
                 _grangerDebug.Log("extracting object name");
                 string objectNameWithPrefixes = line.Remove(0, 13).Replace(".", "");
-                if (!GrangerHelpers.IsBlacklistedCreatureName(objectNameWithPrefixes) && GrangerHelpers.HasAgeInName(objectNameWithPrefixes))
+                if (GrangerHelpers.HasAgeInName(objectNameWithPrefixes))
                 {
                     _grangerDebug.Log("object asumed to be a creature");
-                    var ahSkill = _playerMan.GetAhSkill();
-                    var currentGroup = _playerMan.GetCurrentServerGroup();
-                    if (ahSkill != null)
+                    var server = _playerMan.CurrentServer;
+                    var skill = _playerMan.CurrentServerAhSkill;
+                    if (server != null && skill != null)
                     {
                         _grangerDebug.Log("building new creature object and moving to processor");
 
@@ -566,10 +541,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         {
                             Name = GrangerHelpers.ExtractCreatureName(objectNameWithPrefixes),
                             Age = GrangerHelpers.ExtractCreatureAge(objectNameWithPrefixes),
-                            ServerGroup = currentGroup,
-                            InspectSkill = ahSkill.Value,
-                            //IsDiseased =
-                            //    (GrangerHelpers.LineContainsDiseased(objectNameWithPrefixes) != null)
+                            Server = server,
+                            InspectSkill = skill.Value,
                         };
 
                         var fat = GrangerHelpers.LineContainsFat(objectNameWithPrefixes);
@@ -586,8 +559,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                     }
                     else
                     {
-                        trayPopups.Schedule("CAN'T PROCESS CREATURE", "Cannot gather data for " + _playerMan.PlayerName + " yet, please try again once Granger fully loads.", 5000);
-                        _grangerDebug.Log("processing creature cancelled, still waiting for AH skill or server group searches to finish (skill: " + ahSkill + " ; server group: " + currentGroup);
+                        trayPopups.Schedule(
+                            "Server or AH skill level unknown for " + _playerMan.PlayerName +
+                            ". If WA was just started, give it a few seconds.", "CAN'T PROCESS CREATURE", 5000);
+                        _grangerDebug.Log(string.Format("processing creature cancelled, AH skill or server group unknown for player {0} (skill: {1} ; server: {2}", _playerMan.PlayerName, skill, server));
                     }
                 }
                 else _grangerDebug.Log(objectNameWithPrefixes + " cannot be added. Only named creatures can be added to Granger.");

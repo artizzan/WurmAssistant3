@@ -47,7 +47,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Modules
         /// <param name="timeToShowMillis">how long should this popup be visible, in milliseconds</param>
         public void Schedule(string content, int timeToShowMillis = 3000)
         {
-            Schedule(null, content, timeToShowMillis);
+            Schedule(content, null, timeToShowMillis);
         }
     }
 }

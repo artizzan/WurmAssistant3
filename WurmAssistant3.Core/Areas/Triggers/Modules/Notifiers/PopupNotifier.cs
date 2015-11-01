@@ -13,8 +13,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.Notifiers
 
         public override void Notify()
         {
-            trayPopups.Schedule(trigger.PopupTitle,
-                trigger.PopupContent,
+            trayPopups.Schedule(trigger.PopupContent,
+                trigger.PopupTitle,
                 trigger.StayUntilClicked ? int.MaxValue : trigger.PopupDurationMillis);
         }
 

@@ -53,9 +53,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             if (show)
             {
                 if (PopupPersistent)
-                    trayPopups.Schedule(Title, Message, int.MaxValue);
+                    trayPopups.Schedule(Message, Title, int.MaxValue);
                 else
-                    trayPopups.Schedule(Title, Message, Duration);
+                    trayPopups.Schedule(Message, Title, Duration);
                 show = false;
             }
         }

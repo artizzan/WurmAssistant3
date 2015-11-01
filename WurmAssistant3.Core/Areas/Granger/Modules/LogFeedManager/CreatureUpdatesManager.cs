@@ -61,10 +61,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                     // if we found too many same named in selected, can't continue
                     var partialMessage = "selected herds";
                     trayPopups.Schedule(
-                        "CREATURE UPDATE PROBLEM",
                         String.Format(
                             "There are multiple creatures named {0} in {1}, can't update health/age!",
                             data.Creature.Name, partialMessage),
+                        "CREATURE UPDATE PROBLEM",
                         5000);
                     cont = false;
                 }
@@ -77,10 +77,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         // again if multiple found in db, we can't continue
                         var partialMessage = "database";
                         trayPopups.Schedule(
-                            "CREATURE UPDATE PROBLEM",
                             String.Format(
                                 "There are multiple creatures named {0} in {1}, can't update health/age!",
                                 data.Creature.Name, partialMessage),
+                            "CREATURE UPDATE PROBLEM",
                             5000);
                         cont = false;
                     }
@@ -151,7 +151,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                             string age = null;
                             if (ageChanged) age = "updated age to " + data.Age;
 
-                            trayPopups.Schedule("HEALTH/AGE UPDATE", data.Creature + ": " + health + " " + age);
+                            trayPopups.Schedule(data.Creature + ": " + health + " " + age, "HEALTH/AGE UPDATE");
                         }
                         
                         data.Creature.Age = data.Age;
@@ -186,14 +186,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                     string prefixedName = match.Groups[1].Value;
                     CreatureAge newAge = GrangerHelpers.ExtractCreatureAge(prefixedName);
                     string fixedName = GrangerHelpers.RemoveAllPrefixes(prefixedName);
-                    CreatureEntity[] creatureEntities = GetCreatureToUpdate(fixedName, playerMan.GetCurrentServerGroup());
+                    CreatureEntity[] creatureEntities = GetCreatureToUpdate(fixedName, playerMan.CurrentServer);
                     if (EntireDbSetting && creatureEntities.Length > 1)
                     {
                         trayPopups.Schedule(
-                            "GROOMING ISSUE DETECTED",
                             String.Format(
                                 "There are multiple creatures named {0} in database, going to mark them all!",
                                 fixedName),
+                            "GROOMING ISSUE DETECTED",
                             6000);
                     }
                     foreach (var creature in creatureEntities)
@@ -218,8 +218,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                     string name2 = match.Groups[2].Value;
                     string fixedName1 = GrangerHelpers.RemoveAllPrefixes(name1);
                     string fixedName2 = GrangerHelpers.RemoveAllPrefixes(name2);
-                    CreatureEntity[] creatures1 = GetCreatureToUpdate(fixedName1, playerMan.GetCurrentServerGroup());
-                    CreatureEntity[] creatures2 = GetCreatureToUpdate(fixedName2, playerMan.GetCurrentServerGroup());
+                    CreatureEntity[] creatures1 = GetCreatureToUpdate(fixedName1, playerMan.CurrentServer);
+                    CreatureEntity[] creatures2 = GetCreatureToUpdate(fixedName2, playerMan.CurrentServer);
 
                     ExtractBreedingPairCreature(fixedName1, creatures1);
                     ExtractBreedingPairCreature(fixedName2, creatures2);
@@ -249,16 +249,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                             {
                                 lastBreedingFemale.PregnantUntil = DateTime.Now + GrangerHelpers.LongestPregnancyPossible;
                                 trayPopups.Schedule(
-                                    "BREED UPDATE",
                                     String.Format("({0}) is now marked as pregnant. Be sure to smilexamine to get more accurate pregnancy duration!", lastBreedingFemale.Name),
+                                    "BREED UPDATE",
                                     6000);
                                 context.SubmitChanges();
                             }
                             else
                             {
                                 trayPopups.Schedule(
-                                    "BREED UPDATE PROBLEM",
                                     String.Format("Female name ({0}) does not match the cached name ({1})!", lastBreedingFemale.Name, fixedName),
+                                    "BREED UPDATE PROBLEM",
                                     6000);
                             }
                         }
@@ -266,8 +266,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         {
                             lastBreedingMale.NotInMood = DateTime.Now + GrangerHelpers.Breeding_NotInMood_Duration;
                             trayPopups.Schedule(
-                                "BREED UPDATE",
                                 String.Format("({0}) is now marked as Not In Mood. You can't breed this creature for next 45 minutes.", lastBreedingMale.Name),
+                                "BREED UPDATE",
                                 6000);
                             context.SubmitChanges();
                         }
@@ -289,10 +289,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         if (lastBreedingMale != null) lastBreedingMale.NotInMood = DateTime.Now + GrangerHelpers.Breeding_NotInMood_Duration;
                         if (lastBreedingFemale != null) lastBreedingFemale.NotInMood = DateTime.Now + GrangerHelpers.Breeding_NotInMood_Duration;
                         trayPopups.Schedule(
-                            "BREED UPDATE",
                             String.Format("Breeding appears to have failed, {0} and {1} will be Not In Mood for next 45 minutes.",
                                 lastBreedingMale == null ? "Some creature" : lastBreedingMale.Name,
                                 lastBreedingFemale == null ? "Some creature" : lastBreedingFemale.Name),
+                            "BREED UPDATE",
                             6000);
                     }
                 }
@@ -339,7 +339,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 grangerDebug.Log("LIVETRACKER: R.I.P. log line detected, checking if it's a creature from herds, line: " + line);
                 string lowercasename = match.Groups[1].Value;
                 string fixedName = GrangerHelpers.FixCase(lowercasename);
-                CreatureEntity[] creatures = GetCreatureToUpdate(fixedName, playerMan.GetCurrentServerGroup());
+                CreatureEntity[] creatures = GetCreatureToUpdate(fixedName, playerMan.CurrentServer);
                 //its perfectly possible for this to set few creatures as dead,
                 //but this tag is just informative, so it's ok
                 foreach (var creature in creatures)
@@ -367,9 +367,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             public bool TooManyCreaturesFound;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="line"></param>
         /// <param name="entireDbSetting">false to try selected herds, true to try entire DB</param>
         /// <returns></returns>
@@ -508,15 +505,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                                   + " herds don't have a creature named: " + fixedName;
                     }
                 }
-                if (message != null) trayPopups.Schedule(title ?? "BREED UPDATE PROBLEM", message, 6000);
+                if (message != null) trayPopups.Schedule(message, title ?? "BREED UPDATE PROBLEM", 6000);
             }
         }
 
-        private CreatureEntity[] GetCreatureToUpdate(string creatureName, ServerGroup serverGroup)
+        private CreatureEntity[] GetCreatureToUpdate(string creatureName, IWurmServer server)
         {
+            if (server == null) return new CreatureEntity[0];
+            //todo: select creatures by a pair of creature name and server name
             bool isEpic;
-            if (serverGroup.ServerGroupId == ServerGroup.EpicId) isEpic = true;
-            else if (serverGroup.ServerGroupId == ServerGroup.FreedomId) isEpic = false;
+            if (server.ServerGroup.ServerGroupId == ServerGroup.EpicId)
+                isEpic = true;
+            else if (server.ServerGroup.ServerGroupId == ServerGroup.FreedomId)
+                isEpic = false;
             else return new CreatureEntity[0];
 
             IEnumerable<HerdEntity> query = context.Herds;
@@ -525,11 +526,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 query = query.Where(x => x.Selected);
             }
             var herdsToCheck = query.Select(x => x.HerdID).ToArray();
-            //var step0 = _context.Creatures.ToArray();
-            //var step1 = step0.Where(x => x.Name == creatureName).ToArray();
-            //var step2 = step1.Where(x => selectedHerds.Contains(x.Herd)).ToArray();
-            //var step3 = step2.Where(x => x.EpicCurve == isEpic).ToArray();
-            var foundCreatures = context.Creatures.Where(x => x.Name == creatureName && herdsToCheck.Contains(x.Herd) && (x.EpicCurve ?? false) == isEpic).ToArray();
+            var foundCreatures =
+                context.Creatures.Where(
+                    x => x.Name == creatureName && herdsToCheck.Contains(x.Herd) && (x.EpicCurve ?? false) == isEpic)
+                    .ToArray();
             return foundCreatures;
         }
 
