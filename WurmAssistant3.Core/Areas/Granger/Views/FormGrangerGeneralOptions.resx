@@ -117,4 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="checkBoxUseServerNameAsIdComponent.Text" xml:space="preserve">
+    <value>Use creature server name, as part of it's identity.
+Explanation: Creatures will only be added/updated if game character 
+current server is known and matches creature server. 
+This may break if WU server name changes (WO server names are stable)
+Creature server can be edited manually.</value>
+  </data>
 </root>

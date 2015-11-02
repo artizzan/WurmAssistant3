@@ -11,6 +11,7 @@ using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ValuePreset;
+using AldursLab.WurmAssistant3.Core.Areas.Granger.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
@@ -77,8 +78,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             RebuildAdvisors();
             RefreshAdvisor();
 
-            ucGrangerHerdList1.Init(this, context, logger);
-            ucGrangerCreatureList1.Init(this, context, logger);
+            ucGrangerHerdList1.Init(this, context, logger, wurmApi);
+            ucGrangerCreatureList1.Init(this, context, logger, wurmApi);
             ucGrangerTraitView1.Init(this, context, logger);
 
             Context.OnTraitValuesModified += Context_OnTraitValuesModified;

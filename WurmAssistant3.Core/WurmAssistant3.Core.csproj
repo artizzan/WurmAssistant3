@@ -185,12 +185,6 @@
     <Compile Include="Areas\Granger\Views\FormGrangerNewInfo.Designer.cs">
       <DependentUpon>FormGrangerNewInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\FormGrangerOptions.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Areas\Granger\Views\FormGrangerOptions.Designer.cs">
-      <DependentUpon>FormGrangerOptions.cs</DependentUpon>
-    </Compile>
     <Compile Include="Areas\Granger\Views\FormHerdMerge.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,12 +205,12 @@
     <Compile Include="Areas\Granger\Views\HorseEdit\FormCreatureViewEdit.Designer.cs">
       <DependentUpon>FormCreatureViewEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Modules\HorseEdit\CreatureViewEditOpType.cs" />
+    <Compile Include="Areas\Granger\Modules\CreatureEdit\CreatureViewEditOpType.cs" />
     <Compile Include="Areas\Granger\Modules\CreatureTrait.cs" />
     <Compile Include="Areas\Granger\Modules\ImportExport\Legacy\HerdImporter.cs" />
     <Compile Include="Areas\Granger\Modules\LogFeedManager\GrangerDebugLogger.cs" />
     <Compile Include="Areas\Granger\Modules\LogFeedManager\GrangerHelpers.cs" />
-    <Compile Include="Areas\Granger\Modules\LogFeedManager\CreatureProcessor.cs" />
+    <Compile Include="Areas\Granger\Modules\LogFeedManager\SmileXamineProcessor.cs" />
     <Compile Include="Areas\Granger\Modules\LogFeedManager\CreatureUpdatesManager.cs" />
     <Compile Include="Areas\Granger\Modules\LogFeedManager\LogsFeedManager.cs" />
     <Compile Include="Areas\Granger\Modules\LogFeedManager\PlayerManager.cs" />
@@ -754,9 +748,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Granger\Views\FormGrangerNewInfo.resx">
       <DependentUpon>FormGrangerNewInfo.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Granger\Views\FormGrangerOptions.resx">
-      <DependentUpon>FormGrangerOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Granger\Views\FormHerdMerge.resx">
       <DependentUpon>FormHerdMerge.cs</DependentUpon>

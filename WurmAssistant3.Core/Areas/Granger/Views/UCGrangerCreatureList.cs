@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.Essentials.Extensions.DotNet.Drawing;
+using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
@@ -18,16 +19,17 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
 {
     public partial class UCGrangerCreatureList : UserControl
     {
-        FormGrangerMain MainForm;
-        GrangerContext Context;
+        FormGrangerMain mainForm;
+        GrangerContext context;
+        IWurmApi wurmApi;
 
         ILogger logger;
 
         List<Creature> CurrentCreatures = new List<Creature>(); //cached
 
-        readonly DateTime _treshholdDtValueForBirthDate = new DateTime(1990, 1, 1);
-        readonly TimeSpan _treshholdTsValueForExactAge = DateTime.Now - new DateTime(1990, 1, 1);
-        readonly int _treshholdDaysValueForExactAge = (int)(DateTime.Now - new DateTime(1990, 1, 1)).TotalDays;
+        readonly DateTime treshholdDtValueForBirthDate = new DateTime(1990, 1, 1);
+        readonly TimeSpan treshholdTsValueForExactAge = DateTime.Now - new DateTime(1990, 1, 1);
+        readonly int treshholdDaysValueForExactAge = (int)(DateTime.Now - new DateTime(1990, 1, 1)).TotalDays;
 
         public Creature[] SelectedCreatures
         {
@@ -38,7 +40,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             }
         }
 
-        List<HerdEntity> ActiveHerds = new List<HerdEntity>(); //cached
+        List<HerdEntity> activeHerds = new List<HerdEntity>(); //cached
 
         Creature selectedSingleCreature = null;
 
@@ -48,9 +50,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             set
             {
                 selectedSingleCreature = value;
-                if (MainForm != null) //some designer bug, this prop appear in designer which tries to set it to null initially
+                if (mainForm != null) //some designer bug, this prop appear in designer which tries to set it to null initially
                 {
-                    MainForm.TriggerSelectedSingleCreatureChanged();
+                    mainForm.TriggerSelectedSingleCreatureChanged();
                     UpdateDataForView();
                 }
             }
@@ -63,16 +65,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             InitializeComponent();
         }
 
-        public void Init([NotNull] FormGrangerMain mainForm, [NotNull] GrangerContext context, [NotNull] ILogger logger)
+        public void Init([NotNull] FormGrangerMain mainForm, [NotNull] GrangerContext context, [NotNull] ILogger logger,
+            [NotNull] IWurmApi wurmApi)
         {
             if (mainForm == null) throw new ArgumentNullException("mainForm");
             if (context == null) throw new ArgumentNullException("context");
             if (logger == null) throw new ArgumentNullException("logger");
+            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             this.logger = logger;
-            MainForm = mainForm;
+            this.wurmApi = wurmApi;
+            this.mainForm = mainForm;
             _debug_MainFormAssigned = true;
 
-            if (MainForm.Settings.AdjustForDarkThemes)
+            if (this.mainForm.Settings.AdjustForDarkThemes)
             {
                 MakeDarkHighContrastFriendly();
             }
@@ -81,7 +86,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             {
                 this.objectListView1.RestoreState(mainForm.Settings.CreatureListState);
             }
-            Context = context;
+            this.context = context;
 
             olvColumnPairedWith.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
                 {
@@ -140,8 +145,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                 {
                     Creature creature = (Creature)x;
                     var traits = creature.Traits;
-                    CreatureTrait[] positives = CreatureTrait.GetGoodTraits(traits, MainForm.CurrentValuator);
-                    CreatureTrait[] negatives = CreatureTrait.GetBadTraits(traits, MainForm.CurrentValuator);
+                    CreatureTrait[] positives = CreatureTrait.GetGoodTraits(traits, this.mainForm.CurrentValuator);
+                    CreatureTrait[] negatives = CreatureTrait.GetBadTraits(traits, this.mainForm.CurrentValuator);
                     return string.Format("Good: {0}, Neutral: {1}, Bad: {2}",
                         positives.Length,
                         traits.Length - positives.Length - negatives.Length,
@@ -232,7 +237,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                     if (x is TimeSpan)
                     {
                         TimeSpan ts = (TimeSpan)x;
-                        if (ts < MainForm.Settings.ShowGroomingTime)
+                        if (ts < this.mainForm.Settings.ShowGroomingTime)
                             return ts.ToStringCompact();
                         else return string.Empty;
                     }
@@ -307,7 +312,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                 if (x is DateTime)
                 {
                     DateTime dt = (DateTime)x;
-                    if (dt < _treshholdDtValueForBirthDate)
+                    if (dt < treshholdDtValueForBirthDate)
                     {
                         return string.Empty;
                     }
@@ -321,7 +326,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             olvColumnBirthDate.GroupKeyToTitleConverter = new BrightIdeasSoftware.GroupKeyToTitleConverterDelegate(x =>
             {
                 DateTime dt = (DateTime) x;
-                if (dt < _treshholdDtValueForBirthDate)
+                if (dt < treshholdDtValueForBirthDate)
                 {
                     return "No birth date available";
                 }
@@ -336,7 +341,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             {
                 Creature creature = (Creature)x;
                 var val = (int)creature.ExactAgeAspect.TotalDays;
-                if (val > _treshholdDaysValueForExactAge) return int.MaxValue;
+                if (val > treshholdDaysValueForExactAge) return int.MaxValue;
                 else return val;
             });
             olvColumnExactAge.AspectToStringConverter = new BrightIdeasSoftware.AspectToStringConverterDelegate(x =>
@@ -344,7 +349,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                 if (x is TimeSpan)
                 {
                     TimeSpan ts = (TimeSpan)x;
-                    if (ts > _treshholdTsValueForExactAge)
+                    if (ts > treshholdTsValueForExactAge)
                     {
                         return string.Empty;
                     }
@@ -358,7 +363,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             olvColumnExactAge.GroupKeyToTitleConverter = new BrightIdeasSoftware.GroupKeyToTitleConverterDelegate(x =>
             {
                 int gkey = (int)x;
-                if (gkey > _treshholdDaysValueForExactAge)
+                if (gkey > treshholdDaysValueForExactAge)
                 {
                     return "No birth date available";
                 }
@@ -369,11 +374,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             });
 
 
-            Context.OnHerdsModified += Context_OnHerdsModified;
-            Context.OnEntitiesModified += ContextOnEntitiesModified;
-            MainForm.Granger_UserViewChanged += MainForm_UserViewChanged;
-            MainForm.Granger_AdvisorChanged += MainForm_Granger_AdvisorChanged;
-            MainForm.Granger_ValuatorChanged += MainForm_Granger_ValuatorChanged;
+            this.context.OnHerdsModified += Context_OnHerdsModified;
+            this.context.OnEntitiesModified += ContextOnEntitiesModified;
+            this.mainForm.Granger_UserViewChanged += MainForm_UserViewChanged;
+            this.mainForm.Granger_AdvisorChanged += MainForm_Granger_AdvisorChanged;
+            this.mainForm.Granger_ValuatorChanged += MainForm_Granger_ValuatorChanged;
 
             UpdateCurrentCreaturesData();
             UpdateDataForView();
@@ -430,16 +435,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
 
         void UpdateCurrentCreaturesData() //on init and model updates
         {
-            ActiveHerds = Context.Herds.AsEnumerable().Where(x => x.Selected == true).OrderBy(x => x.HerdID).ToList();
+            activeHerds = context.Herds.AsEnumerable().Where(x => x.Selected == true).OrderBy(x => x.HerdID).ToList();
 
-            textBoxHerds.Text = string.Join(", ", ActiveHerds.Select(x => x.HerdID));
+            textBoxHerds.Text = string.Join(", ", activeHerds.Select(x => x.HerdID));
 
-            CurrentCreatures = Context.Creatures
+            CurrentCreatures = context.Creatures
                 .AsEnumerable()
-                .Where(x => ActiveHerds
+                .Where(x => activeHerds
                     .Select(y => y.HerdID) //create a temporary collection of herdID's
                     .Contains(x.Herd)) //select this creature if herd is in temp collection
-                .Select(x => new Creature(MainForm, x, Context))
+                .Select(x => new Creature(mainForm, x, context))
                 .ToList();
         }
 
@@ -469,7 +474,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             foreach (var creature in CurrentCreatures)
             {
                 creature.ClearColorHints();
-                if (!MainForm.Settings.DisableRowColoring)
+                if (!mainForm.Settings.DisableRowColoring)
                 {
                     creature.RefreshBreedHintColor(minValue, maxValue);
                 }
@@ -494,13 +499,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                 var selected = objectListView1.SelectedObjects.Cast<Creature>().ToArray();
                 foreach (var creature in selected)
                 {
-                    FormCreatureViewEdit ui = new FormCreatureViewEdit(MainForm,
+                    FormCreatureViewEdit ui = new FormCreatureViewEdit(mainForm,
                         creature,
-                        Context,
+                        context,
                         CreatureViewEditOpType.Edit,
                         creature.HerdAspect,
-                        logger);
-                    ui.ShowDialogCenteredOnForm(MainForm);
+                        logger,
+                        wurmApi);
+                    ui.ShowDialogCenteredOnForm(mainForm);
                 }
             }
         }
@@ -508,12 +514,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
         private void moveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var selected = objectListView1.SelectedObjects.Cast<Creature>().ToArray();
-            FormChooseHerd ui = new FormChooseHerd(MainForm, Context);
-            if (ui.ShowDialogCenteredOnForm(MainForm) == DialogResult.OK)
+            FormChooseHerd ui = new FormChooseHerd(mainForm, context);
+            if (ui.ShowDialogCenteredOnForm(mainForm) == DialogResult.OK)
             {
                 string herdID = ui.Result;
 
-                var targetHerd = Context.Creatures.Where(x => x.Herd == herdID).Select(x => new Creature(MainForm, x, Context));
+                var targetHerd = context.Creatures.Where(x => x.Herd == herdID).Select(x => new Creature(mainForm, x, context));
 
                 List<Creature> nonuniqueCreatures = new List<Creature>();
                 foreach (var creature in selected)
@@ -539,7 +545,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                     {
                         creature.Herd = herdID;
                     }
-                    Context.SubmitChanges();
+                    context.SubmitChanges();
                 }
             }
         }
@@ -551,7 +557,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                 string.Join(",\r\n", (IEnumerable<Creature>)selected) + "\r\nContinue?",
                 "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
             {
-                Context.DeleteCreatures(selected.Select(x => x.Entity).ToArray());
+                context.DeleteCreatures(selected.Select(x => x.Entity).ToArray());
             }
         }
 
@@ -564,13 +570,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                 var selected = objectListView1.SelectedObjects.Cast<Creature>().ToArray();
                 foreach (var creature in selected)
                 {
-                    FormCreatureViewEdit ui = new FormCreatureViewEdit(MainForm,
+                    FormCreatureViewEdit ui = new FormCreatureViewEdit(mainForm,
                         creature,
-                        Context,
+                        context,
                         CreatureViewEditOpType.View,
                         creature.HerdAspect,
-                        logger);
-                    ui.ShowDialogCenteredOnForm(MainForm);
+                        logger,
+                        wurmApi);
+                    ui.ShowDialogCenteredOnForm(mainForm);
                 }
             }
         }
@@ -649,7 +656,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             {
                 creature.Color = color;
             }
-            Context.SubmitChanges();
+            context.SubmitChanges();
         }
 
         private void diseasedToolStripMenuItem_Click(object sender, EventArgs e)
@@ -687,7 +694,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                 creature.SetTag(tag, !tagState);
             }
 
-            Context.SubmitChanges();
+            context.SubmitChanges();
         }
 
         private void objectListView1_ColumnReordered(object sender, ColumnReorderedEventArgs e)
@@ -704,18 +711,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
         {
             //this causes crash on Win XP, ordering events happen before mainform assigned,
             //because mainform is assigned after constructor
-            if (!_debug_MainFormAssigned && MainForm == null) return;
+            if (!_debug_MainFormAssigned && mainForm == null) return;
 
             var settings = this.objectListView1.SaveState();
             try
             {
-                MainForm.Settings.CreatureListState = settings;
+                mainForm.Settings.CreatureListState = settings;
             }
             catch (Exception _e)
             {
                 logger.Error(_e,
                     string.Format("Something went wrong when trying to save creaturelist layout, mainform null: {0}",
-                        MainForm));
+                        mainForm));
             }
         }
 
@@ -746,7 +753,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
 
             selected[0].SetMate(selected[1]);
             selected[1].SetMate(selected[0]);
-            Context.SubmitChanges();
+            context.SubmitChanges();
         }
 
         private void clearMateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -767,7 +774,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                     creature.SetMate(null);
                 }
 
-                Context.SubmitChanges();
+                context.SubmitChanges();
             }
         }
 
@@ -890,7 +897,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                     creature.NotInMoodUntil = DateTime.Now + duration;
                 }
 
-                Context.SubmitChanges();
+                context.SubmitChanges();
             }
         }
 
@@ -904,11 +911,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             if (SelectedSingleCreature != null)
             {
                 Creature tempCreatureRef = SelectedSingleCreature;
-                FormEditComments ui = new FormEditComments(this.MainForm, tempCreatureRef.Comments, tempCreatureRef.Name);
-                if (ui.ShowDialogCenteredOnForm(MainForm) == DialogResult.OK)
+                FormEditComments ui = new FormEditComments(this.mainForm, tempCreatureRef.Comments, tempCreatureRef.Name);
+                if (ui.ShowDialogCenteredOnForm(mainForm) == DialogResult.OK)
                 {
                     tempCreatureRef.Comments = ui.Result;
-                    Context.SubmitChanges();
+                    context.SubmitChanges();
                 }
             }
         }

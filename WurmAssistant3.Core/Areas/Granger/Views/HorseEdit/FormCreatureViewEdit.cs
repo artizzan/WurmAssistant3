@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
+using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.CreatureEdit;
@@ -23,6 +24,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit
         CreatureViewEditOpType _opType;
         private string HerdID;
         readonly ILogger logger;
+        readonly IWurmApi wurmApi;
 
         CreatureViewEditOpType OpMode
         {
@@ -46,18 +48,24 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit
             }
         }
 
-        public FormCreatureViewEdit(FormGrangerMain mainForm, Creature creature, GrangerContext context, CreatureViewEditOpType optype, string herdID,
-            [NotNull] ILogger logger)
+        public FormCreatureViewEdit(FormGrangerMain mainForm, Creature creature, GrangerContext context,
+            CreatureViewEditOpType optype, string herdId, [NotNull] ILogger logger,
+            [NotNull] IWurmApi wurmApi)
         {
             if (logger == null) throw new ArgumentNullException("logger");
+            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             this.MainForm = mainForm;
             this.creature = creature;
             this.Context = context;
-            this.HerdID = herdID;
+            this.HerdID = herdId;
             this.logger = logger;
+            this.wurmApi = wurmApi;
             InitializeComponent();
 
             disableAllFields();
+
+            comboBoxServerName.Items.AddRange(
+                wurmApi.Servers.All.Select(server => server.ServerName.Original).Cast<object>().ToArray());
 
             List<string> list = new List<string>();
             list.AddRange(Context.Creatures.Select(x => x.Name));
@@ -118,6 +126,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit
             textBoxComment.Text = creature.CommentsAspect;
             comboBoxColor.Text = creature.Color.CreatureColorId.ToString();
             comboBoxAge.Text = creature.Age.CreatureAgeId.ToString();
+            comboBoxServerName.Text = creature.ServerName ?? string.Empty;
             Creature mate = creature.GetMate();
             if (mate != null) textBoxMate.Text = mate.ToString();
 
@@ -186,11 +195,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit
                     }
                     var traitlistArray = traitlist.ToArray();
 
-                    creature.Name = textBoxName.Text;
-                    creature.Father = comboBoxFather.Text;
-                    creature.Mother = comboBoxMother.Text;
-                    creature.TakenCareOfBy = textBoxCaredForBy.Text;
-                    creature.BrandedFor = textBoxBrandedFor.Text;
+                    creature.Name = textBoxName.Text.Trim();
+                    creature.Father = comboBoxFather.Text.Trim();
+                    creature.Mother = comboBoxMother.Text.Trim();
+                    creature.TakenCareOfBy = textBoxCaredForBy.Text.Trim();
+                    creature.BrandedFor = textBoxBrandedFor.Text.Trim();
 
                     creature.Traits = traitlistArray;
 
@@ -213,6 +222,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit
                     creature.SetTag("diseased", checkBoxDiseased.Checked);
                     creature.SetTag("dead", checkBoxDead.Checked);
                     creature.SetTag("sold", checkBoxSold.Checked);
+
+                    creature.ServerName = comboBoxServerName.Text.Trim();
 
                     if (OpMode == CreatureViewEditOpType.New)
                     {
@@ -269,7 +280,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit
             }
 
             var otherCreatures = Context.Creatures.Where(x => x.Herd == HerdID).ToArray();
-            var nonuniques = otherCreatures.Where(x => x.Name == textBoxName.Text).ToArray();
+
+            var nonuniques = otherCreatures.Where(x =>
+                x.Name == textBoxName.Text.Trim()).ToArray();
 
             if (OpMode == CreatureViewEditOpType.Edit)
                 nonuniques = nonuniques.Where(x => x != creature.Entity).ToArray();
@@ -277,7 +290,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit
             if (nonuniques.Length > 0)
             {
                 labelWarn.Visible = true;
-                labelWarn.Text = "Creature with this identity already exists in this herd";
+                labelWarn.Text = "Creature with this name already exists in this herd";
                 buttonOK.Enabled = false;
                 return false;
             }
@@ -320,13 +333,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-
         }
 
         private void FormCreatureViewEdit_Load(object sender, EventArgs e)
         {
-            //TODO can't use this, top bar can appear above upper edge of screen, needs tweaking
-            //this.Location = FormHelper.GetCenteredChildPositionRelativeToParentWorkAreaBound(this, MainForm);
         }
 
         bool _textBoxPasteUpdate_selfUpdating = false;
@@ -370,6 +380,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit
             }
             CurrentParsedTraits = null;
             buttonApplyTraitsFromPasteText.Enabled = false;
+        }
+
+        private void comboBoxServerName_Validating(object sender, CancelEventArgs e)
+        {
+            ValidateCreatureIdentity();
         }
     }
 }

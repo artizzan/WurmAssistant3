@@ -13,7 +13,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
     class PlayerManager
     {
         readonly GrangerFeature parentModule;
-        readonly GrangerContext context;
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
 
@@ -30,12 +29,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             if (logger == null) throw new ArgumentNullException("logger");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             this.parentModule = parentModule;
-            this.context = context;
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.PlayerName = playerName;
 
-            creatureUpdateManager = new CreatureUpdatesManager(this.parentModule, this.context, this, trayPopups, logger);
+            creatureUpdateManager = new CreatureUpdatesManager(this.parentModule, context, this, trayPopups, logger);
 
             wurmApi.LogsMonitor.Subscribe(PlayerName, LogType.Event, OnNewEventLogEvents);
 

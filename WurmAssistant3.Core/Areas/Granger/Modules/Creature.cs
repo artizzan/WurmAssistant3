@@ -3,6 +3,7 @@ using System.Linq;
 using AldursLab.Essentials.Extensions.DotNet.Drawing;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 {
@@ -272,13 +273,17 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             }
         }
 
-        /// <summary>
-        /// Updated: this now only compares creature names due to issues with name+gender setup
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        [CanBeNull]
+        public string ServerName
+        {
+            get { return Entity.ServerName; }
+            set { Entity.ServerName = value ?? string.Empty; }
+        }
+
         public bool IsIdenticalIdentity(Creature other)
         {
+            // comment: this should be replaced by object equality, leaving for now, 
+            // default equality behavior is probably needed somewhere (maybe when used in OLV?)
             return !this.Entity.IsDifferentIdentityThan(other.Entity);
         }
 
@@ -372,10 +377,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 
         public int ValueAspect
         {
-            get
-            {
-                return this.Value;
-            }
+            get { return this.Value; }
         }
 
         public string PotentialValueAspect
@@ -392,10 +394,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 
         public double? BreedValueAspect
         {
-            get
-            {
-                return this.CachedBreedValue;
-            }
+            get { return this.CachedBreedValue; }
         }
 
         public string PairedWithAspect
@@ -410,11 +409,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 
         public string BrandedForAspect
         {
-            get
-            {
-                return Entity.BrandedFor ?? string.Empty;
-            }
+            get { return Entity.BrandedFor ?? string.Empty; }
         }
+
+        public string ServerAspect { get { return Entity.ServerName ?? "-Unknown-"; } }
 
         public override bool Equals(System.Object obj)
         {

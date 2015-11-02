@@ -244,5 +244,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             get { return captureForPlayers; }
             set { captureForPlayers = new List<string>(value); FlagAsChanged(); }
         }
+
+        [JsonProperty]
+        bool useServerNameAsCreatureIdComponent;
+
+        public bool UseServerNameAsCreatureIdComponent
+        {
+            get { return useServerNameAsCreatureIdComponent; }
+            set { useServerNameAsCreatureIdComponent = value; FlagAsChanged(); }
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.CreatureEdit;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.CreatureEdit;
@@ -15,18 +16,22 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
         FormGrangerMain MainForm;
         GrangerContext Context;
         ILogger logger;
+        IWurmApi wurmApi;
 
         public UCGrangerHerdList()
         {
             InitializeComponent();
         }
 
-        public void Init(FormGrangerMain mainForm, GrangerContext context, [NotNull] ILogger logger)
+        public void Init(FormGrangerMain mainForm, GrangerContext context, [NotNull] ILogger logger,
+            [NotNull] IWurmApi wurmApi)
         {
             if (logger == null) throw new ArgumentNullException("logger");
+            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             MainForm = mainForm;
             Context = context;
             this.logger = logger;
+            this.wurmApi = wurmApi;
 
             objectListView1.BooleanCheckStateGetter = new BrightIdeasSoftware.BooleanCheckStateGetterDelegate(x =>
                 {
@@ -102,7 +107,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             if (selHerd == null) MessageBox.Show("select a herd first");
             else
             {
-                FormCreatureViewEdit ui = new FormCreatureViewEdit(MainForm, null, Context, CreatureViewEditOpType.New, selHerd.HerdID, logger);
+                FormCreatureViewEdit ui = new FormCreatureViewEdit(MainForm, null, Context, CreatureViewEditOpType.New, selHerd.HerdID, logger, wurmApi);
                 ui.ShowDialog();
             }
         }

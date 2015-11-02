@@ -73,6 +73,8 @@
             this.comboBoxMother = new System.Windows.Forms.ComboBox();
             this.labelWarn = new System.Windows.Forms.Label();
             this.buttonEdit = new System.Windows.Forms.Button();
+            this.label17 = new System.Windows.Forms.Label();
+            this.comboBoxServerName = new System.Windows.Forms.ComboBox();
             this.groupBoxGender.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAHskill)).BeginInit();
@@ -159,7 +161,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(230, 38);
+            this.label3.Location = new System.Drawing.Point(230, 79);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(40, 13);
@@ -169,7 +171,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(230, 76);
+            this.label4.Location = new System.Drawing.Point(232, 117);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(37, 13);
@@ -239,7 +241,7 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(443, 475);
+            this.buttonOK.Location = new System.Drawing.Point(443, 525);
             this.buttonOK.Margin = new System.Windows.Forms.Padding(2);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(68, 32);
@@ -252,7 +254,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(514, 475);
+            this.buttonCancel.Location = new System.Drawing.Point(514, 525);
             this.buttonCancel.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(68, 32);
@@ -288,6 +290,8 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.comboBoxServerName);
+            this.panel1.Controls.Add(this.label17);
             this.panel1.Controls.Add(this.dateTimePickerBirthDate);
             this.panel1.Controls.Add(this.label16);
             this.panel1.Controls.Add(this.buttonApplyTraitsFromPasteText);
@@ -329,7 +333,7 @@
             this.panel1.Location = new System.Drawing.Point(9, 10);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(573, 460);
+            this.panel1.Size = new System.Drawing.Size(573, 510);
             this.panel1.TabIndex = 24;
             // 
             // dateTimePickerBirthDate
@@ -354,7 +358,7 @@
             // 
             // buttonApplyTraitsFromPasteText
             // 
-            this.buttonApplyTraitsFromPasteText.Location = new System.Drawing.Point(504, 427);
+            this.buttonApplyTraitsFromPasteText.Location = new System.Drawing.Point(504, 478);
             this.buttonApplyTraitsFromPasteText.Margin = new System.Windows.Forms.Padding(2);
             this.buttonApplyTraitsFromPasteText.Name = "buttonApplyTraitsFromPasteText";
             this.buttonApplyTraitsFromPasteText.Size = new System.Drawing.Size(64, 20);
@@ -366,7 +370,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(2, 410);
+            this.label15.Location = new System.Drawing.Point(2, 461);
             this.label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(270, 13);
@@ -375,7 +379,7 @@
             // 
             // textBoxPasteUpdate
             // 
-            this.textBoxPasteUpdate.Location = new System.Drawing.Point(4, 427);
+            this.textBoxPasteUpdate.Location = new System.Drawing.Point(4, 478);
             this.textBoxPasteUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxPasteUpdate.Name = "textBoxPasteUpdate";
             this.textBoxPasteUpdate.Size = new System.Drawing.Size(496, 20);
@@ -396,7 +400,7 @@
             // 
             // textBoxBrandedFor
             // 
-            this.textBoxBrandedFor.Location = new System.Drawing.Point(232, 167);
+            this.textBoxBrandedFor.Location = new System.Drawing.Point(232, 207);
             this.textBoxBrandedFor.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxBrandedFor.Name = "textBoxBrandedFor";
             this.textBoxBrandedFor.Size = new System.Drawing.Size(198, 20);
@@ -405,7 +409,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(230, 151);
+            this.label14.Location = new System.Drawing.Point(232, 192);
             this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(62, 13);
@@ -414,7 +418,7 @@
             // 
             // textBoxMate
             // 
-            this.textBoxMate.Location = new System.Drawing.Point(230, 240);
+            this.textBoxMate.Location = new System.Drawing.Point(232, 281);
             this.textBoxMate.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxMate.Name = "textBoxMate";
             this.textBoxMate.ReadOnly = true;
@@ -424,7 +428,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(230, 224);
+            this.label13.Location = new System.Drawing.Point(232, 265);
             this.label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(159, 13);
@@ -474,7 +478,7 @@
             // checkBoxEpic
             // 
             this.checkBoxEpic.AutoSize = true;
-            this.checkBoxEpic.Location = new System.Drawing.Point(292, 205);
+            this.checkBoxEpic.Location = new System.Drawing.Point(294, 246);
             this.checkBoxEpic.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxEpic.Name = "checkBoxEpic";
             this.checkBoxEpic.Size = new System.Drawing.Size(96, 17);
@@ -485,7 +489,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(230, 261);
+            this.label10.Location = new System.Drawing.Point(232, 302);
             this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(59, 13);
@@ -494,7 +498,7 @@
             // 
             // textBoxComment
             // 
-            this.textBoxComment.Location = new System.Drawing.Point(230, 277);
+            this.textBoxComment.Location = new System.Drawing.Point(232, 318);
             this.textBoxComment.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxComment.Multiline = true;
             this.textBoxComment.Name = "textBoxComment";
@@ -503,7 +507,7 @@
             // 
             // textBoxCaredForBy
             // 
-            this.textBoxCaredForBy.Location = new System.Drawing.Point(232, 131);
+            this.textBoxCaredForBy.Location = new System.Drawing.Point(232, 171);
             this.textBoxCaredForBy.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxCaredForBy.Name = "textBoxCaredForBy";
             this.textBoxCaredForBy.Size = new System.Drawing.Size(198, 20);
@@ -512,7 +516,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(230, 115);
+            this.label6.Location = new System.Drawing.Point(232, 156);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(64, 13);
@@ -522,7 +526,7 @@
             // numericUpDownAHskill
             // 
             this.numericUpDownAHskill.DecimalPlaces = 2;
-            this.numericUpDownAHskill.Location = new System.Drawing.Point(230, 204);
+            this.numericUpDownAHskill.Location = new System.Drawing.Point(232, 245);
             this.numericUpDownAHskill.Margin = new System.Windows.Forms.Padding(2);
             this.numericUpDownAHskill.Name = "numericUpDownAHskill";
             this.numericUpDownAHskill.Size = new System.Drawing.Size(58, 20);
@@ -531,7 +535,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(230, 188);
+            this.label5.Location = new System.Drawing.Point(232, 229);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(174, 13);
@@ -543,7 +547,7 @@
             this.comboBoxFather.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
             this.comboBoxFather.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBoxFather.FormattingEnabled = true;
-            this.comboBoxFather.Location = new System.Drawing.Point(232, 93);
+            this.comboBoxFather.Location = new System.Drawing.Point(233, 133);
             this.comboBoxFather.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxFather.Name = "comboBoxFather";
             this.comboBoxFather.Size = new System.Drawing.Size(198, 21);
@@ -555,7 +559,7 @@
             this.comboBoxMother.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
             this.comboBoxMother.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.comboBoxMother.FormattingEnabled = true;
-            this.comboBoxMother.Location = new System.Drawing.Point(232, 54);
+            this.comboBoxMother.Location = new System.Drawing.Point(233, 93);
             this.comboBoxMother.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxMother.Name = "comboBoxMother";
             this.comboBoxMother.Size = new System.Drawing.Size(198, 21);
@@ -564,9 +568,10 @@
             // 
             // labelWarn
             // 
+            this.labelWarn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelWarn.AutoSize = true;
             this.labelWarn.ForeColor = System.Drawing.Color.Red;
-            this.labelWarn.Location = new System.Drawing.Point(11, 483);
+            this.labelWarn.Location = new System.Drawing.Point(11, 533);
             this.labelWarn.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelWarn.Name = "labelWarn";
             this.labelWarn.Size = new System.Drawing.Size(58, 13);
@@ -577,7 +582,7 @@
             // buttonEdit
             // 
             this.buttonEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonEdit.Location = new System.Drawing.Point(371, 475);
+            this.buttonEdit.Location = new System.Drawing.Point(371, 525);
             this.buttonEdit.Margin = new System.Windows.Forms.Padding(2);
             this.buttonEdit.Name = "buttonEdit";
             this.buttonEdit.Size = new System.Drawing.Size(68, 32);
@@ -587,13 +592,31 @@
             this.buttonEdit.Visible = false;
             this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(230, 40);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(38, 13);
+            this.label17.TabIndex = 49;
+            this.label17.Text = "Server";
+            // 
+            // comboBoxServerName
+            // 
+            this.comboBoxServerName.FormattingEnabled = true;
+            this.comboBoxServerName.Location = new System.Drawing.Point(232, 56);
+            this.comboBoxServerName.Name = "comboBoxServerName";
+            this.comboBoxServerName.Size = new System.Drawing.Size(198, 21);
+            this.comboBoxServerName.TabIndex = 51;
+            this.comboBoxServerName.Validating += new System.ComponentModel.CancelEventHandler(this.comboBoxServerName_Validating);
+            // 
             // FormCreatureViewEdit
             // 
             this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(593, 518);
+            this.ClientSize = new System.Drawing.Size(593, 568);
             this.Controls.Add(this.buttonEdit);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.buttonCancel);
@@ -665,5 +688,7 @@
         private System.Windows.Forms.Button buttonApplyTraitsFromPasteText;
         private System.Windows.Forms.DateTimePicker dateTimePickerBirthDate;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.ComboBox comboBoxServerName;
     }
 }

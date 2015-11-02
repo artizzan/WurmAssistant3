@@ -139,13 +139,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
 
         static public int GenerateNewCreatureId(GrangerContext context)
         {
-            try
-            {
-                return context.Creatures.Max(x => x.Id) + 1;
-            }
-            catch (InvalidOperationException)
+            if (!context.Creatures.Any())
             {
                 return 1;
+            }
+            else
+            {
+                return context.Creatures.Max(x => x.Id) + 1;
             }
         }
 
@@ -156,7 +156,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
 
         public bool IsDifferentIdentityThan(CreatureEntity otherCreature)
         {
-            return this.Name != otherCreature.Name;
+            return this.Name != otherCreature.Name
+                   && string.Equals(this.ServerName ?? string.Empty,
+                       otherCreature.ServerName ?? string.Empty,
+                       StringComparison.InvariantCultureIgnoreCase);
         }
 
         public string GenderAspect

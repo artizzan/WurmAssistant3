@@ -1,4 +1,4 @@
-﻿namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
+﻿namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Views
 {
     partial class FormGrangerGeneralOptions
     {
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGrangerGeneralOptions));
             this.checkBoxAlwaysUpdateUnlessMultiples = new System.Windows.Forms.CheckBox();
             this.timeSpanInputGroomingTime = new AldursLab.WurmAssistant3.Core.WinForms.TimeSpanInput();
             this.buttonOK = new System.Windows.Forms.Button();
@@ -36,6 +37,7 @@
             this.checkBoxUpdateAgeHealthAllEvents = new System.Windows.Forms.CheckBox();
             this.checkBoxDisableRowColoring = new System.Windows.Forms.CheckBox();
             this.checkBoxAdjustForDarkThemes = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseServerNameAsIdComponent = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // checkBoxAlwaysUpdateUnlessMultiples
@@ -51,7 +53,7 @@
             // 
             // timeSpanInputGroomingTime
             // 
-            this.timeSpanInputGroomingTime.Location = new System.Drawing.Point(11, 185);
+            this.timeSpanInputGroomingTime.Location = new System.Drawing.Point(12, 252);
             this.timeSpanInputGroomingTime.Margin = new System.Windows.Forms.Padding(2);
             this.timeSpanInputGroomingTime.Name = "timeSpanInputGroomingTime";
             this.timeSpanInputGroomingTime.Size = new System.Drawing.Size(231, 45);
@@ -61,7 +63,7 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(221, 252);
+            this.buttonOK.Location = new System.Drawing.Point(221, 349);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(92, 29);
             this.buttonOK.TabIndex = 3;
@@ -72,7 +74,7 @@
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.Location = new System.Drawing.Point(319, 252);
+            this.buttonCancel.Location = new System.Drawing.Point(319, 349);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(92, 29);
             this.buttonCancel.TabIndex = 4;
@@ -83,7 +85,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 170);
+            this.label1.Location = new System.Drawing.Point(9, 237);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(359, 13);
             this.label1.TabIndex = 5;
@@ -121,11 +123,22 @@
     "equired)";
             this.checkBoxAdjustForDarkThemes.UseVisualStyleBackColor = true;
             // 
+            // checkBoxUseServerNameAsIdComponent
+            // 
+            this.checkBoxUseServerNameAsIdComponent.AutoSize = true;
+            this.checkBoxUseServerNameAsIdComponent.Location = new System.Drawing.Point(12, 143);
+            this.checkBoxUseServerNameAsIdComponent.Name = "checkBoxUseServerNameAsIdComponent";
+            this.checkBoxUseServerNameAsIdComponent.Size = new System.Drawing.Size(376, 69);
+            this.checkBoxUseServerNameAsIdComponent.TabIndex = 9;
+            this.checkBoxUseServerNameAsIdComponent.Text = resources.GetString("checkBoxUseServerNameAsIdComponent.Text");
+            this.checkBoxUseServerNameAsIdComponent.UseVisualStyleBackColor = true;
+            // 
             // FormGrangerGeneralOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(423, 293);
+            this.ClientSize = new System.Drawing.Size(423, 390);
+            this.Controls.Add(this.checkBoxUseServerNameAsIdComponent);
             this.Controls.Add(this.checkBoxAdjustForDarkThemes);
             this.Controls.Add(this.checkBoxDisableRowColoring);
             this.Controls.Add(this.checkBoxUpdateAgeHealthAllEvents);
@@ -154,5 +167,6 @@
         private System.Windows.Forms.CheckBox checkBoxUpdateAgeHealthAllEvents;
         private System.Windows.Forms.CheckBox checkBoxDisableRowColoring;
         private System.Windows.Forms.CheckBox checkBoxAdjustForDarkThemes;
+        private System.Windows.Forms.CheckBox checkBoxUseServerNameAsIdComponent;
     }
 }

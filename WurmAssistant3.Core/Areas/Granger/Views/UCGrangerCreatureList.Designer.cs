@@ -89,6 +89,7 @@
             this.olvColumnExactAge = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnBrandedFor = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.olvColumnServer = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -392,6 +393,7 @@
             // objectListView1
             // 
             this.objectListView1.AllColumns.Add(this.olvColumnName);
+            this.objectListView1.AllColumns.Add(this.olvColumnServer);
             this.objectListView1.AllColumns.Add(this.olvColumnHerd);
             this.objectListView1.AllColumns.Add(this.olvColumnBreedValue);
             this.objectListView1.AllColumns.Add(this.olvColumnFather);
@@ -416,6 +418,7 @@
             this.objectListView1.AllowColumnReorder = true;
             this.objectListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnName,
+            this.olvColumnServer,
             this.olvColumnHerd,
             this.olvColumnBreedValue,
             this.olvColumnFather,
@@ -605,6 +608,12 @@
             this.timer1.Interval = 60000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // olvColumnServer
+            // 
+            this.olvColumnServer.AspectName = "ServerAspect";
+            this.olvColumnServer.MinimumWidth = 20;
+            this.olvColumnServer.Text = "Server";
+            // 
             // UCGrangerCreatureList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -686,6 +695,7 @@
         private BrightIdeasSoftware.OLVColumn olvColumnBirthDate;
         private BrightIdeasSoftware.OLVColumn olvColumnExactAge;
         private BrightIdeasSoftware.OLVColumn olvColumnBrandedFor;
+        private BrightIdeasSoftware.OLVColumn olvColumnServer;
 
     }
 }
