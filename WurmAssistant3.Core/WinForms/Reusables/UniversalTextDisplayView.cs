@@ -13,9 +13,14 @@ namespace AldursLab.WurmAssistant3.Core.Root.Views
 {
     public partial class UniversalTextDisplayView : ExtendedForm
     {
-        public UniversalTextDisplayView()
+        public UniversalTextDisplayView(params Button[] extraButtons)
         {
             InitializeComponent();
+
+            foreach (var extraButton in extraButtons)
+            {
+                extraButtonsFlowPanel.Controls.Add(extraButton);
+            }
         }
 
         public string ContentText

@@ -12,6 +12,8 @@ using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Views;
 using AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views;
 using AldursLab.WurmAssistant3.Core.Native.Win32;
+using AldursLab.WurmAssistant3.Core.Properties;
+using AldursLab.WurmAssistant3.Core.Root.Components;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using AldursLab.WurmAssistant3.Core.Root.Views;
 using AldursLab.WurmAssistant3.Core.WinForms;
@@ -144,9 +146,21 @@ namespace AldursLab.WurmAssistant3.Core.Root
 
         bool persistentStateLoaded;
 
-        public MainForm()
+        public MainForm(string[] args)
         {
             InitializeComponent();
+
+            var argsManager = new ConsoleArgsManager(args);
+            if (argsManager.WurmUnlimitedMode)
+            {
+                this.Text = "Wurm Assistant Unlimited";
+                this.Icon = Resources.WurmAssistantUnlimitedIcon;
+                this.systemTrayNotifyIcon.Icon = Resources.WurmAssistantUnlimitedIcon;
+            }
+            else
+            {
+                this.Text = "Wurm Assistant";
+            }
 
             mouseDragManager = new MouseDragManager(this);
             settings = new Settings();
@@ -154,7 +168,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
             minimizationManager = new MinimizationManager(this);
             trayManager = new TrayManager(this);
 
-            bootstrapper = new CoreBootstrapper(this);
+            bootstrapper = new CoreBootstrapper(this, argsManager);
             wurmAssistantConfig = bootstrapper.WurmAssistantConfig;
             logger = bootstrapper.GetCoreLogger();
             InitTimer.Enabled = true;
@@ -235,9 +249,39 @@ namespace AldursLab.WurmAssistant3.Core.Root
                 {
                     bootstrapper.Bootstrap();
                 }
+                catch (ConfigCancelledException)
+                {
+                    Shutdown();
+                }
                 catch (Exception exception)
                 {
-                    var view = new UniversalTextDisplayView()
+                    bool restart = false;
+                    var btn1 = new Button()
+                    {
+                        Text = "Reset Wurm Assistant config",
+                        Height = 28,
+                        Width = 220
+                    };
+                    btn1.Click += (o, args) =>
+                    {
+                        if (bootstrapper.TryResetConfig())
+                        {
+                            MessageBox.Show("Reset complete, please restart.", "Done", MessageBoxButtons.OK);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Reset was not possible.", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    };
+                    var btn2 = new Button()
+                    {
+                        Text = "Restart Wurm Assistant",
+                        Height = 28,
+                        Width = 220,
+                        DialogResult = DialogResult.OK
+                    };
+                    btn2.Click += (o, args) => restart = true;
+                    var view = new UniversalTextDisplayView(btn2, btn1)
                     {
                         Text = "OH NO!!",
                         ContentText =
@@ -245,7 +289,8 @@ namespace AldursLab.WurmAssistant3.Core.Root
                             + Environment.NewLine + exception.ToString()
                     };
                     view.ShowDialog();
-                    Shutdown();
+                    if (restart) Restart();
+                    else Shutdown();
                     return;
                 }
                 finally

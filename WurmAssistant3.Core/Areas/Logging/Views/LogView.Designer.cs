@@ -151,7 +151,7 @@
             this.buyBeerBtn.Name = "buyBeerBtn";
             this.buyBeerBtn.Size = new System.Drawing.Size(94, 34);
             this.buyBeerBtn.TabIndex = 7;
-            this.buyBeerBtn.Text = "Buy Aldy \r\na beer!   ";
+            this.buyBeerBtn.Text = "Buy author \r\na beer!     ";
             this.buyBeerBtn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buyBeerBtn.UseVisualStyleBackColor = true;
             this.buyBeerBtn.Click += new System.EventHandler(this.buyBeerBtn_Click);

@@ -35,7 +35,7 @@
             this.rbOsMac = new System.Windows.Forms.RadioButton();
             this.rbOsLinux = new System.Windows.Forms.RadioButton();
             this.rbOsWindows = new System.Windows.Forms.RadioButton();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelPathDescription = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.btnFindWurmDir = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -44,7 +44,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(375, 244);
+            this.btnOK.Location = new System.Drawing.Point(585, 267);
             this.btnOK.Margin = new System.Windows.Forms.Padding(4);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(100, 28);
@@ -56,7 +56,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(483, 244);
+            this.btnCancel.Location = new System.Drawing.Point(693, 267);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(100, 28);
@@ -66,10 +66,10 @@
             // 
             // wurmOnlineClientDirPath
             // 
-            this.wurmOnlineClientDirPath.Location = new System.Drawing.Point(122, 192);
+            this.wurmOnlineClientDirPath.Location = new System.Drawing.Point(122, 212);
             this.wurmOnlineClientDirPath.Margin = new System.Windows.Forms.Padding(4);
             this.wurmOnlineClientDirPath.Name = "wurmOnlineClientDirPath";
-            this.wurmOnlineClientDirPath.Size = new System.Drawing.Size(461, 23);
+            this.wurmOnlineClientDirPath.Size = new System.Drawing.Size(671, 23);
             this.wurmOnlineClientDirPath.TabIndex = 2;
             // 
             // groupBox1
@@ -122,19 +122,18 @@
             this.rbOsWindows.Text = "Windows";
             this.rbOsWindows.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // labelPathDescription
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 152);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(394, 34);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Choose directory, where wurm online game client is installed, \r\neg. Ubuntu: /Home" +
-    "/MyUbuntu/wurm";
+            this.labelPathDescription.AutoSize = true;
+            this.labelPathDescription.Location = new System.Drawing.Point(12, 155);
+            this.labelPathDescription.Name = "labelPathDescription";
+            this.labelPathDescription.Size = new System.Drawing.Size(156, 51);
+            this.labelPathDescription.TabIndex = 4;
+            this.labelPathDescription.Text = "This label is set in code\r\nline2\r\nline3";
             // 
             // btnFindWurmDir
             // 
-            this.btnFindWurmDir.Location = new System.Drawing.Point(15, 189);
+            this.btnFindWurmDir.Location = new System.Drawing.Point(15, 209);
             this.btnFindWurmDir.Name = "btnFindWurmDir";
             this.btnFindWurmDir.Size = new System.Drawing.Size(100, 29);
             this.btnFindWurmDir.TabIndex = 5;
@@ -148,21 +147,21 @@
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(294, 119);
+            this.textBox1.Size = new System.Drawing.Size(504, 119);
             this.textBox1.TabIndex = 6;
             this.textBox1.TabStop = false;
-            this.textBox1.Text = "Choosing correct operating system will ensure, that Wurm Assistant works correctl" +
-    "y across all its features.\r\n\r\nIf needed, this setup can be run again from Option" +
-    "s menu.";
+            this.textBox1.Text = "Choosing correct operating system will ensure, that Wurm Assistant works well acr" +
+    "oss all its features.\r\n\r\nIf needed, this setup can be run again from Options men" +
+    "u.";
             // 
-            // SetupView
+            // FirstTimeSetupView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(598, 285);
+            this.ClientSize = new System.Drawing.Size(806, 308);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btnFindWurmDir);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelPathDescription);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.wurmOnlineClientDirPath);
             this.Controls.Add(this.btnCancel);
@@ -174,7 +173,8 @@
             this.Name = "FirstTimeSetupView";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Wurm Assistant 3 - First Time Setup";
+            this.Text = "Window title is set in code";
+            this.Load += new System.EventHandler(this.FirstTimeSetupView_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -191,7 +191,7 @@
         private System.Windows.Forms.RadioButton rbOsMac;
         private System.Windows.Forms.RadioButton rbOsLinux;
         private System.Windows.Forms.RadioButton rbOsWindows;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelPathDescription;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button btnFindWurmDir;
         private System.Windows.Forms.TextBox textBox1;

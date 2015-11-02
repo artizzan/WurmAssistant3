@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Modules;
@@ -20,6 +21,26 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config.Views
 
             wurmOnlineClientDirPath.Text = wurmAssistantConfig.WurmGameClientInstallDirectory;
             OperatingSystem = wurmAssistantConfig.RunningPlatform;
+        }
+
+        private void FirstTimeSetupView_Load(object sender, EventArgs e)
+        {
+            if (wurmAssistantConfig.WurmUnlimitedMode)
+            {
+                this.Text = "Wurm Assistant 3 Unlimited - First Time Setup";
+                labelPathDescription.Text = "Choose directory, where Wurm Unlimited game client keeps player data, "
+                                            + Environment.NewLine +
+                                            @"eg. Windows: C:\Games\SteamLibrary\steamapps\common\Wurm Unlimited\WurmLauncher\PlayerFiles";
+            }
+            else
+            {
+
+                this.Text = "Wurm Assistant 3 - First Time Setup";
+                labelPathDescription.Text = "Choose directory, where Wurm Online game client is installed, "
+                                            + Environment.NewLine +
+                                            "eg. Ubuntu: /Home/MyUbuntu/wurm" + Environment.NewLine +
+                                            @"Windows: C:\Games\wurm";
+            }
         }
 
         private Platform OperatingSystem
@@ -72,6 +93,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config.Views
                 MessageBox.Show("Directory does not exist");
                 return;
             }
+            var confirmed = ConfirmDirectory(wurmOnlineClientDirPath.Text);
+            if (!confirmed)
+            {
+                return;
+            }
 
             if (wurmAssistantConfig.WurmGameClientInstallDirectory != wurmOnlineClientDirPath.Text)
             {
@@ -86,6 +112,50 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config.Views
             
 
             this.DialogResult = DialogResult.OK;
+        }
+
+        bool ConfirmDirectory(string directoryPath)
+        {
+            bool valid;
+            string extraInfo = string.Empty;
+            var dir = new DirectoryInfo(directoryPath);
+
+            var configsDirExists = dir.GetDirectories()
+                                      .Any(
+                                          info =>
+                                              info.Name.Equals("configs", StringComparison.InvariantCultureIgnoreCase));
+            var playersDirExists = dir.GetDirectories()
+                                      .Any(
+                                          info =>
+                                              info.Name.Equals("players", StringComparison.InvariantCultureIgnoreCase));
+            var packsDirExists =
+                dir.GetDirectories().Any(info => info.Name.Equals("packs", StringComparison.InvariantCultureIgnoreCase));
+
+            var isProbablyWurmUnlimited = configsDirExists && playersDirExists && !packsDirExists;
+            var isProbablyWurmOnline = configsDirExists && playersDirExists && packsDirExists;
+
+            if (wurmAssistantConfig.WurmUnlimitedMode)
+            {
+                valid = isProbablyWurmUnlimited;
+                if (isProbablyWurmOnline)
+                    extraInfo = " (you have probably chosen Wurm Online directory, instead of Wurm Unlimited)";
+            }
+            else
+            {
+                valid = isProbablyWurmOnline;
+                if (isProbablyWurmUnlimited)
+                    extraInfo = " (you have probably chosen Wurm Unlimited directory, instead of Wurm Online)";
+            }
+
+            if (!valid)
+            {
+                valid = MessageBox.Show("This directory does not appear to be correct. Are you sure?" + extraInfo,
+                "Ops!",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Exclamation) == DialogResult.Yes;
+            }
+
+            return valid;
         }
 
         private void btnFindWurmDir_Click(object sender, EventArgs e)

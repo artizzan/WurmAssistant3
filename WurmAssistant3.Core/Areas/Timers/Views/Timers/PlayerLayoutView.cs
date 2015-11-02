@@ -86,7 +86,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
         {
             string simpleName = serverGroupId;
             bool isServerScoped = false;
-            if (serverGroupId.StartsWith("SERVERSCOPED:"))
+            if (serverGroupId.StartsWith("SERVERSCOPED:", StringComparison.InvariantCultureIgnoreCase))
             {
                 isServerScoped = true;
                 simpleName = serverGroupId.Remove(0, 13);

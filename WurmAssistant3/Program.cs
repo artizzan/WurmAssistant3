@@ -11,13 +11,13 @@ namespace AldursLab.WurmAssistant3
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             try
             {
-                var mainView = new MainForm();
+                var mainView = new MainForm(args);
                 Application.Run(mainView);
             }
             catch (LockFailedException)

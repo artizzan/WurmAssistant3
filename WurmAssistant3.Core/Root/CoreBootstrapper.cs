@@ -38,18 +38,22 @@ namespace AldursLab.WurmAssistant3.Core.Root
         readonly IKernel kernel = new StandardKernel();
 
         readonly MainForm mainForm;
+        readonly ConsoleArgsManager consoleArgs;
         readonly WurmAssistantDataDirectory dataDirectory;
 
-        public CoreBootstrapper([NotNull] MainForm mainForm)
+        public CoreBootstrapper([NotNull] MainForm mainForm, [NotNull] ConsoleArgsManager consoleArgs)
         {
             if (mainForm == null) throw new ArgumentNullException("mainForm");
+            if (consoleArgs == null) throw new ArgumentNullException("consoleArgs");
             this.mainForm = mainForm;
+            this.consoleArgs = consoleArgs;
 
             SetupActivationStrategyComponents();
-            
-            dataDirectory = new WurmAssistantDataDirectory();
+
+            dataDirectory = new WurmAssistantDataDirectory(consoleArgs);
             dataDirectory.Lock();
 
+            kernel.Bind<ConsoleArgsManager>().ToConstant(consoleArgs);
             kernel.Bind<ISuperFactory>().To<SuperFactory>().InSingletonScope();
             kernel.Bind<WurmAssistantConfig, IWurmAssistantConfig>().To<WurmAssistantConfig>().InSingletonScope();
 
@@ -171,6 +175,17 @@ namespace AldursLab.WurmAssistant3.Core.Root
         public ILogger GetCoreLogger()
         {
             return kernel.Get<ILogger>();
+        }
+
+        public bool TryResetConfig()
+        {
+            var settings = kernel.TryGet<WurmAssistantConfig>();
+            if (settings != null)
+            {
+                settings.ReSetupRequested = true;
+                return true;
+            }
+            return false;
         }
     }
 }

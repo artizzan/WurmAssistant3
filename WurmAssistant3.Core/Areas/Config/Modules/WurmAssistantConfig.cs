@@ -1,6 +1,9 @@
+using System;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
+using AldursLab.WurmAssistant3.Core.Root.Components;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Config.Modules
@@ -8,6 +11,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config.Modules
     [PersistentObject("WurmAssistantConfig")]
     public class WurmAssistantConfig : PersistentObjectBase, IWurmAssistantConfig
     {
+        readonly ConsoleArgsManager consoleArgsManager;
+
         [JsonProperty]
         string wurmGameClientInstallDirectory;
 
@@ -23,11 +28,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config.Modules
         [JsonProperty]
         bool minimizeToTrayEnabled;
 
-        public WurmAssistantConfig()
+        public WurmAssistantConfig([NotNull] ConsoleArgsManager consoleArgsManager)
         {
+            if (consoleArgsManager == null) throw new ArgumentNullException("consoleArgsManager");
+            this.consoleArgsManager = consoleArgsManager;
             MinimizeToTrayEnabled = true;
         }
-        
+
         public string WurmGameClientInstallDirectory
         {
             get { return wurmGameClientInstallDirectory; }
@@ -80,6 +87,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config.Modules
         {
             get { return minimizeToTrayEnabled; }
             set { minimizeToTrayEnabled = value; this.FlagAsChanged(); }
+        }
+
+        public bool WurmUnlimitedMode
+        {
+            get { return consoleArgsManager.WurmUnlimitedMode; }
         }
     }
 }

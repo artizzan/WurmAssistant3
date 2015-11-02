@@ -100,6 +100,7 @@
     <Compile Include="Areas\Calendar\Views\SeasonsEditView.Designer.cs">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Areas\Config\Contracts\ConfigCancelledException.cs" />
     <Compile Include="Areas\Config\Contracts\IServersEditorViewFactory.cs" />
     <Compile Include="Areas\Config\Contracts\IWurmAssistantConfig.cs" />
     <Compile Include="Areas\Config\ConfigSetup.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Areas\Granger\Views\ValuePreset\UCGrangerTraitValueEdit.Designer.cs">
       <DependentUpon>UCGrangerTraitValueEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Root\Components\ConsoleArgsManager.cs" />
     <Compile Include="Root\Contracts\ISendBugReportViewFactory.cs" />
     <Compile Include="Root\Views\SendBugReportView.cs">
       <SubType>Form</SubType>
@@ -928,6 +930,8 @@
     <Content Include="ikpMP3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\WurmAssistantUnlimitedIcon.ico" />
+    <None Include="Resources\WurmAssistantUnlimitedIcon.png" />
     <None Include="Resources\ActionQueueModdingHelp.txt" />
     <None Include="Resources\beer.png" />
     <Content Include="Resources\close_icon.gif" />

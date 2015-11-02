@@ -54,7 +54,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config
                 var view = new FirstTimeSetupView(kernel.Get<WurmAssistantConfig>());
                 if (view.ShowDialog() != DialogResult.OK)
                 {
-                    throw new ApplicationException("Configuration dialog was cancelled by user");
+                    throw new ConfigCancelledException("Configuration dialog was cancelled by user");
                 }
                 settings.ReSetupRequested = false;
                 wurmClientInstallDir = new WurmInstallDirectoryOverride();

@@ -14,10 +14,13 @@ namespace AldursLab.WurmAssistant3.Core.Root.Components
         /// <summary>
         /// Prepares data directory and obtains exclusive lock for the directory.
         /// </summary>
+        /// <param name="consoleArgs"></param>
         /// <exception cref="LockFailedException"></exception>
-        public WurmAssistantDataDirectory()
+        public WurmAssistantDataDirectory(ConsoleArgsManager consoleArgs)
         {
-            var dataDirPath = AppPaths.WurmAssistant3.DataDir.FullPath;
+            var dataDirPath = consoleArgs.WurmUnlimitedMode
+                ? AppPaths.WurmAssistantUnlimited.DataDir.FullPath
+                : AppPaths.WurmAssistant3.DataDir.FullPath;
 
             dataDir = new DirectoryInfo(dataDirPath);
             if (!dataDir.Exists) dataDir.Create();

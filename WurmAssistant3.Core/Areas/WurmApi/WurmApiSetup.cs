@@ -12,6 +12,7 @@ using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.WurmApi.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.WurmApi.Modules;
 using AldursLab.WurmAssistant3.Core.IoC;
+using AldursLab.WurmAssistant3.Core.Root.Components;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using JetBrains.Annotations;
 using Ninject;
@@ -22,10 +23,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.WurmApi
     {
         public static void TryAutodetectWurmInstallDir(IKernel kernel)
         {
+            var consoleArgs = kernel.Get<ConsoleArgsManager>();
             try
             {
-                var dir = WurmClientInstallDirectory.AutoDetect();
-                kernel.Bind<IWurmClientInstallDirectory>().ToConstant(dir);
+                if (!consoleArgs.WurmUnlimitedMode)
+                {
+                    var dir = WurmClientInstallDirectory.AutoDetect();
+                    kernel.Bind<IWurmClientInstallDirectory>().ToConstant(dir);
+                }
+                // autodetection is not available for WurmUnlimited
+                // todo: explore how to detect steam library path
             }
             catch (Exception exception)
             {
@@ -53,6 +60,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.WurmApi
 
         static IWurmApi ConstructWurmApi(IKernel kernel)
         {
+            var consoleArgs = kernel.Get<ConsoleArgsManager>();
+
             WurmAssistantConfig config = kernel.Get<WurmAssistantConfig>();
             IWurmApiLoggerFactory loggerFactory = kernel.Get<IWurmApiLoggerFactory>();
             IWurmAssistantDataDirectory dataDirectory = kernel.Get<IWurmAssistantDataDirectory>();
@@ -68,6 +77,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.WurmApi
                 {
                     Platform = config.RunningPlatform,
                     ClearAllCaches = config.DropAllWurmApiCachesToggle,
+                    WurmUnlimitedMode = consoleArgs.WurmUnlimitedMode
                 };
                 serverInfoManager.UpdateWurmApiConfigDictionary(wurmApiConfig.ServerInfoMap);
             }
