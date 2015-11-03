@@ -4,16 +4,31 @@ using System.Windows.Forms;
 using AldursLab.Essentials.Configs;
 using AldursLab.WurmAssistant.Launcher.Core;
 using AldursLab.WurmAssistant.Launcher.Properties;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant.Launcher
 {
     public partial class MainForm : Form, IGuiHost
     {
-        string[] args;
+        readonly string[] args;
+        readonly bool attemptBetaIfNoStable = false;
 
         public MainForm(string[] args)
         {
             this.args = args ?? new string[0];
+
+            if (this.args.Length == 0)
+            {
+                // if no explicit arguments, choose default release channel for this version
+#if CLICKONCEWO
+                this.args = new[] { "stable-win" };
+                attemptBetaIfNoStable = true;
+#elif CLICKONCEWU
+                this.args = new[] { "stable-win", "-WurmUnlimited" };
+                attemptBetaIfNoStable = true;
+#endif
+            }
+
             InitializeComponent();
             ShowInTaskbar = true;
         }
@@ -28,20 +43,8 @@ namespace AldursLab.WurmAssistant.Launcher
                 throw new NullReferenceException("assemblyDir is null");
             }
 
-            bool attemptBetaIfNoStable = false;
-
-#if CLICKONCEWO
-            args = new[] { "stable-win" };
-            attemptBetaIfNoStable = true;
-#elif CLICKONCEWU
-            args = new[] { "stable-win", "-WurmUnlimited" };
-            attemptBetaIfNoStable = true;
-#endif
-
             var wurmUnlimitedMode =
-                args.Length > 1
-                    ? args[1].Equals("-WurmUnlimited", StringComparison.InvariantCultureIgnoreCase)
-                    : false;
+                args.Length > 1 && args[1].Equals("-WurmUnlimited", StringComparison.InvariantCultureIgnoreCase);
 
             var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string rootDir;
