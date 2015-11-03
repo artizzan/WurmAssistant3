@@ -281,7 +281,14 @@ namespace AldursLab.WurmAssistant3.Core.Root
                         DialogResult = DialogResult.OK
                     };
                     btn2.Click += (o, args) => restart = true;
-                    var view = new UniversalTextDisplayView(btn2, btn1)
+                    var btn3 = new Button()
+                    {
+                        Text = "Close Wurm Assistant",
+                        Height = 28,
+                        Width = 220,
+                        DialogResult = DialogResult.OK
+                    };
+                    var view = new UniversalTextDisplayView(btn3, btn2, btn1)
                     {
                         Text = "OH NO!!",
                         ContentText =

@@ -14,9 +14,15 @@ namespace AldursLab.WurmAssistant.Launcher.Core
         public void Start(string filePath, string args)
         {
             string pathPart = string.Format("\"{0}\"", filePath);
-            string argsPart = (args != null && args.Any()) ? (" " + args) : string.Empty;
 
-            Process.Start(pathPart + argsPart);
+            if (args != null)
+            {
+                Process.Start(pathPart, args);
+            }
+            else
+            {
+                Process.Start(pathPart);
+            }
         }
     }
 }

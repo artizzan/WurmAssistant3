@@ -103,8 +103,33 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                         }
                         else
                         {
-                            wasError = true;
-                            gui.AddUserMessage(string.Format("No build found for build code: {0}", config.BuildCode), Color.Red);
+                            if (config.BuildCode.StartsWith("stable", StringComparison.InvariantCultureIgnoreCase)
+                                && config.AttemptBetaIfNoStable)
+                            {
+                                gui.AddUserMessage(
+                                    string.Format("No build found for build code: {0}. Trying latest beta build.",
+                                        config.BuildCode),
+                                    Color.Orange);
+                                latestBuildNumber = await wurmAssistantService.GetLatestVersionAsync(gui, "beta");
+                                if (!string.IsNullOrEmpty(latestBuildNumber))
+                                {
+                                    gui.AddUserMessage(
+                                        string.Format("Beta build found. Continuing...",
+                                            config.BuildCode),
+                                        Color.Orange);
+                                    targetVersion = new Wa3VersionInfo("beta", latestBuildNumber);
+                                }
+                                else
+                                {
+                                    wasError = true;
+                                    gui.AddUserMessage(string.Format("No build found for build code: {0}", config.BuildCode), Color.Red);
+                                }
+                            }
+                            else
+                            {
+                                wasError = true;
+                                gui.AddUserMessage(string.Format("No build found for build code: {0}", config.BuildCode), Color.Red);
+                            }
                         }
                     }
                     catch (Exception exception)
@@ -276,7 +301,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
             if (installLocation == null) throw new ArgumentNullException("installLocation");
             try
             {
-                installLocation.RunWurmAssistant();
+                installLocation.RunWurmAssistant(config.WurmUnlimitedMode ? "-WurmUnlimited" : null);
                 return true;
             }
             catch (Exception exception)
@@ -296,5 +321,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
         public string WurmAssistantExeFileName { get; set; }
         public string BuildCode { get; set; }
         [CanBeNull] public string BuildNumber { get; set; }
+        public bool WurmUnlimitedMode { get; set; }
+        public bool AttemptBetaIfNoStable { get; set; }
     }
 }

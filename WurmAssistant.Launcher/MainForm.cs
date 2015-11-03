@@ -3,12 +3,13 @@ using System.IO;
 using System.Windows.Forms;
 using AldursLab.Essentials.Configs;
 using AldursLab.WurmAssistant.Launcher.Core;
+using AldursLab.WurmAssistant.Launcher.Properties;
 
 namespace AldursLab.WurmAssistant.Launcher
 {
     public partial class MainForm : Form, IGuiHost
     {
-        readonly string[] args;
+        string[] args;
 
         public MainForm(string[] args)
         {
@@ -27,10 +28,35 @@ namespace AldursLab.WurmAssistant.Launcher
                 throw new NullReferenceException("assemblyDir is null");
             }
 
-            this.Text = "Wurm Assistant 3 Launcher";
+            bool attemptBetaIfNoStable = false;
+
+#if CLICKONCEWO
+            args = new[] { "stable-win" };
+            attemptBetaIfNoStable = true;
+#elif CLICKONCEWU
+            args = new[] { "stable-win", "-WurmUnlimited" };
+            attemptBetaIfNoStable = true;
+#endif
+
+            var wurmUnlimitedMode =
+                args.Length > 1
+                    ? args[1].Equals("-WurmUnlimited", StringComparison.InvariantCultureIgnoreCase)
+                    : false;
 
             var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var rootDir = Path.Combine(localAppData, "AldursLab", "WurmAssistant3");
+            string rootDir;
+
+            if (wurmUnlimitedMode)
+            {
+                this.Text = "Wurm Assistant Unlimited Launcher";
+                this.Icon = Resources.WurmAssistantUnlimitedIcon;
+                rootDir = Path.Combine(localAppData, "AldursLab", "WurmAssistant3Unlimited");
+            }
+            else
+            {
+                this.Text = "Wurm Assistant 3 Launcher";
+                rootDir = Path.Combine(localAppData, "AldursLab", "WurmAssistant3");
+            }
 
             var config = new ControllerConfig()
             {
@@ -38,7 +64,8 @@ namespace AldursLab.WurmAssistant.Launcher
                 WebServiceRootUrl = Properties.Settings.Default.WurmAssistantWebServiceUrl,
                 WurmAssistantExeFileName = "AldursLab.WurmAssistant3.exe",
                 BuildCode = args.Length > 0 ? args[0] : "stable-win",
-                BuildNumber = args.Length > 1 ? args[1] : null
+                WurmUnlimitedMode = wurmUnlimitedMode,
+                AttemptBetaIfNoStable = attemptBetaIfNoStable
             };
 
             IDebug debug = new TextDebug(Path.Combine(config.RootDirFullPath, "Launcher", "debug.txt"));

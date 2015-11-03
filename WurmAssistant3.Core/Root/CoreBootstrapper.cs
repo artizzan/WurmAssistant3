@@ -105,6 +105,11 @@ namespace AldursLab.WurmAssistant3.Core.Root
 
         public void Bootstrap()
         {
+            if (consoleArgs.InvalidCmdLineArgs)
+            {
+                throw new ApplicationException("invalid command line arguments: " + string.Join(" | ", consoleArgs.GetRawArgs()));
+            }
+
             WurmApiSetup.TryAutodetectWurmInstallDir(kernel);
             
             // this is where 'first time' config dialog is shown, if required
