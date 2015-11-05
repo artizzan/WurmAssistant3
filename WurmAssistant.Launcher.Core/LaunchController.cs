@@ -60,7 +60,8 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                 launcher = new Launcher(Path.Combine(config.RootDirFullPath, "Launcher"));
                 installLocation = new InstallLocation(Path.Combine(config.RootDirFullPath, "Bin"),
                     config.WurmAssistantExeFileName,
-                    new ProcessRunner());
+                    new ProcessRunner(),
+                    BuildDataDirLockFilePath());
 
                 launcher.EnterLock();
 
@@ -220,6 +221,20 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                 }
                 gui.DisableSkip();
             }
+        }
+
+        private string BuildDataDirLockFilePath()
+        {
+            string basePath;
+            if (config.WurmUnlimitedMode)
+            {
+                basePath = AppPaths.WurmAssistantUnlimited.DataDir.FullPath;
+            }
+            else
+            {
+                basePath = AppPaths.WurmAssistant3.DataDir.FullPath;
+            }
+            return Path.Combine(basePath, AppPaths.LockFileRelativePath);
         }
 
         void TryInstallFromStage(IStagingLocation stagingLocation, IInstallLocation installLocation)

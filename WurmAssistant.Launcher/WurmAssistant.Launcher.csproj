@@ -27,10 +27,10 @@
     <InstallUrl>http://resources.aldurslab.net/WA3-stable-launcher-clickonce/</InstallUrl>
     <ProductName>Wurm Assistant 3 Launcher</ProductName>
     <PublisherName>Aldur%27s Lab</PublisherName>
-    <MinimumRequiredVersion>1.0.0.8</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.0.9</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationRevision>10</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

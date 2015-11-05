@@ -23,19 +23,23 @@ namespace AldursLab.WurmAssistant.Launcher.Core
         readonly string installDirPath;
         readonly string wurmAssistantExeFileName;
         readonly IProcessRunner processRunner;
+        private readonly string dataDirLockFilePath;
 
         FileLock wa3AppLock;
 
-        public InstallLocation(string installDirPath, string wurmAssistantExeFileName, IProcessRunner processRunner)
+        public InstallLocation(string installDirPath, string wurmAssistantExeFileName, IProcessRunner processRunner,
+            [NotNull] string dataDirLockFilePath)
         {
             if (installDirPath == null)
                 throw new ArgumentNullException("installDirPath");
             if (wurmAssistantExeFileName == null) throw new ArgumentNullException("wurmAssistantExeFileName");
             if (processRunner == null) throw new ArgumentNullException("processRunner");
+            if (dataDirLockFilePath == null) throw new ArgumentNullException("dataDirLockFilePath");
 
             this.installDirPath = installDirPath;
             this.wurmAssistantExeFileName = wurmAssistantExeFileName;
             this.processRunner = processRunner;
+            this.dataDirLockFilePath = dataDirLockFilePath;
 
             if (!Path.IsPathRooted(installDirPath))
             {
@@ -88,7 +92,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
         {
             if (wa3AppLock == null)
             {
-                wa3AppLock = FileLock.EnterWithCreate(AppPaths.WurmAssistant3.DataDir.LockFilePath);
+                wa3AppLock = FileLock.EnterWithCreate(dataDirLockFilePath);
             }
         }
 
