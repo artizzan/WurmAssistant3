@@ -9,13 +9,13 @@ namespace AldursLab.WurmAssistant.Shared
 {
     public static class AppPaths
     {
+        public static string LockFileRelativePath = "app.lock";
+
         public static class WurmAssistant3
         {
             public static class DataDir
             {
                 public static string FullPath { get; private set; }
-                public static string LockFilePath { get; private set; }
-
                 static DataDir()
                 {
                     FullPath =
@@ -23,7 +23,6 @@ namespace AldursLab.WurmAssistant.Shared
                             System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
                             "AldursLab",
                             "WurmAssistantData");
-                    LockFilePath = Path.Combine(FullPath, "app.lock");
                 }
             }
         }
@@ -33,8 +32,6 @@ namespace AldursLab.WurmAssistant.Shared
             public static class DataDir
             {
                 public static string FullPath { get; private set; }
-                public static string LockFilePath { get; private set; }
-
                 static DataDir()
                 {
                     FullPath =
@@ -42,7 +39,6 @@ namespace AldursLab.WurmAssistant.Shared
                             System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
                             "AldursLab",
                             "WurmAssistantUnlimitedData");
-                    LockFilePath = Path.Combine(FullPath, "app.lock");
                 }
             }
         }

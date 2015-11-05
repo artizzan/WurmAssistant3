@@ -35,7 +35,7 @@ namespace AldursLab.WurmAssistant3.Core.Root.Components
                 return;
             }
 
-            var lockFile = new FileInfo(AppPaths.WurmAssistant3.DataDir.LockFilePath);
+            var lockFile = new FileInfo(Path.Combine(dataDir.FullName, AppPaths.LockFileRelativePath));
             if (!lockFile.Exists)
             {
                 try
