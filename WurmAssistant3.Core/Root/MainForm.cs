@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.PersistentObjects;
@@ -26,7 +27,8 @@ namespace AldursLab.WurmAssistant3.Core.Root
     [PersistentObject("MainForm")]
     public partial class MainForm : PersistentForm, IUpdateLoop, IHostEnvironment, ISystemTrayContextMenu
     {
-        readonly MouseDragManager mouseDragManager;
+        private readonly string[] args;
+        MouseDragManager mouseDragManager;
 
         [JsonObject(MemberSerialization.OptIn)]
         class Settings
@@ -131,51 +133,68 @@ namespace AldursLab.WurmAssistant3.Core.Root
             }
         }
 
-        readonly ILogger logger;
+        ILogger logger;
 
-        readonly CoreBootstrapper bootstrapper;
+        CoreBootstrapper bootstrapper;
         bool bootstrapped = false;
 
-        readonly IWurmAssistantConfig wurmAssistantConfig;
+        IWurmAssistantConfig wurmAssistantConfig;
 
-        readonly MinimizationManager minimizationManager;
-        readonly TrayManager trayManager;
+        MinimizationManager minimizationManager;
+        TrayManager trayManager;
 
         [JsonProperty]
-        readonly Settings settings;
+        Settings settings;
 
         bool persistentStateLoaded;
 
         public MainForm(string[] args)
         {
+            if (args == null) throw new ArgumentNullException("args");
+            this.args = args;
             InitializeComponent();
+        }
 
-            var argsManager = new ConsoleArgsManager(args);
-            if (argsManager.WurmUnlimitedMode)
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            try
             {
-                this.Text = "Wurm Assistant Unlimited";
-                this.Icon = Resources.WurmAssistantUnlimitedIcon;
-                this.systemTrayNotifyIcon.Icon = Resources.WurmAssistantUnlimitedIcon;
+                var argsManager = new ConsoleArgsManager(args);
+                if (argsManager.WurmUnlimitedMode)
+                {
+                    this.Text = "Wurm Assistant Unlimited";
+                    this.Icon = Resources.WurmAssistantUnlimitedIcon;
+                    this.systemTrayNotifyIcon.Icon = Resources.WurmAssistantUnlimitedIcon;
+                }
+                else
+                {
+                    this.Text = "Wurm Assistant";
+                }
+
+                mouseDragManager = new MouseDragManager(this);
+                settings = new Settings();
+
+                minimizationManager = new MinimizationManager(this);
+                trayManager = new TrayManager(this);
+
+                bootstrapper = new CoreBootstrapper(this, argsManager);
+                wurmAssistantConfig = bootstrapper.WurmAssistantConfig;
+                logger = bootstrapper.GetCoreLogger();
+
+                trayManager.SetupTrayContextMenu();
+
+                systemTrayNotifyIcon.Visible = true;
+
+                InitTimer.Enabled = true;
             }
-            else
+            catch (Exception exception)
             {
-                this.Text = "Wurm Assistant";
+                var view = new UniversalTextDisplayView();
+                view.Text = "Wurm Assistant - ERROR";
+                view.ContentText = exception.ToString();
+                view.ShowDialog();
+                Shutdown();
             }
-
-            mouseDragManager = new MouseDragManager(this);
-            settings = new Settings();
-
-            minimizationManager = new MinimizationManager(this);
-            trayManager = new TrayManager(this);
-
-            bootstrapper = new CoreBootstrapper(this, argsManager);
-            wurmAssistantConfig = bootstrapper.WurmAssistantConfig;
-            logger = bootstrapper.GetCoreLogger();
-            InitTimer.Enabled = true;
-
-            trayManager.SetupTrayContextMenu();
-
-            systemTrayNotifyIcon.Visible = true;
         }
 
         protected override void OnPersistentDataLoaded()
@@ -198,8 +217,6 @@ namespace AldursLab.WurmAssistant3.Core.Root
                     Height = settings.SavedHeight,
                     Width = settings.SavedWidth
                 };
-                //this.Width = settings.SavedWidth;
-                //this.Height = settings.SavedHeight;
             }
         }
 

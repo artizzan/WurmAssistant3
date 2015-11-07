@@ -10,6 +10,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
     [JsonObject(MemberSerialization.OptIn)]
     public class CreatureEntity
     {
+        [JsonProperty]
+        public Guid GlobalId = Guid.NewGuid();
         //primary key
         [JsonProperty("id")]
         public int Id;

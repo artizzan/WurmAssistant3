@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
@@ -6,6 +7,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
     [JsonObject(MemberSerialization.OptIn)]
     public class HerdEntity
     {
+        [JsonProperty]
+        public Guid GlobalId = Guid.NewGuid();
+
         //primary key
         [JsonProperty("herdId")]
         public string HerdID;
