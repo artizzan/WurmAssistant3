@@ -14,6 +14,7 @@ using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Properties;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using JetBrains.Annotations;
+using WurmAssistantDataTransfer.Dtos;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 {
@@ -127,6 +128,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         {
             await Task.FromResult(true);
         }
+
+        public void PopulateDto(WurmAssistantDto dto)
+        {
+        }
+
+        public void ImportFromDto(WurmAssistantDto dto)
+        {
+        }
+
+        public int DataImportOrder { get { return 0; } }
 
         #endregion IFeature
     }

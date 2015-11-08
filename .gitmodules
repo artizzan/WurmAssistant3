@@ -4,3 +4,6 @@
 [submodule "WurmApi"]
 	path = WurmApi
 	url = https://github.com/PeterAldur/WurmApi
+[submodule "WurmAssistantDataTransfer"]
+	path = WurmAssistantDataTransfer
+	url = https://github.com/PeterAldur/WurmAssistantDataTransfer

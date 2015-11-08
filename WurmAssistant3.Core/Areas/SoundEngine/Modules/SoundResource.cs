@@ -15,11 +15,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
         float adjustedVolume;
         Guid id;
 
-        public SoundResource()
+        public SoundResource(Guid? id = null)
         {
             AdjustedVolume = 0.5f;
             FileFullName = string.Empty;
-            id = Guid.NewGuid();
+            this.id = id ?? Guid.NewGuid();
         }
 
         public string FileFullName
@@ -31,6 +31,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
                 fileFullName = value ?? string.Empty;
             }
         }
+
+        public bool IsNull { get { return false; } }
 
         public float AdjustedVolume
         {
@@ -72,5 +74,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
         public string Name { get { return "none"; } }
         public float AdjustedVolume { get { return 0; } }
         public string FileFullName { get { return string.Empty; } }
+        public bool IsNull { get { return true; }}
     }
 }

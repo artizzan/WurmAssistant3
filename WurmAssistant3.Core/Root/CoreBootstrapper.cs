@@ -21,6 +21,7 @@ using AldursLab.WurmAssistant3.Core.Areas.SoundEngine;
 using AldursLab.WurmAssistant3.Core.Areas.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers;
+using AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport;
 using AldursLab.WurmAssistant3.Core.Areas.WurmApi;
 using AldursLab.WurmAssistant3.Core.IoC;
 using AldursLab.WurmAssistant3.Core.Root.Components;
@@ -122,6 +123,8 @@ namespace AldursLab.WurmAssistant3.Core.Root
 
             TrayPopupsSetup.BindTrayPopups(kernel);
             SoundEngineSetup.BindSoundEngine(kernel);
+
+            Wa2DataImportSetup.Bind(kernel);
 
             LogSearcherSetup.BindLogSearcher(kernel);
             CalendarSetup.BindCalendar(kernel);

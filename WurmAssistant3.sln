@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3.Core", "WurmAssistant3.Core\WurmAssistant3.Core.csproj", "{DA679803-09BD-4D44-9C0B-2DCC4D179F6B}"
 EndProject
@@ -38,10 +38,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Performance1.psess = Performance1.psess
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataTransfer", "DataTransfer", "{F1822F63-F88F-46C0-B418-C381F194896E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistantDataTransfer", "WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.csproj", "{C2591795-C58C-4B9A-A1DD-38669C0B0B3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistantDataTransfer.Dtos", "WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.Dtos\WurmAssistantDataTransfer.Dtos.csproj", "{C8867A15-9144-48FD-8816-0283FDB38C6B}"
+EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -99,6 +102,14 @@ Global
 		{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2591795-C58C-4B9A-A1DD-38669C0B0B3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2591795-C58C-4B9A-A1DD-38669C0B0B3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2591795-C58C-4B9A-A1DD-38669C0B0B3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2591795-C58C-4B9A-A1DD-38669C0B0B3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8867A15-9144-48FD-8816-0283FDB38C6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8867A15-9144-48FD-8816-0283FDB38C6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8867A15-9144-48FD-8816-0283FDB38C6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8867A15-9144-48FD-8816-0283FDB38C6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,5 +124,10 @@ Global
 		{65549F72-59C5-416A-8B71-5757BAE8B35D} = {1038DFDD-F4C9-4DBA-A83F-59CDF1D37EF9}
 		{D5FCD526-1C19-410F-8CE4-2B4C4C5B12CA} = {A2CD4209-4E7D-4F53-AF08-15E8E7DE8324}
 		{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9} = {1038DFDD-F4C9-4DBA-A83F-59CDF1D37EF9}
+		{C2591795-C58C-4B9A-A1DD-38669C0B0B3D} = {F1822F63-F88F-46C0-B418-C381F194896E}
+		{C8867A15-9144-48FD-8816-0283FDB38C6B} = {F1822F63-F88F-46C0-B418-C381F194896E}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

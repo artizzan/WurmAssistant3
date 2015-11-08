@@ -31,6 +31,7 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modifyServersListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.officialForumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wikiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,7 +41,8 @@
             this.donatorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.roadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewRoadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.modifyServersListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.importDataFromWa2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,7 +63,9 @@
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.changeSettingsToolStripMenuItem,
-            this.modifyServersListToolStripMenuItem});
+            this.modifyServersListToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.importDataFromWa2ToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -69,9 +73,16 @@
             // changeSettingsToolStripMenuItem
             // 
             this.changeSettingsToolStripMenuItem.Name = "changeSettingsToolStripMenuItem";
-            this.changeSettingsToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.changeSettingsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.changeSettingsToolStripMenuItem.Text = "Change settings";
             this.changeSettingsToolStripMenuItem.Click += new System.EventHandler(this.changeSettingsToolStripMenuItem_Click);
+            // 
+            // modifyServersListToolStripMenuItem
+            // 
+            this.modifyServersListToolStripMenuItem.Name = "modifyServersListToolStripMenuItem";
+            this.modifyServersListToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.modifyServersListToolStripMenuItem.Text = "Modify servers list";
+            this.modifyServersListToolStripMenuItem.Click += new System.EventHandler(this.modifyServersListToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -142,12 +153,17 @@
             this.viewRoadmapToolStripMenuItem.Text = "View roadmap";
             this.viewRoadmapToolStripMenuItem.Click += new System.EventHandler(this.viewRoadmapToolStripMenuItem_Click);
             // 
-            // modifyServersListToolStripMenuItem
+            // toolStripSeparator1
             // 
-            this.modifyServersListToolStripMenuItem.Name = "modifyServersListToolStripMenuItem";
-            this.modifyServersListToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-            this.modifyServersListToolStripMenuItem.Text = "Modify servers list";
-            this.modifyServersListToolStripMenuItem.Click += new System.EventHandler(this.modifyServersListToolStripMenuItem_Click);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(193, 6);
+            // 
+            // importDataFromWa2ToolStripMenuItem
+            // 
+            this.importDataFromWa2ToolStripMenuItem.Name = "importDataFromWa2ToolStripMenuItem";
+            this.importDataFromWa2ToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.importDataFromWa2ToolStripMenuItem.Text = "Import data from WA 2";
+            this.importDataFromWa2ToolStripMenuItem.Click += new System.EventHandler(this.importDataFromWa2ToolStripMenuItem_Click);
             // 
             // MenuView
             // 
@@ -178,5 +194,7 @@
         private System.Windows.Forms.ToolStripMenuItem roadmapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewRoadmapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem modifyServersListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem importDataFromWa2ToolStripMenuItem;
     }
 }

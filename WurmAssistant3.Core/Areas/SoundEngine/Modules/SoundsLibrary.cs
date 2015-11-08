@@ -13,6 +13,7 @@ using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Ninject;
+using WurmAssistantDataTransfer.Dtos;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
 {
@@ -25,12 +26,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
         [JsonProperty] 
         readonly Dictionary<Guid, SoundResource> soundResources = new Dictionary<Guid, SoundResource>();
 
+        private readonly string tempSoundsDirPath;
+
         public SoundsLibrary([NotNull] string soundFilesPath, [NotNull] ILogger logger)
         {
             if (soundFilesPath == null) throw new ArgumentNullException("soundFilesPath");
             if (logger == null) throw new ArgumentNullException("logger");
             this.soundFilesPath = soundFilesPath;
             this.logger = logger;
+
+            tempSoundsDirPath = Path.Combine(soundFilesPath, "Temp");
 
             var dirInfo = new DirectoryInfo(soundFilesPath);
             if (!dirInfo.Exists)
@@ -41,9 +46,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
 
         public event EventHandler<EventArgs> SoundsChanged;
 
-        public void Import(string fileFullPath)
+        public ISoundResource Import(string fileFullPath)
         {
-            var resource = new SoundResource();
+            return ImportInternal(fileFullPath);
+        }
+
+        private ISoundResource ImportInternal(string fileFullPath, Guid? id = null)
+        {
+            if (id != null && soundResources.ContainsKey(id.Value))
+            {
+                throw new ArgumentException(string.Format("Sound with id {0} already exists", id));
+            }
+
+            var resource = new SoundResource(id);
             var sourceFile = new FileInfo(fileFullPath);
             if (!sourceFile.Exists)
             {
@@ -57,6 +72,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
             soundResources.Add(resource.Id, resource);
             FlagAsChanged();
             OnSoundsChanged();
+            return resource;
         }
 
         public void Rename(ISoundResource resource, string newName)
@@ -109,6 +125,57 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
         public ICollection<ISoundResource> GetAllSounds()
         {
             return soundResources.Values.ToArray();
+        }
+
+        public ISoundResource TryGetFirstSoundMatchingName(string name)
+        {
+            return
+                soundResources.Values.FirstOrDefault(
+                    resource => resource.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public void AddSoundSkipId(Sound sound)
+        {
+            AddSoundInternal(sound, true);
+        }
+
+        public void AddSound(Sound sound)
+        {
+            AddSoundInternal(sound, false);
+        }
+
+        private void AddSoundInternal(Sound sound, bool skipGlobalId)
+        {
+            if (!skipGlobalId && sound.Id != null && soundResources.ContainsKey(sound.Id.Value))
+            {
+                throw new ArgumentException(string.Format("sound with id {0} already exists", sound.Id));
+            }
+
+            try
+            {
+                PrepareTempDir();
+                var soundFilePath = Path.Combine(tempSoundsDirPath, sound.FileNameWithExt);
+                File.WriteAllBytes(soundFilePath, sound.FileData);
+                var resource = ImportInternal(soundFilePath, skipGlobalId ? null : sound.Id);
+                Rename(resource, sound.Name);
+            }
+            finally
+            {
+                ClearTempDir();
+            }
+        }
+
+        void PrepareTempDir()
+        {
+            ClearTempDir();
+            var directory = new DirectoryInfo(tempSoundsDirPath);
+            directory.Create();
+        }
+
+        void ClearTempDir()
+        {
+            var directory = new DirectoryInfo(tempSoundsDirPath);
+            if (directory.Exists) directory.Delete(true);
         }
 
         protected virtual void OnSoundsChanged()

@@ -15,6 +15,7 @@ using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Ninject;
+using WurmAssistantDataTransfer.Dtos;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
 {
@@ -157,6 +158,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
         {
             await Task.Delay(0);
         }
+
+        public void PopulateDto(WurmAssistantDto dto)
+        {
+        }
+
+        public void ImportFromDto(WurmAssistantDto dto)
+        {
+        }
+
+        public int DataImportOrder { get { return 0; } }
 
         #endregion
     }

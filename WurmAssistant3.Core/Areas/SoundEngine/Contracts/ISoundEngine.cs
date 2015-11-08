@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WurmAssistantDataTransfer.Dtos;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts
 {
@@ -33,6 +34,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts
         float GlobalVolume { get; set; }
 
         ISoundResource GetSoundById(Guid soundId);
+
+        ISoundResource GetFirstSoundByName(string name);
+
+        /// <exception cref="ArgumentException">Sound with this Id already exists.</exception>
+        void AddSound(Sound sound);
+
+        void AddSoundAsNewId(Sound sound);
     }
 
     public class ChooseSoundResult

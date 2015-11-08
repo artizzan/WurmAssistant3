@@ -13,6 +13,7 @@ using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Properties;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
+using WurmAssistantDataTransfer.Dtos;
 using ILogger = AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts.ILogger;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
@@ -77,6 +78,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
             // no initialization required
             await Task.FromResult(true);
         }
+
+        public void PopulateDto(WurmAssistantDto dto)
+        {
+        }
+
+        public void ImportFromDto(WurmAssistantDto dto)
+        {
+        }
+
+        public int DataImportOrder { get { return 0; } }
 
         #endregion
 

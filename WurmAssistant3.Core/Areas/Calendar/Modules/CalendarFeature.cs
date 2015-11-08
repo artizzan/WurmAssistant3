@@ -16,6 +16,7 @@ using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Ninject;
+using WurmAssistantDataTransfer.Dtos;
 using ILogger = AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts.ILogger;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
@@ -366,6 +367,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
             // no initialization required
             await Task.FromResult(true);
         }
+
+        public void PopulateDto(WurmAssistantDto dto)
+        {
+        }
+
+        public void ImportFromDto(WurmAssistantDto dto)
+        {
+        }
+
+        public int DataImportOrder { get { return 0; } }
 
         #endregion
 

@@ -45,8 +45,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Ninject-3.2.0.0-release-mono-4.0\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="ObjectListView">
-      <HintPath>..\lib\ObjectListView\ObjectListView.dll</HintPath>
+    <Reference Include="ObjectListView, Version=2.9.0.25611, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
+      <HintPath>..\packages\ObjectListView.Official.2.9.0\lib\net20\ObjectListView.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -118,6 +119,24 @@
     </Compile>
     <Compile Include="Areas\Config\Views\SettingsEditView.Designer.cs">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Wa2DataImport\Contracts\IWa2DataImporter.cs" />
+    <Compile Include="Areas\Wa2DataImport\Contracts\DataImportViewFactory.cs" />
+    <Compile Include="Areas\Wa2DataImport\Wa2DataImportSetup.cs" />
+    <Compile Include="Areas\Wa2DataImport\Modules\Wa2DataImporter.cs" />
+    <Compile Include="Areas\Wa2DataImport\Modules\ImportItem.cs" />
+    <Compile Include="Areas\Wa2DataImport\Modules\MergeResult.cs" />
+    <Compile Include="Areas\Wa2DataImport\Views\Wa2DataImportView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Wa2DataImport\Views\Wa2DataImportView.Designer.cs">
+      <DependentUpon>Wa2DataImportView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Wa2DataImport\Views\ImportMergeAssistantView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Wa2DataImport\Views\ImportMergeAssistantView.Designer.cs">
+      <DependentUpon>ImportMergeAssistantView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Features\Contracts\IFeature.cs" />
     <Compile Include="Areas\Features\Contracts\IFeaturesManager.cs" />
@@ -710,6 +729,14 @@
       <Project>{2375aa6c-6b2c-4c4e-8cf0-8b3c1d406aea}</Project>
       <Name>WurmAssistant.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.Dtos\WurmAssistantDataTransfer.Dtos.csproj">
+      <Project>{c8867a15-9144-48fd-8816-0283fdb38c6b}</Project>
+      <Name>WurmAssistantDataTransfer.Dtos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.csproj">
+      <Project>{c2591795-c58c-4b9a-a1dd-38669c0b0b3d}</Project>
+      <Name>WurmAssistantDataTransfer</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Areas\Calendar\Views\FormCalendar.resx">
@@ -726,6 +753,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Config\Views\SettingsEditView.resx">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Wa2DataImport\Views\Wa2DataImportView.resx">
+      <DependentUpon>Wa2DataImportView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Wa2DataImport\Views\ImportMergeAssistantView.resx">
+      <DependentUpon>ImportMergeAssistantView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Granger\Views\Advisor\Default\BreedingEvaluatorDefaultConfig.resx">
       <DependentUpon>BreedingEvaluatorDefaultConfig.cs</DependentUpon>

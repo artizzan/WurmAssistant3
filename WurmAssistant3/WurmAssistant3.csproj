@@ -73,6 +73,10 @@
       <HintPath>..\packages\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ObjectListView, Version=2.9.0.25611, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
+      <HintPath>..\packages\ObjectListView.Official.2.9.0\lib\net20\ObjectListView.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -135,6 +139,14 @@
     <ProjectReference Include="..\WurmAssistant3.Core\WurmAssistant3.Core.csproj">
       <Project>{da679803-09bd-4d44-9c0b-2dcc4d179f6b}</Project>
       <Name>WurmAssistant3.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.Dtos\WurmAssistantDataTransfer.Dtos.csproj">
+      <Project>{c8867a15-9144-48fd-8816-0283fdb38c6b}</Project>
+      <Name>WurmAssistantDataTransfer.Dtos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.csproj">
+      <Project>{c2591795-c58c-4b9a-a1dd-38669c0b0b3d}</Project>
+      <Name>WurmAssistantDataTransfer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

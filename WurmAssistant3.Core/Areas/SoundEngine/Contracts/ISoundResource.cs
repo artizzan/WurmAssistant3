@@ -11,5 +11,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts
         string Name { get; }
         float AdjustedVolume { get; }
         string FileFullName { get; }
+
+        bool IsNull { get; }
     }
 }

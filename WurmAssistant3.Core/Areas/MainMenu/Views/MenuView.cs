@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Contracts;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using JetBrains.Annotations;
 
@@ -12,19 +13,23 @@ namespace AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views
         readonly IProcessStarter processStarter;
         readonly IUserNotifier userNotifier;
         readonly IServersEditorViewFactory serversEditorViewFactory;
+        readonly IDataImportViewFactory dataImportViewFactory;
 
         public MenuView([NotNull] ISettingsEditViewFactory settingsEditViewFactory,
             [NotNull] IProcessStarter processStarter, [NotNull] IUserNotifier userNotifier,
-            [NotNull] IServersEditorViewFactory serversEditorViewFactory)
+            [NotNull] IServersEditorViewFactory serversEditorViewFactory,
+            IDataImportViewFactory dataImportViewFactory)
         {
             if (settingsEditViewFactory == null) throw new ArgumentNullException("settingsEditViewFactory");
             if (processStarter == null) throw new ArgumentNullException("processStarter");
             if (userNotifier == null) throw new ArgumentNullException("userNotifier");
             if (serversEditorViewFactory == null) throw new ArgumentNullException("serversEditorViewFactory");
+            if (dataImportViewFactory == null) throw new ArgumentNullException("dataImportViewFactory");
             this.settingsEditViewFactory = settingsEditViewFactory;
             this.processStarter = processStarter;
             this.userNotifier = userNotifier;
             this.serversEditorViewFactory = serversEditorViewFactory;
+            this.dataImportViewFactory = dataImportViewFactory;
             InitializeComponent();
         }
 
@@ -74,6 +79,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views
         {
             var view = serversEditorViewFactory.CreateServersEditorView();
             view.ShowDialog();
+        }
+
+        private void importDataFromWa2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var importer = dataImportViewFactory;
+            var view = importer.CreateDataImportView();
+            view.StartPosition = FormStartPosition.CenterScreen;
+            view.Show();
         }
     }
 }
