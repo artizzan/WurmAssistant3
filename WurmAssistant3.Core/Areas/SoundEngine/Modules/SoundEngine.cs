@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,8 +10,6 @@ using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views;
-using AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Modules;
-using AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Views;
 using AldursLab.WurmAssistant3.Core.Properties;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
@@ -74,14 +70,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
             return sound ?? new SoundResourceNullObject();
         }
 
-        public void AddSound(Sound sound)
+        public Guid AddSound(Sound sound)
         {
-            soundsLibrary.AddSound(sound);
+            return soundsLibrary.AddSound(sound);
         }
 
-        public void AddSoundAsNewId(Sound sound)
+        public Guid AddSoundAsNewId(Sound sound)
         {
-            soundsLibrary.AddSoundSkipId(sound);
+            return soundsLibrary.AddSoundSkipId(sound);
         }
 
         public bool GlobalMute
@@ -175,62 +171,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
 
         public void ImportFromDto(WurmAssistantDto dto)
         {
-            var items = dto.Sounds.Select(sound =>
-            {
-                ISoundResource existingSound = null;
-                MergeResult defaultMergeResult = MergeResult.AddAsNew;
-                if (sound.Id != null)
-                {
-                    existingSound = soundsLibrary.TryGetSound(sound.Id.Value);
-                    defaultMergeResult = MergeResult.DoNothing;
-                }
-                if (existingSound == null)
-                {
-                    existingSound = soundsLibrary.TryGetFirstSoundMatchingName(sound.Name);
-                    defaultMergeResult = MergeResult.DoNothing;
-                }
-                return new ImportItem<Sound, ISoundResource>()
-                {
-                    Source = sound,
-                    Destination = existingSound,
-                    SourceAspectConverter =
-                        s => s != null
-                            ? string.Format("Id: {0}, Name: {1}, FileName: {2}, Size: {3}",
-                                s.Id,
-                                s.Name,
-                                s.FileNameWithExt,
-                                (s.FileData.Length / 1024) + " kB")
-                            : string.Empty,
-                    DestinationAspectConverter =
-                        s =>
-                        {
-                            if (s == null)
-                                return string.Empty;
-
-                            var fileInfo = new FileInfo(s.FileFullName);
-                            var result =
-                                string.Format("Id: {0}, Name: {1}, FileName: {2}, Size: {3}",
-                                    s.Id,
-                                    s.Name,
-                                    fileInfo.Exists ? fileInfo.Name : "File missing!",
-                                    fileInfo.Exists ? (fileInfo.Length / 1024) + " kB" : "File missing!");
-                            return result;
-                        },
-                    MergeResult = defaultMergeResult,
-                    ResolutionAction =
-                        (result, soundSource, soundDestination) =>
-                        {
-                            if (result == MergeResult.AddAsNew)
-                            {
-                                soundsLibrary.AddSound(soundSource);
-                            }
-                        }
-                };
-            }).ToArray();
-            var mergeAssistantView = new ImportMergeAssistantView(items, logger);
-            mergeAssistantView.Text = "Choose sounds to import...";
-            mergeAssistantView.StartPosition = FormStartPosition.CenterScreen;
-            mergeAssistantView.ShowDialog();
+            SoundEngineWa2Importer importer = new SoundEngineWa2Importer(soundsLibrary, logger);
+            importer.ImportFromDto(dto);
         }
 
         public int DataImportOrder { get { return -1; } }

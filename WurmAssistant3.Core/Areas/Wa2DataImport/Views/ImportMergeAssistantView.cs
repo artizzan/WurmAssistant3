@@ -124,9 +124,25 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Views
 
         private void ImportMergeAssistantView_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                if (!ConfirmClose())
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
+        private void buttonContinue_Click(object sender, EventArgs e)
+        {
+            if (ConfirmClose()) DialogResult = DialogResult.OK;
+        }
+
+        private bool ConfirmClose()
+        {
             bool anyRemaining = objectListView1.Objects.Cast<object>().Any();
 
-            if (anyRemaining && e.CloseReason == CloseReason.UserClosing)
+            if (anyRemaining)
             {
                 if (
                     MessageBox.Show(
@@ -136,9 +152,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Views
                         MessageBoxButtons.OKCancel,
                         MessageBoxIcon.Warning) != DialogResult.OK)
                 {
-                    e.Cancel = true;
+                    return false;
                 }
             }
+
+            return true;
         }
     }
 }

@@ -52,6 +52,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
 
         public Guid TriggerId { get { return TriggerData.TriggerId; } }
 
+        public TriggerKind TriggerKind { get { return TriggerData.TriggerKind; } }
+
         public bool DelayEnabled
         {
             get { return TriggerData.DelayEnabled; }

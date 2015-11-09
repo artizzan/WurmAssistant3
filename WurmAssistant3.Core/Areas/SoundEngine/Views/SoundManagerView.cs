@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
@@ -39,6 +40,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
         {
             get { return (ISoundResource) listBoxAllSounds.SelectedItem; }
         }
+
+        public IEnumerable<ISoundResource> SelectedSounds
+        {
+            get { return listBoxAllSounds.SelectedItems.Cast<ISoundResource>(); }
+        } 
 
         private void RefreshSoundsList()
         {
@@ -81,9 +87,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
 
         private void buttonRemove_Click(object sender, EventArgs e)
         {
-            if (SelectedSound != null)
+            var sounds = SelectedSounds.ToArray();
+            if (sounds.Any())
             {
-                soundsLibrary.Remove(SelectedSound);
+                if (
+                    MessageBox.Show(
+                        "Are you sure to delete selected sounds? Any notification, that might be using these sounds, will stop working.",
+                        "Confirm",
+                        MessageBoxButtons.OKCancel,
+                        MessageBoxIcon.Warning) == DialogResult.OK)
+                {
+                    foreach (var selectedSound in sounds)
+                    {
+                        soundsLibrary.Remove(selectedSound);
+                    }
+                }
             }
         }
 

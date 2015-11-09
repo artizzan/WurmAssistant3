@@ -32,11 +32,13 @@
             this.objectListView1 = new BrightIdeasSoftware.ObjectListView();
             this.olvColumn1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumn2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.ImportAsNewColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.DoNotImportColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.ImportAllBtn = new System.Windows.Forms.Button();
             this.SkipAllExistingBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.buttonContinue = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.objectListView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,6 +46,7 @@
             // 
             this.objectListView1.AllColumns.Add(this.olvColumn1);
             this.objectListView1.AllColumns.Add(this.olvColumn2);
+            this.objectListView1.AllColumns.Add(this.olvColumn3);
             this.objectListView1.AllColumns.Add(this.ImportAsNewColumn);
             this.objectListView1.AllColumns.Add(this.DoNotImportColumn);
             this.objectListView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -53,6 +56,7 @@
             this.objectListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumn1,
             this.olvColumn2,
+            this.olvColumn3,
             this.ImportAsNewColumn,
             this.DoNotImportColumn});
             this.objectListView1.Cursor = System.Windows.Forms.Cursors.Default;
@@ -65,7 +69,7 @@
             this.objectListView1.RowHeight = 40;
             this.objectListView1.ShowGroups = false;
             this.objectListView1.ShowImagesOnSubItems = true;
-            this.objectListView1.Size = new System.Drawing.Size(1065, 432);
+            this.objectListView1.Size = new System.Drawing.Size(1260, 432);
             this.objectListView1.TabIndex = 0;
             this.objectListView1.UseCompatibleStateImageBehavior = false;
             this.objectListView1.UseSubItemCheckBoxes = true;
@@ -76,15 +80,22 @@
             // 
             this.olvColumn1.AspectName = "SourceAspect";
             this.olvColumn1.Text = "Item to import";
-            this.olvColumn1.Width = 400;
+            this.olvColumn1.Width = 350;
             this.olvColumn1.WordWrap = true;
             // 
             // olvColumn2
             // 
             this.olvColumn2.AspectName = "DestinationAspect";
             this.olvColumn2.Text = "Matched existing item";
-            this.olvColumn2.Width = 400;
+            this.olvColumn2.Width = 350;
             this.olvColumn2.WordWrap = true;
+            // 
+            // olvColumn3
+            // 
+            this.olvColumn3.AspectName = "CommentAspect";
+            this.olvColumn3.Text = "Comment";
+            this.olvColumn3.Width = 350;
+            this.olvColumn3.WordWrap = true;
             // 
             // ImportAsNewColumn
             // 
@@ -132,11 +143,23 @@
             this.label1.TabIndex = 3;
             this.label1.Text = resources.GetString("label1.Text");
             // 
+            // buttonContinue
+            // 
+            this.buttonContinue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonContinue.Location = new System.Drawing.Point(1048, 460);
+            this.buttonContinue.Name = "buttonContinue";
+            this.buttonContinue.Size = new System.Drawing.Size(224, 41);
+            this.buttonContinue.TabIndex = 4;
+            this.buttonContinue.Text = "Skip the rest and continue to next batch...";
+            this.buttonContinue.UseVisualStyleBackColor = true;
+            this.buttonContinue.Click += new System.EventHandler(this.buttonContinue_Click);
+            // 
             // ImportMergeAssistantView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1089, 513);
+            this.ClientSize = new System.Drawing.Size(1284, 513);
+            this.Controls.Add(this.buttonContinue);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.SkipAllExistingBtn);
             this.Controls.Add(this.ImportAllBtn);
@@ -160,5 +183,7 @@
         private System.Windows.Forms.Button ImportAllBtn;
         private System.Windows.Forms.Button SkipAllExistingBtn;
         private System.Windows.Forms.Label label1;
+        private BrightIdeasSoftware.OLVColumn olvColumn3;
+        private System.Windows.Forms.Button buttonContinue;
     }
 }

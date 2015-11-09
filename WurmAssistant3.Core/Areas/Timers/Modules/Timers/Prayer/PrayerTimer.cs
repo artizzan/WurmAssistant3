@@ -193,7 +193,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
 
             skillEntryParser = new SkillEntryParser(WurmApi);
 
-            favorNotify = new FavorTimerNotify(this, Player, ServerGroupId, Logger, SoundEngine, TrayPopups, skillEntryParser);
+            favorNotify = new FavorTimerNotify(this, Character, ServerGroupId, Logger, SoundEngine, TrayPopups, skillEntryParser);
 
             View.UpdateSkill(FaithLevel);
             View.ShowSkill = ShowFaithSkillOnTimer;
@@ -212,7 +212,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
                 }
                 else if (Math.Abs(FaithLevel) < 0.00001f)
                 {
-                    Logger.Info("faith was 0 while preparing prayer timer for player: " + Player + ". Attempting 1-year thorough search");
+                    Logger.Info("faith was 0 while preparing prayer timer for player: " + Character + ". Attempting 1-year thorough search");
                     skill = await TryGetSkillFromLogHistoryAsync("Faith", TimeSpan.FromDays(365));
                     if (skill > 0)
                     {
@@ -302,7 +302,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
                 favorNotify.CurrentFavorMax = value;
                 View.UpdateSkill(value);
                 FlagAsChanged();
-                Logger.Info(string.Format("{0} faith level is now {1} on {2}", Player, value, ServerGroupId));
+                Logger.Info(string.Format("{0} faith level is now {1} on {2}", Character, value, ServerGroupId));
             }
         }
 

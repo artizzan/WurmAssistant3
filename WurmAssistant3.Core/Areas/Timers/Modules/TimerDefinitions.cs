@@ -123,6 +123,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         {
             return timerDefinitions[definitionId];
         }
+
+        public TimerDefinition TryGetById(Guid definitionId)
+        {
+            TimerDefinition result;
+            timerDefinitions.TryGetValue(definitionId, out result);
+            return result;
+        }
+
+        public TimerDefinition TryGetByName(string name)
+        {
+            TimerDefinition result;
+            return timerDefinitions.Values.SingleOrDefault(
+                definition => definition.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+        }
     }
 
     public class CustomTimerRemovedEventArgs : EventArgs

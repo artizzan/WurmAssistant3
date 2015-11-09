@@ -134,17 +134,17 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
                     resource => resource.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public void AddSoundSkipId(Sound sound)
+        public Guid AddSoundSkipId(Sound sound)
         {
-            AddSoundInternal(sound, true);
+            return AddSoundInternal(sound, true);
         }
 
-        public void AddSound(Sound sound)
+        public Guid AddSound(Sound sound)
         {
-            AddSoundInternal(sound, false);
+            return AddSoundInternal(sound, false);
         }
 
-        private void AddSoundInternal(Sound sound, bool skipGlobalId)
+        private Guid AddSoundInternal(Sound sound, bool skipGlobalId)
         {
             if (!skipGlobalId && sound.Id != null && soundResources.ContainsKey(sound.Id.Value))
             {
@@ -158,6 +158,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
                 File.WriteAllBytes(soundFilePath, sound.FileData);
                 var resource = ImportInternal(soundFilePath, skipGlobalId ? null : sound.Id);
                 Rename(resource, sound.Name);
+                return resource.Id;
             }
             finally
             {

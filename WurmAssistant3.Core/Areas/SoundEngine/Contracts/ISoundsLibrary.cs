@@ -19,8 +19,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts
         ISoundResource TryGetFirstSoundMatchingName(string name);
 
         /// <exception cref="ArgumentException">Sound with this Id already exists.</exception>
-        void AddSound(Sound sound);
+        Guid AddSound(Sound sound);
 
-        void AddSoundSkipId(Sound sound);
+        Guid AddSoundSkipId(Sound sound);
     }
 }

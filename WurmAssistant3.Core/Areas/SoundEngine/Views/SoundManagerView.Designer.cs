@@ -61,6 +61,7 @@
             this.listBoxAllSounds.Location = new System.Drawing.Point(5, 18);
             this.listBoxAllSounds.Margin = new System.Windows.Forms.Padding(2);
             this.listBoxAllSounds.Name = "listBoxAllSounds";
+            this.listBoxAllSounds.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBoxAllSounds.Size = new System.Drawing.Size(308, 316);
             this.listBoxAllSounds.TabIndex = 0;
             this.listBoxAllSounds.SelectedIndexChanged += new System.EventHandler(this.listBoxAllSounds_SelectedIndexChanged);

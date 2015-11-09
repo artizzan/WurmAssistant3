@@ -11,13 +11,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Modules
 
         public string ImportAsNewAspect
         {
-            get { return HasDestination ? null : "Import"; }
+            get { return (Blocked || HasDestination) ? null : "Import"; }
         }
 
         public string DoNotImportAspect
         {
             get { return null; }
         }
+
+        public string Comment { get; set; }
+        public string CommentAspect { get { return Comment ?? string.Empty; } }
+
+        public bool Blocked { get; set; }
 
         public abstract void Resolve();
 

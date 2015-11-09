@@ -7,8 +7,10 @@ using System.Windows.Forms;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Views;
 using AldursLab.WurmAssistant3.Core.Properties;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
@@ -28,6 +30,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
         readonly IHostEnvironment hostEnvironment;
         readonly IWurmApi wurmApi;
         readonly IPersistentObjectResolver<TriggerManager> triggerManagerResolver;
+        private readonly ITrayPopups trayPopups;
+        private readonly ILogger logger;
 
         [JsonProperty]
         readonly HashSet<string> activeCharacterNames = new HashSet<string>();
@@ -38,7 +42,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
         public TriggersFeature([NotNull] ISoundEngine soundEngine,
             [NotNull] IWurmAssistantDataDirectory wurmAssistantDataDirectory, [NotNull] IUpdateLoop updateLoop,
             [NotNull] IHostEnvironment hostEnvironment, [NotNull] IWurmApi wurmApi,
-            [NotNull] IPersistentObjectResolver<TriggerManager> triggerManagerResolver)
+            [NotNull] IPersistentObjectResolver<TriggerManager> triggerManagerResolver, [NotNull] ITrayPopups trayPopups,
+            [NotNull] ILogger logger)
         {
             if (soundEngine == null) throw new ArgumentNullException("soundEngine");
             if (wurmAssistantDataDirectory == null) throw new ArgumentNullException("wurmAssistantDataDirectory");
@@ -46,12 +51,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
             if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (triggerManagerResolver == null) throw new ArgumentNullException("triggerManagerResolver");
+            if (trayPopups == null) throw new ArgumentNullException("trayPopups");
+            if (logger == null) throw new ArgumentNullException("logger");
             this.soundEngine = soundEngine;
             this.wurmAssistantDataDirectory = wurmAssistantDataDirectory;
             this.updateLoop = updateLoop;
             this.hostEnvironment = hostEnvironment;
             this.wurmApi = wurmApi;
             this.triggerManagerResolver = triggerManagerResolver;
+            this.trayPopups = trayPopups;
+            this.logger = logger;
 
             updateLoop.Updated += (sender, args) => Update();
             hostEnvironment.HostClosing += (sender, args) => Stop();
@@ -64,36 +73,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
             {
                 AddManager(name);
             }
-        }
-
-        public void AddActiveCharacter(string characterName)
-        {
-            activeCharacterNames.Add(characterName);
-            FlagAsChanged();
-        }
-
-        public void RemoveActiveCharacter(string characterName)
-        {
-            activeCharacterNames.Remove(characterName);
-            FlagAsChanged();
-        }
-
-        public ICollection<string> GetAllActiveCharacters()
-        {
-            return activeCharacterNames.ToArray();
-        }
-
-        public void Update()
-        {
-            foreach (var notifier in triggerManagers.Values.ToArray())
-            {
-                notifier.Update();
-            }
-        }
-
-        public void Stop()
-        {
-            // do not clean notifiers, they clean themselves on host closing.
         }
 
         public void AddNewNotifier()
@@ -110,27 +89,58 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
             }
         }
 
-        public void AddManager(string charName)
-        {
-            var triggerManager = triggerManagerResolver.Get(charName);
-            AddManager(triggerManager);
-        }
-
-        public void AddManager(TriggerManager triggerManager)
-        {
-            triggerManager.TriggersFeature = this;
-            mainUi.AddNotifierController(triggerManager.GetUIHandle());
-            triggerManagers.Add(triggerManager.CharacterName, triggerManager);
-            AddActiveCharacter(triggerManager.CharacterName);
-            FlagAsChanged();
-        }
-
         public void RemoveManager(TriggerManager notifier)
         {
             triggerManagers.Remove(notifier.CharacterName);
             RemoveActiveCharacter(notifier.CharacterName);
             FlagAsChanged();
             mainUi.RemoveNotifierController(notifier.GetUIHandle());
+        }
+
+
+        private void AddActiveCharacter(string characterName)
+        {
+            activeCharacterNames.Add(characterName);
+            FlagAsChanged();
+        }
+
+        private void RemoveActiveCharacter(string characterName)
+        {
+            activeCharacterNames.Remove(characterName);
+            FlagAsChanged();
+        }
+
+        private ICollection<string> GetAllActiveCharacters()
+        {
+            return activeCharacterNames.ToArray();
+        }
+
+        private void Update()
+        {
+            foreach (var notifier in triggerManagers.Values.ToArray())
+            {
+                notifier.Update();
+            }
+        }
+
+        private void Stop()
+        {
+            // do not clean notifiers, they clean themselves on host closing.
+        }
+
+        private void AddManager(string charName)
+        {
+            var triggerManager = triggerManagerResolver.Get(charName);
+            AddManager(triggerManager);
+        }
+
+        private void AddManager(TriggerManager triggerManager)
+        {
+            triggerManager.TriggersFeature = this;
+            mainUi.AddNotifierController(triggerManager.GetUIHandle());
+            triggerManagers.Add(triggerManager.CharacterName, triggerManager);
+            AddActiveCharacter(triggerManager.CharacterName);
+            FlagAsChanged();
         }
 
         #region IFeature
@@ -165,6 +175,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
 
         public void ImportFromDto(WurmAssistantDto dto)
         {
+            TriggersWa2Importer importer = new TriggersWa2Importer(soundEngine, trayPopups, triggerManagers, logger);
+            importer.ImportFromDto(dto);
         }
 
         public int DataImportOrder { get { return 0; } }

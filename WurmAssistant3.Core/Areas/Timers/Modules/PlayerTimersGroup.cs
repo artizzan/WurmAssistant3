@@ -130,6 +130,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             get { return currentServerOnTheGroup; }
         }
 
+        public IEnumerable<WurmTimer> Timers
+        {
+            get { return timers; }
+        }
+
         private async void PerformAsyncInits()
         {
             try
@@ -208,16 +213,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                 {
                     try
                     {
-                        WurmTimer newTimer = timerInstances.CreateTimer(definition.Id);
-                        newTimer.Initialize(this, CharacterName, definition);
-                        activeTimerDefinitions.Add(new ActiveTimer()
-                        {
-                            DefinitionId = definition.Id,
-                            TimerId = newTimer.Id
-                        });
-                        layoutControl.RegisterNewTimerDisplay(newTimer.View);
-                        timers.Add(newTimer);
-                        FlagAsChanged();
+                        AddNewTimer(definition);
                     }
                     catch (Exception exception)
                     {
@@ -225,6 +221,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                     }
                 }
             }
+        }
+
+        public WurmTimer AddNewTimer(TimerDefinition definition)
+        {
+            WurmTimer newTimer = timerInstances.CreateTimer(definition.Id);
+            newTimer.Initialize(this, CharacterName, definition);
+            activeTimerDefinitions.Add(new ActiveTimer()
+            {
+                DefinitionId = definition.Id,
+                TimerId = newTimer.Id
+            });
+            layoutControl.RegisterNewTimerDisplay(newTimer.View);
+            timers.Add(newTimer);
+            FlagAsChanged();
+            return newTimer;
         }
 
         public void Stop()

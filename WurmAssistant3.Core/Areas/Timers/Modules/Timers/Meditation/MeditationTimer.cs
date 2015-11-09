@@ -153,7 +153,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
 
             skillEntryParser = new SkillEntryParser(WurmApi);
 
-            sleepNotify = new SleepBonusNotify(Logger, SoundEngine, TrayPopups, Player, "Can turn off sleep bonus now");
+            sleepNotify = new SleepBonusNotify(Logger, SoundEngine, TrayPopups, Character, "Can turn off sleep bonus now");
             sleepNotify.Enabled = SleepBonusReminder;
 
             View.UpdateSkill(MeditationSkill);
@@ -252,7 +252,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
 
         void SetMeditationSkill(float newValue, bool triggerCooldownUpdate = true)
         {
-            Logger.Info(string.Format("{0} meditation skill is now {1} on {2}", Player, newValue, ServerGroupId));
+            Logger.Info(string.Format("{0} meditation skill is now {1} on {2}", Character, newValue, ServerGroupId));
             View.UpdateSkill(newValue);
             if (newValue < 20f)
             {
@@ -326,7 +326,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
                     Logger.Info(
                         string.Format(
                             "while preparing medit timer for player: {0} server group: {1}, skill appears to be 0, attempting wider search",
-                            Player,
+                            Character,
                             ServerGroupId));
                     skill = await TryGetSkillFromLogHistoryAsync("Meditating", TimeSpan.FromDays(365));
                     if (skill < FloatAboveZeroCompareValue)
@@ -334,13 +334,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
                         skill = await TryGetSkillFromLogHistoryAsync("Meditating", TimeSpan.FromDays(1460));
                         if (skill < FloatAboveZeroCompareValue)
                         {
-                            Logger.Info(string.Format("could not get any meditation skill for player: {0} server group: {1}", Player, ServerGroupId));
+                            Logger.Info(string.Format("could not get any meditation skill for player: {0} server group: {1}", Character, ServerGroupId));
                         }
                     }
                 }
                 else
                 {
-                    Logger.Info("Archival level available, skipping wider search for player: " + Player);
+                    Logger.Info("Archival level available, skipping wider search for player: " + Character);
                 }
             }
             return skill;
@@ -407,7 +407,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
                 if (info != null)
                 {
                     this.MeditationSkill = info.Value;
-                    Logger.Info("updated meditation skill for " + Player + " to " + MeditationSkill);
+                    Logger.Info("updated meditation skill for " + Character + " to " + MeditationSkill);
                 }
             }
         }
@@ -418,7 +418,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
             {
                 DateTime currentTime = DateTime.Now;
 
-                var currentServer = await WurmApi.Characters.Get(Player).TryGetCurrentServerAsync();
+                var currentServer = await WurmApi.Characters.Get(Character).TryGetCurrentServerAsync();
                 if (currentServer != null)
                 {
                     var uptime = await currentServer.TryGetCurrentUptimeAsync();
@@ -435,18 +435,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
                         Logger.Warn(string.Format("no server uptime found for server: {0}, Timer: {1}, Player: {2}",
                             currentServer.ServerName,
                             TimerDefinition,
-                            Player));
+                            Character));
                 }
                 else
                 {
                     Logger.Warn(string.Format("no current server found for Timer: {0}, Player: {1}",
                         TimerDefinition,
-                        Player));
+                        Character));
                 }
             }
             catch (Exception exception)
             {
-                Logger.Error(exception, "Error during UpdateDateOfLastCooldownReset, " + TimerDefinition + ", " + Player);
+                Logger.Error(exception, "Error during UpdateDateOfLastCooldownReset, " + TimerDefinition + ", " + Character);
             }
         }
 

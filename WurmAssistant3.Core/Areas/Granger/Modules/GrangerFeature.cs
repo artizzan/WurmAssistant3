@@ -135,6 +135,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 
         public void ImportFromDto(WurmAssistantDto dto)
         {
+            GrangerWa2Importer importer = new GrangerWa2Importer(this);
+            importer.ImportFromDto(dto);
         }
 
         public int DataImportOrder { get { return 0; } }

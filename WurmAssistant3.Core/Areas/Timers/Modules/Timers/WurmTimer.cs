@@ -158,6 +158,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         /// </summary>
         public bool RunUpdateRegardlessOfInitCompleted { get; protected set; }
 
+        public string Character
+        {
+            get { return Player; }
+        }
+
         public virtual void Stop()
         {
             //children should basecall this after their own cleanup

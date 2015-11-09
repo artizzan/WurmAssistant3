@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core.Areas.Triggers.Data;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.Notifiers;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Views;
 
@@ -12,6 +13,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
     public interface ITrigger
     {
         Guid TriggerId { get; }
+        TriggerKind TriggerKind { get; }
 
         void AddLogType(LogType type);
         void RemoveLogType(LogType type);
