@@ -89,7 +89,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         {
             try
             {
-                return new CreatureColor((CreatureColorId)Enum.Parse(typeof(CreatureColorId), enumStr));
+                return new CreatureColor((CreatureColorId)Enum.Parse(typeof(CreatureColorId), enumStr, true));
             }
             catch (Exception _e)
             {
@@ -199,7 +199,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         {
             try
             {
-                return new CreatureAge((CreatureAgeId)Enum.Parse(typeof(CreatureAgeId), enumStr));
+                return new CreatureAge((CreatureAgeId)Enum.Parse(typeof(CreatureAgeId), enumStr, true));
             }
             catch (Exception _e)
             {

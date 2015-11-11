@@ -83,8 +83,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
         {
         }
 
-        public void ImportFromDto(WurmAssistantDto dto)
+        public async Task ImportDataFromWa2Async(WurmAssistantDto dto)
         {
+            await Task.FromResult(true);
         }
 
         public int DataImportOrder { get { return 0; } }

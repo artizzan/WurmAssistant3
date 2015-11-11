@@ -48,11 +48,11 @@
             // selectFileBtn
             // 
             this.selectFileBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.selectFileBtn.Location = new System.Drawing.Point(12, 105);
+            this.selectFileBtn.Location = new System.Drawing.Point(12, 97);
             this.selectFileBtn.Name = "selectFileBtn";
-            this.selectFileBtn.Size = new System.Drawing.Size(136, 23);
+            this.selectFileBtn.Size = new System.Drawing.Size(262, 31);
             this.selectFileBtn.TabIndex = 1;
-            this.selectFileBtn.Text = "Select file";
+            this.selectFileBtn.Text = "Begin by selecting exported JSON file...\r\n";
             this.selectFileBtn.UseVisualStyleBackColor = true;
             this.selectFileBtn.Click += new System.EventHandler(this.selectFileBtn_Click);
             // 

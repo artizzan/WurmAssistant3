@@ -111,15 +111,19 @@
             // objectListView1
             // 
             this.objectListView1.AllColumns.Add(this.olvColumnHerd);
+            this.objectListView1.CellEditUseWholeCell = false;
             this.objectListView1.CheckBoxes = true;
-            this.objectListView1.CheckedAspectName = "";
+            this.objectListView1.CheckedAspectName = "CheckedAspect";
             this.objectListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnHerd});
             this.objectListView1.ContextMenuStrip = this.contextMenuStripHerds;
+            this.objectListView1.Cursor = System.Windows.Forms.Cursors.Default;
             this.objectListView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.objectListView1.FullRowSelect = true;
             this.objectListView1.HasCollapsibleGroups = false;
             this.objectListView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.objectListView1.HighlightBackgroundColor = System.Drawing.Color.Empty;
+            this.objectListView1.HighlightForegroundColor = System.Drawing.Color.Empty;
             this.objectListView1.Location = new System.Drawing.Point(0, 0);
             this.objectListView1.Margin = new System.Windows.Forms.Padding(2);
             this.objectListView1.MultiSelect = false;
@@ -136,7 +140,6 @@
             // olvColumnHerd
             // 
             this.olvColumnHerd.AspectName = "HerdIDAspect";
-            this.olvColumnHerd.CheckBoxes = true;
             this.olvColumnHerd.FillsFreeSpace = true;
             this.olvColumnHerd.MinimumWidth = 20;
             this.olvColumnHerd.Text = "Active herds";

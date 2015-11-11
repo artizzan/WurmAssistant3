@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Contracts;
 using AldursLab.WurmAssistantDataTransfer;
@@ -17,12 +18,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Modules
             this.featuresManager = featuresManager;
         }
 
-        public void ImportFromFile(string filePath)
+        public async Task ImportFromFileAsync(string filePath)
         {
             var dto = transferManager.LoadFromFile(filePath);
             foreach (var feature in featuresManager.Features.OrderBy(feature => feature.DataImportOrder).ToArray())
             {
-                feature.ImportFromDto(dto);
+                await feature.ImportDataFromWa2Async(dto);
             }
         }
     }

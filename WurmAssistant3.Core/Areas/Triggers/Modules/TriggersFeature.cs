@@ -173,10 +173,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
         {
         }
 
-        public void ImportFromDto(WurmAssistantDto dto)
+        public async Task ImportDataFromWa2Async(WurmAssistantDto dto)
         {
             TriggersWa2Importer importer = new TriggersWa2Importer(soundEngine, trayPopups, triggerManagers, logger);
-            importer.ImportFromDto(dto);
+            await importer.ImportFromDtoAsync(dto);
         }
 
         public int DataImportOrder { get { return 0; } }

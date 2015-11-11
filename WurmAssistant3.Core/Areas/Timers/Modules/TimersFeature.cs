@@ -250,10 +250,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         {
         }
 
-        public void ImportFromDto(WurmAssistantDto dto)
+        public async Task ImportDataFromWa2Async(WurmAssistantDto dto)
         {
             TimersWa2Importer importer = new TimersWa2Importer(this, timerDefinitions, soundEngine, logger);
-            importer.ImportFromDto(dto);
+            await importer.ImportFromDtoAsync(dto);
         }
 
         public int DataImportOrder { get { return 0; } }

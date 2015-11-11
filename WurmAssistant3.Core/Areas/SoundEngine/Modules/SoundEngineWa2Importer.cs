@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
@@ -23,7 +24,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
             this.logger = logger;
         }
 
-        public void ImportFromDto(WurmAssistantDto dto)
+        public async Task ImportFromDtoAsync(WurmAssistantDto dto)
         {
             var items = dto.Sounds.Select(sound =>
             {
@@ -80,7 +81,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
             var mergeAssistantView = new ImportMergeAssistantView(items, logger);
             mergeAssistantView.Text = "Choose sounds to import...";
             mergeAssistantView.StartPosition = FormStartPosition.CenterScreen;
-            mergeAssistantView.ShowDialog();
+            mergeAssistantView.Show();
+            await mergeAssistantView.Completed;
         }
     }
 }

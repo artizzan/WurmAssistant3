@@ -22,7 +22,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Features.Contracts
 
         void PopulateDto(WurmAssistantDto dto);
 
-        void ImportFromDto(WurmAssistantDto dto);
+        Task ImportDataFromWa2Async(WurmAssistantDto dto);
 
         int DataImportOrder { get; }
     }

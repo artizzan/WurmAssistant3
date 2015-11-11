@@ -20,20 +20,29 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Views
             InitializeComponent();
         }
 
-        private void selectFileBtn_Click(object sender, EventArgs e)
+        private async void selectFileBtn_Click(object sender, EventArgs e)
         {
+            var oldTxt = selectFileBtn.Text;
             try
             {
+                selectFileBtn.Enabled = false;
+                selectFileBtn.Text = "Importing, please finish before trying again.";
+
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     var path = openFileDialog.FileName;
-                    wa2DataImporter.ImportFromFile(path);
+                    await wa2DataImporter.ImportFromFileAsync(path);
                 }
             }
             catch (Exception exception)
             {
                 logger.Error(exception, "Data import error");
                 MessageBox.Show(exception.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                selectFileBtn.Enabled = true;
+                selectFileBtn.Text = oldTxt;
             }
         }
     }

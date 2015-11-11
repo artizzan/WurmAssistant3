@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
@@ -34,7 +35,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             this.logger = logger;
         }
 
-        public void ImportFromDto(WurmAssistantDto dto)
+        public async Task ImportFromDtoAsync(WurmAssistantDto dto)
         {
             var groupedByCharacter = dto.Timers.GroupBy(timer => timer.CharacterName).ToArray();
 
@@ -90,7 +91,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             var mergeAssistantView = new ImportMergeAssistantView(importItems, logger);
             mergeAssistantView.Text = "Choose timers to import...";
             mergeAssistantView.StartPosition = FormStartPosition.CenterScreen;
-            mergeAssistantView.ShowDialog();
+            mergeAssistantView.Show();
+            await mergeAssistantView.Completed;
         }
 
         private ImportItem<Timer, WurmTimer> BuildImportItem(Timer timer, bool blocked, string comment, PlayerTimersGroup manager, WurmAssistantDto dto)

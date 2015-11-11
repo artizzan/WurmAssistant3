@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
@@ -35,7 +36,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
             this.logger = logger;
         }
 
-        public void ImportFromDto(WurmAssistantDto dto)
+        public async Task ImportFromDtoAsync(WurmAssistantDto dto)
         {
             var groupedByCharacter = dto.Triggers.GroupBy(trigger => trigger.CharacterName);
 
@@ -114,7 +115,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
             var mergeAssistantView = new ImportMergeAssistantView(allImportItems, logger);
             mergeAssistantView.Text = "Choose triggers to import...";
             mergeAssistantView.StartPosition = FormStartPosition.CenterScreen;
-            mergeAssistantView.ShowDialog();
+            mergeAssistantView.Show();
+            await mergeAssistantView.Completed;
         }
 
         private void RecreateImportedTrigger(TriggerManager manager, Trigger source, TriggerKind sourceKind)

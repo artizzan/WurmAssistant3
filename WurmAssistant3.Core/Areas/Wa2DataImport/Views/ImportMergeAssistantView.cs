@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Modules;
@@ -10,6 +11,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Views
     public partial class ImportMergeAssistantView : Form
     {
         private readonly ILogger logger;
+        private TaskCompletionSource<bool> completedCompletionSource = new TaskCompletionSource<bool>(); 
 
         public ImportMergeAssistantView(IEnumerable<ImportItem> items, ILogger logger)
         {
@@ -30,6 +32,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Views
             objectListView1.SetObjects(objects);
         }
 
+        public Task Completed { get { return completedCompletionSource.Task; }}
+
         private void objectListView1_ButtonClick(object sender, BrightIdeasSoftware.CellClickEventArgs e)
         {
             ResolveItem(e.Model, e.Column == ImportAsNewColumn ? MergeResult.AddAsNew : MergeResult.DoNothing);
@@ -41,9 +45,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Views
             foreach (var o in objectListView1.Objects.Cast<object>().ToArray())
             {
                 var item = o as ImportItem;
-                if (item != null && item.HasDestination)
+                if (item != null && (item.HasDestination || item.Blocked))
                 {
-                    // matched items should be skipped
+                    // matched or blocked items should be skipped
                     continue;
                 }
 
@@ -86,6 +90,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Views
                     if (!objectListView1.Objects.Cast<object>().Any())
                     {
                         DialogResult = DialogResult.OK;
+                        Close();
                     }
                     return true;
                 }
@@ -124,18 +129,23 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Views
 
         private void ImportMergeAssistantView_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing)
+            if (DialogResult != DialogResult.OK && e.CloseReason == CloseReason.UserClosing)
             {
                 if (!ConfirmClose())
                 {
                     e.Cancel = true;
                 }
             }
+            completedCompletionSource.TrySetResult(true);
         }
 
         private void buttonContinue_Click(object sender, EventArgs e)
         {
-            if (ConfirmClose()) DialogResult = DialogResult.OK;
+            if (ConfirmClose())
+            {
+                DialogResult = DialogResult.OK;
+                Close();
+            }
         }
 
         private bool ConfirmClose()

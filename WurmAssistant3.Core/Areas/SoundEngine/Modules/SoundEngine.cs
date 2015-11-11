@@ -169,10 +169,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
         {
         }
 
-        public void ImportFromDto(WurmAssistantDto dto)
+        public async Task ImportDataFromWa2Async(WurmAssistantDto dto)
         {
             SoundEngineWa2Importer importer = new SoundEngineWa2Importer(soundsLibrary, logger);
-            importer.ImportFromDto(dto);
+            await importer.ImportFromDtoAsync(dto);
         }
 
         public int DataImportOrder { get { return -1; } }

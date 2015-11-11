@@ -34,6 +34,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         readonly FormGrangerMain grangerUi;
 
         readonly LogsFeedManager logsFeedMan;
+        readonly GrangerContext context;
 
         public GrangerFeature([NotNull] ILogger logger, [NotNull] IWurmAssistantDataDirectory dataDirectory,
             [NotNull] IUpdateLoop updateLoop, [NotNull] IHostEnvironment hostEnvironment,
@@ -62,7 +63,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             this.defaultBreedingEvaluatorOptions = defaultBreedingEvaluatorOptions;
             this.grangerSimpleDb = grangerSimpleDb;
 
-            var context = new GrangerContext(grangerSimpleDb);
+            context = new GrangerContext(grangerSimpleDb);
 
             grangerUi = new FormGrangerMain(this, settings, context, logger, wurmApi, defaultBreedingEvaluatorOptions);
 
@@ -133,10 +134,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         {
         }
 
-        public void ImportFromDto(WurmAssistantDto dto)
+        public async Task ImportDataFromWa2Async(WurmAssistantDto dto)
         {
-            GrangerWa2Importer importer = new GrangerWa2Importer(this);
-            importer.ImportFromDto(dto);
+            GrangerWa2Importer importer = new GrangerWa2Importer(this, context, logger);
+            await importer.ImportFromDtoAsync(dto);
         }
 
         public int DataImportOrder { get { return 0; } }
