@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmAssistant3.Core.Areas.Calendar.Contracts;
-using Castle.Components.DictionaryAdapter;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
@@ -15,7 +14,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
     [PersistentObject("Calendar_WurmSeasonsManager")]
     public class WurmSeasonsManager : PersistentObjectBase
     {
-        List<WurmSeasonDefinition> defaultDefinitions = new EditableList<WurmSeasonDefinition>();
+        List<WurmSeasonDefinition> defaultDefinitions = new List<WurmSeasonDefinition>();
 
         [JsonProperty] 
         readonly List<WurmSeasonDefinition> definitions = new List<WurmSeasonDefinition>();

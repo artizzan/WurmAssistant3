@@ -6,7 +6,6 @@ using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.WurmApi.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.WurmApi.Views;
-using Castle.Components.DictionaryAdapter;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
@@ -77,7 +76,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.WurmApi.Modules
         class ConfigValidator
         {
             readonly IWurmConfig config;
-            readonly List<WurmClientIssue> issues = new EditableList<WurmClientIssue>();
+            readonly List<WurmClientIssue> issues = new List<WurmClientIssue>();
             bool headerWritten = false;
 
             public ConfigValidator([NotNull] IWurmConfig config)
