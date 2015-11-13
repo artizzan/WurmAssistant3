@@ -45,26 +45,31 @@ namespace AldursLab.WurmAssistant3.Core.Root.Components
             if (newChanges.Any())
             {
                 bool firstSection = true;
-                int lastDay = 0;
                 string lastAuthor = string.Empty;
-                foreach (
-                    var source in newChanges.OrderByDescending(change => change.Date).ThenBy(change => change.Author))
+
+                var changesGroupedByDay = newChanges
+                    .GroupBy(change => change.Date.Date)
+                    .OrderByDescending(changes => changes.Key);
+                foreach (var change in changesGroupedByDay)
                 {
-                    if (source.Date.Day != lastDay)
+                    var date = change.Key;
+                    var innerChanges = change.OrderBy(c => c.Date);
+
+                    if (!firstSection) sb.AppendLine();
+                    else firstSection = false;
+
+                    sb.AppendLine(string.Format((string)"{0}", date.ToString("d")));
+                    lastAuthor = string.Empty;
+
+                    foreach (var innerChange in innerChanges)
                     {
-                        if (!firstSection) sb.AppendLine(); 
-                        else firstSection = false;
-                        
-                        sb.AppendLine(string.Format((string) "{0}", source.Date.ToString("d")));
-                        lastDay = source.Date.Day;
-                        lastAuthor = string.Empty;
+                        if (innerChange.Author != lastAuthor)
+                        {
+                            sb.AppendLine("By " + innerChange.Author + ":");
+                            lastAuthor = innerChange.Author;
+                        }
+                        SplitChangeText(sb, innerChange.ChangeText, "; ");
                     }
-                    if (source.Author != lastAuthor)
-                    {
-                        sb.AppendLine("By " + source.Author + ":");
-                        lastAuthor = source.Author;
-                    }
-                    SplitChangeText(sb, source.ChangeText, "; ");
                 }
             }
             return sb.ToString();

@@ -64,25 +64,25 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Root
             File.AppendAllLines(Path.Combine(tempDir.FullName, fileName), lines, Encoding.UTF8);
         }
 
-        const string ExpectedOutput1 = 
-@"By Jack:
-- change six complete
-- change five complete
-By Anna:
-- change four complete|extra";
-        const string ExpectedOutput2 = 
+        const string ExpectedOutput1 =
 @"By Anna:
-- change three complete
-- change two complete
+- change four complete|extra
 By Jack:
-- change one complete";
-
-        const string ExpectedPartialOutput1 = 
-@"By Jack:
-- change six complete
 - change five complete
+- change six complete";
+        const string ExpectedOutput2 =
+@"By Jack:
+- change one complete
 By Anna:
-- change four complete|extra";
+- change two complete
+- change three complete";
+
+        const string ExpectedPartialOutput1 =
+@"By Anna:
+- change four complete|extra
+By Jack:
+- change five complete
+- change six complete";
         const string ExpectedPartialOutput2 = 
 @"By Anna:
 - change three complete";
