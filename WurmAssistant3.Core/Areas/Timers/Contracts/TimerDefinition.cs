@@ -31,6 +31,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts
             return Name;
         }
 
+        public string ToVerboseString()
+        {
+            return string.Format("Id: {0}, RuntimeTypeId: {1}, Name: {2}", Id, RuntimeTypeId, Name);
+        }
+
         public bool Equals(TimerDefinition other)
         {
             if (ReferenceEquals(null, other)) return false;

@@ -43,9 +43,9 @@
             this.DelayInput = new AldursLab.WurmAssistant3.Core.WinForms.TimeSpanInputCompact();
             this.label4 = new System.Windows.Forms.Label();
             this.DelayChkbox = new System.Windows.Forms.CheckBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.checkStateRenderer1 = new BrightIdeasSoftware.CheckStateRenderer();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -233,12 +233,6 @@
             this.DelayChkbox.UseVisualStyleBackColor = true;
             this.DelayChkbox.CheckedChanged += new System.EventHandler(this.DelayChkbox_CheckedChanged);
             // 
-            // toolTip1
-            // 
-            this.toolTip1.AutoPopDelay = 20000;
-            this.toolTip1.InitialDelay = 200;
-            this.toolTip1.ReshowDelay = 100;
-            // 
             // linkLabel1
             // 
             this.linkLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -250,6 +244,12 @@
             this.linkLabel1.Text = "What\'s this cooldown and delay for?";
             this.linkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.AutoPopDelay = 20000;
+            this.toolTip1.InitialDelay = 200;
+            this.toolTip1.ReshowDelay = 100;
             // 
             // TriggerBaseConfig
             // 

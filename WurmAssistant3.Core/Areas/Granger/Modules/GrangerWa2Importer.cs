@@ -83,15 +83,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
                         {
                             context.InsertHerd(source.HerdId);
                         }
-                        else
+
+                        if (
+                            context.Creatures.Any(
+                                entity => entity.Name == creature.Name && entity.Herd == creature.HerdId))
                         {
-                            if (
-                                context.Creatures.Any(
-                                    entity => entity.Name == creature.Name && entity.Herd == creature.Name))
-                            {
-                                throw new InvalidOperationException(
-                                    "Creature with this name and herd already exist in DB. Move this creature to another herd before importing.");
-                            }
+                            throw new InvalidOperationException(
+                                "Creature with this name and herd already exist in DB. Move this creature to another herd before importing.");
                         }
 
                         context.InsertCreature(new CreatureEntity()

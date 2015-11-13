@@ -37,6 +37,53 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
 
         public async Task ImportFromDtoAsync(WurmAssistantDto dto)
         {
+            await ImportCustomTimerDefinitions(dto);
+            await ImportTimers(dto);
+        }
+
+        public async Task ImportCustomTimerDefinitions(WurmAssistantDto dto)
+        {
+            List<ImportItem<LegacyCustomTimerDefinition, TimerDefinition>> importItems =
+                new List<ImportItem<LegacyCustomTimerDefinition, TimerDefinition>>();
+
+            var existingCustomTimerDefs = timerDefinitions.GetCustomTimerDefinitions().ToArray();
+
+            foreach (var legacyCustomTimerDefinition in dto.LegacyCustomTimerDefinitions)
+            {
+                var matchingDef =
+                    existingCustomTimerDefs.FirstOrDefault(
+                        definition => definition.Name == legacyCustomTimerDefinition.Name);
+
+                importItems.Add(new ImportItem<LegacyCustomTimerDefinition, TimerDefinition>()
+                {
+                    Source = legacyCustomTimerDefinition,
+                    Destination = matchingDef,
+                    ResolutionAction = (result, source, dest) =>
+                    {
+                        if (result == MergeResult.AddAsNew)
+                        {
+                            AddCustomTimerDefinition(source, source.Id ?? Guid.NewGuid());
+                        }
+                    },
+                    SourceAspectConverter =
+                        definition =>
+                            definition != null
+                                ? string.Format("{0} ({1})", definition.ToString(), definition.LegacyServerGroupId)
+                                : string.Empty,
+                    DestinationAspectConverter =
+                        definition => definition != null ? definition.ToVerboseString() : string.Empty
+                });
+            }
+
+            var mergeAssistantView = new ImportMergeAssistantView(importItems, logger);
+            mergeAssistantView.Text = "Choose custom timer definitions to import...";
+            mergeAssistantView.StartPosition = FormStartPosition.CenterScreen;
+            mergeAssistantView.Show();
+            await mergeAssistantView.Completed;
+        }
+
+        public async Task ImportTimers(WurmAssistantDto dto)
+        {
             var groupedByCharacter = dto.Timers.GroupBy(timer => timer.CharacterName).ToArray();
 
             List<ImportItem<Timer, WurmTimer>> importItems = new List<ImportItem<Timer, WurmTimer>>();
@@ -236,30 +283,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                                 source.Name));
                     }
 
-                    definition = new TimerDefinition(source.DefinitionId ?? Guid.NewGuid())
-                    {
-                        Name = definitionToImport.Name,
-                        RuntimeTypeId = RuntimeTypeId.LegacyCustom,
-                        CustomTimerConfig = new CustomTimerDefinition()
-                        {
-                            Duration = definitionToImport.Duration,
-                            ResetConditions = definitionToImport.ResetConditions.Select(c =>
-                                new CustomTimerDefinition.Condition()
-                                {
-                                    LogType = ParseLogType(c.LogType),
-                                    RegexPattern = c.Pattern
-                                }).ToArray(),
-                            TriggerConditions = definitionToImport.TriggerConditions.Select(c =>
-                                new CustomTimerDefinition.Condition()
-                                {
-                                    LogType = ParseLogType(c.LogType),
-                                    RegexPattern = c.Pattern
-                                }).ToArray(),
-                            ResetOnUptime = definitionToImport.ResetOnUptime
-                        }
-                    };
-
-                    timerDefinitions.AddTimerDefinition(definition);
+                    AddCustomTimerDefinition(definitionToImport, source.DefinitionId ?? Guid.NewGuid());
                 }
 
                 return definition;
@@ -277,6 +301,34 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             }
 
             return definition;
+        }
+
+        private void AddCustomTimerDefinition(LegacyCustomTimerDefinition definitionToImport, Guid? id = null)
+        {
+            var definition = new TimerDefinition(id ?? Guid.NewGuid())
+            {
+                Name = definitionToImport.Name,
+                RuntimeTypeId = RuntimeTypeId.LegacyCustom,
+                CustomTimerConfig = new CustomTimerDefinition()
+                {
+                    Duration = definitionToImport.Duration,
+                    ResetConditions = definitionToImport.ResetConditions.Select(c =>
+                        new CustomTimerDefinition.Condition()
+                        {
+                            LogType = ParseLogType(c.LogType),
+                            RegexPattern = c.Pattern
+                        }).ToArray(),
+                    TriggerConditions = definitionToImport.TriggerConditions.Select(c =>
+                        new CustomTimerDefinition.Condition()
+                        {
+                            LogType = ParseLogType(c.LogType),
+                            RegexPattern = c.Pattern
+                        }).ToArray(),
+                    ResetOnUptime = definitionToImport.ResetOnUptime
+                }
+            };
+
+            timerDefinitions.AddTimerDefinition(definition);
         }
 
         private LogType ParseLogType(string logType)

@@ -60,10 +60,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
 
                     if (manager != null)
                     {
-                        existingTrigger = manager.Triggers.FirstOrDefault(t => t.TriggerId == trigger.TriggerId
-                                                                               || (t.Name.Equals(trigger.Name,
-                                                                                   StringComparison
-                                                                                       .InvariantCultureIgnoreCase)));
+                        existingTrigger = manager.Triggers.FirstOrDefault(
+                            t =>
+                                t.TriggerId == trigger.TriggerId
+                                || (t.Name != null
+                                    && t.Name.Equals(trigger.Name, StringComparison.InvariantCultureIgnoreCase)));
+
                         isActionQueueAndOneExists = isActionQueue
                                                     && manager.Triggers.Any(
                                                         t => t.TriggerKind == TriggerKind.ActionQueue);

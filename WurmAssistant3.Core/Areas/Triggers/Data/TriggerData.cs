@@ -71,7 +71,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
         }
 
         [JsonProperty]
-        int popupDurationMillis;
+        int popupDurationMillis = 3000;
         public int PopupDurationMillis
         {
             get { return popupDurationMillis; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.Notifiers;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.Notifiers
@@ -19,7 +20,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.Notifiers
             this.popupNotifier = popupNotifier;
             ContentTextBox.Text = popupNotifier.Content;
             TitleTextBox.Text = popupNotifier.Title;
-            DurationNumeric.Value = (decimal)popupNotifier.Duration.TotalSeconds;
+            DurationNumeric.Value = ((decimal)popupNotifier.Duration.TotalSeconds).ConstrainToRange(0, 10000);
             StayUntilClickedCheckBox.Checked = popupNotifier.StayUntilClicked;
             DurationNumeric.Enabled = !popupNotifier.StayUntilClicked;
 
