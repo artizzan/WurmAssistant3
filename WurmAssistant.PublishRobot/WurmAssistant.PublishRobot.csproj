@@ -67,10 +67,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Content Include="publish-package-wa3-universal.cfg">
+    <Content Include="publish-package-wa3-azure.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
+    <Content Include="publish-package-wa3-arvixe.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AldursLab\Lab\Essentials\Essentials.csproj">

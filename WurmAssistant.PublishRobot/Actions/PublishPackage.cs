@@ -77,7 +77,8 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
             RetryManager.AutoRetry(() => publisher.Publish(zipFile, version.BuildCode, version.BuildNumber));
             output.Write("Publishing operation completed.");
 
-            RetryManager.AutoRetry(() => slacker.SendMessage(string.Format("Published {0}", BuildFileName())));
+            RetryManager.AutoRetry(
+                () => slacker.SendMessage(string.Format("Published {0} to {1}", BuildFileName(), webServiceRootUrl)));
         }
 
         string BuildFileName()
