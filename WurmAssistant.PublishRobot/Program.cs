@@ -32,15 +32,8 @@ namespace AldursLab.WurmAssistant.PublishRobot
             IConfig config = new FileSimpleConfig(configPath);
             output.Write(config.ToString());
 
-            if (command.In("publish-package-wa3-universal.cfg"))
-            {
-                var action = new PublishPackage(config, tempDir, output);
-                action.Execute();
-            }
-            else
-            {
-                throw new ArgumentException("*.cfg file name does not match any supported config");
-            }
+            var action = new PublishPackage(config, tempDir, output);
+            action.Execute();
         }
 
         static void ValidateArgs(string[] args)
