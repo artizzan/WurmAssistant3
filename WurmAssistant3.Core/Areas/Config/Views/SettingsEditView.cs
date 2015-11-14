@@ -34,7 +34,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config.Views
 
             firstTimeSetupAgain.Checked = wurmAssistantConfig.ReSetupRequested;
             cleanWurmApiCaches.Checked = wurmAssistantConfig.DropAllWurmApiCachesToggle;
-            MinimizeToTray.Checked = wurmAssistantConfig.MinimizeToTrayEnabled;
         }
 
         private void firstTimeSetupAgain_CheckedChanged(object sender, EventArgs e)
@@ -45,11 +44,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config.Views
         private void cleanWurmApiCaches_CheckedChanged(object sender, EventArgs e)
         {
             wurmAssistantConfig.DropAllWurmApiCachesToggle = cleanWurmApiCaches.Checked;
-        }
-
-        private void MinimizeToTray_CheckedChanged(object sender, EventArgs e)
-        {
-            wurmAssistantConfig.MinimizeToTrayEnabled = MinimizeToTray.Checked;
         }
 
         private void validateConfigButton_Click(object sender, EventArgs e)

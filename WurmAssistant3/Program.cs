@@ -15,16 +15,9 @@ namespace AldursLab.WurmAssistant3
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            try
-            {
-                var mainView = new MainForm(args);
-                Application.Run(mainView);
-            }
-            catch (LockFailedException)
-            {
-                // if another app is running, we are silently quitting
-                Application.Exit();
-            }
+
+            var mainView = new MainForm(args);
+            Application.Run(mainView);
         }
     }
 }

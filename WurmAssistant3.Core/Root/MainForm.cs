@@ -5,14 +5,18 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
+using AldursLab.Essentials.Synchronization;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Logging.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Views;
 using AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views;
-using AldursLab.WurmAssistant3.Core.Native.Win32;
+using AldursLab.WurmAssistant3.Core.Areas.Native.Constants;
+using AldursLab.WurmAssistant3.Core.Areas.Native.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Native.Modules;
 using AldursLab.WurmAssistant3.Core.Properties;
 using AldursLab.WurmAssistant3.Core.Root.Components;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
@@ -115,22 +119,6 @@ namespace AldursLab.WurmAssistant3.Core.Root
                 item.Click += (sender, args) => onClick();
                 mainForm.TrayContextMenuStrip.Items.Insert(insertionIndex, item);
             }
-
-            public void HandleMinimizeToTray()
-            {
-                if (FormWindowState.Minimized == mainForm.WindowState)
-                {
-                    if (mainForm.wurmAssistantConfig.MinimizeToTrayEnabled)
-                    {
-                        if (!mainForm.settings.BaloonTrayTooltipShown)
-                        {
-                            mainForm.systemTrayNotifyIcon.ShowBalloonTip(5000);
-                            mainForm.settings.BaloonTrayTooltipShown = true;
-                        }
-                        mainForm.Hide();
-                    }
-                }
-            }
         }
 
         ILogger logger;
@@ -157,9 +145,10 @@ namespace AldursLab.WurmAssistant3.Core.Root
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            ConsoleArgsManager argsManager = null;
             try
             {
-                var argsManager = new ConsoleArgsManager(args);
+                argsManager = new ConsoleArgsManager(args);
                 if (argsManager.WurmUnlimitedMode)
                 {
                     this.Text = "Wurm Assistant Unlimited";
@@ -178,6 +167,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
                 trayManager = new TrayManager(this);
 
                 bootstrapper = new CoreBootstrapper(this, argsManager);
+                bootstrapper.PreBootstrap();
                 wurmAssistantConfig = bootstrapper.WurmAssistantConfig;
                 logger = bootstrapper.GetCoreLogger();
 
@@ -186,6 +176,33 @@ namespace AldursLab.WurmAssistant3.Core.Root
                 systemTrayNotifyIcon.Visible = true;
 
                 InitTimer.Enabled = true;
+            }
+            catch (LockFailedException)
+            {
+                try
+                {
+                    // this will probably fail on non windows even under WINE
+
+                    if (argsManager != null)
+                    {
+                        INativeCalls rwc = new Win32NativeCalls();
+                        if (argsManager.WurmUnlimitedMode)
+                        {
+                            rwc.AttemptToBringMainWindowToFront("AldursLab.WurmAssistant3", "Unlimited");
+                        }
+                        else
+                        {
+                            rwc.AttemptToBringMainWindowToFront("AldursLab.WurmAssistant3", @"^((?!Unlimited).)*$");
+                        }
+
+                    }
+                }
+                catch (Exception exception)
+                {
+                    if (logger != null) logger.Error(exception, "");
+                }
+
+                Application.Exit();
             }
             catch (Exception exception)
             {
@@ -396,7 +413,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
 
         private void MainView_FormClosed(object sender, FormClosedEventArgs e)
         {
-            bootstrapper.Dispose();
+            if (bootstrapper != null) bootstrapper.Dispose();
         }
 
         public void AddMenuItem(string text, Action onClick, Image image)
@@ -420,7 +437,6 @@ namespace AldursLab.WurmAssistant3.Core.Root
                     settings.SavedHeight = this.Height;
                 }
             }
-            trayManager.HandleMinimizeToTray();
         }
 
         protected virtual void OnLateHostClosing()

@@ -8,7 +8,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config.Contracts
         Platform RunningPlatform { get; set; }
         bool ReSetupRequested { get; set; }
         bool DropAllWurmApiCachesToggle { get; set; }
-        bool MinimizeToTrayEnabled { get; set; }
         bool WurmUnlimitedMode { get; }
     }
 }

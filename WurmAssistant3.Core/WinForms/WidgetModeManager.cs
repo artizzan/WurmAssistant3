@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant3.Core.Native.Win32;
+using AldursLab.WurmAssistant3.Core.Areas.Native.Constants;
 
 namespace AldursLab.WurmAssistant3.Core.WinForms
 {

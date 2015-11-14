@@ -16,6 +16,7 @@ using AldursLab.WurmAssistant3.Core.Areas.Logging.Views;
 using AldursLab.WurmAssistant3.Core.Areas.LogSearcher;
 using AldursLab.WurmAssistant3.Core.Areas.MainMenu;
 using AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views;
+using AldursLab.WurmAssistant3.Core.Areas.Native;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine;
 using AldursLab.WurmAssistant3.Core.Areas.Timers;
@@ -40,7 +41,8 @@ namespace AldursLab.WurmAssistant3.Core.Root
 
         readonly MainForm mainForm;
         readonly ConsoleArgsManager consoleArgs;
-        readonly WurmAssistantDataDirectory dataDirectory;
+
+        WurmAssistantDataDirectory dataDirectory;
 
         public CoreBootstrapper([NotNull] MainForm mainForm, [NotNull] ConsoleArgsManager consoleArgs)
         {
@@ -48,7 +50,10 @@ namespace AldursLab.WurmAssistant3.Core.Root
             if (consoleArgs == null) throw new ArgumentNullException("consoleArgs");
             this.mainForm = mainForm;
             this.consoleArgs = consoleArgs;
+        }
 
+        public void PreBootstrap()
+        {
             SetupActivationStrategyComponents();
 
             dataDirectory = new WurmAssistantDataDirectory(consoleArgs);
@@ -111,6 +116,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
                 throw new ApplicationException("invalid command line arguments: " + string.Join(" | ", consoleArgs.GetRawArgs()));
             }
 
+            NativeSetup.Bind(kernel);
             WurmApiSetup.TryAutodetectWurmInstallDir(kernel);
             
             // this is where 'first time' config dialog is shown, if required

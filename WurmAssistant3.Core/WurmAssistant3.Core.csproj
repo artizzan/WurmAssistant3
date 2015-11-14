@@ -126,6 +126,9 @@
       <DependentUpon>SettingsEditView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Granger\Modules\GrangerWa2Importer.cs" />
+    <Compile Include="Areas\Logging\Modules\LoggerStub.cs" />
+    <Compile Include="Areas\Native\Constants\ShowWindowCommands.cs" />
+    <Compile Include="Areas\Native\NativeSetup.cs" />
     <Compile Include="Areas\SoundEngine\Modules\SoundEngineWa2Importer.cs" />
     <Compile Include="Areas\Timers\Modules\TimersWa2Importer.cs" />
     <Compile Include="Areas\Triggers\Modules\TriggersWa2Importer.cs" />
@@ -579,7 +582,7 @@
     <Compile Include="IoC\ISuperFactory.cs" />
     <Compile Include="IoC\SuperFactory.cs" />
     <Compile Include="Legacy\OperatingSystemInfo.cs" />
-    <Compile Include="Native\Win32\Win32Hooks.cs" />
+    <Compile Include="Areas\Native\Constants\Win32Hooks.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -667,6 +670,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Root\CoreBootstrapper.cs" />
     <Compile Include="ReflectionRootAnchor.cs" />
+    <Compile Include="Areas\Native\Contracts\INativeCalls.cs" />
+    <Compile Include="Areas\Native\Modules\Win32NativeCalls.cs" />
     <Compile Include="WinForms\Reusables\UniversalTextDisplayView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -717,6 +722,7 @@
     <Folder Include="Areas\Features\Views\" />
     <Folder Include="Areas\Granger\Contracts\" />
     <Folder Include="Areas\MainMenu\Contracts\" />
+    <Folder Include="WinForms\Utility\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AldursLab\Lab\Essentials\Essentials.csproj">

@@ -25,14 +25,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config.Modules
         [JsonProperty]
         bool dropAllWurmApiCachesToggle;
 
-        [JsonProperty]
-        bool minimizeToTrayEnabled;
-
         public WurmAssistantConfig([NotNull] ConsoleArgsManager consoleArgsManager)
         {
             if (consoleArgsManager == null) throw new ArgumentNullException("consoleArgsManager");
             this.consoleArgsManager = consoleArgsManager;
-            MinimizeToTrayEnabled = true;
         }
 
         public string WurmGameClientInstallDirectory
@@ -81,12 +77,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config.Modules
                 dropAllWurmApiCachesToggle = value;
                 FlagAsChanged();
             }
-        }
-
-        public bool MinimizeToTrayEnabled
-        {
-            get { return minimizeToTrayEnabled; }
-            set { minimizeToTrayEnabled = value; this.FlagAsChanged(); }
         }
 
         public bool WurmUnlimitedMode

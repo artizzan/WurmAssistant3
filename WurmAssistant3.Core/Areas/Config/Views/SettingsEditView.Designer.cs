@@ -30,7 +30,6 @@
         {
             this.firstTimeSetupAgain = new System.Windows.Forms.CheckBox();
             this.cleanWurmApiCaches = new System.Windows.Forms.CheckBox();
-            this.MinimizeToTray = new System.Windows.Forms.CheckBox();
             this.validateConfigButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -56,17 +55,6 @@
             this.cleanWurmApiCaches.UseVisualStyleBackColor = true;
             this.cleanWurmApiCaches.CheckedChanged += new System.EventHandler(this.cleanWurmApiCaches_CheckedChanged);
             // 
-            // MinimizeToTray
-            // 
-            this.MinimizeToTray.AutoSize = true;
-            this.MinimizeToTray.Location = new System.Drawing.Point(12, 58);
-            this.MinimizeToTray.Name = "MinimizeToTray";
-            this.MinimizeToTray.Size = new System.Drawing.Size(350, 17);
-            this.MinimizeToTray.TabIndex = 2;
-            this.MinimizeToTray.Text = "Minimize app to tray (hide in taskbar, double click tray icon to restore)";
-            this.MinimizeToTray.UseVisualStyleBackColor = true;
-            this.MinimizeToTray.CheckedChanged += new System.EventHandler(this.MinimizeToTray_CheckedChanged);
-            // 
             // validateConfigButton
             // 
             this.validateConfigButton.Location = new System.Drawing.Point(12, 97);
@@ -83,7 +71,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(420, 139);
             this.Controls.Add(this.validateConfigButton);
-            this.Controls.Add(this.MinimizeToTray);
             this.Controls.Add(this.cleanWurmApiCaches);
             this.Controls.Add(this.firstTimeSetupAgain);
             this.MaximizeBox = false;
@@ -100,7 +87,6 @@
 
         private System.Windows.Forms.CheckBox firstTimeSetupAgain;
         private System.Windows.Forms.CheckBox cleanWurmApiCaches;
-        private System.Windows.Forms.CheckBox MinimizeToTray;
         private System.Windows.Forms.Button validateConfigButton;
     }
 }
