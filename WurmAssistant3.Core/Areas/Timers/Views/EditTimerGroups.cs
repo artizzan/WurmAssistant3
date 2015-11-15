@@ -100,5 +100,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
         {
             return currentGroupsLb.SelectedItem as PlayerTimersGroup;
         }
+
+        private void hideGroupBtn_Click(object sender, EventArgs e)
+        {            
+            var selectedGroup = TryGetSelected();
+            if (selectedGroup != null)
+            {
+                selectedGroup.Hidden = !selectedGroup.Hidden;
+                RebuildGroups();
+            }
+        }
     }
 }

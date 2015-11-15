@@ -73,10 +73,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
 
         internal void RegisterTimersGroup(PlayerLayoutView layoutControl)
         {
-            layoutControl.WidgetManager = widgetManager;
-            flowLayoutPanel1.Controls.Add(layoutControl);
-            ApplyTimerGroupsOrdering();
-            widgetManager.ResetMouseEvents();
+            if (!flowLayoutPanel1.Controls.Contains(layoutControl))
+            {
+                layoutControl.WidgetManager = widgetManager;
+                flowLayoutPanel1.Controls.Add(layoutControl);
+                ApplyTimerGroupsOrdering();
+                widgetManager.ResetMouseEvents();
+            }
         }
 
         internal void UnregisterTimersGroup(PlayerLayoutView layoutControl)

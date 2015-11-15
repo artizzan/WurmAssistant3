@@ -67,6 +67,32 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             set { sortingOrder = value; FlagAsChanged(); }
         }
 
+        [JsonProperty()] 
+        bool hidden;
+        public bool Hidden
+        {
+            get { return hidden; }
+            set
+            {
+                hidden = value;
+                if (hidden)
+                {
+                    if (timersFeature != null && layoutControl != null)
+                    {
+                        timersFeature.UnregisterTimersGroup(layoutControl);
+                    }
+                }
+                else
+                {
+                    if (timersFeature != null && layoutControl != null)
+                    {
+                        timersFeature.RegisterTimersGroup(layoutControl);
+                    }
+                }
+                FlagAsChanged();
+            }
+        }
+
         readonly List<WurmTimer> timers = new List<WurmTimer>();
 
         PlayerLayoutView layoutControl;
@@ -106,7 +132,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             try
             {
                 layoutControl = new PlayerLayoutView(this);
-                this.timersFeature.RegisterTimersGroup(layoutControl);
+                if (!Hidden)
+                {
+                    this.timersFeature.RegisterTimersGroup(layoutControl);
+                }
                 wurmApi.LogsMonitor.Subscribe(CharacterName, LogType.AllLogs, OnNewLogEvents);
                 character = wurmApi.Characters.Get(CharacterName);
                 character.LogInOrCurrentServerPotentiallyChanged += CharacterOnLogInOrCurrentServerPotentiallyChanged;
@@ -356,7 +385,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
 
         public override string ToString()
         {
-            return string.Format("{0} ({1})", CharacterName, ServerGroupId);
+            return string.Format("{0} ({1}){2}", CharacterName, ServerGroupId, Hidden ? " (hidden)" : string.Empty);
         }
 
         public void RemoveAllTimers()
