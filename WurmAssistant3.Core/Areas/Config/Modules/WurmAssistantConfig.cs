@@ -14,6 +14,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config.Modules
         readonly ConsoleArgsManager consoleArgsManager;
 
         [JsonProperty]
+        int version = 0;
+
+        [JsonProperty]
         string wurmGameClientInstallDirectory;
 
         [JsonProperty]
@@ -29,6 +32,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Config.Modules
         {
             if (consoleArgsManager == null) throw new ArgumentNullException("consoleArgsManager");
             this.consoleArgsManager = consoleArgsManager;
+        }
+
+        protected override void OnPersistentDataLoaded()
+        {
+            if (version == 0)
+            {
+                dropAllWurmApiCachesToggle = true;
+                version = 1;
+            }
         }
 
         public string WurmGameClientInstallDirectory
