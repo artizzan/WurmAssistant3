@@ -91,7 +91,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
 
         private void buttonAddRemoveChars_Click(object sender, EventArgs e)
         {
-            var view = new EditTimerGroups(timersFeature, wurmApi);
+            var view = new EditTimerGroups(timersFeature, wurmApi, logger);
             view.ShowDialogCenteredOnForm(this);
             ApplyTimerGroupsOrdering();
         }

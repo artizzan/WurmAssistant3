@@ -19,6 +19,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.MeditPath
     [PersistentObject("TimersFeature_MeditPathTimer")]
     public class MeditPathTimer : WurmTimer
     {
+        enum PathSwitchKind { PathAdvance, PathBegin, PathReset }
+
         [JsonProperty]
         DateTime dateOfNextQuestionAttempt = DateTime.MinValue;
         [JsonProperty]
@@ -139,7 +141,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.MeditPath
             {
                 if (line.Content.Contains("Congratulations! You have now reached the level"))
                 {
-                    UpdateDateOfNextQuestionAttempt(line, true, false);
+                    UpdateDateOfNextQuestionAttempt(line, PathSwitchKind.PathAdvance);
                     RemoveManualCooldown();
                     UpdateCooldown();
                 }
@@ -148,8 +150,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.MeditPath
             {
                 if (line.Content.Contains("You decide to start pursuing the insights of the path of"))
                 {
-                    UpdateDateOfNextQuestionAttempt(line, true, true);
+                    UpdateDateOfNextQuestionAttempt(line, PathSwitchKind.PathBegin);
                     RemoveManualCooldown();
+                    UpdateCooldown();
+                }
+                else if (line.Content.StartsWith("You decide to stop pursuing the insights of the path of "))
+                {
+                    UpdateDateOfNextQuestionAttempt(line, PathSwitchKind.PathReset);
                     UpdateCooldown();
                 }
             }
@@ -159,31 +166,40 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.MeditPath
         {
             bool result = false;
 
-            bool IsPathBegin = false;
-            //[00:35:09] Congratulations! You have now reached the level of Rock of the path of love!
-            LogEntry lastPathAdvancedLine = null;
+            PathSwitchKind switchKind = PathSwitchKind.PathAdvance;
+            
+            LogEntry lastPathModifyLine = null;
             LogEntry lastPathFailLine = null;
             foreach (LogEntry line in lines)
             {
                 if (line.Content.Contains("You decide to start pursuing the insights of the path of"))
                 {
-                    lastPathAdvancedLine = line;
+                    lastPathModifyLine = line;
                     lastPathFailLine = null;
-                    IsPathBegin = true;
+                    switchKind = PathSwitchKind.PathBegin;
                 }
 
+                //[00:35:09] Congratulations! You have now reached the level of Rock of the path of love!
                 if (line.Content.Contains("Congratulations! You have now reached the level"))
                 {
-                    IsPathBegin = false;
-                    lastPathAdvancedLine = line;
-                    lastPathFailLine = null; //reset any previous fail finds because they are irrelevant now
+                    lastPathModifyLine = line;
+                    lastPathFailLine = null;
+                    switchKind = PathSwitchKind.PathAdvance;
+                }
+
+                // [05:49:11] You decide to stop pursuing the insights of the path of knowledge. 
+                if (line.Content.StartsWith("You decide to stop pursuing the insights of the path of "))
+                {
+                    lastPathModifyLine = line;
+                    lastPathFailLine = null;
+                    switchKind = PathSwitchKind.PathReset;
                 }
                 //if (line.Contains("[fail message]")
                 //    lastPathFailLine = line;
             }
-            if (lastPathAdvancedLine != null)
+            if (lastPathModifyLine != null)
             {
-                UpdateDateOfNextQuestionAttempt(lastPathAdvancedLine, false, IsPathBegin);
+                UpdateDateOfNextQuestionAttempt(lastPathModifyLine, switchKind);
                 result = true;
             }
             if (lastPathFailLine != null)
@@ -193,13 +209,28 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.MeditPath
             return result;
         }
 
-        void UpdateDateOfNextQuestionAttempt(LogEntry line, bool liveLogs, bool pathBegin)
+        void UpdateDateOfNextQuestionAttempt(LogEntry line, PathSwitchKind switchKind)
         {
-            int cdInHrs = 0;
-            int nextMeditLevel;
+            if (line == null) throw new ArgumentNullException("line");
 
-            if (pathBegin) nextMeditLevel = 1;
-            else nextMeditLevel = MeditationPaths.FindLevel(line.Content) + 1;
+            int cdInHrs = 0;
+            int nextMeditLevel = 0;
+
+            if (switchKind == PathSwitchKind.PathBegin)
+            {
+                nextMeditLevel = 1;
+            }
+            else if (switchKind == PathSwitchKind.PathReset)
+            {
+                nextMeditLevel = 0;
+                // there is a 24h cooldown before new path can be learned
+                NextQuestionAttemptOverridenUntil = line.Timestamp + TimeSpan.FromHours(24);
+            }
+            else
+            {
+                // PathAdvance
+                nextMeditLevel = MeditationPaths.FindLevel(line.Content) + 1;
+            }
 
             cdInHrs = MeditationPaths.GetCooldownHoursForLevel(nextMeditLevel).ConstrainToRange(0, int.MaxValue);
 

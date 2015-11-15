@@ -99,7 +99,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
             wurmApi.LogsMonitor.Subscribe(this.CharacterName, LogType.AllLogs, OnNewLogEvents);
         }
 
-        public  TriggersFeature TriggersFeature { get; set; }
+        public TriggersFeature TriggersFeature { get; set; }
 
         private bool IsMuted()
         {

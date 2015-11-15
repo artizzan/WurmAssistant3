@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
@@ -18,13 +19,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
     {
         readonly TimersFeature timersFeature;
         readonly IWurmApi wurmApi;
+        private readonly ILogger logger;
 
-        public EditTimerGroups([NotNull] TimersFeature timersFeature, [NotNull] IWurmApi wurmApi)
+        public EditTimerGroups([NotNull] TimersFeature timersFeature, [NotNull] IWurmApi wurmApi, ILogger logger)
         {
             if (timersFeature == null) throw new ArgumentNullException("timersFeature");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
+            if (logger == null) throw new ArgumentNullException("logger");
             this.timersFeature = timersFeature;
             this.wurmApi = wurmApi;
+            this.logger = logger;
             InitializeComponent();
             
             RebuildGroups();
@@ -59,7 +63,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
             }
             else
             {
-                timersFeature.CreateGroup(Guid.NewGuid(), playerCb.Text, serverGroupCb.Text);
+                try
+                {
+                    timersFeature.CreateGroup(Guid.NewGuid(), playerCb.Text, serverGroupCb.Text);
+                }
+                catch (Exception exception)
+                {
+                    var message = string.Format("Error at create timer group for player {0}, server group {1}",
+                        playerCb.Text,
+                        serverGroupCb.Text);
+                    logger.Error(exception, message);
+                    MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 RebuildGroups();
             }
         }

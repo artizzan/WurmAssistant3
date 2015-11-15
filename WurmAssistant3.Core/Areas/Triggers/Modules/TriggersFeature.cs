@@ -130,8 +130,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
 
         private void AddManager(string charName)
         {
-            var triggerManager = triggerManagerResolver.Get(charName);
-            AddManager(triggerManager);
+            try
+            {
+                var triggerManager = triggerManagerResolver.Get(charName);
+                AddManager(triggerManager);
+            }
+            catch (Exception exception)
+            {
+                logger.Error(exception, "Failed to create triggers manager for character " + charName);
+            }
         }
 
         private void AddManager(TriggerManager triggerManager)
