@@ -161,7 +161,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
             {
                 foreach (var traitValueEntity in entities)
                 {
-                    grangerSimpleDb.TraitValues.Remove(traitValueEntity.ID);
+                    grangerSimpleDb.TraitValues.Remove(traitValueEntity.Id);
                 }
             }
 
@@ -170,12 +170,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
             {
                 TraitValueEntity newentity = new TraitValueEntity()
                 {
-                    ID = nextIndex,
+                    Id = nextIndex,
                     Trait = new CreatureTrait(keyval.Key),
                     Value = keyval.Value,
                     ValueMapID = traitValueMapId
                 };
-                grangerSimpleDb.TraitValues[newentity.ID] = newentity;
+                grangerSimpleDb.TraitValues[newentity.Id] = newentity;
                 nextIndex++;
             }
 
@@ -190,7 +190,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
             {
                 foreach (var traitValueEntity in entities)
                 {
-                    grangerSimpleDb.TraitValues.Remove(traitValueEntity.ID);
+                    grangerSimpleDb.TraitValues.Remove(traitValueEntity.Id);
                 }
             }
             grangerSimpleDb.Save();

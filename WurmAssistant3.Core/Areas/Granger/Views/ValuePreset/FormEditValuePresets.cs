@@ -95,6 +95,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.ValuePreset
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
+            if (CurrentTraitValueMap == null) return;
+
             if (!CurrentTraitValueMap.ReadOnly)
             {
                 //iterate over controls and update the current value map

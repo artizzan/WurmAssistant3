@@ -11,9 +11,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
     {
         //primary key
         [JsonProperty("id")]
-        public int ID;
+        public int Id;
+
         [JsonProperty("valuemapid")]
         public string ValueMapID;
+
         [JsonProperty("traitid")]
         string _TraitEnumINTStr;
         public CreatureTrait Trait
@@ -27,14 +29,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
                 _TraitEnumINTStr = value.ToInt32().ToString();
             }
         }
-        [Column(Name = "traitvalue")]
+        [JsonProperty("traitvalue")]
         public int Value;
 
-        static public int GenerateNewTraitValueID(GrangerContext context)
+        public static int GenerateNewTraitValueID(GrangerContext context)
         {
             try
             {
-                return context.TraitValues.Max(x => x.ID) + 1;
+                return context.TraitValues.Max(x => x.Id) + 1;
             }
             catch (InvalidOperationException)
             {
