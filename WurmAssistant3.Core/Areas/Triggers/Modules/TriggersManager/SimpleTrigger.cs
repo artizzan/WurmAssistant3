@@ -15,11 +15,22 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
             ILogger logger)
             : base(triggerData, soundEngine, trayPopups, wurmApi, logger)
         {
-            ConditionHelp = "Text to find in logs, case insensitive";
+            ConditionHelp = "Text to match against log entry content, case insensitive";
+            SourceHelp =
+                "Test to match against log entry source. " + Environment.NewLine +
+                "Source is the text between < >, for example game character than sent a PM. " + Environment.NewLine +
+                "Case insensitive. " + Environment.NewLine +
+                "Leave empty to match everything.";
         }
 
         protected override bool CheckCondition(LogEntry logMessage)
         {
+            if (!string.IsNullOrWhiteSpace(TriggerData.Source) 
+                && !string.Equals(logMessage.Source, TriggerData.Source, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return false;
+            }
+
             if (TriggerData.MatchEveryLine) return true;
             if (string.IsNullOrEmpty(TriggerData.Condition)) return false;
             return CheckCaseInsensitive(logMessage.Content);

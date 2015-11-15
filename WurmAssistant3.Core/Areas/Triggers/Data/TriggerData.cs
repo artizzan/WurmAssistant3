@@ -23,6 +23,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
             TriggerKind = triggerKind;
 
             condition = string.Empty;
+            source = string.Empty;
             notificationDelay = 1.0D;
             Condition = string.Empty;
             logTypes = new HashSet<LogType>();
@@ -269,6 +270,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
             set
             {
                 matchEveryLine = value;
+                OnDataChanged();
+            }
+        }
+
+        [JsonProperty] 
+        string source;
+        public string Source
+        {
+            get { return source; }
+            set
+            {
+                source = value;
                 OnDataChanged();
             }
         }

@@ -17,6 +17,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
         }
 
         public string ConditionHelp { get; set; }
+        public string SourceHelp { get; set; }
 
         public override string ConditionAspect
         {
@@ -41,6 +42,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
         {
             get { return TriggerData.MatchEveryLine; }
             set { TriggerData.MatchEveryLine = value; }
+        }
+
+        public string Source
+        {
+            get { return TriggerData.Source; }
+            set { TriggerData.Source = value; }
         }
     }
 }

@@ -21,20 +21,32 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
         {
             if (logger == null) throw new ArgumentNullException("logger");
             this.logger = logger;
-            ConditionHelp = "Use C# regular expression pattern";
+            ConditionHelp = "C# regular expression pattern to match against log entry content.";
+            SourceHelp =
+                "C# regular expression pattern to match against log entry source. " + Environment.NewLine +
+                "Source is the text between < >, for example game character than sent a PM. " + Environment.NewLine +
+                "Leave empty to match everything.";
         }
 
         protected override bool CheckCondition(LogEntry logMessage)
         {
-            if (TriggerData.MatchEveryLine) return true;
-
-            if (string.IsNullOrEmpty(TriggerData.Condition))
-            {
-                return false;
-            }
-
             try
             {
+                if (!string.IsNullOrWhiteSpace(TriggerData.Source))
+                {
+                    if (!Regex.IsMatch(logMessage.Source, TriggerData.Source))
+                    {
+                        return false;
+                    }
+                }
+
+                if (TriggerData.MatchEveryLine) return true;
+
+                if (string.IsNullOrEmpty(TriggerData.Condition))
+                {
+                    return false;
+                }
+
                 return Regex.IsMatch(logMessage.Content, TriggerData.Condition);
             }
             catch (Exception exception)
