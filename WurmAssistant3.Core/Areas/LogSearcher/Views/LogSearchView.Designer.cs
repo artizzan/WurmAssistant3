@@ -346,6 +346,8 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MinimumSize = new System.Drawing.Size(828, 606);
             this.Name = "LogSearchView";
+            this.ShowIcon = false;
+            this.Text = "Log Searcher";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LogSearcherForm_FormClosing);
             this.Load += new System.EventHandler(this.FormLogSearcher_Load);
             this.Resize += new System.EventHandler(this.LogSearcherForm_Resize);

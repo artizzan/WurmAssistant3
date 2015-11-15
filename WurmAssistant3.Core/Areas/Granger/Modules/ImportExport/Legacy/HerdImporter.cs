@@ -24,7 +24,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ImportExport.Legac
 
             XDocument doc = XDocument.Load(xmlFilePath);
             var creatureEntities = new List<CreatureEntity>();       
-            var elements = doc.Root.Elements("Creature");
+            var elements = doc.Root.Elements("Horse").Union(doc.Root.Elements("Creature"));
             foreach (var x in elements)
             {
                 var entity = new CreatureEntity();
@@ -83,6 +83,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ImportExport.Legac
                 entity.Comments = x.Element("Comments").Value;
                 entity.SpecialTagsRaw = x.Element("Tags").Value;
                 entity.BrandedFor = x.Element("BrandedFor").Value;
+
+                var serverNameElem = x.Element("ServerName");
+                entity.ServerName = serverNameElem != null ? serverNameElem.Value : null;
 
                 creatureEntities.Add(entity);
             }

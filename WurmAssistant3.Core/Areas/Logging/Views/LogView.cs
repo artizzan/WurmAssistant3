@@ -127,8 +127,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Logging.Views
 
         void TrimMessages()
         {
-            const int maxMessagesInDisplay = 2000;
-            const int messagesToKeep = 1900;
+            const int maxMessagesInDisplay = 1000;
+            const int messagesToKeep = 900;
 
             if (messages.Count > maxMessagesInDisplay)
             {

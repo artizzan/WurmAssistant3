@@ -260,9 +260,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
             {
                 bool tooManyToProcess = false;
                 bool tooManyToHighlight = false;
-                if (results.Count > 20000)
+                if (matches.Count > 20000)
                     tooManyToProcess = true;
-                if (results.Count > 5000)
+                if (matches.Count > 5000)
                     tooManyToHighlight = true;
                 if (!tooManyToProcess)
                 {

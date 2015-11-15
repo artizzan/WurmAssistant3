@@ -50,7 +50,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.ImportExport.Legac
                         new XElement("Color", creatureEntity.Color),
                         new XElement("Comments", creatureEntity.Comments),
                         new XElement("Tags", creatureEntity.SpecialTagsRaw),
-                        new XElement("BrandedFor", creatureEntity.BrandedFor));
+                        new XElement("BrandedFor", creatureEntity.BrandedFor),
+                        new XElement("ServerName", creatureEntity.ServerName));
                 root.Add(creature);
             }
 

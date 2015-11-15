@@ -268,13 +268,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 // comment: are these sanity checks really needed?
 
                 string sanityFailReason = null;
-                // creatures cant get younger, except if incorrectly updated by Granger or manual edit.
-                if (oldCreature.Age > creatureBuffer.Age)
-                {
-                    sanityFail = true;
-                    if (sanityFailReason == null)
-                        sanityFailReason = "New creature data would make the creature younger than it was";
-                }
+
+                // note: dropped age check, due to foal recognition issues with non-horses
 
                 // if both creatures have a mother name or father name, they cant change
                 // however its possible a mother or father dies and reference is lost (thats how it works in Wurm), 
@@ -361,7 +356,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                     grangerDebug.Log("sanity check failed for creature update: " + oldCreature + ". Reason: " +
                                      sanityFailReason);
                     trayPopups.Schedule("There was data mismatch when trying to update creature, reason: " + sanityFailReason,
-                        "COULD NOT UPDATE CREATURE",
+                        "ERROR AT UPDATE CREATURE",
                         8000);
                 }
                 else
