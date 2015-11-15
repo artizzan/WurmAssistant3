@@ -39,6 +39,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
             if (actionQueueConditions == null) throw new ArgumentNullException("actionQueueConditions");
+
+            CharacterName = persistentObjectId;
+
             this.soundEngine = soundEngine;
             this.trayPopups = trayPopups;
             this.wurmApi = wurmApi;
@@ -46,12 +49,22 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
             this.actionQueueConditions = actionQueueConditions;
         }
 
+        public string CharacterName { get; private set; }
+
         protected override void OnPersistentDataLoaded()
         {
             foreach (var settings in triggerDatas.Values)
             {
                 settings.DataChanged += DataOnDataChanged;
-                triggers.Add(settings.TriggerId, BuildTrigger(settings));
+                try
+                {
+                    triggers.Add(settings.TriggerId, BuildTrigger(settings));
+                }
+                catch (Exception exception)
+                {
+                    logger.Error(exception,
+                        string.Format("Error initializing trigger id {0}, name: {1}", settings.TriggerId, settings.Name));
+                }
             }
         }
 
@@ -78,6 +91,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
                     return new RegexTrigger(settings, soundEngine, trayPopups, wurmApi, logger);
                 case TriggerKind.ActionQueue:
                     return new ActionQueueTrigger(settings, soundEngine, trayPopups, wurmApi, logger, actionQueueConditions);
+                case TriggerKind.SkillLevel:
+                    return new SkillLevelTrigger(CharacterName, settings, soundEngine, trayPopups, wurmApi, logger);
                 default:
                     throw new ApplicationException("Unknown trigger kind: " + settings.TriggerKind);
             }
@@ -104,6 +119,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
                 if (data != null) data.DataChanged -= DataOnDataChanged;
                 triggers.Remove(trigger.TriggerId);
                 triggerDatas.Remove(trigger.TriggerId);
+                trigger.Dispose();
                 FlagAsChanged();
                 return true;
             }
@@ -114,6 +130,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
         void DataOnDataChanged(object sender, EventArgs eventArgs)
         {
             FlagAsChanged();
+        }
+
+        public void DisposeAll()
+        {
+            foreach (var trigger in All)
+            {
+                trigger.Dispose();
+            }
         }
     }
 }

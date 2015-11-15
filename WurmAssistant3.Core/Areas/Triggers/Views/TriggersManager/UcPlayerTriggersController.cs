@@ -8,5 +8,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.TriggersManager
         {
             InitializeComponent();
         }
+
+        private void buttonRemove_Click(object sender, System.EventArgs e)
+        {
+        }
     }
 }

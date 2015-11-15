@@ -180,6 +180,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
             wurmApi.LogsMonitor.Unsubscribe(this.CharacterName, OnNewLogEvents);
             TriggersFeature.RemoveManager(this);
             hostEnvironment.HostClosing -= Cleanup;
+            activeTriggers.DisposeAll();
 
             controlUi.Dispose();
             triggersConfigUi.Close();

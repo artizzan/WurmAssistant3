@@ -392,5 +392,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
                 RemoveLogType(logType);
             }
         }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+        }
     }
 }

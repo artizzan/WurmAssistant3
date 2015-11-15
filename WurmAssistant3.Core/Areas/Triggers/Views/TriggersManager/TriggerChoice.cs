@@ -17,6 +17,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.TriggersManager
             CreateButton("Simple", () => Result = triggerManager.CreateTrigger(TriggerKind.Simple));
             CreateButton("Regex", () => Result = triggerManager.CreateTrigger(TriggerKind.Regex));
             CreateButton("Action Queue", () => Result = triggerManager.CreateTrigger(TriggerKind.ActionQueue));
+            CreateButton("Skill Level", () => Result = triggerManager.CreateTrigger(TriggerKind.SkillLevel));
         }
 
         void CreateButton(string text, Func<ITrigger> clickAction)
@@ -27,8 +28,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.TriggersManager
             btn.Text = text;
             btn.Click += (sender, args) =>
             {
-                clickAction();
-                this.DialogResult = DialogResult.OK;
+                try
+                {
+                    clickAction();
+                    this.DialogResult = DialogResult.OK;
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             };
             flowLayoutPanel1.Controls.Add(btn);
         }

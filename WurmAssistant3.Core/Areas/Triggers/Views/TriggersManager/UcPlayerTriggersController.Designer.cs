@@ -77,6 +77,7 @@
             this.buttonRemove.Size = new System.Drawing.Size(16, 17);
             this.buttonRemove.TabIndex = 0;
             this.buttonRemove.UseVisualStyleBackColor = true;
+            this.buttonRemove.Click += new System.EventHandler(this.buttonRemove_Click);
             // 
             // UcPlayerTriggersController
             // 

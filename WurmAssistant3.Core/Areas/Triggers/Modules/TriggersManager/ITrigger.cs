@@ -10,7 +10,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
 {
     public enum ThreeStateBool { True, False, Error }
 
-    public interface ITrigger
+    public interface ITrigger : IDisposable
     {
         Guid TriggerId { get; }
         TriggerKind TriggerKind { get; }

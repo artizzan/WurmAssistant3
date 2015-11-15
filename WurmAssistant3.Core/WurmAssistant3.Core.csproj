@@ -132,7 +132,14 @@
     <Compile Include="Areas\Native\NativeSetup.cs" />
     <Compile Include="Areas\SoundEngine\Modules\SoundEngineWa2Importer.cs" />
     <Compile Include="Areas\Timers\Modules\TimersWa2Importer.cs" />
+    <Compile Include="Areas\Triggers\Modules\TriggersManager\SkillLevelTrigger.cs" />
     <Compile Include="Areas\Triggers\Modules\TriggersWa2Importer.cs" />
+    <Compile Include="Areas\Triggers\Views\TriggersManager\SkillLevelTriggerConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\SkillLevelTriggerConfig.Designer.cs">
+      <DependentUpon>SkillLevelTriggerConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\Wa2DataImport\Contracts\IWa2DataImporter.cs" />
     <Compile Include="Areas\Wa2DataImport\Contracts\DataImportViewFactory.cs" />
     <Compile Include="Areas\Wa2DataImport\Modules\SoundEngineImportHelper.cs" />
@@ -770,6 +777,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Config\Views\SettingsEditView.resx">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Views\TriggersManager\SkillLevelTriggerConfig.resx">
+      <DependentUpon>SkillLevelTriggerConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Wa2DataImport\Views\Wa2DataImportView.resx">
       <DependentUpon>Wa2DataImportView.cs</DependentUpon>

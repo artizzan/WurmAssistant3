@@ -97,7 +97,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
             mainUi.RemoveNotifierController(notifier.GetUIHandle());
         }
 
-
         private void AddActiveCharacter(string characterName)
         {
             activeCharacterNames.Add(characterName);

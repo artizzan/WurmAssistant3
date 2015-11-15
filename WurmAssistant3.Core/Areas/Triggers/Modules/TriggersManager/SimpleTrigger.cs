@@ -8,7 +8,6 @@ using AldursLab.WurmAssistant3.Core.Areas.Triggers.Data;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
 {
-    //[DataContract]
     public class SimpleTrigger : SimpleConditionTriggerBase
     {
         public SimpleTrigger(TriggerData triggerData, ISoundEngine soundEngine, ITrayPopups trayPopups, IWurmApi wurmApi,

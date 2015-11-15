@@ -285,5 +285,29 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
                 OnDataChanged();
             }
         }
+
+        [JsonProperty]
+        double skillTriggerTreshhold;
+        public double SkillTriggerTreshhold
+        {
+            get { return skillTriggerTreshhold; }
+            set
+            {
+                skillTriggerTreshhold = value;
+                OnDataChanged();
+            }
+        }
+
+        [JsonProperty]
+        string skillTriggerSkillName = string.Empty;
+        public string SkillTriggerSkillName
+        {
+            get { return skillTriggerSkillName; }
+            set
+            {
+                skillTriggerSkillName = value;
+                OnDataChanged();
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@
     {
         Simple,
         Regex,
-        ActionQueue
+        ActionQueue,
+        SkillLevel
     }
 }
