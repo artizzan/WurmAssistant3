@@ -92,6 +92,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
             triggers.Add(settings.TriggerId, trigger);
             triggerDatas.Add(settings.TriggerId, settings);
             settings.DataChanged += DataOnDataChanged;
+            FlagAsChanged();
             return trigger;
         }
 
@@ -103,6 +104,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
                 if (data != null) data.DataChanged -= DataOnDataChanged;
                 triggers.Remove(trigger.TriggerId);
                 triggerDatas.Remove(trigger.TriggerId);
+                FlagAsChanged();
                 return true;
             }
 
