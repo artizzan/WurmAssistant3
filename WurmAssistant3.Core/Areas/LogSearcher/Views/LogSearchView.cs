@@ -18,7 +18,7 @@ using ILogger = AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts.ILogger;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
 {
-    public sealed partial class LogSearchView : ExtendedForm, IFeature
+    public sealed partial class LogSearchView : ExtendedForm
     {
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
@@ -56,41 +56,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
 
             if (comboBoxPlayerName.Items.Count > 0) comboBoxPlayerName.Text = comboBoxPlayerName.Items[0].ToString();
         }
-
-        #region IFeature
-
-        void IFeature.Show()
-        {
-            this.ShowAndBringToFront();
-        }
-
-        void IFeature.Hide()
-        {
-            this.Hide();
-        }
-
-        string IFeature.Name { get { return "Log Searcher"; } }
-
-        Image IFeature.Icon { get { return Resources.LogSearcherIcon; } }
-
-        async Task IFeature.InitAsync()
-        {
-            // no initialization required
-            await Task.FromResult(true);
-        }
-
-        public void PopulateDto(WurmAssistantDto dto)
-        {
-        }
-
-        public async Task ImportDataFromWa2Async(WurmAssistantDto dto)
-        {
-            await Task.FromResult(true);
-        }
-
-        public int DataImportOrder { get { return 0; } }
-
-        #endregion
 
         async void PerformSearch()
         {
@@ -476,22 +441,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
             }
         }
 
-        public void Display()
-        {
-            this.Show();
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                this.WindowState = lastVisibleWindowState;
-            }
-        }
-
         private void LogSearcherForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                e.Cancel = true;
-                this.Hide();
-            }
         }
 
         private void LogSearcherForm_Resize(object sender, EventArgs e)

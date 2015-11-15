@@ -127,6 +127,7 @@
     </Compile>
     <Compile Include="Areas\Granger\Modules\GrangerWa2Importer.cs" />
     <Compile Include="Areas\Logging\Modules\LoggerStub.cs" />
+    <Compile Include="Areas\LogSearcher\Modules\LogSearchFeature.cs" />
     <Compile Include="Areas\Native\Constants\ShowWindowCommands.cs" />
     <Compile Include="Areas\Native\NativeSetup.cs" />
     <Compile Include="Areas\SoundEngine\Modules\SoundEngineWa2Importer.cs" />
