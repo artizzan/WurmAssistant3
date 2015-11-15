@@ -36,5 +36,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
             get { return TriggerData.Condition; }
             set { TriggerData.Condition = value; }
         }
+
+        public bool MatchEveryLine
+        {
+            get { return TriggerData.MatchEveryLine; }
+            set { TriggerData.MatchEveryLine = value; }
+        }
     }
 }

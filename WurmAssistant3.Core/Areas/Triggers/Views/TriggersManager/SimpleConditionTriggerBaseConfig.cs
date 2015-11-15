@@ -15,6 +15,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.TriggersManager
             InitializeComponent();
             ConditionTbox.Text = simpleConditionTriggerBase.Condition;
             DescLabel.Text = simpleConditionTriggerBase.ConditionHelp;
+            checkBoxMatchEveryLine.Checked = _simpleConditionTriggerBase.MatchEveryLine;
+            UpdateControls();
             initComplete = true;
         }
 
@@ -23,6 +25,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.TriggersManager
         private void ConditionTbox_TextChanged(object sender, EventArgs e)
         {
             if (initComplete) _simpleConditionTriggerBase.Condition = ConditionTbox.Text;
+        }
+
+        private void checkBoxMatchEveryLine_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initComplete)
+            {
+                _simpleConditionTriggerBase.MatchEveryLine = checkBoxMatchEveryLine.Checked;
+                UpdateControls();
+            }
+        }
+
+        private void UpdateControls()
+        {
+            ConditionTbox.Enabled = !checkBoxMatchEveryLine.Checked;
         }
     }
 }

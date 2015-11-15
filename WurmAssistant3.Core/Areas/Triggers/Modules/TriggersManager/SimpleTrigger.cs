@@ -20,6 +20,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
 
         protected override bool CheckCondition(LogEntry logMessage)
         {
+            if (TriggerData.MatchEveryLine) return true;
             if (string.IsNullOrEmpty(TriggerData.Condition)) return false;
             return CheckCaseInsensitive(logMessage.Content);
         }

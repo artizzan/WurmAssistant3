@@ -260,5 +260,17 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
                 OnDataChanged();
             }
         }
+
+        [JsonProperty]
+        bool matchEveryLine;
+        public bool MatchEveryLine
+        {
+            get { return matchEveryLine; }
+            set
+            {
+                matchEveryLine = value;
+                OnDataChanged();
+            }
+        }
     }
 }
