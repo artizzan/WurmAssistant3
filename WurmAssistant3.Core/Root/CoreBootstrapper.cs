@@ -111,11 +111,6 @@ namespace AldursLab.WurmAssistant3.Core.Root
 
         public void Bootstrap()
         {
-            if (consoleArgs.InvalidCmdLineArgs)
-            {
-                throw new ApplicationException("invalid command line arguments: " + string.Join(" | ", consoleArgs.GetRawArgs()));
-            }
-
             NativeSetup.Bind(kernel);
             WurmApiSetup.TryAutodetectWurmInstallDir(kernel);
             

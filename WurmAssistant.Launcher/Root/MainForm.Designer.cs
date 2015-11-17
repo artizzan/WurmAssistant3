@@ -1,4 +1,4 @@
-﻿namespace AldursLab.WurmAssistant.Launcher
+﻿namespace AldursLab.WurmAssistant.Launcher.Root
 {
     partial class MainForm
     {

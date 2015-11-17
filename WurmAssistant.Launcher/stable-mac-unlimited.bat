@@ -1,2 +1,2 @@
 ﻿cd /d %0\
-"AldursLab.WurmAssistant.Launcher.exe" stable-mac -WurmUnlimited
+start AldursLab.WurmAssistant.Launcher.exe -BuildCode stable-mac -WurmUnlimited

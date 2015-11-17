@@ -1,47 +1,39 @@
 using System;
 using System.IO;
 using System.Linq;
+using AldursLab.WurmAssistant.Launcher.Contracts;
+using AldursLab.WurmAssistant.Launcher.Dto;
 
-namespace AldursLab.WurmAssistant.Launcher.Core
+namespace AldursLab.WurmAssistant.Launcher.Modules
 {
-    public interface IStagingLocation
-    {
-        bool AnyPackageStaged { get; }
-        IStagedPackage CreatePackageFromZipFile(string filePath);
-        IStagedPackage GetStagedPackage();
-        void ClearStagingArea();
-        void ClearExtractionDir();
-        void ExtractIntoExtractionDir(IStagedPackage package);
-        void MoveExtractionDir(string newPath);
-        FileInfo CreateTempFile();
-    }
-
     public class StagingLocation : IStagingLocation
     {
         readonly DirectoryInfo stageDir;
         readonly DirectoryInfo extractionDir;
         readonly DirectoryInfo tempDir;
 
-        public StagingLocation(string stagingDirRootPath)
+        public StagingLocation(ControllerConfig config)
         {
-            if (stagingDirRootPath == null)
-                throw new ArgumentNullException("stagingDirRootPath");
+            if (config == null)
+                throw new ArgumentNullException("config");
 
-            if (!Path.IsPathRooted(stagingDirRootPath))
+            var stagingDirPath = Path.Combine(config.LauncherBinDirFullPath, "stage");
+
+            if (!Path.IsPathRooted(stagingDirPath))
             {
                 throw new InvalidOperationException("rootPath must be absolute");
             }
 
-            if (!Directory.Exists(stagingDirRootPath))
+            if (!Directory.Exists(stagingDirPath))
             {
-                Directory.CreateDirectory(stagingDirRootPath);
+                Directory.CreateDirectory(stagingDirPath);
             }
 
-            stageDir = new DirectoryInfo(Path.Combine(stagingDirRootPath, "Stage"));
+            stageDir = new DirectoryInfo(Path.Combine(stagingDirPath, "Stage"));
             stageDir.Create();
-            extractionDir = new DirectoryInfo(Path.Combine(stagingDirRootPath, "Extracted"));
+            extractionDir = new DirectoryInfo(Path.Combine(stagingDirPath, "Extracted"));
             extractionDir.Create();
-            tempDir = new DirectoryInfo(Path.Combine(stagingDirRootPath, "Temp"));
+            tempDir = new DirectoryInfo(Path.Combine(stagingDirPath, "Temp"));
             tempDir.Create();
             ClearTempDir();
         }

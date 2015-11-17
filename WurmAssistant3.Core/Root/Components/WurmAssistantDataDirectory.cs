@@ -1,5 +1,7 @@
 using System.IO;
+using System.Linq;
 using System.Threading;
+using AldursLab.Essentials.Extensions.DotNet.IO;
 using AldursLab.Essentials.Synchronization;
 using AldursLab.WurmAssistant.Shared;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
@@ -18,9 +20,30 @@ namespace AldursLab.WurmAssistant3.Core.Root.Components
         /// <exception cref="LockFailedException"></exception>
         public WurmAssistantDataDirectory(ConsoleArgsManager consoleArgs)
         {
-            var dataDirPath = consoleArgs.WurmUnlimitedMode
-                ? AppPaths.WurmAssistantUnlimited.DataDir.FullPath
-                : AppPaths.WurmAssistant3.DataDir.FullPath;
+            string dataDirPath;
+            if (consoleArgs.UseRelativeDataDir)
+            {
+                var finder = new LauncherDirFinder();
+                var launcherBinPath = finder.TryFindLauncherParentDirPath();
+                if (launcherBinPath != null)
+                {
+                    dataDirPath = consoleArgs.WurmUnlimitedMode
+                        ? Path.Combine(launcherBinPath, "data-wa-u")
+                        : Path.Combine(launcherBinPath, "data-wa-o");
+                }
+                else
+                {
+                    dataDirPath = consoleArgs.WurmUnlimitedMode
+                        ? Path.Combine(GetType().Assembly.CodeBaseLocalPath(), "data-wa-u")
+                        : Path.Combine(GetType().Assembly.CodeBaseLocalPath(), "data-wa-o");
+                }
+            }
+            else
+            {
+                dataDirPath = consoleArgs.WurmUnlimitedMode
+                    ? AppPaths.WurmAssistantUnlimited.DataDir.FullPath
+                    : AppPaths.WurmAssistant3.DataDir.FullPath;
+            }
 
             dataDir = new DirectoryInfo(dataDirPath);
             if (!dataDir.Exists) dataDir.Create();
@@ -68,6 +91,38 @@ namespace AldursLab.WurmAssistant3.Core.Root.Components
                 currentAppLock.Dispose();
                 currentAppLock = null;
             }
+        }
+    }
+
+    class LauncherDirFinder
+    {
+        const string LauncherExeName = "AldursLab.WurmAssistant.Launcher.exe";
+
+        public string TryFindLauncherParentDirPath()
+        {
+            var thisDllPath = GetType().Assembly.CodeBaseLocalPath();
+            var info = new DirectoryInfo(thisDllPath);
+            var dirPath = TryFindLauncherDir(info.Parent);
+            return dirPath;
+        }
+
+        string TryFindLauncherDir(DirectoryInfo dir, int maxDepth = 4)
+        {
+            if (dir == null) return null;
+
+            if (maxDepth > 0)
+            {
+                var file = dir.EnumerateFiles(LauncherExeName).FirstOrDefault();
+                if (file != null)
+                {
+                    return Path.GetDirectoryName(file.FullName);
+                }
+                else
+                {
+                    return TryFindLauncherDir(dir.Parent, maxDepth - 1);
+                }
+            }
+            return null;
         }
     }
 }

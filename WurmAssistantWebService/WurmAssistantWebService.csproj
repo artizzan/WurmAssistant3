@@ -389,6 +389,12 @@
       <DependentUpon>201509102107262_ModifyWurmAssistant3PackagesAndAddLogs.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WurmAssistant.Shared\WurmAssistant.Shared.csproj">
+      <Project>{2375aa6c-6b2c-4c4e-8cf0-8b3c1d406aea}</Project>
+      <Name>WurmAssistant.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

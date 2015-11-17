@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using AldursLab.WurmAssistant.Launcher.Contracts;
+using AldursLab.WurmAssistant.Launcher.Modules;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant.Launcher.Core
+namespace AldursLab.WurmAssistant.Launcher.Views
 {
     public partial class UpdaterGui : UserControl, IGui, IProgressReporter
     {

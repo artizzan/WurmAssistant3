@@ -1,34 +1,26 @@
-﻿using System;
-using System.IO;
-using System.Net.Http;
-using System.Runtime.Serialization;
+using System;
 using System.Threading.Tasks;
 using AldursLab.Networking;
+using AldursLab.WurmAssistant.Launcher.Contracts;
+using AldursLab.WurmAssistant.Launcher.Dto;
+using AldursLab.WurmAssistant.Shared.Dtos;
 using JetBrains.Annotations;
-using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant.Launcher.Core
+namespace AldursLab.WurmAssistant.Launcher.Modules
 {
-    public interface IWurmAssistantService
-    {
-        Task<string> GetLatestVersionAsync(IProgressReporter progressReporter, string buildCode);
-
-        Task<IStagedPackage> GetPackageAsync(IProgressReporter progressReporter, string buildCode, string buildNumber);
-    }
-
-    public class WurmAssistantService : IWurmAssistantService
+    public class UpdateService : IUpdateService
     {
         readonly string webServiceRootUrl;
         readonly IStagingLocation stagingLocation;
-
-        readonly JsonSerializer serializer = new JsonSerializer();
+        readonly IWurmAssistantService wurmAssistantService;
 
         static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(60);
 
-        public WurmAssistantService([NotNull] ControllerConfig controllerConfig, IStagingLocation stagingLocation)
+        public UpdateService([NotNull] ControllerConfig controllerConfig, IStagingLocation stagingLocation)
         {
             if (controllerConfig == null) throw new ArgumentNullException("controllerConfig");
             if (stagingLocation == null) throw new ArgumentNullException("stagingLocation");
+
             this.webServiceRootUrl = controllerConfig.WebServiceRootUrl;
             if (webServiceRootUrl.EndsWith("/"))
             {
@@ -36,31 +28,7 @@ namespace AldursLab.WurmAssistant.Launcher.Core
             }
 
             this.stagingLocation = stagingLocation;
-        }
-
-        public async Task<string> GetLatestVersionAsync(IProgressReporter progressReporter, string buildCode)
-        {
-            HttpClient client = new HttpClient();
-            client.Timeout = DefaultTimeout;
-            progressReporter.SetProgressPercent(null);
-            progressReporter.SetProgressStatus("Obtaining latest version for build " + buildCode);
-            var response =
-                await client.GetAsync(string.Format("{0}/LatestBuildNumber/{1}", webServiceRootUrl, buildCode));
-            if (response.IsSuccessStatusCode)
-            {
-                using (var stream = await response.Content.ReadAsStreamAsync())
-                {
-                    var versionString = serializer.Deserialize<string>(new JsonTextReader(new StreamReader(stream)));
-                    progressReporter.SetProgressStatus("Latest version for build " + buildCode + " is: " + versionString);
-                    return versionString;
-                }
-            }
-            else
-            {
-                throw new ServiceException(string.Format("Server returned {0} : {1}",
-                    response.StatusCode,
-                    response.ReasonPhrase));
-            }
+            this.wurmAssistantService = new WurmAssistantService(webServiceRootUrl);
         }
 
         public async Task<IStagedPackage> GetPackageAsync(IProgressReporter progressReporter, string buildCode,
@@ -83,9 +51,6 @@ namespace AldursLab.WurmAssistant.Launcher.Core
                     {
                         lastPercent = percent;
                         progressReporter.SetProgressPercent(percent);
-                        progressReporter.SetProgressStatus(string.Format("Downloaded {0}/{1}",
-                            args.BytesReceived,
-                            args.TotalBytesToReceive));
                     }
                 };
                 webclient.DownloadFileCompleted += (sender, args) =>
@@ -110,29 +75,16 @@ namespace AldursLab.WurmAssistant.Launcher.Core
 
                 return stagingLocation.CreatePackageFromZipFile(tempFile.FullName);
             }
-
-        }
-    }
-
-    [Serializable]
-    public class ServiceException : Exception
-    {
-        public ServiceException()
-        {
         }
 
-        public ServiceException(string message) : base(message)
+        public async Task<string> GetLatestVersionAsync(IProgressReporter progressReporter, string buildCode)
         {
+            return await wurmAssistantService.GetLatestVersionAsync(progressReporter, buildCode);
         }
 
-        public ServiceException(string message, Exception inner) : base(message, inner)
+        public async Task<Package[]> GetAllPackages()
         {
-        }
-
-        protected ServiceException(
-            SerializationInfo info,
-            StreamingContext context) : base(info, context)
-        {
+            return await wurmAssistantService.GetAllPackages();
         }
     }
 }

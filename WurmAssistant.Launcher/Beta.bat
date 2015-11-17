@@ -1,2 +1,2 @@
 ﻿cd /d %0\
-"AldursLab.WurmAssistant.Launcher.exe" beta
+start AldursLab.WurmAssistant.Launcher.exe -BuildCode beta

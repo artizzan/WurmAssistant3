@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistantWebService", "WurmAssistantWebService\WurmAssistantWebService.csproj", "{E15831FF-8239-4BD5-AF97-8A68F104CA95}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AldursLab", "AldursLab", "{7A5520F9-4897-481A-999A-29D183F7DEC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant.Shared", "WurmAssistant.Shared\WurmAssistant.Shared.csproj", "{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,12 @@ Global
 		{E15831FF-8239-4BD5-AF97-8A68F104CA95}.Stable|Any CPU.ActiveCfg = Stable|Any CPU
 		{E15831FF-8239-4BD5-AF97-8A68F104CA95}.Stable|Any CPU.Build.0 = Stable|Any CPU
 		{E15831FF-8239-4BD5-AF97-8A68F104CA95}.Stable|Any CPU.Deploy.0 = Stable|Any CPU
+		{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}.Stable|Any CPU.ActiveCfg = Release|Any CPU
+		{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}.Stable|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

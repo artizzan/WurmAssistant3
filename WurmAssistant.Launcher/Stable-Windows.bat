@@ -1,2 +1,2 @@
 ﻿cd /d %0\
-"AldursLab.WurmAssistant.Launcher.exe" stable-win
+start AldursLab.WurmAssistant.Launcher.exe -BuildCode stable-win

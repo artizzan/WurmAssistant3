@@ -2,15 +2,8 @@ using System;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 
-//using SevenZip;
-
-namespace AldursLab.WurmAssistant.Launcher.Core
+namespace AldursLab.WurmAssistant.Launcher.Modules
 {
-    public interface IStagedPackage
-    {
-        void ExtractIntoDirectory(string targetDir);
-    }
-
     public class ZippedStagedPackage : IStagedPackage
     {
         readonly FileInfo fileInfo;

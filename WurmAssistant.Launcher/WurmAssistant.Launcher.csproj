@@ -63,7 +63,7 @@
     <ManifestKeyFile>WurmAssistant.Launcher_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -74,29 +74,7 @@
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ClickOnce-WO|AnyCPU'">
-    <OutputPath>bin\ClickOnce-WO\</OutputPath>
-    <DefineConstants>TRACE;CLICKONCEWO</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ClickOnce-WU|AnyCPU'">
-    <OutputPath>bin\ClickOnce-WU\</OutputPath>
-    <DefineConstants>TRACE;CLICKONCEWU</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -106,8 +84,13 @@
       <HintPath>..\packages\JetBrains.Annotations.9.2.0\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -118,17 +101,73 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainForm.cs">
+    <Compile Include="Modules\DataDirectory.cs" />
+    <Compile Include="Contracts\IDataDirectory.cs" />
+    <Compile Include="Dto\ControllerConfig.cs" />
+    <Compile Include="Contracts\IGui.cs" />
+    <Compile Include="Contracts\IGuiHost.cs" />
+    <Compile Include="Contracts\IInstallLocation.cs" />
+    <Compile Include="Contracts\InstallLocation.cs" />
+    <Compile Include="Contracts\IProcessRunner.cs" />
+    <Compile Include="Contracts\IProgressReporter.cs" />
+    <Compile Include="Contracts\IStagingLocation.cs" />
+    <Compile Include="Contracts\IUpdateService.cs" />
+    <Compile Include="Contracts\IWurmAssistantService.cs" />
+    <Compile Include="Root\LaunchController.cs" />
+    <Compile Include="Modules\Launcher.cs" />
+    <Compile Include="Contracts\LauncherState.cs" />
+    <Compile Include="Modules\ArgsManager.cs" />
+    <Compile Include="Modules\ProcessRunner.cs" />
+    <Compile Include="Contracts\ServiceException.cs" />
+    <Compile Include="Modules\StagingLocation.cs" />
+    <Compile Include="Modules\TextDebug.cs" />
+    <Compile Include="Views\UpdaterGui.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UpdaterGui.Designer.cs">
+      <DependentUpon>UpdaterGui.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\UpdateService.cs" />
+    <Compile Include="Views\ChooseApp.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Views\ChooseApp.Designer.cs">
+      <DependentUpon>ChooseApp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Contracts\LaunchChoices.cs" />
+    <Compile Include="Root\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Root\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PackagesView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\PackagesView.Designer.cs">
+      <DependentUpon>PackagesView.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Modules\UserSettings.cs" />
+    <Compile Include="Modules\WurmAssistantPackage.cs" />
+    <Compile Include="Modules\WurmAssistantService.cs" />
+    <Compile Include="Modules\ZippedStagedPackage.cs" />
+    <Content Include="README.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="WurmAssistantUnlimitedIcon.ico" />
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Views\UpdaterGui.resx">
+      <DependentUpon>UpdaterGui.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ChooseApp.resx">
+      <DependentUpon>ChooseApp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Root\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\PackagesView.resx">
+      <DependentUpon>PackagesView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -149,6 +188,9 @@
     <Content Include="dev-unlimited.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="wurmassistantlauncher.version">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\WurmAssistantUnlimitedIcon.png" />
     <None Include="Resources\WurmAssistantUnlimitedIcon.ico" />
     <Content Include="stable-mac.bat">
@@ -194,13 +236,17 @@
       <Project>{cf5fdc21-2ff8-42fb-875f-d9a0701bae9f}</Project>
       <Name>Networking</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AldursLab\Lab\Persistence\Persistence.csproj">
+      <Project>{fb65cb05-db0c-4cd6-9a89-cf8e973e1d47}</Project>
+      <Name>Persistence</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj">
       <Project>{0962a106-b1b2-4e21-9931-81d68a98ed37}</Project>
       <Name>PersistentObjects</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WurmAssistant.Launcher.Core\WurmAssistant.Launcher.Core.csproj">
-      <Project>{f66720ba-0084-44e4-965c-64891a3c982f}</Project>
-      <Name>WurmAssistant.Launcher.Core</Name>
+    <ProjectReference Include="..\WurmAssistant.Shared\WurmAssistant.Shared.csproj">
+      <Project>{2375aa6c-6b2c-4c4e-8cf0-8b3c1d406aea}</Project>
+      <Name>WurmAssistant.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -227,6 +273,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

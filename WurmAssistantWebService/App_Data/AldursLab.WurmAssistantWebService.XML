@@ -486,6 +486,18 @@
             Web API for WurmAssistant3
             </summary>
         </member>
+        <member name="M:AldursLab.WurmAssistantWebService.Controllers.WurmAssistant3Controller.GetAllPackages">
+            <summary>
+            Gets info about all available packages.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:AldursLab.WurmAssistantWebService.Controllers.WurmAssistant3Controller.DeletePackage(System.Guid)">
+            <summary>
+            Deletes a package.
+            </summary>
+            <param name="id"></param>
+        </member>
         <member name="M:AldursLab.WurmAssistantWebService.Controllers.WurmAssistant3Controller.GetLatestBuildNumber(System.String)">
             <summary>
             Gets build number of the latest available package for specified build definition.

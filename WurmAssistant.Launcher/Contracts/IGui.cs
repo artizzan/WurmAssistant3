@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 
-namespace AldursLab.WurmAssistant.Launcher.Core
+namespace AldursLab.WurmAssistant.Launcher.Contracts
 {
     public interface IGui : IProgressReporter
     {
@@ -18,11 +18,5 @@ namespace AldursLab.WurmAssistant.Launcher.Core
         void DisableSkip();
 
         Action SkipAction { get; set; }
-    }
-
-    public enum LauncherState
-    {
-        Running,
-        Error
     }
 }

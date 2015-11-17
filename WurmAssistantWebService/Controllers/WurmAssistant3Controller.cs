@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Routing;
+using AldursLab.WurmAssistant.Shared.Dtos;
 using AldursLab.WurmAssistantWebService.Model;
 using AldursLab.WurmAssistantWebService.Model.Entities;
 using AldursLab.WurmAssistantWebService.Model.Services;
@@ -20,6 +23,42 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         protected readonly ApplicationDbContext Context = new ApplicationDbContext();
         protected readonly Files Files = new Files();
         protected readonly Logs Logs = new Logs();
+
+        /// <summary>
+        /// Gets info about all available packages.
+        /// </summary>
+        /// <returns></returns>
+        [Route("Packages")]
+        public Package[] GetAllPackages()
+        {
+            var result = Context.WurmAssistantPackages.Select(
+                package => new Package()
+                {
+                    WurmAssistantPackageId = package.WurmAssistantPackageId,
+                    BuildCode = package.BuildCode,
+                    BuildNumber = package.BuildNumber
+                });
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Deletes a package.
+        /// </summary>
+        /// <param name="id"></param>
+        [Route("Packages/{id}")]
+        [Authorize(Roles = "Admin")]
+        public void DeletePackage(Guid id)
+        {
+            var package =
+                Context.WurmAssistantPackages.SingleOrDefault(
+                    assistantPackage => assistantPackage.WurmAssistantPackageId == id);
+
+            if (package == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            Context.WurmAssistantPackages.Remove(package);
+            Context.SaveChanges();
+            Files.Delete(package.FileId);
+        }
 
         /// <summary>
         /// Gets build number of the latest available package for specified build definition.
@@ -139,15 +178,21 @@ namespace AldursLab.WurmAssistantWebService.Controllers
                 File = newFile
             };
             Context.WurmAssistantPackages.Add(package);
+            Context.SaveChanges();
 
             RemoveOutdatedPackages(buildCode);
-            Context.SaveChanges();
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         void RemoveOutdatedPackages(string buildCode)
         {
+            if (buildCode.StartsWith("beta", StringComparison.InvariantCultureIgnoreCase)
+                || buildCode.StartsWith("stable", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return;
+            }
+
             try
             {
                 var allPackages =
@@ -155,7 +200,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers
                         package => package.BuildCode == buildCode).ToArray();
 
                 var packageCount = allPackages.Count();
-                var countToRemove = packageCount - 3;
+                var countToRemove = packageCount - 10;
                 if (countToRemove > 0)
                 {
                     var toDelete = allPackages.OrderBy(package => package.Created).Take(countToRemove);

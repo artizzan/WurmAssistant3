@@ -1,4 +1,4 @@
-﻿namespace AldursLab.WurmAssistant.Launcher.Core
+﻿namespace AldursLab.WurmAssistant.Launcher.Contracts
 {
     public interface IProgressReporter
     {
