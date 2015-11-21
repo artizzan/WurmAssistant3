@@ -193,6 +193,16 @@ namespace AldursLab.WurmAssistant3.Core.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Radar {
+            get {
+                object obj = ResourceManager.GetObject("Radar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SoundDisabled {
             get {
                 object obj = ResourceManager.GetObject("SoundDisabled", resourceCulture);

@@ -14,7 +14,7 @@ using AldursLab.WurmAssistant3.Core.WinForms;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.CraftingAssistant.Views
 {
-    public partial class Widget : Form
+    public partial class Widget : ExtendedForm
     {
         readonly string characterName;
         readonly IWurmApi wurmApi;

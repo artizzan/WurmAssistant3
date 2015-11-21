@@ -38,7 +38,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CraftingAssistant.Views
                 try
                 {
                     var widget = new Widget(character, wurmApi, logger);
-                    widget.Show();
+                    widget.ShowCenteredOnForm(this);
                 }
                 catch (Exception exception)
                 {

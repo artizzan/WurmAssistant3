@@ -19,6 +19,7 @@ using AldursLab.WurmAssistant3.Core.Areas.MainMenu;
 using AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Native;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence;
+using AldursLab.WurmAssistant3.Core.Areas.RevealCreatures;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine;
 using AldursLab.WurmAssistant3.Core.Areas.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups;
@@ -134,6 +135,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
             TriggersSetup.BindTriggers(kernel);
             GrangerSetup.BindGranger(kernel);
             CraftingAssistantSetup.Bind(kernel);
+            RevealCreaturesSetup.Bind(kernel);
 
             FeaturesSetup.BindFeaturesManager(kernel);
             MainMenuSetup.BindMenu(kernel);

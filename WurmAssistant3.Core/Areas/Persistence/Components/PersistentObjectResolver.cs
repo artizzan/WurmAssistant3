@@ -160,7 +160,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Components
                 return null;
             }
         }
-
     }
 
     public class PersistentObjectResolver<T> : IPersistentObjectResolver<T> where T : class, IPersistentObject
