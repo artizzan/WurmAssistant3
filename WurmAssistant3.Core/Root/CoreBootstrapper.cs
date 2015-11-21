@@ -7,6 +7,7 @@ using AldursLab.WurmAssistant3.Core.Areas.Calendar;
 using AldursLab.WurmAssistant3.Core.Areas.Config;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Modules;
+using AldursLab.WurmAssistant3.Core.Areas.CraftingAssistant;
 using AldursLab.WurmAssistant3.Core.Areas.Features;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Granger;
@@ -132,6 +133,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
             TimersSetup.BindTimers(kernel);
             TriggersSetup.BindTriggers(kernel);
             GrangerSetup.BindGranger(kernel);
+            CraftingAssistantSetup.Bind(kernel);
 
             FeaturesSetup.BindFeaturesManager(kernel);
             MainMenuSetup.BindMenu(kernel);

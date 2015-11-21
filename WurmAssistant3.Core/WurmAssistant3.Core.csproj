@@ -125,6 +125,20 @@
     <Compile Include="Areas\Config\Views\SettingsEditView.Designer.cs">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Areas\CraftingAssistant\CraftingAssistantSetup.cs" />
+    <Compile Include="Areas\CraftingAssistant\Modules\CraftingAssistantFeature.cs" />
+    <Compile Include="Areas\CraftingAssistant\Views\CraftingAssistantView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\CraftingAssistant\Views\CraftingAssistantView.Designer.cs">
+      <DependentUpon>CraftingAssistantView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\CraftingAssistant\Views\Widget.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\CraftingAssistant\Views\Widget.Designer.cs">
+      <DependentUpon>Widget.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\Granger\Modules\GrangerWa2Importer.cs" />
     <Compile Include="Areas\Logging\Modules\LoggerStub.cs" />
     <Compile Include="Areas\LogSearcher\Modules\LogSearchFeature.cs" />
@@ -727,6 +741,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\CraftingAssistant\Contracts\" />
     <Folder Include="Areas\Features\Views\" />
     <Folder Include="Areas\Granger\Contracts\" />
     <Folder Include="Areas\MainMenu\Contracts\" />
@@ -777,6 +792,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Config\Views\SettingsEditView.resx">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\CraftingAssistant\Views\CraftingAssistantView.resx">
+      <DependentUpon>CraftingAssistantView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\CraftingAssistant\Views\Widget.resx">
+      <DependentUpon>Widget.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Triggers\Views\TriggersManager\SkillLevelTriggerConfig.resx">
       <DependentUpon>SkillLevelTriggerConfig.cs</DependentUpon>
@@ -1000,6 +1021,7 @@
     <None Include="Resources\CalendarIcon.png" />
     <None Include="Resources\Grip.png" />
     <None Include="Resources\GrangerIcon.png" />
+    <None Include="Resources\Hammer.png" />
     <Content Include="Resources\irrklang_small.png" />
     <Content Include="Resources\lampsFlow.png" />
     <None Include="Resources\LogSearcherIcon.png" />
