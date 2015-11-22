@@ -37,6 +37,7 @@
             this.gameChar = new System.Windows.Forms.ComboBox();
             this.findText = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.castDate = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.resultsView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -134,11 +135,22 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "Search:";
             // 
+            // castDate
+            // 
+            this.castDate.AutoSize = true;
+            this.castDate.Location = new System.Drawing.Point(330, 29);
+            this.castDate.Name = "castDate";
+            this.castDate.Size = new System.Drawing.Size(51, 13);
+            this.castDate.TabIndex = 7;
+            this.castDate.Text = "cast date";
+            this.castDate.Click += new System.EventHandler(this.castDate_Click);
+            // 
             // RevealCreaturesView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(510, 380);
+            this.Controls.Add(this.castDate);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.findText);
             this.Controls.Add(this.gameChar);
@@ -166,5 +178,6 @@
         private BrightIdeasSoftware.OLVColumn olvColumnDistance;
         private System.Windows.Forms.TextBox findText;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label castDate;
     }
 }

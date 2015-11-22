@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -33,6 +34,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Views
             this.wurmApi = wurmApi;
             this.logger = logger;
             InitializeComponent();
+
+            ClearOutput();
 
             filter = new TextMatchFilter(resultsView,
                 "",
@@ -96,6 +99,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Views
                                    .Where(result => result != null)
                                    .ToList();
                         resultsView.SetObjects(parsedResults);
+                        castDate.Text = "Found: " + latestCastEntry.Timestamp.ToString(CultureInfo.CurrentCulture);
                     }
                     else
                     {
@@ -116,6 +120,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Views
         void ClearOutput()
         {
             resultsView.ClearObjects();
+            castDate.Text = string.Empty;
         }
 
         private void RevealCreaturesView_FormClosing(object sender, FormClosingEventArgs e)
@@ -139,6 +144,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Views
             filter.ContainsStrings = new List<string>() { text };
 
             resultsView.BuildList(true);
+        }
+
+        private void castDate_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

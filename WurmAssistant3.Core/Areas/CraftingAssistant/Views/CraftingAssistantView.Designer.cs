@@ -72,6 +72,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "CraftingAssistantView";
+            this.ShowIcon = false;
             this.Text = "Crafting Assistant";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CraftingAssistantView_FormClosing);
             this.ResumeLayout(false);
