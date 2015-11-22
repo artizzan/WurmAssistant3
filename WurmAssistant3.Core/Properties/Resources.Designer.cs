@@ -163,6 +163,16 @@ namespace AldursLab.WurmAssistant3.Core.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Improvement {
+            get {
+                object obj = ResourceManager.GetObject("Improvement", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap irrklang_small {
             get {
                 object obj = ResourceManager.GetObject("irrklang_small", resourceCulture);

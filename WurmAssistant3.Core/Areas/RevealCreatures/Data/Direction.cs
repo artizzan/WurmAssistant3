@@ -1,9 +1,10 @@
 ﻿using System;
 using AldursLab.Essentials.Extensions.DotNet;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Data
 {
-    public sealed class Direction : IEquatable<Direction>
+    public sealed class Direction : IEquatable<Direction>, IComparable<Direction>, IComparable
     {
         const string AheadLeft = "ahead of you to the left";
         const string Ahead = "in front of you";
@@ -16,6 +17,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Data
 
         public string WurmLogString { get; private set; }
         public string ShortString { get; private set; }
+        private int CompareValue { get; set; }
 
         public static Direction CreateFromLogEntryString(string text)
         {
@@ -24,7 +26,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Data
                 return new Direction()
                 {
                     WurmLogString = AheadLeft,
-                    ShortString = "ahead left"
+                    ShortString = "ahead left",
+                    CompareValue = 0
                 };
             }
             else if (text.Contains(Ahead, StringComparison.InvariantCultureIgnoreCase))
@@ -32,7 +35,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Data
                 return new Direction()
                 {
                     WurmLogString = Ahead,
-                    ShortString = "ahead"
+                    ShortString = "ahead",
+                    CompareValue = 1
                 };
             }
             else if (text.Contains(AheadRight, StringComparison.InvariantCultureIgnoreCase))
@@ -40,7 +44,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Data
                 return new Direction()
                 {
                     WurmLogString = AheadRight,
-                    ShortString = "ahead right"
+                    ShortString = "ahead right",
+                    CompareValue = 2
                 };
             }
             else if (text.Contains(Right, StringComparison.InvariantCultureIgnoreCase))
@@ -48,7 +53,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Data
                 return new Direction()
                 {
                     WurmLogString = Right,
-                    ShortString = "right"
+                    ShortString = "right",
+                    CompareValue = 3
                 };
             }
             else if (text.Contains(BehindRight, StringComparison.InvariantCultureIgnoreCase))
@@ -56,7 +62,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Data
                 return new Direction()
                 {
                     WurmLogString = BehindRight,
-                    ShortString = "behind right"
+                    ShortString = "behind right",
+                    CompareValue = 4
                 };
             }
             else if (text.Contains(Behind, StringComparison.InvariantCultureIgnoreCase))
@@ -64,7 +71,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Data
                 return new Direction()
                 {
                     WurmLogString = Behind,
-                    ShortString = "behind"
+                    ShortString = "behind",
+                    CompareValue = 5
                 };
             }
             else if (text.Contains(BehindLeft, StringComparison.InvariantCultureIgnoreCase))
@@ -72,7 +80,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Data
                 return new Direction()
                 {
                     WurmLogString = BehindLeft,
-                    ShortString = "behind left"
+                    ShortString = "behind left",
+                    CompareValue = 6
                 };
             }
             else if (text.Contains(Left, StringComparison.InvariantCultureIgnoreCase))
@@ -80,7 +89,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Data
                 return new Direction()
                 {
                     WurmLogString = Left,
-                    ShortString = "left"
+                    ShortString = "left",
+                    CompareValue = 7
                 };
             }
             else
@@ -88,7 +98,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Data
                 return new Direction()
                 {
                     WurmLogString = "",
-                    ShortString = ""
+                    ShortString = "",
+                    CompareValue = -1
                 };
             }
         }
@@ -127,6 +138,23 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Data
         public static bool operator !=(Direction left, Direction right)
         {
             return !Equals(left, right);
+        }
+
+        public int CompareTo([NotNull] object obj)
+        {
+            if (obj == null)
+                throw new ArgumentNullException("obj");
+            var other = obj as Direction;
+            if (other == null)
+                throw new ArgumentException("obj is not " + typeof(Direction).FullName);
+            return this.CompareTo(other);
+        }
+
+        public int CompareTo([NotNull] Direction other)
+        {
+            if (other == null)
+                throw new ArgumentNullException("other");
+            return CompareValue.CompareTo(other.CompareValue);
         }
     }
 }

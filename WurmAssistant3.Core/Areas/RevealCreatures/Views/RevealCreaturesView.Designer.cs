@@ -62,6 +62,7 @@
             this.resultsView.Location = new System.Drawing.Point(12, 87);
             this.resultsView.Name = "resultsView";
             this.resultsView.ShowCommandMenuOnRightClick = true;
+            this.resultsView.ShowGroups = false;
             this.resultsView.ShowItemCountOnGroups = true;
             this.resultsView.Size = new System.Drawing.Size(486, 281);
             this.resultsView.TabIndex = 0;
@@ -71,7 +72,6 @@
             // olvColumnCreature
             // 
             this.olvColumnCreature.AspectName = "Creature";
-            this.olvColumnCreature.Groupable = false;
             this.olvColumnCreature.MinimumWidth = 10;
             this.olvColumnCreature.Text = "Creature";
             this.olvColumnCreature.Width = 250;

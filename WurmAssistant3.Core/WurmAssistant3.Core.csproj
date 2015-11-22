@@ -155,6 +155,34 @@
     <Compile Include="Areas\RevealCreatures\Views\RevealCreaturesView.Designer.cs">
       <DependentUpon>RevealCreaturesView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Areas\SkillStats\Data\QueryParams.cs" />
+    <Compile Include="Areas\SkillStats\Data\SkillReportItem.cs" />
+    <Compile Include="Areas\SkillStats\Modules\SkillStatsFeature.cs" />
+    <Compile Include="Areas\SkillStats\SkillStatsSetup.cs" />
+    <Compile Include="Areas\SkillStats\Views\LiveSessionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\LiveSessionView.Designer.cs">
+      <DependentUpon>LiveSessionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillGainsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillGainsView.Designer.cs">
+      <DependentUpon>SkillGainsView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillStatsFeatureView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillStatsFeatureView.Designer.cs">
+      <DependentUpon>SkillStatsFeatureView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillLevelsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillLevelsView.Designer.cs">
+      <DependentUpon>SkillLevelsView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\SoundEngine\Modules\SoundEngineWa2Importer.cs" />
     <Compile Include="Areas\Timers\Modules\TimersWa2Importer.cs" />
     <Compile Include="Areas\Triggers\Modules\TriggersManager\SkillLevelTrigger.cs" />
@@ -814,6 +842,18 @@
     <EmbeddedResource Include="Areas\RevealCreatures\Views\RevealCreaturesView.resx">
       <DependentUpon>RevealCreaturesView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SkillStats\Views\LiveSessionView.resx">
+      <DependentUpon>LiveSessionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SkillStats\Views\SkillGainsView.resx">
+      <DependentUpon>SkillGainsView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SkillStats\Views\SkillStatsFeatureView.resx">
+      <DependentUpon>SkillStatsFeatureView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SkillStats\Views\SkillLevelsView.resx">
+      <DependentUpon>SkillLevelsView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Areas\Triggers\Views\TriggersManager\SkillLevelTriggerConfig.resx">
       <DependentUpon>SkillLevelTriggerConfig.cs</DependentUpon>
     </EmbeddedResource>
@@ -1037,6 +1077,7 @@
     <None Include="Resources\Grip.png" />
     <None Include="Resources\GrangerIcon.png" />
     <None Include="Resources\Hammer.png" />
+    <None Include="Resources\Improvement.png" />
     <Content Include="Resources\irrklang_small.png" />
     <Content Include="Resources\lampsFlow.png" />
     <None Include="Resources\LogSearcherIcon.png" />
