@@ -58,7 +58,7 @@ namespace AldursLab.WurmAssistant.Launcher.Contracts
             var exepath = Path.Combine(installDirPath, buildNumber, "AldursLab.WurmAssistant3.exe");
             var args = string.Empty;
             if (config.WurmUnlimitedMode) args += " -WurmUnlimited";
-            if (config.UseRelativeDataDirPath) args += "-RelativeDataDir";
+            if (config.UseRelativeDataDirPath) args += " -RelativeDataDir";
             processRunner.Start(exepath, args);
         }
 
