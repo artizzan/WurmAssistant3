@@ -8,6 +8,7 @@ using AldursLab.Essentials.Synchronization;
 using AldursLab.WurmAssistant.Launcher.Contracts;
 using AldursLab.WurmAssistant.Launcher.Dto;
 using AldursLab.WurmAssistant.Launcher.Modules;
+using AldursLab.WurmAssistant.Launcher.Properties;
 using AldursLab.WurmAssistant.Launcher.Views;
 using AldursLab.WurmAssistant.Shared;
 using JetBrains.Annotations;
@@ -61,6 +62,21 @@ namespace AldursLab.WurmAssistant.Launcher.Root
             IInstallLocation installLocation = null;
             try
             {
+                UpdateSourceUpdater updateSourceUpdater =
+                    new UpdateSourceUpdater(new WurmAssistantService(Settings.Default.WurmAssistantUpdateSourceUrl));
+                var updateSourceUpdaterTask = updateSourceUpdater.FetchUpdateSourceHost();
+
+                // if first run ever, first establish...
+                if (!Settings.Default.UpdateSourceEstablished)
+                {
+                    gui.AddUserMessage("First run, establishing update source url");
+                    await updateSourceUpdaterTask;
+                    updateSourceUpdater.CommitUpdatedSourceHost();
+                    Settings.Default.UpdateSourceEstablished = true;
+                    Settings.Default.Save();
+                    gui.AddUserMessage("Update source url established to: " + Settings.Default.WurmAssistantWebServiceUrl);
+                }
+
                 launcher = new Modules.Launcher(config);
                 installLocation = new InstallLocation(config, new ProcessRunner(), gui);
 
@@ -202,6 +218,9 @@ namespace AldursLab.WurmAssistant.Launcher.Root
                 {
                     gui.SetState(LauncherState.Error);
                 }
+
+                await updateSourceUpdaterTask;
+                updateSourceUpdater.CommitUpdatedSourceHost();
             }
             catch (LockFailedException exception)
             {

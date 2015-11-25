@@ -106,6 +106,9 @@
     <Compile Include="Areas\Calendar\Views\SeasonsEditView.Designer.cs">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Areas\CombatAssist\CombatAssistSetup.cs" />
+    <Compile Include="Areas\CombatAssist\Modules\CombatAssistFeature.cs" />
+    <Compile Include="Areas\CombatAssist\Modules\CombatResultsParser.cs" />
     <Compile Include="Areas\Config\Contracts\ConfigCancelledException.cs" />
     <Compile Include="Areas\Config\Contracts\IServersEditorViewFactory.cs" />
     <Compile Include="Areas\Config\Contracts\IWurmAssistantConfig.cs" />
@@ -159,6 +162,12 @@
     <Compile Include="Areas\SkillStats\Data\SkillReportItem.cs" />
     <Compile Include="Areas\SkillStats\Modules\SkillStatsFeature.cs" />
     <Compile Include="Areas\SkillStats\SkillStatsSetup.cs" />
+    <Compile Include="Areas\CombatAssist\Views\CombatAssistFeatureView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\CombatAssist\Views\CombatAssistFeatureView.Designer.cs">
+      <DependentUpon>CombatAssistFeatureView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\SkillStats\Views\LiveSessionView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -826,6 +835,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Calendar\Views\SeasonsEditView.resx">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\CombatAssist\Views\CombatAssistFeatureView.resx">
+      <DependentUpon>CombatAssistFeatureView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Config\Views\ServersEditorView.resx">
       <DependentUpon>ServersEditorView.cs</DependentUpon>
