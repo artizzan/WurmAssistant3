@@ -86,5 +86,10 @@ namespace AldursLab.WurmAssistant.Launcher.Modules
         {
             return await wurmAssistantService.GetAllPackages();
         }
+
+        public async Task<string> GetCurrentUpdateSourceHost()
+        {
+            return await wurmAssistantService.GetCurrentUpdateSourceHost();
+        }
     }
 }

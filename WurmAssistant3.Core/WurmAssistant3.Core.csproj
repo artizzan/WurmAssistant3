@@ -106,6 +106,9 @@
     <Compile Include="Areas\Calendar\Views\SeasonsEditView.Designer.cs">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Areas\CombatAssist\CombatAssistSetup.cs" />
+    <Compile Include="Areas\CombatAssist\Modules\CombatAssistFeature.cs" />
+    <Compile Include="Areas\CombatAssist\Modules\CombatResultsParser.cs" />
     <Compile Include="Areas\Config\Contracts\ConfigCancelledException.cs" />
     <Compile Include="Areas\Config\Contracts\IServersEditorViewFactory.cs" />
     <Compile Include="Areas\Config\Contracts\IWurmAssistantConfig.cs" />
@@ -125,11 +128,70 @@
     <Compile Include="Areas\Config\Views\SettingsEditView.Designer.cs">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Areas\CraftingAssistant\CraftingAssistantSetup.cs" />
+    <Compile Include="Areas\CraftingAssistant\Modules\CraftingAssistantFeature.cs" />
+    <Compile Include="Areas\RevealCreatures\Data\FindResult.cs" />
+    <Compile Include="Areas\CraftingAssistant\Views\CraftingAssistantView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\CraftingAssistant\Views\CraftingAssistantView.Designer.cs">
+      <DependentUpon>CraftingAssistantView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\CraftingAssistant\Views\Widget.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\CraftingAssistant\Views\Widget.Designer.cs">
+      <DependentUpon>Widget.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\Granger\Modules\GrangerWa2Importer.cs" />
     <Compile Include="Areas\Logging\Modules\LoggerStub.cs" />
     <Compile Include="Areas\LogSearcher\Modules\LogSearchFeature.cs" />
     <Compile Include="Areas\Native\Constants\ShowWindowCommands.cs" />
     <Compile Include="Areas\Native\NativeSetup.cs" />
+    <Compile Include="Areas\RevealCreatures\Modules\RevealCreaturesFeature.cs" />
+    <Compile Include="Areas\RevealCreatures\RevealCreaturesSetup.cs" />
+    <Compile Include="Areas\RevealCreatures\Data\Direction.cs" />
+    <Compile Include="Areas\RevealCreatures\Data\Distance.cs" />
+    <Compile Include="Areas\RevealCreatures\Views\RevealCreaturesView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\RevealCreatures\Views\RevealCreaturesView.Designer.cs">
+      <DependentUpon>RevealCreaturesView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Data\QueryParams.cs" />
+    <Compile Include="Areas\SkillStats\Data\SkillReportItem.cs" />
+    <Compile Include="Areas\SkillStats\Modules\SkillStatsFeature.cs" />
+    <Compile Include="Areas\SkillStats\SkillStatsSetup.cs" />
+    <Compile Include="Areas\CombatAssist\Views\CombatAssistFeatureView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\CombatAssist\Views\CombatAssistFeatureView.Designer.cs">
+      <DependentUpon>CombatAssistFeatureView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\LiveSessionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\LiveSessionView.Designer.cs">
+      <DependentUpon>LiveSessionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillGainsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillGainsView.Designer.cs">
+      <DependentUpon>SkillGainsView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillStatsFeatureView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillStatsFeatureView.Designer.cs">
+      <DependentUpon>SkillStatsFeatureView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillLevelsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillLevelsView.Designer.cs">
+      <DependentUpon>SkillLevelsView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\SoundEngine\Modules\SoundEngineWa2Importer.cs" />
     <Compile Include="Areas\Timers\Modules\TimersWa2Importer.cs" />
     <Compile Include="Areas\Triggers\Modules\TriggersManager\SkillLevelTrigger.cs" />
@@ -727,9 +789,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\CraftingAssistant\Contracts\" />
     <Folder Include="Areas\Features\Views\" />
     <Folder Include="Areas\Granger\Contracts\" />
     <Folder Include="Areas\MainMenu\Contracts\" />
+    <Folder Include="Areas\RevealCreatures\Contracts\" />
     <Folder Include="WinForms\Utility\" />
   </ItemGroup>
   <ItemGroup>
@@ -772,11 +836,35 @@
     <EmbeddedResource Include="Areas\Calendar\Views\SeasonsEditView.resx">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Areas\CombatAssist\Views\CombatAssistFeatureView.resx">
+      <DependentUpon>CombatAssistFeatureView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Areas\Config\Views\ServersEditorView.resx">
       <DependentUpon>ServersEditorView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Config\Views\SettingsEditView.resx">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\CraftingAssistant\Views\CraftingAssistantView.resx">
+      <DependentUpon>CraftingAssistantView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\CraftingAssistant\Views\Widget.resx">
+      <DependentUpon>Widget.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\RevealCreatures\Views\RevealCreaturesView.resx">
+      <DependentUpon>RevealCreaturesView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SkillStats\Views\LiveSessionView.resx">
+      <DependentUpon>LiveSessionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SkillStats\Views\SkillGainsView.resx">
+      <DependentUpon>SkillGainsView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SkillStats\Views\SkillStatsFeatureView.resx">
+      <DependentUpon>SkillStatsFeatureView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SkillStats\Views\SkillLevelsView.resx">
+      <DependentUpon>SkillLevelsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Triggers\Views\TriggersManager\SkillLevelTriggerConfig.resx">
       <DependentUpon>SkillLevelTriggerConfig.cs</DependentUpon>
@@ -1000,6 +1088,8 @@
     <None Include="Resources\CalendarIcon.png" />
     <None Include="Resources\Grip.png" />
     <None Include="Resources\GrangerIcon.png" />
+    <None Include="Resources\Hammer.png" />
+    <None Include="Resources\Improvement.png" />
     <Content Include="Resources\irrklang_small.png" />
     <Content Include="Resources\lampsFlow.png" />
     <None Include="Resources\LogSearcherIcon.png" />
@@ -1007,6 +1097,7 @@
     <Content Include="Resources\QueueSoundMod.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Radar.png" />
     <Content Include="Resources\SoundDisabled.png" />
     <Content Include="Resources\SoundDisabledSmall.png" />
     <Content Include="Resources\SoundEnabled.png" />

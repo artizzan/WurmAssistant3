@@ -24,6 +24,18 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         protected readonly Files Files = new Files();
         protected readonly Logs Logs = new Logs();
 
+        [Route("UpdateSourceHost")]
+        public string GetUpdateSourceHost()
+        {
+            return "http://wurmassistant.azurewebsites.net/api/WurmAssistant3";
+        }
+
+        [Route("AvailabilityCheck")]
+        public string GetAvailabilityCheck()
+        {
+            return "OK";
+        }
+
         /// <summary>
         /// Gets info about all available packages.
         /// </summary>

@@ -7,5 +7,6 @@ namespace AldursLab.WurmAssistant.Launcher.Contracts
     {
         Task<string> GetLatestVersionAsync(IProgressReporter progressReporter, string buildCode);
         Task<Package[]> GetAllPackages();
+        Task<string> GetCurrentUpdateSourceHost();
     }
 }

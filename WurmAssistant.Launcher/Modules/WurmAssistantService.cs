@@ -26,6 +26,28 @@ namespace AldursLab.WurmAssistant.Launcher.Modules
             this.webServiceRootUrl = webServiceRootUrl;
         }
 
+        public async Task<string> GetCurrentUpdateSourceHost()
+        {
+            HttpClient client = new HttpClient();
+            client.Timeout = DefaultTimeout;
+            var response =
+                await client.GetAsync(string.Format("{0}/UpdateSourceHost", webServiceRootUrl));
+            if (response.IsSuccessStatusCode)
+            {
+                using (var stream = await response.Content.ReadAsStreamAsync())
+                {
+                    var versionString = serializer.Deserialize<string>(new JsonTextReader(new StreamReader(stream)));
+                    return versionString;
+                }
+            }
+            else
+            {
+                throw new ServiceException(string.Format("Server returned {0} : {1}",
+                    response.StatusCode,
+                    response.ReasonPhrase));
+            }
+        }
+
         public async Task<string> GetLatestVersionAsync(IProgressReporter progressReporter, string buildCode)
         {
             HttpClient client = new HttpClient();

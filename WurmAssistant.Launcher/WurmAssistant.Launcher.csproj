@@ -113,6 +113,7 @@
     <Compile Include="Contracts\IStagingLocation.cs" />
     <Compile Include="Contracts\IUpdateService.cs" />
     <Compile Include="Contracts\IWurmAssistantService.cs" />
+    <Compile Include="Modules\UpdateSourceUpdater.cs" />
     <Compile Include="Root\LaunchController.cs" />
     <Compile Include="Modules\Launcher.cs" />
     <Compile Include="Contracts\LauncherState.cs" />

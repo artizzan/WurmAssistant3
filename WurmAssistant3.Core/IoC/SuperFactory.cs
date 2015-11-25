@@ -15,7 +15,6 @@ namespace AldursLab.WurmAssistant3.Core.IoC
             this.kernel = kernel;
         }
 
-
         public T Get<T>()
         {
             return kernel.Get<T>();
