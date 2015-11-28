@@ -3,6 +3,8 @@ Wurm Assistant 3
 
 Wurm Assistant 3 is an extension application to [Wurm Online][] sandbox MMORPG. It provides various tools, that enrich the game experience.
 
+Video feature showcase:
+[Playlist link](https://www.youtube.com/playlist?list=PLfBWOgqhq7n5SoTFrwsO2-qIu8WQxYYOG)
 
 For more information about Wurm Assistant, please visit:
 [Wurm Assistant Official Discussion][official thread]
