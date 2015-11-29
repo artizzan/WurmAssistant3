@@ -37,7 +37,7 @@ namespace AldursLab.WurmAssistant.Launcher.Root
                 var config = new ControllerConfig()
                 {
                     LauncherBinDirFullPath = assemblyDir,
-                    WebServiceRootUrl = Properties.Settings.Default.WurmAssistantWebServiceUrl,
+                    WebServiceRootUrl = Properties.Settings.Default.WurmAssistantWebServiceUrl2,
                     WurmAssistantExeFileName = "AldursLab.WurmAssistant3.exe",
                     BuildCode = args.HasBuildCode ? args.BuildCode : string.Empty,
                     WurmUnlimitedMode = args.WurmUnlimitedMode,

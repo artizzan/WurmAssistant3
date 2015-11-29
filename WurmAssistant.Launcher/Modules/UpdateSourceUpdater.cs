@@ -28,7 +28,7 @@ namespace AldursLab.WurmAssistant.Launcher.Modules
 
         public void CommitUpdatedSourceHost()
         {
-            Settings.Default.WurmAssistantWebServiceUrl = result;
+            Settings.Default.WurmAssistantWebServiceUrl2 = result;
             Settings.Default.Save();
         }
     }

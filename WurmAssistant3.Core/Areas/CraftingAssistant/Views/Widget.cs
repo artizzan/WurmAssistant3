@@ -112,6 +112,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CraftingAssistant.Views
                         currentActionNeeded = match.Groups[1].Value;
                 }
 
+                // The spirit cottage has some irregularities that must be removed with a stone chisel.
+                {
+                    var match = Regex.Match(entry.Content,
+                        @"The .+ has some irregularities that must be removed with (.+)\.",
+                        RegexOptions.Compiled);
+                    if (match.Success)
+                        currentActionNeeded = match.Groups[1].Value;
+                }
+
                 // A tool for digging. It could be improved with a lump.
                 {
                     var match = Regex.Match(entry.Content,

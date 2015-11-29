@@ -11,6 +11,7 @@ using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views;
 using AldursLab.WurmAssistant3.Core.Properties;
+using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Ninject;
@@ -34,17 +35,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
 
         readonly SoundManagerView view;
 
-        public SoundEngine([NotNull] ISoundsLibrary soundsLibrary, ILogger logger)
+        public SoundEngine([NotNull] ISoundsLibrary soundsLibrary, ILogger logger, IProcessStarter processStarter)
         {
             if (soundsLibrary == null) throw new ArgumentNullException("soundsLibrary");
             if (logger == null) throw new ArgumentNullException("logger");
+            if (processStarter == null) throw new ArgumentNullException("processStarter");
             this.soundsLibrary = soundsLibrary;
             this.logger = logger;
 
             engine = new IrrKlang.ISoundEngine();
             globalVolume = 0.5f;
 
-            view = new SoundManagerView(this, soundsLibrary);
+            view = new SoundManagerView(this, soundsLibrary, processStarter);
         }
 
         public void Initialize()

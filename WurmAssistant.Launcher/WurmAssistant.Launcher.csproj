@@ -186,9 +186,6 @@
     <Content Include="beta-unlimited.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="dev-unlimited.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="wurmassistantlauncher.version">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -251,9 +248,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dev.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="WurmAssistantIcon.ico" />
     <Content Include="WurmAssistantLiteIcon.ico" />
   </ItemGroup>

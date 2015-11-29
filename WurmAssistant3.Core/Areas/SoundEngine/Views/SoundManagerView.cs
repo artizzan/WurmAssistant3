@@ -4,6 +4,8 @@ using System.Linq;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Properties;
+using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
 
@@ -13,13 +15,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
     {
         readonly ISoundEngine soundEngine;
         readonly ISoundsLibrary soundsLibrary;
+        readonly IProcessStarter processStarter;
 
-        public SoundManagerView([NotNull] ISoundEngine soundEngine, [NotNull] ISoundsLibrary soundsLibrary)
+        public SoundManagerView([NotNull] ISoundEngine soundEngine, [NotNull] ISoundsLibrary soundsLibrary, IProcessStarter processStarter)
         {
             if (soundEngine == null) throw new ArgumentNullException("soundEngine");
             if (soundsLibrary == null) throw new ArgumentNullException("soundsLibrary");
+            if (processStarter == null) throw new ArgumentNullException("processStarter");
             this.soundEngine = soundEngine;
             this.soundsLibrary = soundsLibrary;
+            this.processStarter = processStarter;
 
             InitializeComponent();
 
@@ -212,6 +217,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
                 e.Cancel = true;
                 this.Hide();
             }
+        }
+
+        private void sampleSoundPackLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            processStarter.StartSafe(Resources.SampleSoundPackUrl);
         }
     }
 }

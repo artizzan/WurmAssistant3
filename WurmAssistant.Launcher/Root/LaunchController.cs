@@ -67,14 +67,14 @@ namespace AldursLab.WurmAssistant.Launcher.Root
                 var updateSourceUpdaterTask = updateSourceUpdater.FetchUpdateSourceHost();
 
                 // if first run ever, first establish...
-                if (!Settings.Default.UpdateSourceEstablished)
+                if (!Settings.Default.UpdateSourceEstablished2)
                 {
                     gui.AddUserMessage("First run, establishing update source url");
                     await updateSourceUpdaterTask;
                     updateSourceUpdater.CommitUpdatedSourceHost();
-                    Settings.Default.UpdateSourceEstablished = true;
+                    Settings.Default.UpdateSourceEstablished2 = true;
                     Settings.Default.Save();
-                    gui.AddUserMessage("Update source url established to: " + Settings.Default.WurmAssistantWebServiceUrl);
+                    gui.AddUserMessage("Update source url established to: " + Settings.Default.WurmAssistantWebServiceUrl2);
                 }
 
                 launcher = new Modules.Launcher(config);

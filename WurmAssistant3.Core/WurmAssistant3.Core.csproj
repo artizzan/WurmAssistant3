@@ -106,9 +106,19 @@
     <Compile Include="Areas\Calendar\Views\SeasonsEditView.Designer.cs">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\CombatAssist\CombatAssistSetup.cs" />
-    <Compile Include="Areas\CombatAssist\Modules\CombatAssistFeature.cs" />
-    <Compile Include="Areas\CombatAssist\Modules\CombatResultsParser.cs" />
+    <Compile Include="Areas\CombatStats\CombatStatsSetup.cs" />
+    <Compile Include="Areas\CombatStats\Modules\CombatStatsFeature.cs" />
+    <Compile Include="Areas\CombatStats\Modules\CombatResults.cs" />
+    <Compile Include="Areas\CombatStats\Modules\CombatResultsProcessor.cs" />
+    <Compile Include="Areas\CombatStats\Contracts\ICombatDataSource.cs" />
+    <Compile Include="Areas\CombatStats\Modules\LiveLogsEventsMonitor.cs" />
+    <Compile Include="Areas\CombatStats\Modules\LogSearchEventsParser.cs" />
+    <Compile Include="Areas\CombatStats\Views\CombatResultsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\CombatStats\Views\CombatResultsView.Designer.cs">
+      <DependentUpon>CombatResultsView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\Config\Contracts\ConfigCancelledException.cs" />
     <Compile Include="Areas\Config\Contracts\IServersEditorViewFactory.cs" />
     <Compile Include="Areas\Config\Contracts\IWurmAssistantConfig.cs" />
@@ -162,11 +172,11 @@
     <Compile Include="Areas\SkillStats\Data\SkillReportItem.cs" />
     <Compile Include="Areas\SkillStats\Modules\SkillStatsFeature.cs" />
     <Compile Include="Areas\SkillStats\SkillStatsSetup.cs" />
-    <Compile Include="Areas\CombatAssist\Views\CombatAssistFeatureView.cs">
+    <Compile Include="Areas\CombatStats\Views\CombatStatsFeatureView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\CombatAssist\Views\CombatAssistFeatureView.Designer.cs">
-      <DependentUpon>CombatAssistFeatureView.cs</DependentUpon>
+    <Compile Include="Areas\CombatStats\Views\CombatStatsFeatureView.Designer.cs">
+      <DependentUpon>CombatStatsFeatureView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\SkillStats\Views\LiveSessionView.cs">
       <SubType>Form</SubType>
@@ -836,8 +846,11 @@
     <EmbeddedResource Include="Areas\Calendar\Views\SeasonsEditView.resx">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\CombatAssist\Views\CombatAssistFeatureView.resx">
-      <DependentUpon>CombatAssistFeatureView.cs</DependentUpon>
+    <EmbeddedResource Include="Areas\CombatStats\Views\CombatStatsFeatureView.resx">
+      <DependentUpon>CombatStatsFeatureView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\CombatStats\Views\CombatResultsView.resx">
+      <DependentUpon>CombatResultsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Config\Views\ServersEditorView.resx">
       <DependentUpon>ServersEditorView.cs</DependentUpon>
@@ -1083,6 +1096,9 @@
     <None Include="Resources\ActionQueueModdingHelp.txt" />
     <None Include="Resources\beer.png" />
     <Content Include="Resources\close_icon.gif" />
+    <None Include="Resources\combat1.png" />
+    <None Include="Resources\Combat.png" />
+    <None Include="Resources\CombatBeta.png" />
     <Content Include="Resources\DeleteRed.png" />
     <Content Include="Resources\DeleteRed_small.png" />
     <None Include="Resources\CalendarIcon.png" />

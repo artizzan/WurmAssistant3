@@ -50,7 +50,8 @@ namespace AldursLab.WurmAssistant.Launcher.Views
             {
                 if (lastLaunchChoice.HasFlag(LaunchChoices.Dev))
                 {
-                    unlimDevBtn.Focus();
+                    // redirecting to beta, dev is removed
+                    unlimBetaBtn.Focus();
                 }
                 else if (lastLaunchChoice.HasFlag(LaunchChoices.Beta))
                 {
@@ -73,7 +74,8 @@ namespace AldursLab.WurmAssistant.Launcher.Views
             {
                 if (lastLaunchChoice.HasFlag(LaunchChoices.Dev))
                 {
-                    devBtn.Focus();
+                    // redirecting to beta, dev is removed
+                    betaBtn.Focus();
                 }
                 else if (lastLaunchChoice.HasFlag(LaunchChoices.Beta))
                 {

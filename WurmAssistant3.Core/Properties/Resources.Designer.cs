@@ -101,12 +101,49 @@ namespace AldursLab.WurmAssistant3.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=Dpt2cVNkRz8.
+        /// </summary>
+        internal static string CalendarVideoUrl {
+            get {
+                return ResourceManager.GetString("CalendarVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap close_icon {
             get {
                 object obj = ResourceManager.GetObject("close_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Combat {
+            get {
+                object obj = ResourceManager.GetObject("Combat", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string CombatStatsVideoUrl {
+            get {
+                return ResourceManager.GetString("CombatStatsVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=E8EdzHp9L4U.
+        /// </summary>
+        internal static string CraftingAssistantVideoUrl {
+            get {
+                return ResourceManager.GetString("CraftingAssistantVideoUrl", resourceCulture);
             }
         }
         
@@ -137,6 +174,15 @@ namespace AldursLab.WurmAssistant3.Core.Properties {
             get {
                 object obj = ResourceManager.GetObject("GrangerIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=y2qzyhdnvVo.
+        /// </summary>
+        internal static string GrangerVideoUrl {
+            get {
+                return ResourceManager.GetString("GrangerVideoUrl", resourceCulture);
             }
         }
         
@@ -191,6 +237,15 @@ namespace AldursLab.WurmAssistant3.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=S_LmnDRZwUk.
+        /// </summary>
+        internal static string LogSearcherVideoUrl {
+            get {
+                return ResourceManager.GetString("LogSearcherVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap paypal_donate {
@@ -207,6 +262,33 @@ namespace AldursLab.WurmAssistant3.Core.Properties {
             get {
                 object obj = ResourceManager.GetObject("Radar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=5ouJzu999_g.
+        /// </summary>
+        internal static string RevealCreaturesVideoUrl {
+            get {
+                return ResourceManager.GetString("RevealCreaturesVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://dl.dropboxusercontent.com/u/74314315/Publish/WurmAssistant3/SampleSounds/sounds_wav.zip.
+        /// </summary>
+        internal static string SampleSoundPackUrl {
+            get {
+                return ResourceManager.GetString("SampleSoundPackUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=4J5b_Tlmsus.
+        /// </summary>
+        internal static string SkillStatsVideoUrl {
+            get {
+                return ResourceManager.GetString("SkillStatsVideoUrl", resourceCulture);
             }
         }
         
@@ -261,6 +343,15 @@ namespace AldursLab.WurmAssistant3.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=Pv2h89jsoC4.
+        /// </summary>
+        internal static string SoundManagerVideoUrl {
+            get {
+                return ResourceManager.GetString("SoundManagerVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap SoundNotifyIcon {
@@ -281,12 +372,30 @@ namespace AldursLab.WurmAssistant3.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=5oB44KiFCuY.
+        /// </summary>
+        internal static string TimersVideoUrl {
+            get {
+                return ResourceManager.GetString("TimersVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap TriggersIcon {
             get {
                 object obj = ResourceManager.GetObject("TriggersIcon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=R2siIpHxc_g.
+        /// </summary>
+        internal static string TriggersVideoUrl {
+            get {
+                return ResourceManager.GetString("TriggersVideoUrl", resourceCulture);
             }
         }
         

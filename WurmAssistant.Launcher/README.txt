@@ -13,7 +13,7 @@ AldursLab.WurmAssistantLauncher.exe [args]
 where [args] can be: 
 
 -BuildCode [code]
-Use specific release channel, eg: dev, beta, stable-win, stable-mac, stable-lin
+Use specific release channel, eg: beta, stable-win, stable-mac, stable-lin
 
 -WurmUnlimited
 Run for Wurm Unlimited, if omitted, runs for Wurm Online.

@@ -26,12 +26,12 @@ namespace AldursLab.WurmAssistant.Launcher.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://wurmassistant.azurewebsites.net/api/WurmAssistant3")]
-        public string WurmAssistantWebServiceUrl {
+        public string WurmAssistantWebServiceUrl2 {
             get {
-                return ((string)(this["WurmAssistantWebServiceUrl"]));
+                return ((string)(this["WurmAssistantWebServiceUrl2"]));
             }
             set {
-                this["WurmAssistantWebServiceUrl"] = value;
+                this["WurmAssistantWebServiceUrl2"] = value;
             }
         }
         
@@ -47,12 +47,12 @@ namespace AldursLab.WurmAssistant.Launcher.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UpdateSourceEstablished {
+        public bool UpdateSourceEstablished2 {
             get {
-                return ((bool)(this["UpdateSourceEstablished"]));
+                return ((bool)(this["UpdateSourceEstablished2"]));
             }
             set {
-                this["UpdateSourceEstablished"] = value;
+                this["UpdateSourceEstablished2"] = value;
             }
         }
     }
