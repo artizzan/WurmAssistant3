@@ -45,6 +45,7 @@
             this.globalVolumeTrackBar = new System.Windows.Forms.TrackBar();
             this.label1 = new System.Windows.Forms.Label();
             this.irrklangImage = new System.Windows.Forms.PictureBox();
+            this.sampleSoundPackLink = new System.Windows.Forms.LinkLabel();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarAdjustedVolume)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -82,7 +83,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(172, 315);
+            this.groupBox1.Size = new System.Drawing.Size(172, 316);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Selected Sound";
@@ -171,7 +172,7 @@
             // 
             this.buttonAddSounds.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAddSounds.Location = new System.Drawing.Point(5, 346);
+            this.buttonAddSounds.Location = new System.Drawing.Point(5, 338);
             this.buttonAddSounds.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAddSounds.Name = "buttonAddSounds";
             this.buttonAddSounds.Size = new System.Drawing.Size(484, 34);
@@ -197,12 +198,13 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.sampleSoundPackLink);
             this.groupBox2.Controls.Add(this.groupBox1);
             this.groupBox2.Controls.Add(this.buttonAddSounds);
             this.groupBox2.Controls.Add(this.listBoxAllSounds);
             this.groupBox2.Location = new System.Drawing.Point(12, 69);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(494, 385);
+            this.groupBox2.Size = new System.Drawing.Size(494, 402);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Sounds";
@@ -240,11 +242,22 @@
             this.irrklangImage.TabIndex = 20;
             this.irrklangImage.TabStop = false;
             // 
+            // sampleSoundPackLink
+            // 
+            this.sampleSoundPackLink.AutoSize = true;
+            this.sampleSoundPackLink.Location = new System.Drawing.Point(5, 378);
+            this.sampleSoundPackLink.Name = "sampleSoundPackLink";
+            this.sampleSoundPackLink.Size = new System.Drawing.Size(159, 13);
+            this.sampleSoundPackLink.TabIndex = 4;
+            this.sampleSoundPackLink.TabStop = true;
+            this.sampleSoundPackLink.Text = "Download sample sound pack...";
+            this.sampleSoundPackLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.sampleSoundPackLink_LinkClicked);
+            // 
             // SoundManagerView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(518, 466);
+            this.ClientSize = new System.Drawing.Size(518, 483);
             this.Controls.Add(this.irrklangImage);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.globalVolumeTrackBar);
@@ -263,6 +276,7 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarAdjustedVolume)).EndInit();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.globalVolumeTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.irrklangImage)).EndInit();
             this.ResumeLayout(false);
@@ -288,6 +302,7 @@
         private System.Windows.Forms.TrackBar globalVolumeTrackBar;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox irrklangImage;
+        private System.Windows.Forms.LinkLabel sampleSoundPackLink;
 
     }
 }

@@ -31,12 +31,10 @@
             this.components = new System.ComponentModel.Container();
             this.stableWinBtn = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.devBtn = new System.Windows.Forms.Button();
             this.betaBtn = new System.Windows.Forms.Button();
             this.stableLinBtn = new System.Windows.Forms.Button();
             this.stableMacBtn = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.unlimDevBtn = new System.Windows.Forms.Button();
             this.unlimBetaBtn = new System.Windows.Forms.Button();
             this.unlimStableLinBtn = new System.Windows.Forms.Button();
             this.unlimStableMacBtn = new System.Windows.Forms.Button();
@@ -58,7 +56,7 @@
             // 
             this.stableWinBtn.Location = new System.Drawing.Point(18, 19);
             this.stableWinBtn.Name = "stableWinBtn";
-            this.stableWinBtn.Size = new System.Drawing.Size(75, 43);
+            this.stableWinBtn.Size = new System.Drawing.Size(107, 43);
             this.stableWinBtn.TabIndex = 0;
             this.stableWinBtn.Text = "Stable \r\n(Windows)";
             this.stableWinBtn.UseVisualStyleBackColor = true;
@@ -66,7 +64,6 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.devBtn);
             this.groupBox1.Controls.Add(this.betaBtn);
             this.groupBox1.Controls.Add(this.stableLinBtn);
             this.groupBox1.Controls.Add(this.stableMacBtn);
@@ -78,19 +75,9 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Wurm Assistant for Wurm Online";
             // 
-            // devBtn
-            // 
-            this.devBtn.Location = new System.Drawing.Point(342, 19);
-            this.devBtn.Name = "devBtn";
-            this.devBtn.Size = new System.Drawing.Size(75, 43);
-            this.devBtn.TabIndex = 4;
-            this.devBtn.Text = "Dev";
-            this.devBtn.UseVisualStyleBackColor = true;
-            this.devBtn.Click += new System.EventHandler(this.devBtn_Click);
-            // 
             // betaBtn
             // 
-            this.betaBtn.Location = new System.Drawing.Point(261, 19);
+            this.betaBtn.Location = new System.Drawing.Point(361, 19);
             this.betaBtn.Name = "betaBtn";
             this.betaBtn.Size = new System.Drawing.Size(75, 43);
             this.betaBtn.TabIndex = 3;
@@ -100,9 +87,9 @@
             // 
             // stableLinBtn
             // 
-            this.stableLinBtn.Location = new System.Drawing.Point(99, 19);
+            this.stableLinBtn.Location = new System.Drawing.Point(131, 19);
             this.stableLinBtn.Name = "stableLinBtn";
-            this.stableLinBtn.Size = new System.Drawing.Size(75, 43);
+            this.stableLinBtn.Size = new System.Drawing.Size(107, 43);
             this.stableLinBtn.TabIndex = 1;
             this.stableLinBtn.Text = "Stable \r\n(Linux)";
             this.stableLinBtn.UseVisualStyleBackColor = true;
@@ -110,9 +97,9 @@
             // 
             // stableMacBtn
             // 
-            this.stableMacBtn.Location = new System.Drawing.Point(180, 19);
+            this.stableMacBtn.Location = new System.Drawing.Point(244, 19);
             this.stableMacBtn.Name = "stableMacBtn";
-            this.stableMacBtn.Size = new System.Drawing.Size(75, 43);
+            this.stableMacBtn.Size = new System.Drawing.Size(111, 43);
             this.stableMacBtn.TabIndex = 2;
             this.stableMacBtn.Text = "Stable \r\n(Mac)";
             this.stableMacBtn.UseVisualStyleBackColor = true;
@@ -120,7 +107,6 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.unlimDevBtn);
             this.groupBox2.Controls.Add(this.unlimBetaBtn);
             this.groupBox2.Controls.Add(this.unlimStableLinBtn);
             this.groupBox2.Controls.Add(this.unlimStableMacBtn);
@@ -132,19 +118,9 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Wurm Assistant for Wurm Unlimited";
             // 
-            // unlimDevBtn
-            // 
-            this.unlimDevBtn.Location = new System.Drawing.Point(342, 19);
-            this.unlimDevBtn.Name = "unlimDevBtn";
-            this.unlimDevBtn.Size = new System.Drawing.Size(75, 43);
-            this.unlimDevBtn.TabIndex = 9;
-            this.unlimDevBtn.Text = "Dev";
-            this.unlimDevBtn.UseVisualStyleBackColor = true;
-            this.unlimDevBtn.Click += new System.EventHandler(this.unlimDevBtn_Click);
-            // 
             // unlimBetaBtn
             // 
-            this.unlimBetaBtn.Location = new System.Drawing.Point(261, 19);
+            this.unlimBetaBtn.Location = new System.Drawing.Point(361, 19);
             this.unlimBetaBtn.Name = "unlimBetaBtn";
             this.unlimBetaBtn.Size = new System.Drawing.Size(75, 43);
             this.unlimBetaBtn.TabIndex = 8;
@@ -154,9 +130,9 @@
             // 
             // unlimStableLinBtn
             // 
-            this.unlimStableLinBtn.Location = new System.Drawing.Point(99, 19);
+            this.unlimStableLinBtn.Location = new System.Drawing.Point(131, 19);
             this.unlimStableLinBtn.Name = "unlimStableLinBtn";
-            this.unlimStableLinBtn.Size = new System.Drawing.Size(75, 43);
+            this.unlimStableLinBtn.Size = new System.Drawing.Size(107, 43);
             this.unlimStableLinBtn.TabIndex = 6;
             this.unlimStableLinBtn.Text = "Stable \r\n(Linux)";
             this.unlimStableLinBtn.UseVisualStyleBackColor = true;
@@ -164,9 +140,9 @@
             // 
             // unlimStableMacBtn
             // 
-            this.unlimStableMacBtn.Location = new System.Drawing.Point(180, 19);
+            this.unlimStableMacBtn.Location = new System.Drawing.Point(244, 19);
             this.unlimStableMacBtn.Name = "unlimStableMacBtn";
-            this.unlimStableMacBtn.Size = new System.Drawing.Size(75, 43);
+            this.unlimStableMacBtn.Size = new System.Drawing.Size(111, 43);
             this.unlimStableMacBtn.TabIndex = 7;
             this.unlimStableMacBtn.Text = "Stable \r\n(Mac)";
             this.unlimStableMacBtn.UseVisualStyleBackColor = true;
@@ -176,7 +152,7 @@
             // 
             this.unlimStableWinBtn.Location = new System.Drawing.Point(18, 19);
             this.unlimStableWinBtn.Name = "unlimStableWinBtn";
-            this.unlimStableWinBtn.Size = new System.Drawing.Size(75, 43);
+            this.unlimStableWinBtn.Size = new System.Drawing.Size(107, 43);
             this.unlimStableWinBtn.TabIndex = 5;
             this.unlimStableWinBtn.Text = "Stable \r\n(Windows)";
             this.unlimStableWinBtn.UseVisualStyleBackColor = true;
@@ -283,12 +259,10 @@
 
         private System.Windows.Forms.Button stableWinBtn;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button devBtn;
         private System.Windows.Forms.Button betaBtn;
         private System.Windows.Forms.Button stableLinBtn;
         private System.Windows.Forms.Button stableMacBtn;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button unlimDevBtn;
         private System.Windows.Forms.Button unlimBetaBtn;
         private System.Windows.Forms.Button unlimStableLinBtn;
         private System.Windows.Forms.Button unlimStableMacBtn;

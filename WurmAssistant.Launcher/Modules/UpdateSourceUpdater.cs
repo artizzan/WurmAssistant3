@@ -12,13 +12,17 @@ namespace AldursLab.WurmAssistant.Launcher.Modules
     public class UpdateSourceUpdater
     {
         readonly IWurmAssistantService wurmAssistantMainService;
+        readonly UserSettings userSettings;
 
         string result;
 
-        public UpdateSourceUpdater([NotNull] IWurmAssistantService wurmAssistantMainService)
+        public UpdateSourceUpdater([NotNull] IWurmAssistantService wurmAssistantMainService,
+            [NotNull] UserSettings userSettings)
         {
             if (wurmAssistantMainService == null) throw new ArgumentNullException("wurmAssistantMainService");
+            if (userSettings == null) throw new ArgumentNullException("userSettings");
             this.wurmAssistantMainService = wurmAssistantMainService;
+            this.userSettings = userSettings;
         }
 
         public async Task FetchUpdateSourceHost()
@@ -28,8 +32,7 @@ namespace AldursLab.WurmAssistant.Launcher.Modules
 
         public void CommitUpdatedSourceHost()
         {
-            Settings.Default.WurmAssistantWebServiceUrl = result;
-            Settings.Default.Save();
+            userSettings.WurmAssistantWebServiceUrl = result;
         }
     }
 }

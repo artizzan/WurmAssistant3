@@ -34,10 +34,12 @@ namespace AldursLab.WurmAssistant.Launcher.Root
                     throw new NullReferenceException("assemblyDir is null");
                 }
 
+                var settings = new UserSettings(assemblyDir);
+
                 var config = new ControllerConfig()
                 {
                     LauncherBinDirFullPath = assemblyDir,
-                    WebServiceRootUrl = Properties.Settings.Default.WurmAssistantWebServiceUrl,
+                    WebServiceRootUrl = settings.WurmAssistantWebServiceUrl,
                     WurmAssistantExeFileName = "AldursLab.WurmAssistant3.exe",
                     BuildCode = args.HasBuildCode ? args.BuildCode : string.Empty,
                     WurmUnlimitedMode = args.WurmUnlimitedMode,
@@ -45,9 +47,9 @@ namespace AldursLab.WurmAssistant.Launcher.Root
                     BuildNumber = args.HasSpecificBuildNumber ? args.SpecificBuildNumber.ToString() : null
                 };
 
+
                 if (args.NoArgs || args.ShowConfigWindow)
                 {
-                    var settings = new UserSettings(config);
                     // ask user what to run...
                     ChooseApp dialog = new ChooseApp(new WurmAssistantService(config.WebServiceRootUrl), settings);
                     dialog.StartPosition = FormStartPosition.CenterScreen;
@@ -81,7 +83,7 @@ namespace AldursLab.WurmAssistant.Launcher.Root
                 IDebug debug = new TextDebug(Path.Combine(assemblyDir, "launcherlog.txt"));
                 debug.Clear();
 
-                var controller = new LaunchController(this, config, debug);
+                var controller = new LaunchController(this, config, debug, settings);
                 controller.Execute();
             }
             catch (Exception exception)

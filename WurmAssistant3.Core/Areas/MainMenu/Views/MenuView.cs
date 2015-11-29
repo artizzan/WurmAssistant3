@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Contracts;
+using AldursLab.WurmAssistant3.Core.Properties;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using JetBrains.Annotations;
 
@@ -71,7 +72,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views
 
         private void viewRoadmapToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-             processStarter.StartSafe(
+            processStarter.StartSafe(
                 "https://trello.com/b/FlIPQ7TW/wurm-assistant-3-roadmap");
         }
 
@@ -87,6 +88,56 @@ namespace AldursLab.WurmAssistant3.Core.Areas.MainMenu.Views
             var view = importer.CreateDataImportView();
             view.StartPosition = FormStartPosition.CenterScreen;
             view.Show();
+        }
+
+        private void videoSoundManagerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe(Resources.SoundManagerVideoUrl);
+        }
+
+        private void videoLogSearcherToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe(Resources.LogSearcherVideoUrl);
+        }
+
+        private void videoCalendarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe(Resources.CalendarVideoUrl);
+        }
+
+        private void videoTimersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe(Resources.TimersVideoUrl);
+        }
+
+        private void videoTriggersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe(Resources.TriggersVideoUrl);
+        }
+
+        private void videoGrangerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe(Resources.GrangerVideoUrl);
+        }
+
+        private void videoCraftingAssistantToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe(Resources.RevealCreaturesVideoUrl);
+        }
+
+        private void videoRevealCreaturesParserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe(Resources.RevealCreaturesVideoUrl);
+        }
+
+        private void videoSkillStatsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe(Resources.SkillStatsVideoUrl);
+        }
+
+        private void videoCombatStatsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe(Resources.CombatStatsVideoUrl);
         }
     }
 }

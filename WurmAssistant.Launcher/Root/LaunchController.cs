@@ -22,16 +22,20 @@ namespace AldursLab.WurmAssistant.Launcher.Root
 
         readonly ControllerConfig config;
         readonly IDebug debug;
+        readonly UserSettings settings;
 
-        public LaunchController(IGuiHost host, ControllerConfig config, [NotNull] IDebug debug)
+        public LaunchController(IGuiHost host, ControllerConfig config, [NotNull] IDebug debug,
+            [NotNull] UserSettings settings)
         {
             if (host == null) throw new ArgumentNullException("host");
             this.host = host;
 
             if (config == null) throw new ArgumentNullException("config");
             if (debug == null) throw new ArgumentNullException("debug");
+            if (settings == null) throw new ArgumentNullException("settings");
             this.config = config;
             this.debug = debug;
+            this.settings = settings;
 
             var updaterGui = new UpdaterGui(host, debug);
             host.SetContent(updaterGui);
@@ -63,18 +67,18 @@ namespace AldursLab.WurmAssistant.Launcher.Root
             try
             {
                 UpdateSourceUpdater updateSourceUpdater =
-                    new UpdateSourceUpdater(new WurmAssistantService(Settings.Default.WurmAssistantUpdateSourceUrl));
+                    new UpdateSourceUpdater(new WurmAssistantService(Settings.Default.WurmAssistantUpdateSourceUrl), settings);
                 var updateSourceUpdaterTask = updateSourceUpdater.FetchUpdateSourceHost();
 
                 // if first run ever, first establish...
-                if (!Settings.Default.UpdateSourceEstablished)
+                if (!settings.UpdateSourceEstablished)
                 {
                     gui.AddUserMessage("First run, establishing update source url");
                     await updateSourceUpdaterTask;
                     updateSourceUpdater.CommitUpdatedSourceHost();
-                    Settings.Default.UpdateSourceEstablished = true;
-                    Settings.Default.Save();
-                    gui.AddUserMessage("Update source url established to: " + Settings.Default.WurmAssistantWebServiceUrl);
+                    config.WebServiceRootUrl = settings.WurmAssistantWebServiceUrl;
+                    settings.UpdateSourceEstablished = true;
+                    gui.AddUserMessage("Update source url established to: " + settings.WurmAssistantWebServiceUrl);
                 }
 
                 launcher = new Modules.Launcher(config);

@@ -1,27 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Core.Areas.CombatAssist.Views;
+using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Properties;
 using WurmAssistantDataTransfer.Dtos;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssist.Modules
+namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
 {
-    public class CombatAssistFeature : IFeature
+    public class CombatStatsFeature : IFeature
     {
         readonly IWurmApi wurmApi;
-        readonly CombatAssistFeatureView view;
+        readonly ILogger logger;
+        readonly CombatStatsFeatureView view;
 
-        public CombatAssistFeature(IWurmApi wurmApi)
+        public CombatStatsFeature(IWurmApi wurmApi, ILogger logger)
         {
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
+            if (logger == null) throw new ArgumentNullException("logger");
             this.wurmApi = wurmApi;
-            view = new CombatAssistFeatureView(wurmApi);
+            this.logger = logger;
+            view = new CombatStatsFeatureView(wurmApi, logger);
         }
 
         #region IFeature
@@ -37,12 +38,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssist.Modules
 
         string IFeature.Name
         {
-            get { return "Combat Assistant"; }
+            get { return "Combat Assistant (in dev)"; }
         }
 
         Image IFeature.Icon
         {
-            get { return Resources.Improvement; }
+            get { return Resources.Combat; }
         }
 
         async Task IFeature.InitAsync()

@@ -9,16 +9,23 @@ namespace AldursLab.WurmAssistant.Launcher.Modules
     {
         public class Data
         {
+            public Data()
+            {
+                WurmAssistantWebServiceUrl = "http://wurmassistant.azurewebsites.net/api/WurmAssistant3";
+            }
+
             public bool UseRelativeDataDir { get; set; }
             public string SpecificBuildNumber { get; set; }
             public LaunchChoices LastLaunchChoice { get; set; }
+            public bool UpdateSourceEstablished { get; set; }
+            public string WurmAssistantWebServiceUrl { get; set; }
         }
 
         readonly Persistent<Data> persistent;
 
-        public UserSettings(ControllerConfig config)
+        public UserSettings(string dirpath)
         {
-            var filepath = Path.Combine(config.LauncherBinDirFullPath, "usersettings.json");
+            var filepath = Path.Combine(dirpath, "usersettings.json");
             
             persistent = new Persistent<Data>(filepath);
             persistent.Load();
@@ -58,6 +65,32 @@ namespace AldursLab.WurmAssistant.Launcher.Modules
             set
             {
                 persistent.Data.LastLaunchChoice = value;
+                persistent.Save();
+            }
+        }
+
+        public bool UpdateSourceEstablished
+        {
+            get
+            {
+                return persistent.Data.UpdateSourceEstablished;
+            }
+            set
+            {
+                persistent.Data.UpdateSourceEstablished = value;
+                persistent.Save();
+            }
+        }
+
+        public string WurmAssistantWebServiceUrl
+        {
+            get
+            {
+                return persistent.Data.WurmAssistantWebServiceUrl;
+            }
+            set
+            {
+                persistent.Data.WurmAssistantWebServiceUrl = value;
                 persistent.Save();
             }
         }

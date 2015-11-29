@@ -172,7 +172,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 }
                 //[20:58:26] A foal skips around here merrily
                 //[01:59:09] This calf looks happy and free.
-                if ((line.Contains("A foal skips around here merrily") || line.Contains("This calf looks happy and free."))
+                if ((line.Contains("A foal skips around here merrily") 
+                    || line.Contains("This calf looks happy and free")
+                    || line.Contains("A small cuddly ball of fluff"))
                     && !verifyList.Foalization)
                 {
                     grangerDebug.Log("applying foalization to the creature");

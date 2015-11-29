@@ -4,7 +4,7 @@ using AldursLab.Essentials.Eventing;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Calendar;
-using AldursLab.WurmAssistant3.Core.Areas.CombatAssist;
+using AldursLab.WurmAssistant3.Core.Areas.CombatStats;
 using AldursLab.WurmAssistant3.Core.Areas.Config;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Modules;
@@ -139,7 +139,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
             CraftingAssistantSetup.Bind(kernel);
             RevealCreaturesSetup.Bind(kernel);
             SkillStatsSetup.Bind(kernel);
-            CombatAssistSetup.Bind(kernel);
+            CombatStatsSetup.Bind(kernel);
 
             FeaturesSetup.BindFeaturesManager(kernel);
             MainMenuSetup.BindMenu(kernel);

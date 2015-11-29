@@ -23,18 +23,6 @@ namespace AldursLab.WurmAssistant.Launcher.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://wurmassistant.azurewebsites.net/api/WurmAssistant3")]
-        public string WurmAssistantWebServiceUrl {
-            get {
-                return ((string)(this["WurmAssistantWebServiceUrl"]));
-            }
-            set {
-                this["WurmAssistantWebServiceUrl"] = value;
-            }
-        }
-        
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://wurmassistant.azurewebsites.net/api/WurmAssistant3")]
@@ -46,13 +34,15 @@ namespace AldursLab.WurmAssistant.Launcher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UpdateSourceEstablished {
+        [global::System.Configuration.DefaultSettingValueAttribute("do not use this piece of garbage user settings system, this line is needed or app" +
+            " will crash with \'unknown section\' message for anyone who prev version with any " +
+            "user setting ")]
+        public string WurmAssistantWebServiceUrl2DoNotUseThis {
             get {
-                return ((bool)(this["UpdateSourceEstablished"]));
+                return ((string)(this["WurmAssistantWebServiceUrl2DoNotUseThis"]));
             }
             set {
-                this["UpdateSourceEstablished"] = value;
+                this["WurmAssistantWebServiceUrl2DoNotUseThis"] = value;
             }
         }
     }
