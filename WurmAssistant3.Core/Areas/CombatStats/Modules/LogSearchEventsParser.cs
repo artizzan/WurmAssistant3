@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data;
+using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
 {
@@ -24,7 +26,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             this.wurmApi = wurmApi;
 
             CombatResults = new CombatResults();
-            processor = new CombatResultsProcessor(CombatResults);
+            processor = new CombatResultsProcessor(CombatResults, logSearchParameters.CharacterName);
         }
 
         public event EventHandler<EventArgs> DataChanged;

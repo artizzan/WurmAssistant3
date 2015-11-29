@@ -38,7 +38,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
 
         string IFeature.Name
         {
-            get { return "Combat Assistant (in dev)"; }
+            get { return "Combat Assistant"; }
         }
 
         Image IFeature.Icon

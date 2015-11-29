@@ -1,6 +1,8 @@
 ﻿using System;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data;
+using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
@@ -24,7 +26,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             this.logger = logger;
 
             CombatResults = new CombatResults();
-            processor = new CombatResultsProcessor(CombatResults);
+            processor = new CombatResultsProcessor(CombatResults, characterName);
 
             wurmApi.LogsMonitor.Subscribe(characterName, LogType.Combat, CombatLogEventHandler);
         }

@@ -1,4 +1,6 @@
 ﻿using System;
+using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data;
+using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat;
 using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Contracts
