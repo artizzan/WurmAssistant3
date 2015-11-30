@@ -7,7 +7,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Contracts
 {
     public interface ICombatDataSource
     {
-        CombatResults CombatResults { get; }
+        CombatStatus CombatStatus { get; }
 
         event EventHandler<EventArgs> DataChanged;
     }

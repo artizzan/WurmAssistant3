@@ -25,13 +25,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             this.logSearchParameters = logSearchParameters;
             this.wurmApi = wurmApi;
 
-            CombatResults = new CombatResults();
-            processor = new CombatResultsProcessor(CombatResults, logSearchParameters.CharacterName);
+            CombatStatus = new CombatStatus(logSearchParameters.CharacterName);
+            processor = new CombatResultsProcessor(CombatStatus);
         }
 
         public event EventHandler<EventArgs> DataChanged;
 
-        public CombatResults CombatResults { get; private set; }
+        public CombatStatus CombatStatus { get; private set; }
 
         public async Task Process()
         {

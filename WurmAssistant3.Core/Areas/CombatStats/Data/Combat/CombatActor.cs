@@ -5,19 +5,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
         public CombatActor(string name)
         {
             Name = name;
-            DamageCausedCounts = new Damage();
+            DamageCausedStats = new DamageCausedStats();
             ParryCounts = new Parry();
             TargetPreferenceCounts = new TargetPreference();
-            EvadeCounts = new Evasion();
+            EvadedCounts = new Evasion();
         }
 
         public string Name { get; private set; }
-        public Damage DamageCausedCounts { get; private set; }
+        public DamageCausedStats DamageCausedStats { get; private set; }
         public Parry ParryCounts { get; private set; }
         public TargetPreference TargetPreferenceCounts { get; private set; }
-        public Evasion EvadeCounts { get; private set; }
+        public Evasion EvadedCounts { get; private set; }
         public int MissesCount { get; set; }
-        public int GlancingCount { get; set; }
+        public int GlancingReceivedCount { get; set; }
         public int ShieldBlockCount { get; set; }
     }
 }

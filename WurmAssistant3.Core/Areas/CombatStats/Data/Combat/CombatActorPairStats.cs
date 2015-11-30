@@ -2,9 +2,9 @@ using System;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
 {
-    public class CombatStats
+    public class CombatActorPairStats
     {
-        public CombatStats(CombatActor actorOne, CombatActor actorTwo)
+        public CombatActorPairStats(CombatActor actorOne, CombatActor actorTwo)
         {
             ActorOne = actorOne;
             ActorTwo = actorTwo;

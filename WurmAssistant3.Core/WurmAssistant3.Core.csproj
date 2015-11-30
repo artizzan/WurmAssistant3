@@ -107,15 +107,16 @@
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\CombatStats\Data\Combat\CombatActor.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\CombatStats.cs" />
+    <Compile Include="Areas\CombatStats\Data\Combat\CombatActorPairStats.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\CountableStrings.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\Damage.cs" />
+    <Compile Include="Areas\CombatStats\Data\Combat\Attack.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\Evasion.cs" />
+    <Compile Include="Areas\CombatStats\Data\Combat\Focus.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\Parry.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\TargetPreference.cs" />
     <Compile Include="Areas\CombatStats\CombatStatsSetup.cs" />
     <Compile Include="Areas\CombatStats\Modules\CombatStatsFeature.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\CombatResults.cs" />
+    <Compile Include="Areas\CombatStats\Data\Combat\CombatStatus.cs" />
     <Compile Include="Areas\CombatStats\Modules\CombatResultsProcessor.cs" />
     <Compile Include="Areas\CombatStats\Contracts\ICombatDataSource.cs" />
     <Compile Include="Areas\CombatStats\Modules\LiveLogsEventsMonitor.cs" />
