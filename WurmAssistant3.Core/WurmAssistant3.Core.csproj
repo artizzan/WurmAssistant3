@@ -112,6 +112,7 @@
     <Compile Include="Areas\CombatStats\Data\Combat\Attack.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\Evasion.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\Focus.cs" />
+    <Compile Include="Areas\CombatStats\Data\Combat\KilledCounts.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\Parry.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\TargetPreference.cs" />
     <Compile Include="Areas\CombatStats\CombatStatsSetup.cs" />

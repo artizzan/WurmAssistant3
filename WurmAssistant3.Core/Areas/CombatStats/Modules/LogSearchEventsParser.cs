@@ -5,6 +5,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data;
 using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat;
+using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
 {
@@ -18,7 +19,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
         bool processed;
         bool running;
 
-        public LogSearchEventsParser(LogSearchParameters logSearchParameters, IWurmApi wurmApi)
+        public LogSearchEventsParser(LogSearchParameters logSearchParameters, IWurmApi wurmApi, ILogger logger)
         {
             if (logSearchParameters == null) throw new ArgumentNullException("logSearchParameters");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
@@ -26,7 +27,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             this.wurmApi = wurmApi;
 
             CombatStatus = new CombatStatus(logSearchParameters.CharacterName);
-            processor = new CombatResultsProcessor(CombatStatus);
+            processor = new CombatResultsProcessor(CombatStatus, logger);
         }
 
         public event EventHandler<EventArgs> DataChanged;
@@ -43,16 +44,23 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
 
                 if (!processed)
                 {
-                    var logEntries = await wurmApi.LogsHistory.ScanAsync(logSearchParameters);
-                    var filteredLogEvents =
-                        logEntries.Where(
-                            entry =>
-                                entry.Timestamp >= logSearchParameters.MinDate
-                                && entry.Timestamp <= logSearchParameters.MaxDate);
+                    // todo: get required logs from processor, run search for each log
 
-                    foreach (var entry in filteredLogEvents)
+                    var logTypes = processor.GetRequiredLogs();
+
+                    foreach (var logType in logTypes)
                     {
-                        processor.ProcessEntry(entry);
+                        var logEntries = await wurmApi.LogsHistory.ScanAsync(logSearchParameters);
+                        var filteredLogEvents =
+                            logEntries.Where(
+                                entry =>
+                                    entry.Timestamp >= logSearchParameters.MinDate
+                                    && entry.Timestamp <= logSearchParameters.MaxDate);
+
+                        foreach (var entry in filteredLogEvents)
+                        {
+                            processor.ProcessEntry(entry, LogType.Combat);
+                        }
                     }
 
                     processed = true;

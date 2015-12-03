@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
 {
-    public class CountableStrings
+    public abstract class CountableStrings
     {
         readonly Dictionary<string, int> counts = new Dictionary<string, int>();
 
@@ -14,5 +14,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
         }
 
         public IEnumerable<KeyValuePair<string, int>> Counts { get { return counts; } } 
+    }
+
+    public class KillStatistics : CountableStrings
+    {
     }
 }

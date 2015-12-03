@@ -15,6 +15,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
         {
             if (characterName == null) throw new ArgumentNullException("characterName");
             this.characterName = characterName;
+            CurrentFocus = new Focus();
+            KillStatistics = new KillStatistics();
         }
 
         public CombatActorPairStats GetStatsFor(string actorOne, string actorTwo)
@@ -47,5 +49,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
         }
 
         public Focus CurrentFocus { get; private set; }
+
+        public KillStatistics KillStatistics { get; private set; }
     }
 }

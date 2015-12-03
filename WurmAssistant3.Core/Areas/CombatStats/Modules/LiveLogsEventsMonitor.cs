@@ -26,9 +26,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             this.logger = logger;
 
             CombatStatus = new CombatStatus(characterName);
-            processor = new CombatResultsProcessor(CombatStatus);
+            processor = new CombatResultsProcessor(CombatStatus, logger);
 
-            wurmApi.LogsMonitor.Subscribe(characterName, LogType.Combat, CombatLogEventHandler);
+            wurmApi.LogsMonitor.Subscribe(characterName, LogType.AllLogs, LogHandler);
         }
 
         public event EventHandler<EventArgs> DataChanged;
@@ -48,25 +48,33 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
         public void Dispose()
         {
             Pause();
-            wurmApi.LogsMonitor.Unsubscribe(characterName, CombatLogEventHandler);
+            wurmApi.LogsMonitor.Unsubscribe(characterName, LogHandler);
         }
 
-        void CombatLogEventHandler(object sender, LogsMonitorEventArgs logsMonitorEventArgs)
+        void LogHandler(object sender, LogsMonitorEventArgs logsMonitorEventArgs)
         {
             try
             {
                 if (collecting)
                 {
+                    bool anyMatched = false;
                     foreach (var entry in logsMonitorEventArgs.WurmLogEntries)
                     {
-                        processor.ProcessEntry(entry);
+                        try
+                        {
+                            anyMatched |= processor.ProcessEntry(entry, logsMonitorEventArgs.LogType);
+                        }
+                        catch (Exception exception)
+                        {
+                            logger.Error(exception, "Error at parsing live log event for combat stats, entry: " + entry);
+                        }
                     }
-                    OnDataChanged();
+                    if (anyMatched) OnDataChanged();
                 }
             }
             catch (Exception exception)
             {
-                logger.Error(exception, "Error at parsing live log event for combat stats.");
+                logger.Error(exception, "General error at parsing live log event for combat stats.");
             }
         }
 

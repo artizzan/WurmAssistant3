@@ -71,7 +71,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views
                     MinDate = fromDtpick.Value,
                     MaxDate = toDtpick.Value,
                     ScanResultOrdering = ScanResultOrdering.Ascending
-                }, wurmApi);
+                }, wurmApi, logger);
                 await parser.Process();
                 var view = new CombatResultsView(parser);
                 view.ShowCenteredOnForm(this);
