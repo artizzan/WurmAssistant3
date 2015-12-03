@@ -45,6 +45,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         Color widgetBgColor = SystemColors.Control;
         [JsonProperty]
         Color widgetForeColor = SystemColors.ControlText;
+        [JsonProperty] 
+        bool showEndDate = false;
+        [JsonProperty] 
+        bool showEndDateInsteadOfTimeRemaining = false;
 
         TimersForm timersForm;
 
@@ -113,6 +117,17 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             set { widgetForeColor = value; FlagAsChanged(); }
         }
 
+        public bool ShowEndDate
+        {
+            get { return showEndDate; }
+            set { showEndDate = value; FlagAsChanged(); }
+        }
+
+        public bool ShowEndDateInsteadOfTimeRemaining
+        {
+            get { return showEndDateInsteadOfTimeRemaining; }
+            set { showEndDateInsteadOfTimeRemaining = value; FlagAsChanged(); }
+        }
 
         public void Initialize()
         {

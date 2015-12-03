@@ -16,6 +16,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
             checkBoxWidgetView.Checked = timersView.WidgetModeEnabled;
             textBoxWidgetSample.BackColor = timersView.WidgetBgColor;
             textBoxWidgetSample.ForeColor = timersView.WidgetForeColor;
+            checkBoxShowEndDate.Checked = timersView.ShowEndDate;
+            checkBoxShowEndDateInstead.Checked = timersView.ShowEndDateInsteadOfTimeRemaining;
+            UpdateControls();
+        }
+
+        void UpdateControls()
+        {
+            if (!checkBoxShowEndDate.Checked)
+            {
+                checkBoxShowEndDateInstead.Checked = false;
+            }
+            checkBoxShowEndDateInstead.Enabled = checkBoxShowEndDate.Checked;
         }
 
         private void checkBoxWidgetView_CheckedChanged(object sender, EventArgs e)
@@ -52,6 +64,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
         {
             textBoxWidgetSample.BackColor = timersView.WidgetBgColor = DefaultBackColor;
             textBoxWidgetSample.ForeColor = timersView.WidgetForeColor = DefaultForeColor;
+        }
+
+        private void checkBoxShowEndDate_CheckedChanged(object sender, EventArgs e)
+        {
+            timersView.ShowEndDate = checkBoxShowEndDate.Checked;
+            UpdateControls();
+        }
+
+        private void checkBoxShowEndDateInstead_CheckedChanged(object sender, EventArgs e)
+        {
+            timersView.ShowEndDateInsteadOfTimeRemaining = checkBoxShowEndDateInstead.Checked;
+            UpdateControls();
         }
     }
 }

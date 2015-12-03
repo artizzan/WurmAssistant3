@@ -105,11 +105,49 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
                 value = progressBar1.Maximum - value;
 
                 progressBar1.Value = value;
-
+                
                 labelTimeTo.Text = string.Empty;
-                if (cd_remaining.Days > 1) labelTimeTo.Text += String.Format("{0} days ", cd_remaining.Days);
-                else if (cd_remaining.Days > 0) labelTimeTo.Text += String.Format("{0} day ", cd_remaining.Days);
-                labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
+
+                if (wurmTimer.TimersFeature.ShowEndDateInsteadOfTimeRemaining)
+                {
+                    labelTimeTo.Text += (DateTime.Now + cd_remaining).ToString("MM-dd HH:mm:ss");
+                }
+                else if (wurmTimer.TimersFeature.ShowEndDate)
+                {
+                    if (cd_remaining.Days > 1)
+                    {
+                        labelTimeTo.Text += String.Format("{0} days ", cd_remaining.Days);
+                        labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
+                    }
+                    else if (cd_remaining.Days > 0)
+                    {
+                        labelTimeTo.Text += String.Format("{0} day ", cd_remaining.Days);
+                        labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
+                    }
+                    else
+                    {
+                        labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
+                        labelTimeTo.Text += string.Format(" ({0})", (DateTime.Now + cd_remaining).ToString("HH:mm"));
+                    }
+                }
+                else
+                {
+                    if (cd_remaining.Days > 1)
+                    {
+                        labelTimeTo.Text += String.Format("{0} days ", cd_remaining.Days);
+                        labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
+                    }
+                    else if (cd_remaining.Days > 0)
+                    {
+                        labelTimeTo.Text += String.Format("{0} day ", cd_remaining.Days);
+                        labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
+                    }
+                    else
+                    {
+                        labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
+                    }
+                }
+
                 if (!string.IsNullOrEmpty(ExtraInfo)) labelTimeTo.Text += ExtraInfo;
             }
         }
