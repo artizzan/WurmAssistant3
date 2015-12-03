@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AldursLab.Essentials.Extensions.DotNet.Drawing;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
@@ -241,6 +242,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         }
 
         public string Name { get { return Entity.Name; } set { Entity.Name = value; } }
+
+        public string InnerName { get { return GetInnerName(Entity.Name); } }
 
         public string Father { get { return Entity.FatherName; } set { Entity.FatherName = value; } }
 
@@ -497,5 +500,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         {
             return Age.CreatureAgeId == CreatureAgeId.YoungFoal || Age.CreatureAgeId == CreatureAgeId.AdolescentFoal;
         }
+
+        public static string GetInnerName(string name)
+        {
+            var match = Regex.Match(name, @"'(.+)'", RegexOptions.Compiled);
+            return match.Success ? match.Groups[1].Value : string.Empty;
+        }
+
     }
 }
