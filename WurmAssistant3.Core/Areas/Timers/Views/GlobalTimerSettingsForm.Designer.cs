@@ -32,13 +32,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonResetWidgetDefaultColor = new System.Windows.Forms.Button();
-            this.labelAutowrap2 = new LabelAutowrap();
+            this.labelAutowrap2 = new AldursLab.WurmAssistant3.Core.WinForms.LabelAutowrap();
             this.textBoxWidgetSample = new System.Windows.Forms.TextBox();
             this.buttonSetWidgetFontColor = new System.Windows.Forms.Button();
             this.buttonChangeWidgetBgColor = new System.Windows.Forms.Button();
             this.checkBoxWidgetView = new System.Windows.Forms.CheckBox();
-            this.labelAutowrap1 = new LabelAutowrap();
+            this.labelAutowrap1 = new AldursLab.WurmAssistant3.Core.WinForms.LabelAutowrap();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.checkBoxShowEndDate = new System.Windows.Forms.CheckBox();
+            this.checkBoxShowEndDateInstead = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,7 +53,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
             this.groupBox1.Controls.Add(this.buttonChangeWidgetBgColor);
             this.groupBox1.Controls.Add(this.checkBoxWidgetView);
             this.groupBox1.Controls.Add(this.labelAutowrap1);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(12, 88);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(265, 262);
             this.groupBox1.TabIndex = 0;
@@ -132,11 +134,36 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
             // 
             this.colorDialog1.SolidColorOnly = true;
             // 
-            // FormTimerGlobalSettings
+            // checkBoxShowEndDate
+            // 
+            this.checkBoxShowEndDate.AutoSize = true;
+            this.checkBoxShowEndDate.Location = new System.Drawing.Point(12, 12);
+            this.checkBoxShowEndDate.Name = "checkBoxShowEndDate";
+            this.checkBoxShowEndDate.Size = new System.Drawing.Size(238, 30);
+            this.checkBoxShowEndDate.TabIndex = 1;
+            this.checkBoxShowEndDate.Text = "Show time of day of when the timer will finish,\r\nin local time, next to time rema" +
+    "ining\r\n";
+            this.checkBoxShowEndDate.UseVisualStyleBackColor = true;
+            this.checkBoxShowEndDate.CheckedChanged += new System.EventHandler(this.checkBoxShowEndDate_CheckedChanged);
+            // 
+            // checkBoxShowEndDateInstead
+            // 
+            this.checkBoxShowEndDateInstead.AutoSize = true;
+            this.checkBoxShowEndDateInstead.Location = new System.Drawing.Point(31, 48);
+            this.checkBoxShowEndDateInstead.Name = "checkBoxShowEndDateInstead";
+            this.checkBoxShowEndDateInstead.Size = new System.Drawing.Size(172, 17);
+            this.checkBoxShowEndDateInstead.TabIndex = 2;
+            this.checkBoxShowEndDateInstead.Text = "Show instead of remaining time\r\n";
+            this.checkBoxShowEndDateInstead.UseVisualStyleBackColor = true;
+            this.checkBoxShowEndDateInstead.CheckedChanged += new System.EventHandler(this.checkBoxShowEndDateInstead_CheckedChanged);
+            // 
+            // GlobalTimerSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(288, 286);
+            this.ClientSize = new System.Drawing.Size(288, 362);
+            this.Controls.Add(this.checkBoxShowEndDateInstead);
+            this.Controls.Add(this.checkBoxShowEndDate);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -147,6 +174,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -161,5 +189,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
         private System.Windows.Forms.TextBox textBoxWidgetSample;
         private LabelAutowrap labelAutowrap2;
         private System.Windows.Forms.Button buttonResetWidgetDefaultColor;
+        private System.Windows.Forms.CheckBox checkBoxShowEndDate;
+        private System.Windows.Forms.CheckBox checkBoxShowEndDateInstead;
     }
 }

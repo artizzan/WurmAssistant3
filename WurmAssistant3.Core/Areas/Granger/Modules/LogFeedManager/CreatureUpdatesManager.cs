@@ -160,7 +160,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         }
 
 
-                        bool ageChanged = data.Age > data.Creature.Age;
+                        bool ageChanged = data.Age != data.Creature.Age;
 
                         if (notify != null || ageChanged)
                         {
@@ -475,23 +475,29 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                     {
                         // we have found the correct creature data
                         result.Creature = creatureEntity;
-                        // possibly existing creature is a foal
+
+                        // transforming age with foal stage in mind
+                        // regular log events do not indicate foal stage,
+                        // if in doubt, do not change age
                         var prevAge = result.Creature.Age.CreatureAgeId;
                         var newAge = result.Age.CreatureAgeId;
-                        // since adding creature for first time gets correct age
-                        // we can asume here that creature can't be younger than it is
-                        // and go for foal status where applicable
+
                         if (prevAge == CreatureAgeId.YoungFoal)
                         {
+                            // we don't know if this is young foal or young mature, keep old value
                             if (newAge == CreatureAgeId.Young) 
                                 result.Age = new CreatureAge(CreatureAgeId.YoungFoal);
+                            // we don't know if this is adolescent foal or adolescent mature, keep old value
                             if (newAge == CreatureAgeId.Adolescent)
-                                result.Age = new CreatureAge(CreatureAgeId.AdolescentFoal);
+                                result.Age = new CreatureAge(CreatureAgeId.YoungFoal);
                         }
                         if (prevAge == CreatureAgeId.AdolescentFoal)
                         {
-                            // here we allow updating to regular Young
-                            if (newAge == CreatureAgeId.Adolescent) 
+                            // young in this context can only mean young mature
+                            if (newAge == CreatureAgeId.Young)
+                                result.Age = new CreatureAge(CreatureAgeId.Young);
+                            // we don't know if this is adolescent foal or adolescent mature, keep old value
+                            if (newAge == CreatureAgeId.Adolescent)
                                 result.Age = new CreatureAge(CreatureAgeId.AdolescentFoal);
                         }
 

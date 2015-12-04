@@ -183,10 +183,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         creatureBuffer.Age.Foalize();
                         verifyList.Foalization = true;
                     }
-                    catch (Exception _e)
+                    catch (InvalidOperationException exception)
                     {
-                        // we can swallow because age is of little significance to granger and can be adjusted easily
-                        logger.Error(_e, "The creature appears to be a foal, but has invalid age for a foal!");
+                        logger.Error(exception, "The creature appears to be a foal, but has invalid age for a foal!");
                     }
                 }
                 //[20:57:27] It has been branded by and belongs to the settlement of Silver Hill Estate.
@@ -219,7 +218,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 
                         var selectedHerds = GetSelectedHerds();
 
-                        var herdsFinds = GetHerdsFinds(selectedHerds, creatureBuffer);
+                        var herdsFinds = GetHerdsFinds(selectedHerds, creatureBuffer, checkInnerName: false);
+                        if (herdsFinds.Length == 0)
+                        {
+                            herdsFinds = GetHerdsFinds(selectedHerds, creatureBuffer, checkInnerName: true);
+                        }
                         var selectedHerdsFinds = herdsFinds;
                         // if there isn't any creature found in selected herds,
                         // try all herds if setting is enabled
@@ -230,7 +233,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                             allHerdSearch = true;
                             string[] allHerds = GetAllHerds();
 
-                            herdsFinds = GetHerdsFinds(allHerds, creatureBuffer);
+                            herdsFinds = GetHerdsFinds(allHerds, creatureBuffer, checkInnerName: false);
+                            if (herdsFinds.Length == 0)
+                            {
+                                herdsFinds = GetHerdsFinds(allHerds, creatureBuffer, checkInnerName: true);
+                            }
                         }
 
                         // first try to update
@@ -379,11 +386,30 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         oldCreature.TraitsInspectedAtSkill = creatureBuffer.InspectSkill;
                     }
                     else
+                    {
                         grangerDebug.Log("old creature data had more accurate trait info, skipping");
+                    }
                     oldCreature.SetTag("dead", false);
                     oldCreature.SetSecondaryInfoTag(creatureBuffer.SecondaryInfo);
                     oldCreature.IsMale = creatureBuffer.IsMale;
                     oldCreature.PregnantUntil = creatureBuffer.PregnantUntil;
+                    if (oldCreature.Name != creatureBuffer.Name)
+                    {
+                        if (NameUniqueInHerd(creatureBuffer.Name, oldCreature.Herd))
+                        {
+                            trayPopups.Schedule(String.Format("Updating name of creature {0} to {1}",
+                                oldCreature.Name,
+                                creatureBuffer.Name), "CREATURE NAME UPDATE");
+                            oldCreature.Name = creatureBuffer.Name;
+                        }
+                        else
+                        {
+                            trayPopups.Schedule(String.Format("Could not update name of creature {0} to {1}, " +
+                                                              "because herd already has a creature with such name.",
+                                oldCreature.Name,
+                                creatureBuffer.Name), "WARNING");
+                        }
+                    }
 
                     context.SubmitChanges();
                     grangerDebug.Log("successfully updated creature in db");
@@ -394,6 +420,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 return true;
             }
             return false;
+        }
+
+        bool NameUniqueInHerd(string creatureName, string herdName)
+        {
+            return !context.Creatures.Any(x => x.Name == creatureName && x.Herd == herdName);
         }
 
         bool TryAddNewCreature(string[] selectedHerds, CreatureEntity[] selectedHerdsFinds)
@@ -498,7 +529,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 Id = CreatureEntity.GenerateNewCreatureId(context),
                 Name = newCreature.Name,
                 Herd = selectedHerd,
-                Age = this.creatureBuffer.Age,
+                Age = newCreature.Age,
                 TakenCareOfBy = newCreature.CaredBy,
                 BrandedFor = newCreature.BrandedBy,
                 FatherName = newCreature.Father,
@@ -525,13 +556,29 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 .Select(x => x.HerdID.ToString()).ToArray();
         }
 
-        private CreatureEntity[] GetHerdsFinds(IEnumerable<string> viableHerds, CreatureBuffer creatureBuffer)
+        private CreatureEntity[] GetHerdsFinds(IEnumerable<string> viableHerds, CreatureBuffer creatureBuffer, bool checkInnerName)
         {
-            var newCreatureName = creatureBuffer.Name;
-            var query = context.Creatures
+            IEnumerable<CreatureEntity> query;
+            if (checkInnerName)
+            {
+                if (string.IsNullOrWhiteSpace(Creature.GetInnerName(creatureBuffer.Name)))
+                {
+                    // cannot match by inner name, this creature doesn't have one
+                    return new CreatureEntity[0];
+                }
+                query = context.Creatures
                                .Where(x =>
-                                   x.Name == newCreatureName &&
+                                   Creature.GetInnerName(x.Name) == Creature.GetInnerName(creatureBuffer.Name) &&
                                    viableHerds.Contains(x.Herd));
+            }
+            else
+            {
+                query = context.Creatures
+                               .Where(x =>
+                                   x.Name == creatureBuffer.Name &&
+                                   viableHerds.Contains(x.Herd));
+            }
+
             if (parentModule.Settings.UseServerNameAsCreatureIdComponent)
             {
                 query =

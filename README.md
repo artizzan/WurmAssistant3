@@ -22,9 +22,9 @@ Compiles under VS 2013 Community and higher.
 Branches, Pull requests
 --------------
 
-dev -> beta -> stable-x
+beta -> stable-x
 
-Any pulls should be directed at Dev, unless hotfixing issues in lower branches.
+Any pulls should be directed at Beta, unless hotfixing issues in lower branches.
 
 About the source
 --------------

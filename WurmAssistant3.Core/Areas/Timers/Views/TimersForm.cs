@@ -156,6 +156,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views
             }
         }
 
+        public bool ShowEndDate
+        {
+            get { return timersFeature.ShowEndDate; }
+            set { timersFeature.ShowEndDate = value; }
+        }
+
+        public bool ShowEndDateInsteadOfTimeRemaining
+        {
+            get { return timersFeature.ShowEndDateInsteadOfTimeRemaining; }
+            set { timersFeature.ShowEndDateInsteadOfTimeRemaining = value; }
+        }
+
+
         void ApplyTimerGroupsOrdering()
         {
             List<PlayerLayoutView> views = new List<PlayerLayoutView>();

@@ -497,10 +497,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
             {
                 if (isLongMeditCooldown)
                 {
+                    View.SetCooldown(LongMeditCooldown);
                     NextMeditationDate = FindLastValidMeditInHistory() + LongMeditCooldown;
                 }
                 else
                 {
+                    View.SetCooldown(ShortMeditCooldown);
                     NextMeditationDate = FindLastValidMeditInHistory() + ShortMeditCooldown;
                 }
 
