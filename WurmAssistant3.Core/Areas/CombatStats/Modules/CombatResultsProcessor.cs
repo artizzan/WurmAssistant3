@@ -2,12 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AldursLab.Essentials.Extensions.DotNet.Collections.Generic;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data;
 using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
+using AldursLab.Essentials.Extensions.DotNet;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
@@ -57,8 +60,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             // You try to maul a Aged troll.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"You try to \w+ a (.+)\.")
-                   .HandleWith(match => currentTargetName = match.Groups[1].Value);
+                   .HandleWith((match, entry) => currentTargetName = match.Groups[1].Value);
 
+            // also added to other events, as this one is not reliable
         }
 
         void SetupMissCounts()
@@ -68,7 +72,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             // You miss with the longsword.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"You miss with the .+\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        UsingStatsFor(CharacterName, currentTargetName ?? string.Empty)
                            .GetActorByName(CharacterName)
                            .MissesCount += 1);
@@ -82,7 +86,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"(.+) tries to (.+) you but you raise your shield and parry\.")
                    .HandleWith(
-                       match =>
+                       (match, entry) =>
                            UsingStatsFor(CharacterName, match.Groups[1].Value)
                                .GetActorByName(CharacterName)
                                .ShieldBlockCount += 1);
@@ -91,10 +95,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"You cut (.+) but he raises his shield and parries\.")
                    .HandleWith(
-                       match =>
+                       (match, entry) =>
+                       {
                            UsingStatsFor(CharacterName, match.Groups[1].Value)
                                .GetActorByName(match.Groups[1].Value)
-                               .ShieldBlockCount += 1);
+                               .ShieldBlockCount += 1;
+                           currentTargetName = match.Groups[1].Value;
+                       });
 
         }
 
@@ -102,17 +109,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
         {
             // You safely parry with your longsword.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
-                   .Matches(@"You safely parry with .+\.")
-                   .HandleWith(match =>
+                   .Matches(@"You (\w+) parry with .+\.")
+                   .HandleWith((match, entry) =>
                        UsingStatsFor(CharacterName, currentTargetName ?? string.Empty)
-                           .GetActorByName(CharacterName).ParryCounts.IncrementForName(match.Groups[2].Value));
+                           .GetActorByName(CharacterName).ParryCounts.IncrementForName(match.Groups[1].Value));
 
             // Aldur easily parries with a large maul.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
-                   .Matches(@"(.+) easily parries with .+\.")
-                   .HandleWith(match =>
+                   .Matches(@"(.+) (\w+) parries with .+\.")
+                   .HandleWith((match, entry) =>
+                   {
                        UsingStatsFor(CharacterName, match.Groups[1].Value)
-                           .GetActorByName(match.Groups[1].Value).ParryCounts.IncrementForName(match.Groups[2].Value));
+                           .GetActorByName(match.Groups[1].Value).ParryCounts.IncrementForName(match.Groups[2].Value);
+                       currentTargetName = match.Groups[1].Value;
+                   });
         }
 
         void SetupGlancingCounts()
@@ -120,16 +130,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             // The attack to the right thigh glances off your armour.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"The attack to .+ glances off your armour\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        UsingStatsFor(CharacterName, currentTargetName ?? string.Empty)
-                           .GetActorByName(CharacterName).GlancingReceivedCount += 1);
+                           .GetActorByName(currentTargetName ?? string.Empty).GlancingBlowsCount += 1);
 
             // Your attack glances off Aged scorpion's armour.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"Your attack glances off (.+)'s armour\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
+                   {
                        UsingStatsFor(CharacterName, match.Groups[1].Value)
-                           .GetActorByName(match.Groups[1].Value).GlancingReceivedCount += 1);
+                           .GetActorByName(CharacterName).GlancingBlowsCount += 1;
+                       currentTargetName = match.Groups[1].Value;
+                   });
         }
 
         void SetupEvadeCounts()
@@ -137,16 +150,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             // You barely evade the blow to the head.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"You (\w+) evade the blow to .+\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        UsingStatsFor(CharacterName, currentTargetName ?? string.Empty)
                            .GetActorByName(CharacterName).EvadedCounts.IncrementForName(match.Groups[1].Value));
 
             // Belfesar barely evades the blow to the chest.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"(.+) (\w+) evades the blow to .+\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
+                   {
                        UsingStatsFor(CharacterName, match.Groups[1].Value)
-                           .GetActorByName(match.Groups[1].Value).EvadedCounts.IncrementForName(match.Groups[2].Value));
+                           .GetActorByName(match.Groups[1].Value).EvadedCounts.IncrementForName(match.Groups[2].Value);
+                       currentTargetName = match.Groups[1].Value;
+                   });
         }
 
         void SetupTargetPreference()
@@ -154,20 +170,24 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             // You move into position for the uppercenter parts of Old troll.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                .Matches(@"You move into position for the (.+) parts of (.+)\.")
-               .HandleWith(match =>
+               .HandleWith((match, entry) =>
+               {
                    UsingStatsFor(CharacterName, match.Groups[2].Value)
-                       .GetActorByName(CharacterName).TargetPreferenceCounts.IncrementForName(match.Groups[1].Value.Trim()));
+                       .GetActorByName(CharacterName)
+                       .TargetPreferenceCounts.IncrementForName(match.Groups[1].Value.Trim());
+                   currentTargetName = match.Groups[2].Value;
+               });
 
             // Belfesar seems to target your left parts.
             // Belfesar targets your left parts.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"(.+) seems to target your (.+) parts\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        UsingStatsFor(CharacterName, match.Groups[1].Value)
                            .GetActorByName(match.Groups[1].Value).TargetPreferenceCounts.IncrementForName(match.Groups[2].Value.Trim()));
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"(.+) targets your (.+) parts\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        UsingStatsFor(CharacterName, match.Groups[1].Value)
                            .GetActorByName(match.Groups[1].Value).TargetPreferenceCounts.IncrementForName(match.Groups[2].Value.Trim()));
 
@@ -180,14 +200,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
 
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"(.+) in the (.+) and (.+) it\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                    {
                        var parseResult = damageEntryParser.Parse(match.Groups[1].Value);
 
                        if (parseResult.Valid)
                        {
-                           var sourceActorName = parseResult.SourceActorName;
-                           var destActorName = parseResult.DestActorName;
+                           var sourceActorName = Characterify(parseResult.SourceActorName);
+                           var destActorName = Characterify(parseResult.DestActorName);
                            var type = parseResult.DamageType;
                            var strength = parseResult.DamageStrength;
                            var targetBodyPart = match.Groups[2].Value;
@@ -195,6 +215,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
 
                            var actor = UsingStatsFor(sourceActorName, destActorName)
                                .GetActorByName(sourceActorName);
+
+                           if (string.Equals(sourceActorName, CharacterName, StringComparison.InvariantCultureIgnoreCase))
+                           {
+                               currentTargetName = destActorName;
+                           }
 
                            var attack = new Attack()
                            {
@@ -213,45 +238,52 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
                    });
         }
 
+        string Characterify(string actorName)
+        {
+            return string.Equals(actorName, "you", StringComparison.InvariantCultureIgnoreCase)
+                ? CharacterName
+                : actorName;
+        }
+
         void SetupFocusLevels()
         {
             // levels:
             // You are not focused on combat.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"You are not focused on combat\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        combatStatus.CurrentFocus.FocusLevel = FocusLevel.NotFocused);
             // You balance your feet and your soul.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"You balance your feet and your soul\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        combatStatus.CurrentFocus.FocusLevel = FocusLevel.Balanced);
             // You are now focused on the enemy and its every move.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"You are now focused on the enemy and its every move\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        combatStatus.CurrentFocus.FocusLevel = FocusLevel.Focused);
             // You feel lightning inside, quickening your reflexes.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"You feel lightning inside, quickening your reflexes\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        combatStatus.CurrentFocus.FocusLevel = FocusLevel.Lighting);
             // Your consciousness is lifted to a higher level, making you very attentive.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"Your consciousness is lifted to a higher level, making you very attentive\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        combatStatus.CurrentFocus.FocusLevel = FocusLevel.Lifted);
             // You feel supernatural. Invincible!
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"You feel supernatural. Invincible\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        combatStatus.CurrentFocus.FocusLevel = FocusLevel.Supernatural);
 
             // You lose some focus.
             // (reduces by one level)
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"You lose some focus\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        combatStatus.CurrentFocus.LowerByOneLevel());
         }
 
@@ -260,22 +292,22 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             // Aged large rat moves in to attack you.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"(.+) moves in to attack you\.")
-                   .HandleWith(match =>
-                       combatStatus.EnemyBeginsAttack(match.Groups[1].Value));
+                   .HandleWith((match, entry) =>
+                       combatStatus.EnemyBeginsAttack(match.Groups[1].Value, entry));
         }
 
         void SetupSpellAttacks()
         {
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"Your weapon freezes Aged black wolf\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        UsingStatsFor(CharacterName, currentTargetName ?? string.Empty)
                            .GetActorByName(CharacterName).FreezingHits += 1);
 
             // Venom enters Old black wolf as you cut him.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"Venom enters (.+) as you .+\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        UsingStatsFor(CharacterName, match.Groups[1].Value)
                            .GetActorByName(CharacterName).AffectingHits += 1);
 
@@ -283,7 +315,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             // Your weapon burns Aged brown bear.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"Your weapon burns (.+).")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        UsingStatsFor(CharacterName, match.Groups[1].Value)
                            .GetActorByName(CharacterName).FlamingHits += 1);
 
@@ -291,7 +323,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             // Your cut affects Aged brown bear.
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
                    .Matches(@"Your cut affects (.+)\.")
-                   .HandleWith(match =>
+                   .HandleWith((match, entry) =>
                        UsingStatsFor(CharacterName, match.Groups[1].Value)
                            .GetActorByName(CharacterName).AffectingHits += 1);
         }
@@ -301,8 +333,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             // Aged hell hound is dead. R.I.P.
             matcher.WhenLogEntry().OfLogType(LogType.Event)
                    .Matches(@"(.+) is dead\. R\.I\.P\.")
-                   .HandleWith(
-                       match => combatStatus.KillStatistics.IncrementForName(match.Groups[1].Value));
+                   .HandleWith((match, entry) => 
+                       combatStatus.KillStatistics.IncrementForName(match.Groups[1].Value));
         }
 
         void OnlyWhenCurrentTargetKnown(Action action)
@@ -321,6 +353,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
         public bool ProcessEntry(LogEntry logEntry, LogType logType)
         {
             return matcher.Match(logEntry, logType);
+        }
+
+        public async Task<bool> ProcessEntryAsync(LogEntry logEntry, LogType logType)
+        {
+            return await matcher.MatchAsync(logEntry, logType);
         }
 
         public IEnumerable<LogType> GetRequiredLogs()
@@ -351,16 +388,42 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
                 {
                     foreach (var matchRule in matchers)
                     {
-                        var match = Regex.Match(entry.Content, matchRule.Pattern);
+                        var match = Regex.Match(entry.Content, matchRule.Pattern, RegexOptions.IgnoreCase);
                         if (match.Success)
                         {
-                            matchRule.MatchHandler(match);
+                            matchRule.MatchHandler(match, entry);
                             return true;
                         }
                     }
                 }
 
                 return false;
+            }
+
+            public async Task<bool> MatchAsync(LogEntry entry, LogType logType)
+            {
+                RebuildIfRequired();
+
+                MatchRule[] matchers;
+                var result = false;
+                if (rulesLookupCache.TryGetValue(logType, out matchers))
+                {
+                    await Task.Run(() =>
+                    {
+                        foreach (var matchRule in matchers)
+                        {
+                            var match = Regex.Match(entry.Content, matchRule.Pattern, RegexOptions.IgnoreCase);
+                            if (match.Success)
+                            {
+                                matchRule.MatchHandler(match, entry);
+                                result = true;
+                                break;
+                            }
+                        }
+                    });
+                }
+
+                return result;
             }
 
             public IEnumerable<LogType> GetRequiredLogs()
@@ -407,7 +470,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
         class MatchRule : IRuleBuilder
         {
             public string Pattern { get; private set; }
-            public Action<Match> MatchHandler { get; private set; }
+            public Action<Match, LogEntry> MatchHandler { get; private set; }
             public LogType LogType { get; private set; }
 
             IRuleBuilder IRuleBuilder.Matches([RegexPattern] string pattern)
@@ -416,7 +479,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
                 return this;
             }
 
-            IRuleBuilder IRuleBuilder.HandleWith(Action<Match> handler)
+            IRuleBuilder IRuleBuilder.HandleWith(Action<Match, LogEntry> handler)
             {
                 MatchHandler = handler;
                 return this;
@@ -432,7 +495,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
         interface IRuleBuilder
         {
             IRuleBuilder Matches([RegexPattern] string pattern);
-            IRuleBuilder HandleWith(Action<Match> handler);
+            IRuleBuilder HandleWith(Action<Match, LogEntry> handler);
             IRuleBuilder OfLogType(LogType logType);
         }
 
@@ -449,15 +512,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
                 pluralizedAttackTypes = attackTypes.Select(s => s + "s").ToArray();
             }
 
+            // order is important (composites first to check!)
             readonly string[] attackStrengths = new[]
             {
                 "Very Lightly",
-                "Lightly",
                 "Pretty Hard",
-                "Hard",
                 "Very Hard",
                 "Extremely Hard",
-                "Deadly Hard"
+                "Deadly Hard",
+                "Lightly",
+                "Hard",
             };
 
             readonly string[] attackTypes = new[]
@@ -470,6 +534,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
                 "bite",
                 "burn",
                 "kick",
+                "pound",
+                "squeeze",
             };
 
             readonly string[] pluralizedAttackTypes;
@@ -485,9 +551,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
 
                 LogIfIndexNotEstablished(index, logEntryContentPart);
 
-                if (index > -1)
+                if (index > 0)
                 {
-                    var countToTake = index + 1;
+                    var countToTake = index;
 
                     var attackerParts = parts.Take(countToTake);
                     var attackTypePart = parts[index];
@@ -504,8 +570,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
                     if (attackStrength != null)
                     {
                         result.DamageStrength = attackStrength;
-                        result.DestActorName = combinedRemainingPart.Replace(attackStrength, "").Trim();
-
+                        result.DestActorName =
+                            Regex.Replace(combinedRemainingPart, attackStrength, "", RegexOptions.IgnoreCase).Trim();
+                       
                         result.Valid = true;
                     }
                 }
@@ -517,7 +584,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             {
                 if (attackStrength == null)
                 {
-                    logger.Error("Could not parse attack strength from log entry, source string: " + combinedRemainingPart);
+                    logger.Error("DamageEntryParser: Could not parse attack strength from log entry, source string: " + combinedRemainingPart);
                 }
             }
 
@@ -525,13 +592,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             {
                 if (index < 0)
                 {
-                    logger.Error("Could not split the log entry part, source string: " + logEntryContentPart);
+                    logger.Error("DamageEntryParser: Could not split the log entry part, source string: " + logEntryContentPart);
+                }
+                if (index == 0)
+                {
+                    logger.Error("DamageEntryParser: Log entry part was split but left side is empty, source string: " + logEntryContentPart);
                 }
             }
 
             string TryParseAttackStrength(string combinedRemainingPart)
             {
-                return attackStrengths.Where(combinedRemainingPart.Contains).FirstOrDefault();
+                return
+                    attackStrengths.FirstOrDefault(
+                        s => combinedRemainingPart.Contains(s, StringComparison.InvariantCultureIgnoreCase));
             }
 
             int ParseIndexOfAttackTypeDelimiter(string[] parts)
@@ -539,9 +612,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
                 for (int i = 0; i < parts.Length; i++)
                 {
                     var part = parts[i];
-                    if (attackTypes.Any(s => s == part))
+                    if (attackTypes.Any(s => string.Equals(s, part, StringComparison.InvariantCultureIgnoreCase)))
                         return i;
-                    if (pluralizedAttackTypes.Any(s => s == part))
+                    if (pluralizedAttackTypes.Any(s => string.Equals(s, part, StringComparison.InvariantCultureIgnoreCase)))
                         return i;
                 }
                 return -1;

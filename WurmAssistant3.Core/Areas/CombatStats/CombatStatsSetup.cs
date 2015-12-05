@@ -9,6 +9,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats
         public static void Bind(IKernel kernel)
         {
             kernel.Bind<IFeature>().To<CombatStatsFeature>().InSingletonScope().Named("CombatAssist");
+            kernel.Bind<FeatureSettings>().ToSelf().InSingletonScope();
         }
     }
 }

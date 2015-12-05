@@ -106,10 +106,13 @@
     <Compile Include="Areas\Calendar\Views\SeasonsEditView.Designer.cs">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Areas\CombatStats\Modules\FeatureSettings.cs" />
+    <Compile Include="Areas\CombatStats\ViewModels\CombatActorViewModel.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\CombatActor.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\CombatActorPairStats.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\CountableStrings.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\Attack.cs" />
+    <Compile Include="Areas\CombatStats\Data\Combat\CurrentAttackers.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\Evasion.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\Focus.cs" />
     <Compile Include="Areas\CombatStats\Data\Combat\KilledCounts.cs" />
@@ -122,6 +125,12 @@
     <Compile Include="Areas\CombatStats\Contracts\ICombatDataSource.cs" />
     <Compile Include="Areas\CombatStats\Modules\LiveLogsEventsMonitor.cs" />
     <Compile Include="Areas\CombatStats\Modules\LogSearchEventsParser.cs" />
+    <Compile Include="Areas\CombatStats\Views\CombatAssistantView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\CombatStats\Views\CombatAssistantView.Designer.cs">
+      <DependentUpon>CombatAssistantView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\CombatStats\Views\CombatResultsView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -855,6 +864,9 @@
     <EmbeddedResource Include="Areas\Calendar\Views\SeasonsEditView.resx">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Areas\CombatStats\Views\CombatAssistantView.resx">
+      <DependentUpon>CombatAssistantView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Areas\CombatStats\Views\CombatStatsFeatureView.resx">
       <DependentUpon>CombatStatsFeatureView.cs</DependentUpon>
     </EmbeddedResource>
@@ -1075,6 +1087,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Root\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -1108,6 +1121,7 @@
     <None Include="Resources\combat1.png" />
     <None Include="Resources\Combat.png" />
     <None Include="Resources\CombatBeta.png" />
+    <None Include="Resources\CombatStatisticsLegend.txt" />
     <Content Include="Resources\DeleteRed.png" />
     <Content Include="Resources\DeleteRed_small.png" />
     <None Include="Resources\CalendarIcon.png" />

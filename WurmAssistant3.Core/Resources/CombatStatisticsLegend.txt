@@ -1,0 +1,33 @@
+All data in a row applies in the context of the attacks done by the Attacker against the Defender.
+Each Attacker vs Defender row aggregates ALL combat between these 2 combat actors types, so if 5 spiders were slain, the data will reflect total stats for these 5 fights.
+
+Columns:
+
+Damage caused / Attack Strengths - detailed list of damage caused to Defender and actual strengths of attacks, which caused this damage.
+
+Spell triggers - how many times a spell activated against Defender. Supports: venom, flaming aura, frostbrand
+
+Misses - missed attacks against Defender. 
+Glancing blows - attacks glanced off Defender's armor.
+Parried - attacks parried by the Defender.
+Evaded - attacks evaded by the Defender.
+Shield blocked - attacks blocked by the Defender.
+
+Total hits - total number of attacks that hit and damaged the Defender, so not parried, blocked etc.
+Total attacks - total number of attacks against Defender.
+
+Hit ratio - % of all attacks, that caused damage to Defender.
+Miss ratio - % of all attacks, that missed the Defender.
+Glance ratio - % of all attacks, that glanced off Defender's armor.
+Blocked ratio - % of all attacks blocked (with shield) by the Defender.
+Parried ratio - % of all attacks parried by the Defender.
+Evaded ratio - % of all attacks evaded by the Defender.
+
+NOTES: 
+"Misses" log only for current character (as in - "You"), so will be relable only when Attacker is You.
+For 3rd party combat (combat where "You" are neither Attacker or Defender), only "Damage caused" is logged, so the ratios will be useless.
+
+Some stats will be inaccurate, when fighting multiple enemies at once. All such stats will be attached to your current target, instead of actual source of attack, as Wurm does not log exact creature that did the action:
+- Your evades (counted for Enemy vs You group)
+- Glancing blows against you (as above)
+- Your parries (as above)

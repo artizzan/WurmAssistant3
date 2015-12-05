@@ -176,7 +176,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Logging.Views
 
         private void buyBeerBtn_Click(object sender, EventArgs e)
         {
-            processStarter.StartSafe("http://blog.aldurcraft.com/WurmAssistant/page/Buy-me-a-beer");
+            processStarter.StartSafe("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=aldurcraft%40gmail%2ecom&lc=GB&item_name=Wurm%20Assistant&item_number=funding&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted");
         }
     }
 }

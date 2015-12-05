@@ -44,7 +44,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CraftingAssistant.Views
                 {
                     logger.Error(exception, "Widget creation failed");
                 }
-                
             }
         }
 

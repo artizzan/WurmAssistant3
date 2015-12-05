@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
+using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using AldursLab.WurmAssistant3.Core.WinForms;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views
@@ -12,13 +13,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views
     {
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
+        readonly FeatureSettings featureSettings;
+        readonly IHostEnvironment hostEnvironment;
 
-        public CombatStatsFeatureView(IWurmApi wurmApi, ILogger logger)
+        public CombatStatsFeatureView(IWurmApi wurmApi, ILogger logger, FeatureSettings featureSettings,
+            IHostEnvironment hostEnvironment)
         {
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
+            if (featureSettings == null) throw new ArgumentNullException("featureSettings");
+            if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
             this.wurmApi = wurmApi;
             this.logger = logger;
+            this.featureSettings = featureSettings;
+            this.hostEnvironment = hostEnvironment;
 
             InitializeComponent();
             var characters =
@@ -46,7 +54,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views
 
                 var monitor = new LiveLogsEventsMonitor(character, wurmApi, logger);
                 monitor.Start();
-                var view = new CombatResultsView(monitor);
+                var view = new CombatResultsView(monitor, featureSettings, hostEnvironment);
+                view.Text = "Live combat stats session for " + character;
                 view.ShowCenteredOnForm(this);
             }
             catch (Exception exception)
@@ -59,6 +68,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views
         {
             try
             {
+                generateStatsBtn.Enabled = false;
+
                 var character = historicCharacterCbox.Text;
 
                 if (string.IsNullOrWhiteSpace(character))
@@ -71,14 +82,24 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views
                     MinDate = fromDtpick.Value,
                     MaxDate = toDtpick.Value,
                     ScanResultOrdering = ScanResultOrdering.Ascending
-                }, wurmApi, logger);
+                },
+                    wurmApi,
+                    logger);
                 await parser.Process();
-                var view = new CombatResultsView(parser);
+                var view = new CombatResultsView(parser, featureSettings, hostEnvironment);
+                view.Text = string.Format("Aggregated combat results for {0} between {1} and {2}",
+                    character,
+                    fromDtpick.Value,
+                    toDtpick.Value);
                 view.ShowCenteredOnForm(this);
             }
             catch (Exception exception)
             {
                 logger.Error(exception, "Error at generate historic combat stats.");
+            }
+            finally
+            {
+                generateStatsBtn.Enabled = true;
             }
         }
 
@@ -113,6 +134,27 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views
         {
             fromDtpick.Value = DateTime.Now.Date.AddDays(-29);
             toDtpick.Value = DateTime.Now.Date.AddDays(1);
+        }
+
+        private void createAssistantBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var character = wurmCharacterCbox.Text;
+
+                if (string.IsNullOrWhiteSpace(character))
+                    return;
+
+                var monitor = new LiveLogsEventsMonitor(character, wurmApi, logger);
+                monitor.Start();
+                var view = new CombatAssistantView(monitor);
+                view.Text = character;
+                view.ShowCenteredOnForm(this);
+            }
+            catch (Exception exception)
+            {
+                logger.Error(exception, "Error at begin live combat stats monitor.");
+            }
         }
     }
 }

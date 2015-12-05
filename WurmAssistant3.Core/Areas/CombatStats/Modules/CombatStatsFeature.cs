@@ -6,6 +6,7 @@ using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Properties;
+using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using WurmAssistantDataTransfer.Dtos;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
@@ -14,15 +15,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
     {
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
+        readonly FeatureSettings featureSettings;
+        readonly IHostEnvironment hostEnvironment;
         readonly CombatStatsFeatureView view;
 
-        public CombatStatsFeature(IWurmApi wurmApi, ILogger logger)
+        public CombatStatsFeature(IWurmApi wurmApi, ILogger logger, FeatureSettings featureSettings, IHostEnvironment hostEnvironment)
         {
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
+            if (featureSettings == null) throw new ArgumentNullException("featureSettings");
+            if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
             this.wurmApi = wurmApi;
             this.logger = logger;
-            view = new CombatStatsFeatureView(wurmApi, logger);
+            this.featureSettings = featureSettings;
+            this.hostEnvironment = hostEnvironment;
+            view = new CombatStatsFeatureView(wurmApi, logger, featureSettings, hostEnvironment);
         }
 
         #region IFeature

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
 {
@@ -14,6 +15,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
         }
 
         public IEnumerable<KeyValuePair<string, int>> Counts { get { return counts; } } 
+
+        public int Total { get { return counts.Any() ? counts.Sum(pair => pair.Value) : 0; }}
     }
 
     public class KillStatistics : CountableStrings

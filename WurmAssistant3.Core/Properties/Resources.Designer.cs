@@ -130,7 +130,23 @@ namespace AldursLab.WurmAssistant3.Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to All data in a row applies in the context of the attacks done by the Attacker against the Defender.
+        ///Each Attacker vs Defender row aggregates ALL combat between these 2 combat actors types, so if 5 spiders were slain, the data will reflect total stats for these 5 fights.
+        ///
+        ///Columns:
+        ///
+        ///Damage caused / Attack Strengths - detailed list of damage caused to Defender and actual strengths of attacks, which caused this damage.
+        ///
+        ///Spell triggers - how many times a spell activated against Defender. Supports: venom, f [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CombatStatisticsLegend {
+            get {
+                return ResourceManager.GetString("CombatStatisticsLegend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=RmZ1qO7iDV0.
         /// </summary>
         internal static string CombatStatsVideoUrl {
             get {

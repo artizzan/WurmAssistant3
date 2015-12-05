@@ -59,7 +59,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
 
                         foreach (var entry in filteredLogEvents)
                         {
-                            processor.ProcessEntry(entry, LogType.Combat);
+                            await processor.ProcessEntryAsync(entry, LogType.Combat);
                         }
                     }
 

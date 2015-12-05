@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
 {
@@ -8,10 +9,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
         {
             ActorOne = actorOne;
             ActorTwo = actorTwo;
+
+            PairId = string.Join(" vs ",
+                new[] {actorOne, actorTwo}.OrderBy(actor => actor.Name).Select(actor => actor.Name));
         }
 
         public CombatActor ActorOne { get; private set; }
         public CombatActor ActorTwo { get; private set; }
+        public string PairId { get; private set; }
 
         public CombatActor GetActorByName(string name)
         {

@@ -32,9 +32,9 @@
             this.wurmCharacterCbox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.createAssistantBtn = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.historicCharacterCbox = new System.Windows.Forms.ComboBox();
+            this.labelAutowrap1 = new AldursLab.WurmAssistant3.Core.WinForms.LabelAutowrap();
             this.label4 = new System.Windows.Forms.Label();
             this.last30DaysBtn = new System.Windows.Forms.Button();
             this.generateStatsBtn = new System.Windows.Forms.Button();
@@ -43,6 +43,8 @@
             this.todayBtn = new System.Windows.Forms.Button();
             this.fromDtpick = new System.Windows.Forms.DateTimePicker();
             this.toDtpick = new System.Windows.Forms.DateTimePicker();
+            this.historicCharacterCbox = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -53,7 +55,7 @@
             this.createLiveSessionBtn.Name = "createLiveSessionBtn";
             this.createLiveSessionBtn.Size = new System.Drawing.Size(160, 23);
             this.createLiveSessionBtn.TabIndex = 0;
-            this.createLiveSessionBtn.Text = "Create Live Session";
+            this.createLiveSessionBtn.Text = "Create Live Stats Session";
             this.createLiveSessionBtn.UseVisualStyleBackColor = true;
             this.createLiveSessionBtn.Click += new System.EventHandler(this.createLiveSessionBtn_Click);
             // 
@@ -77,18 +79,30 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.createAssistantBtn);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.createLiveSessionBtn);
             this.groupBox1.Controls.Add(this.wurmCharacterCbox);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(181, 111);
+            this.groupBox1.Size = new System.Drawing.Size(181, 137);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Live events monitor";
             // 
+            // createAssistantBtn
+            // 
+            this.createAssistantBtn.Location = new System.Drawing.Point(5, 101);
+            this.createAssistantBtn.Name = "createAssistantBtn";
+            this.createAssistantBtn.Size = new System.Drawing.Size(160, 23);
+            this.createAssistantBtn.TabIndex = 3;
+            this.createAssistantBtn.Text = "Create Assistant Widget";
+            this.createAssistantBtn.UseVisualStyleBackColor = true;
+            this.createAssistantBtn.Click += new System.EventHandler(this.createAssistantBtn_Click);
+            // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.labelAutowrap1);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.last30DaysBtn);
             this.groupBox2.Controls.Add(this.generateStatsBtn);
@@ -101,28 +115,18 @@
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Location = new System.Drawing.Point(199, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(257, 210);
+            this.groupBox2.Size = new System.Drawing.Size(257, 262);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Combat log parser";
             // 
-            // label2
+            // labelAutowrap1
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 20);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(104, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Paste log events for:";
-            // 
-            // historicCharacterCbox
-            // 
-            this.historicCharacterCbox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.historicCharacterCbox.FormattingEnabled = true;
-            this.historicCharacterCbox.Location = new System.Drawing.Point(10, 36);
-            this.historicCharacterCbox.Name = "historicCharacterCbox";
-            this.historicCharacterCbox.Size = new System.Drawing.Size(178, 21);
-            this.historicCharacterCbox.TabIndex = 6;
+            this.labelAutowrap1.Location = new System.Drawing.Point(10, 207);
+            this.labelAutowrap1.Name = "labelAutowrap1";
+            this.labelAutowrap1.Size = new System.Drawing.Size(237, 26);
+            this.labelAutowrap1.TabIndex = 20;
+            this.labelAutowrap1.Text = "Warning! Queries longer than a month may take a really long time to build!";
             // 
             // label4
             // 
@@ -200,11 +204,29 @@
             this.toDtpick.Size = new System.Drawing.Size(237, 20);
             this.toDtpick.TabIndex = 16;
             // 
-            // CombatAssistFeatureView
+            // historicCharacterCbox
+            // 
+            this.historicCharacterCbox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.historicCharacterCbox.FormattingEnabled = true;
+            this.historicCharacterCbox.Location = new System.Drawing.Point(10, 36);
+            this.historicCharacterCbox.Name = "historicCharacterCbox";
+            this.historicCharacterCbox.Size = new System.Drawing.Size(178, 21);
+            this.historicCharacterCbox.TabIndex = 6;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(86, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Game character:";
+            // 
+            // CombatStatsFeatureView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(466, 229);
+            this.ClientSize = new System.Drawing.Size(466, 286);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "CombatStatsFeatureView";
@@ -226,7 +248,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox historicCharacterCbox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button last30DaysBtn;
@@ -236,5 +257,8 @@
         private System.Windows.Forms.Button todayBtn;
         private System.Windows.Forms.DateTimePicker fromDtpick;
         private System.Windows.Forms.DateTimePicker toDtpick;
+        private System.Windows.Forms.Button createAssistantBtn;
+        private WinForms.LabelAutowrap labelAutowrap1;
+        private System.Windows.Forms.Label label2;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AldursLab.WurmApi;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
 {
@@ -10,6 +11,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
 
         readonly Dictionary<Tuple<string, string>,CombatActorPairStats> combatStatsMap 
             = new Dictionary<Tuple<string, string>, CombatActorPairStats>();
+
+        readonly CurrentAttackers currentAttackers = new CurrentAttackers();
 
         public CombatStatus(string characterName)
         {
@@ -43,13 +46,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
             get { return characterName; }
         }
 
-        public void EnemyBeginsAttack(string enemyName)
+        public void EnemyBeginsAttack(string enemyName, LogEntry entry)
         {
-            throw new NotImplementedException();
+            currentAttackers.Add(enemyName, entry);
         }
 
         public Focus CurrentFocus { get; private set; }
 
         public KillStatistics KillStatistics { get; private set; }
+
+        public CurrentAttackers CurrentAttackers
+        {
+            get { return currentAttackers; }
+        }
     }
 }

@@ -38,11 +38,6 @@
             this.officialForumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wikiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pMAldurToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contributorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.donatorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.roadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewRoadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.videoSoundManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.videoLogSearcherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,6 +49,11 @@
             this.videoRevealCreaturesParserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.videoSkillStatsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.videoCombatAssistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.creditsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contributorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.donatorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.roadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewRoadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -131,66 +131,28 @@
             // officialForumToolStripMenuItem
             // 
             this.officialForumToolStripMenuItem.Name = "officialForumToolStripMenuItem";
-            this.officialForumToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.officialForumToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.officialForumToolStripMenuItem.Text = "Official Forum";
             this.officialForumToolStripMenuItem.Click += new System.EventHandler(this.officialForumToolStripMenuItem_Click);
             // 
             // wikiToolStripMenuItem
             // 
             this.wikiToolStripMenuItem.Name = "wikiToolStripMenuItem";
-            this.wikiToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.wikiToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.wikiToolStripMenuItem.Text = "Wiki";
             this.wikiToolStripMenuItem.Click += new System.EventHandler(this.wikiToolStripMenuItem_Click);
             // 
             // pMAldurToolStripMenuItem
             // 
             this.pMAldurToolStripMenuItem.Name = "pMAldurToolStripMenuItem";
-            this.pMAldurToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.pMAldurToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.pMAldurToolStripMenuItem.Text = "PM Aldur";
             this.pMAldurToolStripMenuItem.Click += new System.EventHandler(this.pMAldurToolStripMenuItem_Click);
-            // 
-            // creditsToolStripMenuItem
-            // 
-            this.creditsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.contributorsToolStripMenuItem,
-            this.donatorsToolStripMenuItem});
-            this.creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
-            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-            this.creditsToolStripMenuItem.Text = "Credits";
-            // 
-            // contributorsToolStripMenuItem
-            // 
-            this.contributorsToolStripMenuItem.Name = "contributorsToolStripMenuItem";
-            this.contributorsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.contributorsToolStripMenuItem.Text = "Contributors";
-            this.contributorsToolStripMenuItem.Click += new System.EventHandler(this.contributorsToolStripMenuItem_Click);
-            // 
-            // donatorsToolStripMenuItem
-            // 
-            this.donatorsToolStripMenuItem.Name = "donatorsToolStripMenuItem";
-            this.donatorsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.donatorsToolStripMenuItem.Text = "Donators";
-            this.donatorsToolStripMenuItem.Click += new System.EventHandler(this.donatorsToolStripMenuItem_Click);
-            // 
-            // roadmapToolStripMenuItem
-            // 
-            this.roadmapToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.viewRoadmapToolStripMenuItem});
-            this.roadmapToolStripMenuItem.Name = "roadmapToolStripMenuItem";
-            this.roadmapToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
-            this.roadmapToolStripMenuItem.Text = "Roadmap";
-            // 
-            // viewRoadmapToolStripMenuItem
-            // 
-            this.viewRoadmapToolStripMenuItem.Name = "viewRoadmapToolStripMenuItem";
-            this.viewRoadmapToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
-            this.viewRoadmapToolStripMenuItem.Text = "View roadmap";
-            this.viewRoadmapToolStripMenuItem.Click += new System.EventHandler(this.viewRoadmapToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(200, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(229, 6);
             // 
             // videoSoundManagerToolStripMenuItem
             // 
@@ -257,11 +219,48 @@
             // 
             // videoCombatAssistToolStripMenuItem
             // 
-            this.videoCombatAssistToolStripMenuItem.Enabled = false;
             this.videoCombatAssistToolStripMenuItem.Name = "videoCombatAssistToolStripMenuItem";
             this.videoCombatAssistToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.videoCombatAssistToolStripMenuItem.Text = "Video: Combat Stats";
             this.videoCombatAssistToolStripMenuItem.Click += new System.EventHandler(this.videoCombatStatsToolStripMenuItem_Click);
+            // 
+            // creditsToolStripMenuItem
+            // 
+            this.creditsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contributorsToolStripMenuItem,
+            this.donatorsToolStripMenuItem});
+            this.creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
+            this.creditsToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.creditsToolStripMenuItem.Text = "Credits";
+            // 
+            // contributorsToolStripMenuItem
+            // 
+            this.contributorsToolStripMenuItem.Name = "contributorsToolStripMenuItem";
+            this.contributorsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.contributorsToolStripMenuItem.Text = "Contributors";
+            this.contributorsToolStripMenuItem.Click += new System.EventHandler(this.contributorsToolStripMenuItem_Click);
+            // 
+            // donatorsToolStripMenuItem
+            // 
+            this.donatorsToolStripMenuItem.Name = "donatorsToolStripMenuItem";
+            this.donatorsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.donatorsToolStripMenuItem.Text = "Donators";
+            this.donatorsToolStripMenuItem.Click += new System.EventHandler(this.donatorsToolStripMenuItem_Click);
+            // 
+            // roadmapToolStripMenuItem
+            // 
+            this.roadmapToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewRoadmapToolStripMenuItem});
+            this.roadmapToolStripMenuItem.Name = "roadmapToolStripMenuItem";
+            this.roadmapToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
+            this.roadmapToolStripMenuItem.Text = "Roadmap";
+            // 
+            // viewRoadmapToolStripMenuItem
+            // 
+            this.viewRoadmapToolStripMenuItem.Name = "viewRoadmapToolStripMenuItem";
+            this.viewRoadmapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.viewRoadmapToolStripMenuItem.Text = "View roadmap";
+            this.viewRoadmapToolStripMenuItem.Click += new System.EventHandler(this.viewRoadmapToolStripMenuItem_Click);
             // 
             // MenuView
             // 

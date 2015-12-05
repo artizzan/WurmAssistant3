@@ -12,13 +12,33 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
         }
 
         public string Name { get; private set; }
+        /// <summary>
+        /// Damage caused to enemy
+        /// </summary>
         public DamageCausedStats DamageCausedStats { get; private set; }
+        /// <summary>
+        /// Parried enemy attacks
+        /// </summary>
         public Parry ParryCounts { get; private set; }
+        /// <summary>
+        /// Targets chosen against enemy
+        /// </summary>
         public TargetPreference TargetPreferenceCounts { get; private set; }
+        /// <summary>
+        /// Evaded enemy attacks
+        /// </summary>
         public Evasion EvadedCounts { get; private set; }
-
+        /// <summary>
+        /// Misses against the enemy
+        /// </summary>
         public int MissesCount { get; set; }
-        public int GlancingReceivedCount { get; set; }
+        /// <summary>
+        /// Glancing blows against the enemy
+        /// </summary>
+        public int GlancingBlowsCount { get; set; }
+        /// <summary>
+        /// Shield blocked attacks of the enemy
+        /// </summary>
         public int ShieldBlockCount { get; set; }
 
         // number of spell hits caused to other actor

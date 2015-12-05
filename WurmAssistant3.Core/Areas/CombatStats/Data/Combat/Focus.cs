@@ -10,6 +10,11 @@
             if (newLvl < 0) newLvl = 0;
             FocusLevel = (FocusLevel)newLvl;
         }
+
+        public override string ToString()
+        {
+            return FocusLevel.ToString();
+        }
     }
 
     public enum FocusLevel
