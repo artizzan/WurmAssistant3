@@ -337,8 +337,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             // Aged hell hound is dead. R.I.P.
             matcher.WhenLogEntry().OfLogType(LogType.Event)
                    .Matches(@"(.+) is dead\. R\.I\.P\.")
-                   .HandleWith((match, entry) => 
-                       combatStatus.KillStatistics.IncrementForName(match.Groups[1].Value));
+                   .HandleWith((match, entry) =>
+                   {
+                       combatStatus.KillStatistics.IncrementForName(match.Groups[1].Value);
+                       if (match.Groups[1].Value == currentTargetName)
+                       {
+                           UsingStatsFor(CharacterName, match.Groups[1].Value)
+                               .GetActorByName(match.Groups[1].Value).SlainCount += 1;
+                       }
+                   });
         }
 
         void OnlyWhenCurrentTargetKnown(Action action)
@@ -541,7 +548,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
                 "pound",
                 "squeeze",
                 "tailwhip",
-                "wingbuff"
+                "wingbuff",
+                "hurt"
             };
 
             readonly string[] pluralizedAttackTypes;

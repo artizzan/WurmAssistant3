@@ -4,6 +4,7 @@ Each Attacker vs Defender row aggregates ALL combat between these 2 combat actor
 Columns:
 
 Damage caused / Attack Strengths - detailed list of damage caused to Defender and actual strengths of attacks, which caused this damage.
+Slain - number of creatures slain. Counts only for "You" vs something else, when that something was also your current target.
 
 Spell triggers - how many times a spell activated against Defender. Supports: venom, flaming aura, frostbrand
 

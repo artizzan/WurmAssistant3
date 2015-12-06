@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AldursLab.WurmApi;
@@ -44,24 +45,29 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
 
                 if (!processed)
                 {
-                    // todo: get required logs from processor, run search for each log
+                    // all events need to be aggregated first and sorted by timestamp
+                    // so that processor can properly correlate events from different logs
 
                     var logTypes = processor.GetRequiredLogs();
+                    var allEntries = new List<LogEntryWithLogType>();
 
                     foreach (var logType in logTypes)
                     {
+                        logSearchParameters.LogType = logType;
                         var logEntries = await wurmApi.LogsHistory.ScanAsync(logSearchParameters);
                         var filteredLogEvents =
                             logEntries.Where(
                                 entry =>
                                     entry.Timestamp >= logSearchParameters.MinDate
                                     && entry.Timestamp <= logSearchParameters.MaxDate);
-
-                        foreach (var entry in filteredLogEvents)
-                        {
-                            await processor.ProcessEntryAsync(entry, LogType.Combat);
-                        }
+                        allEntries.AddRange(filteredLogEvents.Select(entry => new LogEntryWithLogType(entry, logType)));
                     }
+
+                    foreach (var entry in allEntries.OrderBy(type => type.LogEntry.Timestamp))
+                    {
+                        await processor.ProcessEntryAsync(entry.LogEntry, entry.LogType);
+                    }
+
 
                     processed = true;
                     OnDataChanged();
@@ -78,6 +84,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
             var handler = DataChanged;
             if (handler != null)
                 handler(this, EventArgs.Empty);
+        }
+
+        class LogEntryWithLogType
+        {
+            public LogEntry LogEntry { get; private set; }
+            public LogType LogType { get; private set; }
+
+            public LogEntryWithLogType(LogEntry logEntry, LogType logType)
+            {
+                if (logEntry == null) throw new ArgumentNullException("logEntry");
+                LogEntry = logEntry;
+                LogType = logType;
+            }
         }
     }
 }

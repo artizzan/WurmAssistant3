@@ -203,5 +203,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.ViewModels
                         CultureInfo.CurrentCulture);
             }
         }
+
+        [UsedImplicitly]
+        public int SlainCount
+        {
+            get { return DefenderActor.SlainCount; }
+        }
     }
 }

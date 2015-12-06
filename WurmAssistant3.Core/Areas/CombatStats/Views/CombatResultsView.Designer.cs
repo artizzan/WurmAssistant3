@@ -57,6 +57,7 @@
             this.legendBtn = new System.Windows.Forms.Button();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.toCsvBtn = new System.Windows.Forms.Button();
+            this.olvColumn12 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.objectListView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rowHeightNup)).BeginInit();
             this.SuspendLayout();
@@ -72,6 +73,7 @@
             this.objectListView1.AllColumns.Add(this.olvColumn0);
             this.objectListView1.AllColumns.Add(this.olvColumn1);
             this.objectListView1.AllColumns.Add(this.olvColumn2);
+            this.objectListView1.AllColumns.Add(this.olvColumn12);
             this.objectListView1.AllColumns.Add(this.olvColumn5);
             this.objectListView1.AllColumns.Add(this.olvColumn3);
             this.objectListView1.AllColumns.Add(this.olvColumn10);
@@ -98,6 +100,7 @@
             this.olvColumn0,
             this.olvColumn1,
             this.olvColumn2,
+            this.olvColumn12,
             this.olvColumn5,
             this.olvColumn3,
             this.olvColumn10,
@@ -339,6 +342,12 @@
             this.toCsvBtn.UseVisualStyleBackColor = true;
             this.toCsvBtn.Click += new System.EventHandler(this.toCsvBtn_Click);
             // 
+            // olvColumn12
+            // 
+            this.olvColumn12.AspectName = "SlainCount";
+            this.olvColumn12.Searchable = false;
+            this.olvColumn12.Text = "Slain count";
+            // 
             // CombatResultsView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -392,5 +401,6 @@
         private System.Windows.Forms.Button legendBtn;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.Button toCsvBtn;
+        private BrightIdeasSoftware.OLVColumn olvColumn12;
     }
 }

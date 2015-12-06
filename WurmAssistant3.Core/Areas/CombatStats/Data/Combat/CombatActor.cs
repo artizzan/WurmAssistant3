@@ -46,5 +46,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat
         public int AffectingHits { get; set; }
         public int LifeLeeched { get; set; }
         public int FlamingHits { get; set; }
+
+        /// <summary>
+        /// Number of creatures slain by Character
+        /// </summary>
+        public int SlainCount { get; set; }
     }
 }
