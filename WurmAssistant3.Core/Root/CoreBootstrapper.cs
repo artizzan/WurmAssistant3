@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AldursLab.Essentials.Eventing;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
@@ -59,6 +60,8 @@ namespace AldursLab.WurmAssistant3.Core.Root
         public void PreBootstrap()
         {
             SetupActivationStrategyComponents();
+
+            Regex.CacheSize = 1000;
 
             dataDirectory = new WurmAssistantDataDirectory(consoleArgs);
             dataDirectory.Lock();
