@@ -17,19 +17,24 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
         readonly ILogger logger;
         readonly FeatureSettings featureSettings;
         readonly IHostEnvironment hostEnvironment;
+        readonly IProcessStarter processStarter;
+
         readonly CombatStatsFeatureView view;
 
-        public CombatStatsFeature(IWurmApi wurmApi, ILogger logger, FeatureSettings featureSettings, IHostEnvironment hostEnvironment)
+        public CombatStatsFeature(IWurmApi wurmApi, ILogger logger, FeatureSettings featureSettings,
+            IHostEnvironment hostEnvironment, IProcessStarter processStarter)
         {
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
             if (featureSettings == null) throw new ArgumentNullException("featureSettings");
             if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
+            if (processStarter == null) throw new ArgumentNullException("processStarter");
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.featureSettings = featureSettings;
             this.hostEnvironment = hostEnvironment;
-            view = new CombatStatsFeatureView(wurmApi, logger, featureSettings, hostEnvironment);
+            this.processStarter = processStarter;
+            view = new CombatStatsFeatureView(wurmApi, logger, featureSettings, hostEnvironment, processStarter);
         }
 
         #region IFeature

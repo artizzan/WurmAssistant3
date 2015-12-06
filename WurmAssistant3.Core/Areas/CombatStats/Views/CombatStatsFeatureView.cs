@@ -15,18 +15,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views
         readonly ILogger logger;
         readonly FeatureSettings featureSettings;
         readonly IHostEnvironment hostEnvironment;
+        readonly IProcessStarter processStarter;
 
         public CombatStatsFeatureView(IWurmApi wurmApi, ILogger logger, FeatureSettings featureSettings,
-            IHostEnvironment hostEnvironment)
+            IHostEnvironment hostEnvironment, IProcessStarter processStarter)
         {
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
             if (featureSettings == null) throw new ArgumentNullException("featureSettings");
             if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
+            if (processStarter == null) throw new ArgumentNullException("processStarter");
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.featureSettings = featureSettings;
             this.hostEnvironment = hostEnvironment;
+            this.processStarter = processStarter;
 
             InitializeComponent();
             var characters =
@@ -54,7 +57,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views
 
                 var monitor = new LiveLogsEventsMonitor(character, wurmApi, logger);
                 monitor.Start();
-                var view = new CombatResultsView(monitor, featureSettings, hostEnvironment);
+                var view = new CombatResultsView(monitor, featureSettings, hostEnvironment, processStarter, logger);
                 view.Text = "Live combat stats session for " + character;
                 view.ShowCenteredOnForm(this);
             }
@@ -86,7 +89,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views
                     wurmApi,
                     logger);
                 await parser.Process();
-                var view = new CombatResultsView(parser, featureSettings, hostEnvironment);
+                var view = new CombatResultsView(parser, featureSettings, hostEnvironment, processStarter, logger);
                 view.Text = string.Format("Aggregated combat results for {0} between {1} and {2}",
                     character,
                     fromDtpick.Value,

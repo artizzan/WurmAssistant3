@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using AldursLab.Essentials.Csv;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Data.Combat;
 using AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.CombatStats.ViewModels;
+using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Properties;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using AldursLab.WurmAssistant3.Core.Root.Views;
@@ -20,6 +23,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views
         readonly ICombatDataSource combatDataSource;
         readonly FeatureSettings featureSettings;
         readonly IHostEnvironment hostEnvironment;
+        readonly IProcessStarter processStarter;
+        readonly ILogger logger;
 
         bool refreshRequired = false;
 
@@ -29,17 +34,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views
         readonly TextMatchFilter filter;
         readonly IModelFilter defaultFilter;
 
-        byte[] initialOlvState;
+        readonly byte[] initialOlvState;
 
         public CombatResultsView(ICombatDataSource combatDataSource, FeatureSettings featureSettings,
-            IHostEnvironment hostEnvironment)
+            IHostEnvironment hostEnvironment, IProcessStarter processStarter, ILogger logger)
         {
             if (combatDataSource == null) throw new ArgumentNullException("combatDataSource");
             if (featureSettings == null) throw new ArgumentNullException("featureSettings");
             if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
+            if (processStarter == null) throw new ArgumentNullException("processStarter");
+            if (logger == null) throw new ArgumentNullException("logger");
             this.combatDataSource = combatDataSource;
             this.featureSettings = featureSettings;
             this.hostEnvironment = hostEnvironment;
+            this.processStarter = processStarter;
+            this.logger = logger;
             InitializeComponent();
 
             combatDataSource.DataChanged += CombatResultsOnDataChanged;
@@ -160,6 +169,51 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Views
         private void CombatResultsView_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void toCsvBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ExportToCsv();
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                logger.Error(exception, "CombatResultsView: Csv export failed");
+            }
+            
+        }
+
+        void ExportToCsv()
+        {
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var builder = new EnumerableToCsvBuilder<CombatActorViewModel>(viewModelsMap.Values.ToArray())
+                .AddMapping("Pair", model => model.CombatPair)
+                .AddMapping("Attacker", model => model.AttackerName)
+                .AddMapping("Defender", model => model.DefenderName)
+                .AddMapping("Target choices", model => model.TargetPrefs)
+                .AddMapping("Damage caused", model => model.DamageCaused)
+                .AddMapping("Spell triggers", model => model.WeaponSpellAttacks)
+                .AddMapping("Misses", model => model.Misses)
+                .AddMapping("Glancing blows", model => model.GlancingBlows)
+                .AddMapping("Parried", model => model.Parries)
+                .AddMapping("Evaded", model => model.Evasions)
+                .AddMapping("Shield blocked", model => model.ShieldBlocks)
+                .AddMapping("Total hits", model => model.TotalHits.ToString())
+                .AddMapping("Total attacks", model => model.TotalMainActorAttacks.ToString())
+                .AddMapping("Hit ratio", model => model.HitRatio)
+                .AddMapping("Miss ratio", model => model.MissRatio)
+                .AddMapping("Glance ratio", model => model.GlanceRatio)
+                .AddMapping("Blocked ratio", model => model.BlockRatio)
+                .AddMapping("Parried ratio", model => model.ParryRatio)
+                .AddMapping("Evaded ratio", model => model.EvadeRatio);
+                var csv = builder.BuildCsv();
+                var filePath = saveFileDialog.FileName;
+                File.WriteAllText(filePath, csv);
+                processStarter.StartSafe(Path.GetDirectoryName(filePath));
+            }
         }
     }
 }

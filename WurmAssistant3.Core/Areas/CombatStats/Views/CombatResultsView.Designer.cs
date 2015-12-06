@@ -55,6 +55,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.rowHeightNup = new System.Windows.Forms.NumericUpDown();
             this.legendBtn = new System.Windows.Forms.Button();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.toCsvBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.objectListView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rowHeightNup)).BeginInit();
             this.SuspendLayout();
@@ -320,11 +322,29 @@
             this.legendBtn.UseVisualStyleBackColor = true;
             this.legendBtn.Click += new System.EventHandler(this.legendBtn_Click);
             // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.DefaultExt = "csv";
+            this.saveFileDialog.FileName = "combat.csv";
+            this.saveFileDialog.Filter = "CSV Files|*.csv";
+            this.saveFileDialog.RestoreDirectory = true;
+            // 
+            // toCsvBtn
+            // 
+            this.toCsvBtn.Location = new System.Drawing.Point(517, 8);
+            this.toCsvBtn.Name = "toCsvBtn";
+            this.toCsvBtn.Size = new System.Drawing.Size(75, 23);
+            this.toCsvBtn.TabIndex = 6;
+            this.toCsvBtn.Text = "To CSV";
+            this.toCsvBtn.UseVisualStyleBackColor = true;
+            this.toCsvBtn.Click += new System.EventHandler(this.toCsvBtn_Click);
+            // 
             // CombatResultsView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1283, 459);
+            this.Controls.Add(this.toCsvBtn);
             this.Controls.Add(this.legendBtn);
             this.Controls.Add(this.rowHeightNup);
             this.Controls.Add(this.label2);
@@ -370,5 +390,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown rowHeightNup;
         private System.Windows.Forms.Button legendBtn;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.Button toCsvBtn;
     }
 }

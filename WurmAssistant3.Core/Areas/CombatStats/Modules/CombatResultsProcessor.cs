@@ -275,7 +275,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
                        combatStatus.CurrentFocus.FocusLevel = FocusLevel.Lifted);
             // You feel supernatural. Invincible!
             matcher.WhenLogEntry().OfLogType(LogType.Combat)
-                   .Matches(@"You feel supernatural. Invincible\.")
+                   .Matches(@"You feel supernatural\. Invincible!")
+                   .HandleWith((match, entry) =>
+                       combatStatus.CurrentFocus.FocusLevel = FocusLevel.Supernatural);
+            matcher.WhenLogEntry().OfLogType(LogType.Combat)
+                   .Matches(@"You are already focused to the maximum\.")
                    .HandleWith((match, entry) =>
                        combatStatus.CurrentFocus.FocusLevel = FocusLevel.Supernatural);
 
@@ -536,6 +540,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatStats.Modules
                 "kick",
                 "pound",
                 "squeeze",
+                "tailwhip",
+                "wingbuff"
             };
 
             readonly string[] pluralizedAttackTypes;
