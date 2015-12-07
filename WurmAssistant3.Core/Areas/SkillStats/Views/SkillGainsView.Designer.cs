@@ -99,7 +99,7 @@
             // olvColumn5
             // 
             this.olvColumn5.AspectName = "Gain";
-            this.olvColumn5.AspectToStringFormat = "{0:0.000}";
+            this.olvColumn5.AspectToStringFormat = "{0:0.000000}";
             this.olvColumn5.Groupable = false;
             this.olvColumn5.Text = "Total gain";
             this.olvColumn5.Width = 80;

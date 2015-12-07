@@ -112,14 +112,14 @@
             // olvColumn4
             // 
             this.olvColumn4.AspectName = "AverageGainPerHour";
-            this.olvColumn4.AspectToStringFormat = "{0:0.000}";
+            this.olvColumn4.AspectToStringFormat = "{0:0.000000}";
             this.olvColumn4.Text = "Average gain per hour";
             this.olvColumn4.Width = 140;
             // 
             // olvColumn5
             // 
             this.olvColumn5.AspectName = "TotalGain";
-            this.olvColumn5.AspectToStringFormat = "{0:0.000}";
+            this.olvColumn5.AspectToStringFormat = "{0:0.000000}";
             this.olvColumn5.Text = "Total gain";
             this.olvColumn5.Width = 80;
             // 
