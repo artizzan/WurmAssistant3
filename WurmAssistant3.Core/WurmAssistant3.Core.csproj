@@ -106,35 +106,35 @@
     <Compile Include="Areas\Calendar\Views\SeasonsEditView.Designer.cs">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\CombatStats\Modules\FeatureSettings.cs" />
-    <Compile Include="Areas\CombatStats\ViewModels\CombatActorViewModel.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\CombatActor.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\CombatActorPairStats.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\CountableStrings.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\Attack.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\CurrentAttackers.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\Evasion.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\Focus.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\KilledCounts.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\Parry.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\TargetPreference.cs" />
-    <Compile Include="Areas\CombatStats\CombatStatsSetup.cs" />
-    <Compile Include="Areas\CombatStats\Modules\CombatStatsFeature.cs" />
-    <Compile Include="Areas\CombatStats\Data\Combat\CombatStatus.cs" />
-    <Compile Include="Areas\CombatStats\Modules\CombatResultsProcessor.cs" />
-    <Compile Include="Areas\CombatStats\Contracts\ICombatDataSource.cs" />
-    <Compile Include="Areas\CombatStats\Modules\LiveLogsEventsMonitor.cs" />
-    <Compile Include="Areas\CombatStats\Modules\LogSearchEventsParser.cs" />
-    <Compile Include="Areas\CombatStats\Views\CombatAssistantView.cs">
+    <Compile Include="Areas\CombatAssistant\Modules\FeatureSettings.cs" />
+    <Compile Include="Areas\CombatAssistant\ViewModels\CombatActorViewModel.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\CombatActor.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\CombatActorPairStats.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\CountableStrings.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\Attack.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\CurrentAttackers.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\Evasion.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\Focus.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\KilledCounts.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\Parry.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\TargetPreference.cs" />
+    <Compile Include="Areas\CombatAssistant\CombatAssistantSetup.cs" />
+    <Compile Include="Areas\CombatAssistant\Modules\CombatAssistantFeature.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\CombatStatus.cs" />
+    <Compile Include="Areas\CombatAssistant\Modules\CombatResultsProcessor.cs" />
+    <Compile Include="Areas\CombatAssistant\Contracts\ICombatDataSource.cs" />
+    <Compile Include="Areas\CombatAssistant\Modules\LiveLogsEventsMonitor.cs" />
+    <Compile Include="Areas\CombatAssistant\Modules\LogSearchEventsParser.cs" />
+    <Compile Include="Areas\CombatAssistant\Views\CombatWidgetView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\CombatStats\Views\CombatAssistantView.Designer.cs">
-      <DependentUpon>CombatAssistantView.cs</DependentUpon>
+    <Compile Include="Areas\CombatAssistant\Views\CombatWidgetView.Designer.cs">
+      <DependentUpon>CombatWidgetView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\CombatStats\Views\CombatResultsView.cs">
+    <Compile Include="Areas\CombatAssistant\Views\CombatResultsView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\CombatStats\Views\CombatResultsView.Designer.cs">
+    <Compile Include="Areas\CombatAssistant\Views\CombatResultsView.Designer.cs">
       <DependentUpon>CombatResultsView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Config\Contracts\ConfigCancelledException.cs" />
@@ -190,11 +190,11 @@
     <Compile Include="Areas\SkillStats\Data\SkillReportItem.cs" />
     <Compile Include="Areas\SkillStats\Modules\SkillStatsFeature.cs" />
     <Compile Include="Areas\SkillStats\SkillStatsSetup.cs" />
-    <Compile Include="Areas\CombatStats\Views\CombatStatsFeatureView.cs">
+    <Compile Include="Areas\CombatAssistant\Views\CombatAssistantFeatureView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\CombatStats\Views\CombatStatsFeatureView.Designer.cs">
-      <DependentUpon>CombatStatsFeatureView.cs</DependentUpon>
+    <Compile Include="Areas\CombatAssistant\Views\CombatAssistantFeatureView.Designer.cs">
+      <DependentUpon>CombatAssistantFeatureView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\SkillStats\Views\LiveSessionView.cs">
       <SubType>Form</SubType>
@@ -864,13 +864,13 @@
     <EmbeddedResource Include="Areas\Calendar\Views\SeasonsEditView.resx">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\CombatStats\Views\CombatAssistantView.resx">
-      <DependentUpon>CombatAssistantView.cs</DependentUpon>
+    <EmbeddedResource Include="Areas\CombatAssistant\Views\CombatWidgetView.resx">
+      <DependentUpon>CombatWidgetView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\CombatStats\Views\CombatStatsFeatureView.resx">
-      <DependentUpon>CombatStatsFeatureView.cs</DependentUpon>
+    <EmbeddedResource Include="Areas\CombatAssistant\Views\CombatAssistantFeatureView.resx">
+      <DependentUpon>CombatAssistantFeatureView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\CombatStats\Views\CombatResultsView.resx">
+    <EmbeddedResource Include="Areas\CombatAssistant\Views\CombatResultsView.resx">
       <DependentUpon>CombatResultsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Config\Views\ServersEditorView.resx">

@@ -24,11 +24,13 @@ Blocked ratio - % of all attacks blocked (with shield) by the Defender.
 Parried ratio - % of all attacks parried by the Defender.
 Evaded ratio - % of all attacks evaded by the Defender.
 
+Fighting skill gained - amount of fighting skill gained by Attacker, for kills of the Defender. Note: for best accurancy, game client skill gain logging frequency should be set to "Always".
+
 NOTES: 
 "Misses" log only for current character (as in - "You"), so will be relable only when Attacker is You.
 For 3rd party combat (combat where "You" are neither Attacker or Defender), only "Damage caused" is logged, so the ratios will be useless.
 
 Some stats will be inaccurate, when fighting multiple enemies at once. All such stats will be attached to your current target, instead of actual source of attack, as Wurm does not log exact creature that did the action:
-- Your evades (counted for Enemy vs You group)
+- Your evades (counted for group: Enemy vs You)
 - Glancing blows against you (as above)
 - Your parries (as above)
