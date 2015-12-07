@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.TriggersManager;
 using AldursLab.WurmAssistant3.Core.WinForms;
@@ -11,14 +11,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views
     public partial class FormTriggersMain : ExtendedForm
     {
         readonly TriggersFeature parent;
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
 
-        public FormTriggersMain([NotNull] TriggersFeature parent, [NotNull] ISoundEngine soundEngine)
+        public FormTriggersMain([NotNull] TriggersFeature parent, [NotNull] ISoundManager soundManager)
         {
             if (parent == null) throw new ArgumentNullException("parent");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             this.parent = parent;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             InitializeComponent();
         }
 

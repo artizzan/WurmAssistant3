@@ -8,7 +8,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
@@ -27,7 +27,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         readonly IHostEnvironment host;
         readonly ILogger logger;
         readonly IWurmApi wurmApi;
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
         readonly ITrayPopups trayPopups;
         readonly TimerDefinitions timerDefinitions;
         readonly IPersistentObjectResolver<PlayerTimersGroup> playerTimersGroupsResolver;
@@ -53,7 +53,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         TimersForm timersForm;
 
         public TimersFeature([NotNull] IHostEnvironment host, IUpdateLoop updateLoop, [NotNull] ILogger logger,
-            [NotNull] IWurmApi wurmApi, [NotNull] ISoundEngine soundEngine, [NotNull] ITrayPopups trayPopups,
+            [NotNull] IWurmApi wurmApi, [NotNull] ISoundManager soundManager, [NotNull] ITrayPopups trayPopups,
             [NotNull] TimerDefinitions timerDefinitions,
             [NotNull] IPersistentObjectResolver<PlayerTimersGroup> playerTimersGroupsResolver,
             [NotNull] TimerInstances timerInstances)
@@ -61,7 +61,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             if (host == null) throw new ArgumentNullException("host");
             if (logger == null) throw new ArgumentNullException("logger");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (timerDefinitions == null) throw new ArgumentNullException("timerDefinitions");
             if (playerTimersGroupsResolver == null) throw new ArgumentNullException("playerTimersGroupsResolver");
@@ -69,7 +69,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
             this.host = host;
             this.logger = logger;
             this.wurmApi = wurmApi;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             this.trayPopups = trayPopups;
             this.timerDefinitions = timerDefinitions;
             this.playerTimersGroupsResolver = playerTimersGroupsResolver;
@@ -175,7 +175,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                             this,
                             wurmApi,
                             logger,
-                            soundEngine,
+                            soundManager,
                             trayPopups,
                             timerDefinitions,
                             timerInstances);
@@ -198,7 +198,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                 this,
                 wurmApi,
                 logger,
-                soundEngine,
+                soundManager,
                 trayPopups,
                 timerDefinitions,
                 timerInstances);
@@ -267,7 +267,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
 
         public async Task ImportDataFromWa2Async(WurmAssistantDto dto)
         {
-            TimersWa2Importer importer = new TimersWa2Importer(this, timerDefinitions, soundEngine, logger);
+            TimersWa2Importer importer = new TimersWa2Importer(this, timerDefinitions, soundManager, logger);
             await importer.ImportFromDtoAsync(dto);
         }
 

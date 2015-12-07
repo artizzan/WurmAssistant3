@@ -6,7 +6,7 @@ using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters.Skills;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Meditation;
@@ -56,10 +56,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
             public bool Enabled { get; set; }
             public int PopupDuration { get { return handler.Duration; } set { handler.Duration = value; } }
 
-            public SleepBonusNotify(ILogger logger, ISoundEngine soundEngine, ITrayPopups trayPopups, string popupTitle,
+            public SleepBonusNotify(ILogger logger, ISoundManager soundManager, ITrayPopups trayPopups, string popupTitle,
                 string popupMessage, bool popupPersistent = false)
             {
-                handler = new NotifyHandler(logger, soundEngine, trayPopups)
+                handler = new NotifyHandler(logger, soundManager, trayPopups)
                 {
                     PopupPersistent = popupPersistent,
                     Message = (popupMessage ?? ""),
@@ -138,9 +138,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
 
         SkillEntryParser skillEntryParser;
 
-        public MeditationTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundEngine soundEngine,
+        public MeditationTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundManager soundManager,
             ITrayPopups trayPopups)
-            : base(persistentObjectId, trayPopups, logger, wurmApi, soundEngine)
+            : base(persistentObjectId, trayPopups, logger, wurmApi, soundManager)
         {
             cooldownUpdateOperation = new TriggerableAsyncOperation(UpdateMeditationCooldown);
         }
@@ -153,7 +153,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Meditation
 
             skillEntryParser = new SkillEntryParser(WurmApi);
 
-            sleepNotify = new SleepBonusNotify(Logger, SoundEngine, TrayPopups, Character, "Can turn off sleep bonus now");
+            sleepNotify = new SleepBonusNotify(Logger, SoundManager, TrayPopups, Character, "Can turn off sleep bonus now");
             sleepNotify.Enabled = SleepBonusReminder;
 
             View.UpdateSkill(MeditationSkill);

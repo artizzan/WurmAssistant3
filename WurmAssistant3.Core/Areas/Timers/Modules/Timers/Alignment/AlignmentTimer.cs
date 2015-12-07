@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Alignment;
@@ -209,9 +209,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Alignment
         DateTime dateOfNextAlignment = DateTime.MinValue;
         readonly List<AlignmentHistoryEntry> alignmentHistory = new List<AlignmentHistoryEntry>();
 
-        public AlignmentTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundEngine soundEngine,
+        public AlignmentTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundManager soundManager,
             ITrayPopups trayPopups)
-            : base(persistentObjectId, trayPopups, logger, wurmApi, soundEngine)
+            : base(persistentObjectId, trayPopups, logger, wurmApi, soundManager)
         {
         }
 

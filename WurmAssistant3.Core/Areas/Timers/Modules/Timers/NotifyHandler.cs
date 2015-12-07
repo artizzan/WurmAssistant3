@@ -1,7 +1,7 @@
 using System;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using JetBrains.Annotations;
 
@@ -10,7 +10,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
     class NotifyHandler
     {
         readonly ILogger logger;
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
         readonly ITrayPopups trayPopups;
         public Guid SoundId { get; set; }
         bool play;
@@ -25,15 +25,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         public int Duration { get { return duration; } set { duration = value.ConstrainToRange(1000, int.MaxValue); } }
         bool show;
 
-        public NotifyHandler([NotNull] ILogger logger, [NotNull] ISoundEngine soundEngine,
+        public NotifyHandler([NotNull] ILogger logger, [NotNull] ISoundManager soundManager,
             [NotNull] ITrayPopups trayPopups, Guid? soundId = null, string messageTitle = "",
             string messageContent = "", bool messagePersist = false)
         {
             if (logger == null) throw new ArgumentNullException("logger");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             this.logger = logger;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             this.trayPopups = trayPopups;
             this.SoundId = soundId ?? Guid.Empty;
             this.Title = messageTitle;
@@ -46,7 +46,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
             if (play)
             {
                 //todo reimpl: store as guid, not string
-                soundEngine.PlayOneShot(SoundId);
+                soundManager.PlayOneShot(SoundId);
                 logger.Debug("played notify sound");
                 play = false;
             }

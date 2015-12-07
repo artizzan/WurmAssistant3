@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 
@@ -17,9 +17,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Sermon
 
         DateTime dateOfNextSermon = DateTime.MinValue;
 
-        public SermonTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundEngine soundEngine,
+        public SermonTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundManager soundManager,
             ITrayPopups trayPopups)
-            : base(persistentObjectId, trayPopups, logger, wurmApi, soundEngine)
+            : base(persistentObjectId, trayPopups, logger, wurmApi, soundManager)
         {
         }
 

@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using Newtonsoft.Json;
@@ -18,9 +18,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.JunkSale
         [JsonProperty]
         int currentTotalAmount;
 
-        public JunkSaleTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundEngine soundEngine,
+        public JunkSaleTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundManager soundManager,
             ITrayPopups trayPopups)
-            : base(persistentObjectId, trayPopups, logger, wurmApi, soundEngine)
+            : base(persistentObjectId, trayPopups, logger, wurmApi, soundManager)
         {
         }
 

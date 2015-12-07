@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Legacy;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
@@ -20,23 +20,23 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
         readonly CalendarFeature parentModule;
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
 
         readonly bool windowInitCompleted = false;
         bool serverListCreated = false;
 
 
         public FormCalendar([NotNull] CalendarFeature parentModule, [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger,
-            [NotNull] ISoundEngine soundEngine)
+            [NotNull] ISoundManager soundManager)
         {
             if (parentModule == null) throw new ArgumentNullException("parentModule");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             this.parentModule = parentModule;
             this.wurmApi = wurmApi;
             this.logger = logger;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
 
             InitializeComponent();
 
@@ -135,7 +135,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
 
         private void buttonChooseSound_Click(object sender, EventArgs e)
         {
-            var result = soundEngine.ChooseSound(this);
+            var result = soundManager.ChooseSound(this);
             if (result.ActionResult == ActionResult.Ok)
             {
                 parentModule.SoundId = result.SoundResource.Id;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Data;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.TriggersManager;
@@ -10,9 +10,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
 {
     public abstract class SimpleConditionTriggerBase : TriggerBase
     {
-        protected SimpleConditionTriggerBase(TriggerData triggerData, ISoundEngine soundEngine, ITrayPopups trayPopups, IWurmApi wurmApi,
+        protected SimpleConditionTriggerBase(TriggerData triggerData, ISoundManager soundManager, ITrayPopups trayPopups, IWurmApi wurmApi,
             ILogger logger)
-            : base(triggerData, soundEngine, trayPopups, wurmApi, logger)
+            : base(triggerData, soundManager, trayPopups, wurmApi, logger)
         {
         }
 

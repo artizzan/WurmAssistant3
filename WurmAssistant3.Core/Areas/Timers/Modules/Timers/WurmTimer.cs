@@ -6,7 +6,7 @@ using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers;
@@ -21,7 +21,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         protected readonly ITrayPopups TrayPopups;
         protected readonly ILogger Logger;
         protected readonly IWurmApi WurmApi;
-        protected readonly ISoundEngine SoundEngine;
+        protected readonly ISoundManager SoundManager;
 
         PlayerTimersGroup playerTimersGroup;
         protected string Player;
@@ -46,17 +46,17 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         TimeSpan lastUptimeSnapshot;
 
         public WurmTimer(string persistentObjectId, [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger,
-            [NotNull] IWurmApi wurmApi, [NotNull] ISoundEngine soundEngine) : base(persistentObjectId)
+            [NotNull] IWurmApi wurmApi, [NotNull] ISoundManager soundManager) : base(persistentObjectId)
         {
             Id = Guid.Parse(persistentObjectId);
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (logger == null) throw new ArgumentNullException("logger");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             this.TrayPopups = trayPopups;
             this.Logger = logger;
             this.WurmApi = wurmApi;
-            this.SoundEngine = soundEngine;
+            this.SoundManager = soundManager;
 
         }
 
@@ -71,7 +71,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
 
             View = new TimerDisplayView(this);
 
-            CDNotify = new CooldownHandler(Logger, SoundEngine, TrayPopups)
+            CDNotify = new CooldownHandler(Logger, SoundManager, TrayPopups)
             {
                 DurationMillis = PopupDurationMillis,
                 Title = Player,
@@ -287,7 +287,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         /// </summary>
         public void OpenTimerConfig()
         {
-            TimerDefaultSettingsForm ui = new TimerDefaultSettingsForm(this, SoundEngine);
+            TimerDefaultSettingsForm ui = new TimerDefaultSettingsForm(this, SoundManager);
             ui.ShowDialogCenteredOnForm(this.GetModuleUi());
         }
 

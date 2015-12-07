@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Data;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.Notifiers;
@@ -18,21 +18,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
     {
         protected readonly TriggerData TriggerData;
 
-        protected readonly ISoundEngine SoundEngine;
+        protected readonly ISoundManager SoundManager;
         protected readonly ITrayPopups TrayPopups;
         protected readonly IWurmApi WurmApi;
         protected readonly ILogger Logger;
 
-        public TriggerBase([NotNull] TriggerData triggerData, [NotNull] ISoundEngine soundEngine, [NotNull] ITrayPopups trayPopups,
+        public TriggerBase([NotNull] TriggerData triggerData, [NotNull] ISoundManager soundManager, [NotNull] ITrayPopups trayPopups,
             [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger)
         {
             if (triggerData == null) throw new ArgumentNullException("triggerData");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
             this.TriggerData = triggerData;
-            this.SoundEngine = soundEngine;
+            this.SoundManager = soundManager;
             this.TrayPopups = trayPopups;
             this.WurmApi = wurmApi;
             this.Logger = logger;
@@ -42,7 +42,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
 
             if (triggerData.HasSound)
             {
-                Sound = new SoundNotifier(this, soundEngine);
+                Sound = new SoundNotifier(this, soundManager);
             }
             if (triggerData.HasPopup)
             {
@@ -359,7 +359,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
             {
                 if (_currentEditUi == null)
                 {
-                    _currentEditUi = new EditTrigger(this, SoundEngine, TrayPopups);
+                    _currentEditUi = new EditTrigger(this, SoundManager, TrayPopups);
                     _currentEditUi.ShowCenteredOnForm(parent);
                 }
                 else

@@ -1,6 +1,6 @@
 ﻿using System;
 using AldursLab.Essentials.Extensions.DotNet;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
@@ -10,14 +10,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
     public partial class TimerDefaultSettingsForm : ExtendedForm
     {
         readonly WurmTimer parentTimer;
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
         readonly bool isInited = false;
 
-        public TimerDefaultSettingsForm(WurmTimer wurmTimer, [NotNull] ISoundEngine soundEngine)
+        public TimerDefaultSettingsForm(WurmTimer wurmTimer, [NotNull] ISoundManager soundManager)
         {
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             parentTimer = wurmTimer;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             InitializeComponent();
             if (wurmTimer.MoreOptionsAvailable) buttonMoreOptions.Visible = true;
             this.Text = wurmTimer.Name;
@@ -25,7 +25,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
             this.checkBoxPopup.Checked = parentTimer.PopupNotify;
             this.checkBoxSound.Checked = parentTimer.SoundNotify;
             this.checkBoxPopupPersistent.Checked = parentTimer.PersistentPopup;
-            this.textBoxSoundName.Text = soundEngine.GetSoundById(parentTimer.SoundId).Name;
+            this.textBoxSoundName.Text = soundManager.GetSoundById(parentTimer.SoundId).Name;
             this.checkBoxOnAssistantLaunch.Checked = parentTimer.PopupOnWaLaunch;
             int popupDurationMillis = parentTimer.PopupDurationMillis;
             this.numericUpDownPopupDuration.Value =
@@ -92,7 +92,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers
         {
             if (isInited)
             {
-                var result = soundEngine.ChooseSound(this);
+                var result = soundManager.ChooseSound(this);
                 if (result.ActionResult == ActionResult.Ok)
                 {
                     var newsound = result.SoundResource;

@@ -5,7 +5,7 @@ using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Data;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager;
@@ -43,7 +43,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
 
         readonly IHostEnvironment hostEnvironment;
 
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
 
         readonly ILogger logger;
 
@@ -54,14 +54,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
         string lastLineContent;
 
         public TriggerManager([NotNull] string persistentObjectId, [NotNull] IWurmApi wurmApi,
-            [NotNull] IHostEnvironment hostEnvironment, [NotNull] ISoundEngine soundEngine, [NotNull] ILogger logger,
+            [NotNull] IHostEnvironment hostEnvironment, [NotNull] ISoundManager soundManager, [NotNull] ILogger logger,
             [NotNull] ITrayPopups trayPopups, [NotNull] IPersistentObjectResolver<ActiveTriggers> activeTriggersResolver)
             : base(persistentObjectId)
         {
             if (persistentObjectId == null) throw new ArgumentNullException("persistentObjectId");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (logger == null) throw new ArgumentNullException("logger");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (activeTriggersResolver == null) throw new ArgumentNullException("activeTriggersResolver");
@@ -69,7 +69,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
 
             this.wurmApi = wurmApi;
             this.hostEnvironment = hostEnvironment;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             this.logger = logger;
             this.trayPopups = trayPopups;
             this.activeTriggersResolver = activeTriggersResolver;
@@ -88,7 +88,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
             controlUi = new UcPlayerTriggersController();
 
             //create this notifier UI
-            triggersConfigUi = new FormTriggersConfig(this, soundEngine);
+            triggersConfigUi = new FormTriggersConfig(this, soundManager);
 
             UpdateMutedState();
             controlUi.label1.Text = CharacterName;

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Modules;
@@ -19,19 +19,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
     {
         private readonly TimersFeature timersFeature;
         private readonly TimerDefinitions timerDefinitions;
-        private readonly ISoundEngine soundEngine;
+        private readonly ISoundManager soundManager;
         private readonly ILogger logger;
 
         public TimersWa2Importer(TimersFeature timersFeature, TimerDefinitions timerDefinitions,
-            ISoundEngine soundEngine, ILogger logger)
+            ISoundManager soundManager, ILogger logger)
         {
             if (timersFeature == null) throw new ArgumentNullException("timersFeature");
             if (timerDefinitions == null) throw new ArgumentNullException("timerDefinitions");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (logger == null) throw new ArgumentNullException("logger");
             this.timersFeature = timersFeature;
             this.timerDefinitions = timerDefinitions;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             this.logger = logger;
         }
 
@@ -194,7 +194,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         {
             if (source.SoundNotify)
             {
-                newTimer.SoundId = SoundEngineImportHelper.MergeSoundAndGetId(soundEngine, source.Sound);
+                newTimer.SoundId = SoundEngineImportHelper.MergeSoundAndGetId(soundManager, source.Sound);
                 newTimer.SoundNotify = true;
             }
             if (source.PopupNotify)
@@ -232,7 +232,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
                     t.FavorSettings.FavorNotifySound = s.FavorNotifySoundEnabled;
                     if (s.FavorNotifySound != null)
                     {
-                        t.FavorSettings.FavorNotifySoundId = SoundEngineImportHelper.MergeSoundAndGetId(soundEngine,
+                        t.FavorSettings.FavorNotifySoundId = SoundEngineImportHelper.MergeSoundAndGetId(soundManager,
                             s.FavorNotifySound);
                     }
                     t.FavorSettings.FavorNotifyPopup = s.FavorNotifyPopupEnabled;

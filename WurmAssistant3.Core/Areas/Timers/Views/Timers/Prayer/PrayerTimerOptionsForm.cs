@@ -1,6 +1,6 @@
 ﻿using System;
 using AldursLab.Essentials.Extensions.DotNet;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
@@ -11,21 +11,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Prayer
     {
         private readonly PrayerTimer prayerTimer;
         private TimerDefaultSettingsForm formSettings;
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
 
         public PrayerTimerOptionsForm(PrayerTimer prayerTimer, TimerDefaultSettingsForm form,
-            [NotNull] ISoundEngine soundEngine)
+            [NotNull] ISoundManager soundManager)
         {
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             InitializeComponent();
             this.prayerTimer = prayerTimer;
             this.formSettings = form;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
 
             numericUpDownFavorWhenThis.Value =
                 ((decimal) prayerTimer.FavorSettings.FavorNotifyOnLevel).ConstrainToRange(0M, 100M);
             checkBoxPopupPersist.Checked = prayerTimer.FavorSettings.FavorNotifyPopupPersist;
-            textBoxSoundName.Text = soundEngine.GetSoundById(prayerTimer.FavorSettings.FavorNotifySoundId).Name;
+            textBoxSoundName.Text = soundManager.GetSoundById(prayerTimer.FavorSettings.FavorNotifySoundId).Name;
             checkBoxNotifySound.Checked = prayerTimer.FavorSettings.FavorNotifySound;
             checkBoxNotifyPopup.Checked = prayerTimer.FavorSettings.FavorNotifyPopup;
             checkBoxFavorWhenMAX.Checked = prayerTimer.FavorSettings.FavorNotifyWhenMax;
@@ -51,7 +51,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Prayer
 
         private void buttonChangeSound_Click(object sender, EventArgs e)
         {
-            var result = soundEngine.ChooseSound(this);
+            var result = soundManager.ChooseSound(this);
             if (result.ActionResult == ActionResult.Ok)
             {
                 textBoxSoundName.Text = result.SoundResource.Name;

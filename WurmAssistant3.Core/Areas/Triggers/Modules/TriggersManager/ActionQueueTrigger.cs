@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Contracts.ActionQueueParsing;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Data;
@@ -28,9 +28,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
         // wurm log line that triggered queue sound
         private string logEntryThatTriggeredLastQueueSound;
 
-        public ActionQueueTrigger(TriggerData triggerData, ISoundEngine soundEngine, ITrayPopups trayPopups,
+        public ActionQueueTrigger(TriggerData triggerData, ISoundManager soundManager, ITrayPopups trayPopups,
             IWurmApi wurmApi, ILogger logger, [NotNull] IActionQueueConditions conditionsManager)
-            : base(triggerData, soundEngine, trayPopups, wurmApi, logger)
+            : base(triggerData, soundManager, trayPopups, wurmApi, logger)
         {
             if (logger == null) throw new ArgumentNullException("logger");
             if (conditionsManager == null) throw new ArgumentNullException("conditionsManager");

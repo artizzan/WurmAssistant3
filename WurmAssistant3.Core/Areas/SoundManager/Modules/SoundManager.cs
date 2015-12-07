@@ -1,31 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Modules.Irrklang;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Views;
 using AldursLab.WurmAssistant3.Core.Properties;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Ninject;
 using WurmAssistantDataTransfer.Dtos;
-using ISoundEngine = AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts.ISoundEngine;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
+namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Modules
 {
     [PersistentObject("SoundEngine")]
-    public sealed class SoundEngine : PersistentObjectBase, ISoundEngine, IInitializable, IFeature
+    public sealed class SoundManager : PersistentObjectBase, ISoundManager, IInitializable, IFeature
     {
         readonly ISoundsLibrary soundsLibrary;
         private readonly ILogger logger;
-        readonly IrrKlang.ISoundEngine engine;
+        readonly ISoundEngine engine;
 
         [JsonProperty]
         float globalVolume;
@@ -35,15 +32,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
 
         readonly SoundManagerView view;
 
-        public SoundEngine([NotNull] ISoundsLibrary soundsLibrary, ILogger logger, IProcessStarter processStarter)
+        public SoundManager([NotNull] ISoundsLibrary soundsLibrary, ISoundEngine soundEngine, ILogger logger, IProcessStarter processStarter)
         {
             if (soundsLibrary == null) throw new ArgumentNullException("soundsLibrary");
+            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
             if (logger == null) throw new ArgumentNullException("logger");
             if (processStarter == null) throw new ArgumentNullException("processStarter");
             this.soundsLibrary = soundsLibrary;
             this.logger = logger;
 
-            engine = new IrrKlang.ISoundEngine();
+            engine = soundEngine;
             globalVolume = 0.5f;
 
             view = new SoundManagerView(this, soundsLibrary, processStarter);

@@ -1,9 +1,9 @@
 using System;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
-using IrrKlang;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Modules.Irrklang;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
+namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Modules
 {
     class PlayingSoundHandle : IPlayingSoundHandle
     {
@@ -47,27 +47,5 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
         }
 
         public bool IsNullSound { get { return false; } }
-    }
-
-    class PlayingSoundHandleNullObject : IPlayingSoundHandle
-    {
-        public void Pause()
-        {
-            IsPaused = true;
-        }
-
-        public void Resume()
-        {
-            IsPaused = false;
-        }
-
-        public void Stop()
-        {
-        }
-
-        public bool IsFinished { get { return true; } }
-        public bool IsPaused { get; private set; }
-        public float CurrentVolume { get; set; }
-        public bool IsNullSound { get { return true; } }
     }
 }

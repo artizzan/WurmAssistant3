@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.Wa2DataImport.Views;
 using WurmAssistantDataTransfer.Dtos;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
+namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Modules
 {
     public class SoundEngineWa2Importer
     {

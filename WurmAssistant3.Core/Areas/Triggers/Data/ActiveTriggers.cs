@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Contracts.ActionQueueParsing;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager;
@@ -18,7 +18,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
     [PersistentObject("TriggersFeature_ActiveTriggers")]
     public class ActiveTriggers : PersistentObjectBase
     {
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
         readonly ITrayPopups trayPopups;
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
@@ -30,11 +30,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
         private readonly Dictionary<Guid,ITrigger> triggers = new Dictionary<Guid,ITrigger>();
         Func<bool> mutedEvaluator;
 
-        public ActiveTriggers(string persistentObjectId, [NotNull] ISoundEngine soundEngine,
+        public ActiveTriggers(string persistentObjectId, [NotNull] ISoundManager soundManager,
             [NotNull] ITrayPopups trayPopups, [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger,
             [NotNull] IActionQueueConditions actionQueueConditions) : base(persistentObjectId)
         {
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
@@ -42,7 +42,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
 
             CharacterName = persistentObjectId;
 
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             this.trayPopups = trayPopups;
             this.wurmApi = wurmApi;
             this.logger = logger;
@@ -86,13 +86,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Data
             switch (settings.TriggerKind)
             {
                 case TriggerKind.Simple:
-                    return new SimpleTrigger(settings, soundEngine, trayPopups, wurmApi, logger);
+                    return new SimpleTrigger(settings, soundManager, trayPopups, wurmApi, logger);
                 case TriggerKind.Regex:
-                    return new RegexTrigger(settings, soundEngine, trayPopups, wurmApi, logger);
+                    return new RegexTrigger(settings, soundManager, trayPopups, wurmApi, logger);
                 case TriggerKind.ActionQueue:
-                    return new ActionQueueTrigger(settings, soundEngine, trayPopups, wurmApi, logger, actionQueueConditions);
+                    return new ActionQueueTrigger(settings, soundManager, trayPopups, wurmApi, logger, actionQueueConditions);
                 case TriggerKind.SkillLevel:
-                    return new SkillLevelTrigger(CharacterName, settings, soundEngine, trayPopups, wurmApi, logger);
+                    return new SkillLevelTrigger(CharacterName, settings, soundManager, trayPopups, wurmApi, logger);
                 default:
                     throw new ApplicationException("Unknown trigger kind: " + settings.TriggerKind);
             }

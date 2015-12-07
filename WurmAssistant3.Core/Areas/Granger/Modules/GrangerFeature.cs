@@ -9,7 +9,7 @@ using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Properties;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
@@ -25,7 +25,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
         readonly IWurmAssistantDataDirectory dataDirectory;
         readonly IUpdateLoop updateLoop;
         readonly IHostEnvironment hostEnvironment;
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
         readonly ITrayPopups trayPopups;
 
         readonly GrangerSettings settings;
@@ -38,7 +38,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 
         public GrangerFeature([NotNull] ILogger logger, [NotNull] IWurmAssistantDataDirectory dataDirectory,
             [NotNull] IUpdateLoop updateLoop, [NotNull] IHostEnvironment hostEnvironment,
-            [NotNull] ISoundEngine soundEngine, [NotNull] ITrayPopups trayPopups, [NotNull] IWurmApi wurmApi, GrangerSettings grangerSettings,
+            [NotNull] ISoundManager soundManager, [NotNull] ITrayPopups trayPopups, [NotNull] IWurmApi wurmApi, GrangerSettings grangerSettings,
             [NotNull] DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions,
             [NotNull] GrangerSimpleDb grangerSimpleDb)
         {
@@ -46,13 +46,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             this.dataDirectory = dataDirectory;
             this.updateLoop = updateLoop;
             this.hostEnvironment = hostEnvironment;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             this.trayPopups = trayPopups;
             if (logger == null) throw new ArgumentNullException("logger");
             if (dataDirectory == null) throw new ArgumentNullException("dataDirectory");
             if (updateLoop == null) throw new ArgumentNullException("updateLoop");
             if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (defaultBreedingEvaluatorOptions == null)

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WurmAssistantDataTransfer.Dtos;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts
+namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts
 {
     public interface ISoundsLibrary
     {

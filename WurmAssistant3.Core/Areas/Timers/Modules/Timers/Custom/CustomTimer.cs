@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
@@ -23,9 +23,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom
         DateTime cooldownTo = DateTime.MinValue;
         DateTime uptimeResetSince = DateTime.MinValue;
 
-        public CustomTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundEngine soundEngine,
+        public CustomTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundManager soundManager,
             ITrayPopups trayPopups)
-            : base(persistentObjectId, trayPopups, logger, wurmApi, soundEngine)
+            : base(persistentObjectId, trayPopups, logger, wurmApi, soundManager)
         {
             if (logger == null) throw new ArgumentNullException("logger");
             this.logger = logger;

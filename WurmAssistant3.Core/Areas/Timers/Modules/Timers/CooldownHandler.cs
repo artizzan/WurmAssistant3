@@ -1,6 +1,6 @@
 ﻿using System;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using JetBrains.Annotations;
 
@@ -29,14 +29,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers
         bool shown = true;
         bool played = true;
 
-        public CooldownHandler([NotNull] ILogger logger, [NotNull] ISoundEngine soundEngine,
+        public CooldownHandler([NotNull] ILogger logger, [NotNull] ISoundManager soundManager,
             [NotNull] ITrayPopups trayPopups,
             Guid? soundId = null, string messageTitle = null, string messageContent = null, bool messagePersist = false)
         {
             if (logger == null) throw new ArgumentNullException("logger");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
-            handler = new NotifyHandler(logger, soundEngine, trayPopups)
+            handler = new NotifyHandler(logger, soundManager, trayPopups)
             {
                 SoundId = (soundId ?? Guid.Empty),
                 Title = (messageTitle ?? string.Empty),

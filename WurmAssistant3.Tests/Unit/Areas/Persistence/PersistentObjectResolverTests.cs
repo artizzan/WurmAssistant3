@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AldursLab.Testing;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence.Components;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules;
 using AldursLab.WurmAssistant3.Core.IoC;
 using Ninject;
 using NUnit.Framework;

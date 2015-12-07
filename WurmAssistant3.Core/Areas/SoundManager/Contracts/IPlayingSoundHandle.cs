@@ -1,4 +1,4 @@
-﻿namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts
+﻿namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts
 {
     /// <summary>
     /// Represents a handle to a playable sound instance.

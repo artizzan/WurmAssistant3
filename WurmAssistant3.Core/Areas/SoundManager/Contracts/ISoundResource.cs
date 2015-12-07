@@ -1,6 +1,6 @@
 using System;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts
+namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts
 {
     /// <summary>
     /// Represents a single sound resource (eg. sound clip)

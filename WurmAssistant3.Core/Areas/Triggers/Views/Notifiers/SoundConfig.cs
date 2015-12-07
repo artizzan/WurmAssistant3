@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.Notifiers;
 using JetBrains.Annotations;
 
@@ -10,7 +10,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.Notifiers
     public partial class SoundConfig : UserControl, INotifierConfig
     {
         private readonly ISoundNotifier soundNotifier;
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
 
         public UserControl ControlHandle { get { return this; } }
 
@@ -18,24 +18,24 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.Notifiers
 
         public event EventHandler Removed;
 
-        public SoundConfig(ISoundNotifier soundNotifier, [NotNull] ISoundEngine soundEngine)
+        public SoundConfig(ISoundNotifier soundNotifier, [NotNull] ISoundManager soundManager)
         {
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             InitializeComponent();
             _soundTextBoxDefBackColor = SoundTextBox.BackColor;
             this.soundNotifier = soundNotifier;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
 
-            SetSoundTextBoxText(this.soundEngine.GetSoundById(this.soundNotifier.SoundId).Name);
+            SetSoundTextBoxText(this.soundManager.GetSoundById(this.soundNotifier.SoundId).Name);
         }
 
         private void ChangeButton_Click(object sender, EventArgs e)
         {
-            var result = soundEngine.ChooseSound();
+            var result = soundManager.ChooseSound();
             if (result.ActionResult == ActionResult.Ok)
             {
                 soundNotifier.SoundId = result.SoundResource.Id;
-                SetSoundTextBoxText(soundEngine.GetSoundById(this.soundNotifier.SoundId).Name);
+                SetSoundTextBoxText(soundManager.GetSoundById(this.soundNotifier.SoundId).Name);
             }
         }
 
@@ -60,7 +60,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.Notifiers
 
         private void PlayButton_Click(object sender, EventArgs e)
         {
-            soundEngine.PlayOneShot(soundNotifier.SoundId);
+            soundManager.PlayOneShot(soundNotifier.SoundId);
         }
 
         protected void OnRemoved()

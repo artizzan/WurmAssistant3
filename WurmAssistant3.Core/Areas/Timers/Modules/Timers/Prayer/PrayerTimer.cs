@@ -6,7 +6,7 @@ using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters.Skills;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Views.Timers.Prayer;
@@ -80,7 +80,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
             readonly SkillEntryParser skillEntryParser;
 
             public FavorTimerNotify(PrayerTimer timer, string player, string serverGroupId, ILogger logger,
-                ISoundEngine soundEngine, ITrayPopups trayPopups, [NotNull] SkillEntryParser skillEntryParser)
+                ISoundManager soundManager, ITrayPopups trayPopups, [NotNull] SkillEntryParser skillEntryParser)
             {
                 if (skillEntryParser == null)
                     throw new ArgumentNullException("skillEntryParser");
@@ -90,7 +90,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
 
                 favorHandler = new NotifyHandler(
                     logger,
-                    soundEngine,
+                    soundManager,
                     trayPopups,
                     Settings.FavorNotifySoundId,
                     player,
@@ -177,9 +177,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
         FavorTimerNotify favorNotify;
         SkillEntryParser skillEntryParser;
 
-        public PrayerTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundEngine soundEngine,
+        public PrayerTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundManager soundManager,
             ITrayPopups trayPopups)
-            : base(persistentObjectId, trayPopups, logger, wurmApi, soundEngine)
+            : base(persistentObjectId, trayPopups, logger, wurmApi, soundManager)
         {
             updatePrayerCooldownOperation = new TriggerableAsyncOperation(UpdatePrayerCooldown);
         }
@@ -193,7 +193,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
 
             skillEntryParser = new SkillEntryParser(WurmApi);
 
-            favorNotify = new FavorTimerNotify(this, Character, ServerGroupId, Logger, SoundEngine, TrayPopups, skillEntryParser);
+            favorNotify = new FavorTimerNotify(this, Character, ServerGroupId, Logger, SoundManager, TrayPopups, skillEntryParser);
 
             View.UpdateSkill(FaithLevel);
             View.ShowSkill = ShowFaithSkillOnTimer;
@@ -358,7 +358,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
 
         public override void OpenMoreOptions(TimerDefaultSettingsForm form)
         {
-            PrayerTimerOptionsForm ui = new PrayerTimerOptionsForm(this, form, SoundEngine);
+            PrayerTimerOptionsForm ui = new PrayerTimerOptionsForm(this, form, SoundManager);
             ui.ShowDialogCenteredOnForm(form);
         }
 

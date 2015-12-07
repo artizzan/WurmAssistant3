@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AldursLab.Testing;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Modules;
 using NUnit.Framework;
 using Telerik.JustMock.AutoMock;
 

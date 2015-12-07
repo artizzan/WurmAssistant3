@@ -1,4 +1,4 @@
-﻿namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
+﻿namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Views
 {
     partial class ChooseSoundView
     {

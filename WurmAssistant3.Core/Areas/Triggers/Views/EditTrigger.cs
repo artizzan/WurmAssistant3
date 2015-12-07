@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.Notifiers;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager;
@@ -16,15 +16,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views
     public partial class EditTrigger : ExtendedForm
     {
         private readonly ITrigger _trigger;
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
         readonly ITrayPopups trayPopups;
 
-        public EditTrigger(ITrigger trigger, [NotNull] ISoundEngine soundEngine, [NotNull] ITrayPopups trayPopups)
+        public EditTrigger(ITrigger trigger, [NotNull] ISoundManager soundManager, [NotNull] ITrayPopups trayPopups)
         {
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             _trigger = trigger;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             this.trayPopups = trayPopups;
             InitializeComponent();
             Text = trigger.TypeAspect.Capitalize() + " Trigger";
@@ -37,7 +37,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views
         private void AddNotificationButton_Click(object sender, EventArgs e)
         {
             IEnumerable<INotifier> restrictNotifiers = _trigger.GetNotifiers();
-            var ui = new ChooseNotifierType(_trigger, restrictNotifiers, trayPopups, soundEngine);
+            var ui = new ChooseNotifierType(_trigger, restrictNotifiers, trayPopups, soundManager);
             if (ui.ShowDialogCenteredOnForm(this) == DialogResult.OK)
             {
                 _trigger.AddNotifier(ui.Result);

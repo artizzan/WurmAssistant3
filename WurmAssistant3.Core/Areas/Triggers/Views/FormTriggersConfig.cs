@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.TriggersManager;
@@ -14,16 +14,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views
     public partial class FormTriggersConfig : ExtendedForm
     {
         readonly TriggerManager triggerManager;
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
         private const string DisplayName = "Triggers";
 
-        public FormTriggersConfig([NotNull] TriggerManager triggerManager, [NotNull] ISoundEngine soundEngine)
+        public FormTriggersConfig([NotNull] TriggerManager triggerManager, [NotNull] ISoundManager soundManager)
         {
             if (triggerManager == null) throw new ArgumentNullException("triggerManager");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             InitializeComponent();
             this.triggerManager = triggerManager;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             BuildFormText();
             UpdateMutedState();
             TriggersListView.SetObjects(this.triggerManager.Triggers);
@@ -122,7 +122,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views
             }
             else
             {
-                soundEngine.StopAllSounds();
+                soundManager.StopAllSounds();
                 buttonMute.Image = Resources.SoundDisabledSmall;
                 BuildFormText(true);
                 this.Text = String.Format("{1} ({0}) [MUTED]", triggerManager.CharacterName, DisplayName);
@@ -140,7 +140,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views
 
         private void buttonManageSNDBank_Click(object sender, EventArgs e)
         {
-            soundEngine.ShowSoundManager();
+            soundManager.ShowSoundManager();
         }
 
         private void FormSoundNotifyConfig_FormClosing(object sender, FormClosingEventArgs e)

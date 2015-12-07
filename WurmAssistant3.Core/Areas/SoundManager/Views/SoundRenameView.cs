@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
+namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Views
 {
     public partial class SoundRenameView : Form
     {

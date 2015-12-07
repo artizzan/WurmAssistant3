@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Properties;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
+namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Views
 {
     public partial class SoundManagerView : ExtendedForm
     {
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
         readonly ISoundsLibrary soundsLibrary;
         readonly IProcessStarter processStarter;
 
-        public SoundManagerView([NotNull] ISoundEngine soundEngine, [NotNull] ISoundsLibrary soundsLibrary, IProcessStarter processStarter)
+        public SoundManagerView([NotNull] ISoundManager soundManager, [NotNull] ISoundsLibrary soundsLibrary, IProcessStarter processStarter)
         {
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (soundsLibrary == null) throw new ArgumentNullException("soundsLibrary");
             if (processStarter == null) throw new ArgumentNullException("processStarter");
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             this.soundsLibrary = soundsLibrary;
             this.processStarter = processStarter;
 
@@ -30,7 +30,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
 
             trackBarAdjustedVolume.Enabled = false;
             RefreshSoundsList();
-            globalVolumeTrackBar.Value = ((int) (soundEngine.GlobalVolume*100f)).ConstrainToRange(0, 100);
+            globalVolumeTrackBar.Value = ((int) (soundManager.GlobalVolume*100f)).ConstrainToRange(0, 100);
 
             soundsLibrary.SoundsChanged += SoundsLibraryOnSoundsChanged;
             this.Closed += (sender, args) => soundsLibrary.SoundsChanged -= SoundsLibraryOnSoundsChanged;
@@ -83,10 +83,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            soundEngine.StopAllSounds();
+            soundManager.StopAllSounds();
             if (SelectedSound != null)
             {
-                soundEngine.PlayOneShot(SelectedSound);
+                soundManager.PlayOneShot(SelectedSound);
             }
         }
 
@@ -168,7 +168,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
 
         private void button1_Click(object sender, EventArgs e)
         {
-            soundEngine.StopAllSounds();
+            soundManager.StopAllSounds();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -190,7 +190,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
 
         private void globalVolumeTrackBar_MouseUp(object sender, MouseEventArgs e)
         {
-            soundEngine.GlobalVolume = ((float) globalVolumeTrackBar.Value)/100;
+            soundManager.GlobalVolume = ((float) globalVolumeTrackBar.Value)/100;
         }
 
         private void globalVolumeTrackBar_KeyDown(object sender, KeyEventArgs e)
@@ -207,7 +207,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
 
         private void globalVolumeTrackBar_Scroll(object sender, EventArgs e)
         {
-            soundEngine.GlobalVolume = ((float)globalVolumeTrackBar.Value) / 100;
+            soundManager.GlobalVolume = ((float)globalVolumeTrackBar.Value) / 100;
         }
 
         private void SoundManagerView_FormClosing(object sender, FormClosingEventArgs e)

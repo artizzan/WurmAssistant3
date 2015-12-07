@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Data;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.Notifiers;
@@ -18,19 +18,19 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
 {
     public class TriggersWa2Importer
     {
-        private readonly ISoundEngine soundEngine;
+        private readonly ISoundManager soundManager;
         private readonly ITrayPopups trayPopups;
         private readonly Dictionary<string, TriggerManager> triggerManagers;
         private readonly ILogger logger;
 
-        public TriggersWa2Importer(ISoundEngine soundEngine, ITrayPopups trayPopups,
+        public TriggersWa2Importer(ISoundManager soundManager, ITrayPopups trayPopups,
             Dictionary<string, TriggerManager> triggerManagers, ILogger logger)
         {
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (triggerManagers == null) throw new ArgumentNullException("triggerManagers");
             if (logger == null) throw new ArgumentNullException("logger");
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             this.trayPopups = trayPopups;
             this.triggerManagers = triggerManagers;
             this.logger = logger;
@@ -174,8 +174,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
             newTrigger.StayUntilClicked = source.StayUntilClicked ?? false;
             if (source.HasSound && source.Sound != null)
             {
-                var soundId = SoundEngineImportHelper.MergeSoundAndGetId(soundEngine, source.Sound);
-                newTrigger.AddNotifier(new SoundNotifier(newTrigger, soundEngine)
+                var soundId = SoundEngineImportHelper.MergeSoundAndGetId(soundManager, source.Sound);
+                newTrigger.AddNotifier(new SoundNotifier(newTrigger, soundManager)
                 {
                     SoundId = soundId
                 });

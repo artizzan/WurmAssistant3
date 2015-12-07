@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using System.IO;
 using AldursLab.Essentials.Extensions.DotNet;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
+namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Modules
 {
     [JsonObject(MemberSerialization.Fields)]
     class SoundResource : ISoundResource
@@ -66,14 +66,5 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
         {
             return string.Format("{0}", Name);
         }
-    }
-
-    public class SoundResourceNullObject : ISoundResource
-    {
-        public Guid Id { get { return Guid.Empty; } }
-        public string Name { get { return "none"; } }
-        public float AdjustedVolume { get { return 0; } }
-        public string FileFullName { get { return string.Empty; } }
-        public bool IsNull { get { return true; }}
     }
 }

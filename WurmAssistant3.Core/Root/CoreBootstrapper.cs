@@ -23,7 +23,7 @@ using AldursLab.WurmAssistant3.Core.Areas.Native;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence;
 using AldursLab.WurmAssistant3.Core.Areas.RevealCreatures;
 using AldursLab.WurmAssistant3.Core.Areas.SkillStats;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Core.Areas.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers;
@@ -130,7 +130,7 @@ namespace AldursLab.WurmAssistant3.Core.Root
             WurmApiSetup.ValidateWurmGameClientConfig(kernel);
 
             TrayPopupsSetup.BindTrayPopups(kernel);
-            SoundEngineSetup.BindSoundEngine(kernel);
+            SoundManagerSetup.Bind(kernel);
 
             Wa2DataImportSetup.Bind(kernel);
 

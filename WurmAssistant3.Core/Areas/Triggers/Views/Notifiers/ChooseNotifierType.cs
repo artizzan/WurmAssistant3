@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.Notifiers;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager;
@@ -16,16 +16,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.Notifiers
         public INotifier Result = null;
 
         public ChooseNotifierType(ITrigger trigger, IEnumerable<INotifier> existingNotifiers, [NotNull] ITrayPopups trayPopups,
-            [NotNull] ISoundEngine soundEngine)
+            [NotNull] ISoundManager soundManager)
         {
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
 
             InitializeComponent();
             var enumerable = existingNotifiers as INotifier[] ?? existingNotifiers.ToArray();
             
             CreateButton("Sound Notifier",
-                () => Result = new SoundNotifier(trigger, soundEngine), 
+                () => Result = new SoundNotifier(trigger, soundManager), 
                 enumerable.Any(x => x is ISoundNotifier));
             
             CreateButton("Popup Notifier",

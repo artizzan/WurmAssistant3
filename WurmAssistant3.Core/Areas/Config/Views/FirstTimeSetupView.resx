@@ -120,4 +120,11 @@
   <metadata name="folderBrowserDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="textBox1.Text" xml:space="preserve">
+    <value>Choosing correct operating system will ensure, that Wurm Assistant works well across all its features.
+
+If needed, this setup can be run again from Options menu.
+
+On non-windows, only a simple sound engine is available (no volume support)</value>
+  </data>
 </root>

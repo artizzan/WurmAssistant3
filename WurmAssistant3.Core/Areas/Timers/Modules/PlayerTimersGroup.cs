@@ -10,7 +10,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters;
 using AldursLab.WurmApi.Modules.Wurm.ServerHistory;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers;
 using AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Custom;
@@ -108,14 +108,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules
         IWurmServer currentServerOnTheGroup;
 
         public PlayerTimersGroup(string persistentObjectId, TimersFeature timersFeature, 
-            [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger, [NotNull] ISoundEngine soundEngine, 
+            [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger, [NotNull] ISoundManager soundManager, 
             [NotNull] ITrayPopups trayPopups, [NotNull] TimerDefinitions timerDefinitions,
             [NotNull] TimerInstances timerInstances)
             : base(persistentObjectId) 
         {
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (timerDefinitions == null) throw new ArgumentNullException("timerDefinitions");
             if (timerInstances == null) throw new ArgumentNullException("timerInstances");

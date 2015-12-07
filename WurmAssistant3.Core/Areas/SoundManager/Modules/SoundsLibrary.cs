@@ -2,20 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using AldursLab.Essentials.Eventing;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
-using Ninject;
 using WurmAssistantDataTransfer.Dtos;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Modules
+namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Modules
 {
     [PersistentObject("SoundEngine_SoundsLibrary")]
     public class SoundsLibrary : PersistentObjectBase, ISoundsLibrary

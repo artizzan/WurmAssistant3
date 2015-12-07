@@ -9,7 +9,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Calendar.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Calendar.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Properties;
 using AldursLab.WurmAssistant3.Core.Root.Contracts;
@@ -26,7 +26,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
     {
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
         readonly ITrayPopups trayPopups;
 
         public class WurmSeasonOutputItem : IComparable<WurmSeasonOutputItem>
@@ -219,18 +219,18 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
         readonly WurmSeasonsManager seasonsManager;
 
         public CalendarFeature([NotNull] IWurmApi wurmApi, [NotNull] ILogger logger, [NotNull] IUpdateLoop updateLoop,
-            [NotNull] ISoundEngine soundEngine, [NotNull] ITrayPopups trayPopups,
+            [NotNull] ISoundManager soundManager, [NotNull] ITrayPopups trayPopups,
             [NotNull] WurmSeasonsManager seasonsManager)
         {
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
             if (updateLoop == null) throw new ArgumentNullException("updateLoop");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (seasonsManager == null) throw new ArgumentNullException("seasonsManager");
             this.wurmApi = wurmApi;
             this.logger = logger;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             this.trayPopups = trayPopups;
             this.seasonsManager = seasonsManager;
 
@@ -282,7 +282,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
 
         public ISoundResource Sound
         {
-            get { return soundEngine.GetSoundById(soundId); }
+            get { return soundManager.GetSoundById(soundId); }
         }
 
         public bool PopupWarning
@@ -333,7 +333,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
 
         protected override void OnPersistentDataLoaded()
         {
-            CalendarUI = new FormCalendar(this, wurmApi, logger, soundEngine);
+            CalendarUI = new FormCalendar(this, wurmApi, logger, soundManager);
             CalendarUI.UpdateTrackedSeasonsList(TrackedSeasons);
 
             ReInitSeasonData();
@@ -497,7 +497,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Modules
 
         void TriggerSoundWarning()
         {
-            soundEngine.PlayOneShot(SoundId);
+            soundManager.PlayOneShot(SoundId);
         }
 
         void TriggerPopupWarning(string text)

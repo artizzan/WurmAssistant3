@@ -9,7 +9,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Persistence.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Views;
 using AldursLab.WurmAssistant3.Core.Properties;
@@ -24,7 +24,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
     [PersistentObject("TriggersFeature")]
     public class TriggersFeature : PersistentObjectBase, IFeature, IInitializable
     {
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
         readonly IWurmAssistantDataDirectory wurmAssistantDataDirectory;
         readonly IUpdateLoop updateLoop;
         readonly IHostEnvironment hostEnvironment;
@@ -39,13 +39,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
         FormTriggersMain mainUi;
         readonly Dictionary<string, TriggerManager> triggerManagers = new Dictionary<string, TriggerManager>();
 
-        public TriggersFeature([NotNull] ISoundEngine soundEngine,
+        public TriggersFeature([NotNull] ISoundManager soundManager,
             [NotNull] IWurmAssistantDataDirectory wurmAssistantDataDirectory, [NotNull] IUpdateLoop updateLoop,
             [NotNull] IHostEnvironment hostEnvironment, [NotNull] IWurmApi wurmApi,
             [NotNull] IPersistentObjectResolver<TriggerManager> triggerManagerResolver, [NotNull] ITrayPopups trayPopups,
             [NotNull] ILogger logger)
         {
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (wurmAssistantDataDirectory == null) throw new ArgumentNullException("wurmAssistantDataDirectory");
             if (updateLoop == null) throw new ArgumentNullException("updateLoop");
             if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
@@ -53,7 +53,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
             if (triggerManagerResolver == null) throw new ArgumentNullException("triggerManagerResolver");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (logger == null) throw new ArgumentNullException("logger");
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             this.wurmAssistantDataDirectory = wurmAssistantDataDirectory;
             this.updateLoop = updateLoop;
             this.hostEnvironment = hostEnvironment;
@@ -68,7 +68,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
 
         public void Initialize()
         {
-            mainUi = new FormTriggersMain(this, soundEngine);
+            mainUi = new FormTriggersMain(this, soundManager);
             foreach (var name in GetAllActiveCharacters())
             {
                 AddManager(name);
@@ -181,7 +181,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules
 
         public async Task ImportDataFromWa2Async(WurmAssistantDto dto)
         {
-            TriggersWa2Importer importer = new TriggersWa2Importer(soundEngine, trayPopups, triggerManagers, logger);
+            TriggersWa2Importer importer = new TriggersWa2Importer(soundManager, trayPopups, triggerManagers, logger);
             await importer.ImportFromDtoAsync(dto);
         }
 

@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.WinForms;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
+namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Views
 {
     public partial class ChooseSoundView : ExtendedForm
     {
         readonly ISoundsLibrary soundsLibrary;
-        readonly ISoundEngine soundEngine;
+        readonly ISoundManager soundManager;
 
-        public ChooseSoundView([NotNull] ISoundsLibrary soundsLibrary, [NotNull] ISoundEngine soundEngine)
+        public ChooseSoundView([NotNull] ISoundsLibrary soundsLibrary, [NotNull] ISoundManager soundManager)
         {
             if (soundsLibrary == null) throw new ArgumentNullException("soundsLibrary");
-            if (soundEngine == null) throw new ArgumentNullException("soundEngine");
+            if (soundManager == null) throw new ArgumentNullException("soundManager");
             this.soundsLibrary = soundsLibrary;
-            this.soundEngine = soundEngine;
+            this.soundManager = soundManager;
             InitializeComponent();
             RefreshList();
 
@@ -45,7 +45,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
 
         private void buttonAddSound_Click(object sender, EventArgs e)
         {
-            soundEngine.ShowSoundManager();
+            soundManager.ShowSoundManager();
         }
 
         private void buttonPlay_Click(object sender, EventArgs e)
@@ -60,10 +60,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Views
 
         void PlaySound()
         {
-            soundEngine.StopAllSounds();
+            soundManager.StopAllSounds();
             if (listBox1.SelectedIndex > -1)
             {
-                soundEngine.PlayOneShot((ISoundResource) listBox1.SelectedItem);
+                soundManager.PlayOneShot((ISoundResource) listBox1.SelectedItem);
             }
         }
 

@@ -7,7 +7,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters;
 using AldursLab.WurmApi.Modules.Wurm.Characters.Skills;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundEngine.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Data;
 using AldursLab.WurmAssistant3.Core.Areas.Triggers.Views.TriggersManager;
@@ -27,9 +27,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Triggers.Modules.TriggersManager
 
         WeakReference<SkillLevelTriggerConfig> configViewWeakRef;
 
-        public SkillLevelTrigger(string characterName, TriggerData triggerData, ISoundEngine soundEngine,
+        public SkillLevelTrigger(string characterName, TriggerData triggerData, ISoundManager soundManager,
             ITrayPopups trayPopups, IWurmApi wurmApi, ILogger logger)
-            : base(triggerData, soundEngine, trayPopups, wurmApi, logger)
+            : base(triggerData, soundManager, trayPopups, wurmApi, logger)
         {
             if (characterName == null) throw new ArgumentNullException("characterName");
             this.characterName = characterName;

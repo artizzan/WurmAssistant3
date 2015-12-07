@@ -220,7 +220,17 @@
     <Compile Include="Areas\SkillStats\Views\SkillLevelsView.Designer.cs">
       <DependentUpon>SkillLevelsView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\SoundEngine\Modules\SoundEngineWa2Importer.cs" />
+    <Compile Include="Areas\SoundManager\Modules\BuiltIn\DefaultSound.cs" />
+    <Compile Include="Areas\SoundManager\Modules\BuiltIn\DefaultSoundEngine.cs" />
+    <Compile Include="Areas\SoundManager\Modules\Irrklang\IrrklangSound.cs" />
+    <Compile Include="Areas\SoundManager\Modules\Irrklang\IrrklangSoundEngineProxy.cs" />
+    <Compile Include="Areas\SoundManager\Contracts\ISound.cs" />
+    <Compile Include="Areas\SoundManager\Contracts\ISoundEngine.cs" />
+    <Compile Include="Areas\SoundManager\Modules\PlayingSoundHandleNullObject.cs" />
+    <Compile Include="Areas\SoundManager\Modules\SoundEngineWa2Importer.cs" />
+    <Compile Include="Areas\SoundManager\Modules\SoundResourceNullObject.cs" />
+    <Compile Include="Areas\SoundManager\Modules\Stub\StubSound.cs" />
+    <Compile Include="Areas\SoundManager\Modules\Stub\StubSoundEngine.cs" />
     <Compile Include="Areas\Timers\Modules\TimersWa2Importer.cs" />
     <Compile Include="Areas\Triggers\Modules\TriggersManager\SkillLevelTrigger.cs" />
     <Compile Include="Areas\Triggers\Modules\TriggersWa2Importer.cs" />
@@ -525,31 +535,31 @@
     </Compile>
     <Compile Include="Areas\Triggers\TriggersSetup.cs" />
     <Compile Include="Profiling\Profiler.cs" />
-    <Compile Include="Areas\SoundEngine\Contracts\ISoundEngine.cs" />
-    <Compile Include="Areas\SoundEngine\Contracts\IPlayingSoundHandle.cs" />
-    <Compile Include="Areas\SoundEngine\Contracts\ISoundResource.cs" />
-    <Compile Include="Areas\SoundEngine\Contracts\ISoundsLibrary.cs" />
-    <Compile Include="Areas\SoundEngine\Modules\PlayingSoundHandle.cs" />
-    <Compile Include="Areas\SoundEngine\Modules\SoundEngine.cs" />
-    <Compile Include="Areas\SoundEngine\Modules\SoundResource.cs" />
-    <Compile Include="Areas\SoundEngine\Modules\SoundsLibrary.cs" />
-    <Compile Include="Areas\SoundEngine\SoundEngineSetup.cs" />
-    <Compile Include="Areas\SoundEngine\Views\ChooseSoundView.cs">
+    <Compile Include="Areas\SoundManager\Contracts\ISoundManager.cs" />
+    <Compile Include="Areas\SoundManager\Contracts\IPlayingSoundHandle.cs" />
+    <Compile Include="Areas\SoundManager\Contracts\ISoundResource.cs" />
+    <Compile Include="Areas\SoundManager\Contracts\ISoundsLibrary.cs" />
+    <Compile Include="Areas\SoundManager\Modules\PlayingSoundHandle.cs" />
+    <Compile Include="Areas\SoundManager\Modules\SoundManager.cs" />
+    <Compile Include="Areas\SoundManager\Modules\SoundResource.cs" />
+    <Compile Include="Areas\SoundManager\Modules\SoundsLibrary.cs" />
+    <Compile Include="Areas\SoundManager\SoundManagerSetup.cs" />
+    <Compile Include="Areas\SoundManager\Views\ChooseSoundView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\SoundEngine\Views\ChooseSoundView.Designer.cs">
+    <Compile Include="Areas\SoundManager\Views\ChooseSoundView.Designer.cs">
       <DependentUpon>ChooseSoundView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\SoundEngine\Views\SoundManagerView.cs">
+    <Compile Include="Areas\SoundManager\Views\SoundManagerView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\SoundEngine\Views\SoundManagerView.Designer.cs">
+    <Compile Include="Areas\SoundManager\Views\SoundManagerView.Designer.cs">
       <DependentUpon>SoundManagerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\SoundEngine\Views\SoundRenameView.cs">
+    <Compile Include="Areas\SoundManager\Views\SoundRenameView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\SoundEngine\Views\SoundRenameView.Designer.cs">
+    <Compile Include="Areas\SoundManager\Views\SoundRenameView.Designer.cs">
       <DependentUpon>SoundRenameView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Timers\Contracts\TimerDefinition.cs" />
@@ -978,13 +988,13 @@
     <EmbeddedResource Include="Areas\Persistence\Views\DeserializationErrorResolverView.resx">
       <DependentUpon>DeserializationErrorResolverView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\SoundEngine\Views\ChooseSoundView.resx">
+    <EmbeddedResource Include="Areas\SoundManager\Views\ChooseSoundView.resx">
       <DependentUpon>ChooseSoundView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\SoundEngine\Views\SoundManagerView.resx">
+    <EmbeddedResource Include="Areas\SoundManager\Views\SoundManagerView.resx">
       <DependentUpon>SoundManagerView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\SoundEngine\Views\SoundRenameView.resx">
+    <EmbeddedResource Include="Areas\SoundManager\Views\SoundRenameView.resx">
       <DependentUpon>SoundRenameView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Timers\Views\EditTimerGroups.resx">
