@@ -4,7 +4,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Data.Combat
 {
     public class Attack
     {
-        public string Type { get; set; }
+        public string AttackType { get; set; }
         public string Strength { get; set; }
         public string Damage { get; set; }
         public string TargetBodyPart { get; set; }

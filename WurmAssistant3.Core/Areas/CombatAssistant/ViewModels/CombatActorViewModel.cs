@@ -35,11 +35,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.ViewModels
 
         string BuildDamageStats(DamageCausedStats damageCausedStats)
         {
-            var aggregation = damageCausedStats.Attacks.GroupBy(attack => attack.Damage)
+            var aggregation = damageCausedStats.Attacks.GroupBy(attack => new { attack.Damage, attack.AttackType })
                                                .Select(attacks =>
                                                    new
                                                    {
-                                                       DamageCaused = attacks.Key,
+                                                       DamageCaused = attacks.Key.Damage,
+                                                       DamageType = attacks.Key.AttackType,
                                                        AttackStrength =
                                                            string.Join(", ",
                                                                attacks.GroupBy(attack => attack.Strength)
@@ -47,7 +48,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.ViewModels
                                                                           grouping =>
                                                                               grouping.Key + " x" + grouping.Count()))
                                                    });
-            return string.Join(Environment.NewLine, aggregation.Select(arg => arg.DamageCaused + ": " + arg.AttackStrength));
+            return string.Join(Environment.NewLine,
+                aggregation.Select(
+                    arg => string.Format("{0}: {1} ({2})", arg.DamageCaused, arg.AttackStrength, arg.DamageType)));
         }
 
         [UsedImplicitly]

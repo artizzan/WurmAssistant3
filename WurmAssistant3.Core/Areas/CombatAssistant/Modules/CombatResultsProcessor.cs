@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters.Skills;
@@ -229,7 +230,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
                                Damage = damageCaused,
                                Strength = strength,
                                TargetBodyPart = targetBodyPart,
-                               Type = type
+                               AttackType = type
                            };
 
                            actor.DamageCausedStats.Add(attack);
@@ -589,21 +590,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
                 "Hard",
             };
 
-            readonly string[] attackTypes = new[]
+            readonly DefinedAttackType[] attackTypes = new[]
             {
-                "maul",
-                "cut",
-                "pierce",
-                "hit",
-                "claw",
-                "bite",
-                "burn",
-                "kick",
-                "pound",
-                "squeeze",
-                "tailwhip",
-                "wingbuff",
-                "hurt"
+                new DefinedAttackType("maul"),
+                new DefinedAttackType("cut"),
+                new DefinedAttackType("pierce"),
+                new DefinedAttackType("hit"),
+                new DefinedAttackType("claw"),
+                new DefinedAttackType("bite"),
+                new DefinedAttackType("burn"),
+                new DefinedAttackType("kick"),
+                new DefinedAttackType("pound"),
+                new DefinedAttackType("squeeze"),
+                new DefinedAttackType("tailwhip"),
+                new DefinedAttackType("wingbuff"),
+                new DefinedAttackType("hurt"),
             };
 
             readonly string[] pluralizedAttackTypes;
@@ -615,20 +616,17 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
                 var result = new DamageEntryParseResult();
 
                 var parts = logEntryContentPart.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-                var index = ParseIndexOfAttackTypeDelimiter(parts);
+                var delimitationResult = TryEstablishAttackTypeDelimiter(parts);
 
-                LogIfIndexNotEstablished(index, logEntryContentPart);
+                LogIfDelimiterNotEstablished(delimitationResult, logEntryContentPart);
 
-                if (index > 0)
+                if (delimitationResult != null)
                 {
-                    var countToTake = index;
-
-                    var attackerParts = parts.Take(countToTake);
-                    var attackTypePart = parts[index];
-                    var remainingPart = parts.Skip(countToTake + 1);
+                    var attackerParts = parts.Take(delimitationResult.BeginIndex);
+                    var remainingPart = parts.Skip(delimitationResult.EndIndex + 1);
 
                     result.SourceActorName = string.Join(" ", attackerParts);
-                    result.DamageType = attackTypePart;
+                    result.DamageType = delimitationResult.AttackType;
 
                     var combinedRemainingPart = string.Join(" ", remainingPart);
                     var attackStrength = TryParseAttackStrength(combinedRemainingPart);
@@ -656,13 +654,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
                 }
             }
 
-            void LogIfIndexNotEstablished(int index, string logEntryContentPart)
+            void LogIfDelimiterNotEstablished(DelimitationResult result, string logEntryContentPart)
             {
-                if (index < 0)
+                if (result == null)
                 {
                     logger.Error("DamageEntryParser: Could not split the log entry part, source string: " + logEntryContentPart);
                 }
-                if (index == 0)
+                else if (result.BeginIndex == 0)
                 {
                     logger.Error("DamageEntryParser: Log entry part was split but left side is empty, source string: " + logEntryContentPart);
                 }
@@ -675,17 +673,108 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
                         s => combinedRemainingPart.Contains(s, StringComparison.InvariantCultureIgnoreCase));
             }
 
-            int ParseIndexOfAttackTypeDelimiter(string[] parts)
+            DelimitationResult TryEstablishAttackTypeDelimiter(string[] parts)
             {
                 for (int i = 0; i < parts.Length; i++)
                 {
-                    var part = parts[i];
-                    if (attackTypes.Any(s => string.Equals(s, part, StringComparison.InvariantCultureIgnoreCase)))
-                        return i;
-                    if (pluralizedAttackTypes.Any(s => string.Equals(s, part, StringComparison.InvariantCultureIgnoreCase)))
-                        return i;
+                    var specialAttackResult = TryParseSpecialAttack(parts, i);
+                    if (specialAttackResult != null)
+                    {
+                        return specialAttackResult;
+                    }
+                    else
+                    {
+                        var part = parts[i];
+                        foreach (var attackType in attackTypes)
+                        {
+                            if (attackType.Matches(part))
+                            {
+                                return new DelimitationResult().SetSingleIndex(i).SetAttackType(attackType.Singular);
+                            }
+                        }
+                    }
                 }
-                return -1;
+                return null;
+            }
+
+            DelimitationResult TryParseSpecialAttack(string[] parts, int i)
+            {
+                //todo
+                //"hits the groin of", // Low rider
+                if (parts.Length > i + 3 
+                    && parts[i] == "hits" 
+                    && parts[i + 1] == "the" 
+                    && parts[i + 2] == "groin"
+                    && parts[i + 3] == "of")
+                {
+                    return new DelimitationResult().SetAttackType("Low rider").SetIndexSpan(i, i + 3);
+                }
+
+                //"lunge and cut", // Bloodscion
+                if (parts.Length > i + 2
+                    && parts[i] == "lunge"
+                    && parts[i + 1] == "and"
+                    && parts[i + 2] == "cut")
+                {
+                    return new DelimitationResult().SetAttackType("Bloodscion").SetIndexSpan(i, i + 2);
+                }
+
+                //"engrave", // Back breaker
+                if (parts[i] == "engrave")
+                {
+                    return new DelimitationResult().SetAttackType("Back breaker").SetSingleIndex(i);
+                }
+
+                return null;
+            }
+
+            class DefinedAttackType
+            {
+                public DefinedAttackType(string singular, bool autopluralize = true)
+                {
+                    Singular = singular;
+                    if (autopluralize) Plural = singular + "s";
+                }
+
+                public string Singular { get; set; }
+                public string Plural { get; set; }
+
+                public bool Matches(string source)
+                {
+                    if (string.Equals(source, Singular, StringComparison.InvariantCultureIgnoreCase)
+                        || (Plural != null && string.Equals(source, Plural, StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+
+            class DelimitationResult
+            {
+                public string AttackType { get; set; }
+                public int BeginIndex { get; set; }
+                public int EndIndex { get; set; }
+
+                public DelimitationResult SetSingleIndex(int index)
+                {
+                    BeginIndex = EndIndex = index;
+                    return this;
+                }
+
+                public DelimitationResult SetIndexSpan(int start, int end)
+                {
+                    BeginIndex = start;
+                    EndIndex = end;
+                    return this;
+                }
+
+                public DelimitationResult SetAttackType(string attackType)
+                {
+                    AttackType = attackType;
+                    return this;
+                }
             }
         }
 
