@@ -574,13 +574,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
                 if (logger == null)
                     throw new ArgumentNullException("logger");
                 this.logger = logger;
-
-                pluralizedAttackTypes = attackTypes.Select(s => s + "s").ToArray();
             }
 
             // order is important (composites first to check!)
-            readonly string[] attackStrengths = new[]
-            {
+            readonly string[] attackStrengths = {
                 "Very Lightly",
                 "Pretty Hard",
                 "Very Hard",
@@ -590,26 +587,24 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
                 "Hard",
             };
 
-            readonly DefinedAttackType[] attackTypes = new[]
-            {
-                new DefinedAttackType("maul"),
-                new DefinedAttackType("cut"),
-                new DefinedAttackType("pierce"),
-                new DefinedAttackType("hit"),
-                new DefinedAttackType("claw"),
-                new DefinedAttackType("bite"),
-                new DefinedAttackType("burn"),
-                new DefinedAttackType("kick"),
-                new DefinedAttackType("pound"),
-                new DefinedAttackType("squeeze"),
-                new DefinedAttackType("tailwhip"),
-                new DefinedAttackType("wingbuff"),
-                new DefinedAttackType("hurt"),
+            readonly RegularAttackType[] regularAttackTypes = {
+                new RegularAttackType("maul"),
+                new RegularAttackType("cut"),
+                new RegularAttackType("pierce"),
+                new RegularAttackType("hit"),
+                new RegularAttackType("claw"),
+                new RegularAttackType("bite"),
+                new RegularAttackType("burn"),
+                new RegularAttackType("kick"),
+                new RegularAttackType("pound"),
+                new RegularAttackType("squeeze"),
+                new RegularAttackType("tailwhip"),
+                new RegularAttackType("wingbuff"),
+                new RegularAttackType("hurt"),
+                new RegularAttackType("headbutt"),
             };
 
-            readonly string[] pluralizedAttackTypes;
-
-            readonly char[] delimiters = new[] { ' ' };
+            readonly char[] delimiters = { ' ' };
 
             public DamageEntryParseResult Parse(string logEntryContentPart)
             {
@@ -685,7 +680,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
                     else
                     {
                         var part = parts[i];
-                        foreach (var attackType in attackTypes)
+                        foreach (var attackType in regularAttackTypes)
                         {
                             if (attackType.Matches(part))
                             {
@@ -699,8 +694,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
 
             DelimitationResult TryParseSpecialAttack(string[] parts, int i)
             {
-                //todo
-                //"hits the groin of", // Low rider
                 if (parts.Length > i + 3 
                     && parts[i] == "hits" 
                     && parts[i + 1] == "the" 
@@ -710,7 +703,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
                     return new DelimitationResult().SetAttackType("Low rider").SetIndexSpan(i, i + 3);
                 }
 
-                //"lunge and cut", // Bloodscion
                 if (parts.Length > i + 2
                     && parts[i] == "lunge"
                     && parts[i + 1] == "and"
@@ -719,18 +711,27 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
                     return new DelimitationResult().SetAttackType("Bloodscion").SetIndexSpan(i, i + 2);
                 }
 
-                //"engrave", // Back breaker
                 if (parts[i] == "engrave")
                 {
                     return new DelimitationResult().SetAttackType("Back breaker").SetSingleIndex(i);
                 }
 
+                if (parts[i] == "stomp")
+                {
+                    return new DelimitationResult().SetAttackType("Faithpush").SetSingleIndex(i);
+                }
+
+                if (parts[i] == "string")
+                {
+                    return new DelimitationResult().SetAttackType("Cricket").SetSingleIndex(i);
+                }
+
                 return null;
             }
 
-            class DefinedAttackType
+            class RegularAttackType
             {
-                public DefinedAttackType(string singular, bool autopluralize = true)
+                public RegularAttackType(string singular, bool autopluralize = true)
                 {
                     Singular = singular;
                     if (autopluralize) Plural = singular + "s";
