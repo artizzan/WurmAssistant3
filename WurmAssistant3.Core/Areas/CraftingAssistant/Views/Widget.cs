@@ -97,7 +97,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CraftingAssistant.Views
                 // You will want to polish the lamp with a pelt before you improve it.
                 {
                     var match = Regex.Match(entry.Content,
-                        @"You will want to polish the .+ with a (.+) before you improve it\.",
+                        @"You will want to polish the .+ with (.+) before you improve it\.",
                         RegexOptions.Compiled);
                     if (match.Success)
                         currentActionNeeded = match.Groups[1].Value;
@@ -136,6 +136,41 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CraftingAssistant.Views
                 // You repair the lamp.
                 if (entry.Content.Contains("You repair")) requireRepair = false;
 
+                // [11:59:32] You must use a mallet on the knarr in order to improve it.
+                {
+                    var match = Regex.Match(entry.Content,
+                        @"You must use (.+) on .+ in order to improve it",
+                        RegexOptions.Compiled);
+                    if (match.Success)
+                        currentActionNeeded = match.Groups[1].Value;
+                }
+
+                // [12:00:07] You will want to polish the knarr with a pelt to improve it.
+                {
+                    var match = Regex.Match(entry.Content,
+                        @"You will want to polish .+ with (.+) to improve it",
+                        RegexOptions.Compiled);
+                    if (match.Success)
+                        currentActionNeeded = match.Groups[1].Value;
+                }
+
+                // [12:00:25] You notice some notches you must carve away in order to improve the knarr.
+                {
+                    var match = Regex.Match(entry.Content,
+                        @"You notice some notches you must carve away in order to improve .+",
+                        RegexOptions.Compiled);
+                    if (match.Success)
+                        currentActionNeeded = "carving knife";
+                }
+
+                // [12:01:27] You must use a file to smooth out the knarr in order to improve it.
+                {
+                    var match = Regex.Match(entry.Content,
+                        @"You must use (.+) to smooth out .+ in order to improve it",
+                        RegexOptions.Compiled);
+                    if (match.Success)
+                        currentActionNeeded = match.Groups[1].Value;
+                }
             }
         }
 
