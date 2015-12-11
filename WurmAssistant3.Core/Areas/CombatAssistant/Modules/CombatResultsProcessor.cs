@@ -726,6 +726,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
                     return new DelimitationResult().SetAttackType("Cricket").SetSingleIndex(i);
                 }
 
+                if (parts[i] == "dissect")
+                {
+                    return new DelimitationResult().SetAttackType("Bonebringer").SetSingleIndex(i);
+                }
+
+                if (parts[i] == "redecorate")
+                {
+                    return new DelimitationResult().SetAttackType("Wild garden").SetSingleIndex(i);
+                }
+
+                if (parts[i] == "paint")
+                {
+                    return new DelimitationResult().SetAttackType("Winged fang").SetSingleIndex(i);
+                }
+
                 return null;
             }
 
