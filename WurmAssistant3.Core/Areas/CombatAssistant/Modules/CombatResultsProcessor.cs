@@ -596,7 +596,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
                 new RegularAttackType("bite"),
                 new RegularAttackType("burn"),
                 new RegularAttackType("kick"),
-                new RegularAttackType("pound"),
                 new RegularAttackType("squeeze"),
                 new RegularAttackType("tailwhip"),
                 new RegularAttackType("wingbuff"),
@@ -739,6 +738,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.CombatAssistant.Modules
                 if (parts[i] == "paint")
                 {
                     return new DelimitationResult().SetAttackType("Winged fang").SetSingleIndex(i);
+                }
+
+                if (parts[i] == "pound")
+                {
+                    return new DelimitationResult().SetAttackType("Sleepwalker").SetSingleIndex(i);
                 }
 
                 return null;
