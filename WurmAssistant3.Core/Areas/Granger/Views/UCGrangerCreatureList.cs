@@ -528,7 +528,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                     {
                         if (creature != otherCreature)
                         {
-                            if (creature.IsIdenticalIdentity(otherCreature))
+                            if (creature.IsNotUniquelyIdentifiableWhenComparedTo(otherCreature))
                             {
                                 nonuniqueCreatures.Add(creature);
                             }
