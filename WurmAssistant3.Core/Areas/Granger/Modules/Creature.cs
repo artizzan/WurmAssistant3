@@ -266,7 +266,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 
                 foreach (var creature in targetHerd)
                 {
-                    if (creature.IsIdenticalIdentity(this))
+                    if (creature.IsNotUniquelyIdentifiableWhenComparedTo(this))
                     {
                         throw new Exception("can not change herd because nonunique creatures already exists in target herd");
                     }
@@ -283,11 +283,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             set { Entity.ServerName = value ?? string.Empty; }
         }
 
-        public bool IsIdenticalIdentity(Creature other)
+        public bool IsNotUniquelyIdentifiableWhenComparedTo(Creature other)
         {
-            // comment: this should be replaced by object equality, leaving for now, 
-            // default equality behavior is probably needed somewhere (maybe when used in OLV?)
-            return !this.Entity.IsDifferentIdentityThan(other.Entity);
+            return !this.Entity.IsUniquelyIdentifiableWhenComparedTo(other.Entity);
         }
 
         public string HerdAspect { get { return Entity.Herd; } }

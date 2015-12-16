@@ -120,7 +120,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
             {
                 foreach (var destinationCreature in creaturesInDestination)
                 {
-                    if (sourceCreatures.IsDifferentIdentityThan(destinationCreature) == false)
+                    if (sourceCreatures.IsUniquelyIdentifiableWhenComparedTo(destinationCreature) == false)
                         nonUniqueIdentityCreatures.Add(sourceCreatures);
                 }
             }

@@ -156,12 +156,41 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer
             return string.Format("{0} ({1}, {2})", Name, GenderAspect, Herd);
         }
 
-        public bool IsDifferentIdentityThan(CreatureEntity otherCreature)
+        /// <summary>
+        /// This method determines, if otherCreature can be reliably distinguished from this creature.
+        /// In Wurm, it is possible for 2 creatures to be different actual entities, but share same qualities - names, parents, even server.
+        /// There is no way to Id such creatures from logs alone.
+        /// This method should tell, if 2 creatures can be distinguished from each other, based purely on always available log information,
+        /// which currently is just creature name and the server it originates from (since creatures cannot travel between servers 
+        /// and WurmApi always knows current character server name)
+        /// </summary>
+        /// <param name="otherCreature"></param>
+        /// <returns></returns>
+        public bool IsUniquelyIdentifiableWhenComparedTo(CreatureEntity otherCreature)
         {
-            return this.Name != otherCreature.Name
-                   && string.Equals(this.ServerName ?? string.Empty,
-                       otherCreature.ServerName ?? string.Empty,
-                       StringComparison.InvariantCultureIgnoreCase);
+            var hasSameName = this.Name == otherCreature.Name;
+
+            if (hasSameName)
+            {
+                // if names are equal, we might still be able to differentiate by server names
+                if (string.IsNullOrWhiteSpace(this.ServerName) || string.IsNullOrWhiteSpace(otherCreature.ServerName))
+                {
+                    // if server is unknown for one or both of these creatures, creatures are not uniquely identifiable
+                    return false;
+                }
+                else
+                {
+                    // if both servers known and different, creatures can be differentiated when originating from different servers
+                    return !string.Equals(this.ServerName,
+                        otherCreature.ServerName,
+                        StringComparison.InvariantCultureIgnoreCase);
+                }
+            }
+            else
+            {
+                // if names are different, the creature are uniquely identifiable
+                return true;
+            }
         }
 
         public string GenderAspect

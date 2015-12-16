@@ -517,9 +517,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             FormChooseHerd ui = new FormChooseHerd(mainForm, context);
             if (ui.ShowDialogCenteredOnForm(mainForm) == DialogResult.OK)
             {
-                string herdID = ui.Result;
+                string herdId = ui.Result;
 
-                var targetHerd = context.Creatures.Where(x => x.Herd == herdID).Select(x => new Creature(mainForm, x, context));
+                var targetHerd = context.Creatures.Where(x => x.Herd == herdId).Select(x => new Creature(mainForm, x, context)).ToArray();
 
                 List<Creature> nonuniqueCreatures = new List<Creature>();
                 foreach (var creature in selected)
@@ -537,13 +537,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                 }
 
                 if (nonuniqueCreatures.Count > 0)
-                    MessageBox.Show("could not change herd for selected creatures, because following creatures have same identity (name+gender):\r\n"
+                    MessageBox.Show("could not change herd for selected creatures, because following creatures have same identity (name and server if known):\r\n"
                         + string.Join(", ", nonuniqueCreatures.Select(x => x.ToString())));
                 else
                 {
                     foreach (var creature in selected)
                     {
-                        creature.Herd = herdID;
+                        creature.Herd = herdId;
                     }
                     context.SubmitChanges();
                 }
