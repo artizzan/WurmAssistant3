@@ -29,6 +29,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Components
         public override void HandleErrorOnDeserialize(object o, ErrorEventArgs args)
         {
             base.HandleErrorOnDeserialize(o, args);
+
             logger.Error(args.ErrorContext.Error,
                 string.Format((string) "Deserialization error. Member = {0} ; Path = {1}",
                     args.ErrorContext.Member,
@@ -37,8 +38,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Components
             if (view.ShowDialog() == DialogResult.No)
             {
                 host.Shutdown();
-                //throw new ApplicationException("test");
-                
             }
         }
 
@@ -49,6 +48,32 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Persistence.Components
                 string.Format((string) "Serialization error. Member = {0} ; Path = {1}",
                     args.ErrorContext.Member,
                     args.ErrorContext.Path));
+        }
+
+        public override PreviewResult PreviewJsonStringOnPopulate(string rawJson, object populatedObject)
+        {
+            var result = base.PreviewJsonStringOnPopulate(rawJson, populatedObject);
+
+            if (string.IsNullOrEmpty(rawJson))
+            {
+                LogError("an empty string was found in the data source", populatedObject);
+                result.BreakPopulating = true;
+            }
+            else if (rawJson.Trim().All(c => c == '\0'))
+            {
+                LogError("an all-NUL string content was found in the data source", populatedObject);
+                result.BreakPopulating = true;
+            }
+
+            return result;
+        }
+
+        private void LogError(string reason, object obj)
+        {
+            logger.Error(string.Format(
+                "While restoring state for object {0}, {1}. Skipping population.",
+                obj != null ? obj.GetType().ToString() : "NULL",
+                reason));
         }
     }
 }
