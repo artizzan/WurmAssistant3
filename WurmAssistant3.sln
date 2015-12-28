@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3.Core", "WurmAssistant3.Core\WurmAssistant3.Core.csproj", "{DA679803-09BD-4D44-9C0B-2DCC4D179F6B}"
 EndProject
@@ -131,8 +131,5 @@ Global
 		{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9} = {1038DFDD-F4C9-4DBA-A83F-59CDF1D37EF9}
 		{C2591795-C58C-4B9A-A1DD-38669C0B0B3D} = {F1822F63-F88F-46C0-B418-C381F194896E}
 		{C8867A15-9144-48FD-8816-0283FDB38C6B} = {F1822F63-F88F-46C0-B418-C381F194896E}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
