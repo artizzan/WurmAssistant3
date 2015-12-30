@@ -67,7 +67,8 @@ namespace AldursLab.WurmAssistant.Launcher.Contracts
         {
             if (AnyInstalled)
             {
-                return GetInstalledVersions().OrderByDescending(info => info.BuildNumber).First();
+                var installedVersions = GetInstalledVersions();
+                return installedVersions.OrderByDescending(info => int.Parse(info.BuildNumber)).First();
             }
 
             return null;
