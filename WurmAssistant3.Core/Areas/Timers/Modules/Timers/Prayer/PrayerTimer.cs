@@ -387,16 +387,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Timers.Modules.Timers.Prayer
 
         public override void HandleNewSkillLogLine(LogEntry line)
         {
+            Logger.Debug($"Timer: {this}; processing skill log message: {line}");
+
             favorNotify.HandleNewSkillLogLine(line);
             // "[02:03:41] Faith increased by 0,124 to 27,020"
             if (line.Content.StartsWith("Faith increased", StringComparison.Ordinal)
                 || line.Content.StartsWith("Faith decreased", StringComparison.Ordinal))
             {
-
+                Logger.Debug($"Timer: {this}; skill log message ident as faith gain: {line}");
                 var info = skillEntryParser.TryParseSkillInfoFromLogLine(line);
                 if (info != null && info.Gain != null)
                 {
                     float faithskillgain = info.Gain.Value;
+
+                    Logger.Debug($"Timer: {this}; skill log faith gain message parsed: {line}; faith gain: {info.Gain.Value}");
 
                     if (faithskillgain >= 0.120F)
                     {
