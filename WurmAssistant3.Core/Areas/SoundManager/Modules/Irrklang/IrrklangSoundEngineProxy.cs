@@ -11,7 +11,11 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Modules.Irrklang
             engine = new IrrKlang.ISoundEngine();
         }
 
-        public float SoundVolume { get; set; }
+        public float SoundVolume
+        {
+            get { return engine.SoundVolume; }
+            set { engine.SoundVolume = value; }
+        }
 
         public ISound Play2D(string soundFilename, bool playLooped, bool startPaused)
         {
