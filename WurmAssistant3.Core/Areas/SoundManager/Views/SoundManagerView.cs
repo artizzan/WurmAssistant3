@@ -30,10 +30,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Views
 
             trackBarAdjustedVolume.Enabled = false;
             RefreshSoundsList();
-            globalVolumeTrackBar.Value = ((int) (soundManager.GlobalVolume*100f)).ConstrainToRange(0, 100);
 
             soundsLibrary.SoundsChanged += SoundsLibraryOnSoundsChanged;
             this.Closed += (sender, args) => soundsLibrary.SoundsChanged -= SoundsLibraryOnSoundsChanged;
+        }
+
+        public void SetSoundSlider(float volume)
+        {
+            globalVolumeTrackBar.Value = ((int)(soundManager.GlobalVolume * 100f)).ConstrainToRange(0, 100);
         }
 
         void SoundsLibraryOnSoundsChanged(object sender, EventArgs eventArgs)
