@@ -50,6 +50,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.SoundManager.Modules
         public void Initialize()
         {
             engine.SoundVolume = globalVolume;
+            view.SetSoundSlider(globalVolume);
         }
 
         public float GlobalVolume
