@@ -211,7 +211,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.LogSearcher.Views
 
             buttonCommitSearch.Text = "Loading results...";
 
-            labelAllResults.Text = "All results: " + results.Count;
+            labelAllResults.Text = "All results: " + matches.Count;
 
             richTextBoxAllLines.Visible = false;
             listBoxAllResults.Visible = false;
