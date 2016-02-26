@@ -61,6 +61,16 @@ namespace AldursLab.WurmAssistant3.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _2016_02_26_20h57_49 {
+            get {
+                object obj = ResourceManager.GetObject("_2016_02_26_20h57_49", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Action Queue Trigger modding how-to
         ///
         ///Trigger parses new log events from the game logs, matching them against all configured conditions.
@@ -136,8 +146,7 @@ namespace AldursLab.WurmAssistant3.Core.Properties {
         ///Columns:
         ///
         ///Damage caused / Attack Strengths - detailed list of damage caused to Defender and actual strengths of attacks, which caused this damage.
-        ///
-        ///Spell triggers - how many times a spell activated against Defender. Supports: venom, f [rest of string was truncated]&quot;;.
+        ///Slain - number of creatures slain. Counts only for &quot;You&quot; vs something else, when that so [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CombatStatisticsLegend {
             get {
