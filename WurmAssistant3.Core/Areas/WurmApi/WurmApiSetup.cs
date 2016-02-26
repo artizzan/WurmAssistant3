@@ -88,11 +88,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.WurmApi
 
             var wurmApiDataDir = new DirectoryInfo(Path.Combine(dataDirectory.DirectoryPath, "WurmApi"));
 
-            var wurmApi = AldursLab.WurmApi.WurmApiFactory.Create(wurmApiDataDir.FullName,
-                loggerFactory.Create(),
-                eventMarshaller,
-                wurmInstallDirectory,
-                wurmApiConfig);
+            var wurmApi = AldursLab.WurmApi.WurmApiFactory.Create(
+                new WurmApiCreationOptions()
+                {
+                    DataDirPath = wurmApiDataDir.FullName,
+                    WurmApiLogger = loggerFactory.Create(),
+                    WurmApiEventMarshaller = eventMarshaller,
+                    WurmClientInstallDirectory = wurmInstallDirectory,
+                    WurmApiConfig = wurmApiConfig
+                });
 
             config.DropAllWurmApiCachesToggle = false;
 
