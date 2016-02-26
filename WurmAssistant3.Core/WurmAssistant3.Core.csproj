@@ -143,6 +143,7 @@
     <Compile Include="Areas\Config\Contracts\ISettingsEditViewFactory.cs" />
     <Compile Include="Areas\Config\Modules\ServerInfoManager.cs" />
     <Compile Include="Areas\Config\Contracts\ServerInformation.cs" />
+    <Compile Include="Areas\Config\Modules\VisualCppRedistDetector.cs" />
     <Compile Include="Areas\Config\Views\ServersEditorView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -154,6 +155,12 @@
     </Compile>
     <Compile Include="Areas\Config\Views\SettingsEditView.Designer.cs">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Config\Views\VisualCppMissingHelperView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Config\Views\VisualCppMissingHelperView.Designer.cs">
+      <DependentUpon>VisualCppMissingHelperView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\CraftingAssistant\CraftingAssistantSetup.cs" />
     <Compile Include="Areas\CraftingAssistant\Modules\CraftingAssistantFeature.cs" />
@@ -888,6 +895,9 @@
     <EmbeddedResource Include="Areas\Config\Views\SettingsEditView.resx">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Config\Views\VisualCppMissingHelperView.resx">
+      <DependentUpon>VisualCppMissingHelperView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Areas\CraftingAssistant\Views\CraftingAssistantView.resx">
       <DependentUpon>CraftingAssistantView.cs</DependentUpon>
     </EmbeddedResource>
@@ -1126,6 +1136,7 @@
     <None Include="Resources\WurmAssistantUnlimitedIcon.png" />
     <None Include="Resources\ActionQueueModdingHelp.txt" />
     <None Include="Resources\beer.png" />
+    <None Include="Resources\2016-02-26_20h57_49.png" />
     <Content Include="Resources\close_icon.gif" />
     <None Include="Resources\combat1.png" />
     <None Include="Resources\Combat.png" />

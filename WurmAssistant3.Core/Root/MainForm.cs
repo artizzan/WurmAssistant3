@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -9,6 +11,8 @@ using AldursLab.Essentials.Synchronization;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
+using AldursLab.WurmAssistant3.Core.Areas.Config.Modules;
+using AldursLab.WurmAssistant3.Core.Areas.Config.Views;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Modules;
@@ -289,49 +293,21 @@ namespace AldursLab.WurmAssistant3.Core.Root
                 }
                 catch (Exception exception)
                 {
-                    bool restart = false;
-                    var btn1 = new Button()
+                    bool handled = false;
+
+                    // Trying to handle missing irrKlang dependencies.
+                    // Checking for specific part of the message, because the rest of it may be localized.
+                    if (exception.GetType() == typeof (FileNotFoundException)
+                        && exception.Message.Contains("'irrKlang.NET4.dll'"))
                     {
-                        Text = "Reset Wurm Assistant config",
-                        Height = 28,
-                        Width = 220
-                    };
-                    btn1.Click += (o, args) =>
+                        handled = HandleMissingIrrklangDependency(exception);
+                    }
+
+                    if (!handled)
                     {
-                        if (bootstrapper.TryResetConfig())
-                        {
-                            MessageBox.Show("Reset complete, please restart.", "Done", MessageBoxButtons.OK);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Reset was not possible.", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    };
-                    var btn2 = new Button()
-                    {
-                        Text = "Restart Wurm Assistant",
-                        Height = 28,
-                        Width = 220,
-                        DialogResult = DialogResult.OK
-                    };
-                    btn2.Click += (o, args) => restart = true;
-                    var btn3 = new Button()
-                    {
-                        Text = "Close Wurm Assistant",
-                        Height = 28,
-                        Width = 220,
-                        DialogResult = DialogResult.OK
-                    };
-                    var view = new UniversalTextDisplayView(btn3, btn2, btn1)
-                    {
-                        Text = "OH NO!!",
-                        ContentText =
-                            "Application startup was interrupted by an ugly error! " + Environment.NewLine
-                            + Environment.NewLine + exception.ToString()
-                    };
-                    view.ShowDialog();
-                    if (restart) Restart();
-                    else Shutdown();
+                        HandleOtherError(exception);
+                    }
+                    
                     return;
                 }
                 finally
@@ -342,6 +318,68 @@ namespace AldursLab.WurmAssistant3.Core.Root
                 bootstrapped = true;
                 UpdateTimer.Enabled = true;
             }
+        }
+
+        void HandleOtherError(Exception exception)
+        {
+            bool restart = false;
+            var btn1 = new Button()
+            {
+                Text = "Reset Wurm Assistant config",
+                Height = 28,
+                Width = 220
+            };
+            btn1.Click += (o, args) =>
+            {
+                if (bootstrapper.TryResetConfig())
+                {
+                    MessageBox.Show("Reset complete, please restart.", "Done", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    MessageBox.Show("Reset was not possible.", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            };
+            var btn2 = new Button()
+            {
+                Text = "Restart Wurm Assistant",
+                Height = 28,
+                Width = 220,
+                DialogResult = DialogResult.OK
+            };
+            btn2.Click += (o, args) => restart = true;
+            var btn3 = new Button()
+            {
+                Text = "Close Wurm Assistant",
+                Height = 28,
+                Width = 220,
+                DialogResult = DialogResult.OK
+            };
+            var view = new UniversalTextDisplayView(btn3, btn2, btn1)
+            {
+                Text = "OH NO!!",
+                ContentText = "Application startup was interrupted by an ugly error! "
+                              + Environment.NewLine
+                              + Environment.NewLine + exception.ToString()
+            };
+
+            view.ShowDialog();
+            if (restart) Restart();
+            else Shutdown();
+        }
+
+        bool HandleMissingIrrklangDependency(Exception exception)
+        {
+            var visualCppDetector = new VisualCppRedistDetector();
+            // trying to detect if Visual C++ Redistributable x86 SP1 is installed
+            if (!visualCppDetector.IsInstalled2010X86Sp1())
+            {
+                var form = new VisualCppMissingHelperView(exception);
+                form.ShowDialog();
+                Shutdown();
+                return true;
+            }
+            return false;
         }
 
         private void UpdateTimer_Tick(object sender, EventArgs e)

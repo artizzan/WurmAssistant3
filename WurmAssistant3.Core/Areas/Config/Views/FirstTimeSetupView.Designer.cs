@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FirstTimeSetupView));
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.wurmOnlineClientDirPath = new System.Windows.Forms.TextBox();
@@ -90,25 +89,27 @@
             // rbOsMac
             // 
             this.rbOsMac.AutoSize = true;
+            this.rbOsMac.Enabled = false;
             this.rbOsMac.Location = new System.Drawing.Point(9, 81);
             this.rbOsMac.Margin = new System.Windows.Forms.Padding(4);
             this.rbOsMac.Name = "rbOsMac";
-            this.rbOsMac.Size = new System.Drawing.Size(185, 21);
+            this.rbOsMac.Size = new System.Drawing.Size(190, 21);
             this.rbOsMac.TabIndex = 2;
             this.rbOsMac.TabStop = true;
-            this.rbOsMac.Text = "Mac OS X - limited sound";
+            this.rbOsMac.Text = "Mac OS X - not supported";
             this.rbOsMac.UseVisualStyleBackColor = true;
             // 
             // rbOsLinux
             // 
             this.rbOsLinux.AutoSize = true;
+            this.rbOsLinux.Enabled = false;
             this.rbOsLinux.Location = new System.Drawing.Point(9, 53);
             this.rbOsLinux.Margin = new System.Windows.Forms.Padding(4);
             this.rbOsLinux.Name = "rbOsLinux";
-            this.rbOsLinux.Size = new System.Drawing.Size(239, 21);
+            this.rbOsLinux.Size = new System.Drawing.Size(244, 21);
             this.rbOsLinux.TabIndex = 1;
             this.rbOsLinux.TabStop = true;
-            this.rbOsLinux.Text = "Linux (eg. Ubuntu) - limited sound";
+            this.rbOsLinux.Text = "Linux (eg. Ubuntu) - not supported";
             this.rbOsLinux.UseVisualStyleBackColor = true;
             // 
             // rbOsWindows
@@ -151,7 +152,8 @@
             this.textBox1.Size = new System.Drawing.Size(504, 119);
             this.textBox1.TabIndex = 6;
             this.textBox1.TabStop = false;
-            this.textBox1.Text = resources.GetString("textBox1.Text");
+            this.textBox1.Text = "Support for non-windows has been disabled and will not be back. \r\nWurm Assistant " +
+    "is very sorry!\r\n\r\nIf needed, this setup can be run again from Options menu.";
             // 
             // FirstTimeSetupView
             // 
