@@ -11,6 +11,8 @@ using AldursLab.WurmAssistant.Shared.Dtos;
 using AldursLab.WurmAssistantWebService.Model;
 using AldursLab.WurmAssistantWebService.Model.Entities;
 using AldursLab.WurmAssistantWebService.Model.Services;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace AldursLab.WurmAssistantWebService.Controllers
 {
@@ -23,6 +25,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         protected readonly ApplicationDbContext Context = new ApplicationDbContext();
         protected readonly Files Files = new Files();
         protected readonly Logs Logs = new Logs();
+        protected readonly TelemetryClient TelemetryClient = new TelemetryClient();
 
         [Route("UpdateSourceHost")]
         public string GetUpdateSourceHost()
@@ -227,6 +230,10 @@ namespace AldursLab.WurmAssistantWebService.Controllers
             catch (Exception exception)
             {
                 Logs.Add("WurmAssistant3Controller.RemoveOutdatedPackages", "Error: " + exception.ToString());
+                TelemetryClient.TrackException(exception, new Dictionary<string, string>()
+                {
+                    ["BuildCode"] = buildCode
+                });
             }
         }
     }
