@@ -919,5 +919,20 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
                 }
             }
         }
+
+        private void bloodBayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateCreaturesColors(new CreatureColor(CreatureColorId.BloodBay));
+        }
+
+        private void ebonyBlackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateCreaturesColors(new CreatureColor(CreatureColorId.EbonyBlack));
+        }
+
+        private void piebaldPintoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateCreaturesColors(new CreatureColor(CreatureColorId.PiebaldPinto));
+        }
     }
 }

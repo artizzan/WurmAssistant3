@@ -37,6 +37,10 @@
             this.brownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.goldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.bloodBayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ebonyBlackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.piebaldPintoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.notACreatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,6 +71,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.objectListView1 = new BrightIdeasSoftware.ObjectListView();
             this.olvColumnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnServer = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnHerd = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnBreedValue = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnFather = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -89,7 +94,6 @@
             this.olvColumnExactAge = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnBrandedFor = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.olvColumnServer = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.contextMenuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -112,7 +116,7 @@
             this.deleteToolStripMenuItem,
             this.tESTToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(190, 220);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(190, 242);
             // 
             // setColorToolStripMenuItem
             // 
@@ -123,6 +127,10 @@
             this.brownToolStripMenuItem,
             this.goldToolStripMenuItem,
             this.toolStripSeparator3,
+            this.bloodBayToolStripMenuItem,
+            this.ebonyBlackToolStripMenuItem,
+            this.piebaldPintoToolStripMenuItem,
+            this.toolStripSeparator6,
             this.notACreatureToolStripMenuItem});
             this.setColorToolStripMenuItem.Name = "setColorToolStripMenuItem";
             this.setColorToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
@@ -131,47 +139,73 @@
             // blackToolStripMenuItem
             // 
             this.blackToolStripMenuItem.Name = "blackToolStripMenuItem";
-            this.blackToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.blackToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.blackToolStripMenuItem.Text = "Black";
             this.blackToolStripMenuItem.Click += new System.EventHandler(this.blackToolStripMenuItem_Click);
             // 
             // whiteToolStripMenuItem
             // 
             this.whiteToolStripMenuItem.Name = "whiteToolStripMenuItem";
-            this.whiteToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.whiteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.whiteToolStripMenuItem.Text = "White";
             this.whiteToolStripMenuItem.Click += new System.EventHandler(this.whiteToolStripMenuItem_Click);
             // 
             // greyToolStripMenuItem
             // 
             this.greyToolStripMenuItem.Name = "greyToolStripMenuItem";
-            this.greyToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.greyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.greyToolStripMenuItem.Text = "Grey";
             this.greyToolStripMenuItem.Click += new System.EventHandler(this.greyToolStripMenuItem_Click);
             // 
             // brownToolStripMenuItem
             // 
             this.brownToolStripMenuItem.Name = "brownToolStripMenuItem";
-            this.brownToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.brownToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.brownToolStripMenuItem.Text = "Brown";
             this.brownToolStripMenuItem.Click += new System.EventHandler(this.brownToolStripMenuItem_Click);
             // 
             // goldToolStripMenuItem
             // 
             this.goldToolStripMenuItem.Name = "goldToolStripMenuItem";
-            this.goldToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.goldToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.goldToolStripMenuItem.Text = "Gold";
             this.goldToolStripMenuItem.Click += new System.EventHandler(this.goldToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(105, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            // 
+            // bloodBayToolStripMenuItem
+            // 
+            this.bloodBayToolStripMenuItem.Name = "bloodBayToolStripMenuItem";
+            this.bloodBayToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.bloodBayToolStripMenuItem.Text = "Blood Bay";
+            this.bloodBayToolStripMenuItem.Click += new System.EventHandler(this.bloodBayToolStripMenuItem_Click);
+            // 
+            // ebonyBlackToolStripMenuItem
+            // 
+            this.ebonyBlackToolStripMenuItem.Name = "ebonyBlackToolStripMenuItem";
+            this.ebonyBlackToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.ebonyBlackToolStripMenuItem.Text = "Ebony Black";
+            this.ebonyBlackToolStripMenuItem.Click += new System.EventHandler(this.ebonyBlackToolStripMenuItem_Click);
+            // 
+            // piebaldPintoToolStripMenuItem
+            // 
+            this.piebaldPintoToolStripMenuItem.Name = "piebaldPintoToolStripMenuItem";
+            this.piebaldPintoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.piebaldPintoToolStripMenuItem.Text = "Piebald Pinto";
+            this.piebaldPintoToolStripMenuItem.Click += new System.EventHandler(this.piebaldPintoToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(149, 6);
             // 
             // notACreatureToolStripMenuItem
             // 
             this.notACreatureToolStripMenuItem.Name = "notACreatureToolStripMenuItem";
-            this.notACreatureToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.notACreatureToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.notACreatureToolStripMenuItem.Text = "None";
             this.notACreatureToolStripMenuItem.Click += new System.EventHandler(this.notACreatureToolStripMenuItem_Click);
             // 
@@ -191,40 +225,40 @@
             // fatToolStripMenuItem
             // 
             this.fatToolStripMenuItem.Name = "fatToolStripMenuItem";
-            this.fatToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.fatToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.fatToolStripMenuItem.Text = "Fat";
             this.fatToolStripMenuItem.Click += new System.EventHandler(this.fatToolStripMenuItem_Click);
             // 
             // diseasedToolStripMenuItem
             // 
             this.diseasedToolStripMenuItem.Name = "diseasedToolStripMenuItem";
-            this.diseasedToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.diseasedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.diseasedToolStripMenuItem.Text = "Diseased";
             this.diseasedToolStripMenuItem.Click += new System.EventHandler(this.diseasedToolStripMenuItem_Click);
             // 
             // starvingToolStripMenuItem
             // 
             this.starvingToolStripMenuItem.Name = "starvingToolStripMenuItem";
-            this.starvingToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.starvingToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.starvingToolStripMenuItem.Text = "Starving";
             this.starvingToolStripMenuItem.Click += new System.EventHandler(this.starvingToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(117, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
             // 
             // deadToolStripMenuItem
             // 
             this.deadToolStripMenuItem.Name = "deadToolStripMenuItem";
-            this.deadToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.deadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.deadToolStripMenuItem.Text = "Dead";
             this.deadToolStripMenuItem.Click += new System.EventHandler(this.deadToolStripMenuItem_Click);
             // 
             // soldToolStripMenuItem
             // 
             this.soldToolStripMenuItem.Name = "soldToolStripMenuItem";
-            this.soldToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.soldToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.soldToolStripMenuItem.Text = "Sold";
             this.soldToolStripMenuItem.Click += new System.EventHandler(this.soldToolStripMenuItem_Click);
             // 
@@ -416,6 +450,7 @@
             this.objectListView1.AllColumns.Add(this.olvColumnExactAge);
             this.objectListView1.AllColumns.Add(this.olvColumnBrandedFor);
             this.objectListView1.AllowColumnReorder = true;
+            this.objectListView1.CellEditUseWholeCell = false;
             this.objectListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnName,
             this.olvColumnServer,
@@ -440,6 +475,7 @@
             this.olvColumnBirthDate,
             this.olvColumnExactAge,
             this.olvColumnBrandedFor});
+            this.objectListView1.Cursor = System.Windows.Forms.Cursors.Default;
             this.objectListView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.objectListView1.FullRowSelect = true;
             this.objectListView1.GridLines = true;
@@ -448,6 +484,8 @@
             this.objectListView1.HasCollapsibleGroups = false;
             this.objectListView1.HeaderWordWrap = true;
             this.objectListView1.HideSelection = false;
+            this.objectListView1.HighlightBackgroundColor = System.Drawing.Color.Empty;
+            this.objectListView1.HighlightForegroundColor = System.Drawing.Color.Empty;
             this.objectListView1.Location = new System.Drawing.Point(2, 26);
             this.objectListView1.Margin = new System.Windows.Forms.Padding(2);
             this.objectListView1.Name = "objectListView1";
@@ -476,6 +514,12 @@
             this.olvColumnName.MinimumWidth = 20;
             this.olvColumnName.Text = "Name";
             this.olvColumnName.UseInitialLetterForGroup = true;
+            // 
+            // olvColumnServer
+            // 
+            this.olvColumnServer.AspectName = "ServerAspect";
+            this.olvColumnServer.MinimumWidth = 20;
+            this.olvColumnServer.Text = "Server";
             // 
             // olvColumnHerd
             // 
@@ -608,12 +652,6 @@
             this.timer1.Interval = 60000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // olvColumnServer
-            // 
-            this.olvColumnServer.AspectName = "ServerAspect";
-            this.olvColumnServer.MinimumWidth = 20;
-            this.olvColumnServer.Text = "Server";
-            // 
             // UCGrangerCreatureList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -696,6 +734,9 @@
         private BrightIdeasSoftware.OLVColumn olvColumnExactAge;
         private BrightIdeasSoftware.OLVColumn olvColumnBrandedFor;
         private BrightIdeasSoftware.OLVColumn olvColumnServer;
-
+        private System.Windows.Forms.ToolStripMenuItem bloodBayToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ebonyBlackToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem piebaldPintoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
     }
 }

@@ -6,11 +6,12 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 {
-    public enum CreatureColorId { Unknown = 0, Black = 1, White = 2, Grey = 3, Brown = 4, Gold = 5 }
+    public enum CreatureColorId
+    {
+        Unknown = 0, Black = 1, White = 2, Grey = 3, Brown = 4,
+        Gold = 5, BloodBay = 6, EbonyBlack = 7, PiebaldPinto = 8
+    }
 
-    /// <summary>
-    /// equal and operator overloaded to compare underlying enum
-    /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
     public class CreatureColor
     {
@@ -91,9 +92,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             {
                 return new CreatureColor((CreatureColorId)Enum.Parse(typeof(CreatureColorId), enumStr, true));
             }
-            catch (Exception _e)
+            catch (Exception)
             {
-                //Aldurcraft.Utility.Logger.LogError("Parse error for CreatureColor from enumStr: " + enumStr, "CreatureColor", _e);
                 return new CreatureColor(CreatureColorId.Unknown);
             }
         }
@@ -119,8 +119,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
                     return System.Drawing.Color.Gold;
                 case CreatureColorId.Grey:
                     return System.Drawing.Color.LightGray;
+                case CreatureColorId.BloodBay:
+                    return System.Drawing.Color.RosyBrown;
+                case CreatureColorId.EbonyBlack:
+                    return System.Drawing.Color.Black;
+                case CreatureColorId.PiebaldPinto:
+                    return System.Drawing.Color.DarkGray;
                 default:
-                    //Aldurcraft.Utility.Logger.LogError("no ARGB match for CreatureColor: " + EnumVal, this);
                     return null;
             }
         }
@@ -201,9 +206,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             {
                 return new CreatureAge((CreatureAgeId)Enum.Parse(typeof(CreatureAgeId), enumStr, true));
             }
-            catch (Exception _e)
+            catch (Exception)
             {
-                //Aldurcraft.Utility.Logger.LogError("Parse error for CreatureAge from enumStr: " + enumStr, "CreatureColor", _e);
                 return new CreatureAge(CreatureAgeId.Unknown);
             }
         }
