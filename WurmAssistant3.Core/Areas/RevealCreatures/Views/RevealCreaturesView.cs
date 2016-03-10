@@ -57,14 +57,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Views
                 if (!string.IsNullOrWhiteSpace(gamechar))
                 {
                     var apichar = wurmApi.Characters.Get(gamechar);
-                    var currentServer = await apichar.TryGetCurrentServerAsync();
-                    var results =
-                        await
-                            apichar.Logs.ScanLogsServerGroupRestrictedAsync(
-                                DateTime.Now.Subtract(TimeSpan.FromDays(90)),
-                                DateTime.Now,
-                                LogType.Event,
-                                currentServer.ServerGroup);
+
+                    var results = await
+                        apichar.Logs.ScanLogsAsync(
+                            DateTime.Now.Subtract(TimeSpan.FromDays(90)),
+                            DateTime.Now,
+                            LogType.Event);
 
                     LogEntry latestCastEntry =
                         results.Where(entry => entry.Content.Equals("You receive insights about the area."))
@@ -100,6 +98,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Views
                                    .ToList();
                         resultsView.SetObjects(parsedResults);
                         castDate.Text = "Found: " + latestCastEntry.Timestamp.ToString(CultureInfo.CurrentCulture);
+                        var ago = TryCalculateHowLongAgo(latestCastEntry.Timestamp);
+                        howLongAgoLabel.Text = ago != TimeSpan.Zero ? $"({ago.ToStringCompact()} ago)" : string.Empty;
                     }
                     else
                     {
@@ -117,10 +117,23 @@ namespace AldursLab.WurmAssistant3.Core.Areas.RevealCreatures.Views
             }
         }
 
+        TimeSpan TryCalculateHowLongAgo(DateTime dateTime)
+        {
+            try
+            {
+                return DateTime.Now - dateTime;
+            }
+            catch (Exception)
+            {
+                return TimeSpan.Zero;
+            }
+        }
+
         void ClearOutput()
         {
             resultsView.ClearObjects();
             castDate.Text = string.Empty;
+            howLongAgoLabel.Text = string.Empty;
         }
 
         private void RevealCreaturesView_FormClosing(object sender, FormClosingEventArgs e)

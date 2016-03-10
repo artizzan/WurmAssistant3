@@ -38,6 +38,7 @@
             this.findText = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.castDate = new System.Windows.Forms.Label();
+            this.howLongAgoLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.resultsView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -145,11 +146,21 @@
             this.castDate.Text = "cast date";
             this.castDate.Click += new System.EventHandler(this.castDate_Click);
             // 
+            // howLongAgoLabel
+            // 
+            this.howLongAgoLabel.AutoSize = true;
+            this.howLongAgoLabel.Location = new System.Drawing.Point(330, 42);
+            this.howLongAgoLabel.Name = "howLongAgoLabel";
+            this.howLongAgoLabel.Size = new System.Drawing.Size(51, 13);
+            this.howLongAgoLabel.TabIndex = 8;
+            this.howLongAgoLabel.Text = "cast date";
+            // 
             // RevealCreaturesView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(510, 380);
+            this.Controls.Add(this.howLongAgoLabel);
             this.Controls.Add(this.castDate);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.findText);
@@ -179,5 +190,6 @@
         private System.Windows.Forms.TextBox findText;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label castDate;
+        private System.Windows.Forms.Label howLongAgoLabel;
     }
 }
