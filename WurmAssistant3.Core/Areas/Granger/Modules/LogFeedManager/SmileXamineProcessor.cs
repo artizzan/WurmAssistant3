@@ -561,15 +561,24 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             IEnumerable<CreatureEntity> query;
             if (checkInnerName)
             {
-                if (string.IsNullOrWhiteSpace(Creature.GetInnerName(creatureBuffer.Name)))
+                var bufferInnerNameInfo = Creature.GetInnerNameInfo(creatureBuffer.Name);
+                if (!bufferInnerNameInfo.HasInnerName)
                 {
                     // cannot match by inner name, this creature doesn't have one
                     return new CreatureEntity[0];
                 }
                 query = context.Creatures
                                .Where(x =>
-                                   Creature.GetInnerName(x.Name) == Creature.GetInnerName(creatureBuffer.Name) &&
-                                   viableHerds.Contains(x.Herd));
+                               {
+                                   var iteratedInnerNameInfo = Creature.GetInnerNameInfo(x.Name);
+                                   // consider only those creatures, which have inner names
+                                   if (!iteratedInnerNameInfo.HasInnerName)
+                                   {
+                                       return false;
+                                   }
+                                   return iteratedInnerNameInfo.InnerName == bufferInnerNameInfo.InnerName &&
+                                          viableHerds.Contains(x.Herd);
+                               });
             }
             else
             {

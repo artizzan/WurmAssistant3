@@ -243,7 +243,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 
         public string Name { get { return Entity.Name; } set { Entity.Name = value; } }
 
-        public string InnerName { get { return GetInnerName(Entity.Name); } }
+        public string InnerName { get { return GetInnerNameInfo(Entity.Name).InnerName; } }
 
         public string Father { get { return Entity.FatherName; } set { Entity.FatherName = value; } }
 
@@ -499,11 +499,38 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             return Age.CreatureAgeId == CreatureAgeId.YoungFoal || Age.CreatureAgeId == CreatureAgeId.AdolescentFoal;
         }
 
-        public static string GetInnerName(string name)
+        //public static string GetInnerName(string name)
+        //{
+        //    return GetInnerNameInfo(name).InnerName;
+        //    //var match = Regex.Match(name, @"'(.+)'", RegexOptions.Compiled);
+        //    //return match.Success ? match.Groups[1].Value : string.Empty;
+        //}
+
+        public static InnerNameInfo GetInnerNameInfo(string name)
         {
             var match = Regex.Match(name, @"'(.+)'", RegexOptions.Compiled);
-            return match.Success ? match.Groups[1].Value : string.Empty;
+            if (match.Success)
+            {
+                return new InnerNameInfo()
+                {
+                    HasInnerName = true,
+                    InnerName = match.Groups[1].Value
+                };
+            }
+            else
+            {
+                return new InnerNameInfo()
+                {
+                    HasInnerName = false,
+                    InnerName = string.Empty
+                };
+            }
         }
+    }
 
+    public class InnerNameInfo
+    {
+        public bool HasInnerName { get; set; }
+        public string InnerName { get; set; }
     }
 }
