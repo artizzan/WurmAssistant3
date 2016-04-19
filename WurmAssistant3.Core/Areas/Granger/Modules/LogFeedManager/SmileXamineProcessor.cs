@@ -159,12 +159,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 //[17:11:42] She will deliver in about 4.
                 if (line.Contains("She will deliver in") && !verifyList.Pregnant)
                 {
-                    grangerDebug.Log("found maybe prengant line");
-                    Match match = Regex.Match(line, @"She will deliver in about (\d+)");
+                    grangerDebug.Log("found maybe pregnant line");
+                    Match match = Regex.Match(line, @"She will deliver in about (\d+) days");
                     if (match.Success)
                     {
                         double length = Double.Parse(match.Groups[1].Value) + 1D;
-                        creatureBuffer.PregnantUntil = DateTime.Now + TimeSpan.FromHours(length * 21D);
+                        creatureBuffer.PregnantUntil = DateTime.Now + TimeSpan.FromDays(length);
                         grangerDebug.Log("found creature to be pregnant, estimated delivery: " + creatureBuffer.PregnantUntil);
                     }
                     verifyList.Pregnant = true;
@@ -488,7 +488,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 trayPopups.Schedule(
                     partialMessage + " contain many creatures named " + creatureBuffer.Name
                     + ", narrow herd selection",
-                    "CAN'T ADD OR UPDATE CREATE",
+                    "CAN'T ADD OR UPDATE CREATURE",
                     6000);
                 //notify user to narrow the herd selection
             }
@@ -497,14 +497,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             {
                 const string message = "exactly one herd has to be active to add new creature";
                 grangerDebug.Log(message);
-                trayPopups.Schedule(message, "CAN'T ADD OR UPDATE CREATE", 4000);
+                trayPopups.Schedule(message, "CAN'T ADD OR UPDATE CREATURE", 4000);
             }
             else if (parentModule.Settings.DoNotBlockDataUpdateUnlessMultiplesInEntireDb
                      && selectedHerds.Length == 0)
             {
                 const string message = "at least one herd must be select to add new creature";
                 grangerDebug.Log(message);
-                trayPopups.Schedule(message, "CAN'T ADD OR UPDATE CREATE", 4000);
+                trayPopups.Schedule(message, "CAN'T ADD OR UPDATE CREATURE", 4000);
             }
             else
             {
@@ -512,7 +512,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 const string message = "add/update creature failed for unknown reasons";
                 grangerDebug.Log(message);
                 logger.Error(message);
-                trayPopups.Schedule(message, "CAN'T ADD OR UPDATE CREATE", 4000);
+                trayPopups.Schedule(message, "CAN'T ADD OR UPDATE CREATURE", 4000);
             }
         }
 
