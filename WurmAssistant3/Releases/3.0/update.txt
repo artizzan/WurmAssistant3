@@ -1,1 +1,0 @@
-﻿files in this folder should describe all features of version 3.0

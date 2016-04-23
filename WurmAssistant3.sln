@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3.Core", "WurmAssistant3.Core\WurmAssistant3.Core.csproj", "{DA679803-09BD-4D44-9C0B-2DCC4D179F6B}"
 EndProject
@@ -22,8 +22,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui.Wpf", "AldursLab\Lab\Gui.Wpf\Gui.Wpf.csproj", "{3285F7B4-5F46-4120-8CDB-10CD815D7650}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui", "AldursLab\Lab\Gui\Gui.csproj", "{1EA6D250-6EA0-4C5D-B681-6BCF9B0A8F02}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3", "WurmAssistant3\WurmAssistant3.csproj", "{090B405F-748E-4E4E-83AE-BABB93E0821E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant.Shared", "WurmAssistant.Shared\WurmAssistant.Shared.csproj", "{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}"
 EndProject
@@ -48,6 +46,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{627E5F
 	ProjectSection(SolutionItems) = preProject
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3", "WurmAssistant3\WurmAssistant3.csproj", "{29F8B209-AF74-4338-8294-96EC8D9DC9AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,10 +87,6 @@ Global
 		{1EA6D250-6EA0-4C5D-B681-6BCF9B0A8F02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EA6D250-6EA0-4C5D-B681-6BCF9B0A8F02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EA6D250-6EA0-4C5D-B681-6BCF9B0A8F02}.Release|Any CPU.Build.0 = Release|Any CPU
-		{090B405F-748E-4E4E-83AE-BABB93E0821E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{090B405F-748E-4E4E-83AE-BABB93E0821E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{090B405F-748E-4E4E-83AE-BABB93E0821E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{090B405F-748E-4E4E-83AE-BABB93E0821E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -115,6 +111,10 @@ Global
 		{C8867A15-9144-48FD-8816-0283FDB38C6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8867A15-9144-48FD-8816-0283FDB38C6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8867A15-9144-48FD-8816-0283FDB38C6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29F8B209-AF74-4338-8294-96EC8D9DC9AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29F8B209-AF74-4338-8294-96EC8D9DC9AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29F8B209-AF74-4338-8294-96EC8D9DC9AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29F8B209-AF74-4338-8294-96EC8D9DC9AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

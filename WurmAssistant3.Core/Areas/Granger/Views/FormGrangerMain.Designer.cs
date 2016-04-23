@@ -34,10 +34,10 @@
             this.buttonEditValuePreset = new System.Windows.Forms.Button();
             this.buttonTraitView = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.ucGrangerHerdList1 = new UCGrangerHerdList();
+            this.ucGrangerHerdList1 = new AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.UCGrangerHerdList();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.ucGrangerCreatureList1 = new UCGrangerCreatureList();
-            this.ucGrangerTraitView1 = new UCGrangerTraitView();
+            this.ucGrangerTraitView1 = new AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.UCGrangerTraitView();
+            this.ucGrangerCreatureList1 = new AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy.UCGrangerCreatureList();
             this.buttonHerdView = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -108,16 +108,18 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(572, 289);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 303F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(572, 320);
             this.tableLayoutPanel1.TabIndex = 8;
             // 
             // ucGrangerHerdList1
             // 
             this.ucGrangerHerdList1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucGrangerHerdList1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.ucGrangerHerdList1.Location = new System.Drawing.Point(2, 2);
-            this.ucGrangerHerdList1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ucGrangerHerdList1.Margin = new System.Windows.Forms.Padding(2);
             this.ucGrangerHerdList1.Name = "ucGrangerHerdList1";
-            this.ucGrangerHerdList1.Size = new System.Drawing.Size(108, 285);
+            this.ucGrangerHerdList1.Size = new System.Drawing.Size(108, 316);
             this.ucGrangerHerdList1.TabIndex = 0;
             // 
             // splitContainer2
@@ -135,11 +137,20 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.ucGrangerTraitView1);
-            this.splitContainer2.Size = new System.Drawing.Size(456, 285);
-            this.splitContainer2.SplitterDistance = 260;
+            this.splitContainer2.Size = new System.Drawing.Size(456, 316);
+            this.splitContainer2.SplitterDistance = 264;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 4;
             this.splitContainer2.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer2_SplitterMoved);
+            // 
+            // ucGrangerTraitView1
+            // 
+            this.ucGrangerTraitView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucGrangerTraitView1.Location = new System.Drawing.Point(0, 0);
+            this.ucGrangerTraitView1.Margin = new System.Windows.Forms.Padding(2);
+            this.ucGrangerTraitView1.Name = "ucGrangerTraitView1";
+            this.ucGrangerTraitView1.Size = new System.Drawing.Size(189, 316);
+            this.ucGrangerTraitView1.TabIndex = 2;
             // 
             // ucGrangerCreatureList1
             // 
@@ -148,17 +159,8 @@
             this.ucGrangerCreatureList1.Margin = new System.Windows.Forms.Padding(2);
             this.ucGrangerCreatureList1.Name = "ucGrangerCreatureList1";
             this.ucGrangerCreatureList1.SelectedSingleCreature = null;
-            this.ucGrangerCreatureList1.Size = new System.Drawing.Size(260, 285);
+            this.ucGrangerCreatureList1.Size = new System.Drawing.Size(264, 316);
             this.ucGrangerCreatureList1.TabIndex = 1;
-            // 
-            // ucGrangerTraitView1
-            // 
-            this.ucGrangerTraitView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ucGrangerTraitView1.Location = new System.Drawing.Point(0, 0);
-            this.ucGrangerTraitView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.ucGrangerTraitView1.Name = "ucGrangerTraitView1";
-            this.ucGrangerTraitView1.Size = new System.Drawing.Size(193, 285);
-            this.ucGrangerTraitView1.TabIndex = 2;
             // 
             // buttonHerdView
             // 
@@ -184,7 +186,8 @@
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 69F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(576, 362);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(576, 393);
             this.tableLayoutPanel2.TabIndex = 10;
             // 
             // panel1
@@ -316,7 +319,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(576, 362);
+            this.ClientSize = new System.Drawing.Size(576, 393);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);

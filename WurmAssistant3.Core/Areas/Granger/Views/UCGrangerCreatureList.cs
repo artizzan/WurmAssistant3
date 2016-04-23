@@ -781,6 +781,17 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
         Creature[] lastSelectedCreatures = null;
         private void objectListView1_SelectionChanged(object sender, EventArgs e)
         {
+            // disabled: not fired properly under WPF application, replaced by SelectedIndexChanged
+            //SelectionChanged();
+        }
+
+        private void objectListView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectionChanged();
+        }
+
+        void SelectionChanged()
+        {
             var newSelectedCreatures = SelectedCreatures;
             bool changed = SelectionChangedCheck(lastSelectedCreatures, newSelectedCreatures);
             if (!_updatingListView && changed)
