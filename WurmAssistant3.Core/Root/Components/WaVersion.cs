@@ -25,10 +25,18 @@ namespace AldursLab.WurmAssistant3.Core.Root.Components
 
             try
             {
-                var fileContent = File.ReadAllText(Path.Combine(binDirectory.FullPath, "version.dat"));
-                var version = Wa3VersionInfo.CreateFromVersionDat(fileContent);
-                logger.Info("Parsed WA version: " + version);
-                VersionInfo = version;
+                var filePath = Path.Combine(binDirectory.FullPath, "version.dat");
+                if (!File.Exists(filePath))
+                {
+                    logger.Warn($"version.dat does not exist at {filePath}. Is this development build?");
+                }
+                else
+                {
+                    var fileContent = File.ReadAllText(filePath);
+                    var version = Wa3VersionInfo.CreateFromVersionDat(fileContent);
+                    logger.Info("Parsed WA version: " + version);
+                    VersionInfo = version;
+                }
             }
             catch (Exception exception)
             {
