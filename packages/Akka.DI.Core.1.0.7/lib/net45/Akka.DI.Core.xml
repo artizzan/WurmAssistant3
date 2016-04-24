@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Akka.DI.Core</name>
+    </assembly>
+    <members>
+        <member name="T:Akka.DI.Core.DIActorContextAdapter">
+            <summary>
+            This class represents an adapter used to generate <see cref="T:Akka.Actor.Props"/> configuration
+            objects using the dependency injection (DI) extension using a given actor context.
+            </summary>
+        </member>
+        <member name="M:Akka.DI.Core.DIActorContextAdapter.#ctor(Akka.Actor.IActorContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Akka.DI.Core.DIActorContextAdapter"/> class.
+            </summary>
+            <param name="context">The actor context associated with a system that contains the DI extension.</param>
+            <exception cref="T:System.ArgumentNullException">
+            The <paramref name="context"/> was null.
+            </exception>
+        </member>
+        <member name="M:Akka.DI.Core.DIActorContextAdapter.ActorOf``1(System.String)">
+            <summary>
+            Obsolete. Use <see cref="M:Akka.DI.Core.DIActorContextAdapter.Props(System.Type)"/> or <see cref="M:Akka.DI.Core.DIActorContextAdapter.Props``1"/> methods for actor creation. This method will be removed in future versions.
+            </summary>
+            <typeparam name="TActor">N/A</typeparam>
+            <param name="name">N/A</param>
+            <returns>N/A</returns>
+        </member>
+        <member name="M:Akka.DI.Core.DIActorContextAdapter.Props(System.Type)">
+            <summary>
+            Creates a <see cref="T:Akka.Actor.Props"/> configuration object for a given actor type.
+            </summary>
+            <param name="actorType">The actor type for which to create the <see cref="T:Akka.Actor.Props"/> configuration.</param>
+            <returns>A <see cref="T:Akka.Actor.Props"/> configuration object for the given actor type.</returns>
+        </member>
+        <member name="M:Akka.DI.Core.DIActorContextAdapter.Props``1">
+            <summary>
+            Creates a <see cref="T:Akka.Actor.Props"/> configuration object for a given actor type.
+            </summary>
+            <typeparam name="TActor">The actor type for which to create the <see cref="T:Akka.Actor.Props"/> configuration.</typeparam>
+            <returns>A <see cref="T:Akka.Actor.Props"/> configuration object for the given actor type.</returns>
+        </member>
+        <member name="T:Akka.DI.Core.DIActorProducer">
+            <summary>
+            This class represents an actor creation strategy that uses dependency injection (DI) to resolve and instantiate actors based on their type.
+            </summary>
+        </member>
+        <member name="M:Akka.DI.Core.DIActorProducer.#ctor(Akka.DI.Core.IDependencyResolver,System.Type)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Akka.DI.Core.DIActorProducer"/> class.
+            </summary>
+            <param name="dependencyResolver">The resolver used to resolve the given actor type.</param>
+            <param name="actorType">The type of actor that this producer creates.</param>
+            <exception cref="T:System.ArgumentNullException">
+            Either the <paramref name="dependencyResolver"/> or the <paramref name="actorType"/> was null.
+            </exception>
+        </member>
+        <member name="P:Akka.DI.Core.DIActorProducer.ActorType">
+            <summary>
+            Retrieves the type of the actor to produce.
+            </summary>
+        </member>
+        <member name="M:Akka.DI.Core.DIActorProducer.Produce">
+            <summary>
+            Creates an actor based on the container's implementation specific actor factory.
+            </summary>
+            <returns>An actor created by the container.</returns>
+        </member>
+        <member name="M:Akka.DI.Core.DIActorProducer.Release(Akka.Actor.ActorBase)">
+            <summary>
+            Signals the container that it can release its reference to the actor.
+            </summary>
+            <param name="actor">The actor to remove from the container.</param>
+        </member>
+        <member name="T:Akka.DI.Core.DIActorSystemAdapter">
+            <summary>
+            This class represents an adapter used to generate <see cref="T:Akka.Actor.Props"/> configuration
+            objects using the dependency injection (DI) extension using a given actor system.
+            </summary>
+        </member>
+        <member name="M:Akka.DI.Core.DIActorSystemAdapter.#ctor(Akka.Actor.ActorSystem)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Akka.DI.Core.DIActorSystemAdapter"/> class.
+            </summary>
+            <param name="system">The actor system that contains the DI extension.</param>
+            <exception cref="T:System.ArgumentNullException">
+            The <paramref name="system"/> was null.
+            </exception>
+        </member>
+        <member name="M:Akka.DI.Core.DIActorSystemAdapter.Props(System.Type)">
+            <summary>
+            Creates a <see cref="T:Akka.Actor.Props"/> configuration object for a given actor type.
+            </summary>
+            <param name="actorType">The actor type for which to create the <see cref="T:Akka.Actor.Props"/> configuration.</param>
+            <returns>A <see cref="T:Akka.Actor.Props"/> configuration object for the given actor type.</returns>
+        </member>
+        <member name="M:Akka.DI.Core.DIActorSystemAdapter.Props``1">
+            <summary>
+            Creates a <see cref="T:Akka.Actor.Props"/> configuration object for a given actor type.
+            </summary>
+            <typeparam name="TActor">The actor type for which to create the <see cref="T:Akka.Actor.Props"/> configuration.</typeparam>
+            <returns>A <see cref="T:Akka.Actor.Props"/> configuration object for the given actor type.</returns>
+        </member>
+        <member name="T:Akka.DI.Core.DIExt">
+            <summary>
+            This class represents an <see cref="T:Akka.Actor.ActorSystem"/> extension used to create <see cref="T:Akka.Actor.Props"/>
+            configuration objects using a dependency injection (DI) container.
+            </summary>
+        </member>
+        <member name="M:Akka.DI.Core.DIExt.Initialize(Akka.DI.Core.IDependencyResolver)">
+            <summary>
+            Initializes the extension to use a given DI resolver.
+            </summary>
+            <param name="dependencyResolver">The resolver used to resolve types from the DI container.</param>
+            <exception cref="T:System.ArgumentNullException">The dependency resolver must not be null.</exception>
+        </member>
+        <member name="M:Akka.DI.Core.DIExt.Props(System.Type)">
+            <summary>
+            Creates a <see cref="T:Akka.Actor.Props"/> configuration object for a given actor type.
+            </summary>
+            <param name="actorType">The actor type for which to create the <see cref="T:Akka.Actor.Props"/> configuration.</param>
+            <returns>A <see cref="T:Akka.Actor.Props"/> configuration object for the given actor type.</returns>
+        </member>
+        <member name="T:Akka.DI.Core.DIExtension">
+            <summary>
+            This class represents an <see cref="T:Akka.Actor.ActorSystem"/> provider used to create the dependency injection (DI) extension.
+            </summary>
+        </member>
+        <member name="F:Akka.DI.Core.DIExtension.DIExtensionProvider">
+            <summary>
+            A static reference to the current provider.
+            </summary>
+        </member>
+        <member name="M:Akka.DI.Core.DIExtension.CreateExtension(Akka.Actor.ExtendedActorSystem)">
+            <summary>
+            Creates the dependency injection extension using a given actor system.
+            </summary>
+            <param name="system">The actor system to use when creating the extension.</param>
+            <returns>The extension created using the given actor system.</returns>
+        </member>
+        <member name="T:Akka.DI.Core.Extensions">
+            <summary>
+            This class contains extension methods used to simplify working with dependency injection (DI) inside an <see cref="T:Akka.Actor.ActorSystem"/>.
+            </summary>
+        </member>
+        <member name="M:Akka.DI.Core.Extensions.AddDependencyResolver(Akka.Actor.ActorSystem,Akka.DI.Core.IDependencyResolver)">
+            <summary>
+            Registers a dependency resolver with a given actor system.
+            </summary>
+            <param name="system">The actor system in which to register the given dependency resolver.</param>
+            <param name="dependencyResolver">The dependency resolver being registered to the actor system.</param>
+            <exception cref="T:System.ArgumentNullException">
+            Either the <paramref name="system"/> or the <paramref name="dependencyResolver"/> was null.
+            </exception>
+        </member>
+        <member name="M:Akka.DI.Core.Extensions.DI(Akka.Actor.ActorSystem)">
+            <summary>
+            Creates an adapter used to generate <see cref="T:Akka.Actor.Props"/> configuration objects using the DI extension using a given actor system.
+            </summary>
+            <param name="system">The actor system that contains the DI extension.</param>
+            <returns>An adapter used to generate <see cref="T:Akka.Actor.Props"/> configuration objects using the DI extension.</returns>
+        </member>
+        <member name="M:Akka.DI.Core.Extensions.DI(Akka.Actor.IActorContext)">
+            <summary>
+            Creates an adapter used to generate <see cref="T:Akka.Actor.Props"/> configuration objects using the DI extension using a given actor context.
+            </summary>
+            <param name="context">The actor context associated with a system that contains the DI extension.</param>
+            <returns>An adapter used to generate <see cref="T:Akka.Actor.Props"/> configuration objects using the DI extension.</returns>
+        </member>
+        <member name="M:Akka.DI.Core.Extensions.GetTypeValue(System.String)">
+            <summary>
+            Retrieves the <see cref="T:System.Type"/> with a given name from the current <see cref="T:System.AppDomain"/>.
+            </summary>
+            <param name="typeName">The string representation of the type to retrieve.</param>
+            <returns>The <see cref="T:System.Type"/> with the given name.</returns>
+        </member>
+        <member name="T:Akka.DI.Core.IDependencyResolver">
+            <summary>
+            Defines services used by the <see cref="T:Akka.Actor.ActorSystem"/> extension system to create actors
+            </summary>
+        </member>
+        <member name="M:Akka.DI.Core.IDependencyResolver.GetType(System.String)">
+            <summary>
+            Retrieves an actor's type with the specified name
+            </summary>
+            <param name="actorName">The name of the actor to retrieve</param>
+            <returns>The type with the specified actor name</returns>
+        </member>
+        <member name="M:Akka.DI.Core.IDependencyResolver.CreateActorFactory(System.Type)">
+            <summary>
+            Creates a delegate factory used to create actors based on their type
+            </summary>
+            <param name="actorType">The type of actor that the factory builds</param>
+            <returns>A delegate factory used to create actors</returns>
+        </member>
+        <member name="M:Akka.DI.Core.IDependencyResolver.Create``1">
+            <summary>
+            Used to register the configuration for an actor of the specified type <typeparamref name="TActor"/>
+            </summary>
+            <typeparam name="TActor">The type of actor the configuration is based</typeparam>
+            <returns>The configuration object for the given actor type</returns>
+        </member>
+        <member name="M:Akka.DI.Core.IDependencyResolver.Create(System.Type)">
+            <summary>
+            Used to register the configuration for an actor of the specified type <paramref name="actorType"/> 
+            </summary>
+            <param name="actorType">The <see cref="T:System.Type"/> of actor the configuration is based</param>
+            <returns>The configuration object for the given actor type</returns>
+        </member>
+        <member name="M:Akka.DI.Core.IDependencyResolver.Release(Akka.Actor.ActorBase)">
+            <summary>
+            Signals the container to release it's reference to the actor.
+            </summary>
+            <param name="actor">The actor to remove from the container</param>
+        </member>
+    </members>
+</doc>

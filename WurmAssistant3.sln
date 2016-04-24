@@ -49,6 +49,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{627E5F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3", "WurmAssistant3\WurmAssistant3.csproj", "{29F8B209-AF74-4338-8294-96EC8D9DC9AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmApi2", "WurmApi2\WurmApi2.csproj", "{37A74B2C-CB82-498B-80C6-F92889ACF77D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmApi2.Tests", "WurmApi2.Tests\WurmApi2.Tests.csproj", "{E765DBEC-079F-4892-9C79-A7474DB2BCE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +119,14 @@ Global
 		{29F8B209-AF74-4338-8294-96EC8D9DC9AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29F8B209-AF74-4338-8294-96EC8D9DC9AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29F8B209-AF74-4338-8294-96EC8D9DC9AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37A74B2C-CB82-498B-80C6-F92889ACF77D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37A74B2C-CB82-498B-80C6-F92889ACF77D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37A74B2C-CB82-498B-80C6-F92889ACF77D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37A74B2C-CB82-498B-80C6-F92889ACF77D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E765DBEC-079F-4892-9C79-A7474DB2BCE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E765DBEC-079F-4892-9C79-A7474DB2BCE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E765DBEC-079F-4892-9C79-A7474DB2BCE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E765DBEC-079F-4892-9C79-A7474DB2BCE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
