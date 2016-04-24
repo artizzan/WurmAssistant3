@@ -156,11 +156,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                     verifyList.CaredBy = true;
                     grangerDebug.Log("finished parsing care line");
                 }
-                //[17:11:42] She will deliver in about 4.
+                //[17:11:42] She will deliver in about 4 days.
+                //[17:11:42] She will deliver in about 1 day.
                 if (line.Contains("She will deliver in") && !verifyList.Pregnant)
                 {
                     grangerDebug.Log("found maybe pregnant line");
-                    Match match = Regex.Match(line, @"She will deliver in about (\d+) days");
+                    Match match = Regex.Match(line, @"She will deliver in about (\d+)");
                     if (match.Success)
                     {
                         double length = Double.Parse(match.Groups[1].Value) + 1D;
