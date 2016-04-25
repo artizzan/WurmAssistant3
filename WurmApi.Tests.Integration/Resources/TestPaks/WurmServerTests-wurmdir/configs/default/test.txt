@@ -1,0 +1,23 @@
+#Wurm online saved player data
+#Wed Sep 04 19:48:12 CEST 2013
+skillProgressToLevel=false
+skillProgression5=unknown|false
+skillProgression4=unknown|false
+skillProgression3=unknown|false
+skillProgression2=unknown|false
+skillProgression1=unknown|false
+toolSlot10=-1
+customTimer5=-1|-1
+customTimer4=-1|-1
+customTimer3=-1|-1
+customTimer2=-1|-1
+customTimer1=-1|-1
+toolSlot9=-1
+toolSlot8=-1
+toolSlot7=662359924279042
+toolSlot6=868184974427906
+toolSlot5=289045410219778
+toolSlot4=378023375275778
+toolSlot3=177237731051266
+toolSlot2=373847173891842
+toolSlot1=351171256518402

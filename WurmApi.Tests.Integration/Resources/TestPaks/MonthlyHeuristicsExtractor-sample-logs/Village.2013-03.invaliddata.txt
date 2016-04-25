@@ -1,0 +1,7 @@
+hello
+
+im not really a log file
+
+im here to crash your tests
+
+have a nice day!

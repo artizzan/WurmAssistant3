@@ -1,0 +1,4 @@
+Logging started 2015-08-16
+[00:08:09] <System> This is the Community Assistance window. Just type your questions here. To stop receiving these messages, type /ca.
+Logging started 2015-08-16
+[00:16:40] <System> This is the Community Assistance window. Just type your questions here. To stop receiving these messages, type /ca.

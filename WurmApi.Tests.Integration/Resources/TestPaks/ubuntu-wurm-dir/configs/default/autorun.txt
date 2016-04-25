@@ -1,0 +1,5 @@
+// In this file you can put console commands that you want to execute on startup.
+// This file is handled AFTER keybindings.txt, so a keybind here will override it.
+
+// This file will be automatically created with default values if it is missing.
+// So if you ever manage to mess up this file, just delete it to get a clean one.

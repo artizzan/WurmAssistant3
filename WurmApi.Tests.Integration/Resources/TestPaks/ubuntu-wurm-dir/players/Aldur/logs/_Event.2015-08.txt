@@ -1,0 +1,28 @@
+Logging started 2015-08-16
+[00:08:05] You will now fight normally.
+[00:08:05] You will now fight normally.
+[00:08:05] Baloo is logged in on Xanadu.
+[00:08:05] Welcome back, Aldur! The Exodus server has been waiting for you.
+[00:08:09] You enter Misthaven.
+[00:08:09] You enter Freedom Isles.
+[00:08:09] You feel the presence of Fo.
+[00:08:09] You may not move right now.
+[00:08:09] 33 other players are online. You are on Exodus (1038 totally in Wurm).
+[00:08:09] Type /help for available commands.
+[00:08:09] You feel rested.
+[00:08:21] You may now move again.
+[00:09:06] You may now queue 4 actions.
+Logging started 2015-08-16
+[00:16:36] You will now fight normally.
+[00:16:37] You will now fight normally.
+[00:16:37] Baloo is logged in on Xanadu.
+[00:16:37] Welcome back, Aldur! The Exodus server has been waiting for you.
+[00:16:40] You enter Misthaven.
+[00:16:40] You enter Freedom Isles.
+[00:16:40] You feel the presence of Fo.
+[00:16:40] You may not move right now.
+[00:16:40] 34 other players are online. You are on Exodus (1019 totally in Wurm).
+[00:16:40] Type /help for available commands.
+[00:16:48] You may now move again.
+[00:17:37] You may now queue 4 actions.
+[00:19:43] You are no longer invulnerable.

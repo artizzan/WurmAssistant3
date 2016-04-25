@@ -113,6 +113,10 @@
       <Project>{a0ce70f0-6f13-47f5-9b61-69f6be1ab082}</Project>
       <Name>Testing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WurmApi\WurmApi.csproj">
+      <Project>{f23b8ad5-5c3b-4c9a-bc11-3577f1cb3272}</Project>
+      <Name>WurmApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WurmAssistant.Shared\WurmAssistant.Shared.csproj">
       <Project>{2375aa6c-6b2c-4c4e-8cf0-8b3c1d406aea}</Project>
       <Name>WurmAssistant.Shared</Name>

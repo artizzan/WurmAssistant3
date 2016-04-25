@@ -1,0 +1,162 @@
+Logging started 2012-09-04
+[13:56:39] Body stamina increased  to 27
+Logging started 2012-09-05
+[04:42:22] Body increased  to 32
+Logging started 2012-09-05
+[05:08:27] Mining increased  to 46
+Logging started 2012-09-05
+[14:38:30] Soul strength increased  to 23
+[15:04:01] Pickaxe increased  to 49
+Logging started 2012-09-06
+[18:40:57] Woodcutting increased  to 39
+[19:46:00] Woodcutting increased  to 40
+Logging started 2012-09-07
+[10:43:22] Nature increased  to 31
+[10:47:14] Sickle increased  to 22
+[11:01:47] Axes increased  to 21
+Logging started 2012-09-07
+[12:44:07] Woodcutting increased  to 41
+[13:06:50] Hatchet increased  to 25
+Logging started 2012-09-08
+[08:06:14] Body strength increased  to 31
+Logging started 2012-09-08
+[08:55:16] Miscellaneous items increased  to 54
+[10:06:35] Stone chisel increased  to 20
+[12:09:20] Firemaking increased  to 17
+Logging started 2012-09-09
+[13:53:46] Carpentry increased  to 66
+Logging started 2012-09-12
+[15:21:15] Saw increased by 0,100 to 18,663
+[15:52:27] Repairing increased by 0,101 to 27,797
+[15:57:09] Repairing increased by 0,100 to 27,898
+[16:08:27] Forestry increased by 0,100 to 25,907
+[18:09:00] Blacksmithing increased by 0,104 to 42,258
+[18:21:52] Blacksmithing increased by 0,104 to 42,362
+[18:32:49] Smithing increased by 0,102 to 27,510
+[18:38:15] Blacksmithing increased by 0,101 to 42,463
+[18:50:25] Blacksmithing increased by 0,109 to 42,572
+[18:54:56] Smithing increased by 0,102 to 27,612
+[19:05:11] Blacksmithing increased by 0,102 to 42,674
+[19:15:25] Blacksmithing increased by 0,101 to 42,774
+[20:25:47] Masonry increased by 0,104 to 57,073
+[20:43:47] Masonry increased by 0,103 to 57,176
+[21:18:21] Masonry increased by 0,103 to 57,279
+[21:46:56] Masonry increased by 0,103 to 57,382
+Logging started 2012-09-13
+[09:26:10] Masonry increased by 0,102 to 57,566
+[09:45:27] Masonry increased by 0,101 to 57,668
+[10:12:09] Masonry increased by 0,101 to 57,768
+[10:26:55] Masonry increased by 0,100 to 57,868
+[10:57:24] Masonry increased by 0,101 to 57,969
+[11:17:09] Masonry increased by 0,101 to 58,071
+Logging started 2012-09-13
+[17:13:23] Paving increased by 0,116 to 19,259
+[18:20:20] Hatchet increased by 0,108 to 25,176
+[18:22:21] Axes increased by 0,110 to 21,470
+[18:22:48] Woodcutting increased by 0,102 to 41,510
+[18:28:58] Hatchet increased by 0,102 to 25,277
+[18:29:10] Axes increased by 0,103 to 21,573
+[18:29:34] Woodcutting increased by 0,104 to 41,614
+[18:36:44] Woodcutting increased by 0,100 to 41,714
+[18:37:41] Hatchet increased by 0,104 to 25,381
+[18:38:07] Axes increased by 0,113 to 21,687
+[18:42:24] Hatchet increased by 0,106 to 25,487
+[18:46:30] Axes increased by 0,110 to 21,797
+[18:46:55] Woodcutting increased by 0,101 to 41,815
+[18:54:02] Woodcutting increased by 0,102 to 41,917
+[18:55:13] Hatchet increased by 0,103 to 25,590
+[18:58:47] Woodcutting increased by 0,102 to 42,019
+[19:01:28] Axes increased by 0,107 to 21,904
+[19:06:19] Tracking increased by 0,172 to 8,755
+[19:08:37] Woodcutting increased by 0,105 to 42,124
+[19:11:24] Tracking increased by 0,259 to 9,014
+[19:13:16] Hatchet increased by 0,109 to 25,699
+[19:15:57] Woodcutting increased by 0,109 to 42,232
+[19:18:24] Axes increased by 0,115 to 22,019
+[19:20:41] Hatchet increased by 0,103 to 25,802
+[19:25:34] Axes increased by 0,101 to 22,120
+[19:27:57] Hatchet increased by 0,105 to 25,907
+[19:28:37] Woodcutting increased by 0,104 to 42,337
+[19:31:24] Axes increased by 0,104 to 22,224
+Logging started 2012-09-14
+[13:24:22] Animal husbandry increased by 0,106 to 38,638
+[13:37:38] Rake increased by 0,118 to 12,764
+[13:40:52] Rake increased by 0,117 to 12,881
+[13:40:52] Farming increased by 0,101 to 34,243
+[13:42:38] Rake increased by 0,118 to 12,999
+[14:25:54] Woodcutting increased by 0,101 to 42,477
+Logging started 2012-09-14
+[17:34:44] Blacksmithing increased by 0,105 to 42,897
+[17:49:46] Blacksmithing increased by 0,105 to 43,002
+[17:55:01] Smithing increased by 0,100 to 27,789
+[18:04:00] Blacksmithing increased by 0,100 to 43,102
+[20:49:40] Fighting increased by 0,147 to 25,789
+[20:55:43] First aid increased by 0,111 to 24,007
+[21:06:28] Defensive fighting increased by 0,155 to 4,846
+[21:06:48] Defensive fighting increased by 0,150 to 4,996
+[21:07:15] Fighting increased by 0,232 to 26,022
+[21:08:16] First aid increased by 0,110 to 24,116
+[21:12:11] Defensive fighting increased by 0,145 to 5,141
+[21:16:10] Healing increased by 0,103 to 11,355
+[21:18:00] First aid increased by 0,109 to 24,225
+[21:26:10] Healing increased by 0,105 to 11,459
+[21:26:41] First aid increased by 0,108 to 24,333
+[21:26:56] Normal fighting increased by 0,108 to 31,766
+[21:27:00] Fighting increased by 0,236 to 26,257
+[21:31:35] Swords increased by 0,101 to 13,398
+[21:31:35] Longsword increased by 0,107 to 22,020
+[21:32:12] Fighting increased by 0,124 to 26,382
+[22:05:14] First aid increased by 0,113 to 24,446
+[22:06:09] Healing increased by 0,101 to 11,560
+[22:10:41] Normal fighting increased by 0,107 to 31,873
+[22:11:08] Fighting increased by 0,145 to 26,527
+[22:39:37] Natural substances increased by 0,148 to 12,359
+[22:40:59] Alchemy increased by 0,124 to 5,353
+Logging started 2012-09-15
+[10:20:22] Mining increased by 0,100 to 47,036
+[10:24:27] Pickaxe increased by 0,101 to 49,839
+[11:30:44] Mining increased by 0,100 to 47,136
+[11:35:39] Pickaxe increased by 0,102 to 49,941
+Logging started 2012-09-15
+[17:54:11] Rake increased by 0,101 to 13,151
+[17:56:25] Farming increased by 0,104 to 34,402
+[17:59:21] Rake increased by 0,110 to 13,260
+[18:01:14] Rake increased by 0,100 to 13,361
+[18:01:53] Farming increased by 0,101 to 34,503
+Logging started 2012-09-16
+[10:31:28] Rake increased by 0,101 to 13,539
+[10:32:40] Farming increased by 0,100 to 34,638
+[10:34:58] Rake increased by 0,106 to 13,644
+[13:12:23] Digging increased by 0,101 to 74,674
+[13:53:46] Digging increased by 0,101 to 74,775
+[14:20:22] Shovel increased by 0,101 to 56,975
+[14:31:35] Digging increased by 0,101 to 74,875
+[15:16:51] Digging increased by 0,100 to 74,975
+[15:21:23] Shovel increased by 0,101 to 57,076
+[15:28:44] Miscellaneous items increased by 0,100 to 54,622
+[16:13:37] Digging increased by 0,100 to 75,076
+[16:21:56] Shovel increased by 0,100 to 57,177
+Logging started 2012-09-16
+[18:32:00] Digging increased by 0,101 to 75,254
+[18:34:37] Shovel increased by 0,101 to 57,330
+[19:28:27] Digging increased by 0,102 to 75,355
+[19:37:28] Shovel increased by 0,101 to 57,431
+[19:57:28] Miscellaneous items increased by 0,100 to 54,786
+[20:02:50] Digging increased by 0,101 to 75,456
+[20:40:27] Shovel increased by 0,101 to 57,532
+[21:48:00] Digging increased by 0,100 to 75,557
+[22:29:32] Shovel increased by 0,102 to 57,634
+[22:30:12] Digging increased by 0,101 to 75,658
+[22:56:50] Miscellaneous items increased by 0,100 to 54,886
+[23:24:21] Paving increased by 0,104 to 19,451
+[23:29:29] Paving increased by 0,103 to 19,554
+[23:40:41] Paving increased by 0,114 to 19,668
+[23:45:14] Paving increased by 0,106 to 19,774
+[23:52:00] Paving increased by 0,109 to 19,883
+[23:55:22] Paving increased by 0,100 to 19,983
+Logging started 2012-09-17
+[11:05:07] Paving increased by 0,101 to 20,142
+[12:02:06] Rake increased by 0,111 to 13,768
+[12:12:26] Rake increased by 0,104 to 13,872
+[12:15:26] Farming increased by 0,103 to 34,819
+[12:16:26] Rake increased by 0,109 to 13,980

@@ -1,0 +1,31 @@
+#Wurm Online window positions
+#Sun Aug 16 00:09:49 CEST 2015
+compass=204 123 -1 -1 0
+notification=964 393 -1 -1 0
+quickbar=694 568 -1 -1 1
+trade=128 96 768 576 0
+Character=175 147 326 475 0
+missions=136 192 480 384 0
+healthbar=16 30 -1 -1 0
+statusEffect=919 5 -1 -1 4
+inventory=528 192 320 384 0
+support=628 29 326 475 0
+personalGoalsWindow=640 199 313 371 0
+missionprogress=16 60 -1 -1 0
+timers=787 72 -1 -1 1
+selected=469 32 -1 -1 4
+friend=628 29 326 475 0
+spelleffects=246 192 320 384 0
+achievementWindow=156 192 400 384 0
+event=512 608 512 160 0
+toolbelt=464 64 -1 -1 0
+wikisearch=387 359 250 50 0
+chat=0 608 512 160 0
+skills=176 192 320 384 0
+helpbutton=50 200 -1 -1 0
+menuwindow=0 0 -1 -1 0
+skillTracker=858 200 -1 -1 2
+stats=282 106 320 240 0
+fightwindow=16 162 -1 -1 0
+target=204 32 -1 -1 0
+equipment=528 192 320 384 0

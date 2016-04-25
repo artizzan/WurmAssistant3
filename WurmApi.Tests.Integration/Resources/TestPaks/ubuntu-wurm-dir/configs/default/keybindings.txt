@@ -1,0 +1,74 @@
+// This file contains your saved key bindings, DO NOT EDIT IT.
+// The contents are replaced with your active keybinds every time you quit the game.
+// If you want to add a new key binding, use bind in the game console instead.
+// Use autorun.txt for non-bind commands that should run on game start.
+
+// This file will be automatically created with default values if it is missing.
+// So if you ever manage to mess up this file, just delete it to get a clean one.
+bind W MOVE_FORWARD
+bind S MOVE_BACK
+bind A MOVE_LEFT
+bind D MOVE_RIGHT
+bind Q TURN_LEFT
+bind E TURN_RIGHT
+bind PAGE_UP TURN_UP
+bind PAGE_DOWN TURN_DOWN
+bind X AUTORUN
+bind INSERT STRAFE
+bind V CENTER_VIEW
+bind Enter TOGGLE_CHAT
+bind TAB NEXT_TAB
+bind shift+TAB PREVIOUS_TAB
+bind ctrl+TAB NEXT_WINDOW
+bind ctrl+shift+TAB PREVIOUS_WINDOW
+bind O MAIN_MENU
+bind ESCAPE STOP_OR_MAIN_MENU
+bind 1 ACTIVATE_TOOL1
+bind 2 ACTIVATE_TOOL2
+bind 3 ACTIVATE_TOOL3
+bind 4 ACTIVATE_TOOL4
+bind 5 ACTIVATE_TOOL5
+bind C TOGGLE_CHARACTER
+bind M TOGGLE_MAP
+bind B TOGGLE_CRAFTING
+bind N TOGGLE_CRAFTING_RECIPES
+bind F1 "toggle console"
+bind F2 "toggle skills"
+bind F3 "toggle inventory"
+bind F4 "toggle stats"
+bind F5 "say /sleep"
+bind F6 "say /time"
+bind F7 "say /mission"
+bind F8 "say /fl"
+bind F10 "toggle gui"
+bind F11 "screenshot"
+bind F12 "quit"
+bind Numpad7 AIM_UPPER_LEFT
+bind Numpad8 AIM_UPPER_MIDDLE
+bind Numpad9 AIM_UPPER_RIGHT
+bind Numpad4 AIM_LEFT
+bind Numpad5 AIM_MIDDLE
+bind Numpad6 AIM_RIGHT
+bind Numpad1 AIM_LOWER_LEFT
+bind Numpad2 AIM_LOWER_MIDDLE
+bind Numpad3 AIM_LOWER_RIGHT
+bind Divide DEFEND_LEFT
+bind Add DEFEND_RIGHT
+bind Multiply DEFEND_UPPER
+bind Subtract DEFEND_LOWER
+bind Numpad0 FOCUS
+bind Decimal SHIELD_BASH
+bind 6 SPECIAL_MOVE1
+bind 7 SPECIAL_MOVE2
+bind 8 SPECIAL_MOVE3
+bind 9 SPECIAL_MOVE4
+bind 0 SPECIAL_MOVE5
+bind UP MOVE_FORWARD
+bind DOWN MOVE_BACK
+bind LEFT TURN_LEFT
+bind RIGHT TURN_RIGHT
+bind T TOGGLE_CHAT
+bind I "toggle inventory"
+bind P TOGGLE_CHARACTER
+bind F9 "toggle character"
+bind H "toggle wikisearch"

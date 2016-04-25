@@ -1,0 +1,5 @@
+#Wurm Online client saved statistics
+#Sun Aug 16 00:14:16 CEST 2015
+played=2
+messages_received=2
+playtime=2404

@@ -1,0 +1,61 @@
+Logging started 2012-09-21
+[00:02:49] Meditating increased by 0,110 to 17,366
+[00:06:29] Meditating increased by 0,109 to 17,475
+[00:11:43] Meditating increased by 0,108 to 17,583
+[00:19:39] Meditating increased by 0,107 to 17,690
+[00:26:12] Meditating increased by 0,106 to 17,796
+[00:29:08] Meditating increased by 0,106 to 17,902
+[00:31:40] Meditating increased by 0,105 to 18,007
+[00:35:11] Meditating increased by 0,104 to 18,111
+[00:43:55] Meditating increased by 0,103 to 18,214
+Logging started 2012-09-21
+[10:03:41] Sickle increased by 0,102 to 22,379
+[10:09:56] Forestry increased by 0,100 to 26,130
+[10:19:14] Sickle increased by 0,100 to 22,479
+[11:01:05] Forestry increased by 0,110 to 26,240
+Logging started 2012-09-21
+[13:55:48] Forestry increased by 0,107 to 26,370
+[13:57:43] Sickle increased by 0,106 to 22,631
+[14:00:58] Forestry increased by 0,110 to 26,480
+[14:03:32] Forestry increased by 0,101 to 26,581
+[14:03:45] Sickle increased by 0,102 to 22,733
+[14:20:32] Forestry increased by 0,108 to 26,689
+[14:21:19] Sickle increased by 0,102 to 22,835
+[16:08:58] Nature increased by 0,102 to 31,602
+[16:23:25] Meditating increased by 0,102 to 18,316
+[16:31:43] Meditating increased by 0,101 to 18,418
+[16:42:10] Meditating increased by 0,201 to 18,619
+Logging started 2012-09-21
+[17:22:50] Meditating increased by 0,201 to 18,619
+[17:27:22] Meditating increased by 0,199 to 18,818
+[17:30:42] Meditating increased by 0,196 to 19,014
+[17:33:51] Meditating increased by 0,194 to 19,207
+[17:36:54] Meditating increased by 0,191 to 19,399
+[17:41:55] Meditating increased by 0,189 to 19,588
+[17:47:29] Meditating increased by 0,187 to 19,774
+[18:00:35] Meditating increased by 0,184 to 19,959
+[18:09:19] Meditating increased by 0,182 to 20,141
+[18:57:49] Hot food cooking increased by 0,134 to 21,021
+[19:07:54] First aid increased by 0,101 to 25,355
+[19:16:34] Normal fighting increased by 0,104 to 32,649
+[19:17:24] Longsword increased by 0,100 to 22,725
+[19:17:24] Swords increased by 0,106 to 13,944
+[19:17:31] Fighting increased by 0,122 to 28,307
+[19:18:09] Healing increased by 0,101 to 12,117
+[19:18:39] Butchering knife increased by 0,118 to 17,163
+[19:21:39] Fighting increased by 0,181 to 28,488
+[19:26:57] Normal fighting increased by 0,105 to 32,753
+[19:27:02] Longsword increased by 0,101 to 22,826
+[19:27:37] Butchering increased by 0,102 to 10,267
+[19:28:05] First aid increased by 0,110 to 25,464
+[19:51:18] Knives increased by 0,107 to 12,838
+[19:57:41] Forestry increased by 0,108 to 26,873
+[19:59:46] Sickle increased by 0,104 to 23,019
+[20:05:47] Forestry increased by 0,111 to 26,984
+[20:15:58] Swords increased by 0,106 to 14,050
+[20:17:55] Longsword increased by 0,106 to 22,932
+[20:18:34] Fighting increased by 0,246 to 28,734
+[20:29:31] Nature increased by 0,102 to 31,723
+[20:32:16] Sickle increased by 0,106 to 23,124
+[20:36:20] Normal fighting increased by 0,104 to 32,858
+[20:37:13] Butchering knife increased by 0,106 to 17,269

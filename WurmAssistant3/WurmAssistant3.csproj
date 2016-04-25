@@ -148,6 +148,10 @@
       <Project>{0962a106-b1b2-4e21-9931-81d68a98ed37}</Project>
       <Name>PersistentObjects</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WurmApi\WurmApi.csproj">
+      <Project>{f23b8ad5-5c3b-4c9a-bc11-3577f1cb3272}</Project>
+      <Name>WurmApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WurmAssistant3.Core\WurmAssistant3.Core.csproj">
       <Project>{da679803-09bd-4d44-9c0b-2dcc4d179f6b}</Project>
       <Name>WurmAssistant3.Core</Name>

@@ -1,0 +1,11 @@
+Logging started 2012-09-23
+[16:25:27] Hammer increased by 0,102 to 52,254
+[16:39:29] Masonry increased by 0,101 to 58,361
+Logging started 2012-09-23
+[18:57:28] Masonry increased by 0,101 to 58,545
+[19:29:41] Masonry increased by 0,103 to 58,649
+[22:18:25] Hammer increased by 0,103 to 52,409
+[22:40:51] Hammer increased by 0,103 to 52,512
+[22:41:59] Masonry increased by 0,102 to 58,751
+[23:06:28] Forestry increased by 0,107 to 27,187
+[23:37:13] Gardening increased by 0,106 to 26,977
