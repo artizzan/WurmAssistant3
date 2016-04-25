@@ -41,7 +41,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBoxChosenSeasons = new System.Windows.Forms.TextBox();
             this.textBoxChosenSound = new System.Windows.Forms.TextBox();
-            this.listViewNFSeasons = new ListViewNf();
+            this.listViewNFSeasons = new AldursLab.WurmAssistant3.Core.WinForms.ListViewNf();
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -53,6 +53,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             this.buttonModSeasonList = new System.Windows.Forms.Button();
             this.buttonConfigure = new System.Windows.Forms.Button();
             this.labelDisplayTimeMode = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -65,9 +66,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             this.groupBox1.Controls.Add(this.radioButtonRealTime);
             this.groupBox1.Controls.Add(this.radioButtonWurmTime);
             this.groupBox1.Location = new System.Drawing.Point(299, 1);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox1.Size = new System.Drawing.Size(128, 72);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
@@ -77,7 +78,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             // 
             this.radioButtonRealTime.AutoSize = true;
             this.radioButtonRealTime.Location = new System.Drawing.Point(4, 39);
-            this.radioButtonRealTime.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radioButtonRealTime.Margin = new System.Windows.Forms.Padding(2);
             this.radioButtonRealTime.Name = "radioButtonRealTime";
             this.radioButtonRealTime.Size = new System.Drawing.Size(73, 17);
             this.radioButtonRealTime.TabIndex = 1;
@@ -90,7 +91,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             // 
             this.radioButtonWurmTime.AutoSize = true;
             this.radioButtonWurmTime.Location = new System.Drawing.Point(4, 17);
-            this.radioButtonWurmTime.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radioButtonWurmTime.Margin = new System.Windows.Forms.Padding(2);
             this.radioButtonWurmTime.Name = "radioButtonWurmTime";
             this.radioButtonWurmTime.Size = new System.Drawing.Size(79, 17);
             this.radioButtonWurmTime.TabIndex = 0;
@@ -103,7 +104,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             // 
             this.checkBoxSoundWarning.AutoSize = true;
             this.checkBoxSoundWarning.Location = new System.Drawing.Point(4, 46);
-            this.checkBoxSoundWarning.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.checkBoxSoundWarning.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxSoundWarning.Name = "checkBoxSoundWarning";
             this.checkBoxSoundWarning.Size = new System.Drawing.Size(57, 17);
             this.checkBoxSoundWarning.TabIndex = 2;
@@ -115,7 +116,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             // 
             this.checkBoxPopupWarning.AutoSize = true;
             this.checkBoxPopupWarning.Location = new System.Drawing.Point(4, 24);
-            this.checkBoxPopupWarning.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.checkBoxPopupWarning.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxPopupWarning.Name = "checkBoxPopupWarning";
             this.checkBoxPopupWarning.Size = new System.Drawing.Size(186, 17);
             this.checkBoxPopupWarning.TabIndex = 3;
@@ -126,7 +127,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             // buttonChooseSeasons
             // 
             this.buttonChooseSeasons.Location = new System.Drawing.Point(219, 17);
-            this.buttonChooseSeasons.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonChooseSeasons.Margin = new System.Windows.Forms.Padding(2);
             this.buttonChooseSeasons.Name = "buttonChooseSeasons";
             this.buttonChooseSeasons.Size = new System.Drawing.Size(188, 22);
             this.buttonChooseSeasons.TabIndex = 4;
@@ -137,7 +138,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             // buttonClearSound
             // 
             this.buttonClearSound.Location = new System.Drawing.Point(145, 68);
-            this.buttonClearSound.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonClearSound.Margin = new System.Windows.Forms.Padding(2);
             this.buttonClearSound.Name = "buttonClearSound";
             this.buttonClearSound.Size = new System.Drawing.Size(48, 23);
             this.buttonClearSound.TabIndex = 15;
@@ -148,7 +149,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             // buttonChooseSound
             // 
             this.buttonChooseSound.Location = new System.Drawing.Point(4, 68);
-            this.buttonChooseSound.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonChooseSound.Margin = new System.Windows.Forms.Padding(2);
             this.buttonChooseSound.Name = "buttonChooseSound";
             this.buttonChooseSound.Size = new System.Drawing.Size(138, 23);
             this.buttonChooseSound.TabIndex = 14;
@@ -167,9 +168,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             this.groupBox2.Controls.Add(this.checkBoxSoundWarning);
             this.groupBox2.Controls.Add(this.buttonClearSound);
             this.groupBox2.Location = new System.Drawing.Point(2, 105);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox2.Size = new System.Drawing.Size(424, 122);
             this.groupBox2.TabIndex = 16;
             this.groupBox2.TabStop = false;
@@ -179,7 +180,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             // 
             this.textBoxChosenSeasons.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBoxChosenSeasons.Location = new System.Drawing.Point(219, 43);
-            this.textBoxChosenSeasons.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxChosenSeasons.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxChosenSeasons.Multiline = true;
             this.textBoxChosenSeasons.Name = "textBoxChosenSeasons";
             this.textBoxChosenSeasons.ReadOnly = true;
@@ -190,7 +191,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             // 
             this.textBoxChosenSound.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBoxChosenSound.Location = new System.Drawing.Point(4, 95);
-            this.textBoxChosenSound.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxChosenSound.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxChosenSound.Name = "textBoxChosenSound";
             this.textBoxChosenSound.ReadOnly = true;
             this.textBoxChosenSound.Size = new System.Drawing.Size(189, 23);
@@ -206,10 +207,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             this.columnHeader5,
             this.columnHeader6});
             this.listViewNFSeasons.GridLines = true;
-            this.listViewNFSeasons.Location = new System.Drawing.Point(9, 10);
-            this.listViewNFSeasons.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.listViewNFSeasons.Location = new System.Drawing.Point(9, 28);
+            this.listViewNFSeasons.Margin = new System.Windows.Forms.Padding(2);
             this.listViewNFSeasons.Name = "listViewNFSeasons";
-            this.listViewNFSeasons.Size = new System.Drawing.Size(454, 323);
+            this.listViewNFSeasons.Size = new System.Drawing.Size(454, 305);
             this.listViewNFSeasons.TabIndex = 17;
             this.listViewNFSeasons.UseCompatibleStateImageBehavior = false;
             this.listViewNFSeasons.View = System.Windows.Forms.View.Details;
@@ -236,9 +237,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             this.groupBox3.Controls.Add(this.comboBoxChooseServer);
             this.groupBox3.Controls.Add(this.textBoxWurmDate);
             this.groupBox3.Location = new System.Drawing.Point(1, 1);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox3.Size = new System.Drawing.Size(288, 99);
             this.groupBox3.TabIndex = 18;
             this.groupBox3.TabStop = false;
@@ -260,7 +261,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             this.comboBoxChooseServer.Enabled = false;
             this.comboBoxChooseServer.FormattingEnabled = true;
             this.comboBoxChooseServer.Location = new System.Drawing.Point(156, 24);
-            this.comboBoxChooseServer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxChooseServer.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxChooseServer.MaxDropDownItems = 12;
             this.comboBoxChooseServer.Name = "comboBoxChooseServer";
             this.comboBoxChooseServer.Size = new System.Drawing.Size(128, 21);
@@ -270,7 +271,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             // textBoxWurmDate
             // 
             this.textBoxWurmDate.Location = new System.Drawing.Point(5, 49);
-            this.textBoxWurmDate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxWurmDate.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxWurmDate.Multiline = true;
             this.textBoxWurmDate.Name = "textBoxWurmDate";
             this.textBoxWurmDate.ReadOnly = true;
@@ -286,7 +287,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             this.panelOptions.Controls.Add(this.groupBox3);
             this.panelOptions.Controls.Add(this.groupBox1);
             this.panelOptions.Location = new System.Drawing.Point(9, 102);
-            this.panelOptions.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelOptions.Margin = new System.Windows.Forms.Padding(2);
             this.panelOptions.Name = "panelOptions";
             this.panelOptions.Size = new System.Drawing.Size(431, 231);
             this.panelOptions.TabIndex = 19;
@@ -295,7 +296,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             // buttonModSeasonList
             // 
             this.buttonModSeasonList.Location = new System.Drawing.Point(299, 78);
-            this.buttonModSeasonList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonModSeasonList.Margin = new System.Windows.Forms.Padding(2);
             this.buttonModSeasonList.Name = "buttonModSeasonList";
             this.buttonModSeasonList.Size = new System.Drawing.Size(110, 22);
             this.buttonModSeasonList.TabIndex = 18;
@@ -307,7 +308,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             // 
             this.buttonConfigure.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.buttonConfigure.Location = new System.Drawing.Point(9, 337);
-            this.buttonConfigure.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonConfigure.Margin = new System.Windows.Forms.Padding(2);
             this.buttonConfigure.Name = "buttonConfigure";
             this.buttonConfigure.Size = new System.Drawing.Size(105, 28);
             this.buttonConfigure.TabIndex = 20;
@@ -326,17 +327,27 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
             this.labelDisplayTimeMode.TabIndex = 21;
             this.labelDisplayTimeMode.Text = "Showing times as...";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(304, 13);
+            this.label2.TabIndex = 22;
+            this.label2.Text = "Note: Times are a best guess, actual seasons are a bit random.";
+            // 
             // FormCalendar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(471, 376);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.labelDisplayTimeMode);
             this.Controls.Add(this.buttonConfigure);
             this.Controls.Add(this.panelOptions);
             this.Controls.Add(this.listViewNFSeasons);
             this.DoubleBuffered = true;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormCalendar";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -381,8 +392,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Calendar.Views
         private System.Windows.Forms.ComboBox comboBoxChooseServer;
         private System.Windows.Forms.Label labelDisplayTimeMode;
         private System.Windows.Forms.Button buttonModSeasonList;
-
-
-
+        private System.Windows.Forms.Label label2;
     }
 }
