@@ -101,15 +101,15 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AldursLab\Lab\Essentials\Essentials.csproj">
+    <ProjectReference Include="..\..\modules\AldursLab\Lab\Essentials\Essentials.csproj">
       <Project>{e7e145ed-1938-4c09-b432-dc7d7a2d5ddb}</Project>
       <Name>Essentials</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj">
+    <ProjectReference Include="..\..\modules\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj">
       <Project>{0962a106-b1b2-4e21-9931-81d68a98ed37}</Project>
       <Name>PersistentObjects</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AldursLab\Lab\Testing\Testing.csproj">
+    <ProjectReference Include="..\..\modules\AldursLab\Lab\Testing\Testing.csproj">
       <Project>{a0ce70f0-6f13-47f5-9b61-69f6be1ab082}</Project>
       <Name>Testing</Name>
     </ProjectReference>

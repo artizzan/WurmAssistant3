@@ -844,15 +844,15 @@
     <Folder Include="WinForms\Utility\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AldursLab\Lab\Essentials\Essentials.csproj">
+    <ProjectReference Include="..\..\modules\AldursLab\Lab\Essentials\Essentials.csproj">
       <Project>{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}</Project>
       <Name>Essentials</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AldursLab\Lab\Gui\Gui.csproj">
+    <ProjectReference Include="..\..\modules\AldursLab\Lab\Gui\Gui.csproj">
       <Project>{1ea6d250-6ea0-4c5d-b681-6bcf9b0a8f02}</Project>
       <Name>Gui</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj">
+    <ProjectReference Include="..\..\modules\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj">
       <Project>{0962a106-b1b2-4e21-9931-81d68a98ed37}</Project>
       <Name>PersistentObjects</Name>
     </ProjectReference>
@@ -864,11 +864,11 @@
       <Project>{2375aa6c-6b2c-4c4e-8cf0-8b3c1d406aea}</Project>
       <Name>WurmAssistant.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.Dtos\WurmAssistantDataTransfer.Dtos.csproj">
+    <ProjectReference Include="..\..\modules\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.Dtos\WurmAssistantDataTransfer.Dtos.csproj">
       <Project>{c8867a15-9144-48fd-8816-0283fdb38c6b}</Project>
       <Name>WurmAssistantDataTransfer.Dtos</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.csproj">
+    <ProjectReference Include="..\..\modules\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.csproj">
       <Project>{c2591795-c58c-4b9a-a1dd-38669c0b0b3d}</Project>
       <Name>WurmAssistantDataTransfer</Name>
     </ProjectReference>

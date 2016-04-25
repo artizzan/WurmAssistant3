@@ -9,21 +9,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3.Tests", "Wur
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AldursLab", "AldursLab", "{1038DFDD-F4C9-4DBA-A83F-59CDF1D37EF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials", "AldursLab\Lab\Essentials\Essentials.csproj", "{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials", "..\modules\AldursLab\Lab\Essentials\Essentials.csproj", "{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentObjects", "AldursLab\Lab\PersistentObjects\PersistentObjects.csproj", "{0962A106-B1B2-4E21-9931-81D68A98ED37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentObjects", "..\modules\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj", "{0962A106-B1B2-4E21-9931-81D68A98ED37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "AldursLab\Lab\Testing\Testing.csproj", "{A0CE70F0-6F13-47F5-9B61-69F6BE1AB082}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "..\modules\AldursLab\Lab\Testing\Testing.csproj", "{A0CE70F0-6F13-47F5-9B61-69F6BE1AB082}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui.Wpf", "AldursLab\Lab\Gui.Wpf\Gui.Wpf.csproj", "{3285F7B4-5F46-4120-8CDB-10CD815D7650}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui.Wpf", "..\modules\AldursLab\Lab\Gui.Wpf\Gui.Wpf.csproj", "{3285F7B4-5F46-4120-8CDB-10CD815D7650}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui", "AldursLab\Lab\Gui\Gui.csproj", "{1EA6D250-6EA0-4C5D-B681-6BCF9B0A8F02}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui", "..\modules\AldursLab\Lab\Gui\Gui.csproj", "{1EA6D250-6EA0-4C5D-B681-6BCF9B0A8F02}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant.Shared", "WurmAssistant.Shared\WurmAssistant.Shared.csproj", "{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials.Tests", "AldursLab\Lab\Essentials.Tests\Essentials.Tests.csproj", "{65549F72-59C5-416A-8B71-5757BAE8B35D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials.Tests", "..\modules\AldursLab\Lab\Essentials.Tests\Essentials.Tests.csproj", "{65549F72-59C5-416A-8B71-5757BAE8B35D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentObjects.Tests", "AldursLab\Lab\PersistentObjects.Tests\PersistentObjects.Tests.csproj", "{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentObjects.Tests", "..\modules\AldursLab\Lab\PersistentObjects.Tests\PersistentObjects.Tests.csproj", "{8AA81A2A-3F7E-4193-BD61-3BA7D7C785D9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{834E44A1-4276-4102-8F03-2AB1F9B21747}"
 	ProjectSection(SolutionItems) = preProject
@@ -32,9 +32,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataTransfer", "DataTransfer", "{F1822F63-F88F-46C0-B418-C381F194896E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistantDataTransfer", "WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.csproj", "{C2591795-C58C-4B9A-A1DD-38669C0B0B3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistantDataTransfer", "..\modules\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.csproj", "{C2591795-C58C-4B9A-A1DD-38669C0B0B3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistantDataTransfer.Dtos", "WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.Dtos\WurmAssistantDataTransfer.Dtos.csproj", "{C8867A15-9144-48FD-8816-0283FDB38C6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistantDataTransfer.Dtos", "..\modules\WurmAssistantDataTransfer\WurmAssistantDataTransfer\WurmAssistantDataTransfer.Dtos\WurmAssistantDataTransfer.Dtos.csproj", "{C8867A15-9144-48FD-8816-0283FDB38C6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant3", "WurmAssistant3\WurmAssistant3.csproj", "{29F8B209-AF74-4338-8294-96EC8D9DC9AA}"
 EndProject
