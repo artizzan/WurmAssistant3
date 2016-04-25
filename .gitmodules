@@ -1,6 +1,6 @@
 [submodule "AldursLab"]
-	path = AldursLab
+	path = src/AldursLab
 	url = https://github.com/PeterAldur/AldursLab
 [submodule "WurmAssistantDataTransfer"]
-	path = WurmAssistantDataTransfer
+	path = src/WurmAssistantDataTransfer
 	url = https://github.com/PeterAldur/WurmAssistantDataTransfer

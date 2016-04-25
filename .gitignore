@@ -178,5 +178,5 @@ FakesAssemblies/
 !*.exe
 !*.bak
 
-WurmAssistant.Launcher/gladiolus.arvixe.com/
-WurmAssistantWebService/Properties/PublishProfiles/
+src/WurmAssistant.Launcher/gladiolus.arvixe.com/
+src/WurmAssistantWebService/Properties/PublishProfiles/
