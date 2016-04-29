@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using AldursLab.WurmApi.FileSystem;
 
-namespace AldursLab.WurmApi.Tests.TempDirs
+namespace AldursLab.WurmApi.Tests.Integration.TempDirs
 {
     public sealed class DirectoryHandle : IDisposable
     {

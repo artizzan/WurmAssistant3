@@ -1,8 +1,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
-using AldursLab.WurmApi.Tests.Integration.Builders.WurmClient;
 
-namespace AldursLab.WurmApi.Tests.Builders.WurmClient
+namespace AldursLab.WurmApi.Tests.Integration.Builders.WurmClient
 {
     class GameSettings
     {

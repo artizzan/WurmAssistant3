@@ -35,7 +35,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-[assembly: InternalsVisibleTo("AldursLab.WurmApi.Tests")]
+[assembly: InternalsVisibleTo("AldursLab.WurmApi.Tests.Unit")]
 [assembly: InternalsVisibleTo("AldursLab.WurmApi.Tests.Integration")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: InternalsVisibleTo("Telerik.JustMock, PublicKey=0024000004800000940000000602000000240000525341310004000001000100098b1434e598c6" +

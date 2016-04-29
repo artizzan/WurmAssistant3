@@ -6,7 +6,7 @@ using AldursLab.WurmApi.Modules.Events.Internal;
 using AldursLab.WurmApi.Modules.Events.Internal.Messages;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmApi.Tests.Helpers
+namespace AldursLab.WurmApi.Tests.Integration.Helpers
 {
     class Subscriber<TMessage> : IHandle<TMessage> where TMessage : Message
     {

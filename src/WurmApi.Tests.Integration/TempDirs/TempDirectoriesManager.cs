@@ -7,7 +7,7 @@ using AldursLab.WurmApi.FileSystem;
 using NUnit.Framework;
 using SevenZip;
 
-namespace AldursLab.WurmApi.Tests.TempDirs
+namespace AldursLab.WurmApi.Tests.Integration.TempDirs
 {
     class TempDirectoriesManager
     {

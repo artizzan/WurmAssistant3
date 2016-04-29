@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AldursLab.WurmApi.Tests.Extensions
+namespace AldursLab.WurmApi.Tests.Integration.Extensions
 {
     public static class StringExtensions
     {

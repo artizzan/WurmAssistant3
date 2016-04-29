@@ -34,6 +34,7 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 [assembly: InternalsVisibleTo("Telerik.JustMock, PublicKey=0024000004800000940000000602000000240000525341310004000001000100098b1434e598c6" +
 "56b22eb59000b0bf73310cb8488a6b63db1d35457f2f939f927414921a769821f371c31a8c1d4b" +

@@ -1,4 +1,4 @@
-﻿namespace AldursLab.WurmApi.Tests.TempDirs
+﻿namespace AldursLab.WurmApi.Tests.Integration.TempDirs
 {
     public static class TempDirectoriesFactory
     {

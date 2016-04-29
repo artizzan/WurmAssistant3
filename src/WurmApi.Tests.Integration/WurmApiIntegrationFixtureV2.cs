@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using AldursLab.WurmApi.Tests.Builders;
-using AldursLab.WurmApi.Tests.Builders.WurmClient;
-using AldursLab.WurmApi.Tests.TempDirs;
+using AldursLab.WurmApi.Tests.Integration.Builders;
+using AldursLab.WurmApi.Tests.Integration.Builders.WurmClient;
+using AldursLab.WurmApi.Tests.Integration.TempDirs;
 using Telerik.JustMock;
 
 namespace AldursLab.WurmApi.Tests

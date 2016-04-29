@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace AldursLab.WurmApi.Tests.Helpers
+namespace AldursLab.WurmApi.Tests.Integration.Helpers
 {
     class LogWriter
     {

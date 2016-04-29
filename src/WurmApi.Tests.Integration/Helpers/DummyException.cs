@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AldursLab.WurmApi.Tests.Helpers
+namespace AldursLab.WurmApi.Tests.Integration.Helpers
 {
     /// <summary>
     /// Dummy exception to use in tests.

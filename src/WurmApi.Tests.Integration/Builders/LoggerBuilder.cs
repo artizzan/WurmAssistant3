@@ -5,7 +5,7 @@ using System.Reflection;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
 
-namespace AldursLab.WurmApi.Tests.Builders
+namespace AldursLab.WurmApi.Tests.Integration.Builders
 {
     public static class LoggerBuilder
     {

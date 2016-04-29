@@ -1,7 +1,6 @@
 using System.IO;
-using AldursLab.WurmApi.Tests.Integration.Builders.WurmClient;
 
-namespace AldursLab.WurmApi.Tests.Builders.WurmClient
+namespace AldursLab.WurmApi.Tests.Integration.Builders.WurmClient
 {
     class Autorun
     {

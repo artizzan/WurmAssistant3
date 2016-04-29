@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AldursLab.WurmApi.Tests.TempDirs;
+using AldursLab.WurmApi.Tests.Integration.TempDirs;
 using JetBrains.Annotations;
 using Telerik.JustMock;
 using Telerik.JustMock.Helpers;
 
-namespace AldursLab.WurmApi.Tests.Builders.WurmClient
+namespace AldursLab.WurmApi.Tests.Integration.Builders.WurmClient
 {
     class WurmClientMock : IDisposable
     {

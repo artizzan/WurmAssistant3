@@ -2,7 +2,7 @@
 using AldursLab.WurmApi.Modules.Networking;
 using Telerik.JustMock.Helpers;
 
-namespace AldursLab.WurmApi.Tests.Builders
+namespace AldursLab.WurmApi.Tests.Integration.Builders
 {
     static class HttpWebRequestsBuilder
     {

@@ -48,7 +48,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AldursLab\Essentials\Essentials.csproj">
+    <ProjectReference Include="..\..\modules\AldursLab\Essentials\Essentials.csproj">
       <Project>{e7e145ed-1938-4c09-b432-dc7d7a2d5ddb}</Project>
       <Name>Essentials</Name>
     </ProjectReference>

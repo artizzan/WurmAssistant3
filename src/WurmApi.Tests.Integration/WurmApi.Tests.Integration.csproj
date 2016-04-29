@@ -108,56 +108,50 @@
     <Compile Include="Builders\WurmClient\WurmConfig.cs" />
     <Compile Include="Builders\WurmClient\WurmLogs.cs" />
     <Compile Include="Builders\WurmClient\WurmPlayer.cs" />
-    <Compile Include="Extensions\DateTimeExtTests.cs" />
+    <Compile Include="Scenarios\Events\InternalEventInvokerTests.cs" />
+    <Compile Include="Scenarios\Events\PublicEventInvokerTests.cs" />
     <Compile Include="TempDirs\DirectoryHandle.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Helpers\DummyException.cs" />
     <Compile Include="Helpers\EventAwaiter.cs" />
     <Compile Include="Helpers\LogWriter.cs" />
-    <Compile Include="Tests\Extensions\DateTimeExtensionsTests.cs" />
-    <Compile Include="Tests\Extensions\EventHandlerExtensionsTests.cs" />
-    <Compile Include="Tests\LogWriterTests.cs" />
+    <Compile Include="Scenarios\LogWriterTests.cs" />
     <Compile Include="Helpers\Subscriber.cs" />
     <Compile Include="TempDirs\TempDirectoriesFactory.cs" />
     <Compile Include="TempDirs\TempDirectoriesManager.cs" />
-    <Compile Include="Tests\Modules\Wurm\Characters\Logs\WurmCharacterLogsTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\Characters\Skills\WurmCharacterSkillsTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\LogReading\LogFileStreamReaderLinuxTests.cs" />
-    <Compile Include="Tests\PersistentCollectionsLibraryTests\CustomDeserializationErrorHandler.cs" />
-    <Compile Include="Tests\PersistentCollectionsLibraryTests\Data\Dtos.cs" />
-    <Compile Include="Tests\PersistentCollectionsLibraryTests\Data\PersistentData.cs" />
-    <Compile Include="Tests\PersistentCollectionsLibraryTests\Data\TestValues.cs" />
-    <Compile Include="Tests\PersistentCollectionsLibraryTests\TestsBase.cs" />
-    <Compile Include="Tests\PersistentCollectionsLibraryTests\Tests\DeserializationErrorHandlingTests.cs" />
-    <Compile Include="Tests\PersistentCollectionsLibraryTests\Tests\MigrationsTests.cs" />
-    <Compile Include="Tests\PersistentCollectionsLibraryTests\Tests\PersistenceAndLoadingTests.cs" />
-    <Compile Include="Tests\TempDirectoriesTests\UnitTests.cs" />
-    <Compile Include="Tests\Modules\TestsBase.cs" />
-    <Compile Include="Tests\Modules\Wurm\WurmTests.cs" />
-    <Compile Include="Tools\BinaryTestSerializer.cs" />
-    <Compile Include="Tools\JsonTestSerializer.cs" />
-    <Compile Include="Tests\Events\InternalEventInvokerTests.cs" />
-    <Compile Include="Tests\Events\PublicEventInvokerTests.cs" />
-    <Compile Include="Tests\Utility\SignallizableThreadedOperationTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\CharacterDirectories\WurmCharacterDirectoriesTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\Characters\WurmCharactersTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\ConfigDirectories\WurmConfigDirectoriesTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\Configs\WurmConfigsTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\LogDefinitions\WurmLogDefinitionsTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\LogFiles\WurmLogFilesTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\LogsHistory\MonthlyHeuristicsExtractorTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\LogsHistory\WurmLogsHistoryTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\LogsMonitor\WurmLogsMonitorTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\ServerHistory\SortedServerHistoryTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\ServerHistory\WurmServerHistoryTests.cs" />
-    <Compile Include="Tests\Modules\Wurm\Servers\WurmServersTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\Characters\Logs\WurmCharacterLogsTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\Characters\Skills\WurmCharacterSkillsTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\LogReading\LogFileStreamReaderLinuxTests.cs" />
+    <Compile Include="Scenarios\PersistentCollections\CustomDeserializationErrorHandler.cs" />
+    <Compile Include="Scenarios\PersistentCollections\Data\Dtos.cs" />
+    <Compile Include="Scenarios\PersistentCollections\Data\PersistentData.cs" />
+    <Compile Include="Scenarios\PersistentCollections\Data\TestValues.cs" />
+    <Compile Include="Scenarios\PersistentCollections\TestsBase.cs" />
+    <Compile Include="Scenarios\PersistentCollections\Tests\DeserializationErrorHandlingTests.cs" />
+    <Compile Include="Scenarios\PersistentCollections\Tests\MigrationsTests.cs" />
+    <Compile Include="Scenarios\PersistentCollections\Tests\PersistenceAndLoadingTests.cs" />
+    <Compile Include="Scenarios\TempDirectoriesTests\UnitTests.cs" />
+    <Compile Include="Scenarios\Modules\TestsBase.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\WurmTests.cs" />
+    <Compile Include="Scenarios\Utility\SignallizableThreadedOperationTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\CharacterDirectories\WurmCharacterDirectoriesTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\Characters\WurmCharactersTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\ConfigDirectories\WurmConfigDirectoriesTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\Configs\WurmConfigsTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\LogDefinitions\WurmLogDefinitionsTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\LogFiles\WurmLogFilesTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\LogsHistory\MonthlyHeuristicsExtractorTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\LogsHistory\WurmLogsHistoryTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\LogsMonitor\WurmLogsMonitorTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\ServerHistory\SortedServerHistoryTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\ServerHistory\WurmServerHistoryTests.cs" />
+    <Compile Include="Scenarios\Modules\Wurm\Servers\WurmServersTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\WurmDateTimeTests.cs" />
     <Compile Include="WurmApiIntegrationFixtureV2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\CsvOutput1.txt" />
-    <Content Include="Tests\TempDirectoriesTests\SampleSourceDir\Sample.txt">
+    <Content Include="Scenarios\TempDirectoriesTests\SampleSourceDir\Sample.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x64\7z.dll">
@@ -213,7 +207,7 @@
     <Content Include="Resources\TestPaksZipped\WurmCharacterLogsTests-wurmdir.7z">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Tests\TempDirectoriesTests\SampleZippedDir.7z">
+    <None Include="Scenarios\TempDirectoriesTests\SampleZippedDir.7z">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="WebTest1.webtest">
@@ -656,8 +650,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Builders\WurmClient\Defaults.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Defaults.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Defaults.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -666,6 +660,7 @@
       <Name>WurmApi</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

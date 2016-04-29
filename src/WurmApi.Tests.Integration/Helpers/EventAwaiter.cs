@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmApi.Tests.Helpers
+namespace AldursLab.WurmApi.Tests.Integration.Helpers
 {
     class EventAwaiter<TEventArgs> where TEventArgs : EventArgs
     {

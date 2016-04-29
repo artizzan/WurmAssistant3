@@ -1,6 +1,6 @@
-﻿using AldursLab.WurmApi.Tests.TempDirs;
+﻿using AldursLab.WurmApi.Tests.Integration.TempDirs;
 
-namespace AldursLab.WurmApi.Tests.Builders.WurmClient
+namespace AldursLab.WurmApi.Tests.Integration.Builders.WurmClient
 {
     static class WurmClientMockBuilder
     {
