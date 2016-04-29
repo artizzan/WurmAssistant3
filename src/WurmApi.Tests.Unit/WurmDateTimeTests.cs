@@ -2,7 +2,7 @@
 using AldursLab.WurmApi.Tests.Unit.Testutils;
 using Xunit;
 
-namespace AldursLab.WurmApi.Tests.Tests
+namespace AldursLab.WurmApi.Tests.Unit
 {
     public class WurmDateTimeTests
     {

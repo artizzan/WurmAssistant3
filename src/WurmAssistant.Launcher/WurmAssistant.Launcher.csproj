@@ -83,8 +83,8 @@
       <HintPath>..\..\packages\JetBrains.Annotations.10.1.4\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -219,25 +219,24 @@
     <Content Include="stable-windows-unlimited.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="WurmAssistant.Launcher_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AldursLab\Essentials\Essentials.csproj">
+    <ProjectReference Include="..\..\modules\AldursLab\Essentials\Essentials.csproj">
       <Project>{e7e145ed-1938-4c09-b432-dc7d7a2d5ddb}</Project>
       <Name>Essentials</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AldursLab\Networking\Networking.csproj">
+    <ProjectReference Include="..\..\modules\AldursLab\Networking\Networking.csproj">
       <Project>{cf5fdc21-2ff8-42fb-875f-d9a0701bae9f}</Project>
       <Name>Networking</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AldursLab\Persistence\Persistence.csproj">
+    <ProjectReference Include="..\..\modules\AldursLab\Persistence\Persistence.csproj">
       <Project>{fb65cb05-db0c-4cd6-9a89-cf8e973e1d47}</Project>
       <Name>Persistence</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AldursLab\PersistentObjects\PersistentObjects.csproj">
+    <ProjectReference Include="..\..\modules\AldursLab\PersistentObjects\PersistentObjects.csproj">
       <Project>{0962a106-b1b2-4e21-9931-81d68a98ed37}</Project>
       <Name>PersistentObjects</Name>
     </ProjectReference>
