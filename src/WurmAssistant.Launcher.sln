@@ -7,15 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant.Launcher", "W
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AldursLab", "AldursLab", "{6CA89AB0-9BB0-42E9-9DE7-EA5597828FDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials", "AldursLab\Essentials\Essentials.csproj", "{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials", "..\modules\AldursLab\Essentials\Essentials.csproj", "{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Networking", "AldursLab\Networking\Networking.csproj", "{CF5FDC21-2FF8-42FB-875F-D9A0701BAE9F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Networking", "..\modules\AldursLab\Networking\Networking.csproj", "{CF5FDC21-2FF8-42FB-875F-D9A0701BAE9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentObjects", "AldursLab\PersistentObjects\PersistentObjects.csproj", "{0962A106-B1B2-4E21-9931-81D68A98ED37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentObjects", "..\modules\AldursLab\PersistentObjects\PersistentObjects.csproj", "{0962A106-B1B2-4E21-9931-81D68A98ED37}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant.Shared", "WurmAssistant.Shared\WurmAssistant.Shared.csproj", "{2375AA6C-6B2C-4C4E-8CF0-8B3C1D406AEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "AldursLab\Persistence\Persistence.csproj", "{FB65CB05-DB0C-4CD6-9A89-CF8E973E1D47}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "..\modules\AldursLab\Persistence\Persistence.csproj", "{FB65CB05-DB0C-4CD6-9A89-CF8E973E1D47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
