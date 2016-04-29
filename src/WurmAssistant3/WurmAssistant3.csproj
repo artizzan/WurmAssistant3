@@ -144,7 +144,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\modules\AldursLab\Lab\PersistentObjects\PersistentObjects.csproj">
+    <ProjectReference Include="..\..\modules\AldursLab\PersistentObjects\PersistentObjects.csproj">
       <Project>{0962a106-b1b2-4e21-9931-81d68a98ed37}</Project>
       <Name>PersistentObjects</Name>
     </ProjectReference>

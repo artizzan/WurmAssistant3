@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant.PublishRobot"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AldursLab", "AldursLab", "{D3166EBD-236B-4E74-850D-FFAAC5C487FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials", "AldursLab\Lab\Essentials\Essentials.csproj", "{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Essentials", "AldursLab\Essentials\Essentials.csproj", "{E7E145ED-1938-4C09-B432-DC7D7A2D5DDB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WurmAssistant.PublishRobot.WebServiceTester", "WurmAssistant.PublishRobot.WebServiceTester\WurmAssistant.PublishRobot.WebServiceTester.csproj", "{BD05FE0E-BD34-4D05-BBB0-DFA9552B5D0E}"
 EndProject
