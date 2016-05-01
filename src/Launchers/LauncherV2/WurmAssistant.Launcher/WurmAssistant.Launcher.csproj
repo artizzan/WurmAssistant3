@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1E636D2D-609A-46BA-9B01-765D48DC40C3}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AldursLab.WurmAssistant.Launcher</RootNamespace>
+    <AssemblyName>AldursLab.WurmAssistant.Launcher</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>ftp://gladiolus.arvixe.com/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Background</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>true</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://resources.aldurslab.net/WA3-stable-launcher-clickonce/</InstallUrl>
+    <ProductName>Wurm Assistant 3 Launcher</ProductName>
+    <PublisherName>Aldur%27s Lab</PublisherName>
+    <MinimumRequiredVersion>1.0.0.10</MinimumRequiredVersion>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>11</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>0617A295358AFA18CAA61B4FD6BC43482B8F9CD6</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>WurmAssistant.Launcher_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>WurmAssistantIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="JetBrains.Annotations, Version=10.1.4.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\JetBrains.Annotations.10.1.4\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Modules\DataDirectory.cs" />
+    <Compile Include="Contracts\IDataDirectory.cs" />
+    <Compile Include="Dto\ControllerConfig.cs" />
+    <Compile Include="Contracts\IGui.cs" />
+    <Compile Include="Contracts\IGuiHost.cs" />
+    <Compile Include="Contracts\IInstallLocation.cs" />
+    <Compile Include="Contracts\InstallLocation.cs" />
+    <Compile Include="Contracts\IProcessRunner.cs" />
+    <Compile Include="Contracts\IProgressReporter.cs" />
+    <Compile Include="Contracts\IStagingLocation.cs" />
+    <Compile Include="Contracts\IUpdateService.cs" />
+    <Compile Include="Contracts\IWurmAssistantService.cs" />
+    <Compile Include="Modules\UpdateSourceUpdater.cs" />
+    <Compile Include="Root\LaunchController.cs" />
+    <Compile Include="Modules\Launcher.cs" />
+    <Compile Include="Contracts\LauncherState.cs" />
+    <Compile Include="Modules\ArgsManager.cs" />
+    <Compile Include="Modules\ProcessRunner.cs" />
+    <Compile Include="Contracts\ServiceException.cs" />
+    <Compile Include="Modules\StagingLocation.cs" />
+    <Compile Include="Modules\TextDebug.cs" />
+    <Compile Include="Views\UpdaterGui.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UpdaterGui.Designer.cs">
+      <DependentUpon>UpdaterGui.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\UpdateService.cs" />
+    <Compile Include="Views\ChooseApp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\ChooseApp.Designer.cs">
+      <DependentUpon>ChooseApp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Contracts\LaunchChoices.cs" />
+    <Compile Include="Root\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Root\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PackagesView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\PackagesView.Designer.cs">
+      <DependentUpon>PackagesView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Modules\UserSettings.cs" />
+    <Compile Include="Modules\WurmAssistantPackage.cs" />
+    <Compile Include="Modules\WurmAssistantService.cs" />
+    <Compile Include="Modules\ZippedStagedPackage.cs" />
+    <Content Include="README.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WurmAssistantUnlimitedIcon.ico" />
+    <EmbeddedResource Include="Views\UpdaterGui.resx">
+      <DependentUpon>UpdaterGui.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ChooseApp.resx">
+      <DependentUpon>ChooseApp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Root\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\PackagesView.resx">
+      <DependentUpon>PackagesView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Content Include="beta.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="beta-unlimited.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="wurmassistantlauncher.version">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\WurmAssistantUnlimitedIcon.png" />
+    <None Include="Resources\WurmAssistantUnlimitedIcon.ico" />
+    <Content Include="stable-mac.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Content Include="stable-linux.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="stable-windows.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="stable-linux-unlimited.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="stable-mac-unlimited.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="stable-windows-unlimited.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common\Essentials\Essentials.csproj">
+      <Project>{e7e145ed-1938-4c09-b432-dc7d7a2d5ddb}</Project>
+      <Name>Essentials</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\Networking\Networking.csproj">
+      <Project>{cf5fdc21-2ff8-42fb-875f-d9a0701bae9f}</Project>
+      <Name>Networking</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\Persistence\Persistence.csproj">
+      <Project>{fb65cb05-db0c-4cd6-9a89-cf8e973e1d47}</Project>
+      <Name>Persistence</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\WurmAssistant.Shared\WurmAssistant.Shared.csproj">
+      <Project>{2375aa6c-6b2c-4c4e-8cf0-8b3c1d406aea}</Project>
+      <Name>WurmAssistant.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WurmAssistantIcon.ico" />
+    <Content Include="WurmAssistantLiteIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
