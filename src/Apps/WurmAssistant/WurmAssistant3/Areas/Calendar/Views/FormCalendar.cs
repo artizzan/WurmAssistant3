@@ -8,7 +8,6 @@ using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Calendar.Modules;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
-using AldursLab.WurmAssistant3.Legacy;
 using AldursLab.WurmAssistant3.WinForms;
 using JetBrains.Annotations;
 
@@ -176,11 +175,6 @@ namespace AldursLab.WurmAssistant3.Areas.Calendar.Views
         private void FormCalendar_Load(object sender, EventArgs e)
         {
             if (panelOptions.Visible) panelOptions.Visible = false;
-            if (OperatingSystemInfo.RunningOS == OperatingSystemInfo.OStype.WinXP)
-            {
-                logger.Info("adjusting layout for WinXP");
-                this.Size = new Size(this.Size.Width + 110, this.Size.Height);
-            }
         }
 
         private void buttonModSeasonList_Click(object sender, EventArgs e)

@@ -847,7 +847,6 @@
     <Compile Include="IoC\KernelExtensions.cs" />
     <Compile Include="IoC\PreInitializeActionsStrategy.cs" />
     <Compile Include="IoC\SuperFactory.cs" />
-    <Compile Include="Legacy\OperatingSystemInfo.cs" />
     <Compile Include="Profiling\Profiler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
