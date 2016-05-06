@@ -4,13 +4,13 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace AldursLab.Persistence
+namespace AldursLab.Persistence.Simple
 {
-    public class JsonTypelessSerializer : ISerializer
+    public class DefaultJsonSerializer : ISerializer
     {
         readonly JsonSerializer serializer;
 
-        public JsonTypelessSerializer()
+        public DefaultJsonSerializer()
         {
             var settings = new JsonSerializerSettings()
             {
@@ -18,7 +18,7 @@ namespace AldursLab.Persistence
                 PreserveReferencesHandling = PreserveReferencesHandling.All,
                 ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
                 ObjectCreationHandling = ObjectCreationHandling.Replace,
-                TypeNameHandling = TypeNameHandling.None,
+                TypeNameHandling = TypeNameHandling.Auto,
                 ContractResolver = new ExtendedContractResolver()
             };
             serializer = JsonSerializer.Create(settings);

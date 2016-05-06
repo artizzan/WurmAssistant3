@@ -55,7 +55,7 @@
     <Compile Include="Eventing\EventAggregator.cs" />
     <Compile Include="Eventing\EventArgs.cs" />
     <Compile Include="Eventing\IThreadMarshaller.cs" />
-    <Compile Include="Extensions\ActionExtensions.cs" />
+    <Compile Include="Extensions\DotNet\ActionExtensions.cs" />
     <Compile Include="Extensions\DotNet\ComparableExtensions.cs" />
     <Compile Include="Extensions\DotNet\AssemblyExtensions.cs" />
     <Compile Include="Extensions\DotNet\AttributeExtensions.cs" />

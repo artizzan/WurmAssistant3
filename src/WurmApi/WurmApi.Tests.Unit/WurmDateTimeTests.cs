@@ -1,57 +1,57 @@
 ﻿using System;
 using AldursLab.WurmApi.Tests.Unit.Testutils;
-using Xunit;
+using NUnit.Framework;
 
 namespace AldursLab.WurmApi.Tests.Unit
 {
     public class WurmDateTimeTests
     {
-        [Fact]
+        [Test]
         public void CreatesWithProperValues()
         {
             var date = new WurmDateTime(1000, WurmStarfall.Saw, 1, WurmDay.Ant, 12, 6, 8);
-            Assert.Equal(1000, date.Year);
-            Assert.Equal(WurmStarfall.Saw, date.Starfall);
-            Assert.Equal(1, date.Week);
-            Assert.Equal(WurmDay.Ant, date.Day);
-            Assert.Equal(12, date.Hour);
-            Assert.Equal(6, date.Minute);
-            Assert.Equal(8, date.Second);
-            Assert.Equal(29, date.DayInYear);
-            Assert.Equal(new TimeSpan(29, 12, 6, 8), date.DayAndTimeOfYear);
+            Assert.AreEqual(1000, date.Year);
+            Assert.AreEqual(WurmStarfall.Saw, date.Starfall);
+            Assert.AreEqual(1, date.Week);
+            Assert.AreEqual(WurmDay.Ant, date.Day);
+            Assert.AreEqual(12, date.Hour);
+            Assert.AreEqual(6, date.Minute);
+            Assert.AreEqual(8, date.Second);
+            Assert.AreEqual(29, date.DayInYear);
+            Assert.AreEqual(new TimeSpan(29, 12, 6, 8), date.DayAndTimeOfYear);
         }
 
-        [Fact]
+        [Test]
         public void MinMaxHasCorrectValues()
         {
-            Assert.Equal(new WurmDateTime(99999, 12, 4, 7, 23, 59, 59), WurmDateTime.MaxValue);
-            Assert.Equal(new WurmDateTime(0, 1, 1, 1, 0, 0, 0), WurmDateTime.MinValue);
+            Assert.AreEqual(new WurmDateTime(99999, 12, 4, 7, 23, 59, 59), WurmDateTime.MaxValue);
+            Assert.AreEqual(new WurmDateTime(0, 1, 1, 1, 0, 0, 0), WurmDateTime.MinValue);
         }
 
-        [Fact]
+        [Test]
         public void TimeToCalculatesCorrect()
         {
             var date = new WurmDateTime(1000, WurmStarfall.Saw, 1, WurmDay.Ant, 12, 6, 8);
-            Assert.Equal(TimeSpan.FromDays(336), date.TimeTo(new WurmDateTime(1001, WurmStarfall.Saw, 1, WurmDay.Ant, 12, 6, 8)));
+            Assert.AreEqual(TimeSpan.FromDays(336), date.TimeTo(new WurmDateTime(1001, WurmStarfall.Saw, 1, WurmDay.Ant, 12, 6, 8)));
         }
 
-        [Fact]
+        [Test]
         public void ToStringCorrectFormat()
         {
             var date = new WurmDateTime(1000, WurmStarfall.Saw, 1, WurmDay.Ant, 12, 6, 8);
-            Assert.Equal("12:06:08 on day of Ant in week 1 of the Saw starfall in the year of 1000", date.ToString());
+            Assert.AreEqual("12:06:08 on day of Ant in week 1 of the Saw starfall in the year of 1000", date.ToString());
         }
 
-        [Fact]
+        [Test]
         public void SubtractOrAddExceedsLimit_SetsMinMaxValue()
         {
             var dateLow = new WurmDateTime(1, WurmStarfall.Diamond, 1, WurmDay.Ant, 1, 6, 8);
-            Assert.Equal(WurmDateTime.MinValue, dateLow - TimeSpan.FromDays(500));
+            Assert.AreEqual(WurmDateTime.MinValue, dateLow - TimeSpan.FromDays(500));
             var dateHigh = new WurmDateTime(99999, WurmStarfall.Saw, 1, WurmDay.Ant, 12, 6, 8);
-            Assert.Equal(WurmDateTime.MaxValue, dateHigh + TimeSpan.FromDays(900));
+            Assert.AreEqual(WurmDateTime.MaxValue, dateHigh + TimeSpan.FromDays(900));
         }
 
-        [Fact]
+        [Test]
         public void IsWithinCalculatesCorrect()
         {
             var date = new WurmDateTime(1000, WurmStarfall.Saw, 1, WurmDay.Ant, 12, 6, 8);
@@ -62,35 +62,35 @@ namespace AldursLab.WurmApi.Tests.Unit
             Assert.False(date.IsWithin(datemin, datemin));
         }
 
-        [Fact]
+        [Test]
         public void NumericConstruction_ThrowsExceptionsOnBadValues()
         {
             Assert.Throws<ArgumentException>(() => new WurmDateTime(100000, 1, 1, 1, 1, 1, 1));
             Assert.Throws<ArgumentException>(() => new WurmDateTime(-1, 1, 1, 1, 1, 1, 1));
         }
 
-        [Fact]
+        [Test]
         public void TimeSpanAdditionsCalculateCorrectDates()
         {
             var date = new WurmDateTime(1000, WurmStarfall.Diamond, 1, WurmDay.Ant, 12, 0, 0);
 
             var date2 = date + TimeSpan.FromDays(2);
-            Assert.Equal(new WurmDateTime(1000, WurmStarfall.Diamond, 1, WurmDay.Wurm, 12, 0, 0), date2);
+            Assert.AreEqual(new WurmDateTime(1000, WurmStarfall.Diamond, 1, WurmDay.Wurm, 12, 0, 0), date2);
 
             var date3 = date + TimeSpan.FromDays(20);
-            Assert.Equal(new WurmDateTime(1000, WurmStarfall.Diamond, 3, WurmDay.Awakening, 12, 0, 0), date3);
+            Assert.AreEqual(new WurmDateTime(1000, WurmStarfall.Diamond, 3, WurmDay.Awakening, 12, 0, 0), date3);
 
             var date4 = date + TimeSpan.FromDays(28);
-            Assert.Equal(new WurmDateTime(1000, WurmStarfall.Saw, 1, WurmDay.Ant, 12, 0, 0), date4);
+            Assert.AreEqual(new WurmDateTime(1000, WurmStarfall.Saw, 1, WurmDay.Ant, 12, 0, 0), date4);
 
             var date5 = date + TimeSpan.FromDays(336);
-            Assert.Equal(new WurmDateTime(1001, WurmStarfall.Diamond, 1, WurmDay.Ant, 12, 0, 0), date5);
+            Assert.AreEqual(new WurmDateTime(1001, WurmStarfall.Diamond, 1, WurmDay.Ant, 12, 0, 0), date5);
 
             var date6 = date - TimeSpan.FromDays(336);
-            Assert.Equal(new WurmDateTime(999, WurmStarfall.Diamond, 1, WurmDay.Ant, 12, 0, 0), date6);
+            Assert.AreEqual(new WurmDateTime(999, WurmStarfall.Diamond, 1, WurmDay.Ant, 12, 0, 0), date6);
         }
 
-        [Fact]
+        [Test]
         public void Equality()
         {
             // disable "Comparison made to same variable"
@@ -119,14 +119,14 @@ namespace AldursLab.WurmApi.Tests.Unit
 #pragma warning restore 1718
         }
 
-        [Fact]
+        [Test]
         public void HashCodeMatchesPattern()
         {
             var date = new WurmDateTime(1000, WurmStarfall.Diamond, 3, WurmDay.Ant, 12, 0, 0);
-            Assert.Equal(date.TotalSeconds.GetHashCode(), date.GetHashCode());
+            Assert.AreEqual(date.TotalSeconds.GetHashCode(), date.GetHashCode());
         }
 
-        [Fact]
+        [Test]
         public void Serialization_Binary()
         {
             WurmDateTime date = new WurmDateTime(1234, WurmStarfall.Fire, 2, WurmDay.Sleep, 2, 5, 8);
@@ -135,10 +135,10 @@ namespace AldursLab.WurmApi.Tests.Unit
 
             var deserializedDate = serializer.Reserialize(date);
 
-            Assert.Equal(date, deserializedDate);
+            Assert.AreEqual(date, deserializedDate);
         }
 
-        [Fact]
+        [Test]
         public void Serialization_Json()
         {
             var serializer = new JsonTestSerializer<WurmDateTime>();
@@ -147,7 +147,7 @@ namespace AldursLab.WurmApi.Tests.Unit
 
             var deserialized = serializer.Reserialize(date);
 
-            Assert.Equal(date, deserialized);
+            Assert.AreEqual(date, deserialized);
         }
     }
 }
