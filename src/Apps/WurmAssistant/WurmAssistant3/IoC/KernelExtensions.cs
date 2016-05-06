@@ -1,0 +1,49 @@
+﻿using System;
+using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
+using Ninject;
+
+namespace AldursLab.WurmAssistant3.IoC
+{
+    public static class KernelExtensions
+    {
+        public static void ProhibitGet<T>(this IKernel kernel)
+        {
+            kernel.Bind<T>().ToMethod(context =>
+            {
+                throw new InvalidOperationException(
+                    string.Format("Resolving {0} is not allowed. Resolve interfaces implemented by this type.",
+                        context.Binding.Service.FullName));
+            });
+        }
+
+        public static void LogCoreError(this IKernel kernel, Exception exception, string message)
+        {
+            var loggerFactory = kernel.TryGet<ILoggerFactory>();
+            if (loggerFactory != null)
+            {
+                var logger = loggerFactory.Create("Kernel");
+                logger.Error(exception, message);
+            }
+        }
+
+        public static void LogCoreInfo(this IKernel kernel, string message)
+        {
+            var loggerFactory = kernel.TryGet<ILoggerFactory>();
+            if (loggerFactory != null)
+            {
+                var logger = loggerFactory.Create("Kernel");
+                logger.Info(message);
+            }
+        }
+
+        public static void LogCoreInfo(this IKernel kernel, Exception exception, string message)
+        {
+            var loggerFactory = kernel.TryGet<ILoggerFactory>();
+            if (loggerFactory != null)
+            {
+                var logger = loggerFactory.Create("Kernel");
+                logger.Info(exception, message);
+            }
+        }
+    }
+}

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using AldursLab.WurmAssistant3.Core.Root;
+using AldursLab.WurmAssistant3.Root;
 using Caliburn.Micro;
 
 namespace AldursLab.WurmAssistant3
