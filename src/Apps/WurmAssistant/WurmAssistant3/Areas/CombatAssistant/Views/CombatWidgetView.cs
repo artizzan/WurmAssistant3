@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using AldursLab.WurmAssistant3.Areas.CombatAssistant.Contracts;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.CombatAssistant.Views
 {

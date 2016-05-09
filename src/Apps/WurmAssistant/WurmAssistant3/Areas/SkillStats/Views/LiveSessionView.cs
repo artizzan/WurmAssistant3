@@ -7,7 +7,7 @@ using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.Essentials.Extensions.DotNet.Collections.Generic;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.SkillStats.Data;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 using ILogger = AldursLab.WurmAssistant3.Areas.Logging.Contracts.ILogger;
 
 namespace AldursLab.WurmAssistant3.Areas.SkillStats.Views

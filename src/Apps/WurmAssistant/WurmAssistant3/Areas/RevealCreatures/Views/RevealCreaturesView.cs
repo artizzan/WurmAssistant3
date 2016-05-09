@@ -8,7 +8,7 @@ using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.RevealCreatures.Data;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 using BrightIdeasSoftware;
 
 namespace AldursLab.WurmAssistant3.Areas.RevealCreatures.Views

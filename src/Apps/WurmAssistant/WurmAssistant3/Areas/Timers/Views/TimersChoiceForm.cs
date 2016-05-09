@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AldursLab.WurmAssistant3.Areas.Timers.Contracts;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Views
 {

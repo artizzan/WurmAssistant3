@@ -5,7 +5,7 @@ using AldursLab.WurmAssistant3.Areas.Granger.Modules;
 using AldursLab.WurmAssistant3.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Areas.Granger.Modules.ImportExport.Legacy;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.Views

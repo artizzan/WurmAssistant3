@@ -4,12 +4,12 @@ using System.Linq;
 using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.InstallDirectory;
 using AldursLab.WurmAssistant3.Areas.Config.Modules;
+using AldursLab.WurmAssistant3.Areas.Core.Components.Singletons;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.WurmApi.Contracts;
 using AldursLab.WurmAssistant3.Areas.WurmApi.Modules;
-using AldursLab.WurmAssistant3.IoC;
-using AldursLab.WurmAssistant3.Root.Components;
-using AldursLab.WurmAssistant3.Root.Contracts;
+using AldursLab.WurmAssistant3.Utils.IoC;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.WurmApi

@@ -1,12 +1,12 @@
 ﻿using System.IO;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Modules;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Modules.BuiltIn;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Modules.Irrklang;
-using AldursLab.WurmAssistant3.Root.Contracts;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.SoundManager

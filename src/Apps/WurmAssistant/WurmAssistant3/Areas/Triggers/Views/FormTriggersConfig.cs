@@ -6,7 +6,7 @@ using AldursLab.WurmAssistant3.Areas.Triggers.Modules;
 using AldursLab.WurmAssistant3.Areas.Triggers.Modules.TriggersManager;
 using AldursLab.WurmAssistant3.Areas.Triggers.Views.TriggersManager;
 using AldursLab.WurmAssistant3.Properties;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.Views

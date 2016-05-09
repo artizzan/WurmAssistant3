@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using AldursLab.WurmAssistant3.Areas.SkillStats.Data;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.SkillStats.Views
 {

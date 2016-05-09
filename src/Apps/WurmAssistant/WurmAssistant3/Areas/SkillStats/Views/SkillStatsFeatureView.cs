@@ -9,7 +9,7 @@ using AldursLab.WurmApi.Modules.Wurm.Characters.Skills;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.SkillStats.Data;
 using AldursLab.WurmAssistant3.Areas.SkillStats.Modules;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.SkillStats.Views
 {

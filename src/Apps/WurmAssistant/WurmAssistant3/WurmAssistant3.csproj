@@ -114,80 +114,80 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Root\Components\BinDirectory.cs" />
-    <Compile Include="Root\Components\ChangelogManager.cs" />
-    <Compile Include="Root\Components\ConsoleArgsManager.cs" />
-    <Compile Include="Root\Components\ProcessStarter.cs" />
-    <Compile Include="Root\Components\UserNotifier.cs" />
-    <Compile Include="Root\Components\WaExecutionInfoProvider.cs" />
-    <Compile Include="Root\Components\WaVersion.cs" />
-    <Compile Include="Root\Components\WinFormsThreadMarshaller.cs" />
-    <Compile Include="Root\Components\WurmAssistantDataDirectory.cs" />
-    <Compile Include="Root\Contracts\IBinDirectory.cs" />
-    <Compile Include="Root\Contracts\IChangelogManager.cs" />
-    <Compile Include="Root\Contracts\IHostEnvironment.cs" />
-    <Compile Include="Root\Contracts\IProcessStarter.cs" />
-    <Compile Include="Root\Contracts\ISendBugReportViewFactory.cs" />
-    <Compile Include="Root\Contracts\ISystemTrayContextMenu.cs" />
-    <Compile Include="Root\Contracts\IUpdateLoop.cs" />
-    <Compile Include="Root\Contracts\IUserNotifier.cs" />
-    <Compile Include="Root\Contracts\IWaExecutionInfoProvider.cs" />
-    <Compile Include="Root\Contracts\IWaVersion.cs" />
-    <Compile Include="Root\Contracts\IWurmAssistantDataDirectory.cs" />
-    <Compile Include="Root\CoreBootstrapper.cs" />
-    <Compile Include="Root\MainForm.cs">
+    <Compile Include="Areas\Core\Components\Singletons\BinDirectory.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\ChangelogManager.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\ConsoleArgsManager.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\ProcessStarter.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\UserNotifier.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\WaExecutionInfoProvider.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\WaVersion.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\WinFormsThreadMarshaller.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\WurmAssistantDataDirectory.cs" />
+    <Compile Include="Areas\Core\Contracts\IBinDirectory.cs" />
+    <Compile Include="Areas\Core\Contracts\IChangelogManager.cs" />
+    <Compile Include="Areas\Core\Contracts\IHostEnvironment.cs" />
+    <Compile Include="Areas\Core\Contracts\IProcessStarter.cs" />
+    <Compile Include="Areas\Core\Contracts\ISendBugReportViewFactory.cs" />
+    <Compile Include="Areas\Core\Contracts\ISystemTrayContextMenu.cs" />
+    <Compile Include="Areas\Core\Contracts\IUpdateLoop.cs" />
+    <Compile Include="Areas\Core\Contracts\IUserNotifier.cs" />
+    <Compile Include="Areas\Core\Contracts\IWaExecutionInfoProvider.cs" />
+    <Compile Include="Areas\Core\Contracts\IWaVersion.cs" />
+    <Compile Include="Areas\Core\Contracts\IWurmAssistantDataDirectory.cs" />
+    <Compile Include="CoreBootstrapper.cs" />
+    <Compile Include="Areas\Core\Views\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Root\MainForm.Designer.cs">
+    <Compile Include="Areas\Core\Views\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Root\Views\SendBugReportView.cs">
+    <Compile Include="Areas\Core\Views\SendBugReportView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Root\Views\SendBugReportView.Designer.cs">
+    <Compile Include="Areas\Core\Views\SendBugReportView.Designer.cs">
       <DependentUpon>SendBugReportView.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\ExtendedForm.cs">
+    <Compile Include="Utils\WinForms\ExtendedForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\ExtendedUserControl.cs">
+    <Compile Include="Utils\WinForms\ExtendedUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="WinForms\LabelAutowrap.cs">
+    <Compile Include="Utils\WinForms\LabelAutowrap.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WinForms\ListViewNf.cs">
+    <Compile Include="Utils\WinForms\ListViewNf.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WinForms\MinimizationManager.cs" />
-    <Compile Include="WinForms\PersistentForm.cs">
+    <Compile Include="Utils\WinForms\MinimizationManager.cs" />
+    <Compile Include="Utils\WinForms\PersistentForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\PersistentUserControl.cs">
+    <Compile Include="Utils\WinForms\PersistentUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="WinForms\Reusables\UniversalTextDisplayView.cs">
+    <Compile Include="Utils\WinForms\Reusables\UniversalTextDisplayView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WinForms\Reusables\UniversalTextDisplayView.Designer.cs">
+    <Compile Include="Utils\WinForms\Reusables\UniversalTextDisplayView.Designer.cs">
       <DependentUpon>UniversalTextDisplayView.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\TextBoxNf.cs">
+    <Compile Include="Utils\WinForms\TextBoxNf.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WinForms\TimeSpanInput.cs">
+    <Compile Include="Utils\WinForms\TimeSpanInput.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="WinForms\TimeSpanInput.Designer.cs">
+    <Compile Include="Utils\WinForms\TimeSpanInput.Designer.cs">
       <DependentUpon>TimeSpanInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\TimeSpanInputCompact.cs">
+    <Compile Include="Utils\WinForms\TimeSpanInputCompact.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="WinForms\TimeSpanInputCompact.Designer.cs">
+    <Compile Include="Utils\WinForms\TimeSpanInputCompact.Designer.cs">
       <DependentUpon>TimeSpanInputCompact.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\WidgetModeManager.cs" />
+    <Compile Include="Utils\WinForms\WidgetModeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Calendar\CalendarSetup.cs" />
@@ -843,11 +843,10 @@
     </Compile>
     <Compile Include="Areas\WurmApi\WurmApiSetup.cs" />
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="IoC\ISuperFactory.cs" />
-    <Compile Include="IoC\KernelExtensions.cs" />
-    <Compile Include="IoC\PreInitializeActionsStrategy.cs" />
-    <Compile Include="IoC\SuperFactory.cs" />
-    <Compile Include="Profiling\Profiler.cs" />
+    <Compile Include="Areas\Core\Contracts\ISuperFactory.cs" />
+    <Compile Include="Utils\IoC\KernelExtensions.cs" />
+    <Compile Include="Utils\IoC\PreInitializeActionsStrategy.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\SuperFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1093,19 +1092,19 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Root\MainForm.resx">
+    <EmbeddedResource Include="Areas\Core\Views\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Root\Views\SendBugReportView.resx">
+    <EmbeddedResource Include="Areas\Core\Views\SendBugReportView.resx">
       <DependentUpon>SendBugReportView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\Reusables\UniversalTextDisplayView.resx">
+    <EmbeddedResource Include="Utils\WinForms\Reusables\UniversalTextDisplayView.resx">
       <DependentUpon>UniversalTextDisplayView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\TimeSpanInput.resx">
+    <EmbeddedResource Include="Utils\WinForms\TimeSpanInput.resx">
       <DependentUpon>TimeSpanInput.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\TimeSpanInputCompact.resx">
+    <EmbeddedResource Include="Utils\WinForms\TimeSpanInputCompact.resx">
       <DependentUpon>TimeSpanInputCompact.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
@@ -1122,6 +1121,14 @@
     <ProjectReference Include="..\..\..\Common\Essentials\Essentials.csproj">
       <Project>{e7e145ed-1938-4c09-b432-dc7d7a2d5ddb}</Project>
       <Name>Essentials</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\Persistence.Simple\Persistence.Simple.csproj">
+      <Project>{e1c00979-8878-4e3f-9fff-668e0a4c660b}</Project>
+      <Name>Persistence.Simple</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\Persistence\Persistence.csproj">
+      <Project>{fb65cb05-db0c-4cd6-9a89-cf8e973e1d47}</Project>
+      <Name>Persistence</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Common\PersistentObjects\PersistentObjects.csproj">
       <Project>{d97b40b0-debe-49ea-a630-7aa4e1e46c82}</Project>
@@ -1204,12 +1211,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Config\ViewModels\" />
+    <Folder Include="Areas\Core\Components\AreaScoped\" />
+    <Folder Include="Areas\Core\Components\Transients\" />
+    <Folder Include="Areas\Core\Data\" />
     <Folder Include="Areas\CraftingAssistant\Contracts\" />
     <Folder Include="Areas\Features\Views\" />
     <Folder Include="Areas\Granger\Contracts\" />
     <Folder Include="Areas\MainMenu\Contracts\" />
     <Folder Include="Areas\RevealCreatures\Contracts\" />
-    <Folder Include="WinForms\Utility\" />
+    <Folder Include="Utils\WinForms\Utility\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

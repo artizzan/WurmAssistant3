@@ -1,4 +1,4 @@
-﻿using AldursLab.WurmAssistant3.WinForms;
+﻿using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Views
 {
@@ -241,7 +241,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Views
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button addBtn;
         private System.Windows.Forms.Button removeBtn;
-        private WinForms.LabelAutowrap labelAutowrap1;
+        private LabelAutowrap labelAutowrap1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button moveDownBtn;
         private System.Windows.Forms.Button moveUpBtn;

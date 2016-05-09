@@ -1,4 +1,4 @@
-﻿using AldursLab.WurmAssistant3.WinForms;
+﻿using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.CombatAssistant.Views
 {
@@ -260,7 +260,7 @@ namespace AldursLab.WurmAssistant3.Areas.CombatAssistant.Views
         private System.Windows.Forms.DateTimePicker fromDtpick;
         private System.Windows.Forms.DateTimePicker toDtpick;
         private System.Windows.Forms.Button createAssistantBtn;
-        private WinForms.LabelAutowrap labelAutowrap1;
+        private LabelAutowrap labelAutowrap1;
         private System.Windows.Forms.Label label2;
     }
 }

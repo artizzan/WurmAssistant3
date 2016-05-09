@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.SoundManager.Views

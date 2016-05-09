@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Areas.Granger.Modules.Advisor.Default;
 using AldursLab.WurmAssistant3.Areas.Granger.Modules.DataLayer;
@@ -12,7 +13,6 @@ using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Properties;
-using AldursLab.WurmAssistant3.Root.Contracts;
 using JetBrains.Annotations;
 using WurmAssistantDataTransfer.Dtos;
 

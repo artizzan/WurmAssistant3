@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AldursLab.WurmAssistant3.Areas.Granger.Modules.DataLayer;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.Views
 {

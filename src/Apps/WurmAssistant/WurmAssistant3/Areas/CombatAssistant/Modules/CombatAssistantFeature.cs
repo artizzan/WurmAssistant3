@@ -3,10 +3,10 @@ using System.Drawing;
 using System.Threading.Tasks;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.CombatAssistant.Views;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Properties;
-using AldursLab.WurmAssistant3.Root.Contracts;
 using WurmAssistantDataTransfer.Dtos;
 
 namespace AldursLab.WurmAssistant3.Areas.CombatAssistant.Modules

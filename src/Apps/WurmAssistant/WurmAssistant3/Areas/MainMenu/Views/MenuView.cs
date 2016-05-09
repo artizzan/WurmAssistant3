@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Wa2DataImport.Contracts;
 using AldursLab.WurmAssistant3.Properties;
-using AldursLab.WurmAssistant3.Root.Contracts;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.MainMenu.Views

@@ -8,7 +8,7 @@ using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Timers.Modules;
 using AldursLab.WurmAssistant3.Areas.Timers.Views.Timers;
 using AldursLab.WurmAssistant3.Areas.Timers.Views.Timers.Custom;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Views

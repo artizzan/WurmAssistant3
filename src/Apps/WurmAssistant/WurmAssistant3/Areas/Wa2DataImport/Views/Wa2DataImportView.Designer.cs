@@ -1,4 +1,4 @@
-﻿using AldursLab.WurmAssistant3.WinForms;
+﻿using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Wa2DataImport.Views
 {
@@ -81,7 +81,7 @@ namespace AldursLab.WurmAssistant3.Areas.Wa2DataImport.Views
 
         #endregion
 
-        private WinForms.LabelAutowrap labelAutowrap1;
+        private LabelAutowrap labelAutowrap1;
         private System.Windows.Forms.Button selectFileBtn;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
     }

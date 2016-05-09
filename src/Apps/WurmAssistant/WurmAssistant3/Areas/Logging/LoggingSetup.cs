@@ -1,8 +1,8 @@
 using System.IO;
 using AldursLab.Essentials.Eventing;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Modules;
-using AldursLab.WurmAssistant3.Root.Contracts;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Logging

@@ -2,7 +2,7 @@ using System;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
-using AldursLab.WurmAssistant3.Root.Components;
+using AldursLab.WurmAssistant3.Areas.Core.Components.Singletons;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 

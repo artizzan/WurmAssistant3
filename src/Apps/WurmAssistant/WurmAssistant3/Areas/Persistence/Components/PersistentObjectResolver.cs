@@ -2,8 +2,8 @@
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using AldursLab.PersistentObjects;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Persistence.Contracts;
-using AldursLab.WurmAssistant3.IoC;
 using JetBrains.Annotations;
 using Ninject.Parameters;
 

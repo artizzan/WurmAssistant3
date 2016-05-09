@@ -2,7 +2,7 @@
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Areas.Timers.Modules.Timers;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Views.Timers

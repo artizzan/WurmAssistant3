@@ -1,4 +1,4 @@
-﻿using AldursLab.WurmAssistant3.WinForms;
+﻿using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Config.Views
 {
@@ -118,7 +118,7 @@ namespace AldursLab.WurmAssistant3.Areas.Config.Views
         #endregion
 
         private System.Windows.Forms.LinkLabel linkLabel1;
-        private WinForms.LabelAutowrap labelAutowrap1;
+        private LabelAutowrap labelAutowrap1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button1;

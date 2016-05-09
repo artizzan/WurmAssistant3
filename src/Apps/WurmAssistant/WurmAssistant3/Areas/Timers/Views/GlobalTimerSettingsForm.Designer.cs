@@ -1,4 +1,4 @@
-﻿using AldursLab.WurmAssistant3.WinForms;
+﻿using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Views
 {

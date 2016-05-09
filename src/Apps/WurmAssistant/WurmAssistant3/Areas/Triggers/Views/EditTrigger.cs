@@ -8,7 +8,7 @@ using AldursLab.WurmAssistant3.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Areas.Triggers.Modules.Notifiers;
 using AldursLab.WurmAssistant3.Areas.Triggers.Modules.TriggersManager;
 using AldursLab.WurmAssistant3.Areas.Triggers.Views.Notifiers;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.Views

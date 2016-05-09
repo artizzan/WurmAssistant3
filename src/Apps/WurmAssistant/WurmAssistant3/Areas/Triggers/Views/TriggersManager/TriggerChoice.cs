@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Areas.Triggers.Data;
 using AldursLab.WurmAssistant3.Areas.Triggers.Modules;
 using AldursLab.WurmAssistant3.Areas.Triggers.Modules.TriggersManager;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.Views.TriggersManager
 {

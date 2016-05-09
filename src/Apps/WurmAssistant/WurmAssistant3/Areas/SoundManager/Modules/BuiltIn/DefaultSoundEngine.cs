@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Media;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
-using AldursLab.WurmAssistant3.Root.Contracts;
 
 namespace AldursLab.WurmAssistant3.Areas.SoundManager.Modules.BuiltIn
 {

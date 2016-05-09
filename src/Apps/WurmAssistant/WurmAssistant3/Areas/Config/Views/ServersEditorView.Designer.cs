@@ -1,4 +1,4 @@
-﻿using AldursLab.WurmAssistant3.WinForms;
+﻿using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Config.Views
 {
@@ -186,7 +186,7 @@ namespace AldursLab.WurmAssistant3.Areas.Config.Views
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Button saveButton;
-        private WinForms.LabelAutowrap labelAutowrap1;
+        private LabelAutowrap labelAutowrap1;
         private System.Windows.Forms.DataGridView customGrid;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;

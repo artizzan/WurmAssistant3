@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Areas.Timers.Modules;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Views.Timers.Custom

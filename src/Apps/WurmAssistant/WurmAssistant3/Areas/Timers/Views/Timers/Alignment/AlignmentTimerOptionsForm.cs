@@ -1,6 +1,6 @@
 ﻿using System;
 using AldursLab.WurmAssistant3.Areas.Timers.Modules.Timers.Alignment;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Views.Timers.Alignment
 {

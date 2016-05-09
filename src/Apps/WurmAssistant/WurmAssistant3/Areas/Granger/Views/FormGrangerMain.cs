@@ -10,7 +10,7 @@ using AldursLab.WurmAssistant3.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Areas.Granger.Modules.ValuePreset;
 using AldursLab.WurmAssistant3.Areas.Granger.Views.ValuePreset;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.Views

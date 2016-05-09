@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.Views
 {

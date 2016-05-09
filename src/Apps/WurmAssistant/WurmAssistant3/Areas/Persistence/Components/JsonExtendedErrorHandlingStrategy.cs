@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Windows.Forms;
 using AldursLab.PersistentObjects.Serialization;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Persistence.Views;
-using AldursLab.WurmAssistant3.Root.Contracts;
 using JetBrains.Annotations;
 using Newtonsoft.Json.Serialization;
 

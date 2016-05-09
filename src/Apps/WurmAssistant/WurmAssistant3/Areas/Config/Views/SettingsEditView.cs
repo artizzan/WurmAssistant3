@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.WurmApi.Contracts;
-using AldursLab.WurmAssistant3.Root.Contracts;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Config.Views

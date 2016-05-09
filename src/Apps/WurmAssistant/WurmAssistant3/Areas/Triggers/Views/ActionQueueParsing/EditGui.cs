@@ -9,7 +9,7 @@ using AldursLab.Essentials.Csv;
 using AldursLab.WurmAssistant3.Areas.Triggers.Contracts.ActionQueueParsing;
 using AldursLab.WurmAssistant3.Areas.Triggers.Modules.ActionQueueParsing;
 using AldursLab.WurmAssistant3.Properties;
-using AldursLab.WurmAssistant3.WinForms.Reusables;
+using AldursLab.WurmAssistant3.Utils.WinForms.Reusables;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.Views.ActionQueueParsing

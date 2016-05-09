@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 using ILogger = AldursLab.WurmAssistant3.Areas.Logging.Contracts.ILogger;
 

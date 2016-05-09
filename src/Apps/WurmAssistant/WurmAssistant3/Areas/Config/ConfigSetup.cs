@@ -3,8 +3,8 @@ using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Areas.Config.Modules;
 using AldursLab.WurmAssistant3.Areas.Config.Views;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.WurmApi.Modules;
-using AldursLab.WurmAssistant3.Root.Contracts;
 using Ninject;
 using Ninject.Extensions.Factory;
 

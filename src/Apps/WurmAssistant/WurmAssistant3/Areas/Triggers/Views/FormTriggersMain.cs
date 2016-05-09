@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Areas.Triggers.Modules;
 using AldursLab.WurmAssistant3.Areas.Triggers.Views.TriggersManager;
-using AldursLab.WurmAssistant3.WinForms;
+using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.Views
