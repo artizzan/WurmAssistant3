@@ -82,9 +82,16 @@ namespace AldursLab.WurmApi.Modules.Wurm.LogsMonitor
                     Thread.Sleep(500);
                     if (stop) return;
 
-                    foreach (var logsMonitorEngineManager in characterNameToEngineManagers.Values)
+                    try
                     {
-                        logsMonitorEngineManager.Update(allEventSubscriptionsTsafe);
+                        foreach (var logsMonitorEngineManager in characterNameToEngineManagers.Values)
+                        {
+                            logsMonitorEngineManager.Update(allEventSubscriptionsTsafe);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        logger.Log(LogLevel.Error, "WurmLogsMonitor 'updater' task crashed", this, exception);
                     }
                 }
             }, TaskCreationOptions.LongRunning);

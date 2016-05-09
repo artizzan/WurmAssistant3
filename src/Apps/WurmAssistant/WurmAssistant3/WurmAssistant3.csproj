@@ -156,10 +156,6 @@
       <Project>{f23b8ad5-5c3b-4c9a-bc11-3577f1cb3272}</Project>
       <Name>WurmApi</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WurmAssistant3.Core\WurmAssistant3.Core.csproj">
-      <Project>{da679803-09bd-4d44-9c0b-2dcc4d179f6b}</Project>
-      <Name>WurmAssistant3.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Common\WurmAssistantDataTransfer.Dtos\WurmAssistantDataTransfer.Dtos.csproj">
       <Project>{c8867a15-9144-48fd-8816-0283fdb38c6b}</Project>
       <Name>WurmAssistantDataTransfer.Dtos</Name>
@@ -167,6 +163,10 @@
     <ProjectReference Include="..\..\..\Common\WurmAssistantDataTransfer\WurmAssistantDataTransfer.csproj">
       <Project>{c2591795-c58c-4b9a-a1dd-38669c0b0b3d}</Project>
       <Name>WurmAssistantDataTransfer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant3.Core\WurmAssistant3.Core.csproj">
+      <Project>{da679803-09bd-4d44-9c0b-2dcc4d179f6b}</Project>
+      <Name>WurmAssistant3.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

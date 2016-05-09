@@ -74,24 +74,52 @@ namespace AldursLab.WurmApi.Utility
         public IList<LogEntry> ParseLinesFromLogsScan(IReadOnlyList<string> lines, DateTime dayStamp)
         {
             List<LogEntry> result = new List<LogEntry>(lines.Count);
+            DateTime? previousStamp = null;
             foreach (var line in lines)
             {
                 if (IsLoggingStartedLine(line))
                 {
                     continue;
                 }
-                TimeSpan span = ParsingHelper.GetTimestampFromLogLine(line);
+                // maybe just empty line (eg. happens on examining signs)
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
+                TimeSpan? parsedTime = null;
+                DateTime? currentStamp = null;
+                try
+                {
+                    parsedTime = ParsingHelper.GetTimestampFromLogLine(line);
+                }
+                catch (Exception exception)
+                {
+                    logger.Log(LogLevel.Warn, "Found log line with unparseable timestamp, line may be ignored.", this, exception);
+                }
+                
                 string source = ParsingHelper.TryParseSourceFromLogLine(line);
                 string content = ParsingHelper.TryParseContentFromLogLine(line);
-                DateTime finalStamp = new DateTime(dayStamp.Year,
-                    dayStamp.Month,
-                    dayStamp.Day,
-                    span.Hours,
-                    span.Minutes,
-                    span.Seconds);
+                if (parsedTime.HasValue)
+                {
+                    currentStamp = new DateTime(dayStamp.Year,
+                        dayStamp.Month,
+                        dayStamp.Day,
+                        parsedTime.Value.Hours,
+                        parsedTime.Value.Minutes,
+                        parsedTime.Value.Seconds);
+                }
+                else if (previousStamp.HasValue)
+                {
+                    currentStamp = previousStamp.Value;
+                }
 
-                LogEntry entry = new LogEntry(finalStamp, source, content);
-                result.Add(entry);
+                if (currentStamp.HasValue)
+                {
+                    previousStamp = currentStamp;
+
+                    LogEntry entry = new LogEntry(currentStamp.Value, source, content);
+                    result.Add(entry);
+                }
             }
             return result;
         }

@@ -172,7 +172,7 @@ namespace AldursLab.WurmApi.Utility
             {
                 return match.Groups[1].Value;
             }
-            return string.Empty;
+            return line;
         }
 
         public static string TryParsePmRecipientFromFileName(string fileName)
