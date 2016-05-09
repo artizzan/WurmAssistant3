@@ -1150,6 +1150,10 @@
       <Project>{c2591795-c58c-4b9a-a1dd-38669c0b0b3d}</Project>
       <Name>WurmAssistantDataTransfer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant3.Core\WurmAssistant3.Core.csproj">
+      <Project>{da679803-09bd-4d44-9c0b-2dcc4d179f6b}</Project>
+      <Name>WurmAssistant3.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Areas\Granger\Refactor.txt" />
