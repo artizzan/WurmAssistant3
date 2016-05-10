@@ -61,8 +61,8 @@
             this.olvColumn3});
             this.objectListView.Cursor = System.Windows.Forms.Cursors.Default;
             this.objectListView.FullRowSelect = true;
-            this.objectListView.HighlightBackgroundColor = System.Drawing.Color.Empty;
-            this.objectListView.HighlightForegroundColor = System.Drawing.Color.Empty;
+            this.objectListView.SelectedBackColor = System.Drawing.Color.Empty;
+            this.objectListView.SelectedForeColor = System.Drawing.Color.Empty;
             this.objectListView.Location = new System.Drawing.Point(12, 37);
             this.objectListView.Name = "objectListView";
             this.objectListView.ShowCommandMenuOnRightClick = true;

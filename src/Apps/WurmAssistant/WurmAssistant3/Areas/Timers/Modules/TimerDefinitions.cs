@@ -121,7 +121,6 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Modules
 
         public TimerDefinition TryGetByName(string name)
         {
-            TimerDefinition result;
             return timerDefinitions.Values.SingleOrDefault(
                 definition => definition.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }

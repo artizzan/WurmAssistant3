@@ -72,7 +72,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Views
             logChanged = true;
         }
 
-        public void Handle(LogLevel level, string message, Exception exception, string category)
+        public new void Handle(LogLevel level, string message, Exception exception, string category)
         {
             var formattedCategory = ShortenCategory(FilterCategory(category));
             AddMessage(string.Format("{0} > {3}{1}{2}",

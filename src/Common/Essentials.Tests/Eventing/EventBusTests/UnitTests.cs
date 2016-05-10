@@ -86,9 +86,12 @@ namespace AldursLab.Essentials.Tests.Eventing.EventBusTests
         class AsyncSubscriber : IHandle<EmptyMessage>
         {
             public EmptyMessage HandledMessage { get; private set; }
-            public event EventHandler<EventArgs> MessageHandled; 
+            public event EventHandler<EventArgs> MessageHandled;
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+            // intended to be async for testing purposes
             public async void Handle(EmptyMessage message)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
             {
                 HandledMessage = message;
                 OnMessageHandled();

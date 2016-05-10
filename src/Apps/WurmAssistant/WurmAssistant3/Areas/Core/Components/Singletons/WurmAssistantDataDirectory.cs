@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -8,7 +9,7 @@ using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
 {
-    public class WurmAssistantDataDirectory : IWurmAssistantDataDirectory
+    public class WurmAssistantDataDirectory : IWurmAssistantDataDirectory, IDisposable
     {
         readonly DirectoryInfo dataDir;
         FileLock currentAppLock;
@@ -47,10 +48,11 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
 
             dataDir = new DirectoryInfo(dataDirPath);
             if (!dataDir.Exists) dataDir.Create();
+            Lock();
         }
 
         public string DirectoryPath { get { return dataDir.FullName; } }
-        public void Lock()
+        void Lock()
         {
             if (currentAppLock != null)
             {
@@ -84,13 +86,18 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
             currentAppLock = FileLock.Enter(lockFile.FullName);
         }
 
-        public void Unlock()
+        void Unlock()
         {
             if (currentAppLock != null)
             {
                 currentAppLock.Dispose();
                 currentAppLock = null;
             }
+        }
+
+        public void Dispose()
+        {
+            Unlock();
         }
     }
 

@@ -20,6 +20,7 @@ using AldursLab.WurmAssistant3.Areas.MainMenu.Views;
 using AldursLab.WurmAssistant3.Areas.Native.Constants;
 using AldursLab.WurmAssistant3.Areas.Native.Contracts;
 using AldursLab.WurmAssistant3.Areas.Native.Modules;
+using AldursLab.WurmAssistant3.Messages.Lifecycle;
 using AldursLab.WurmAssistant3.Properties;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using AldursLab.WurmAssistant3.Utils.WinForms.Reusables;
@@ -29,7 +30,7 @@ using Newtonsoft.Json;
 namespace AldursLab.WurmAssistant3.Areas.Core.Views
 {
     [PersistentObject("MainForm")]
-    public partial class MainForm : PersistentForm, IUpdateLoop, IHostEnvironment, ISystemTrayContextMenu
+    public partial class MainForm : PersistentForm, IHostEnvironment, ISystemTrayContextMenu
     {
         private readonly string[] args;
         MouseDragManager mouseDragManager;
@@ -143,12 +144,14 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
             InitializeComponent();
         }
 
+        public IEventBus EventBus { get; set; }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
             ConsoleArgsManager argsManager = null;
             try
             {
-                argsManager = new ConsoleArgsManager(args);
+                argsManager = new ConsoleArgsManager();
                 if (argsManager.WurmUnlimitedMode)
                 {
                     this.Text = "Wurm Assistant Unlimited";
@@ -166,7 +169,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
                 minimizationManager = new MinimizationManager(this);
                 trayManager = new TrayManager(this);
 
-                bootstrapper = new CoreBootstrapper(this, argsManager);
+                bootstrapper = new CoreBootstrapper(this);
                 bootstrapper.PreBootstrap();
                 wurmAssistantConfig = bootstrapper.WurmAssistantConfig;
                 logger = bootstrapper.GetCoreLogger();
@@ -194,7 +197,6 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
                         {
                             rwc.AttemptToBringMainWindowToFront("AldursLab.WurmAssistant3", @"^((?!Unlimited).)*$");
                         }
-
                     }
                 }
                 catch (Exception exception)
@@ -312,7 +314,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
                 }
 
                 bootstrapped = true;
-                UpdateTimer.Enabled = true;
+                EventBus.PublishOnUiThread(new AppBootstrapped());
             }
         }
 
@@ -378,14 +380,6 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
             return false;
         }
 
-        private void UpdateTimer_Tick(object sender, EventArgs e)
-        {
-            // guard against running update on scheduled ticks, after beginning shutdown
-            if (!AppClosing)
-            {
-                OnUpdate();
-            }
-        }
 
         public event EventHandler<EventArgs> Updated;
 
@@ -398,7 +392,6 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
         private void MainView_FormClosing(object sender, FormClosingEventArgs e)
         {
             OnHostClosing();
-            UpdateTimer.Enabled = false;
         }
 
         public event EventHandler<EventArgs> HostClosing;
@@ -423,7 +416,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
         }
 
         public Platform Platform { get { return Platform.Unknown;} }
-
+        
         protected virtual void OnHostClosing()
         {
             if (AppClosing) return;
@@ -431,6 +424,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
             try
             {
                 AppClosing = true;
+                EventBus.PublishOnUiThread(new AppClosing());
                 var handler = HostClosing;
                 if (handler != null)
                     handler(this, EventArgs.Empty);

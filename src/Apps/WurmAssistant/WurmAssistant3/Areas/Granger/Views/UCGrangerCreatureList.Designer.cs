@@ -484,8 +484,8 @@
             this.objectListView1.HasCollapsibleGroups = false;
             this.objectListView1.HeaderWordWrap = true;
             this.objectListView1.HideSelection = false;
-            this.objectListView1.HighlightBackgroundColor = System.Drawing.Color.Empty;
-            this.objectListView1.HighlightForegroundColor = System.Drawing.Color.Empty;
+            this.objectListView1.SelectedBackColor = System.Drawing.Color.Empty;
+            this.objectListView1.SelectedForeColor = System.Drawing.Color.Empty;
             this.objectListView1.Location = new System.Drawing.Point(2, 26);
             this.objectListView1.Margin = new System.Windows.Forms.Padding(2);
             this.objectListView1.Name = "objectListView1";

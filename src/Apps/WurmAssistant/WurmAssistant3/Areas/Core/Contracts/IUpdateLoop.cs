@@ -8,5 +8,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Contracts
         /// Triggered regularly in 500 ms intervals, always on UI thread.
         /// </summary>
         event EventHandler<EventArgs> Updated;
+
+        void Start();
     }
 }

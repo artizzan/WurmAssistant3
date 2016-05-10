@@ -459,6 +459,14 @@
             <para>When we move to .NET 3.5, we can use LINQ and not need this method.</para>
             </remarks>
         </member>
+        <member name="M:BrightIdeasSoftware.ObjectListView.GetCellRenderer(System.Object,BrightIdeasSoftware.OLVColumn)">
+            <summary>
+            Get the renderer to be used to draw the given cell.
+            </summary>
+            <param name="model">The row model for the row</param>
+            <param name="column">The column to be drawn</param>
+            <returns>The renderer used for drawing a cell. Must not return null.</returns>
+        </member>
         <member name="M:BrightIdeasSoftware.ObjectListView.IsDisabled(System.Object)">
             <summary>
             Is this given model object disabled?
@@ -4164,6 +4172,20 @@
             raise those events itself.
             </remarks>
         </member>
+        <member name="P:BrightIdeasSoftware.ObjectListView.CellRendererGetter">
+            <summary>
+            This delegate fetches the renderer for a particular cell. 
+            </summary>
+            <remarks>
+            <para>
+            If this returns null (or is not installed), the renderer for the column will be used.
+            If the column renderer is null, then <seealso cref="P:BrightIdeasSoftware.ObjectListView.DefaultRenderer"/> will be used.
+            </para>
+            <para>
+            This is called every time any cell is drawn. It must be efficient! 
+            </para>
+            </remarks>
+        </member>
         <member name="P:BrightIdeasSoftware.ObjectListView.CellToolTipGetter">
             <summary>
             This delegate is called when the list wants to show a tooltip for a particular cell.
@@ -7629,6 +7651,11 @@
             <param name="newValue"></param>
             <returns></returns>
         </member>
+        <member name="T:BrightIdeasSoftware.CellRendererGetterDelegate">
+            <summary>
+            These delegates are used to get the renderer for a particular cell
+            </summary>
+        </member>
         <member name="T:BrightIdeasSoftware.ColumnRightClickEventHandler">
             <summary>
             The callbacks for RightColumnClick events
@@ -7978,6 +8005,11 @@
         <member name="P:BrightIdeasSoftware.OLVListSubItem.Url">
             <summary>
             Gets or sets the url that should be invoked when this subitem is clicked
+            </summary>
+        </member>
+        <member name="P:BrightIdeasSoftware.OLVListSubItem.Selected">
+            <summary>
+            Gets or sets whether this cell is selected
             </summary>
         </member>
         <member name="T:BrightIdeasSoftware.HitTestLocation">

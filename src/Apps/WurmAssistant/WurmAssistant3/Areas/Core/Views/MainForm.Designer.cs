@@ -34,7 +34,6 @@
             this.MenuViewPanel = new System.Windows.Forms.Panel();
             this.LogViewPanel = new System.Windows.Forms.Panel();
             this.featuresFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.InitTimer = new System.Windows.Forms.Timer(this.components);
             this.systemTrayNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.TrayContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -86,11 +85,6 @@
             this.featuresFlowPanel.Size = new System.Drawing.Size(600, 1);
             this.featuresFlowPanel.TabIndex = 3;
             // 
-            // UpdateTimer
-            // 
-            this.UpdateTimer.Interval = 500;
-            this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
-            // 
             // InitTimer
             // 
             this.InitTimer.Tick += new System.EventHandler(this.InitTimer_Tick);
@@ -133,7 +127,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel MenuViewPanel;
         private System.Windows.Forms.Panel LogViewPanel;
-        private System.Windows.Forms.Timer UpdateTimer;
         private System.Windows.Forms.Timer InitTimer;
         private System.Windows.Forms.NotifyIcon systemTrayNotifyIcon;
         private System.Windows.Forms.ContextMenuStrip TrayContextMenuStrip;

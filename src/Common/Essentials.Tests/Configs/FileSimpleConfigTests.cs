@@ -143,13 +143,13 @@ key1=value1
 key2=value2
 ";
 
-            const string expectedOutputPattern =
-@"Main config file\: .+\\config.cfg
-Override config file\: N/A
-Values\:
-KEY1\=value1
-KEY2\=value2
-End";
+//            const string expectedOutputPattern =
+//@"Main config file\: .+\\config.cfg
+//Override config file\: N/A
+//Values\:
+//KEY1\=value1
+//KEY2\=value2
+//End";
 
             using (DirectoryHandle tempDir1 = TempDirectoriesFactory.CreateEmpty())
             {

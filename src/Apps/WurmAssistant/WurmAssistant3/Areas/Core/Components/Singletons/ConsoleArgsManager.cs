@@ -14,10 +14,9 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
         bool wurmUnlimitedMode = false;
         bool useRelativeDataDir = false;
 
-        public ConsoleArgsManager([NotNull] string[] args)
+        public ConsoleArgsManager()
         {
-            if (args == null) throw new ArgumentNullException("args");
-            this.args = args;
+            this.args = Environment.GetCommandLineArgs();
 
             ParseArgs();
         }

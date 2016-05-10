@@ -58,8 +58,8 @@
             this.resultsView.Cursor = System.Windows.Forms.Cursors.Default;
             this.resultsView.EmptyListMsg = "None";
             this.resultsView.HideSelection = false;
-            this.resultsView.HighlightBackgroundColor = System.Drawing.Color.Empty;
-            this.resultsView.HighlightForegroundColor = System.Drawing.Color.Empty;
+            this.resultsView.SelectedBackColor = System.Drawing.Color.Empty;
+            this.resultsView.SelectedForeColor = System.Drawing.Color.Empty;
             this.resultsView.Location = new System.Drawing.Point(12, 87);
             this.resultsView.Name = "resultsView";
             this.resultsView.ShowCommandMenuOnRightClick = true;

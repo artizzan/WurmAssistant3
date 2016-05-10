@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 using AldursLab.Essentials.Eventing;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
@@ -9,6 +10,7 @@ using AldursLab.WurmAssistant3.Areas.CombatAssistant;
 using AldursLab.WurmAssistant3.Areas.Config;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Areas.Config.Modules;
+using AldursLab.WurmAssistant3.Areas.Core.Components.Obsolete;
 using AldursLab.WurmAssistant3.Areas.Core.Components.Singletons;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Core.Views;
@@ -45,16 +47,11 @@ namespace AldursLab.WurmAssistant3
         readonly IKernel kernel = new StandardKernel();
 
         readonly MainForm mainForm;
-        readonly ConsoleArgsManager consoleArgs;
 
-        WurmAssistantDataDirectory dataDirectory;
-
-        public CoreBootstrapper([NotNull] MainForm mainForm, [NotNull] ConsoleArgsManager consoleArgs)
+        public CoreBootstrapper([NotNull] MainForm mainForm)
         {
-            if (mainForm == null) throw new ArgumentNullException("mainForm");
-            if (consoleArgs == null) throw new ArgumentNullException("consoleArgs");
+            if (mainForm == null) throw new ArgumentNullException(nameof(mainForm));
             this.mainForm = mainForm;
-            this.consoleArgs = consoleArgs;
         }
 
         public void PreBootstrap()
@@ -63,20 +60,21 @@ namespace AldursLab.WurmAssistant3
 
             Regex.CacheSize = 1000;
 
-            dataDirectory = new WurmAssistantDataDirectory(consoleArgs);
-            dataDirectory.Lock();
-
-            kernel.Bind<ConsoleArgsManager>().ToConstant(consoleArgs);
+            kernel.Bind<IEventBus>().To<EventBus>().InSingletonScope();
+            //todo: this hack only until MainForm is replaced.
+            mainForm.EventBus = kernel.Get<IEventBus>();
+            kernel.Bind<ConsoleArgsManager>().ToSelf().InSingletonScope();
             kernel.Bind<ISuperFactory>().To<SuperFactory>().InSingletonScope();
             kernel.Bind<WurmAssistantConfig, IWurmAssistantConfig>().To<WurmAssistantConfig>().InSingletonScope();
 
-            kernel.Bind<IWurmAssistantDataDirectory>().ToConstant(dataDirectory);
+            kernel.Bind<IWurmAssistantDataDirectory>().To<WurmAssistantDataDirectory>().InSingletonScope();
             kernel.ProhibitGet<WurmAssistantDataDirectory>();
 
-            kernel.Bind<WinFormsThreadMarshaller, IThreadMarshaller, IWurmApiEventMarshaller>()
-                  .ToConstant(new WinFormsThreadMarshaller(mainForm));
+            kernel.Bind<DispatcherThreadMarshaller, IThreadMarshaller, IWurmApiEventMarshaller>()
+                  .To<DispatcherThreadMarshaller>().InSingletonScope();
 
-            kernel.Bind<MainForm, IHostEnvironment, IUpdateLoop, ISystemTrayContextMenu>().ToConstant(mainForm);
+            kernel.Bind<IUpdateLoop>().To<UpdateLoop>().InSingletonScope();
+            kernel.Bind<MainForm, IHostEnvironment, ISystemTrayContextMenu>().ToConstant(mainForm);
 
             kernel.Bind<ProcessStarter, IProcessStarter>().To<ProcessStarter>().InSingletonScope();
             kernel.Bind<UserNotifier, IUserNotifier>().To<UserNotifier>().InSingletonScope();
@@ -186,9 +184,9 @@ namespace AldursLab.WurmAssistant3
             {
                 kernel.Dispose();
             }
-            finally
+            catch (Exception exception)
             {
-                dataDirectory.Unlock();
+                MessageBox.Show(exception.ToString());
             }
         }
 
