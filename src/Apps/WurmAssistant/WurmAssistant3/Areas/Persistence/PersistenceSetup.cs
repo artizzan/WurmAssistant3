@@ -37,14 +37,13 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
 
             var dataDir = kernel.Get<IWurmAssistantDataDirectory>();
             var logger = kernel.Get<ILogger>();
-            var host = kernel.Get<IHostEnvironment>();
             var timerFactory = kernel.Get<ITimerFactory>();
 
             var config = new PersistenceManagerConfig()
             {
                 DataStoreDirectoryPath = Path.Combine(dataDir.DirectoryPath, "Data")
             };
-            var errorStrategy = new JsonExtendedErrorHandlingStrategy(logger, host);
+            var errorStrategy = new JsonExtendedErrorHandlingStrategy(logger);
             var serializationStrategy = new JsonSerializationStrategy
             {
                 ErrorStrategy = errorStrategy

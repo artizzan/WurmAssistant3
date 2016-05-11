@@ -129,7 +129,6 @@
     <Compile Include="Areas\Core\Contracts\IBinDirectory.cs" />
     <Compile Include="Areas\Core\Contracts\IChangelogManager.cs" />
     <Compile Include="Areas\Core\Contracts\IEventBus.cs" />
-    <Compile Include="Areas\Core\Contracts\IHostEnvironment.cs" />
     <Compile Include="Areas\Core\Contracts\IProcessStarter.cs" />
     <Compile Include="Areas\Core\Contracts\ISendBugReportViewFactory.cs" />
     <Compile Include="Areas\Core\Contracts\ISystemTrayContextMenu.cs" />
@@ -153,7 +152,6 @@
     <Compile Include="Areas\Core\Views\SendBugReportView.Designer.cs">
       <DependentUpon>SendBugReportView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Messages\Lifecycle\AppClosing.cs" />
     <Compile Include="Messages\Lifecycle\AppBootstrapped.cs" />
     <Compile Include="Messages\Message.cs" />
     <Compile Include="Utils\WinForms\ExtendedForm.cs">

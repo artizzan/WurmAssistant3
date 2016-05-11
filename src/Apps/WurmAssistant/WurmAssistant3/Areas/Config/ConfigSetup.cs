@@ -23,18 +23,8 @@ namespace AldursLab.WurmAssistant3.Areas.Config
 
         public static void ConfigureApplication(IKernel kernel)
         {
-            var host = kernel.Get<IHostEnvironment>();
             var settings = kernel.Get<WurmAssistantConfig>();
             var wurmClientInstallDir = kernel.TryGet<IWurmClientInstallDirectory>();
-
-            if (settings.RunningPlatform == Platform.Unknown)
-            {
-                if (host.Platform != Platform.Unknown)
-                {
-                    settings.RunningPlatform = host.Platform;
-                }
-            }
-            bool platformKnown = settings.RunningPlatform != Platform.Unknown;
 
             if (wurmClientInstallDir != null)
             {
@@ -42,7 +32,7 @@ namespace AldursLab.WurmAssistant3.Areas.Config
             }
             bool installDirKnown = !string.IsNullOrWhiteSpace(settings.WurmGameClientInstallDirectory);
 
-            if (settings.ReSetupRequested || !platformKnown || !installDirKnown)
+            if (settings.ReSetupRequested || !installDirKnown)
             {
                 // run setup;
                 var view = new FirstTimeSetupView(kernel.Get<WurmAssistantConfig>());

@@ -13,14 +13,11 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence.Components
     class JsonExtendedErrorHandlingStrategy : JsonDefaultErrorHandlingStrategy
     {
         readonly ILogger logger;
-        readonly IHostEnvironment host;
 
-        public JsonExtendedErrorHandlingStrategy([NotNull] ILogger logger, [NotNull] IHostEnvironment host)
+        public JsonExtendedErrorHandlingStrategy([NotNull] ILogger logger)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (host == null) throw new ArgumentNullException("host");
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
             this.logger = logger;
-            this.host = host;
         }
 
         public override void HandleErrorOnDeserialize(object o, ErrorEventArgs args)
@@ -34,7 +31,7 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence.Components
             var view = new DeserializationErrorResolverView(o, args);
             if (view.ShowDialog() == DialogResult.No)
             {
-                host.Shutdown();
+                System.Windows.Application.Current.Shutdown();
             }
         }
 

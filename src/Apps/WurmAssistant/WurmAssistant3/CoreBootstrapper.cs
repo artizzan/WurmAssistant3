@@ -75,7 +75,7 @@ namespace AldursLab.WurmAssistant3
             kernel.Bind<DispatcherThreadMarshaller, IThreadMarshaller, IWurmApiEventMarshaller>()
                   .To<DispatcherThreadMarshaller>().InSingletonScope();
             
-            kernel.Bind<MainForm, IHostEnvironment, ISystemTrayContextMenu>().ToConstant(mainForm);
+            kernel.Bind<MainForm, ISystemTrayContextMenu>().ToConstant(mainForm);
 
             kernel.Bind<ProcessStarter, IProcessStarter>().To<ProcessStarter>().InSingletonScope();
             kernel.Bind<UserNotifier, IUserNotifier>().To<UserNotifier>().InSingletonScope();

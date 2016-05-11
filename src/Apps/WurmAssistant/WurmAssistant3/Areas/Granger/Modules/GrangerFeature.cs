@@ -19,11 +19,10 @@ using WurmAssistantDataTransfer.Dtos;
 namespace AldursLab.WurmAssistant3.Areas.Granger.Modules
 {
     [PersistentObject("GrangerFeature")]
-    public class GrangerFeature : PersistentObjectBase, IFeature
+    public class GrangerFeature : PersistentObjectBase, IFeature, IDisposable
     {
         readonly ILogger logger;
         readonly IWurmAssistantDataDirectory dataDirectory;
-        readonly IHostEnvironment hostEnvironment;
         readonly ISoundManager soundManager;
         readonly ITrayPopups trayPopups;
 
@@ -37,7 +36,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules
 
         public GrangerFeature([NotNull] ILogger logger, 
             [NotNull] IWurmAssistantDataDirectory dataDirectory,
-            [NotNull] IHostEnvironment hostEnvironment,
             [NotNull] ISoundManager soundManager, 
             [NotNull] ITrayPopups trayPopups, 
             [NotNull] IWurmApi wurmApi, 
@@ -47,12 +45,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules
         {
             this.logger = logger;
             this.dataDirectory = dataDirectory;
-            this.hostEnvironment = hostEnvironment;
             this.soundManager = soundManager;
             this.trayPopups = trayPopups;
             if (logger == null) throw new ArgumentNullException("logger");
             if (dataDirectory == null) throw new ArgumentNullException("dataDirectory");
-            if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
             if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
@@ -71,9 +67,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules
             logsFeedMan = new LogsFeedManager(this, context, wurmApi, logger, trayPopups);
             logsFeedMan.UpdatePlayers(settings.CaptureForPlayers);
             grangerUi.Granger_PlayerListChanged += GrangerUI_Granger_PlayerListChanged;
-
-            //updateLoop.Updated += (sender, args) => Update();
-            hostEnvironment.HostClosing += (sender, args) => Stop();
         }
 
         void GrangerUI_Granger_PlayerListChanged(object sender, EventArgs e)
@@ -84,13 +77,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules
         private void Update()
         {
             logsFeedMan.Update();
-        }
-
-        private void Stop()
-        {
-            if (grangerUi != null) grangerUi.SaveAllState();
-            else logger.Error("Granger UI null when trying to save state on Stop");
-            logsFeedMan.Dispose();
         }
 
         #region IFeature
@@ -144,5 +130,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules
         public int DataImportOrder { get { return 0; } }
 
         #endregion IFeature
+
+        public void Dispose()
+        {
+            if (grangerUi != null) grangerUi.SaveAllState();
+            else logger.Error("Granger UI null when trying to save state on Stop");
+            logsFeedMan.Dispose();
+        }
     }
 }

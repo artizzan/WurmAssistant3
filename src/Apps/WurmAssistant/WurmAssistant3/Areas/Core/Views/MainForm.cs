@@ -30,7 +30,7 @@ using Newtonsoft.Json;
 namespace AldursLab.WurmAssistant3.Areas.Core.Views
 {
     [PersistentObject("MainForm")]
-    public partial class MainForm : PersistentForm, IHostEnvironment, ISystemTrayContextMenu
+    public partial class MainForm : PersistentForm, ISystemTrayContextMenu
     {
         private readonly string[] args;
         MouseDragManager mouseDragManager;
@@ -204,7 +204,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
                     if (logger != null) logger.Error(exception, "");
                 }
 
-                Application.Exit();
+                System.Windows.Application.Current.Shutdown();
             }
             catch (Exception exception)
             {
@@ -380,63 +380,18 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
             return false;
         }
 
-
-        public event EventHandler<EventArgs> Updated;
-
-        void OnUpdate()
-        {
-            var handler = Updated;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
         private void MainView_FormClosing(object sender, FormClosingEventArgs e)
         {
-            OnHostClosing();
         }
-
-        public event EventHandler<EventArgs> HostClosing;
-        public event EventHandler<EventArgs> LateHostClosing;
-
-        bool AppClosing { get; set; }
-        bool IHostEnvironment.Closing
-        {
-            get { return this.AppClosing; }
-        }
-
+        
         public void Restart()
         {
-            OnHostClosing();
             Application.Restart();
         }
 
         public void Shutdown()
         {
-            OnHostClosing();
-            Application.Exit();
-        }
-
-        public Platform Platform { get { return Platform.Unknown;} }
-        
-        protected virtual void OnHostClosing()
-        {
-            if (AppClosing) return;
-
-            try
-            {
-                AppClosing = true;
-                EventBus.PublishOnUiThread(new AppClosing());
-                var handler = HostClosing;
-                if (handler != null)
-                    handler(this, EventArgs.Empty);
-            }
-            catch (Exception exception)
-            {
-                logger.Error(exception, "HostClosing event has thrown an unhandled exception!");
-            }
-            finally
-            {
-                OnLateHostClosing();
-            }
+            System.Windows.Application.Current.Shutdown();
         }
 
         private void MainView_FormClosed(object sender, FormClosedEventArgs e)
@@ -465,12 +420,6 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
                     settings.SavedHeight = this.Height;
                 }
             }
-        }
-
-        protected virtual void OnLateHostClosing()
-        {
-            var handler = LateHostClosing;
-            if (handler != null) handler(this, EventArgs.Empty);
         }
 
         class MouseDragManager

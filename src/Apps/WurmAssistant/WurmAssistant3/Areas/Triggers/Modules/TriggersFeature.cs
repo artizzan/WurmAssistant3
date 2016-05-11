@@ -26,7 +26,6 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
     {
         readonly ISoundManager soundManager;
         readonly IWurmAssistantDataDirectory wurmAssistantDataDirectory;
-        readonly IHostEnvironment hostEnvironment;
         readonly IWurmApi wurmApi;
         readonly IPersistentObjectResolver<TriggerManager> triggerManagerResolver;
         readonly ITrayPopups trayPopups;
@@ -43,7 +42,6 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
             [NotNull] ISoundManager soundManager,
             [NotNull] IWurmAssistantDataDirectory wurmAssistantDataDirectory,
             [NotNull] ITimerFactory timerFactory,
-            [NotNull] IHostEnvironment hostEnvironment, 
             [NotNull] IWurmApi wurmApi,
             [NotNull] IPersistentObjectResolver<TriggerManager> triggerManagerResolver, 
             [NotNull] ITrayPopups trayPopups,
@@ -52,14 +50,12 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
             if (soundManager == null) throw new ArgumentNullException(nameof(soundManager));
             if (wurmAssistantDataDirectory == null) throw new ArgumentNullException(nameof(wurmAssistantDataDirectory));
             if (timerFactory == null) throw new ArgumentNullException(nameof(timerFactory));
-            if (hostEnvironment == null) throw new ArgumentNullException(nameof(hostEnvironment));
             if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
             if (triggerManagerResolver == null) throw new ArgumentNullException(nameof(triggerManagerResolver));
             if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             this.soundManager = soundManager;
             this.wurmAssistantDataDirectory = wurmAssistantDataDirectory;
-            this.hostEnvironment = hostEnvironment;
             this.wurmApi = wurmApi;
             this.triggerManagerResolver = triggerManagerResolver;
             this.trayPopups = trayPopups;
@@ -68,7 +64,6 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
             updateTimer = timerFactory.CreateUiThreadTimer();
             updateTimer.Interval = TimeSpan.FromMilliseconds(500);
             updateTimer.Tick += (sender, args) => Update();
-            hostEnvironment.HostClosing += (sender, args) => Stop();
         }
 
         public void Initialize()
@@ -126,11 +121,6 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
             {
                 notifier.Update();
             }
-        }
-
-        private void Stop()
-        {
-            // do not clean notifiers, they clean themselves on host closing.
         }
 
         private void AddManager(string charName)
@@ -198,6 +188,10 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
         public void Dispose()
         {
             updateTimer.Stop();
+            foreach (var triggerManager in triggerManagers)
+            {
+                triggerManager.Value.Dispose();
+            }
         }
     }
 }

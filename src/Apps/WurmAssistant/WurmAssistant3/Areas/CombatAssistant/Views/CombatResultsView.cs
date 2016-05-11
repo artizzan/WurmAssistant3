@@ -22,7 +22,6 @@ namespace AldursLab.WurmAssistant3.Areas.CombatAssistant.Views
     {
         readonly ICombatDataSource combatDataSource;
         readonly FeatureSettings featureSettings;
-        readonly IHostEnvironment hostEnvironment;
         readonly IProcessStarter processStarter;
         readonly ILogger logger;
 
@@ -37,16 +36,14 @@ namespace AldursLab.WurmAssistant3.Areas.CombatAssistant.Views
         readonly byte[] initialOlvState;
 
         public CombatResultsView(ICombatDataSource combatDataSource, FeatureSettings featureSettings,
-            IHostEnvironment hostEnvironment, IProcessStarter processStarter, ILogger logger)
+            IProcessStarter processStarter, ILogger logger)
         {
             if (combatDataSource == null) throw new ArgumentNullException("combatDataSource");
             if (featureSettings == null) throw new ArgumentNullException("featureSettings");
-            if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
             if (processStarter == null) throw new ArgumentNullException("processStarter");
             if (logger == null) throw new ArgumentNullException("logger");
             this.combatDataSource = combatDataSource;
             this.featureSettings = featureSettings;
-            this.hostEnvironment = hostEnvironment;
             this.processStarter = processStarter;
             this.logger = logger;
             InitializeComponent();
@@ -68,14 +65,7 @@ namespace AldursLab.WurmAssistant3.Areas.CombatAssistant.Views
 
             initialOlvState = objectListView1.SaveState();
 
-            hostEnvironment.HostClosing += HostEnvironmentOnHostClosing;
-
             RefreshData();
-        }
-
-        void HostEnvironmentOnHostClosing(object sender, EventArgs eventArgs)
-        {
-            PersistOlvState();
         }
 
         void CombatResultsOnDataChanged(object sender, EventArgs eventArgs)
@@ -86,7 +76,6 @@ namespace AldursLab.WurmAssistant3.Areas.CombatAssistant.Views
         private void CombatResultsView_FormClosing(object sender, FormClosingEventArgs e)
         {
             combatDataSource.DataChanged -= CombatResultsOnDataChanged;
-            hostEnvironment.HostClosing -= HostEnvironmentOnHostClosing;
             PersistOlvState();
         }
 

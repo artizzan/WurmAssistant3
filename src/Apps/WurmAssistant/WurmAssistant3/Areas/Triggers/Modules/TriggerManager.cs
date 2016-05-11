@@ -20,7 +20,7 @@ using Ninject;
 namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
 {
     [PersistentObject("TriggersFeature_TriggerManager")]
-    public class TriggerManager : PersistentObjectBase, IInitializable
+    public class TriggerManager : PersistentObjectBase, IInitializable, IDisposable
     {
         [JsonProperty] bool muted = false;
 
@@ -41,8 +41,6 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
 
         readonly IWurmApi wurmApi;
 
-        readonly IHostEnvironment hostEnvironment;
-
         readonly ISoundManager soundManager;
 
         readonly ILogger logger;
@@ -54,13 +52,12 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
         string lastLineContent;
 
         public TriggerManager([NotNull] string persistentObjectId, [NotNull] IWurmApi wurmApi,
-            [NotNull] IHostEnvironment hostEnvironment, [NotNull] ISoundManager soundManager, [NotNull] ILogger logger,
+            [NotNull] ISoundManager soundManager, [NotNull] ILogger logger,
             [NotNull] ITrayPopups trayPopups, [NotNull] IPersistentObjectResolver<ActiveTriggers> activeTriggersResolver)
             : base(persistentObjectId)
         {
             if (persistentObjectId == null) throw new ArgumentNullException("persistentObjectId");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
             if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (logger == null) throw new ArgumentNullException("logger");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
@@ -68,15 +65,12 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
             CharacterName = persistentObjectId;
 
             this.wurmApi = wurmApi;
-            this.hostEnvironment = hostEnvironment;
             this.soundManager = soundManager;
             this.logger = logger;
             this.trayPopups = trayPopups;
             this.activeTriggersResolver = activeTriggersResolver;
 
             TriggerListState = new byte[0];
-
-            hostEnvironment.HostClosing += Cleanup;
         }
 
         public void Initialize()
@@ -166,20 +160,11 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
             ToggleUi();
         }
 
-        void Cleanup(object sender, EventArgs e)
-        {
-            wurmApi.LogsMonitor.Unsubscribe(this.CharacterName, OnNewLogEvents);
-            hostEnvironment.HostClosing -= Cleanup;
-
-            controlUi.Dispose();
-            triggersConfigUi.Close();
-        }
-
         public void StopAndRemove(object sender, EventArgs e)
         {
             wurmApi.LogsMonitor.Unsubscribe(this.CharacterName, OnNewLogEvents);
             TriggersFeature.RemoveManager(this);
-            hostEnvironment.HostClosing -= Cleanup;
+
             activeTriggers.DisposeAll();
 
             controlUi.Dispose();
@@ -214,6 +199,14 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
                     lastLineContent = logMessage.Content;
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            wurmApi.LogsMonitor.Unsubscribe(this.CharacterName, OnNewLogEvents);
+
+            controlUi.Dispose();
+            triggersConfigUi.Close();
         }
     }
 }

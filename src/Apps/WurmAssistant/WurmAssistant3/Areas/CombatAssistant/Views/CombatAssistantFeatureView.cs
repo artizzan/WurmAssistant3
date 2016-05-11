@@ -14,21 +14,18 @@ namespace AldursLab.WurmAssistant3.Areas.CombatAssistant.Views
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
         readonly FeatureSettings featureSettings;
-        readonly IHostEnvironment hostEnvironment;
         readonly IProcessStarter processStarter;
 
         public CombatAssistantFeatureView(IWurmApi wurmApi, ILogger logger, FeatureSettings featureSettings,
-            IHostEnvironment hostEnvironment, IProcessStarter processStarter)
+            IProcessStarter processStarter)
         {
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (featureSettings == null) throw new ArgumentNullException("featureSettings");
-            if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
-            if (processStarter == null) throw new ArgumentNullException("processStarter");
+            if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (featureSettings == null) throw new ArgumentNullException(nameof(featureSettings));
+            if (processStarter == null) throw new ArgumentNullException(nameof(processStarter));
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.featureSettings = featureSettings;
-            this.hostEnvironment = hostEnvironment;
             this.processStarter = processStarter;
 
             InitializeComponent();
@@ -57,7 +54,7 @@ namespace AldursLab.WurmAssistant3.Areas.CombatAssistant.Views
 
                 var monitor = new LiveLogsEventsMonitor(character, wurmApi, logger);
                 monitor.Start();
-                var view = new CombatResultsView(monitor, featureSettings, hostEnvironment, processStarter, logger);
+                var view = new CombatResultsView(monitor, featureSettings, processStarter, logger);
                 view.Text = "Live combat stats session for " + character;
                 view.ShowCenteredOnForm(this);
             }
@@ -89,7 +86,7 @@ namespace AldursLab.WurmAssistant3.Areas.CombatAssistant.Views
                     wurmApi,
                     logger);
                 await parser.Process();
-                var view = new CombatResultsView(parser, featureSettings, hostEnvironment, processStarter, logger);
+                var view = new CombatResultsView(parser, featureSettings, processStarter, logger);
                 view.Text = string.Format("Aggregated combat results for {0} between {1} and {2}",
                     character,
                     fromDtpick.Value,

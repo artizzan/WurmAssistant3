@@ -24,7 +24,6 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Modules
     [PersistentObject("TimersFeature")]
     public sealed class TimersFeature : PersistentObjectBase, IFeature, IInitializable, IDisposable
     {
-        readonly IHostEnvironment host;
         readonly ILogger logger;
         readonly IWurmApi wurmApi;
         readonly ISoundManager soundManager;
@@ -54,7 +53,6 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Modules
         readonly ITimer updateTimer;
 
         public TimersFeature(
-            [NotNull] IHostEnvironment host,
             [NotNull] ITimerFactory timerFactory, 
             [NotNull] ILogger logger,
             [NotNull] IWurmApi wurmApi, 
@@ -64,7 +62,6 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Modules
             [NotNull] IPersistentObjectResolver<PlayerTimersGroup> playerTimersGroupsResolver,
             [NotNull] TimerInstances timerInstances)
         {
-            if (host == null) throw new ArgumentNullException(nameof(host));
             if (timerFactory == null) throw new ArgumentNullException(nameof(timerFactory));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
@@ -73,7 +70,6 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Modules
             if (timerDefinitions == null) throw new ArgumentNullException(nameof(timerDefinitions));
             if (playerTimersGroupsResolver == null) throw new ArgumentNullException(nameof(playerTimersGroupsResolver));
             if (timerInstances == null) throw new ArgumentNullException(nameof(timerInstances));
-            this.host = host;
             this.logger = logger;
             this.wurmApi = wurmApi;
             this.soundManager = soundManager;
@@ -83,15 +79,6 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Modules
             this.timerInstances = timerInstances;
 
             updateTimer = timerFactory.CreateUiThreadTimer();
-
-            host.HostClosing += (sender, args) =>
-            {
-                foreach (var timergroup in timerGroups)
-                {
-                    timergroup.Stop();
-                }
-                timersForm.Dispose();
-            };
 
             updateTimer.Interval = TimeSpan.FromMilliseconds(500);
             updateTimer.Tick += (sender, args) =>
@@ -330,6 +317,11 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Modules
         public void Dispose()
         {
             updateTimer.Stop();
+            foreach (var timergroup in timerGroups)
+            {
+                timergroup.Stop();
+            }
+            timersForm.Dispose();
         }
     }
 }
