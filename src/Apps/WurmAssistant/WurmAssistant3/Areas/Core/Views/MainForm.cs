@@ -20,7 +20,6 @@ using AldursLab.WurmAssistant3.Areas.MainMenu.Views;
 using AldursLab.WurmAssistant3.Areas.Native.Constants;
 using AldursLab.WurmAssistant3.Areas.Native.Contracts;
 using AldursLab.WurmAssistant3.Areas.Native.Modules;
-using AldursLab.WurmAssistant3.Messages.Lifecycle;
 using AldursLab.WurmAssistant3.Properties;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using AldursLab.WurmAssistant3.Utils.WinForms.Reusables;
@@ -314,7 +313,6 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
                 }
 
                 bootstrapped = true;
-                EventBus.PublishOnUiThread(new AppBootstrapped());
             }
         }
 
@@ -387,6 +385,8 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
         public void Restart()
         {
             Application.Restart();
+            // Restart does not automatically shutdown WPF application
+            Shutdown();
         }
 
         public void Shutdown()

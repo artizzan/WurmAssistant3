@@ -93,9 +93,9 @@ namespace AldursLab.WurmAssistant3.Areas.TrayPopups.Modules
             {
                 popupContainer.BeginInvoke(new Action(popupContainer.CloseThisContainer));
             }
-            catch 
+            catch (Exception exception)
             {
-                System.Diagnostics.Debug.WriteLine("PopupManager finalizer exception");
+                System.Diagnostics.Debug.WriteLine("PopupManager finalizer exception: " + exception);
             }
         }
     }

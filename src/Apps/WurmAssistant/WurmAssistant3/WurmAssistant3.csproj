@@ -152,7 +152,6 @@
     <Compile Include="Areas\Core\Views\SendBugReportView.Designer.cs">
       <DependentUpon>SendBugReportView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Messages\Lifecycle\AppBootstrapped.cs" />
     <Compile Include="Messages\Message.cs" />
     <Compile Include="Utils\WinForms\ExtendedForm.cs">
       <SubType>Form</SubType>
