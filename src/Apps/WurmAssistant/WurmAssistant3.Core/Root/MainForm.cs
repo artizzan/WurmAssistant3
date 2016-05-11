@@ -206,7 +206,8 @@ namespace AldursLab.WurmAssistant3.Core.Root
                     if (logger != null) logger.Error(exception, "");
                 }
 
-                Application.Exit();
+
+                System.Windows.Application.Current.Shutdown();
             }
             catch (Exception exception)
             {
@@ -418,12 +419,14 @@ namespace AldursLab.WurmAssistant3.Core.Root
         {
             OnHostClosing();
             Application.Restart();
+            // Restart does not automatically shutdown WPF application
+            System.Windows.Application.Current.Shutdown();
         }
 
         public void Shutdown()
         {
             OnHostClosing();
-            Application.Exit();
+            System.Windows.Application.Current.Shutdown();
         }
 
         public Platform Platform { get { return Platform.Unknown;} }
