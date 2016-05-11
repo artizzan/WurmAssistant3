@@ -60,6 +60,8 @@ namespace AldursLab.WurmAssistant3
 
             Regex.CacheSize = 1000;
 
+            kernel.Bind<ITimerFactory>().To<TimerFactory>().InSingletonScope();
+
             kernel.Bind<IEventBus>().To<EventBus>().InSingletonScope();
             //todo: this hack only until MainForm is replaced.
             mainForm.EventBus = kernel.Get<IEventBus>();
@@ -72,8 +74,7 @@ namespace AldursLab.WurmAssistant3
 
             kernel.Bind<DispatcherThreadMarshaller, IThreadMarshaller, IWurmApiEventMarshaller>()
                   .To<DispatcherThreadMarshaller>().InSingletonScope();
-
-            kernel.Bind<IUpdateLoop>().To<UpdateLoop>().InSingletonScope();
+            
             kernel.Bind<MainForm, IHostEnvironment, ISystemTrayContextMenu>().ToConstant(mainForm);
 
             kernel.Bind<ProcessStarter, IProcessStarter>().To<ProcessStarter>().InSingletonScope();

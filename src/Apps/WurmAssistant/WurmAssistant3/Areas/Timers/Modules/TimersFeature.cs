@@ -22,7 +22,7 @@ using WurmAssistantDataTransfer.Dtos;
 namespace AldursLab.WurmAssistant3.Areas.Timers.Modules
 {
     [PersistentObject("TimersFeature")]
-    public sealed class TimersFeature : PersistentObjectBase, IFeature, IInitializable
+    public sealed class TimersFeature : PersistentObjectBase, IFeature, IInitializable, IDisposable
     {
         readonly IHostEnvironment host;
         readonly ILogger logger;
@@ -51,21 +51,28 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Modules
         bool showEndDateInsteadOfTimeRemaining = false;
 
         TimersForm timersForm;
+        readonly ITimer updateTimer;
 
-        public TimersFeature([NotNull] IHostEnvironment host, IUpdateLoop updateLoop, [NotNull] ILogger logger,
-            [NotNull] IWurmApi wurmApi, [NotNull] ISoundManager soundManager, [NotNull] ITrayPopups trayPopups,
+        public TimersFeature(
+            [NotNull] IHostEnvironment host,
+            [NotNull] ITimerFactory timerFactory, 
+            [NotNull] ILogger logger,
+            [NotNull] IWurmApi wurmApi, 
+            [NotNull] ISoundManager soundManager, 
+            [NotNull] ITrayPopups trayPopups,
             [NotNull] TimerDefinitions timerDefinitions,
             [NotNull] IPersistentObjectResolver<PlayerTimersGroup> playerTimersGroupsResolver,
             [NotNull] TimerInstances timerInstances)
         {
-            if (host == null) throw new ArgumentNullException("host");
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (soundManager == null) throw new ArgumentNullException("soundManager");
-            if (trayPopups == null) throw new ArgumentNullException("trayPopups");
-            if (timerDefinitions == null) throw new ArgumentNullException("timerDefinitions");
-            if (playerTimersGroupsResolver == null) throw new ArgumentNullException("playerTimersGroupsResolver");
-            if (timerInstances == null) throw new ArgumentNullException("timerInstances");
+            if (host == null) throw new ArgumentNullException(nameof(host));
+            if (timerFactory == null) throw new ArgumentNullException(nameof(timerFactory));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (soundManager == null) throw new ArgumentNullException(nameof(soundManager));
+            if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
+            if (timerDefinitions == null) throw new ArgumentNullException(nameof(timerDefinitions));
+            if (playerTimersGroupsResolver == null) throw new ArgumentNullException(nameof(playerTimersGroupsResolver));
+            if (timerInstances == null) throw new ArgumentNullException(nameof(timerInstances));
             this.host = host;
             this.logger = logger;
             this.wurmApi = wurmApi;
@@ -74,6 +81,8 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Modules
             this.timerDefinitions = timerDefinitions;
             this.playerTimersGroupsResolver = playerTimersGroupsResolver;
             this.timerInstances = timerInstances;
+
+            updateTimer = timerFactory.CreateUiThreadTimer();
 
             host.HostClosing += (sender, args) =>
             {
@@ -84,7 +93,8 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Modules
                 timersForm.Dispose();
             };
 
-            updateLoop.Updated += (sender, args) =>
+            updateTimer.Interval = TimeSpan.FromMilliseconds(500);
+            updateTimer.Tick += (sender, args) =>
             {
                 foreach (var timergroup in timerGroups)
                 {
@@ -144,6 +154,8 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Modules
                     logger.Error(exception, "Error during initialization of server group id " + groupId);
                 }
             }
+
+            updateTimer.Start();
         }
 
         void TimerDefinitionsRemovedCustomTimer(object sender, CustomTimerRemovedEventArgs e)
@@ -313,6 +325,11 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Modules
                     }
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            updateTimer.Stop();
         }
     }
 }

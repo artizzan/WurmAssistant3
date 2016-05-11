@@ -23,7 +23,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules
     {
         readonly ILogger logger;
         readonly IWurmAssistantDataDirectory dataDirectory;
-        readonly IUpdateLoop updateLoop;
         readonly IHostEnvironment hostEnvironment;
         readonly ISoundManager soundManager;
         readonly ITrayPopups trayPopups;
@@ -36,21 +35,23 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules
         readonly LogsFeedManager logsFeedMan;
         readonly GrangerContext context;
 
-        public GrangerFeature([NotNull] ILogger logger, [NotNull] IWurmAssistantDataDirectory dataDirectory,
-            [NotNull] IUpdateLoop updateLoop, [NotNull] IHostEnvironment hostEnvironment,
-            [NotNull] ISoundManager soundManager, [NotNull] ITrayPopups trayPopups, [NotNull] IWurmApi wurmApi, GrangerSettings grangerSettings,
+        public GrangerFeature([NotNull] ILogger logger, 
+            [NotNull] IWurmAssistantDataDirectory dataDirectory,
+            [NotNull] IHostEnvironment hostEnvironment,
+            [NotNull] ISoundManager soundManager, 
+            [NotNull] ITrayPopups trayPopups, 
+            [NotNull] IWurmApi wurmApi, 
+            GrangerSettings grangerSettings,
             [NotNull] DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions,
             [NotNull] GrangerSimpleDb grangerSimpleDb)
         {
             this.logger = logger;
             this.dataDirectory = dataDirectory;
-            this.updateLoop = updateLoop;
             this.hostEnvironment = hostEnvironment;
             this.soundManager = soundManager;
             this.trayPopups = trayPopups;
             if (logger == null) throw new ArgumentNullException("logger");
             if (dataDirectory == null) throw new ArgumentNullException("dataDirectory");
-            if (updateLoop == null) throw new ArgumentNullException("updateLoop");
             if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
             if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
@@ -71,7 +72,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules
             logsFeedMan.UpdatePlayers(settings.CaptureForPlayers);
             grangerUi.Granger_PlayerListChanged += GrangerUI_Granger_PlayerListChanged;
 
-            updateLoop.Updated += (sender, args) => Update();
+            //updateLoop.Updated += (sender, args) => Update();
             hostEnvironment.HostClosing += (sender, args) => Stop();
         }
 

@@ -16,7 +16,7 @@ using Ninject.Activation.Strategies;
 
 namespace AldursLab.WurmAssistant3.Areas.Persistence
 {
-    public class PersistenceSetup
+    public class PersistenceSetup : IDisposable
     {
         public static void BindPersistenceSystems(IKernel kernel)
         {
@@ -38,7 +38,7 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
             var dataDir = kernel.Get<IWurmAssistantDataDirectory>();
             var logger = kernel.Get<ILogger>();
             var host = kernel.Get<IHostEnvironment>();
-            var updateLoop = kernel.Get<IUpdateLoop>();
+            var timerFactory = kernel.Get<ITimerFactory>();
 
             var config = new PersistenceManagerConfig()
             {
@@ -60,8 +60,7 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
                     kernel.Components
                           .GetAll<IActivationStrategy>().Single(strategy => strategy is PreInitializeActionsStrategy);
 
-            var persistentDataManager = new PersistenceSetup(persistenceManager,
-                host, updateLoop);
+            var persistentDataManager = new PersistenceSetup(persistenceManager, timerFactory);
             persistentDataManager.SetupPersistenceActivation(str);
 
             kernel.Bind<PersistenceSetup>().ToConstant(persistentDataManager);
@@ -70,17 +69,22 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
             kernel.Bind(typeof (IPersistentObjectResolver<>)).To(typeof (PersistentObjectResolver<>)).InSingletonScope();
         }
 
+        readonly ITimer updateTimer;
         readonly PersistenceManager persistenceManager;
         readonly object locker = new object();
 
-        PersistenceSetup([NotNull] PersistenceManager persistenceManager, IHostEnvironment hostEnvironment,
-            IUpdateLoop updateLoop)
+        PersistenceSetup([NotNull] PersistenceManager persistenceManager, [NotNull] ITimerFactory timerFactory)
         {
-            if (persistenceManager == null)
-                throw new ArgumentNullException("persistenceManager");
+            if (persistenceManager == null) throw new ArgumentNullException(nameof(persistenceManager));
+            if (timerFactory == null) throw new ArgumentNullException(nameof(timerFactory));
+            this.updateTimer = timerFactory.CreateUiThreadTimer();
+            this.updateTimer.Interval = TimeSpan.FromMilliseconds(500);
+            this.updateTimer.Tick += UpdateLoopOnUpdated;
+
             this.persistenceManager = persistenceManager;
-            updateLoop.Updated += UpdateLoopOnUpdated;
-            hostEnvironment.LateHostClosing += HostEnvironmentOnHostClosing;
+
+            this.updateTimer.Start();
+            //hostEnvironment.LateHostClosing += HostEnvironmentOnHostClosing;
         }
 
         void UpdateLoopOnUpdated(object sender, EventArgs eventArgs)
@@ -88,15 +92,15 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
             persistenceManager.SavePending();
         }
 
-        void HostEnvironmentOnHostClosing(object sender, EventArgs eventArgs)
-        {
-            // for debugging save only changed, so issues can be spotted.
-#if DEBUG
-            persistenceManager.SavePending();
-#else
-            persistenceManager.SaveAll();
-#endif
-        }
+//        void HostEnvironmentOnHostClosing(object sender, EventArgs eventArgs)
+//        {
+//            // for debugging save only changed, so issues can be spotted.
+//#if DEBUG
+//            persistenceManager.SavePending();
+//#else
+//            persistenceManager.SaveAll();
+//#endif
+//        }
 
         void SetupPersistenceActivation(PreInitializeActionsStrategy str)
         {
@@ -114,6 +118,17 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
                     instanceReference.Instance = @object;
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            updateTimer.Stop();
+            // for debugging save only changed, so issues can be spotted.
+#if DEBUG
+            persistenceManager.SavePending();
+#else
+            persistenceManager.SaveAll();
+#endif
         }
     }
 }

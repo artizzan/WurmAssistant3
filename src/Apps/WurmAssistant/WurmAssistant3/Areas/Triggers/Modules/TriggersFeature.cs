@@ -22,16 +22,16 @@ using WurmAssistantDataTransfer.Dtos;
 namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
 {
     [PersistentObject("TriggersFeature")]
-    public class TriggersFeature : PersistentObjectBase, IFeature, IInitializable
+    public class TriggersFeature : PersistentObjectBase, IFeature, IInitializable, IDisposable
     {
         readonly ISoundManager soundManager;
         readonly IWurmAssistantDataDirectory wurmAssistantDataDirectory;
-        readonly IUpdateLoop updateLoop;
         readonly IHostEnvironment hostEnvironment;
         readonly IWurmApi wurmApi;
         readonly IPersistentObjectResolver<TriggerManager> triggerManagerResolver;
-        private readonly ITrayPopups trayPopups;
-        private readonly ILogger logger;
+        readonly ITrayPopups trayPopups;
+        readonly ILogger logger;
+        readonly ITimer updateTimer;
 
         [JsonProperty]
         readonly HashSet<string> activeCharacterNames = new HashSet<string>();
@@ -39,30 +39,35 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
         FormTriggersMain mainUi;
         readonly Dictionary<string, TriggerManager> triggerManagers = new Dictionary<string, TriggerManager>();
 
-        public TriggersFeature([NotNull] ISoundManager soundManager,
-            [NotNull] IWurmAssistantDataDirectory wurmAssistantDataDirectory, [NotNull] IUpdateLoop updateLoop,
-            [NotNull] IHostEnvironment hostEnvironment, [NotNull] IWurmApi wurmApi,
-            [NotNull] IPersistentObjectResolver<TriggerManager> triggerManagerResolver, [NotNull] ITrayPopups trayPopups,
+        public TriggersFeature(
+            [NotNull] ISoundManager soundManager,
+            [NotNull] IWurmAssistantDataDirectory wurmAssistantDataDirectory,
+            [NotNull] ITimerFactory timerFactory,
+            [NotNull] IHostEnvironment hostEnvironment, 
+            [NotNull] IWurmApi wurmApi,
+            [NotNull] IPersistentObjectResolver<TriggerManager> triggerManagerResolver, 
+            [NotNull] ITrayPopups trayPopups,
             [NotNull] ILogger logger)
         {
-            if (soundManager == null) throw new ArgumentNullException("soundManager");
-            if (wurmAssistantDataDirectory == null) throw new ArgumentNullException("wurmAssistantDataDirectory");
-            if (updateLoop == null) throw new ArgumentNullException("updateLoop");
-            if (hostEnvironment == null) throw new ArgumentNullException("hostEnvironment");
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (triggerManagerResolver == null) throw new ArgumentNullException("triggerManagerResolver");
-            if (trayPopups == null) throw new ArgumentNullException("trayPopups");
-            if (logger == null) throw new ArgumentNullException("logger");
+            if (soundManager == null) throw new ArgumentNullException(nameof(soundManager));
+            if (wurmAssistantDataDirectory == null) throw new ArgumentNullException(nameof(wurmAssistantDataDirectory));
+            if (timerFactory == null) throw new ArgumentNullException(nameof(timerFactory));
+            if (hostEnvironment == null) throw new ArgumentNullException(nameof(hostEnvironment));
+            if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (triggerManagerResolver == null) throw new ArgumentNullException(nameof(triggerManagerResolver));
+            if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
             this.soundManager = soundManager;
             this.wurmAssistantDataDirectory = wurmAssistantDataDirectory;
-            this.updateLoop = updateLoop;
             this.hostEnvironment = hostEnvironment;
             this.wurmApi = wurmApi;
             this.triggerManagerResolver = triggerManagerResolver;
             this.trayPopups = trayPopups;
             this.logger = logger;
 
-            updateLoop.Updated += (sender, args) => Update();
+            updateTimer = timerFactory.CreateUiThreadTimer();
+            updateTimer.Interval = TimeSpan.FromMilliseconds(500);
+            updateTimer.Tick += (sender, args) => Update();
             hostEnvironment.HostClosing += (sender, args) => Stop();
         }
 
@@ -73,6 +78,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
             {
                 AddManager(name);
             }
+            updateTimer.Start();
         }
 
         public void AddNewNotifier()
@@ -188,5 +194,10 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Modules
         public int DataImportOrder { get { return 0; } }
 
         #endregion
+
+        public void Dispose()
+        {
+            updateTimer.Stop();
+        }
     }
 }

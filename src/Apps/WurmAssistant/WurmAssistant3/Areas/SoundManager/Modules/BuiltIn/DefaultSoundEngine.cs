@@ -3,25 +3,22 @@ using System.Collections.Generic;
 using System.Media;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.SoundManager.Modules.BuiltIn
 {
     class DefaultSoundEngine : ISoundEngine
     {
         readonly List<WeakReference<SoundPlayer>> soundPlayers = new List<WeakReference<SoundPlayer>>();
-        int counter;
 
-        public DefaultSoundEngine(IUpdateLoop updateLoop)
+        public DefaultSoundEngine([NotNull] ITimerFactory timerFactory)
         {
-            updateLoop.Updated += (sender, args) =>
-            {
-                counter++;
-                if (counter > 100)
-                {
-                    counter = 0;
-                    CleanupWeakRefs();
-                }
-            };
+            if (timerFactory == null) throw new ArgumentNullException(nameof(timerFactory));
+
+            var timer = timerFactory.CreateUiThreadTimer();
+            timer.Interval = TimeSpan.FromSeconds(50);
+            timer.Tick += (sender, args) => CleanupWeakRefs();
+            timer.Start();
         }
 
         void CleanupWeakRefs()

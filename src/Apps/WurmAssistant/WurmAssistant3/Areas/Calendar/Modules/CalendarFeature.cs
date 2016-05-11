@@ -27,6 +27,7 @@ namespace AldursLab.WurmAssistant3.Areas.Calendar.Modules
         readonly ILogger logger;
         readonly ISoundManager soundManager;
         readonly ITrayPopups trayPopups;
+        readonly ITimer updateTimer;
 
         public class WurmSeasonOutputItem : IComparable<WurmSeasonOutputItem>
         {
@@ -217,16 +218,20 @@ namespace AldursLab.WurmAssistant3.Areas.Calendar.Modules
 
         readonly WurmSeasonsManager seasonsManager;
 
-        public CalendarFeature([NotNull] IWurmApi wurmApi, [NotNull] ILogger logger, [NotNull] IUpdateLoop updateLoop,
-            [NotNull] ISoundManager soundManager, [NotNull] ITrayPopups trayPopups,
+        public CalendarFeature(
+            [NotNull] IWurmApi wurmApi, 
+            [NotNull] ILogger logger,
+            [NotNull] ITimerFactory timerFactory,
+            [NotNull] ISoundManager soundManager, 
+            [NotNull] ITrayPopups trayPopups,
             [NotNull] WurmSeasonsManager seasonsManager)
         {
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (updateLoop == null) throw new ArgumentNullException("updateLoop");
-            if (soundManager == null) throw new ArgumentNullException("soundManager");
-            if (trayPopups == null) throw new ArgumentNullException("trayPopups");
-            if (seasonsManager == null) throw new ArgumentNullException("seasonsManager");
+            if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (timerFactory == null) throw new ArgumentNullException(nameof(timerFactory));
+            if (soundManager == null) throw new ArgumentNullException(nameof(soundManager));
+            if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
+            if (seasonsManager == null) throw new ArgumentNullException(nameof(seasonsManager));
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.soundManager = soundManager;
@@ -241,7 +246,9 @@ namespace AldursLab.WurmAssistant3.Areas.Calendar.Modules
             serverName = "";
             mainWindowSize = new System.Drawing.Size(487, 414);
 
-            updateLoop.Updated += (sender, args) =>
+            updateTimer = timerFactory.CreateUiThreadTimer();
+            updateTimer.Interval = TimeSpan.FromMilliseconds(500);
+            updateTimer.Tick += (sender, args) =>
             {
                 ObtainWdtForCurrentServer();
                 if (hasWdt) UpdateOutputList();
@@ -338,6 +345,8 @@ namespace AldursLab.WurmAssistant3.Areas.Calendar.Modules
             ReInitSeasonData();
 
             ObtainWdtForCurrentServer();
+
+            updateTimer.Start();
         }
 
         List<WurmSeasonOutputItem> WurmSeasonOutput = new List<WurmSeasonOutputItem>();
