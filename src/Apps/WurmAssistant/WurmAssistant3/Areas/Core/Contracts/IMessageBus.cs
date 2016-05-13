@@ -7,7 +7,7 @@ using AldursLab.WurmAssistant3.Messages;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Contracts
 {
-    public interface IEventBus
+    public interface IMessageBus
     {
         bool HandlerExistsFor(Type messageType);
         void Subscribe(object subscriber);

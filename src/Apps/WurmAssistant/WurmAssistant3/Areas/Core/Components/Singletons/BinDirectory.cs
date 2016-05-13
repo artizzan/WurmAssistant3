@@ -2,10 +2,11 @@
 using System.IO;
 using System.Reflection;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
+using Caliburn.Micro;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
 {
-    public class BinDirectory : IBinDirectory
+    public class BinDirectory : IBinDirectory, IHandle<string>
     {
         public BinDirectory()
         {
@@ -13,5 +14,9 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
         }
 
         public string FullPath { get; private set; }
+        public void Handle(string message)
+        {
+            
+        }
     }
 }

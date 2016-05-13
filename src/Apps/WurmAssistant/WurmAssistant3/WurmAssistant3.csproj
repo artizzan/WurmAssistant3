@@ -116,11 +116,13 @@
     </Compile>
     <Compile Include="Areas\Core\Components\Singletons\BinDirectory.cs" />
     <Compile Include="Areas\Core\Components\Singletons\ChangelogManager.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\KernelConfig.cs" />
     <Compile Include="Areas\Core\Components\Singletons\ConsoleArgsManager.cs" />
     <Compile Include="Areas\Core\Components\Singletons\DispatcherThreadMarshaller.cs" />
-    <Compile Include="Areas\Core\Components\Singletons\EventBus.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\MessageBus.cs" />
     <Compile Include="Areas\Core\Components\Singletons\ProcessStarter.cs" />
     <Compile Include="Areas\Core\Components\Singletons\TimerFactory.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\TrayMenu.cs" />
     <Compile Include="Areas\Core\Components\Singletons\UserNotifier.cs" />
     <Compile Include="Areas\Core\Components\Singletons\WaExecutionInfoProvider.cs" />
     <Compile Include="Areas\Core\Components\Singletons\WaVersion.cs" />
@@ -128,7 +130,8 @@
     <Compile Include="Areas\Core\Components\Singletons\WurmAssistantDataDirectory.cs" />
     <Compile Include="Areas\Core\Contracts\IBinDirectory.cs" />
     <Compile Include="Areas\Core\Contracts\IChangelogManager.cs" />
-    <Compile Include="Areas\Core\Contracts\IEventBus.cs" />
+    <Compile Include="Areas\Core\Contracts\IMessageBus.cs" />
+    <Compile Include="Areas\Core\Contracts\IKernelConfig.cs" />
     <Compile Include="Areas\Core\Contracts\IProcessStarter.cs" />
     <Compile Include="Areas\Core\Contracts\ISendBugReportViewFactory.cs" />
     <Compile Include="Areas\Core\Contracts\ISystemTrayContextMenu.cs" />
@@ -152,7 +155,11 @@
     <Compile Include="Areas\Core\Views\SendBugReportView.Designer.cs">
       <DependentUpon>SendBugReportView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Messages\Requests\ApplicationShutdownRequest.cs" />
+    <Compile Include="Messages\Requests\MainViewRestoreRequest.cs" />
     <Compile Include="Messages\Message.cs" />
+    <Compile Include="Utils\IoC\CustomActionsStrategyBase.cs" />
+    <Compile Include="Utils\IoC\PostInitializeActionsStrategy.cs" />
     <Compile Include="Utils\WinForms\ExtendedForm.cs">
       <SubType>Form</SubType>
     </Compile>

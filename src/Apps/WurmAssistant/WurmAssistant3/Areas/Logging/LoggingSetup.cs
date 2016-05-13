@@ -3,6 +3,7 @@ using AldursLab.Essentials.Eventing;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Modules;
+using AldursLab.WurmAssistant3.Areas.Logging.Views;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Logging
@@ -20,6 +21,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
             kernel.Bind<IWurmApiLoggerFactory>().ToConstant(manager);
             kernel.Bind<ILogMessageFlow>().ToConstant(manager);
             kernel.Bind<ILogMessageHandler>().ToConstant(manager);
+            kernel.Bind<LogView>().ToSelf();
 
             BindLoggerAutoResolver(kernel);
         }

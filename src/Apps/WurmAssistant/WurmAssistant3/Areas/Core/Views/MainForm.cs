@@ -20,16 +20,20 @@ using AldursLab.WurmAssistant3.Areas.MainMenu.Views;
 using AldursLab.WurmAssistant3.Areas.Native.Constants;
 using AldursLab.WurmAssistant3.Areas.Native.Contracts;
 using AldursLab.WurmAssistant3.Areas.Native.Modules;
+using AldursLab.WurmAssistant3.Messages;
+using AldursLab.WurmAssistant3.Messages.Requests;
 using AldursLab.WurmAssistant3.Properties;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using AldursLab.WurmAssistant3.Utils.WinForms.Reusables;
+using Caliburn.Micro;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using Action = System.Action;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Views
 {
     [PersistentObject("MainForm")]
-    public partial class MainForm : PersistentForm, ISystemTrayContextMenu
+    public partial class MainForm : PersistentForm, IHandle<MainViewRestoreRequest>, IHandle<ApplicationShutdownRequest>
     {
         private readonly string[] args;
         MouseDragManager mouseDragManager;
@@ -65,62 +69,6 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
             }
         }
 
-        class TrayManager
-        {
-            readonly MainForm mainForm;
-
-            public TrayManager([NotNull] MainForm mainForm)
-            {
-                if (mainForm == null) throw new ArgumentNullException("mainForm");
-                this.mainForm = mainForm;
-            }
-
-            public void SetupTrayContextMenu()
-            {
-                mainForm.systemTrayNotifyIcon.MouseClick += (sender, args) =>
-                {
-                    if (args.Button == MouseButtons.Left)
-                    {
-                        mainForm.ShowRestore(new object(), EventArgs.Empty);
-                    }
-                    else if (args.Button == MouseButtons.Right)
-                    {
-                        mainForm.TrayContextMenuStrip.Show();
-                    }
-                };
-
-                var tsmi = new ToolStripMenuItem()
-                {
-                    Text = "Show Main Window"
-                };
-                tsmi.Click += mainForm.ShowRestore;
-                mainForm.TrayContextMenuStrip.Items.Add(tsmi);
-                mainForm.TrayContextMenuStrip.Items.Add(new ToolStripSeparator());
-                mainForm.TrayContextMenuStrip.Items.Add(new ToolStripSeparator());
-                var tsmi2 = new ToolStripMenuItem()
-                {
-                    Text = "Exit"
-                };
-                tsmi2.Click += (sender, args) => mainForm.Shutdown();
-                mainForm.TrayContextMenuStrip.Items.Add(tsmi2);
-            }
-
-            public void AddMenuItem(string text, Action onClick, Image image)
-            {
-                // insert just above last separator and close option
-                var insertionIndex = (mainForm.TrayContextMenuStrip.Items.Count - 2).EnsureNonNegative();
-                var item = new ToolStripMenuItem()
-                {
-                    ImageAlign = ContentAlignment.MiddleLeft,
-                    ImageScaling = ToolStripItemImageScaling.SizeToFit,
-                    Image = image,
-                    Text = text
-                };
-                item.Click += (sender, args) => onClick();
-                mainForm.TrayContextMenuStrip.Items.Insert(insertionIndex, item);
-            }
-        }
-
         ILogger logger;
 
         CoreBootstrapper bootstrapper;
@@ -129,12 +77,13 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
         IWurmAssistantConfig wurmAssistantConfig;
 
         MinimizationManager minimizationManager;
-        TrayManager trayManager;
 
         [JsonProperty]
         Settings settings;
 
         bool persistentStateLoaded;
+        IMessageBus messageBus;
+        ISystemTrayContextMenu systemTrayContextMenu;
 
         public MainForm(string[] args)
         {
@@ -143,7 +92,24 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
             InitializeComponent();
         }
 
-        public IEventBus EventBus { get; set; }
+        //TODO this is temporary until MainForm becomes a part of resolve
+        public IMessageBus MessageBus
+        {
+            get { return messageBus; }
+            set { messageBus = value; messageBus.Subscribe(this); }
+        }
+
+        //TODO this is temporary until MainForm becomes a part of resolve
+        public ISystemTrayContextMenu SystemTrayContextMenu
+        {
+            get { return systemTrayContextMenu; }
+            set
+            {
+                systemTrayContextMenu = value;
+                systemTrayContextMenu.ShowMainWindowClicked += ShowRestore;
+                systemTrayContextMenu.ExitWurmAssistantClicked += (sender, eventArgs) => Shutdown();
+            }
+        }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -155,7 +121,6 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
                 {
                     this.Text = "Wurm Assistant Unlimited";
                     this.Icon = Resources.WurmAssistantUnlimitedIcon;
-                    this.systemTrayNotifyIcon.Icon = Resources.WurmAssistantUnlimitedIcon;
                 }
                 else
                 {
@@ -166,16 +131,11 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
                 settings = new Settings();
 
                 minimizationManager = new MinimizationManager(this);
-                trayManager = new TrayManager(this);
 
                 bootstrapper = new CoreBootstrapper(this);
                 bootstrapper.PreBootstrap();
                 wurmAssistantConfig = bootstrapper.WurmAssistantConfig;
                 logger = bootstrapper.GetCoreLogger();
-
-                trayManager.SetupTrayContextMenu();
-
-                systemTrayNotifyIcon.Visible = true;
 
                 InitTimer.Enabled = true;
             }
@@ -399,15 +359,9 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
             if (bootstrapper != null) bootstrapper.Dispose();
         }
 
-        public void AddMenuItem(string text, Action onClick, Image image)
-        {
-            trayManager.AddMenuItem(text, onClick, image);
-        }
-
         void ShowRestore(object sender, EventArgs e)
         {
             minimizationManager.Restore();
-            systemTrayNotifyIcon.Visible = true;
         }
 
         private void MainForm_Resize(object sender, EventArgs e)
@@ -468,6 +422,16 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
                     SendMessage(mainForm.Handle, Win32Hooks.WM_NCLBUTTONDOWN, Win32Hooks.HT_CAPTION, 0);
                 }
             }
+        }
+
+        void IHandle<MainViewRestoreRequest>.Handle(MainViewRestoreRequest message)
+        {
+            ShowRestore(new object(), EventArgs.Empty);
+        }
+
+        void IHandle<ApplicationShutdownRequest>.Handle(ApplicationShutdownRequest message)
+        {
+            Shutdown();
         }
     }
 }

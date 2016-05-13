@@ -9,7 +9,7 @@ using Action = System.Action;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
 {
-    class EventBus : IEventBus
+    class MessageBus : IMessageBus
     {
         readonly IEventAggregator eventAggregator;
 
@@ -38,7 +38,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
             eventAggregator.PublishOnUIThread(message);
         }
 
-        public EventBus()
+        public MessageBus()
         {
             eventAggregator = new EventAggregator();
         }

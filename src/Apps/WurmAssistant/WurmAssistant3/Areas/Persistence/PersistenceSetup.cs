@@ -54,13 +54,10 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
 
             kernel.Bind<PersistenceManager>().ToConstant(persistenceManager);
 
-            PreInitializeActionsStrategy str =
-                (PreInitializeActionsStrategy)
-                    kernel.Components
-                          .GetAll<IActivationStrategy>().Single(strategy => strategy is PreInitializeActionsStrategy);
+            var kernelConfig = kernel.Get<IKernelConfig>();
 
             var persistentDataManager = new PersistenceSetup(persistenceManager, timerFactory);
-            persistentDataManager.SetupPersistenceActivation(str);
+            persistentDataManager.SetupPersistenceActivation(kernelConfig);
 
             kernel.Bind<PersistenceSetup>().ToConstant(persistentDataManager);
 
@@ -101,9 +98,9 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
 //#endif
 //        }
 
-        void SetupPersistenceActivation(PreInitializeActionsStrategy str)
+        void SetupPersistenceActivation(IKernelConfig kernelConfig)
         {
-            str.AddActivationAction(Action);
+            kernelConfig.AddPreInitializeActivations(Action, null);
         }
 
         void Action(IContext context, InstanceReference instanceReference)

@@ -21,9 +21,9 @@ namespace AldursLab.WurmAssistant3.Areas.Features.Modules
             [NotNull] ISystemTrayContextMenu systemTrayContextMenu,
             [NotNull] ILogger logger)
         {
-            if (systemTrayContextMenu == null) throw new ArgumentNullException("systemTrayContextMenu");
-            if (features == null) throw new ArgumentNullException("features");
-            if (logger == null) throw new ArgumentNullException("logger");
+            if (systemTrayContextMenu == null) throw new ArgumentNullException(nameof(systemTrayContextMenu));
+            if (features == null) throw new ArgumentNullException(nameof(features));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
             this.systemTrayContextMenu = systemTrayContextMenu;
             this.features = features;
             this.logger = logger;

@@ -35,6 +35,7 @@ using AldursLab.WurmAssistant3.Areas.Triggers;
 using AldursLab.WurmAssistant3.Areas.Wa2DataImport;
 using AldursLab.WurmAssistant3.Areas.WurmApi;
 using AldursLab.WurmAssistant3.Utils.IoC;
+using Caliburn.Micro;
 using JetBrains.Annotations;
 using Ninject;
 using Ninject.Activation.Strategies;
@@ -56,15 +57,33 @@ namespace AldursLab.WurmAssistant3
 
         public void PreBootstrap()
         {
-            SetupActivationStrategyComponents();
-
             Regex.CacheSize = 1000;
+
+            var customKernelConfig = new KernelConfig(kernel);
+            kernel.Bind<IKernelConfig>().ToConstant(customKernelConfig);
+
+            IMessageBus messageBus = new MessageBus();
+            mainForm.MessageBus = messageBus; //todo: this hack only until MainForm is replaced.
+            kernel.Bind<IMessageBus>().ToConstant(messageBus);
+
+            customKernelConfig.AddPostInitializeActivations(
+                (context, reference) =>
+                {
+                    if (reference.Instance is IHandle)
+                    {
+                        messageBus.Subscribe(reference.Instance);
+                    }
+                },
+                (context, reference) =>
+                {
+                    if (reference.Instance is IHandle)
+                    {
+                        messageBus.Unsubscribe(reference.Instance);
+                    }
+                });
 
             kernel.Bind<ITimerFactory>().To<TimerFactory>().InSingletonScope();
 
-            kernel.Bind<IEventBus>().To<EventBus>().InSingletonScope();
-            //todo: this hack only until MainForm is replaced.
-            mainForm.EventBus = kernel.Get<IEventBus>();
             kernel.Bind<ConsoleArgsManager>().ToSelf().InSingletonScope();
             kernel.Bind<ISuperFactory>().To<SuperFactory>().InSingletonScope();
             kernel.Bind<WurmAssistantConfig, IWurmAssistantConfig>().To<WurmAssistantConfig>().InSingletonScope();
@@ -74,8 +93,9 @@ namespace AldursLab.WurmAssistant3
 
             kernel.Bind<DispatcherThreadMarshaller, IThreadMarshaller, IWurmApiEventMarshaller>()
                   .To<DispatcherThreadMarshaller>().InSingletonScope();
-            
-            kernel.Bind<MainForm, ISystemTrayContextMenu>().ToConstant(mainForm);
+
+            kernel.Bind<ISystemTrayContextMenu>().To<TrayMenu>().InSingletonScope();
+            kernel.Bind<MainForm>().ToConstant(mainForm);
 
             kernel.Bind<ProcessStarter, IProcessStarter>().To<ProcessStarter>().InSingletonScope();
             kernel.Bind<UserNotifier, IUserNotifier>().To<UserNotifier>().InSingletonScope();
@@ -94,26 +114,11 @@ namespace AldursLab.WurmAssistant3
             var manager = kernel.Get<PersistenceManager>();
             manager.LoadAndStartTracking(mainForm);
             mainForm.AfterPersistentStateLoaded();
+
+            mainForm.SystemTrayContextMenu = kernel.Get<ISystemTrayContextMenu>();
         }
 
         public IWurmAssistantConfig WurmAssistantConfig { get { return kernel.Get<IWurmAssistantConfig>(); } }
-
-        void SetupActivationStrategyComponents()
-        {
-            var allComponents = kernel.Components.GetAll<IActivationStrategy>().ToList();
-            if (allComponents.Count != 7)
-            {
-                throw new Exception("Unexpected count of Ninject IActivationStrategy components");
-            }
-            kernel.Components.RemoveAll<IActivationStrategy>();
-            kernel.Components.Add<IActivationStrategy, ActivationCacheStrategy>();
-            kernel.Components.Add<IActivationStrategy, PropertyInjectionStrategy>();
-            kernel.Components.Add<IActivationStrategy, MethodInjectionStrategy>();
-            kernel.Components.Add<IActivationStrategy, PreInitializeActionsStrategy>();
-            kernel.Components.Add<IActivationStrategy, InitializableStrategy>();
-            kernel.Components.Add<IActivationStrategy, StartableStrategy>();
-            kernel.Components.Add<IActivationStrategy, DisposableStrategy>();
-        }
 
         public void Bootstrap()
         {

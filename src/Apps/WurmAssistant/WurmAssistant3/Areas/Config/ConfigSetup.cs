@@ -18,6 +18,7 @@ namespace AldursLab.WurmAssistant3.Areas.Config
             kernel.Bind<SettingsEditView>().ToSelf();
 
             kernel.Bind<IServersEditorViewFactory>().ToFactory();
+            kernel.Bind<ServersEditorView>().ToSelf();
             kernel.Bind<ServerInfoManager>().ToSelf().InSingletonScope();
         }
 

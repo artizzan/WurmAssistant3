@@ -52,7 +52,6 @@
     <Compile Include="Csv\EnumerableToCsvBuilder.cs" />
     <Compile Include="DataAccess\EntityNotFoundException.cs" />
     <Compile Include="DataAccess\IChangeTrackedRepository.cs" />
-    <Compile Include="Eventing\EventAggregator.cs" />
     <Compile Include="Eventing\EventArgs.cs" />
     <Compile Include="Eventing\IThreadMarshaller.cs" />
     <Compile Include="Extensions\DotNet\ActionExtensions.cs" />

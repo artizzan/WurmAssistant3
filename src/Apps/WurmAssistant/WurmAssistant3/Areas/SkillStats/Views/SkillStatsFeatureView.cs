@@ -86,6 +86,11 @@ namespace AldursLab.WurmAssistant3.Areas.SkillStats.Views
             try
             {
                 var gameChar = liveMonCharacterCbox.Text;
+                if (string.IsNullOrWhiteSpace(gameChar))
+                {
+                    MessageBox.Show("Please choose game character");
+                    return;
+                }
                 var view = new LiveSessionView(gameChar, wurmApi, logger);
                 view.ShowCenteredOnForm(this);
             }

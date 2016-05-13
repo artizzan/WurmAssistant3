@@ -35,8 +35,6 @@
             this.LogViewPanel = new System.Windows.Forms.Panel();
             this.featuresFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.InitTimer = new System.Windows.Forms.Timer(this.components);
-            this.systemTrayNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.TrayContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -89,20 +87,6 @@
             // 
             this.InitTimer.Tick += new System.EventHandler(this.InitTimer_Tick);
             // 
-            // systemTrayNotifyIcon
-            // 
-            this.systemTrayNotifyIcon.BalloonTipText = "I\'ll be here if you need me!";
-            this.systemTrayNotifyIcon.BalloonTipTitle = "Wurm Assistant 3";
-            this.systemTrayNotifyIcon.ContextMenuStrip = this.TrayContextMenuStrip;
-            this.systemTrayNotifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("systemTrayNotifyIcon.Icon")));
-            this.systemTrayNotifyIcon.Text = "Wurm Assistant 3";
-            this.systemTrayNotifyIcon.Visible = true;
-            // 
-            // TrayContextMenuStrip
-            // 
-            this.TrayContextMenuStrip.Name = "TrayContextMenuStrip";
-            this.TrayContextMenuStrip.Size = new System.Drawing.Size(61, 4);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -128,8 +112,6 @@
         private System.Windows.Forms.Panel MenuViewPanel;
         private System.Windows.Forms.Panel LogViewPanel;
         private System.Windows.Forms.Timer InitTimer;
-        private System.Windows.Forms.NotifyIcon systemTrayNotifyIcon;
-        private System.Windows.Forms.ContextMenuStrip TrayContextMenuStrip;
         private System.Windows.Forms.FlowLayoutPanel featuresFlowPanel;
         private System.Windows.Forms.ToolTip toolTips;
     }
