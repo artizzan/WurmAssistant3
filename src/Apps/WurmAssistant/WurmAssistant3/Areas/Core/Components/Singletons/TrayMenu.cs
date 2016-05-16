@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
-using AldursLab.WurmAssistant3.Messages.Requests;
 using AldursLab.WurmAssistant3.Properties;
 using JetBrains.Annotations;
 
@@ -21,7 +20,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
         public event EventHandler<EventArgs> ExitWurmAssistantClicked;
         public event EventHandler<EventArgs> ShowMainWindowClicked;
 
-        public TrayMenu(ConsoleArgsManager consoleArgsManager)
+        public TrayMenu(IConsoleArgs consoleArgs)
         {
             contextMenuStrip = new ContextMenuStrip();
             notifyIcon = new NotifyIcon
@@ -34,7 +33,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
                 Visible = true
             };
 
-            if (consoleArgsManager.WurmUnlimitedMode)
+            if (consoleArgs.WurmUnlimitedMode)
             {
                 notifyIcon.BalloonTipTitle = "Wurm Assistant 3 Unlimited";
                 notifyIcon.Text = "Wurm Assistant 3 Unlimited";

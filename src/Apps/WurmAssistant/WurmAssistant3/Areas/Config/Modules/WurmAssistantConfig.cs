@@ -3,6 +3,7 @@ using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Areas.Core.Components.Singletons;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
@@ -11,7 +12,7 @@ namespace AldursLab.WurmAssistant3.Areas.Config.Modules
     [PersistentObject("WurmAssistantConfig")]
     public class WurmAssistantConfig : PersistentObjectBase, IWurmAssistantConfig
     {
-        readonly ConsoleArgsManager consoleArgsManager;
+        readonly IConsoleArgs consoleArgs;
 
         [JsonProperty]
         int version = 0;
@@ -28,10 +29,10 @@ namespace AldursLab.WurmAssistant3.Areas.Config.Modules
         [JsonProperty]
         bool dropAllWurmApiCachesToggle;
 
-        public WurmAssistantConfig([NotNull] ConsoleArgsManager consoleArgsManager)
+        public WurmAssistantConfig([NotNull] IConsoleArgs consoleArgs)
         {
-            if (consoleArgsManager == null) throw new ArgumentNullException("consoleArgsManager");
-            this.consoleArgsManager = consoleArgsManager;
+            if (consoleArgs == null) throw new ArgumentNullException(nameof(consoleArgs));
+            this.consoleArgs = consoleArgs;
         }
 
         protected override void OnPersistentDataLoaded()
@@ -93,7 +94,7 @@ namespace AldursLab.WurmAssistant3.Areas.Config.Modules
 
         public bool WurmUnlimitedMode
         {
-            get { return consoleArgsManager.WurmUnlimitedMode; }
+            get { return consoleArgs.WurmUnlimitedMode; }
         }
     }
 }

@@ -116,8 +116,9 @@
     </Compile>
     <Compile Include="Areas\Core\Components\Singletons\BinDirectory.cs" />
     <Compile Include="Areas\Core\Components\Singletons\ChangelogManager.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\WpfAppEnvironment.cs" />
     <Compile Include="Areas\Core\Components\Singletons\KernelConfig.cs" />
-    <Compile Include="Areas\Core\Components\Singletons\ConsoleArgsManager.cs" />
+    <Compile Include="Areas\Core\Components\Singletons\ConsoleArgs.cs" />
     <Compile Include="Areas\Core\Components\Singletons\DispatcherThreadMarshaller.cs" />
     <Compile Include="Areas\Core\Components\Singletons\MessageBus.cs" />
     <Compile Include="Areas\Core\Components\Singletons\ProcessStarter.cs" />
@@ -128,8 +129,11 @@
     <Compile Include="Areas\Core\Components\Singletons\WaVersion.cs" />
     <Compile Include="Areas\Core\Components\Obsolete\WinFormsThreadMarshaller.cs" />
     <Compile Include="Areas\Core\Components\Singletons\WurmAssistantDataDirectory.cs" />
+    <Compile Include="Areas\Core\Contracts\IConsoleArgs.cs" />
+    <Compile Include="Utils\IrrklangDependencyValidator.cs" />
     <Compile Include="Areas\Core\Contracts\IBinDirectory.cs" />
     <Compile Include="Areas\Core\Contracts\IChangelogManager.cs" />
+    <Compile Include="Areas\Core\Contracts\IEnvironment.cs" />
     <Compile Include="Areas\Core\Contracts\IMessageBus.cs" />
     <Compile Include="Areas\Core\Contracts\IKernelConfig.cs" />
     <Compile Include="Areas\Core\Contracts\IProcessStarter.cs" />
@@ -142,7 +146,6 @@
     <Compile Include="Areas\Core\Contracts\IWaVersion.cs" />
     <Compile Include="Areas\Core\Contracts\IWurmAssistantDataDirectory.cs" />
     <Compile Include="Areas\Core\Parts\DispatcherTimerProxy.cs" />
-    <Compile Include="CoreBootstrapper.cs" />
     <Compile Include="Areas\Core\Views\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,8 +158,6 @@
     <Compile Include="Areas\Core\Views\SendBugReportView.Designer.cs">
       <DependentUpon>SendBugReportView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Messages\Requests\ApplicationShutdownRequest.cs" />
-    <Compile Include="Messages\Requests\MainViewRestoreRequest.cs" />
     <Compile Include="Messages\Message.cs" />
     <Compile Include="Utils\IoC\CustomActionsStrategyBase.cs" />
     <Compile Include="Utils\IoC\PostInitializeActionsStrategy.cs" />
@@ -269,7 +270,7 @@
     <Compile Include="Areas\Config\Contracts\IWurmAssistantConfig.cs" />
     <Compile Include="Areas\Config\Contracts\ServerInformation.cs" />
     <Compile Include="Areas\Config\Modules\ServerInfoManager.cs" />
-    <Compile Include="Areas\Config\Modules\VisualCppRedistDetector.cs" />
+    <Compile Include="Utils\VisualCppRedistDetector.cs" />
     <Compile Include="Areas\Config\Modules\WurmAssistantConfig.cs" />
     <Compile Include="Areas\Config\Views\FirstTimeSetupView.cs">
       <SubType>Form</SubType>
@@ -289,10 +290,10 @@
     <Compile Include="Areas\Config\Views\SettingsEditView.Designer.cs">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Config\Views\VisualCppMissingHelperView.cs">
+    <Compile Include="Utils\VisualCppMissingHelperView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\Config\Views\VisualCppMissingHelperView.Designer.cs">
+    <Compile Include="Utils\VisualCppMissingHelperView.Designer.cs">
       <DependentUpon>VisualCppMissingHelperView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\CraftingAssistant\CraftingAssistantSetup.cs" />
@@ -900,7 +901,7 @@
     <EmbeddedResource Include="Areas\Config\Views\SettingsEditView.resx">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Config\Views\VisualCppMissingHelperView.resx">
+    <EmbeddedResource Include="Utils\VisualCppMissingHelperView.resx">
       <DependentUpon>VisualCppMissingHelperView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\CraftingAssistant\Views\CraftingAssistantView.resx">
@@ -1233,6 +1234,8 @@
     <Folder Include="Areas\Granger\Contracts\" />
     <Folder Include="Areas\MainMenu\Contracts\" />
     <Folder Include="Areas\RevealCreatures\Contracts\" />
+    <Folder Include="Messages\Events\" />
+    <Folder Include="Messages\Requests\" />
     <Folder Include="Utils\WinForms\Utility\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -19,7 +19,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
         /// </summary>
         /// <param name="consoleArgs"></param>
         /// <exception cref="LockFailedException"></exception>
-        public WurmAssistantDataDirectory(ConsoleArgsManager consoleArgs)
+        public WurmAssistantDataDirectory(IConsoleArgs consoleArgs)
         {
             string dataDirPath;
             if (consoleArgs.UseRelativeDataDir)

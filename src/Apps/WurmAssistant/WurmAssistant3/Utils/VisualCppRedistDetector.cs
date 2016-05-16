@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 
-namespace AldursLab.WurmAssistant3.Areas.Config.Modules
+namespace AldursLab.WurmAssistant3.Utils
 {
     public class VisualCppRedistDetector
     {

@@ -4,7 +4,7 @@ using System.Media;
 using System.Windows.Forms;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Areas.Config.Views
+namespace AldursLab.WurmAssistant3.Utils
 {
     public partial class VisualCppMissingHelperView : Form
     {

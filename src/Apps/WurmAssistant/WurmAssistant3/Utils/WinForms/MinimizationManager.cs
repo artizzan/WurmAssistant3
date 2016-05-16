@@ -12,7 +12,7 @@ namespace AldursLab.WurmAssistant3.Utils.WinForms
 
         public MinimizationManager([NotNull] Form form)
         {
-            if (form == null) throw new ArgumentNullException("form");
+            if (form == null) throw new ArgumentNullException(nameof(form));
             this.form = form;
             SaveLastNonMinimizedState();
             form.Resize += (sender, args) =>

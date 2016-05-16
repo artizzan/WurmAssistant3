@@ -1,6 +1,6 @@
 ﻿using AldursLab.WurmAssistant3.Utils.WinForms;
 
-namespace AldursLab.WurmAssistant3.Areas.Config.Views
+namespace AldursLab.WurmAssistant3.Utils
 {
     partial class VisualCppMissingHelperView
     {

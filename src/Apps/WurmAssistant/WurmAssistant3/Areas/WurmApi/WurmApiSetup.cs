@@ -18,7 +18,7 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi
     {
         public static void TryAutodetectWurmInstallDir(IKernel kernel)
         {
-            var consoleArgs = kernel.Get<ConsoleArgsManager>();
+            var consoleArgs = kernel.Get<IConsoleArgs>();
             try
             {
                 if (!consoleArgs.WurmUnlimitedMode)
@@ -55,7 +55,7 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi
 
         static IWurmApi ConstructWurmApi(IKernel kernel)
         {
-            var consoleArgs = kernel.Get<ConsoleArgsManager>();
+            var consoleArgs = kernel.Get<IConsoleArgs>();
 
             WurmAssistantConfig config = kernel.Get<WurmAssistantConfig>();
             IWurmApiLoggerFactory loggerFactory = kernel.Get<IWurmApiLoggerFactory>();

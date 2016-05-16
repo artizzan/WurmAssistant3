@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
 {
-    public class ConsoleArgsManager
+    public class ConsoleArgs : IConsoleArgs
     {
         const string WurmUnlimitedFlag = "-wurmunlimited";
         const string RelativeDataDirFlag = "-relativedatadir";
@@ -14,7 +15,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
         bool wurmUnlimitedMode = false;
         bool useRelativeDataDir = false;
 
-        public ConsoleArgsManager()
+        public ConsoleArgs() //todo: use IEnvironment?
         {
             this.args = Environment.GetCommandLineArgs();
 

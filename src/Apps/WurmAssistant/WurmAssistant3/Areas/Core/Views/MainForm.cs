@@ -21,8 +21,8 @@ using AldursLab.WurmAssistant3.Areas.Native.Constants;
 using AldursLab.WurmAssistant3.Areas.Native.Contracts;
 using AldursLab.WurmAssistant3.Areas.Native.Modules;
 using AldursLab.WurmAssistant3.Messages;
-using AldursLab.WurmAssistant3.Messages.Requests;
 using AldursLab.WurmAssistant3.Properties;
+using AldursLab.WurmAssistant3.Utils;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using AldursLab.WurmAssistant3.Utils.WinForms.Reusables;
 using Caliburn.Micro;
@@ -33,10 +33,174 @@ using Action = System.Action;
 namespace AldursLab.WurmAssistant3.Areas.Core.Views
 {
     [PersistentObject("MainForm")]
-    public partial class MainForm : PersistentForm, IHandle<MainViewRestoreRequest>, IHandle<ApplicationShutdownRequest>
+    public partial class MainForm : PersistentForm
     {
-        private readonly string[] args;
-        MouseDragManager mouseDragManager;
+        readonly IConsoleArgs consoleArgs;
+        readonly LogView logView;
+        readonly MenuView menuView;
+        readonly IFeaturesManager featuresManager;
+        readonly IWaExecutionInfoProvider waExecutionInfoProvider;
+        readonly IChangelogManager changelogManager;
+        readonly IUserNotifier userNotifier;
+        readonly ILogger logger;
+        readonly MouseDragManager mouseDragManager;
+        readonly MinimizationManager minimizationManager;
+
+        [JsonProperty] readonly Settings settings;
+        
+        bool persistentStateLoaded;
+
+        public MainForm(
+            [NotNull] IConsoleArgs consoleArgs,
+            [NotNull] LogView logView,
+            [NotNull] MenuView menuView,
+            [NotNull] IFeaturesManager featuresManager,
+            [NotNull] ISystemTrayContextMenu systemTrayContextMenu,
+            [NotNull] IWaExecutionInfoProvider waExecutionInfoProvider,
+            [NotNull] IChangelogManager changelogManager,
+            [NotNull] IUserNotifier userNotifier,
+            [NotNull] ILogger logger)
+        {
+            if (consoleArgs == null) throw new ArgumentNullException(nameof(consoleArgs));
+            if (logView == null) throw new ArgumentNullException(nameof(logView));
+            if (menuView == null) throw new ArgumentNullException(nameof(menuView));
+            if (featuresManager == null) throw new ArgumentNullException(nameof(featuresManager));
+            if (systemTrayContextMenu == null) throw new ArgumentNullException(nameof(systemTrayContextMenu));
+            if (waExecutionInfoProvider == null) throw new ArgumentNullException(nameof(waExecutionInfoProvider));
+            if (changelogManager == null) throw new ArgumentNullException(nameof(changelogManager));
+            if (userNotifier == null) throw new ArgumentNullException(nameof(userNotifier));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            this.consoleArgs = consoleArgs;
+            this.logView = logView;
+            this.menuView = menuView;
+            this.featuresManager = featuresManager;
+            this.waExecutionInfoProvider = waExecutionInfoProvider;
+            this.changelogManager = changelogManager;
+            this.userNotifier = userNotifier;
+            this.logger = logger;
+
+            InitializeComponent();
+
+            settings = new Settings();
+            minimizationManager = new MinimizationManager(this);
+            mouseDragManager = new MouseDragManager(this);
+            mouseDragManager.Hook();
+
+            systemTrayContextMenu.ShowMainWindowClicked += ShowRestore;
+            systemTrayContextMenu.ExitWurmAssistantClicked += (sender, eventArgs) => this.Close();
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            persistentStateLoaded = true;
+            RestoreSizeFromSaved();
+
+            Text += string.Format(" ({0})", waExecutionInfoProvider.Get());
+
+            if (consoleArgs.WurmUnlimitedMode)
+            {
+                this.Text = "Wurm Assistant Unlimited";
+                this.Icon = Resources.WurmAssistantUnlimitedIcon;
+            }
+            else
+            {
+                this.Text = "Wurm Assistant";
+            }
+
+            SetupFeaturesManager();
+            SetupLogView();
+            SetupMenuView();
+
+            ShowChangelog();
+        }
+
+        void ShowChangelog()
+        {
+            try
+            {
+                var changes = changelogManager.GetNewChanges();
+                if (!string.IsNullOrWhiteSpace(changes))
+                {
+                    changelogManager.ShowChanges(changes);
+                    changelogManager.UpdateLastChangeDate();
+                }
+            }
+            catch (Exception exception)
+            {
+                logger.Warn(exception, "Error at parsing or opening changelog");
+                userNotifier.NotifyWithMessageBox("Error opening changelog, see logs for details.", NotifyKind.Warning);
+            }
+        }
+
+        protected override void OnPersistentDataLoaded()
+        {
+            settings.MainForm = this;
+        }
+
+        void RestoreSizeFromSaved()
+        {
+            if (settings.SavedWidth != default(int) && settings.SavedHeight != default(int))
+            {
+                this.Size = new Size()
+                {
+                    Height = settings.SavedHeight,
+                    Width = settings.SavedWidth
+                };
+            }
+        }
+
+        public void SetupLogView()
+        {
+            LogViewPanel.Controls.Clear();
+            logView.Dock = DockStyle.Fill;
+            LogViewPanel.Controls.Add(logView);
+        }
+
+        public void SetupFeaturesManager()
+        {
+            featuresFlowPanel.Controls.Clear();
+
+            var features = featuresManager.Features;
+
+            foreach (var f in features)
+            {
+                var feature = f;
+                Button btn = new Button
+                {
+                    Size = new Size(80, 80),
+                    BackgroundImageLayout = ImageLayout.Stretch,
+                    BackgroundImage = feature.Icon
+                };
+
+                btn.Click += (o, args) => feature.Show();
+                toolTips.SetToolTip(btn, feature.Name);
+                featuresFlowPanel.Controls.Add(btn);
+            }
+        }
+
+        public void SetupMenuView()
+        {
+            MenuViewPanel.Controls.Clear();
+            menuView.Dock = DockStyle.Fill;
+            MenuViewPanel.Controls.Add(menuView);
+        }
+
+        void ShowRestore(object sender, EventArgs e)
+        {
+            minimizationManager.Restore();
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                if (persistentStateLoaded)
+                {
+                    settings.SavedWidth = this.Width;
+                    settings.SavedHeight = this.Height;
+                }
+            }
+        }
 
         [JsonObject(MemberSerialization.OptIn)]
         class Settings
@@ -66,313 +230,6 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
             {
                 get { return baloonTrayTooltipShown; }
                 set { baloonTrayTooltipShown = value; MainForm.FlagAsChanged(); }
-            }
-        }
-
-        ILogger logger;
-
-        CoreBootstrapper bootstrapper;
-        bool bootstrapped = false;
-
-        IWurmAssistantConfig wurmAssistantConfig;
-
-        MinimizationManager minimizationManager;
-
-        [JsonProperty]
-        Settings settings;
-
-        bool persistentStateLoaded;
-        IMessageBus messageBus;
-        ISystemTrayContextMenu systemTrayContextMenu;
-
-        public MainForm(string[] args)
-        {
-            if (args == null) throw new ArgumentNullException("args");
-            this.args = args;
-            InitializeComponent();
-        }
-
-        //TODO this is temporary until MainForm becomes a part of resolve
-        public IMessageBus MessageBus
-        {
-            get { return messageBus; }
-            set { messageBus = value; messageBus.Subscribe(this); }
-        }
-
-        //TODO this is temporary until MainForm becomes a part of resolve
-        public ISystemTrayContextMenu SystemTrayContextMenu
-        {
-            get { return systemTrayContextMenu; }
-            set
-            {
-                systemTrayContextMenu = value;
-                systemTrayContextMenu.ShowMainWindowClicked += ShowRestore;
-                systemTrayContextMenu.ExitWurmAssistantClicked += (sender, eventArgs) => Shutdown();
-            }
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            ConsoleArgsManager argsManager = null;
-            try
-            {
-                argsManager = new ConsoleArgsManager();
-                if (argsManager.WurmUnlimitedMode)
-                {
-                    this.Text = "Wurm Assistant Unlimited";
-                    this.Icon = Resources.WurmAssistantUnlimitedIcon;
-                }
-                else
-                {
-                    this.Text = "Wurm Assistant";
-                }
-
-                mouseDragManager = new MouseDragManager(this);
-                settings = new Settings();
-
-                minimizationManager = new MinimizationManager(this);
-
-                bootstrapper = new CoreBootstrapper(this);
-                bootstrapper.PreBootstrap();
-                wurmAssistantConfig = bootstrapper.WurmAssistantConfig;
-                logger = bootstrapper.GetCoreLogger();
-
-                InitTimer.Enabled = true;
-            }
-            catch (LockFailedException)
-            {
-                try
-                {
-                    // this will probably fail on non windows even under WINE
-
-                    if (argsManager != null)
-                    {
-                        INativeCalls rwc = new Win32NativeCalls();
-                        if (argsManager.WurmUnlimitedMode)
-                        {
-                            rwc.AttemptToBringMainWindowToFront("AldursLab.WurmAssistant3", "Unlimited");
-                        }
-                        else
-                        {
-                            rwc.AttemptToBringMainWindowToFront("AldursLab.WurmAssistant3", @"^((?!Unlimited).)*$");
-                        }
-                    }
-                }
-                catch (Exception exception)
-                {
-                    if (logger != null) logger.Error(exception, "");
-                }
-
-                System.Windows.Application.Current.Shutdown();
-            }
-            catch (Exception exception)
-            {
-                var view = new UniversalTextDisplayView();
-                view.Text = "Wurm Assistant - ERROR";
-                view.ContentText = exception.ToString();
-                view.ShowDialog();
-                Shutdown();
-            }
-        }
-
-        protected override void OnPersistentDataLoaded()
-        {
-            settings.MainForm = this;
-        }
-
-        public void AfterPersistentStateLoaded()
-        {
-            persistentStateLoaded = true;
-            RestoreSizeFromSaved();
-        }
-
-        void RestoreSizeFromSaved()
-        {
-            if (settings.SavedWidth != default(int) && settings.SavedHeight != default(int))
-            {
-                this.Size = new Size()
-                {
-                    Height = settings.SavedHeight,
-                    Width = settings.SavedWidth
-                };
-            }
-        }
-
-        public void SetLogView(LogView logView)
-        {
-            LogViewPanel.Controls.Clear();
-            logView.Dock = DockStyle.Fill;
-            LogViewPanel.Controls.Add(logView);
-        }
-
-        public void SetFeaturesManager(IFeaturesManager featuresManager)
-        {
-            featuresFlowPanel.Controls.Clear();
-
-            var features = featuresManager.Features;
-
-            foreach (var f in features)
-            {
-                var feature = f;
-                Button btn = new Button
-                {
-                    Size = new Size(80, 80),
-                    BackgroundImageLayout = ImageLayout.Stretch,
-                    BackgroundImage = feature.Icon
-                };
-
-                btn.Click += (o, args) => feature.Show();
-                toolTips.SetToolTip(btn, feature.Name);
-                featuresFlowPanel.Controls.Add(btn);
-            }
-        }
-
-        public void SetMenuView(MenuView menuView)
-        {
-            MenuViewPanel.Controls.Clear();
-            menuView.Dock = DockStyle.Fill;
-            MenuViewPanel.Controls.Add(menuView);
-        }
-
-        private void InitTimer_Tick(object sender, EventArgs e)
-        {
-            if (!bootstrapped)
-            {
-                InitTimer.Enabled = false;
-
-                try
-                {
-                    bootstrapper.Bootstrap();
-                }
-                catch (ConfigCancelledException)
-                {
-                    Shutdown();
-                }
-                catch (Exception exception)
-                {
-                    bool handled = false;
-
-                    // Trying to handle missing irrKlang dependencies.
-                    // Checking for specific part of the message, because the rest of it may be localized.
-                    if (exception.GetType() == typeof (FileNotFoundException)
-                        && exception.Message.Contains("'irrKlang.NET4.dll'"))
-                    {
-                        handled = HandleMissingIrrklangDependency(exception);
-                    }
-
-                    if (!handled)
-                    {
-                        HandleOtherError(exception);
-                    }
-                    
-                    return;
-                }
-                finally
-                {
-                    mouseDragManager.Hook();
-                }
-
-                bootstrapped = true;
-            }
-        }
-
-        void HandleOtherError(Exception exception)
-        {
-            bool restart = false;
-            var btn1 = new Button()
-            {
-                Text = "Reset Wurm Assistant config",
-                Height = 28,
-                Width = 220
-            };
-            btn1.Click += (o, args) =>
-            {
-                if (bootstrapper.TryResetConfig())
-                {
-                    MessageBox.Show("Reset complete, please restart.", "Done", MessageBoxButtons.OK);
-                }
-                else
-                {
-                    MessageBox.Show("Reset was not possible.", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            };
-            var btn2 = new Button()
-            {
-                Text = "Restart Wurm Assistant",
-                Height = 28,
-                Width = 220,
-                DialogResult = DialogResult.OK
-            };
-            btn2.Click += (o, args) => restart = true;
-            var btn3 = new Button()
-            {
-                Text = "Close Wurm Assistant",
-                Height = 28,
-                Width = 220,
-                DialogResult = DialogResult.OK
-            };
-            var view = new UniversalTextDisplayView(btn3, btn2, btn1)
-            {
-                Text = "OH NO!!",
-                ContentText = "Application startup was interrupted by an ugly error! "
-                              + Environment.NewLine
-                              + Environment.NewLine + exception.ToString()
-            };
-
-            view.ShowDialog();
-            if (restart) Restart();
-            else Shutdown();
-        }
-
-        bool HandleMissingIrrklangDependency(Exception exception)
-        {
-            var visualCppDetector = new VisualCppRedistDetector();
-            // trying to detect if Visual C++ Redistributable x86 SP1 is installed
-            if (!visualCppDetector.IsInstalled2010X86Sp1())
-            {
-                var form = new VisualCppMissingHelperView(exception);
-                form.ShowDialog();
-                Shutdown();
-                return true;
-            }
-            return false;
-        }
-
-        private void MainView_FormClosing(object sender, FormClosingEventArgs e)
-        {
-        }
-        
-        public void Restart()
-        {
-            Application.Restart();
-            // Restart does not automatically shutdown WPF application
-            Shutdown();
-        }
-
-        public void Shutdown()
-        {
-            System.Windows.Application.Current.Shutdown();
-        }
-
-        private void MainView_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (bootstrapper != null) bootstrapper.Dispose();
-        }
-
-        void ShowRestore(object sender, EventArgs e)
-        {
-            minimizationManager.Restore();
-        }
-
-        private void MainForm_Resize(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Normal)
-            {
-                if (persistentStateLoaded)
-                {
-                    settings.SavedWidth = this.Width;
-                    settings.SavedHeight = this.Height;
-                }
             }
         }
 
@@ -422,16 +279,6 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
                     SendMessage(mainForm.Handle, Win32Hooks.WM_NCLBUTTONDOWN, Win32Hooks.HT_CAPTION, 0);
                 }
             }
-        }
-
-        void IHandle<MainViewRestoreRequest>.Handle(MainViewRestoreRequest message)
-        {
-            ShowRestore(new object(), EventArgs.Empty);
-        }
-
-        void IHandle<ApplicationShutdownRequest>.Handle(ApplicationShutdownRequest message)
-        {
-            Shutdown();
         }
     }
 }

@@ -34,7 +34,6 @@
             this.MenuViewPanel = new System.Windows.Forms.Panel();
             this.LogViewPanel = new System.Windows.Forms.Panel();
             this.featuresFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.InitTimer = new System.Windows.Forms.Timer(this.components);
             this.toolTips = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -83,10 +82,6 @@
             this.featuresFlowPanel.Size = new System.Drawing.Size(600, 1);
             this.featuresFlowPanel.TabIndex = 3;
             // 
-            // InitTimer
-            // 
-            this.InitTimer.Tick += new System.EventHandler(this.InitTimer_Tick);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -96,8 +91,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "Window tilte is set in code";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainView_FormClosing);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainView_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -111,7 +104,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel MenuViewPanel;
         private System.Windows.Forms.Panel LogViewPanel;
-        private System.Windows.Forms.Timer InitTimer;
         private System.Windows.Forms.FlowLayoutPanel featuresFlowPanel;
         private System.Windows.Forms.ToolTip toolTips;
     }
