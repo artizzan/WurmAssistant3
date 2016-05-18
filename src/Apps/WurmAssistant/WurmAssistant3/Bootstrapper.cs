@@ -69,18 +69,17 @@ namespace AldursLab.WurmAssistant3
             {
                 consoleArgs = new ConsoleArgs();
                 kernel.Bind<IConsoleArgs>().ToConstant(consoleArgs);
-                System.Windows.Forms.Application.EnableVisualStyles();
 
+                System.Windows.Forms.Application.EnableVisualStyles();
                 Regex.CacheSize = 1000;
 
-                var customKernelConfig = new KernelConfig(kernel);
-                kernel.Bind<IKernelConfig>().ToConstant(customKernelConfig);
+                var kernelConfig = KernelConfig.EnableFor(kernel);
+                kernel.Bind<IKernelConfig>().ToConstant(kernelConfig);
 
                 IMessageBus messageBus = new MessageBus();
-                //mainForm.MessageBus = messageBus;
                 kernel.Bind<IMessageBus>().ToConstant(messageBus);
 
-                customKernelConfig.AddPostInitializeActivations(
+                kernelConfig.AddPostInitializeActivations(
                     (context, reference) =>
                     {
                         if (reference.Instance is IHandle)

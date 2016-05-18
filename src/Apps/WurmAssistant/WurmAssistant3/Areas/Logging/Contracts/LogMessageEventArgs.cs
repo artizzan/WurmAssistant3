@@ -14,6 +14,8 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Contracts
             Category = category;
         }
 
+        public DateTime Timestamp { get; } = DateTime.Now;
+
         public NLog.LogLevel Level { get; private set; }
 
         public string Message { get; private set; }

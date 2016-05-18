@@ -12,15 +12,14 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
     {
         public static void Setup(IKernel kernel)
         {
-            var logOutputDirFullPath = Path.Combine(kernel.Get<IWurmAssistantDataDirectory>().DirectoryPath, "Logs");
-            LoggingManager manager = new LoggingManager(kernel.Get<IThreadMarshaller>());
-            manager.Setup(logOutputDirFullPath);
+            kernel.Bind(
+                typeof(ILoggingConfig),
+                typeof(ILoggerFactory),
+                typeof(IWurmApiLoggerFactory),
+                typeof(ILogMessageSteam),
+                typeof(ILogMessageDump))
+                  .To<LoggingManager>().InSingletonScope();
 
-            kernel.Bind<ILoggingConfig>().ToConstant(manager);
-            kernel.Bind<ILoggerFactory>().ToConstant(manager);
-            kernel.Bind<IWurmApiLoggerFactory>().ToConstant(manager);
-            kernel.Bind<ILogMessageFlow>().ToConstant(manager);
-            kernel.Bind<ILogMessageHandler>().ToConstant(manager);
             kernel.Bind<LogView>().ToSelf();
 
             BindLoggerAutoResolver(kernel);

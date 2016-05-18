@@ -16,7 +16,7 @@ using Ninject.Activation.Strategies;
 
 namespace AldursLab.WurmAssistant3.Areas.Persistence
 {
-    public class PersistenceSetup : IDisposable
+    public static class PersistenceSetup
     {
         public static void BindPersistenceSystems(IKernel kernel)
         {
@@ -35,96 +35,35 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
 
             // Data saving relies on application events, wired via PersistentDataManager.
 
-            var dataDir = kernel.Get<IWurmAssistantDataDirectory>();
-            var logger = kernel.Get<ILogger>();
-            var timerFactory = kernel.Get<ITimerFactory>();
-
-            var config = new PersistenceManagerConfig()
+            kernel.Bind<PersistenceManager>().ToMethod(context =>
             {
-                DataStoreDirectoryPath = Path.Combine(dataDir.DirectoryPath, "Data")
-            };
-            var errorStrategy = new JsonExtendedErrorHandlingStrategy(logger);
-            var serializationStrategy = new JsonSerializationStrategy
-            {
-                ErrorStrategy = errorStrategy
-            };
-            var persistenceManager = new PersistenceManager(config,
-                serializationStrategy,
-                new FlatFilesPersistenceStrategy(config));
+                var dataDir = kernel.Get<IWurmAssistantDataDirectory>();
+                var logger = kernel.Get<ILogger>();
 
-            kernel.Bind<PersistenceManager>().ToConstant(persistenceManager);
+                var config = new PersistenceManagerConfig()
+                {
+                    DataStoreDirectoryPath = Path.Combine(dataDir.DirectoryPath, "Data")
+                };
+                var errorStrategy = new JsonExtendedErrorHandlingStrategy(logger);
+                var serializationStrategy = new JsonSerializationStrategy
+                {
+                    ErrorStrategy = errorStrategy
+                };
+                var persistenceManagerr = new PersistenceManager(config,
+                    serializationStrategy,
+                    new FlatFilesPersistenceStrategy(config));
 
-            var kernelConfig = kernel.Get<IKernelConfig>();
+                return persistenceManagerr;
+            }).InSingletonScope();
 
-            var persistentDataManager = new PersistenceSetup(persistenceManager, timerFactory);
-            persistentDataManager.SetupPersistenceActivation(kernelConfig);
-
-            kernel.Bind<PersistenceSetup>().ToConstant(persistentDataManager);
+            kernel.Bind<PersistenceEnabler>().ToSelf().InSingletonScope();
 
             kernel.Bind<IPersistentObjectResolver>().To<PersistentObjectResolver>().InSingletonScope();
-            kernel.Bind(typeof (IPersistentObjectResolver<>)).To(typeof (PersistentObjectResolver<>)).InSingletonScope();
-        }
+            kernel.Bind(typeof(IPersistentObjectResolver<>)).To(typeof(PersistentObjectResolver<>)).InSingletonScope();
 
-        readonly ITimer updateTimer;
-        readonly PersistenceManager persistenceManager;
-        readonly object locker = new object();
-
-        PersistenceSetup([NotNull] PersistenceManager persistenceManager, [NotNull] ITimerFactory timerFactory)
-        {
-            if (persistenceManager == null) throw new ArgumentNullException(nameof(persistenceManager));
-            if (timerFactory == null) throw new ArgumentNullException(nameof(timerFactory));
-            this.updateTimer = timerFactory.CreateUiThreadTimer();
-            this.updateTimer.Interval = TimeSpan.FromMilliseconds(500);
-            this.updateTimer.Tick += UpdateLoopOnUpdated;
-
-            this.persistenceManager = persistenceManager;
-
-            this.updateTimer.Start();
-            //hostEnvironment.LateHostClosing += HostEnvironmentOnHostClosing;
-        }
-
-        void UpdateLoopOnUpdated(object sender, EventArgs eventArgs)
-        {
-            persistenceManager.SavePending();
-        }
-
-//        void HostEnvironmentOnHostClosing(object sender, EventArgs eventArgs)
-//        {
-//            // for debugging save only changed, so issues can be spotted.
-//#if DEBUG
-//            persistenceManager.SavePending();
-//#else
-//            persistenceManager.SaveAll();
-//#endif
-//        }
-
-        void SetupPersistenceActivation(IKernelConfig kernelConfig)
-        {
-            kernelConfig.AddPreInitializeActivations(Action, null);
-        }
-
-        void Action(IContext context, InstanceReference instanceReference)
-        {
-            lock (locker)
-            {
-                var @object = instanceReference.Instance as IPersistentObject;
-                if (@object != null)
-                {
-                    @object = persistenceManager.LoadAndStartTracking(@object, returnExistingInsteadOfException: true);
-                    instanceReference.Instance = @object;
-                }
-            }
-        }
-
-        public void Dispose()
-        {
-            updateTimer.Stop();
-            // for debugging save only changed, so issues can be spotted.
-#if DEBUG
-            persistenceManager.SavePending();
-#else
-            persistenceManager.SaveAll();
-#endif
+            // this step is required, so that objects resolved after this step can be properly populated.
+            var persistentDataManager = kernel.Get<PersistenceEnabler>();
+            persistentDataManager.SetupPersistenceActivation();
         }
     }
 }

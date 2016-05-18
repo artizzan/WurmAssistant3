@@ -12,22 +12,24 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
 {
     public class LoggingConfig : ILoggingConfig
     {
-        LoggingConfiguration config;
+        readonly LoggingConfiguration config;
         string currentReadableLogFileFullPath;
         string currentVerboseLogFileFullPath;
 
-        public void Setup(string logOutputDirFullPath)
+        public LoggingConfig(string logOutputDirFullPath)
         {
-            if (logOutputDirFullPath == null)
-                throw new ArgumentNullException("logOutputDirFullPath");
-            
+            if (logOutputDirFullPath == null) throw new ArgumentNullException(nameof(logOutputDirFullPath));
+            this.LogsDirectoryFullPath = logOutputDirFullPath;
+
             config = new LoggingConfiguration();
 
-            SetupReadableLogging(logOutputDirFullPath);
-            SetupVerboseLogging(logOutputDirFullPath);
+            SetupReadableLogging(LogsDirectoryFullPath);
+            SetupVerboseLogging(LogsDirectoryFullPath);
 
             ApplyLoggingConfig();
         }
+
+        public string LogsDirectoryFullPath { get; }
 
         private void SetupReadableLogging(string logOutputDirFullPath)
         {

@@ -37,7 +37,7 @@
             this.showAppLog = new System.Windows.Forms.Button();
             this.shopAppLogDetailed = new System.Windows.Forms.Button();
             this.reportBug = new System.Windows.Forms.Button();
-            this.buyBeerBtn = new System.Windows.Forms.Button();
+            this.openLogsFolderBtn = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.logViewButtonsFlowPanel.SuspendLayout();
             this.SuspendLayout();
@@ -92,7 +92,7 @@
             this.logViewButtonsFlowPanel.Controls.Add(this.showAppLog);
             this.logViewButtonsFlowPanel.Controls.Add(this.shopAppLogDetailed);
             this.logViewButtonsFlowPanel.Controls.Add(this.reportBug);
-            this.logViewButtonsFlowPanel.Controls.Add(this.buyBeerBtn);
+            this.logViewButtonsFlowPanel.Controls.Add(this.openLogsFolderBtn);
             this.logViewButtonsFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logViewButtonsFlowPanel.Location = new System.Drawing.Point(0, 0);
             this.logViewButtonsFlowPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -143,18 +143,15 @@
             this.reportBug.UseVisualStyleBackColor = true;
             this.reportBug.Click += new System.EventHandler(this.reportBug_Click);
             // 
-            // buyBeerBtn
+            // openLogsFolderBtn
             // 
-            this.buyBeerBtn.Image = global::AldursLab.WurmAssistant3.Properties.Resources.beer;
-            this.buyBeerBtn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buyBeerBtn.Location = new System.Drawing.Point(403, 3);
-            this.buyBeerBtn.Name = "buyBeerBtn";
-            this.buyBeerBtn.Size = new System.Drawing.Size(94, 34);
-            this.buyBeerBtn.TabIndex = 7;
-            this.buyBeerBtn.Text = "Buy author \r\na beer!     ";
-            this.buyBeerBtn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buyBeerBtn.UseVisualStyleBackColor = true;
-            this.buyBeerBtn.Click += new System.EventHandler(this.buyBeerBtn_Click);
+            this.openLogsFolderBtn.Location = new System.Drawing.Point(403, 3);
+            this.openLogsFolderBtn.Name = "openLogsFolderBtn";
+            this.openLogsFolderBtn.Size = new System.Drawing.Size(94, 34);
+            this.openLogsFolderBtn.TabIndex = 7;
+            this.openLogsFolderBtn.Text = "Open logs\r\nfolder";
+            this.openLogsFolderBtn.UseVisualStyleBackColor = true;
+            this.openLogsFolderBtn.Click += new System.EventHandler(this.openLogsFolderBtn_Click);
             // 
             // LogView
             // 
@@ -182,6 +179,6 @@
         private System.Windows.Forms.Button reportBug;
         private System.Windows.Forms.TextBox logOutput;
         private System.Windows.Forms.FlowLayoutPanel logViewButtonsFlowPanel;
-        private System.Windows.Forms.Button buyBeerBtn;
+        private System.Windows.Forms.Button openLogsFolderBtn;
     }
 }

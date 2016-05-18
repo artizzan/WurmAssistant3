@@ -19,7 +19,12 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
         bool configured;
         readonly object locker = new object();
 
-        public KernelConfig([NotNull] IKernel kernel)
+        public static IKernelConfig EnableFor(IKernel kernel)
+        {
+            return new KernelConfig(kernel);
+        }
+
+        KernelConfig([NotNull] IKernel kernel)
         {
             if (kernel == null) throw new ArgumentNullException(nameof(kernel));
             this.kernel = kernel;

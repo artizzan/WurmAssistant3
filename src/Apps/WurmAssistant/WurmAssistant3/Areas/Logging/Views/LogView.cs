@@ -11,7 +11,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Views
 {
     public partial class LogView : UserControl
     {
-        readonly ILogMessageFlow logMessageFlow;
+        readonly ILogMessageSteam logMessageSteam;
         readonly ILoggingConfig loggingConfig;
         readonly IProcessStarter processStarter;
         readonly IUserNotifier userNotifier;
@@ -21,48 +21,62 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Views
 
         bool logChanged = false;
 
-        public LogView([NotNull] ILogMessageFlow logMessageFlow, [NotNull] ILoggingConfig loggingConfig,
-            [NotNull] IProcessStarter processStarter, [NotNull] IUserNotifier userNotifier,
+        public LogView(
+            [NotNull] ILogMessageSteam logMessageSteam, 
+            [NotNull] ILoggingConfig loggingConfig,
+            [NotNull] IProcessStarter processStarter, 
+            [NotNull] IUserNotifier userNotifier,
             [NotNull] ISendBugReportViewFactory sendBugReportViewFactory) 
         {
-            if (logMessageFlow == null)
-                throw new ArgumentNullException("logMessageFlow");
-            if (loggingConfig == null)
-                throw new ArgumentNullException("loggingConfig");
-            if (processStarter == null)
-                throw new ArgumentNullException("processStarter");
-            if (userNotifier == null)
-                throw new ArgumentNullException("userNotifier");
-            if (sendBugReportViewFactory == null) throw new ArgumentNullException("sendBugReportViewFactory");
+            if (logMessageSteam == null) throw new ArgumentNullException(nameof(logMessageSteam));
+            if (loggingConfig == null) throw new ArgumentNullException(nameof(loggingConfig));
+            if (processStarter == null) throw new ArgumentNullException(nameof(processStarter));
+            if (userNotifier == null) throw new ArgumentNullException(nameof(userNotifier));
+            if (sendBugReportViewFactory == null) throw new ArgumentNullException(nameof(sendBugReportViewFactory));
 
-            this.logMessageFlow = logMessageFlow;
+            this.logMessageSteam = logMessageSteam;
             this.loggingConfig = loggingConfig;
             this.processStarter = processStarter;
             this.userNotifier = userNotifier;
             this.sendBugReportViewFactory = sendBugReportViewFactory;
 
-            logMessageFlow.EventLogged += LogMessagePublisherOnEventLogged;
-            logMessageFlow.ErrorCountChanged += LogMessagePublisherOnErrorCountChanged;
-
             InitializeComponent();
 
+            logMessageSteam.EventLogged += LogMessagePublisherOnEventLogged;
+            logMessageSteam.ErrorCountChanged += LogMessagePublisherOnErrorCountChanged;
+
+            var missedEvents = logMessageSteam.ConsumeMissedMessages();
+            foreach (var missedEvent in missedEvents)
+            {
+                LogMessagePublisherOnEventLogged(logMessageSteam, missedEvent);
+            }
+            
             timer.Enabled = true;
+
+            RecalculateErrors();
         }
 
         void LogMessagePublisherOnErrorCountChanged(object sender, EventArgs eventArgs)
         {
-            errorCounter.Text = string.Format("{0}{1}{2}",
-                "Warnings: " + logMessageFlow.WarnCount,
-                Environment.NewLine,
-                "Errors: " + logMessageFlow.ErrorCount);
+            RecalculateErrors();
         }
 
-        void LogMessagePublisherOnEventLogged(object sender, LogMessageEventArgs logMessageEventArgs)
+        void RecalculateErrors()
         {
-            Handle(logMessageEventArgs.Level,
-                logMessageEventArgs.Message,
-                logMessageEventArgs.Exception,
-                logMessageEventArgs.Category);
+            errorCounter.Text = string.Format("{0}{1}{2}",
+                "Warnings: " + logMessageSteam.WarnCount,
+                Environment.NewLine,
+                "Errors: " + logMessageSteam.ErrorCount);
+        }
+
+        void LogMessagePublisherOnEventLogged(object sender, LogMessageEventArgs args)
+        {
+            var formattedCategory = ShortenCategory(FilterCategory(args.Category));
+            AddMessage(string.Format("[{4}] > {0} > {3}{1}{2}",
+                args.Level,
+                args.Message ?? "NULL",
+                FormatException(args.Exception),
+                formattedCategory != string.Empty ? formattedCategory + " > " : string.Empty, args.Timestamp.ToString("HH:mm:ss")));
         }
 
         public void AddMessage(string message)
@@ -70,16 +84,6 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Views
             messages.Add(message);
             TrimMessages();
             logChanged = true;
-        }
-
-        public new void Handle(LogLevel level, string message, Exception exception, string category)
-        {
-            var formattedCategory = ShortenCategory(FilterCategory(category));
-            AddMessage(string.Format("{0} > {3}{1}{2}",
-                level,
-                message ?? "NULL",
-                FormatException(exception),
-                formattedCategory != string.Empty ? formattedCategory + " > " : string.Empty));
         }
 
         string FilterCategory(string category)
@@ -173,9 +177,9 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Views
             }
         }
 
-        private void buyBeerBtn_Click(object sender, EventArgs e)
+        private void openLogsFolderBtn_Click(object sender, EventArgs e)
         {
-            processStarter.StartSafe("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=aldurcraft%40gmail%2ecom&lc=GB&item_name=Wurm%20Assistant&item_number=funding&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted");
+            processStarter.StartSafe(loggingConfig.LogsDirectoryFullPath);
         }
     }
 }

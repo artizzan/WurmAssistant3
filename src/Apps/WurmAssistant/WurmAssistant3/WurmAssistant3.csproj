@@ -130,6 +130,7 @@
     <Compile Include="Areas\Core\Components\Obsolete\WinFormsThreadMarshaller.cs" />
     <Compile Include="Areas\Core\Components\Singletons\WurmAssistantDataDirectory.cs" />
     <Compile Include="Areas\Core\Contracts\IConsoleArgs.cs" />
+    <Compile Include="Areas\Persistence\Components\PersistenceEnabler.cs" />
     <Compile Include="Utils\IrrklangDependencyValidator.cs" />
     <Compile Include="Areas\Core\Contracts\IBinDirectory.cs" />
     <Compile Include="Areas\Core\Contracts\IChangelogManager.cs" />
@@ -451,8 +452,8 @@
     <Compile Include="Areas\Logging\Contracts\ILogger.cs" />
     <Compile Include="Areas\Logging\Contracts\ILoggerFactory.cs" />
     <Compile Include="Areas\Logging\Contracts\ILoggingConfig.cs" />
-    <Compile Include="Areas\Logging\Contracts\ILogMessageFlow.cs" />
-    <Compile Include="Areas\Logging\Contracts\ILogMessageHandler.cs" />
+    <Compile Include="Areas\Logging\Contracts\ILogMessageSteam.cs" />
+    <Compile Include="Areas\Logging\Contracts\ILogMessageDump.cs" />
     <Compile Include="Areas\Logging\Contracts\IWurmApiLoggerFactory.cs" />
     <Compile Include="Areas\Logging\Contracts\LogMessageEventArgs.cs" />
     <Compile Include="Areas\Logging\LoggingSetup.cs" />

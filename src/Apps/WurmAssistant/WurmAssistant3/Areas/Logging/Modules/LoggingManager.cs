@@ -1,5 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using AldursLab.Essentials.Eventing;
+using AldursLab.Essentials.Extensions.DotNet.Collections.Concurrent;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using JetBrains.Annotations;
 using ILogger = AldursLab.WurmAssistant3.Areas.Logging.Contracts.ILogger;
@@ -7,30 +13,36 @@ using LogLevel = NLog.LogLevel;
 
 namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
 {
-    public class LoggingManager : ILoggerFactory, IWurmApiLoggerFactory, ILogMessageFlow, ILogMessageHandler, ILoggingConfig
+    public sealed class LoggingManager : ILoggerFactory, IWurmApiLoggerFactory, ILogMessageSteam, ILogMessageDump, ILoggingConfig
     {
         readonly IThreadMarshaller threadMarshaller;
         readonly Logger factoryLogger;
 
-        LoggingConfig loggingConfig;
+        readonly LoggingConfig loggingConfig;
+        readonly ConcurrentQueue<LogMessageEventArgs> missedEvents = new ConcurrentQueue<LogMessageEventArgs>();
 
-        public LoggingManager([NotNull] IThreadMarshaller threadMarshaller)
+        public LoggingManager([NotNull] IThreadMarshaller threadMarshaller,
+            [NotNull] IWurmAssistantDataDirectory wurmAssistantDataDirectory)
         {
-            if (threadMarshaller == null) throw new ArgumentNullException("threadMarshaller");
+            if (threadMarshaller == null) throw new ArgumentNullException(nameof(threadMarshaller));
+            if (wurmAssistantDataDirectory == null) throw new ArgumentNullException(nameof(wurmAssistantDataDirectory));
             this.threadMarshaller = threadMarshaller;
-            factoryLogger = new Logger(this, "LoggingManager");
-            loggingConfig = new LoggingConfig();
-        }
 
-        public void Setup(string logOutputDirFullPath)
-        {
-            loggingConfig.Setup(logOutputDirFullPath);
+            var logOutputDirFullPath = Path.Combine(wurmAssistantDataDirectory.DirectoryPath, "Logs");
+            loggingConfig = new LoggingConfig(logOutputDirFullPath);
+
+            factoryLogger = new Logger(this, "LoggingManager");
         }
 
         public int ErrorCount { get; private set; }
         public int WarnCount { get; private set; }
         public event EventHandler<EventArgs> ErrorCountChanged;
         public event EventHandler<LogMessageEventArgs> EventLogged;
+
+        public IEnumerable<LogMessageEventArgs> ConsumeMissedMessages()
+        {
+            return missedEvents.DequeueAll();
+        }
 
         ILogger ILoggerFactory.Create(string category)
         {
@@ -59,10 +71,12 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
                 }
             }
 
+            var args = new LogMessageEventArgs(nlogLevel, message, exception, category);
+
             var handler = EventLogged;
             if (handler != null)
             {
-                var args = new LogMessageEventArgs(nlogLevel, message, exception, category);
+                
                 try
                 {
                     threadMarshaller.Marshal(() => handler(this, args));
@@ -73,9 +87,25 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
                     factoryLogger.Error(handlingException, "Error during log event forwarding");
                 }
             }
+            else
+            {
+                // necessary because there is a small delay before LogView is resolved.
+                AddToMissedEvents(args);
+            }
         }
 
-        protected virtual void OnErrorCountChanged()
+        void AddToMissedEvents(LogMessageEventArgs args)
+        {
+            // avoid accidental "memory leak"
+            if (missedEvents.Count > 50000)
+            {
+                LogMessageEventArgs throwaway;
+                missedEvents.TryDequeue(out throwaway);
+            }
+            missedEvents.Enqueue(args);
+        }
+
+        void OnErrorCountChanged()
         {
             var handler = ErrorCountChanged;
             if (handler != null)
@@ -94,5 +124,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
         {
             return loggingConfig.GetCurrentVerboseLogFileFullPath();
         }
+
+        public string LogsDirectoryFullPath => loggingConfig.LogsDirectoryFullPath;
     }
 }

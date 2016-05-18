@@ -8,14 +8,14 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
 {
     public class Logger : Contracts.ILogger, AldursLab.WurmApi.IWurmApiLogger
     {
-        readonly ILogMessageHandler logMessageHandler;
+        readonly ILogMessageDump logMessageDump;
         readonly string category;
         readonly NLog.Logger logger;
 
-        public Logger([NotNull] ILogMessageHandler logMessageHandler, string category = null)
+        public Logger([NotNull] ILogMessageDump logMessageDump, string category = null)
         {
-            if (logMessageHandler == null) throw new ArgumentNullException("logMessageHandler");
-            this.logMessageHandler = logMessageHandler;
+            if (logMessageDump == null) throw new ArgumentNullException(nameof(logMessageDump));
+            this.logMessageDump = logMessageDump;
             if (category == null)
                 category = string.Empty;
             this.category = category;
@@ -44,7 +44,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
                 message = "WurmApi > " + prefix + ": " + message;
 
                 logger.Log(nlogLevel, exception, message);
-                logMessageHandler.HandleEvent(nlogLevel, message, exception, category);
+                logMessageDump.HandleEvent(nlogLevel, message, exception, category);
             }
         }
 
@@ -72,7 +72,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
             if (logger.IsErrorEnabled)
             {
                 logger.Error(message);
-                logMessageHandler.HandleEvent(LogLevel.Error, message, null, category);
+                logMessageDump.HandleEvent(LogLevel.Error, message, null, category);
             }
         }
 
@@ -81,7 +81,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
             if (logger.IsErrorEnabled)
             {
                 logger.Error(exception, message);
-                logMessageHandler.HandleEvent(LogLevel.Error, message, exception, category);
+                logMessageDump.HandleEvent(LogLevel.Error, message, exception, category);
             }
         }
 
@@ -90,7 +90,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
             if (logger.IsInfoEnabled)
             {
                 logger.Info(message);
-                logMessageHandler.HandleEvent(LogLevel.Info, message, null, category);
+                logMessageDump.HandleEvent(LogLevel.Info, message, null, category);
             }
         }
 
@@ -99,7 +99,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
             if (logger.IsInfoEnabled)
             {
                 logger.Info(exception, message);
-                logMessageHandler.HandleEvent(LogLevel.Info, message, exception, category);
+                logMessageDump.HandleEvent(LogLevel.Info, message, exception, category);
             }
         }
 
@@ -108,7 +108,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
             if (logger.IsWarnEnabled)
             {
                 logger.Warn(message);
-                logMessageHandler.HandleEvent(LogLevel.Warn, message, null, category);
+                logMessageDump.HandleEvent(LogLevel.Warn, message, null, category);
             }
         }
 
@@ -117,7 +117,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
             if (logger.IsWarnEnabled)
             {
                 logger.Warn(exception, message);
-                logMessageHandler.HandleEvent(LogLevel.Warn, message, exception, category);
+                logMessageDump.HandleEvent(LogLevel.Warn, message, exception, category);
             }
         }
 
@@ -126,7 +126,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Modules
             if (logger.IsDebugEnabled)
             {
                 logger.Debug(message);
-                logMessageHandler.HandleEvent(LogLevel.Debug, message, null, category);
+                logMessageDump.HandleEvent(LogLevel.Debug, message, null, category);
             }
         }
     }
