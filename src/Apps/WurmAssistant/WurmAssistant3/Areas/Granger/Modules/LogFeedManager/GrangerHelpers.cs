@@ -10,7 +10,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules.LogFeedManager
     {
         public static TimeSpan Breeding_NotInMood_Duration = TimeSpan.FromMinutes(45);
 
-        //DRY matching maps for wurm log text, in case it ever changes
         public const string
             YOUNG = "Young",
             ADOLESCENT = "Adolescent",
@@ -31,9 +30,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules.LogFeedManager
 
         public static string[] CreatureAgesUpcase;
 
-        /// <summary>
-        /// check for these names is ToUpperInvariant
-        /// </summary>
         static string[] WildCreatureNames = 
         {
             //todo: this is no longer useful, remove functionality
@@ -55,8 +51,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules.LogFeedManager
             allnameprefixesBuilder.AddRange(CreatureAges);
             allnameprefixesBuilder.AddRange(OtherNamePrefixes);
 
-            // Fix for recent change in casing creature ages, todo refactor
-            allnameprefixesBuilder.AddRange(CreatureAges.Select(s => s.ToLowerInvariant()));
+            //// Fix for recent change in casing creature ages, todo refactor
+            //allnameprefixesBuilder.AddRange(CreatureAges.Select(s => s.ToLowerInvariant()));
 
             AllNamePrefixes = allnameprefixesBuilder.ToArray<string>();
         }
@@ -65,7 +61,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules.LogFeedManager
         {
             foreach (string prefix in AllNamePrefixes)
             {
-                creatureName = creatureName.Replace(prefix, string.Empty);
+                //
+                creatureName = Regex.Replace(creatureName,
+                    $@"^{prefix}(\W)|(\W){prefix}(\W)",
+                    "$1$2",
+                    RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
             }
             creatureName = creatureName.Trim();
             return creatureName;
