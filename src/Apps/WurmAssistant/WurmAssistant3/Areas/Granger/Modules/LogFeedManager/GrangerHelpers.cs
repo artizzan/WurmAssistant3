@@ -54,6 +54,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules.LogFeedManager
             var allnameprefixesBuilder = new List<string>();
             allnameprefixesBuilder.AddRange(CreatureAges);
             allnameprefixesBuilder.AddRange(OtherNamePrefixes);
+
+            // Fix for recent change in casing creature ages, todo refactor
+            allnameprefixesBuilder.AddRange(CreatureAges.Select(s => s.ToLowerInvariant()));
+
             AllNamePrefixes = allnameprefixesBuilder.ToArray<string>();
         }
 

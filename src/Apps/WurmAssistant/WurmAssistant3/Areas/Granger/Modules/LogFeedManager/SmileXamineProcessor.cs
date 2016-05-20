@@ -620,7 +620,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules.LogFeedManager
                 //[20:48:42] You smile at Adolescent diseased Mountainheart.
                 grangerDebug.Log("extracting object name");
                 string objectNameWithPrefixes = line.Remove(0, 13).Replace(".", "");
-                if (GrangerHelpers.HasAgeInName(objectNameWithPrefixes))
+                if (GrangerHelpers.HasAgeInName(objectNameWithPrefixes, ignoreCase:true))
                 {
                     grangerDebug.Log("object asumed to be a creature");
                     var server = playerMan.CurrentServer;
