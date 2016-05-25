@@ -797,14 +797,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy
             if (!_updatingListView && changed)
             {
                 var selectedCreatures = newSelectedCreatures;
-                logger.Debug("Selected creatures changed, array count: " + selectedCreatures.Length);
+                //logger.Debug("Selected creatures changed, array count: " + selectedCreatures.Length);
                 if (selectedCreatures.Length == 1)
                 {
-                    logger.Debug("Selected single creature, array count: " + selectedCreatures.Length);
+                    //logger.Debug("Selected single creature, array count: " + selectedCreatures.Length);
                     var creature = selectedCreatures[0];
                     if (!creature.Equals(SelectedSingleCreature)) //change only if new selected creature is different
                     {
-                        logger.Debug("Selected single creature changing");
+                        //logger.Debug("Selected single creature changing");
                         SelectedSingleCreature = selectedCreatures[0];
                     }
                 }

@@ -120,11 +120,14 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                     verifyList.Gender = true;
                     grangerDebug.Log("creature set to female");
                 }
-                //[01:05:57] Mother is Venerable fat Starkdance. Father is Venerable fat Jollypie. 
-                if ((line.Contains("Mother is") || line.Contains("Father is")) && !verifyList.Parents)
+                //[22:34:28] His mother is the old fat Painthop. His father is the venerable fat Starkclip. 
+                //[22:34:28] Her mother is the old fat Painthop. Her father is the venerable fat Starkclip. 
+                if ((line.Contains("mother is") || line.Contains("father is")) && !verifyList.Parents)
                 {
                     grangerDebug.Log("found maybe parents line");
-                    Match match = Regex.Match(line, @"Mother is (?<g>\w+ \w+ .+?)\.|Mother is (?<g>\w+ .+?)\.");
+                    Match match = Regex.Match(line,
+                        @"mother is \w+ (?<g>\w+ \w+ .+?)\.|mother is \w+ (?<g>\w+ .+?)\.",
+                        RegexOptions.IgnoreCase | RegexOptions.Compiled);
                     if (match.Success)
                     {
                         string mother = match.Groups["g"].Value;
@@ -132,7 +135,9 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         creatureBuffer.Mother = mother;
                         grangerDebug.Log("mother set to: " + mother);
                     }
-                    Match match2 = Regex.Match(line, @"Father is (?<g>\w+ \w+ .+?)\.|Father is (?<g>\w+ .+?)\.");
+                    Match match2 = Regex.Match(line,
+                        @"father is \w+ (?<g>\w+ \w+ .+?)\.|father is \w+ (?<g>\w+ .+?)\.",
+                        RegexOptions.IgnoreCase | RegexOptions.Compiled);
                     if (match2.Success)
                     {
                         string father = match2.Groups["g"].Value;
@@ -617,12 +622,21 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             //attempt to extract the name of game object
             try
             {
-                //[20:48:42] You smile at Adolescent diseased Mountainheart.
                 grangerDebug.Log("extracting object name");
-                string objectNameWithPrefixes = line.Remove(0, 13).Replace(".", "");
+
+                //[20:48:42] You smile at the Adolescent diseased Mountainheart.
+                Match match = Regex.Match(line,
+                    @"You smile at (a|an|the) (.+)\.",
+                    RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                string objectNameWithPrefixes = string.Empty;
+                if (match.Success)
+                {
+                    objectNameWithPrefixes = match.Groups[2].Value;
+                }
+
                 if (GrangerHelpers.HasAgeInName(objectNameWithPrefixes, ignoreCase:true))
                 {
-                    grangerDebug.Log("object asumed to be a creature");
+                    grangerDebug.Log("object assumed to be a creature");
                     var server = playerMan.CurrentServer;
                     var skill = playerMan.CurrentServerAhSkill;
                     if (server != null && skill != null)
