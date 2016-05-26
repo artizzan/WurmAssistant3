@@ -49,11 +49,11 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
                 {
                     ErrorStrategy = errorStrategy
                 };
-                var persistenceManagerr = new PersistenceManager(config,
+                var persistenceManager = new PersistenceManager(config,
                     serializationStrategy,
                     new FlatFilesPersistenceStrategy(config));
 
-                return persistenceManagerr;
+                return persistenceManager;
             }).InSingletonScope();
 
             kernel.Bind<PersistenceEnabler>().ToSelf().InSingletonScope();
@@ -61,7 +61,7 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
             kernel.Bind<IPersistentObjectResolver>().To<PersistentObjectResolver>().InSingletonScope();
             kernel.Bind(typeof(IPersistentObjectResolver<>)).To(typeof(PersistentObjectResolver<>)).InSingletonScope();
 
-            // this step is required, so that objects resolved after this step can be properly populated.
+            // this step is required, so that objects resolved after this step, can be properly populated.
             var persistentDataManager = kernel.Get<PersistenceEnabler>();
             persistentDataManager.SetupPersistenceActivation();
         }

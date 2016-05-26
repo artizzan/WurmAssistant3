@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Utils.IoC;
 using JetBrains.Annotations;
@@ -11,7 +8,7 @@ using Ninject.Activation;
 using Ninject.Activation.Strategies;
 using Ninject.Planning.Bindings.Resolvers;
 
-namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
+namespace AldursLab.WurmAssistant3.Areas.Core.Components.Custom
 {
     class KernelConfig : IKernelConfig
     {

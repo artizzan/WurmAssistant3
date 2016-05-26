@@ -5,12 +5,12 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
 {
-    class WaExecutionInfoProvider : IWaExecutionInfoProvider
+    class WaVersionInfoProvider : IWaVersionInfoProvider
     {
         readonly IWurmAssistantConfig wurmAssistantConfig;
         readonly IWaVersion waVersion;
 
-        public WaExecutionInfoProvider([NotNull] IWurmAssistantConfig wurmAssistantConfig, [NotNull] IWaVersion waVersion)
+        public WaVersionInfoProvider([NotNull] IWurmAssistantConfig wurmAssistantConfig, [NotNull] IWaVersion waVersion)
         {
             if (wurmAssistantConfig == null) throw new ArgumentNullException("wurmAssistantConfig");
             if (waVersion == null) throw new ArgumentNullException("waVersion");

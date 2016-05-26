@@ -1,0 +1,27 @@
+using System;
+using System.Linq;
+using AldursLab.WurmAssistant3.Utils.IoC;
+using JetBrains.Annotations;
+
+namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Exceptions
+{
+    [Serializable]
+    public class MislocatedAreaConfigurationException : ConventionBindingException
+    {
+        readonly AreaTypeReflectionInfo[] mislocatedConfigs;
+
+        public MislocatedAreaConfigurationException([NotNull] AreaTypeReflectionInfo[] mislocatedConfigs)
+        {
+            if (mislocatedConfigs == null) throw new ArgumentNullException(nameof(mislocatedConfigs));
+            this.mislocatedConfigs = mislocatedConfigs;
+        }
+
+        public override string ToString()
+        {
+            return
+                $"At least one implementation of {nameof(IAreaConfiguration)} is not within AldursLab.WurmAssistant3.Areas subnamespace. "
+                + "All configuration implementations must be within area they are intended to configure. List of mislocated types: "
+                + string.Join(", ", mislocatedConfigs.Select(info => info.Type.FullName)) + " " + base.ToString();
+        }
+    }
+}

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
-using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Areas.Core.Components.Singletons
+namespace AldursLab.WurmAssistant3.Areas.Core.Components.Custom
 {
     public class ConsoleArgs : IConsoleArgs
     {

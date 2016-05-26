@@ -15,6 +15,7 @@ using AldursLab.WurmAssistant3.Areas.CombatAssistant;
 using AldursLab.WurmAssistant3.Areas.Config;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Areas.Config.Modules;
+using AldursLab.WurmAssistant3.Areas.Core.Components.Custom;
 using AldursLab.WurmAssistant3.Areas.Core.Components.Singletons;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Core.Views;
@@ -40,6 +41,7 @@ using AldursLab.WurmAssistant3.Areas.TrayPopups;
 using AldursLab.WurmAssistant3.Areas.Triggers;
 using AldursLab.WurmAssistant3.Areas.Wa2DataImport;
 using AldursLab.WurmAssistant3.Areas.WurmApi;
+using AldursLab.WurmAssistant3.Systems.ConventionBinding;
 using AldursLab.WurmAssistant3.Utils;
 using AldursLab.WurmAssistant3.Utils.IoC;
 using AldursLab.WurmAssistant3.Utils.WinForms.Reusables;
@@ -95,32 +97,39 @@ namespace AldursLab.WurmAssistant3
                         }
                     });
 
+                // Todo: Enable and test after refactoring all areas is completed.
+                //var priorityBindingOrder = new List<string>()
+                //{
+                //    "Core",
+                //    "Persistence",
+                //};
+                //var conventionBindingManager = new ConventionBindingManager(kernel, priorityBindingOrder);
+                //conventionBindingManager.BindAreasByConvention();
+
+                // to convention
                 kernel.Bind<ITimerFactory>().To<TimerFactory>().InSingletonScope();
                 kernel.Bind<IEnvironment>().To<WpfAppEnvironment>().InSingletonScope();
-
                 kernel.Bind<ISuperFactory>().To<SuperFactory>().InSingletonScope();
-                kernel.Bind<WurmAssistantConfig, IWurmAssistantConfig>().To<WurmAssistantConfig>().InSingletonScope();
-
                 kernel.Bind<IWurmAssistantDataDirectory>().To<WurmAssistantDataDirectory>().InSingletonScope();
                 kernel.ProhibitGet<WurmAssistantDataDirectory>();
-
                 kernel.Bind<DispatcherThreadMarshaller, IThreadMarshaller, IWurmApiEventMarshaller>()
                       .To<DispatcherThreadMarshaller>().InSingletonScope();
-
                 kernel.Bind<ISystemTrayContextMenu>().To<TrayMenu>().InSingletonScope();
                 kernel.Bind<MainForm>().ToSelf().InSingletonScope();
-
                 kernel.Bind<ProcessStarter, IProcessStarter>().To<ProcessStarter>().InSingletonScope();
                 kernel.Bind<UserNotifier, IUserNotifier>().To<UserNotifier>().InSingletonScope();
                 kernel.Bind<BinDirectory, IBinDirectory>().To<BinDirectory>().InSingletonScope();
                 kernel.Bind<WaVersion, IWaVersion>().To<WaVersion>().InSingletonScope();
-                kernel.Bind<WaExecutionInfoProvider, IWaExecutionInfoProvider>()
-                      .To<WaExecutionInfoProvider>()
+                kernel.Bind<WaVersionInfoProvider, IWaVersionInfoProvider>()
+                      .To<WaVersionInfoProvider>()
                       .InSingletonScope();
                 kernel.Bind<ChangelogManager, IChangelogManager>().To<ChangelogManager>().InSingletonScope();
-
                 kernel.Bind<SendBugReportView>().ToSelf();
+                // end: to convention
+
                 kernel.Bind<ISendBugReportViewFactory>().ToFactory();
+
+                kernel.Bind<WurmAssistantConfig, IWurmAssistantConfig>().To<WurmAssistantConfig>().InSingletonScope();
 
                 LoggingSetup.Setup(kernel);
 

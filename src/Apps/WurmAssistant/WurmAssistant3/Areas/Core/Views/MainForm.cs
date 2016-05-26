@@ -39,7 +39,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
         readonly LogView logView;
         readonly MenuView menuView;
         readonly IFeaturesManager featuresManager;
-        readonly IWaExecutionInfoProvider waExecutionInfoProvider;
+        readonly IWaVersionInfoProvider waVersionInfoProvider;
         readonly IChangelogManager changelogManager;
         readonly IUserNotifier userNotifier;
         readonly ILogger logger;
@@ -56,7 +56,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
             [NotNull] MenuView menuView,
             [NotNull] IFeaturesManager featuresManager,
             [NotNull] ISystemTrayContextMenu systemTrayContextMenu,
-            [NotNull] IWaExecutionInfoProvider waExecutionInfoProvider,
+            [NotNull] IWaVersionInfoProvider waVersionInfoProvider,
             [NotNull] IChangelogManager changelogManager,
             [NotNull] IUserNotifier userNotifier,
             [NotNull] ILogger logger)
@@ -66,7 +66,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
             if (menuView == null) throw new ArgumentNullException(nameof(menuView));
             if (featuresManager == null) throw new ArgumentNullException(nameof(featuresManager));
             if (systemTrayContextMenu == null) throw new ArgumentNullException(nameof(systemTrayContextMenu));
-            if (waExecutionInfoProvider == null) throw new ArgumentNullException(nameof(waExecutionInfoProvider));
+            if (waVersionInfoProvider == null) throw new ArgumentNullException(nameof(waVersionInfoProvider));
             if (changelogManager == null) throw new ArgumentNullException(nameof(changelogManager));
             if (userNotifier == null) throw new ArgumentNullException(nameof(userNotifier));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
@@ -74,7 +74,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
             this.logView = logView;
             this.menuView = menuView;
             this.featuresManager = featuresManager;
-            this.waExecutionInfoProvider = waExecutionInfoProvider;
+            this.waVersionInfoProvider = waVersionInfoProvider;
             this.changelogManager = changelogManager;
             this.userNotifier = userNotifier;
             this.logger = logger;
@@ -95,7 +95,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Views
             persistentStateLoaded = true;
             RestoreSizeFromSaved();
 
-            Text += string.Format(" ({0})", waExecutionInfoProvider.Get());
+            Text += string.Format(" ({0})", waVersionInfoProvider.Get());
 
             if (consoleArgs.WurmUnlimitedMode)
             {
