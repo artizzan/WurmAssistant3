@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters;
+using AldursLab.WurmAssistant3.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.TrayPopups.Contracts;
@@ -23,17 +24,19 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules.LogFeedManager
         readonly Dictionary<ServerGroup, float> serverGroupToAhSkillMap = new Dictionary<ServerGroup, float>();
 
         public PlayerManager(GrangerFeature parentModule, GrangerContext context, string playerName,
-            [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger, [NotNull] ITrayPopups trayPopups)
+            [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger, [NotNull] ITrayPopups trayPopups,
+            [NotNull] IWurmAssistantConfig wurmAssistantConfig)
         {
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
+            if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
             this.parentModule = parentModule;
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.PlayerName = playerName;
 
-            creatureUpdateManager = new CreatureUpdatesManager(this.parentModule, context, this, trayPopups, logger);
+            creatureUpdateManager = new CreatureUpdatesManager(this.parentModule, context, this, trayPopups, logger, wurmAssistantConfig);
 
             wurmApi.LogsMonitor.Subscribe(PlayerName, LogType.Event, OnNewEventLogEvents);
 
