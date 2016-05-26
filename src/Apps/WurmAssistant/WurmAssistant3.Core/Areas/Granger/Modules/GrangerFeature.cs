@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Legacy;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.Advisor.Default;
@@ -40,7 +41,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             [NotNull] IUpdateLoop updateLoop, [NotNull] IHostEnvironment hostEnvironment,
             [NotNull] ISoundManager soundManager, [NotNull] ITrayPopups trayPopups, [NotNull] IWurmApi wurmApi, GrangerSettings grangerSettings,
             [NotNull] DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions,
-            [NotNull] GrangerSimpleDb grangerSimpleDb)
+            [NotNull] GrangerSimpleDb grangerSimpleDb,
+            [NotNull] IWurmAssistantConfig wurmAssistantConfig)
         {
             this.logger = logger;
             this.dataDirectory = dataDirectory;
@@ -58,6 +60,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
             if (defaultBreedingEvaluatorOptions == null)
                 throw new ArgumentNullException("defaultBreedingEvaluatorOptions");
             if (grangerSimpleDb == null) throw new ArgumentNullException("grangerSimpleDb");
+            if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
 
             settings = grangerSettings;
             this.defaultBreedingEvaluatorOptions = defaultBreedingEvaluatorOptions;
@@ -67,7 +70,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules
 
             grangerUi = new FormGrangerMain(this, settings, context, logger, wurmApi, defaultBreedingEvaluatorOptions);
 
-            logsFeedMan = new LogsFeedManager(this, context, wurmApi, logger, trayPopups);
+            logsFeedMan = new LogsFeedManager(this, context, wurmApi, logger, trayPopups, wurmAssistantConfig);
             logsFeedMan.UpdatePlayers(settings.CaptureForPlayers);
             grangerUi.Granger_PlayerListChanged += GrangerUI_Granger_PlayerListChanged;
 

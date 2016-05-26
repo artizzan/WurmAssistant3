@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
@@ -39,10 +40,12 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         readonly GrangerDebugLogger grangerDebug;
 
         public CreatureUpdatesManager(GrangerFeature parentModule, GrangerContext context, PlayerManager playerManager,
-            [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger)
+            [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger,
+            [NotNull] IWurmAssistantConfig wurmAssistantConfig)
         {
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (logger == null) throw new ArgumentNullException("logger");
+            if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
             this.parentModule = parentModule;
             this.context = context;
             playerMan = playerManager;
@@ -56,7 +59,8 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 playerMan,
                 grangerDebug,
                 trayPopups,
-                logger);
+                logger,
+                wurmAssistantConfig);
         }
 
         internal void ProcessEventForCreatureUpdates(LogEntry line)

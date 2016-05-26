@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
@@ -15,20 +16,24 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
         readonly ITrayPopups trayPopups;
+        readonly IWurmAssistantConfig wurmAssistantConfig;
         readonly GrangerFeature parentModule;
         readonly Dictionary<string, PlayerManager> playerManagers = new Dictionary<string, PlayerManager>();
 
         public LogsFeedManager(GrangerFeature parentModule, GrangerContext context, [NotNull] IWurmApi wurmApi,
-            [NotNull] ILogger logger, [NotNull] ITrayPopups trayPopups)
+            [NotNull] ILogger logger, [NotNull] ITrayPopups trayPopups,
+            [NotNull] IWurmAssistantConfig wurmAssistantConfig)
         {
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
+            if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
             this.parentModule = parentModule;
             this.context = context;
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.trayPopups = trayPopups;
+            this.wurmAssistantConfig = wurmAssistantConfig;
         }
 
         public void TryRegisterPlayer(string playerName)
@@ -37,7 +42,13 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             {
                 try
                 {
-                    playerManagers[playerName] = new PlayerManager(parentModule, context, playerName, wurmApi, logger, trayPopups);
+                    playerManagers[playerName] = new PlayerManager(parentModule,
+                        context,
+                        playerName,
+                        wurmApi,
+                        logger,
+                        trayPopups,
+                        wurmAssistantConfig);
                 }
                 catch (Exception exception)
                 {

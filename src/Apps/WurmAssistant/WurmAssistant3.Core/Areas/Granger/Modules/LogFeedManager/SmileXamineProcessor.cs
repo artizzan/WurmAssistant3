@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Core.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.DataLayer;
 using AldursLab.WurmAssistant3.Core.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Core.Areas.TrayPopups.Contracts;
@@ -50,6 +51,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
         readonly GrangerDebugLogger grangerDebug;
         readonly ITrayPopups trayPopups;
         readonly ILogger logger;
+        readonly IWurmAssistantConfig wurmAssistantConfig;
 
         bool isProcessing = false;
         DateTime startedProcessingOn;
@@ -62,13 +64,16 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
 
         public SmileXamineProcessor(GrangerFeature parentModule, GrangerContext context, PlayerManager playerMan,
             GrangerDebugLogger debugLogger,
-            [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger)
+            [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger,
+            [NotNull] IWurmAssistantConfig wurmAssistantConfig)
         {
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (logger == null) throw new ArgumentNullException("logger");
+            if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
             grangerDebug = debugLogger;
             this.trayPopups = trayPopups;
             this.logger = logger;
+            this.wurmAssistantConfig = wurmAssistantConfig;
             this.parentModule = parentModule;
             this.context = context;
             this.playerMan = playerMan;
@@ -122,25 +127,22 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 }
                 //[22:34:28] His mother is the old fat Painthop. His father is the venerable fat Starkclip. 
                 //[22:34:28] Her mother is the old fat Painthop. Her father is the venerable fat Starkclip. 
-                if ((line.Contains("mother is") || line.Contains("father is")) && !verifyList.Parents)
+                if (IsParentIdentifyingLine(line) && !verifyList.Parents)
                 {
                     grangerDebug.Log("found maybe parents line");
-                    Match match = Regex.Match(line,
-                        @"mother is \w+ (?<g>\w+ \w+ .+?)\.|mother is \w+ (?<g>\w+ .+?)\.",
-                        RegexOptions.IgnoreCase | RegexOptions.Compiled);
-                    if (match.Success)
+                    
+                    Match motherMatch = ParseMother(line);
+                    if (motherMatch.Success)
                     {
-                        string mother = match.Groups["g"].Value;
+                        string mother = motherMatch.Groups["g"].Value;
                         mother = GrangerHelpers.ExtractCreatureName(mother);
                         creatureBuffer.Mother = mother;
                         grangerDebug.Log("mother set to: " + mother);
                     }
-                    Match match2 = Regex.Match(line,
-                        @"father is \w+ (?<g>\w+ \w+ .+?)\.|father is \w+ (?<g>\w+ .+?)\.",
-                        RegexOptions.IgnoreCase | RegexOptions.Compiled);
-                    if (match2.Success)
+                    Match fatherMatch = ParseFather(line);
+                    if (fatherMatch.Success)
                     {
-                        string father = match2.Groups["g"].Value;
+                        string father = fatherMatch.Groups["g"].Value;
                         father = GrangerHelpers.ExtractCreatureName(father);
                         creatureBuffer.Father = father;
                         grangerDebug.Log("father set to: " + father);
@@ -208,6 +210,49 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                     }
                 }
             }
+        }
+
+        bool IsParentIdentifyingLine(string line)
+        {
+            return 
+                // after Rift update for WO
+                line.Contains("mother is")
+                || line.Contains("father is")
+                // WU client was not updated together with WO Rift update, old conditions are still needed.
+                || line.Contains("Mother is")
+                || line.Contains("Father is");
+        }
+
+        Match ParseMother(string line)
+        {
+            var result = Regex.Match(line,
+                @"mother is \w+ (?<g>\w+ \w+ .+?)\.|mother is \w+ (?<g>\w+ .+?)\.",
+                RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+            // WU client was not updated together with WO Rift update, need old check for WU
+            if (!result.Success && wurmAssistantConfig.WurmUnlimitedMode)
+            {
+                result = Regex.Match(line,
+                    @"Mother is (?<g>\w+ \w+ .+?)\.|Mother is (?<g>\w+ .+?)\.",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            }
+            return result;
+        }
+
+        Match ParseFather(string line)
+        {
+            var result = Regex.Match(line,
+                @"father is \w+ (?<g>\w+ \w+ .+?)\.|father is \w+ (?<g>\w+ .+?)\.",
+                RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+            // WU client was not updated together with WO Rift update, need old check for WU
+            if (!result.Success && wurmAssistantConfig.WurmUnlimitedMode)
+            {
+                result = Regex.Match(line,
+                        @"Father is (?<g>\w+ \w+ .+?)\.|Father is (?<g>\w+ .+?)\.",
+                        RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            }
+            return result;
         }
 
         void VerifyAndApplyProcessing()
@@ -624,14 +669,15 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
             {
                 grangerDebug.Log("extracting object name");
 
-                //[20:48:42] You smile at the Adolescent diseased Mountainheart.
+                // [20:48:42] You smile at the Adolescent diseased Mountainheart.
+                // Preserving condition without expected determiner from before WO Rift update, because WU client was not updated.
                 Match match = Regex.Match(line,
-                    @"You smile at (a|an|the) (.+)\.",
-                    RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                    @"You smile at (a|an|the) (?<g>.+)\.|You smile at (?<g>.+)\.",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
                 string objectNameWithPrefixes = string.Empty;
                 if (match.Success)
                 {
-                    objectNameWithPrefixes = match.Groups[2].Value;
+                    objectNameWithPrefixes = match.Groups["g"].Value;
                 }
 
                 if (GrangerHelpers.HasAgeInName(objectNameWithPrefixes, ignoreCase:true))
