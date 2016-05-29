@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="AreaTemplateVsixProject.AldursLab.3f6f690c-4543-4995-b22a-84244d239ab8" Version="1.0" Language="en-US" Publisher="Aldurcraft" />
+    <DisplayName>Wurm Assistant Area Project Templates</DisplayName>
+    <Description xml:space="preserve">Contains templates for Area project and an optional Area Contracts project.</Description>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\WurmAssistant3.Areas.TemplateBase.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="ProjectTemplates\WurmAssistant3.Areas.TemplateBase.Contracts.zip" />
+  </Assets>
+</PackageManifest>

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AldursLab.WurmAssistant3.Utils.IoC;
+using AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Exceptions

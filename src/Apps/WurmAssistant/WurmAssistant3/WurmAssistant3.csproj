@@ -131,19 +131,18 @@
     <Compile Include="Areas\Core\Components\Singletons\WurmAssistantDataDirectory.cs" />
     <Compile Include="Areas\Core\Contracts\IConsoleArgs.cs" />
     <Compile Include="Areas\Persistence\Components\PersistenceEnabler.cs" />
-    <Compile Include="Systems\ConventionBinding\AreasBinder.cs" />
-    <Compile Include="Systems\ConventionBinding\AreaBinder.cs" />
-    <Compile Include="Systems\ConventionBinding\AreaReflectionInfo.cs" />
-    <Compile Include="Systems\ConventionBinding\AreaScope.cs" />
-    <Compile Include="Systems\ConventionBinding\AreaTypeReflectionInfo.cs" />
-    <Compile Include="Systems\ConventionBinding\AreaTypesManager.cs" />
+    <Compile Include="Systems\ConventionBinding\Exceptions\AreaTypesSpreadAcrossAssembliesException.cs" />
+    <Compile Include="Systems\ConventionBinding\Parts\AreaHelpers.cs" />
+    <Compile Include="Systems\ConventionBinding\Parts\AreasBinder.cs" />
+    <Compile Include="Systems\ConventionBinding\Parts\AreaBinder.cs" />
+    <Compile Include="Systems\ConventionBinding\Parts\AreaTypeLibrary.cs" />
+    <Compile Include="Systems\ConventionBinding\Parts\AreaTypeReflectionInfo.cs" />
+    <Compile Include="Systems\ConventionBinding\Parts\AreaTypesManager.cs" />
     <Compile Include="Systems\ConventionBinding\Exceptions\ConventionBindingException.cs" />
     <Compile Include="Systems\ConventionBinding\ConventionBindingManager.cs" />
     <Compile Include="Systems\ConventionBinding\Exceptions\DuplicatedAreaConfigurationException.cs" />
     <Compile Include="Systems\ConventionBinding\Exceptions\InvalidAreaConfigTypeException.cs" />
     <Compile Include="Systems\ConventionBinding\Exceptions\MislocatedAreaConfigurationException.cs" />
-    <Compile Include="Systems\ConventionBinding\IAreaConfiguration.cs" />
-    <Compile Include="Systems\ConventionBinding\NinjectExtensions.cs" />
     <Compile Include="Utils\IrrklangDependencyValidator.cs" />
     <Compile Include="Areas\Core\Contracts\IBinDirectory.cs" />
     <Compile Include="Areas\Core\Contracts\IChangelogManager.cs" />
@@ -1177,6 +1176,10 @@
     <ProjectReference Include="..\..\..\Common\WurmAssistantDataTransfer\WurmAssistantDataTransfer.csproj">
       <Project>{c2591795-c58c-4b9a-a1dd-38669c0b0b3d}</Project>
       <Name>WurmAssistantDataTransfer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant3.Contracts\WurmAssistant3.Contracts.csproj">
+      <Project>{0c56745c-c82b-409a-8a39-5164d8c21e4c}</Project>
+      <Name>WurmAssistant3.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -2,54 +2,38 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AldursLab.WurmAssistant3.Systems.ConventionBinding.Exceptions;
-using AldursLab.WurmAssistant3.Utils.IoC;
 using JetBrains.Annotations;
 using Ninject;
-using Ninject.Extensions.Conventions;
 using Ninject.Extensions.Factory;
 using Ninject.Infrastructure.Language;
 
-namespace AldursLab.WurmAssistant3.Systems.ConventionBinding
+namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts
 {
     class AreaBinder
     {
+        AreaTypesManager AreaTypesManager { get; }
+
         [CanBeNull]
-        readonly Type areaConfigurationType;
+        readonly AreaTypeReflectionInfo areaConfigurationType;
 
         readonly IKernel kernel;
 
-        public AreaReflectionInfo AreaReflectionInfo { get; }
-        public AreaTypesManager AreaTypesManager { get; }
-
         public AreaBinder(
-            [NotNull] AreaReflectionInfo areaReflectionInfo, 
-            [CanBeNull] Type areaConfigurationType,
+            [NotNull] string areaName,
+            [NotNull] AreaTypeLibrary areaTypeLibrary,
             [NotNull] IKernel kernel)
         {
-            if (areaReflectionInfo == null) throw new ArgumentNullException(nameof(areaReflectionInfo));
+            if (areaName == null) throw new ArgumentNullException(nameof(areaName));
+            if (areaTypeLibrary == null) throw new ArgumentNullException(nameof(areaTypeLibrary));
             if (kernel == null) throw new ArgumentNullException(nameof(kernel));
-            this.AreaReflectionInfo = areaReflectionInfo;
-            this.areaConfigurationType = areaConfigurationType;
+            AreaName = areaName;
+
             this.kernel = kernel;
-            this.AreaTypesManager = new AreaTypesManager(areaReflectionInfo);
+            this.AreaTypesManager = new AreaTypesManager(areaName, areaTypeLibrary);
+            this.areaConfigurationType = this.AreaTypesManager.TryGetAreaConfigurationType();
         }
 
-        public IAreaConfiguration TryActivateCustomConfig()
-        {
-            if (areaConfigurationType != null)
-            {
-                try
-                {
-                    return (IAreaConfiguration)Activator.CreateInstance(areaConfigurationType);
-                }
-                catch (Exception exception)
-                {
-                    throw new InvalidAreaConfigTypeException(areaConfigurationType, exception);
-                }
-            }
-
-            return null;
-        }
+        public string AreaName { get; }
 
         public void BindByConvention()
         {
@@ -65,24 +49,6 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding
             {
                 var services = GetAllImplementedServices(transient);
                 kernel.Bind(services.ToArray()).To(transient).InTransientScope();
-            }
-
-            var areaScoped = AreaTypesManager.GetAllAreaScoped();
-            foreach (var areaScope in areaScoped)
-            {
-                var services = GetAllImplementedServices(areaScope);
-                var binding = kernel.Bind(services.ToArray()).To(areaScope).InSingletonScope().WithOptionalAreaScopeArgument();
-                binding.BindingConfiguration.ScopeCallback = context =>
-                {
-                    var type = context.Request.ParentContext?.Request.Service;
-                    if (type == null)
-                    {
-                        throw new NullReferenceException(
-                            $"Resolved AreaScoped service {context.Binding.Service.FullName} is not within any ParentContext");
-                    }
-                    var scopeName = AreaReflectionInfo.ParseAreaNameFromType(type);
-                    return scopeName;
-                };
             }
 
             var viewModels = AreaTypesManager.GetAllViewModels();
@@ -107,7 +73,7 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding
                     throw new InvalidOperationException(
                         $"Type {autoFactory.FullName} must be an interface to be properly proxied into an automatic Ninject factory.");
                 }
-                kernel.Bind(autoFactory).ToFactory();
+                kernel.Bind(autoFactory).ToFactory(autoFactory);
             }
         }
 
@@ -126,6 +92,22 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding
             }
 
             return services;
+        }
+
+        public void RunCustomConfigIfDefined()
+        {
+            if (areaConfigurationType != null)
+            {
+                try
+                {
+                    var config = areaConfigurationType.ActivateAsAreaConfiguration();
+                    config.Configure(kernel);
+                }
+                catch (Exception exception)
+                {
+                    throw new InvalidAreaConfigTypeException(areaConfigurationType, exception);
+                }
+            }
         }
     }
 }

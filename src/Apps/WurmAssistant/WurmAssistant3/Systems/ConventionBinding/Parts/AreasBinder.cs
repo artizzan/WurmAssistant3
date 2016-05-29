@@ -4,39 +4,45 @@ using System.Linq;
 using JetBrains.Annotations;
 using Ninject;
 
-namespace AldursLab.WurmAssistant3.Systems.ConventionBinding
+namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts
 {
     class AreasBinder
     {
+        readonly AreaTypeLibrary areaTypeLibrary;
         readonly IKernel kernel;
         readonly List<AreaBinder> areaBinders;
 
         public AreasBinder(
-            [NotNull] IEnumerable<AreaTypeReflectionInfo> configurationTypes,
-            [NotNull] IEnumerable<AreaReflectionInfo> detectedAreas,
+            [NotNull] AreaTypeLibrary areaTypeLibrary,
             [NotNull] IKernel kernel,
             [NotNull] IReadOnlyList<string> priorityOrderedAreas)
         {
-            if (configurationTypes == null) throw new ArgumentNullException(nameof(configurationTypes));
-            if (detectedAreas == null) throw new ArgumentNullException(nameof(detectedAreas));
+            if (areaTypeLibrary == null) throw new ArgumentNullException(nameof(areaTypeLibrary));
             if (kernel == null) throw new ArgumentNullException(nameof(kernel));
             if (priorityOrderedAreas == null) throw new ArgumentNullException(nameof(priorityOrderedAreas));
+            this.areaTypeLibrary = areaTypeLibrary;
             this.kernel = kernel;
 
-            var binderPool = detectedAreas
+            string[] allKnownAreaNames =
+                areaTypeLibrary.GetAllTypes()
+                               .Where(info => info.AreaKnown)
+                               .Select(info => info.AreaName)
+                               .Distinct()
+                               .ToArray();
+
+            var binderPool = allKnownAreaNames
                 .Select(
-                    info =>
+                    areaName =>
                         new AreaBinder(
-                            info,
-                            configurationTypes.SingleOrDefault(
-                                reflectionInfo => reflectionInfo.AreaReflectionInfo.AreaName == info.AreaName)?.Type,
+                            areaName,
+                            areaTypeLibrary,
                             kernel))
                 .ToList();
 
             List<AreaBinder> orderedBinders = new List<AreaBinder>();
             foreach (var areaName in priorityOrderedAreas)
             {
-                var matchingManager = binderPool.SingleOrDefault(manager => manager.AreaReflectionInfo.AreaName == areaName);
+                var matchingManager = binderPool.SingleOrDefault(manager => manager.AreaName == areaName);
                 if (matchingManager == null)
                 {
                     throw new InvalidOperationException($"Priority Area: {areaName} was not found among all reflected area types.");
@@ -57,9 +63,8 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding
         {
             foreach (var areaBinder in areaBinders)
             {
-                var customConfig = areaBinder.TryActivateCustomConfig();
                 areaBinder.BindByConvention();
-                customConfig?.Configure(kernel);
+                areaBinder.RunCustomConfigIfDefined();
             }
         }
     }

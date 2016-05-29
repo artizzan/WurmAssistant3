@@ -97,10 +97,11 @@ namespace AldursLab.WurmAssistant3
                         }
                     });
 
-                // Todo: Enable and test after refactoring all areas is completed.
+                // Todo: Enable and test, once refactoring all areas is completed.
                 //var priorityBindingOrder = new List<string>()
                 //{
                 //    "Core",
+                //    "Logging",
                 //    "Persistence",
                 //};
                 //var conventionBindingManager = new ConventionBindingManager(kernel, priorityBindingOrder);

@@ -1,6 +1,6 @@
 using Ninject;
 
-namespace AldursLab.WurmAssistant3.Systems.ConventionBinding
+namespace AldursLab.WurmAssistant3
 {
     /// <summary>
     /// This interface can be used to mark a single public class within an Area.

@@ -1,6 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using AldursLab.WurmAssistant3.Utils.IoC;
+using AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Exceptions
@@ -10,10 +11,10 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Exceptions
     {
         readonly AreaTypeReflectionInfo[] mislocatedConfigs;
 
-        public MislocatedAreaConfigurationException([NotNull] AreaTypeReflectionInfo[] mislocatedConfigs)
+        public MislocatedAreaConfigurationException([NotNull] IEnumerable<AreaTypeReflectionInfo> mislocatedConfigs)
         {
             if (mislocatedConfigs == null) throw new ArgumentNullException(nameof(mislocatedConfigs));
-            this.mislocatedConfigs = mislocatedConfigs;
+            this.mislocatedConfigs = mislocatedConfigs.ToArray();
         }
 
         public override string ToString()
