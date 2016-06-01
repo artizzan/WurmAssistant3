@@ -490,10 +490,10 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                         {
                             // we don't know if this is young foal or young mature, keep old value
                             if (newAge == CreatureAgeId.Young) 
-                                result.Age = new CreatureAge(CreatureAgeId.YoungFoal);
+                                result.Age = new CreatureAge(prevAge);
                             // we don't know if this is adolescent foal or adolescent mature, keep old value
                             if (newAge == CreatureAgeId.Adolescent)
-                                result.Age = new CreatureAge(CreatureAgeId.YoungFoal);
+                                result.Age = new CreatureAge(prevAge);
                         }
                         if (prevAge == CreatureAgeId.AdolescentFoal)
                         {
@@ -502,7 +502,7 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                                 result.Age = new CreatureAge(CreatureAgeId.Young);
                             // we don't know if this is adolescent foal or adolescent mature, keep old value
                             if (newAge == CreatureAgeId.Adolescent)
-                                result.Age = new CreatureAge(CreatureAgeId.AdolescentFoal);
+                                result.Age = new CreatureAge(prevAge);
                         }
 
                         break;
