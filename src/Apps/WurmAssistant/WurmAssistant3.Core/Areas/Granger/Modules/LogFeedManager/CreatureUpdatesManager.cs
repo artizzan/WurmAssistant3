@@ -220,7 +220,6 @@ namespace AldursLab.WurmAssistant3.Core.Areas.Granger.Modules.LogFeedManager
                 {
                     grangerDebug.Log("LIVETRACKER: applying groomed flag due to: " + line);
                     string prefixedName = match.Groups[1].Value;
-                    CreatureAge newAge = GrangerHelpers.ExtractCreatureAge(prefixedName);
                     string fixedName = GrangerHelpers.RemoveAllPrefixes(prefixedName);
                     CreatureEntity[] creatureEntities = GetCreatureToUpdate(fixedName, playerMan.CurrentServer);
                     if (EntireDbSetting && creatureEntities.Length > 1)
