@@ -1,5 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
+using AldursLab.WurmAssistant3.Systems.ConventionBinding.Exceptions;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts
@@ -21,7 +22,14 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts
 
         public IAreaConfiguration ActivateAsAreaConfiguration()
         {
-            return (IAreaConfiguration)Activator.CreateInstance(Type);
+            try
+            {
+                return (IAreaConfiguration)Activator.CreateInstance(Type);
+            }
+            catch (Exception exception)
+            {
+                throw new InvalidAreaConfigTypeException(this, exception);
+            }
         }
 
         public bool MatchesAreaName(string areaName)

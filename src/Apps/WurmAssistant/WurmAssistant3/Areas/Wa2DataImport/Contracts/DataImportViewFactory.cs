@@ -1,9 +1,11 @@
-using AldursLab.WurmAssistant3.Areas.Wa2DataImport.Views;
+using AldursLab.WurmAssistant3.Areas.Wa2DataImport.Parts;
+using AldursLab.WurmAssistant3.Areas.Wa2DataImport.Transients;
 
 namespace AldursLab.WurmAssistant3.Areas.Wa2DataImport.Contracts
 {
-    public interface IDataImportViewFactory
+    [NinjectFactory]
+    public interface IDataImportFormFactory
     {
-        Wa2DataImportView CreateDataImportView();
+        Wa2DataImportForm CreateDataImportForm();
     }
 }

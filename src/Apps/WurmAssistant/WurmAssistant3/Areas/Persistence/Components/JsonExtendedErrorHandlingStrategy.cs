@@ -28,7 +28,7 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence.Components
                 string.Format((string) "Deserialization error. Member = {0} ; Path = {1}",
                     args.ErrorContext.Member,
                     args.ErrorContext.Path));
-            var view = new DeserializationErrorResolverView(o, args);
+            var view = new DeserializationErrorResolverForm(o, args);
             if (view.ShowDialog() == DialogResult.No)
             {
                 System.Windows.Application.Current.Shutdown();

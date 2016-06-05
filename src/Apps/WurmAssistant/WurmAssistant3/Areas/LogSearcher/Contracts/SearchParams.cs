@@ -1,6 +1,6 @@
 using System;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Areas.LogSearcher.Views;
+using AldursLab.WurmAssistant3.Areas.LogSearcher.Parts;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.LogSearcher.Contracts

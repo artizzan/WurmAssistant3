@@ -98,15 +98,8 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts
         {
             if (areaConfigurationType != null)
             {
-                try
-                {
-                    var config = areaConfigurationType.ActivateAsAreaConfiguration();
-                    config.Configure(kernel);
-                }
-                catch (Exception exception)
-                {
-                    throw new InvalidAreaConfigTypeException(areaConfigurationType, exception);
-                }
+                var config = areaConfigurationType.ActivateAsAreaConfiguration();
+                config.Configure(kernel);
             }
         }
     }

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AldursLab.Testing;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
-using AldursLab.WurmAssistant3.Areas.SoundManager.Modules;
+using AldursLab.WurmAssistant3.Areas.SoundManager.Singletons;
 using NUnit.Framework;
 using Telerik.JustMock.AutoMock;
 

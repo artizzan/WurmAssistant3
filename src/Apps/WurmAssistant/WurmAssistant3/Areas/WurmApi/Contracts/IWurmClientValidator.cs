@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using AldursLab.WurmAssistant3.Areas.WurmApi.Modules;
+using AldursLab.WurmAssistant3.Areas.WurmApi.Singletons;
 
 namespace AldursLab.WurmAssistant3.Areas.WurmApi.Contracts
 {

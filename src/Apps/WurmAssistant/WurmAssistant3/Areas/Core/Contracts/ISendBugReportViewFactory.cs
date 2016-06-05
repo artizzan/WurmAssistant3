@@ -1,9 +1,10 @@
-﻿using AldursLab.WurmAssistant3.Areas.Core.Views;
+﻿using AldursLab.WurmAssistant3.Areas.Core.Transients;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Contracts
 {
+    [NinjectFactory]
     public interface ISendBugReportViewFactory
     {
-        SendBugReportView CreateSendBugReportView();
+        SendBugReportForm CreateSendBugReportView();
     }
 }

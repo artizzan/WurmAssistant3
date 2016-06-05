@@ -1,7 +1,6 @@
 ﻿using AldursLab.WurmAssistant3.Areas.Features.Contracts;
-using AldursLab.WurmAssistant3.Areas.Granger.Modules;
-using AldursLab.WurmAssistant3.Areas.Granger.Modules.Advisor.Default;
-using AldursLab.WurmAssistant3.Areas.Granger.Modules.DataLayer;
+using AldursLab.WurmAssistant3.Areas.Granger.Features;
+using AldursLab.WurmAssistant3.Areas.Granger.Singletons;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger

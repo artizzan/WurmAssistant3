@@ -1,9 +1,10 @@
-﻿using AldursLab.WurmAssistant3.Areas.Config.Views;
+﻿using AldursLab.WurmAssistant3.Areas.Config.Transients;
 
 namespace AldursLab.WurmAssistant3.Areas.Config.Contracts
 {
+    [NinjectFactory]
     public interface ISettingsEditViewFactory
     {
-        SettingsEditView CreateSettingsEditView();
+        SettingsEditForm CreateSettingsEditView();
     }
 }

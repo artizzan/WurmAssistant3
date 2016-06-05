@@ -3,7 +3,8 @@ using AldursLab.Essentials.Eventing;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Modules;
-using AldursLab.WurmAssistant3.Areas.Logging.Views;
+using AldursLab.WurmAssistant3.Areas.Logging.Singletons;
+using AldursLab.WurmAssistant3.Areas.Logging.Transients;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Logging
@@ -20,7 +21,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
                 typeof(ILogMessageDump))
                   .To<LoggingManager>().InSingletonScope();
 
-            kernel.Bind<LogView>().ToSelf();
+            kernel.Bind<CombinedLogsUserControl>().ToSelf();
 
             BindLoggerAutoResolver(kernel);
         }

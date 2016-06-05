@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Windows;
-using AldursLab.WurmAssistant3.Areas.Config.Views;
 
 namespace AldursLab.WurmAssistant3.Utils
 {

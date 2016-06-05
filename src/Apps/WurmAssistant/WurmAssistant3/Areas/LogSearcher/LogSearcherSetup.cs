@@ -1,5 +1,5 @@
 ﻿using AldursLab.WurmAssistant3.Areas.Features.Contracts;
-using AldursLab.WurmAssistant3.Areas.LogSearcher.Modules;
+using AldursLab.WurmAssistant3.Areas.LogSearcher.Features;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.LogSearcher

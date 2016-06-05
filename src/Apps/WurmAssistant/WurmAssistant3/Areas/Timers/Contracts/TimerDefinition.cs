@@ -1,5 +1,5 @@
 using System;
-using AldursLab.WurmAssistant3.Areas.Timers.Modules;
+using AldursLab.WurmAssistant3.Areas.Timers.Parts;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 

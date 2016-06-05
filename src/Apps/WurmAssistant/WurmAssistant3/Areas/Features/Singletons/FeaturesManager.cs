@@ -1,0 +1,111 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
+using AldursLab.WurmAssistant3.Areas.Features.Contracts;
+using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
+using Castle.Components.DictionaryAdapter;
+using JetBrains.Annotations;
+using Ninject;
+
+namespace AldursLab.WurmAssistant3.Areas.Features.Singletons
+{
+    public class FeaturesManager : IFeaturesManager, IInitializable
+    {
+        readonly ISystemTrayContextMenu systemTrayContextMenu;
+        IEnumerable<IFeature> features;
+        readonly ILogger logger;
+
+        bool asyncInitStarted = false;
+
+        public FeaturesManager([NotNull] IEnumerable<IFeature> features,
+            [NotNull] ISystemTrayContextMenu systemTrayContextMenu,
+            [NotNull] ILogger logger)
+        {
+            if (systemTrayContextMenu == null) throw new ArgumentNullException(nameof(systemTrayContextMenu));
+            if (features == null) throw new ArgumentNullException(nameof(features));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            this.systemTrayContextMenu = systemTrayContextMenu;
+            this.features = features;
+            this.logger = logger;
+        }
+
+        public void Initialize()
+        {
+            // todo: temporary fix for order, remove after feature gui is improved
+            // order got broken after wiring ConventionBindingManager
+            ReorderFeatures(new[]
+            {
+                "Sounds Manager",
+                "Log Searcher",
+                "Calendar",
+                "Timers",
+                "Triggers",
+                "Granger",
+                "Crafting Assistant",
+                "Reveal Creatures Parser",
+                "Skill Stats",
+                "Combat Assistant",
+            });
+
+            foreach (var f in features)
+            {
+                var feature = f;
+                systemTrayContextMenu.AddMenuItem(f.Name, () => feature.Show(), f.Icon);
+            }
+        }
+
+        void ReorderFeatures(string[] orderedFeatureNames)
+        {
+            var otherFeatures = features.Where(feature => orderedFeatureNames.All(s => s != feature.Name)).ToArray();
+
+            List<IFeature> orderedFeatures = new List<IFeature>();
+            foreach (var orderedFeatureMame in orderedFeatureNames)
+            {
+                orderedFeatures.Add(features.Single(feature => feature.Name == orderedFeatureMame));
+            }
+
+            orderedFeatures.AddRange(otherFeatures);
+
+            features = orderedFeatures;
+        }
+
+        public IEnumerable<IFeature> Features => features;
+
+        public async void InitFeatures()
+        {
+            if (asyncInitStarted)
+            {
+                throw new InvalidOperationException("AsyncInitFeatures already triggered");
+            }
+
+            asyncInitStarted = true;
+
+            try
+            {
+                List<Tuple<Task, IFeature>> tasks = new List<Tuple<Task, IFeature>>();
+                foreach (var feature in Features)
+                {
+                    tasks.Add(new Tuple<Task, IFeature>(feature.InitAsync(), feature));
+                }
+                foreach (var tuple in tasks)
+                {
+                    try
+                    {
+                        await tuple.Item1;
+                        logger.Info(string.Format("Feature initialized: {0}", tuple.Item2.Name));
+                    }
+                    catch (Exception exception)
+                    {
+                        logger.Error(exception, string.Format("Error at feature initialization: {0}", tuple.Item2.Name));
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                logger.Error(exception, "");
+            }
+        }
+    }
+}
