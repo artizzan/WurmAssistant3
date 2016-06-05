@@ -224,7 +224,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules
             {
                 if (objectname.Contains(agestring))
                 {
-                    return WurmStringToAgeMap[agestring];
+                    return WurmStringToAgeMap[agestring].CreateCopy();
                 }
             }
 
@@ -236,13 +236,18 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Modules
             prefixedobjectname = prefixedobjectname.ToUpperInvariant();
             foreach (var agestring in GrangerHelpers.CreatureAgesUpcase)
             {
-                if (prefixedobjectname.StartsWith(agestring, StringComparison.InvariantCulture))
+                if (prefixedobjectname.StartsWith(agestring, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return WurmStringToAgeMap[agestring];
+                    return WurmStringToAgeMap[agestring].CreateCopy();
                 }
             }
 
             return new CreatureAge(CreatureAgeId.Unknown);
+        }
+
+        CreatureAge CreateCopy()
+        {
+            return new CreatureAge(this.creatureAgeId);
         }
 
         public void Foalize()
