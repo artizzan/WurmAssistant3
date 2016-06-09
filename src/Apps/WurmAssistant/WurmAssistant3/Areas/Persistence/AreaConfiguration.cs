@@ -11,10 +11,12 @@ using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Persistence.Components;
 using AldursLab.WurmAssistant3.Areas.Persistence.Contracts;
+using JetBrains.Annotations;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Persistence
 {
+    [UsedImplicitly]
     public class AreaConfiguration : IAreaConfiguration
     {
         public void Configure(IKernel kernel)

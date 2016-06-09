@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Areas.Calendar.Features;
+using AldursLab.WurmAssistant3.Areas.Calendar.Singletons;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Utils.WinForms;

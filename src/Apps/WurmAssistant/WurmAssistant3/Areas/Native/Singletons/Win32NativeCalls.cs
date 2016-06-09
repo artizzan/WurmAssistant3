@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using AldursLab.WurmAssistant3.Areas.Native.Constants;
 using AldursLab.WurmAssistant3.Areas.Native.Contracts;
 
 namespace AldursLab.WurmAssistant3.Areas.Native.Singletons

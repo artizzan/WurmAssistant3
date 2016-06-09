@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
-using AldursLab.WurmAssistant3.Areas.Wa2DataImport.Contracts;
 using AldursLab.WurmAssistant3.Properties;
 using JetBrains.Annotations;
 
@@ -14,23 +13,19 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu.Singletons
         readonly IProcessStarter processStarter;
         readonly IUserNotifier userNotifier;
         readonly IServersEditorViewFactory serversEditorViewFactory;
-        readonly IDataImportFormFactory dataImportFormFactory;
 
         public MainMenuUserControl([NotNull] ISettingsEditViewFactory settingsEditViewFactory,
             [NotNull] IProcessStarter processStarter, [NotNull] IUserNotifier userNotifier,
-            [NotNull] IServersEditorViewFactory serversEditorViewFactory,
-            IDataImportFormFactory dataImportFormFactory)
+            [NotNull] IServersEditorViewFactory serversEditorViewFactory)
         {
             if (settingsEditViewFactory == null) throw new ArgumentNullException("settingsEditViewFactory");
             if (processStarter == null) throw new ArgumentNullException("processStarter");
             if (userNotifier == null) throw new ArgumentNullException("userNotifier");
             if (serversEditorViewFactory == null) throw new ArgumentNullException("serversEditorViewFactory");
-            if (dataImportFormFactory == null) throw new ArgumentNullException("dataImportFormFactory");
             this.settingsEditViewFactory = settingsEditViewFactory;
             this.processStarter = processStarter;
             this.userNotifier = userNotifier;
             this.serversEditorViewFactory = serversEditorViewFactory;
-            this.dataImportFormFactory = dataImportFormFactory;
             InitializeComponent();
         }
 
@@ -80,14 +75,6 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu.Singletons
         {
             var view = serversEditorViewFactory.CreateServersEditorView();
             view.ShowDialog();
-        }
-
-        private void importDataFromWa2ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var importer = dataImportFormFactory;
-            var view = importer.CreateDataImportForm();
-            view.StartPosition = FormStartPosition.CenterScreen;
-            view.Show();
         }
 
         private void videoSoundManagerToolStripMenuItem_Click(object sender, EventArgs e)

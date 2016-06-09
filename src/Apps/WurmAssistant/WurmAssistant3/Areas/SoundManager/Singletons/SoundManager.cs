@@ -139,11 +139,5 @@ namespace AldursLab.WurmAssistant3.Areas.SoundManager.Singletons
         {
             form.Hide();
         }
-
-        public async Task ImportDataFromWa2Async(WurmAssistantDto dto)
-        {
-            SoundEngineWa2Importer importer = new SoundEngineWa2Importer(soundsLibrary, logger);
-            await importer.ImportFromDtoAsync(dto);
-        }
     }
 }

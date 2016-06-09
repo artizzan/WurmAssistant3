@@ -1,5 +1,4 @@
 ﻿using AldursLab.WurmAssistant3.Areas.Features.Contracts;
-using AldursLab.WurmAssistant3.Areas.Granger.Features;
 using AldursLab.WurmAssistant3.Areas.Granger.Singletons;
 using Ninject;
 

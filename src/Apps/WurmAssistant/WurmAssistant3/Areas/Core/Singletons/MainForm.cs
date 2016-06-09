@@ -9,7 +9,7 @@ using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Transients;
 using AldursLab.WurmAssistant3.Areas.MainMenu.Singletons;
-using AldursLab.WurmAssistant3.Areas.Native.Constants;
+using AldursLab.WurmAssistant3.Areas.Native.Contracts;
 using AldursLab.WurmAssistant3.Properties;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;

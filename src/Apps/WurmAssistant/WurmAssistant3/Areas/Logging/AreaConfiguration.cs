@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
+using JetBrains.Annotations;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Logging
 {
+    [UsedImplicitly]
     public class AreaConfiguration : IAreaConfiguration
     {
         public void Configure(IKernel kernel)

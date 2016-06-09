@@ -19,5 +19,10 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Exceptions
             StreamingContext context) : base(info, context)
         {
         }
+
+        protected ConventionBindingException(string message)
+            :base(message)
+        {
+        }
     }
 }

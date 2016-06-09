@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using AldursLab.Essentials.Eventing;
+using AldursLab.Essentials.Extensions.DotNet.IO;
 using AldursLab.Essentials.Synchronization;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
@@ -37,9 +40,9 @@ using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.Timers;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
 using AldursLab.WurmAssistant3.Areas.Triggers;
-using AldursLab.WurmAssistant3.Areas.Wa2DataImport;
 using AldursLab.WurmAssistant3.Areas.WurmApi;
 using AldursLab.WurmAssistant3.Systems.ConventionBinding;
+using AldursLab.WurmAssistant3.Systems.Plugins;
 using AldursLab.WurmAssistant3.Utils;
 using AldursLab.WurmAssistant3.Utils.IoC;
 using AldursLab.WurmAssistant3.Utils.WinForms.Reusables;
@@ -70,6 +73,14 @@ namespace AldursLab.WurmAssistant3
                 consoleArgs = new ConsoleArgs();
                 kernel.Bind<IConsoleArgs>().ToConstant(consoleArgs);
 
+                var dataDirectory = new WurmAssistantDataDirectory(consoleArgs);
+                kernel.Bind<IWurmAssistantDataDirectory, WurmAssistantDataDirectory>()
+                      .ToConstant(dataDirectory);
+
+                var pluginsDir = new DirectoryInfo(Path.Combine(dataDirectory.DirectoryPath, "Plugins"));
+                var pluginManager = new PluginManager(pluginsDir);
+                kernel.Bind<PluginManager>().ToConstant(pluginManager);
+
                 System.Windows.Forms.Application.EnableVisualStyles();
                 Regex.CacheSize = 1000;
 
@@ -95,72 +106,18 @@ namespace AldursLab.WurmAssistant3
                         }
                     });
 
-                // Todo: Enable and test, once refactoring all areas is completed.
                 var priorityBindingOrder = new List<string>()
                 {
                     "Core",
                     "Logging",
                     "Persistence",
                 };
+
                 var conventionBindingManager = new ConventionBindingManager(
                     kernel, 
                     priorityBindingOrder,
-                    new [] { this.GetType().Assembly });
+                    new [] { this.GetType().Assembly }.Concat(pluginManager.PluginAssemblies).ToArray());
                 conventionBindingManager.BindAreasByConvention();
-
-                //// to convention
-                //kernel.Bind<ITimerFactory>().To<TimerFactory>().InSingletonScope();
-                //kernel.Bind<IEnvironment>().To<WpfAppEnvironment>().InSingletonScope();
-                //kernel.Bind<ISuperFactory>().To<SuperFactory>().InSingletonScope();
-                //kernel.Bind<IWurmAssistantDataDirectory>().To<WurmAssistantDataDirectory>().InSingletonScope();
-                //kernel.ProhibitGet<WurmAssistantDataDirectory>();
-                //kernel.Bind<DispatcherThreadMarshaller, IThreadMarshaller, IWurmApiEventMarshaller>()
-                //      .To<DispatcherThreadMarshaller>().InSingletonScope();
-                //kernel.Bind<ISystemTrayContextMenu>().To<TrayMenu>().InSingletonScope();
-                //kernel.Bind<MainForm>().ToSelf().InSingletonScope();
-                //kernel.Bind<ProcessStarter, IProcessStarter>().To<ProcessStarter>().InSingletonScope();
-                //kernel.Bind<UserNotifier, IUserNotifier>().To<UserNotifier>().InSingletonScope();
-                //kernel.Bind<BinDirectory, IBinDirectory>().To<BinDirectory>().InSingletonScope();
-                //kernel.Bind<WaVersion, IWaVersion>().To<WaVersion>().InSingletonScope();
-                //kernel.Bind<WaVersionInfoProvider, IWaVersionInfoProvider>()
-                //      .To<WaVersionInfoProvider>()
-                //      .InSingletonScope();
-                //kernel.Bind<ChangelogManager, IChangelogManager>().To<ChangelogManager>().InSingletonScope();
-                //kernel.Bind<SendBugReportForm>().ToSelf();
-                //// end: to convention
-
-                //kernel.Bind<ISendBugReportViewFactory>().ToFactory();
-
-                //kernel.Bind<WurmAssistantConfig, IWurmAssistantConfig>().To<WurmAssistantConfig>().InSingletonScope();
-
-                //LoggingSetup.Setup(kernel); //handled
-
-                //PersistenceSetup.BindPersistenceSystems(kernel); //handled
-
-                //NativeSetup.Bind(kernel); //handled
-
-                //ConfigSetup.BindComponents(kernel); //handled
-
-                //WurmApiSetup.BindSingletonApi(kernel); //handled
-                //WurmApiSetup.ValidateWurmGameClientConfig(kernel); //handled
-
-                //TrayPopupsSetup.BindTrayPopups(kernel); //handled
-                //SoundManagerSetup.Bind(kernel); //handled
-
-                //Wa2DataImportSetup.Bind(kernel); //handled
-
-                //LogSearcherSetup.BindLogSearcher(kernel); //handled
-                //CalendarSetup.BindCalendar(kernel); //handled
-                //TimersSetup.BindTimers(kernel); //handled
-                //TriggersSetup.BindTriggers(kernel); //handled
-                //GrangerSetup.BindGranger(kernel); //handled
-                //CraftingAssistantSetup.Bind(kernel); //handled
-                //RevealCreaturesSetup.Bind(kernel); //handled
-                //SkillStatsSetup.Bind(kernel); //handled
-                //CombatAssistantSetup.Bind(kernel); //handled
-
-                //FeaturesSetup.BindFeaturesManager(kernel); //handled
-                //MainMenuSetup.BindMenu(kernel); //handled
 
                 var featureManager = kernel.Get<IFeaturesManager>();
                 featureManager.InitFeatures();

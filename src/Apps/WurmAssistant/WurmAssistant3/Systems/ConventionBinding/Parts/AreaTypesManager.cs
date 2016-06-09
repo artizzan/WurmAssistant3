@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts

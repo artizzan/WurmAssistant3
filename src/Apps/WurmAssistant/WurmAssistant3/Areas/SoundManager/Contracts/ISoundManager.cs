@@ -38,8 +38,8 @@ namespace AldursLab.WurmAssistant3.Areas.SoundManager.Contracts
         Guid AddSound(Sound sound);
 
         Guid AddSoundAsNewId(Sound sound);
+
         void HideGui();
-        Task ImportDataFromWa2Async(WurmAssistantDto dto);
     }
 
     public class ChooseSoundResult

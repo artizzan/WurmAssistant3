@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Systems.ConventionBinding.Exceptions;
 using JetBrains.Annotations;
 using Ninject;
@@ -71,12 +72,12 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts
                 if (!autoFactory.IsInterface)
                 {
                     throw new InvalidOperationException(
-                        $"Type {autoFactory.FullName} must be an interface to be properly proxied into an automatic Ninject factory.");
+                        $"Type {autoFactory.FullName} must be an interface in order to be properly proxied into an automatic Ninject factory.");
                 }
                 kernel.Bind(autoFactory).ToFactory(autoFactory);
             }
         }
-
+            
         IEnumerable<Type> GetAllImplementedServices(Type type)
         {
             List<Type> services = new List<Type> { type };

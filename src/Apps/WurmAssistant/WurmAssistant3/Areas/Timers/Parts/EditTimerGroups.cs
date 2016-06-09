@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Areas.Timers.Features;
+using AldursLab.WurmAssistant3.Areas.Timers.Singletons;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Areas.Timers.Features;
 using AldursLab.WurmAssistant3.Areas.Timers.Parts.Timers;
 using AldursLab.WurmAssistant3.Areas.Timers.Parts.Timers.Custom;
 using AldursLab.WurmAssistant3.Areas.Timers.Singletons;

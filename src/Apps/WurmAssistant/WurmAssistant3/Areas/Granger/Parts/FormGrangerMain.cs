@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Areas.Granger.Features;
 using AldursLab.WurmAssistant3.Areas.Granger.Parts.Advisor;
 using AldursLab.WurmAssistant3.Areas.Granger.Parts.DataLayer;
 using AldursLab.WurmAssistant3.Areas.Granger.Parts.ValuePreset;

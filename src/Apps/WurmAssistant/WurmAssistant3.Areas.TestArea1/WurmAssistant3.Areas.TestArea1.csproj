@@ -37,6 +37,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,7 +52,9 @@
     <Compile Include="CustomViews\SampleCustomView.cs" />
     <Compile Include="OutsideConvention\SomeTypeOutsideConvention.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Singletons\SampleFeature.cs" />
     <Compile Include="Singletons\Nested\SampleNestedSingleton.cs" />
+    <Compile Include="Singletons\SampleFeature2.cs" />
     <Compile Include="Singletons\SampleSingleton.cs" />
     <Compile Include="Transients\Nested\SampleNestedTransient.cs" />
     <Compile Include="Transients\SampleTransient.cs" />

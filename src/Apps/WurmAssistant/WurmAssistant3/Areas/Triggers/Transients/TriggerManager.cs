@@ -10,6 +10,7 @@ using AldursLab.WurmAssistant3.Areas.TrayPopups.Contracts;
 using AldursLab.WurmAssistant3.Areas.Triggers.Data;
 using AldursLab.WurmAssistant3.Areas.Triggers.Parts;
 using AldursLab.WurmAssistant3.Areas.Triggers.Parts.TriggersManager;
+using AldursLab.WurmAssistant3.Areas.Triggers.Singletons;
 using AldursLab.WurmAssistant3.Properties;
 using JetBrains.Annotations;
 using Newtonsoft.Json;

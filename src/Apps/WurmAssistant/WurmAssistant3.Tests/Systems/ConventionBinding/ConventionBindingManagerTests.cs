@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
+using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Areas.TestArea1;
 using AldursLab.WurmAssistant3.Areas.TestArea1.Contracts;
 using AldursLab.WurmAssistant3.Areas.TestArea1.Contracts.Nested;
@@ -71,6 +73,10 @@ namespace AldursLab.WurmAssistant3.Tests.Systems.ConventionBinding
                 var factory = kernel.Get<ISampleViewModelFactory>();
                 factory.Should().NotBeNull();
             }
+            {
+                var feature = kernel.GetAll<IFeature>();
+                feature.Should().HaveCount(2);
+            }
         }
 
         [Test]
@@ -128,6 +134,17 @@ namespace AldursLab.WurmAssistant3.Tests.Systems.ConventionBinding
                 var singleton2 = kernel.Get<SampleNestedSingleton>();
                 var singleton3 = kernel.Get<ISampleNestedSingleton>();
                 singleton1.Should().BeSameAs(singleton2).And.BeSameAs(singleton3);
+            }
+            {
+                var sampleFeature = kernel.Get<SampleFeature>();
+                var sampleFeatureBis = kernel.GetAll<IFeature>().Single(feature => feature.Name == "SampleFeature");
+                sampleFeature.Should().BeSameAs(sampleFeatureBis);
+
+            }
+            {
+                var sampleFeature2 = kernel.Get<SampleFeature2>();
+                var sampleFeature2Bis = kernel.GetAll<IFeature>().Single(feature => feature.Name == "SampleFeature2");
+                sampleFeature2.Should().BeSameAs(sampleFeature2Bis);
             }
         }
 
