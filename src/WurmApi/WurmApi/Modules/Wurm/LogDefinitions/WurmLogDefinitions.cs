@@ -40,6 +40,7 @@ namespace AldursLab.WurmApi.Modules.Wurm.LogDefinitions
             new LogDefinition(LogType.Trade, "Trade", "Trade"), 
             new LogDefinition(LogType.Support, "_Support", "Support"), 
             new LogDefinition(LogType.Help, "_Help", "Help"), 
+            new LogDefinition(LogType.GvHelp, "GV_HELP", "Help"), 
         };
 
         readonly Dictionary<string, LogType> prefixToEnumMap = new Dictionary<string, LogType>();
@@ -51,29 +52,6 @@ namespace AldursLab.WurmApi.Modules.Wurm.LogDefinitions
             {
                 AddLogTypeMapping(logDefinition.LogPrefix, logDefinition.LogType);
             }
-
-            //AddLogTypeMapping("_Combat", LogType.Combat);
-            //AddLogTypeMapping("_Event", LogType.Event);
-            //AddLogTypeMapping("_Friends", LogType.Friends);
-            //AddLogTypeMapping("_Local", LogType.Local);
-            //AddLogTypeMapping("_Skills", LogType.Skills);
-            //AddLogTypeMapping("Alliance", LogType.Alliance);
-            //AddLogTypeMapping("CA_HELP", LogType.CaHelp);
-            //AddLogTypeMapping("Freedom", LogType.Freedom);
-            //AddLogTypeMapping("GL-Freedom", LogType.GlFreedom);
-            //AddLogTypeMapping("MGMT", LogType.Mgmt);
-            //AddLogTypeMapping("PM", LogType.Pm);
-            //AddLogTypeMapping("Team", LogType.Team);
-            //AddLogTypeMapping("Village", LogType.Village);
-            //AddLogTypeMapping("_Deaths", LogType.Deaths);
-            //AddLogTypeMapping("Mol_Rehan", LogType.MolRehan);
-            //AddLogTypeMapping("GL-Mol_Rehan", LogType.GlMolRehan);
-            //AddLogTypeMapping("Jenn-Kellon", LogType.JennKellon);
-            //AddLogTypeMapping("GL-Jenn-Kellon", LogType.GlJennKellon);
-            //AddLogTypeMapping("HOTS", LogType.Hots);
-            //AddLogTypeMapping("GL-HOTS", LogType.GlHots);
-            //AddLogTypeMapping("Trade", LogType.Trade);
-            //AddLogTypeMapping("_Support", LogType.Support);
 
             var allTypesCount = AllLogTypes.Count();
             var allDefinitionsCount = AllDefinitions.Count();
