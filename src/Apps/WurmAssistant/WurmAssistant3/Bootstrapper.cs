@@ -240,6 +240,7 @@ namespace AldursLab.WurmAssistant3
         void ShutdownCurrentApp()
         {
             Application.Current.Shutdown();
+            kernel.Dispose();
         }
 
         void RestartCurrentApp()

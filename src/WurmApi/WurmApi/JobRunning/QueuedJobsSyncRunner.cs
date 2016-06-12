@@ -105,7 +105,7 @@ namespace AldursLab.WurmApi.JobRunning
             if (!searchJobTask.Wait(50))
             {
                 jobSignaller.Set();
-                searchJobTask.Wait(15000);
+                searchJobTask.Wait(5000);
             }
             GC.SuppressFinalize(this);
         }
