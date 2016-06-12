@@ -12,7 +12,7 @@ namespace AldursLab.WurmAssistant3.Systems.Plugins
 {
     class PluginManager : IDisposable
     {
-        DirectoryInfo pluginsDirectory;
+        readonly DirectoryInfo pluginsDirectory;
         List<PluginInfo> plugins;
         readonly List<Assembly> pluginAssemblies = new List<Assembly>();
 

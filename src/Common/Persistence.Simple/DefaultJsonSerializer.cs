@@ -54,6 +54,7 @@ namespace AldursLab.Persistence.Simple
             {
                 var contract = base.CreateDictionaryContract(objectType);
 
+                // Serialize Enums as numeric.
                 var keyType = contract.DictionaryKeyType;
                 if (keyType.BaseType == typeof(Enum))
                 {

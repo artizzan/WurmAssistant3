@@ -39,6 +39,7 @@ using AldursLab.WurmAssistant3.Areas.Timers;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
 using AldursLab.WurmAssistant3.Areas.Triggers;
 using AldursLab.WurmAssistant3.Areas.WurmApi;
+using AldursLab.WurmAssistant3.Systems.AppUpgrades;
 using AldursLab.WurmAssistant3.Systems.ConventionBinding;
 using AldursLab.WurmAssistant3.Systems.Plugins;
 using AldursLab.WurmAssistant3.Utils;
@@ -78,6 +79,9 @@ namespace AldursLab.WurmAssistant3
                 var pluginsDir = new DirectoryInfo(Path.Combine(dataDirectory.DirectoryPath, "Plugins"));
                 var pluginManager = new PluginManager(pluginsDir);
                 kernel.Bind<PluginManager>().ToConstant(pluginManager);
+
+                VersionUpgradeManager upgradeManager = new VersionUpgradeManager(dataDirectory, consoleArgs);
+                upgradeManager.RunUpgrades();
 
                 System.Windows.Forms.Application.EnableVisualStyles();
                 Regex.CacheSize = 1000;
