@@ -2,9 +2,10 @@
 using System.Threading.Tasks;
 using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 
-namespace AldursLab.WurmAssistant3.Areas.TestArea1.Singletons
+namespace AldursLab.WurmAssistant3.Areas.TestArea1.Services
 {
-    public class SampleFeature2 : IFeature
+    [KernelHint(BindingHint.Singleton)]
+    public class SampleFeature : IFeature
     {
         public void Show()
         {
@@ -14,7 +15,7 @@ namespace AldursLab.WurmAssistant3.Areas.TestArea1.Singletons
         {
         }
 
-        public string Name { get { return "SampleFeature2"; } }
+        public string Name { get { return "SampleFeature"; } }
         public Image Icon { get; }
         public Task InitAsync()
         {

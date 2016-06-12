@@ -68,7 +68,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Singletons\SamplePluginFeature.cs" />
+    <Compile Include="Services\SamplePluginFeature.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WurmAssistant3.Areas.SamplePlugin.Contracts\WurmAssistant3.Areas.SamplePlugin.Contracts.csproj">
@@ -88,7 +88,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Transients\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Views\" />
   </ItemGroup>

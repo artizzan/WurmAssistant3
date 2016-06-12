@@ -5,13 +5,9 @@ using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Areas.TestArea1;
 using AldursLab.WurmAssistant3.Areas.TestArea1.Contracts;
 using AldursLab.WurmAssistant3.Areas.TestArea1.Contracts.Nested;
-using AldursLab.WurmAssistant3.Areas.TestArea1.CustomViews;
-using AldursLab.WurmAssistant3.Areas.TestArea1.CustomViews.Nested;
 using AldursLab.WurmAssistant3.Areas.TestArea1.OutsideConvention;
-using AldursLab.WurmAssistant3.Areas.TestArea1.Singletons;
-using AldursLab.WurmAssistant3.Areas.TestArea1.Singletons.Nested;
-using AldursLab.WurmAssistant3.Areas.TestArea1.Transients;
-using AldursLab.WurmAssistant3.Areas.TestArea1.Transients.Nested;
+using AldursLab.WurmAssistant3.Areas.TestArea1.Services;
+using AldursLab.WurmAssistant3.Areas.TestArea1.Services.Nested;
 using AldursLab.WurmAssistant3.Areas.TestArea1.ViewModels;
 using AldursLab.WurmAssistant3.Areas.TestArea1.ViewModels.Nested;
 using AldursLab.WurmAssistant3.Systems.ConventionBinding;
@@ -52,9 +48,6 @@ namespace AldursLab.WurmAssistant3.Tests.Systems.ConventionBinding
 
                 var viewmodel = kernel.Get<SampleViewModel>();
                 viewmodel.Should().NotBeNull();
-
-                var customview = kernel.Get<SampleCustomView>();
-                customview.Should().NotBeNull();
             }
             {
                 var singleton = kernel.Get<ISampleSingleton>();
@@ -65,9 +58,6 @@ namespace AldursLab.WurmAssistant3.Tests.Systems.ConventionBinding
 
                 var viewmodel = kernel.Get<ISampleViewModel>();
                 viewmodel.Should().NotBeNull();
-
-                var customview = kernel.Get<ISampleCustomView>();
-                customview.Should().NotBeNull();
             }
             {
                 var factory = kernel.Get<ISampleViewModelFactory>();
@@ -91,9 +81,6 @@ namespace AldursLab.WurmAssistant3.Tests.Systems.ConventionBinding
 
                 var viewmodel = kernel.Get<SampleNestedViewModel>();
                 viewmodel.Should().NotBeNull();
-
-                var customview = kernel.Get<SampleNestedCustomView>();
-                customview.Should().NotBeNull();
             }
             {
                 var singleton = kernel.Get<ISampleNestedSingleton>();
@@ -104,9 +91,6 @@ namespace AldursLab.WurmAssistant3.Tests.Systems.ConventionBinding
 
                 var viewmodel = kernel.Get<ISampleNestedViewModel>();
                 viewmodel.Should().NotBeNull();
-
-                var customview = kernel.Get<ISampleNestedCustomView>();
-                customview.Should().NotBeNull();
             }
             {
                 var factory = kernel.Get<ISampleNestedViewModelFactory>();

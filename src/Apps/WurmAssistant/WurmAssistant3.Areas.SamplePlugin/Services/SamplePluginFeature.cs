@@ -4,7 +4,7 @@ using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Areas.SamplePlugin.CustomViews;
 using AldursLab.WurmAssistant3.Areas.SamplePlugin.Properties;
 
-namespace AldursLab.WurmAssistant3.Areas.SamplePlugin.Singletons
+namespace AldursLab.WurmAssistant3.Areas.SamplePlugin.Services
 {
     public class SamplePluginFeature : IFeature
     {

@@ -46,13 +46,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anchor.cs" />
-    <Compile Include="ISampleCustomView.cs" />
     <Compile Include="ISampleSingleton.cs" />
     <Compile Include="ISampleTransient.cs" />
     <Compile Include="ISampleViewModelFactory.cs" />
     <Compile Include="ISampleViewModel.cs" />
     <Compile Include="Nested\ISampleNestedViewModelFactory.cs" />
-    <Compile Include="Nested\ISampleNestedCustomView.cs" />
     <Compile Include="Nested\ISampleNestedSingleton.cs" />
     <Compile Include="Nested\ISampleNestedTransient.cs" />
     <Compile Include="Nested\ISampleNestedViewModel.cs" />

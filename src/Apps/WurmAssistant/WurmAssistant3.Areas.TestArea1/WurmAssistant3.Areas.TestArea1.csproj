@@ -48,16 +48,14 @@
   <ItemGroup>
     <Compile Include="Anchor.cs" />
     <Compile Include="AreaConfiguration.cs" />
-    <Compile Include="CustomViews\Nested\SampleNestedCustomView.cs" />
-    <Compile Include="CustomViews\SampleCustomView.cs" />
     <Compile Include="OutsideConvention\SomeTypeOutsideConvention.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Singletons\SampleFeature.cs" />
-    <Compile Include="Singletons\Nested\SampleNestedSingleton.cs" />
-    <Compile Include="Singletons\SampleFeature2.cs" />
-    <Compile Include="Singletons\SampleSingleton.cs" />
-    <Compile Include="Transients\Nested\SampleNestedTransient.cs" />
-    <Compile Include="Transients\SampleTransient.cs" />
+    <Compile Include="Services\SampleFeature.cs" />
+    <Compile Include="Services\Nested\SampleNestedSingleton.cs" />
+    <Compile Include="Services\SampleFeature2.cs" />
+    <Compile Include="Services\SampleSingleton.cs" />
+    <Compile Include="Services\Nested\SampleNestedTransient.cs" />
+    <Compile Include="Services\SampleTransient.cs" />
     <Compile Include="ViewModels\Nested\SampleNestedViewModel.cs" />
     <Compile Include="ViewModels\SampleViewModel.cs" />
   </ItemGroup>
