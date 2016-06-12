@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Areas.Calendar.Contracts;
-using AldursLab.WurmAssistant3.Areas.Calendar.Singletons;
+using AldursLab.WurmAssistant3.Areas.Calendar.Services;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Calendar.Parts

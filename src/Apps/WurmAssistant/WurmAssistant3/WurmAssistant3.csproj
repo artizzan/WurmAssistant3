@@ -114,27 +114,29 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Areas\Core\Contracts\IAppManager.cs" />
     <Compile Include="Areas\Core\Contracts\IWurmAssistantDataDirectory.cs" />
-    <Compile Include="Areas\Core\Singletons\BinDirectory.cs" />
-    <Compile Include="Areas\Core\Singletons\ChangelogManager.cs" />
-    <Compile Include="Areas\Core\Singletons\WpfAppEnvironment.cs" />
+    <Compile Include="Areas\Core\Services\AppManager.cs" />
+    <Compile Include="Areas\Core\Services\BinDirectory.cs" />
+    <Compile Include="Areas\Core\Services\ChangelogManager.cs" />
+    <Compile Include="Areas\Core\Services\WpfAppEnvironment.cs" />
     <Compile Include="Areas\Core\KernelConfig.cs" />
     <Compile Include="Areas\Core\ConsoleArgs.cs" />
-    <Compile Include="Areas\Core\Singletons\DispatcherThreadMarshaller.cs" />
+    <Compile Include="Areas\Core\Services\DispatcherThreadMarshaller.cs" />
     <Compile Include="Areas\Core\MessageBus.cs" />
-    <Compile Include="Areas\Core\Singletons\ProcessStarter.cs" />
-    <Compile Include="Areas\Core\Singletons\TimerFactory.cs" />
-    <Compile Include="Areas\Core\Singletons\TrayMenu.cs" />
-    <Compile Include="Areas\Core\Singletons\UserNotifier.cs" />
-    <Compile Include="Areas\Core\Singletons\WaVersionInfoProvider.cs" />
-    <Compile Include="Areas\Core\Singletons\WaVersion.cs" />
+    <Compile Include="Areas\Core\Services\ProcessStarter.cs" />
+    <Compile Include="Areas\Core\Services\TimerFactory.cs" />
+    <Compile Include="Areas\Core\Services\TrayMenu.cs" />
+    <Compile Include="Areas\Core\Services\UserNotifier.cs" />
+    <Compile Include="Areas\Core\Services\WaVersionInfoProvider.cs" />
+    <Compile Include="Areas\Core\Services\WaVersion.cs" />
     <Compile Include="Areas\Core\Obsolete\WinFormsThreadMarshaller.cs" />
     <Compile Include="Areas\Core\WurmAssistantDataDirectory.cs" />
     <Compile Include="Areas\Core\Contracts\IConsoleArgs.cs" />
     <Compile Include="Areas\Logging\AreaConfiguration.cs" />
     <Compile Include="Areas\Persistence\AreaConfiguration.cs" />
     <Compile Include="Areas\Persistence\Components\PersistenceEnabler.cs" />
-    <Compile Include="Areas\SoundManager\Singletons\SoundManagerFeature.cs" />
+    <Compile Include="Areas\SoundManager\Services\SoundManagerFeature.cs" />
     <Compile Include="Areas\WurmApi\AreaConfiguration.cs" />
     <Compile Include="Systems\ConventionBinding\Exceptions\AreaTypesSpreadAcrossAssembliesException.cs" />
     <Compile Include="Systems\ConventionBinding\Parts\AreaHelpers.cs" />
@@ -165,16 +167,16 @@
     <Compile Include="Areas\Core\Contracts\IWaVersionInfoProvider.cs" />
     <Compile Include="Areas\Core\Contracts\IWaVersion.cs" />
     <Compile Include="Areas\Core\Parts\DispatcherTimerProxy.cs" />
-    <Compile Include="Areas\Core\Singletons\MainForm.cs">
+    <Compile Include="Areas\Core\Services\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\Core\Singletons\MainForm.Designer.cs">
+    <Compile Include="Areas\Core\Services\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Core\Transients\SendBugReportForm.cs">
+    <Compile Include="Areas\Core\Services\SendBugReportForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\Core\Transients\SendBugReportForm.Designer.cs">
+    <Compile Include="Areas\Core\Services\SendBugReportForm.Designer.cs">
       <DependentUpon>SendBugReportForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Messages\Message.cs" />
@@ -183,8 +185,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Calendar\Contracts\WurmSeasonDefinition.cs" />
-    <Compile Include="Areas\Calendar\Singletons\CalendarFeature.cs" />
-    <Compile Include="Areas\Calendar\Singletons\WurmSeasonsManager.cs" />
+    <Compile Include="Areas\Calendar\Services\CalendarFeature.cs" />
+    <Compile Include="Areas\Calendar\Services\WurmSeasonsManager.cs" />
     <Compile Include="Areas\Calendar\Parts\CalendarForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -215,9 +217,9 @@
     <Compile Include="Areas\CombatAssistant\Data\Combat\KilledCounts.cs" />
     <Compile Include="Areas\CombatAssistant\Data\Combat\Parry.cs" />
     <Compile Include="Areas\CombatAssistant\Data\Combat\TargetPreference.cs" />
-    <Compile Include="Areas\CombatAssistant\Singletons\CombatAssistantFeature.cs" />
+    <Compile Include="Areas\CombatAssistant\Services\CombatAssistantFeature.cs" />
     <Compile Include="Areas\CombatAssistant\Parts\CombatResultsProcessor.cs" />
-    <Compile Include="Areas\CombatAssistant\Singletons\FeatureSettings.cs" />
+    <Compile Include="Areas\CombatAssistant\Services\FeatureSettings.cs" />
     <Compile Include="Areas\CombatAssistant\Parts\LiveLogsEventsMonitor.cs" />
     <Compile Include="Areas\CombatAssistant\Parts\LogSearchEventsParser.cs" />
     <Compile Include="Areas\CombatAssistant\Parts\CombatActorViewModel.cs" />
@@ -244,25 +246,25 @@
     <Compile Include="Areas\Config\Contracts\ISettingsEditViewFactory.cs" />
     <Compile Include="Areas\Config\Contracts\IWurmAssistantConfig.cs" />
     <Compile Include="Areas\Config\Contracts\ServerInformation.cs" />
-    <Compile Include="Areas\Config\Singletons\ServerInfoManager.cs" />
+    <Compile Include="Areas\Config\Services\ServerInfoManager.cs" />
     <Compile Include="Utils\VisualCppRedistDetector.cs" />
-    <Compile Include="Areas\Config\Singletons\WurmAssistantConfig.cs" />
+    <Compile Include="Areas\Config\Services\WurmAssistantConfig.cs" />
     <Compile Include="Areas\WurmApi\Parts\WurmApiSetupForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Areas\WurmApi\Parts\WurmApiSetupForm.Designer.cs">
       <DependentUpon>WurmApiSetupForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Config\Transients\ServersEditorForm.cs">
+    <Compile Include="Areas\Config\Services\ServersEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\Config\Transients\ServersEditorForm.Designer.cs">
+    <Compile Include="Areas\Config\Services\ServersEditorForm.Designer.cs">
       <DependentUpon>ServersEditorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Config\Transients\SettingsEditForm.cs">
+    <Compile Include="Areas\Config\Services\SettingsEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\Config\Transients\SettingsEditForm.Designer.cs">
+    <Compile Include="Areas\Config\Services\SettingsEditForm.Designer.cs">
       <DependentUpon>SettingsEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\VisualCppMissingHelperView.cs">
@@ -271,11 +273,11 @@
     <Compile Include="Utils\VisualCppMissingHelperView.Designer.cs">
       <DependentUpon>VisualCppMissingHelperView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\CraftingAssistant\Singletons\CraftingAssistantFeature.cs" />
-    <Compile Include="Areas\CraftingAssistant\Singletons\CraftingAssistantForm.cs">
+    <Compile Include="Areas\CraftingAssistant\Services\CraftingAssistantFeature.cs" />
+    <Compile Include="Areas\CraftingAssistant\Services\CraftingAssistantForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\CraftingAssistant\Singletons\CraftingAssistantForm.Designer.cs">
+    <Compile Include="Areas\CraftingAssistant\Services\CraftingAssistantForm.Designer.cs">
       <DependentUpon>CraftingAssistantForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\CraftingAssistant\Parts\Widget.cs">
@@ -285,26 +287,25 @@
       <DependentUpon>Widget.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Features\Contracts\IFeaturesManager.cs" />
-    <Compile Include="Areas\Features\Singletons\FeaturesManager.cs" />
-    <Compile Include="Areas\Granger\GrangerSetup.cs" />
+    <Compile Include="Areas\Features\Services\FeaturesManager.cs" />
     <Compile Include="Areas\Granger\Parts\Advisor\BreedingAdvisor.cs" />
     <Compile Include="Areas\Granger\Parts\Advisor\BreedingEvaluator.cs" />
     <Compile Include="Areas\Granger\Parts\Advisor\Default\ColorWeight.cs" />
     <Compile Include="Areas\Granger\Parts\Advisor\Default\DefaultBreedingEvaluator.cs" />
-    <Compile Include="Areas\Granger\Singletons\DefaultBreedingEvaluatorOptions.cs" />
+    <Compile Include="Areas\Granger\Services\DefaultBreedingEvaluatorOptions.cs" />
     <Compile Include="Areas\Granger\Parts\Advisor\Disabled\DisabledBreedingEvaluator.cs" />
     <Compile Include="Areas\Granger\Parts\Creature.cs" />
     <Compile Include="Areas\Granger\Parts\CreatureEdit\CreatureViewEditOpType.cs" />
     <Compile Include="Areas\Granger\Parts\CreatureTrait.cs" />
     <Compile Include="Areas\Granger\Parts\DataLayer\CreatureEntity.cs" />
     <Compile Include="Areas\Granger\Parts\DataLayer\GrangerContext.cs" />
-    <Compile Include="Areas\Granger\Singletons\GrangerSimpleDb.cs" />
+    <Compile Include="Areas\Granger\Services\GrangerSimpleDb.cs" />
     <Compile Include="Areas\Granger\Parts\DataLayer\HerdEntity.cs" />
     <Compile Include="Areas\Granger\Parts\DataLayer\TraitValueEntity.cs" />
     <Compile Include="Areas\Granger\Parts\Enums.cs" />
     <Compile Include="Areas\Granger\Parts\Exceptions.cs" />
-    <Compile Include="Areas\Granger\Singletons\GrangerFeature.cs" />
-    <Compile Include="Areas\Granger\Singletons\GrangerSettings.cs" />
+    <Compile Include="Areas\Granger\Services\GrangerFeature.cs" />
+    <Compile Include="Areas\Granger\Services\GrangerSettings.cs" />
     <Compile Include="Areas\Granger\Parts\ImportExport\Legacy\HerdExporter.cs" />
     <Compile Include="Areas\Granger\Parts\ImportExport\Legacy\HerdImporter.cs" />
     <Compile Include="Areas\Granger\Parts\LogFeedManager\AhSkillInfo.cs" />
@@ -429,15 +430,15 @@
     <Compile Include="Areas\Logging\Modules\Logger.cs" />
     <Compile Include="Areas\Logging\Modules\LoggerStub.cs" />
     <Compile Include="Areas\Logging\Modules\LoggingConfig.cs" />
-    <Compile Include="Areas\Logging\Singletons\LoggingManager.cs" />
-    <Compile Include="Areas\Logging\Transients\CombinedLogsUserControl.cs">
+    <Compile Include="Areas\Logging\Services\LoggingManager.cs" />
+    <Compile Include="Areas\Logging\Services\CombinedLogsUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Areas\Logging\Transients\CombinedLogsUserControl.Designer.cs">
+    <Compile Include="Areas\Logging\Services\CombinedLogsUserControl.Designer.cs">
       <DependentUpon>CombinedLogsUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\LogSearcher\Contracts\SearchParams.cs" />
-    <Compile Include="Areas\LogSearcher\Singletons\LogSearchFeature.cs" />
+    <Compile Include="Areas\LogSearcher\Services\LogSearchFeature.cs" />
     <Compile Include="Areas\LogSearcher\Parts\LogSearchForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -446,13 +447,13 @@
     </Compile>
     <Compile Include="Areas\LogSearcher\Parts\SearchTypeId.cs" />
     <Compile Include="Areas\LogSearcher\Parts\SingleSearchMatch.cs" />
-    <Compile Include="Areas\MainMenu\Singletons\MainMenuUserControl.cs">
+    <Compile Include="Areas\MainMenu\Services\MainMenuUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Areas\MainMenu\Singletons\MainMenuUserControl.Designer.cs">
+    <Compile Include="Areas\MainMenu\Services\MainMenuUserControl.Designer.cs">
       <DependentUpon>MainMenuUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Native\Singletons\Win32NativeCalls.cs" />
+    <Compile Include="Areas\Native\Services\Win32NativeCalls.cs" />
     <Compile Include="Areas\Persistence\Components\JsonExtendedErrorHandlingStrategy.cs" />
     <Compile Include="Areas\Persistence\Components\PersistentObjectResolver.cs" />
     <Compile Include="Areas\Persistence\Contracts\IPersistentObjectResolver.cs" />
@@ -465,7 +466,7 @@
     <Compile Include="Areas\RevealCreatures\Data\Direction.cs" />
     <Compile Include="Areas\RevealCreatures\Data\Distance.cs" />
     <Compile Include="Areas\RevealCreatures\Data\FindResult.cs" />
-    <Compile Include="Areas\RevealCreatures\Singletons\RevealCreaturesFeature.cs" />
+    <Compile Include="Areas\RevealCreatures\Services\RevealCreaturesFeature.cs" />
     <Compile Include="Areas\RevealCreatures\Parts\RevealCreaturesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -474,7 +475,7 @@
     </Compile>
     <Compile Include="Areas\SkillStats\Data\QueryParams.cs" />
     <Compile Include="Areas\SkillStats\Data\SkillReportItem.cs" />
-    <Compile Include="Areas\SkillStats\Singletons\SkillStatsFeature.cs" />
+    <Compile Include="Areas\SkillStats\Services\SkillStatsFeature.cs" />
     <Compile Include="Areas\SkillStats\Parts\LiveSessionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -508,13 +509,13 @@
     <Compile Include="Areas\SoundManager\Parts\BuiltIn\DefaultSound.cs" />
     <Compile Include="Areas\SoundManager\Parts\BuiltIn\DefaultSoundEngine.cs" />
     <Compile Include="Areas\SoundManager\Parts\Irrklang\IrrklangSound.cs" />
-    <Compile Include="Areas\SoundManager\Singletons\IrrklangSoundEngineProxy.cs" />
+    <Compile Include="Areas\SoundManager\Services\IrrklangSoundEngineProxy.cs" />
     <Compile Include="Areas\SoundManager\Parts\PlayingSoundHandle.cs" />
     <Compile Include="Areas\SoundManager\Parts\PlayingSoundHandleNullObject.cs" />
-    <Compile Include="Areas\SoundManager\Singletons\SoundManager.cs" />
+    <Compile Include="Areas\SoundManager\Services\SoundManager.cs" />
     <Compile Include="Areas\SoundManager\Parts\SoundResource.cs" />
     <Compile Include="Areas\SoundManager\Parts\SoundResourceNullObject.cs" />
-    <Compile Include="Areas\SoundManager\Singletons\SoundsLibrary.cs" />
+    <Compile Include="Areas\SoundManager\Services\SoundsLibrary.cs" />
     <Compile Include="Areas\SoundManager\Parts\Stub\StubSound.cs" />
     <Compile Include="Areas\SoundManager\Parts\Stub\StubSoundEngine.cs" />
     <Compile Include="Areas\SoundManager\Parts\ChooseSoundForm.cs">
@@ -539,20 +540,20 @@
     <Compile Include="Areas\Timers\Contracts\TimerDefinition.cs" />
     <Compile Include="Areas\Timers\Parts\CustomTimerDefinition.cs" />
     <Compile Include="Areas\Timers\Parts\PlayerTimersGroup.cs" />
-    <Compile Include="Areas\Timers\Singletons\TimerDefinitions.cs" />
-    <Compile Include="Areas\Timers\Singletons\TimerInstances.cs" />
-    <Compile Include="Areas\Timers\Singletons\TimersFeature.cs" />
-    <Compile Include="Areas\Timers\Transients\Timers\Alignment\AlignmentTimer.cs" />
+    <Compile Include="Areas\Timers\Services\TimerDefinitions.cs" />
+    <Compile Include="Areas\Timers\Services\TimerInstances.cs" />
+    <Compile Include="Areas\Timers\Services\TimersFeature.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\Alignment\AlignmentTimer.cs" />
     <Compile Include="Areas\Timers\Parts\Timers\CooldownHandler.cs" />
-    <Compile Include="Areas\Timers\Transients\Timers\Custom\CustomTimer.cs" />
-    <Compile Include="Areas\Timers\Transients\Timers\JunkSale\JunkSaleTimer.cs" />
-    <Compile Include="Areas\Timers\Transients\Timers\Meditation\MeditationTimer.cs" />
-    <Compile Include="Areas\Timers\Transients\Timers\MeditPath\MeditPathTimer.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\Custom\CustomTimer.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\JunkSale\JunkSaleTimer.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\Meditation\MeditationTimer.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\MeditPath\MeditPathTimer.cs" />
     <Compile Include="Areas\Timers\Parts\Timers\NotifyHandler.cs" />
-    <Compile Include="Areas\Timers\Transients\Timers\Prayer\PrayerTimer.cs" />
-    <Compile Include="Areas\Timers\Transients\Timers\Sermon\SermonTimer.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\Prayer\PrayerTimer.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\Sermon\SermonTimer.cs" />
     <Compile Include="Areas\Timers\Parts\Timers\WurmTimer.cs" />
-    <Compile Include="Areas\Timers\Singletons\TimerTypes.cs" />
+    <Compile Include="Areas\Timers\Services\TimerTypes.cs" />
     <Compile Include="Areas\Timers\Parts\EditTimerGroups.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -646,7 +647,7 @@
     <Compile Include="Areas\TrayPopups\Contracts\ITrayPopups.cs" />
     <Compile Include="Areas\TrayPopups\Contracts\PopupMessage.cs" />
     <Compile Include="Areas\TrayPopups\Parts\PopupManager.cs" />
-    <Compile Include="Areas\TrayPopups\Singletons\TrayPopups.cs" />
+    <Compile Include="Areas\TrayPopups\Services\TrayPopups.cs" />
     <Compile Include="Areas\TrayPopups\Parts\FormPopupContainer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -663,19 +664,19 @@
     <Compile Include="Areas\Triggers\Contracts\ActionQueueParsing\IActionQueueConditions.cs" />
     <Compile Include="Areas\Triggers\Contracts\ActionQueueParsing\IActionQueueParsingCondition.cs" />
     <Compile Include="Areas\Triggers\Contracts\ActionQueueParsing\MatchingKind.cs" />
-    <Compile Include="Areas\Triggers\Transients\ActiveTriggers.cs" />
+    <Compile Include="Areas\Triggers\Services\ActiveTriggers.cs" />
     <Compile Include="Areas\Triggers\Data\TriggerData.cs" />
     <Compile Include="Areas\Triggers\Data\TriggerKind.cs" />
     <Compile Include="Areas\Triggers\Parts\ActionQueueParsing\Condition.cs" />
-    <Compile Include="Areas\Triggers\Singletons\ConditionsManager.cs" />
+    <Compile Include="Areas\Triggers\Services\ConditionsManager.cs" />
     <Compile Include="Areas\Triggers\Parts\Notifiers\INotifier.cs" />
     <Compile Include="Areas\Triggers\Parts\Notifiers\NotifierAbstract.cs" />
     <Compile Include="Areas\Triggers\Parts\Notifiers\NotifierBase.cs" />
     <Compile Include="Areas\Triggers\Parts\Notifiers\NotifierException.cs" />
     <Compile Include="Areas\Triggers\Parts\Notifiers\PopupNotifier.cs" />
     <Compile Include="Areas\Triggers\Parts\Notifiers\SoundNotifier.cs" />
-    <Compile Include="Areas\Triggers\Transients\TriggerManager.cs" />
-    <Compile Include="Areas\Triggers\Singletons\TriggersFeature.cs" />
+    <Compile Include="Areas\Triggers\Services\TriggerManager.cs" />
+    <Compile Include="Areas\Triggers\Services\TriggersFeature.cs" />
     <Compile Include="Areas\Triggers\Parts\TriggersManager\ActionQueueTrigger.cs" />
     <Compile Include="Areas\Triggers\Parts\TriggersManager\ITrigger.cs" />
     <Compile Include="Areas\Triggers\Parts\TriggersManager\RegexTrigger.cs" />
@@ -782,7 +783,7 @@
       <DependentUpon>UcPlayerTriggersController.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\WurmApi\Contracts\IWurmClientValidator.cs" />
-    <Compile Include="Areas\WurmApi\Singletons\WurmClientValidator.cs" />
+    <Compile Include="Areas\WurmApi\Services\WurmClientValidator.cs" />
     <Compile Include="Areas\WurmApi\Parts\WurmInstallDirectoryOverride.cs" />
     <Compile Include="Areas\WurmApi\Parts\ValidationResultForm.cs">
       <SubType>Form</SubType>
@@ -794,7 +795,7 @@
     <Compile Include="Areas\Core\Contracts\ISuperFactory.cs" />
     <Compile Include="Utils\IoC\KernelExtensions.cs" />
     <Compile Include="Utils\IoC\PreInitializeActionsStrategy.cs" />
-    <Compile Include="Areas\Core\Singletons\SuperFactory.cs" />
+    <Compile Include="Areas\Core\Services\SuperFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -829,16 +830,16 @@
     <EmbeddedResource Include="Areas\WurmApi\Parts\WurmApiSetupForm.resx">
       <DependentUpon>WurmApiSetupForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Config\Transients\ServersEditorForm.resx">
+    <EmbeddedResource Include="Areas\Config\Services\ServersEditorForm.resx">
       <DependentUpon>ServersEditorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Config\Transients\SettingsEditForm.resx">
+    <EmbeddedResource Include="Areas\Config\Services\SettingsEditForm.resx">
       <DependentUpon>SettingsEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Utils\VisualCppMissingHelperView.resx">
       <DependentUpon>VisualCppMissingHelperView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\CraftingAssistant\Singletons\CraftingAssistantForm.resx">
+    <EmbeddedResource Include="Areas\CraftingAssistant\Services\CraftingAssistantForm.resx">
       <DependentUpon>CraftingAssistantForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\CraftingAssistant\Parts\Widget.resx">
@@ -895,13 +896,13 @@
     <EmbeddedResource Include="Areas\Granger\Parts\ValuePreset\UCGrangerTraitValueEdit.resx">
       <DependentUpon>UCGrangerTraitValueEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Logging\Transients\CombinedLogsUserControl.resx">
+    <EmbeddedResource Include="Areas\Logging\Services\CombinedLogsUserControl.resx">
       <DependentUpon>CombinedLogsUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\LogSearcher\Parts\LogSearchForm.resx">
       <DependentUpon>LogSearchForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\MainMenu\Singletons\MainMenuUserControl.resx">
+    <EmbeddedResource Include="Areas\MainMenu\Services\MainMenuUserControl.resx">
       <DependentUpon>MainMenuUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Persistence\Views\DeserializationErrorResolverForm.resx">
@@ -1034,10 +1035,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Core\Singletons\MainForm.resx">
+    <EmbeddedResource Include="Areas\Core\Services\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Core\Transients\SendBugReportForm.resx">
+    <EmbeddedResource Include="Areas\Core\Services\SendBugReportForm.resx">
       <DependentUpon>SendBugReportForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
@@ -1155,6 +1156,7 @@
     <Folder Include="Areas\Granger\Contracts\" />
     <Folder Include="Areas\MainMenu\Contracts\" />
     <Folder Include="Areas\Native\Contracts\" />
+    <Folder Include="Areas\Persistence\Services\" />
     <Folder Include="Areas\RevealCreatures\Contracts\" />
     <Folder Include="Messages\Events\" />
     <Folder Include="Messages\Requests\" />

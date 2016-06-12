@@ -1,4 +1,4 @@
-using AldursLab.WurmAssistant3.Areas.Config.Transients;
+using AldursLab.WurmAssistant3.Areas.Config.Services;
 
 namespace AldursLab.WurmAssistant3.Areas.Config.Contracts
 {

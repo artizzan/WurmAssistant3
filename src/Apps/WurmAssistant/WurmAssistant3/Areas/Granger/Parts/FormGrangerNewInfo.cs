@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant3.Areas.Granger.Singletons;
+using AldursLab.WurmAssistant3.Areas.Granger.Services;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.Parts
 {

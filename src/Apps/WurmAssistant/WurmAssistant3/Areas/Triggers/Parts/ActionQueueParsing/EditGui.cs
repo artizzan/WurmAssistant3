@@ -7,7 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using AldursLab.Essentials.Csv;
 using AldursLab.WurmAssistant3.Areas.Triggers.Contracts.ActionQueueParsing;
-using AldursLab.WurmAssistant3.Areas.Triggers.Singletons;
+using AldursLab.WurmAssistant3.Areas.Triggers.Services;
 using AldursLab.WurmAssistant3.Properties;
 using AldursLab.WurmAssistant3.Utils.WinForms.Reusables;
 using JetBrains.Annotations;

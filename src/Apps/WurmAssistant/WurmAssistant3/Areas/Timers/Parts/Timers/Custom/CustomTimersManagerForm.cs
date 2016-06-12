@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Timers.Contracts;
-using AldursLab.WurmAssistant3.Areas.Timers.Singletons;
+using AldursLab.WurmAssistant3.Areas.Timers.Services;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 

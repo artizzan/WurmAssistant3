@@ -2,7 +2,7 @@
 using AldursLab.WurmAssistant3.Areas.Granger.Parts.Advisor.Default;
 using AldursLab.WurmAssistant3.Areas.Granger.Parts.Advisor.Disabled;
 using AldursLab.WurmAssistant3.Areas.Granger.Parts.DataLayer;
-using AldursLab.WurmAssistant3.Areas.Granger.Singletons;
+using AldursLab.WurmAssistant3.Areas.Granger.Services;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using JetBrains.Annotations;
 

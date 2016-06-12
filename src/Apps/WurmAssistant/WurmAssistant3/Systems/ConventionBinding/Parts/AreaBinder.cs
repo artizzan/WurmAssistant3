@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Systems.ConventionBinding.Exceptions;
 using JetBrains.Annotations;
@@ -38,32 +39,16 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts
 
         public void BindByConvention()
         {
-            var singletons = AreaTypesManager.GetAllSingletons();
-            foreach (var singleton in singletons)
+            var services = AreaTypesManager.GetAllServices();
+            foreach (var service in services)
             {
-                var services = GetAllImplementedServices(singleton);
-                kernel.Bind(services.ToArray()).To(singleton).InSingletonScope();
-            }
-
-            var transients = AreaTypesManager.GetAllTransients();
-            foreach (var transient in transients)
-            {
-                var services = GetAllImplementedServices(transient);
-                kernel.Bind(services.ToArray()).To(transient).InTransientScope();
+                BindContracts(service);
             }
 
             var viewModels = AreaTypesManager.GetAllViewModels();
             foreach (var viewModel in viewModels)
             {
-                var services = GetAllImplementedServices(viewModel);
-                kernel.Bind(services.ToArray()).To(viewModel).InTransientScope();
-            }
-
-            var customViews = AreaTypesManager.GetAllCustomViews();
-            foreach (var customView in customViews)
-            {
-                var services = GetAllImplementedServices(customView);
-                kernel.Bind(services.ToArray()).To(customView).InTransientScope();
+                BindContracts(viewModel);
             }
 
             var autoFactories = AreaTypesManager.GetAllAutoFactories();
@@ -75,6 +60,31 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts
                         $"Type {autoFactory.FullName} must be an interface in order to be properly proxied into an automatic Ninject factory.");
                 }
                 kernel.Bind(autoFactory).ToFactory(autoFactory);
+            }
+        }
+
+        void BindContracts(Type service)
+        {
+            var contracts = GetAllImplementedServices(service);
+            var kernelHint = TryGetKernelHint(service);
+            if (kernelHint != null)
+            {
+                if (kernelHint.BindingHint == BindingHint.Singleton)
+                {
+                    kernel.Bind(contracts.ToArray()).To(service).InSingletonScope();
+                }
+                else if (kernelHint.BindingHint == BindingHint.DoNotBind)
+                {
+                    // do nothing
+                }
+                else
+                {
+                    kernel.Bind(contracts.ToArray()).To(service);
+                }
+            }
+            else
+            {
+                kernel.Bind(contracts.ToArray()).To(service);
             }
         }
             
@@ -93,6 +103,11 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts
             }
 
             return services;
+        }
+
+        KernelHintAttribute TryGetKernelHint(Type type)
+        {
+            return (KernelHintAttribute)type.GetCustomAttribute(typeof(KernelHintAttribute));
         }
 
         public void RunCustomConfigIfDefined()

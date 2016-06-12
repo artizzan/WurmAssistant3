@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AldursLab.WurmAssistant3.Areas.Granger.Singletons;
+using AldursLab.WurmAssistant3.Areas.Granger.Services;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.Parts.DataLayer

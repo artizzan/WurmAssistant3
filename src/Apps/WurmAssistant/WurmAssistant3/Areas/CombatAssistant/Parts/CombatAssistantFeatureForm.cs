@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Areas.CombatAssistant.Singletons;
+using AldursLab.WurmAssistant3.Areas.CombatAssistant.Services;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Utils.WinForms;

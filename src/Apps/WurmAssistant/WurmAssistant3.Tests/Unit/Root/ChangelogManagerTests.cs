@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AldursLab.Testing;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
-using AldursLab.WurmAssistant3.Areas.Core.Singletons;
+using AldursLab.WurmAssistant3.Areas.Core.Services;
 using NUnit.Framework;
 using Telerik.JustMock;
 using Telerik.JustMock.AutoMock;

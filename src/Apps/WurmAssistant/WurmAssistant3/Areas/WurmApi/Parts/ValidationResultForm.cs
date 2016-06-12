@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant3.Areas.WurmApi.Singletons;
+using AldursLab.WurmAssistant3.Areas.WurmApi.Services;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.WurmApi.Parts

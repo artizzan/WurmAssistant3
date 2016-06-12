@@ -5,7 +5,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Areas.Granger.Parts.DataLayer;
-using AldursLab.WurmAssistant3.Areas.Granger.Singletons;
+using AldursLab.WurmAssistant3.Areas.Granger.Services;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.TrayPopups.Contracts;
 using JetBrains.Annotations;

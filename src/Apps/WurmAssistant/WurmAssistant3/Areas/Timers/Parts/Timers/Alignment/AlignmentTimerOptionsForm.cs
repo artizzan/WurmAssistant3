@@ -1,5 +1,5 @@
 ﻿using System;
-using AldursLab.WurmAssistant3.Areas.Timers.Transients.Timers.Alignment;
+using AldursLab.WurmAssistant3.Areas.Timers.Services.Timers.Alignment;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Parts.Timers.Alignment

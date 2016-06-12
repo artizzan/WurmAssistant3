@@ -50,6 +50,7 @@
     <Compile Include="Areas\Native\Contracts\INativeCalls.cs" />
     <Compile Include="Areas\Native\Contracts\ShowWindowCommands.cs" />
     <Compile Include="Areas\Native\Contracts\Win32Hooks.cs" />
+    <Compile Include="KernelHintAttribute.cs" />
     <Compile Include="IAreaConfiguration.cs" />
     <Compile Include="NinjectFactoryAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

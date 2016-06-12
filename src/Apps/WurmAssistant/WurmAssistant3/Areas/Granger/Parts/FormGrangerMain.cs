@@ -6,7 +6,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Granger.Parts.Advisor;
 using AldursLab.WurmAssistant3.Areas.Granger.Parts.DataLayer;
 using AldursLab.WurmAssistant3.Areas.Granger.Parts.ValuePreset;
-using AldursLab.WurmAssistant3.Areas.Granger.Singletons;
+using AldursLab.WurmAssistant3.Areas.Granger.Services;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;

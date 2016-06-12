@@ -1,6 +1,6 @@
 ﻿using System;
 using AldursLab.Essentials.Extensions.DotNet;
-using AldursLab.WurmAssistant3.Areas.Timers.Transients.Timers.Meditation;
+using AldursLab.WurmAssistant3.Areas.Timers.Services.Timers.Meditation;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Parts.Timers.Meditation

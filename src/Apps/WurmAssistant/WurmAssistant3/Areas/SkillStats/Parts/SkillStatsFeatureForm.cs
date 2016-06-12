@@ -8,7 +8,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters.Skills;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.SkillStats.Data;
-using AldursLab.WurmAssistant3.Areas.SkillStats.Singletons;
+using AldursLab.WurmAssistant3.Areas.SkillStats.Services;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.SkillStats.Parts

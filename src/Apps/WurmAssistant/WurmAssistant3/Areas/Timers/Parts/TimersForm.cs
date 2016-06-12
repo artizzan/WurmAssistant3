@@ -7,7 +7,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Timers.Parts.Timers;
 using AldursLab.WurmAssistant3.Areas.Timers.Parts.Timers.Custom;
-using AldursLab.WurmAssistant3.Areas.Timers.Singletons;
+using AldursLab.WurmAssistant3.Areas.Timers.Services;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 

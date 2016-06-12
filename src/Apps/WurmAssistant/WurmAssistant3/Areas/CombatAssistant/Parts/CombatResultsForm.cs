@@ -7,7 +7,7 @@ using AldursLab.Essentials.Csv;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmAssistant3.Areas.CombatAssistant.Contracts;
 using AldursLab.WurmAssistant3.Areas.CombatAssistant.Data.Combat;
-using AldursLab.WurmAssistant3.Areas.CombatAssistant.Singletons;
+using AldursLab.WurmAssistant3.Areas.CombatAssistant.Services;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Properties;

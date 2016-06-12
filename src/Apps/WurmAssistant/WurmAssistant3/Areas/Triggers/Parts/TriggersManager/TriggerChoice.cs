@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Areas.Triggers.Data;
-using AldursLab.WurmAssistant3.Areas.Triggers.Transients;
+using AldursLab.WurmAssistant3.Areas.Triggers.Services;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.Parts.TriggersManager

@@ -9,7 +9,7 @@ using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Areas.Timers.Contracts;
 using AldursLab.WurmAssistant3.Areas.Timers.Parts.Timers;
-using AldursLab.WurmAssistant3.Areas.Timers.Singletons;
+using AldursLab.WurmAssistant3.Areas.Timers.Services;
 using AldursLab.WurmAssistant3.Areas.TrayPopups.Contracts;
 using JetBrains.Annotations;
 using Newtonsoft.Json;

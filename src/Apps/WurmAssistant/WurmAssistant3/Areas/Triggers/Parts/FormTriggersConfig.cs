@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
 using AldursLab.WurmAssistant3.Areas.Triggers.Parts.TriggersManager;
-using AldursLab.WurmAssistant3.Areas.Triggers.Transients;
+using AldursLab.WurmAssistant3.Areas.Triggers.Services;
 using AldursLab.WurmAssistant3.Properties;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;

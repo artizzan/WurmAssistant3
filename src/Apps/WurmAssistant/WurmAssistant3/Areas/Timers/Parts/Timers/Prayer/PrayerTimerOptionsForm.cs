@@ -1,7 +1,7 @@
 ﻿using System;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
-using AldursLab.WurmAssistant3.Areas.Timers.Transients.Timers.Prayer;
+using AldursLab.WurmAssistant3.Areas.Timers.Services.Timers.Prayer;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 

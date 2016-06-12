@@ -22,10 +22,8 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts
 
         public string AreaName { get; }
 
-        public IEnumerable<Type> GetAllSingletons() { return FilterComponents("Singletons"); }
-        public IEnumerable<Type> GetAllTransients() { return FilterComponents("Transients"); }
+        public IEnumerable<Type> GetAllServices() { return FilterComponents("Services"); }
         public IEnumerable<Type> GetAllViewModels() { return FilterComponents("ViewModels"); }
-        public IEnumerable<Type> GetAllCustomViews() { return FilterComponents("CustomViews"); }
         public IEnumerable<Type> GetAllAutoFactories()
         {
             return

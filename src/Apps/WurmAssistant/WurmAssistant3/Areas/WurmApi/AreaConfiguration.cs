@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
-using AldursLab.WurmAssistant3.Areas.Config.Singletons;
+using AldursLab.WurmAssistant3.Areas.Config.Services;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.WurmApi.Parts;
-using AldursLab.WurmAssistant3.Areas.WurmApi.Singletons;
+using AldursLab.WurmAssistant3.Areas.WurmApi.Services;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.WurmApi
