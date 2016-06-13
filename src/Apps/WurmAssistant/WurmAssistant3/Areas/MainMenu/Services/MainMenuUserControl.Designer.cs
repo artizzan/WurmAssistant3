@@ -49,6 +49,7 @@
             this.videoCombatAssistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.roadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewRoadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,7 +58,8 @@
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.optionsToolStripMenuItem,
             this.helpToolStripMenuItem,
-            this.roadmapToolStripMenuItem});
+            this.roadmapToolStripMenuItem,
+            this.debugToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(278, 24);
@@ -215,9 +217,17 @@
             // viewRoadmapToolStripMenuItem
             // 
             this.viewRoadmapToolStripMenuItem.Name = "viewRoadmapToolStripMenuItem";
-            this.viewRoadmapToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.viewRoadmapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.viewRoadmapToolStripMenuItem.Text = "View roadmap";
             this.viewRoadmapToolStripMenuItem.Click += new System.EventHandler(this.viewRoadmapToolStripMenuItem_Click);
+            // 
+            // debugToolStripMenuItem
+            // 
+            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.debugToolStripMenuItem.Text = "Debug";
+            this.debugToolStripMenuItem.Visible = false;
+            this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
             // 
             // MainMenuUserControl
             // 
@@ -256,5 +266,6 @@
         private System.Windows.Forms.ToolStripMenuItem videoRevealCreaturesParserToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem videoSkillStatsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem videoCombatAssistToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
     }
 }

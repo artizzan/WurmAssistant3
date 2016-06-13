@@ -133,7 +133,13 @@
     <Compile Include="Areas\Core\Obsolete\WinFormsThreadMarshaller.cs" />
     <Compile Include="Areas\Core\Services\WurmAssistantDataDirectory.cs" />
     <Compile Include="Areas\Core\Contracts\IConsoleArgs.cs" />
+    <Compile Include="Areas\Debugging\Contracts\IDebuggingWindowFactory.cs" />
+    <Compile Include="Areas\Debugging\Services\DebuggingWindow.xaml.cs">
+      <DependentUpon>DebuggingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Features\Contracts\IFeaturesFactory.cs" />
     <Compile Include="Areas\Logging\AreaConfiguration.cs" />
+    <Compile Include="Areas\Logging\Modules\LogMessageDumpStub.cs" />
     <Compile Include="Areas\Persistence\AreaConfiguration.cs" />
     <Compile Include="Areas\Persistence\Components\PersistenceEnabler.cs" />
     <Compile Include="Areas\Persistence\Contracts\IPersistentContextProvider.cs" />
@@ -1163,6 +1169,12 @@
     <Folder Include="Areas\RevealCreatures\Contracts\" />
     <Folder Include="Messages\Events\" />
     <Folder Include="Messages\Requests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Areas\Debugging\Services\DebuggingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

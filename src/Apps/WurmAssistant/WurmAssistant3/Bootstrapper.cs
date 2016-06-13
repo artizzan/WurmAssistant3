@@ -2,54 +2,26 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
-using AldursLab.Essentials.Eventing;
-using AldursLab.Essentials.Extensions.DotNet.IO;
+using System.Windows.Threading;
 using AldursLab.Essentials.Synchronization;
-using AldursLab.PersistentObjects;
-using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Areas.Calendar;
-using AldursLab.WurmAssistant3.Areas.CombatAssistant;
-using AldursLab.WurmAssistant3.Areas.Config;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
-using AldursLab.WurmAssistant3.Areas.Core;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Core.Services;
-using AldursLab.WurmAssistant3.Areas.CraftingAssistant;
-using AldursLab.WurmAssistant3.Areas.Features;
 using AldursLab.WurmAssistant3.Areas.Features.Contracts;
-using AldursLab.WurmAssistant3.Areas.Granger;
-using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Areas.LogSearcher;
-using AldursLab.WurmAssistant3.Areas.MainMenu;
-using AldursLab.WurmAssistant3.Areas.Native;
+using AldursLab.WurmAssistant3.Areas.Logging.Modules;
 using AldursLab.WurmAssistant3.Areas.Native.Contracts;
 using AldursLab.WurmAssistant3.Areas.Native.Services;
-using AldursLab.WurmAssistant3.Areas.Persistence;
-using AldursLab.WurmAssistant3.Areas.RevealCreatures;
-using AldursLab.WurmAssistant3.Areas.SkillStats;
-using AldursLab.WurmAssistant3.Areas.SoundManager;
-using AldursLab.WurmAssistant3.Areas.Timers;
-using AldursLab.WurmAssistant3.Areas.TrayPopups;
-using AldursLab.WurmAssistant3.Areas.Triggers;
-using AldursLab.WurmAssistant3.Areas.WurmApi;
 using AldursLab.WurmAssistant3.Systems.AppUpgrades;
 using AldursLab.WurmAssistant3.Systems.ConventionBinding;
 using AldursLab.WurmAssistant3.Systems.Plugins;
 using AldursLab.WurmAssistant3.Utils;
-using AldursLab.WurmAssistant3.Utils.IoC;
 using AldursLab.WurmAssistant3.Utils.WinForms.Reusables;
 using Caliburn.Micro;
 using Ninject;
-using Ninject.Extensions.Factory;
-using Application = System.Windows.Application;
-using MessageBox = System.Windows.MessageBox;
 
 namespace AldursLab.WurmAssistant3
 {
@@ -78,6 +50,7 @@ namespace AldursLab.WurmAssistant3
 
                 var pluginsDir = new DirectoryInfo(Path.Combine(dataDirectory.DirectoryPath, "Plugins"));
                 var pluginManager = new PluginManager(pluginsDir);
+                pluginManager.EnablePlugins();
                 kernel.Bind<PluginManager>().ToConstant(pluginManager);
 
                 VersionUpgradeManager upgradeManager = new VersionUpgradeManager(dataDirectory, consoleArgs);
@@ -121,12 +94,19 @@ namespace AldursLab.WurmAssistant3
                     new [] { this.GetType().Assembly }.Concat(pluginManager.PluginAssemblies).ToArray());
                 conventionBindingManager.BindAreasByConvention();
 
+                var logger = GetLogger();
+
                 var featureManager = kernel.Get<IFeaturesManager>();
-                featureManager.InitFeatures();
+                featureManager.InitFeaturesAsync();
 
                 var mainForm = kernel.Get<MainForm>();
                 mainForm.Closed += (o, args) => ShutdownCurrentApp();
                 mainForm.Show();
+
+                foreach (var dllLoadError in pluginManager.DllLoadErrors)
+                {
+                    logger.Error(dllLoadError.Exception, "Failed to load plugin DLL: " + dllLoadError.DllFileName);
+                }
             }
             catch (LockFailedException)
             {
@@ -160,6 +140,36 @@ namespace AldursLab.WurmAssistant3
 
                 ShutdownCurrentApp();
             }
+        }
+
+        protected override void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            GetLogger().Error(e.Exception, "Something went very wrong!");
+            // Errors should not crash the application.
+            e.Handled = true;
+            base.OnUnhandledException(sender, e);
+        }
+
+        protected override void OnExit(object sender, EventArgs e)
+        {
+            base.OnExit(sender, e);
+            kernel.Dispose();
+        }
+
+        ILogger GetLogger()
+        {
+            ILogger logger;
+            try
+            {
+                logger = kernel.Get<ILogger>();
+            }
+            catch (Exception exception)
+            {
+                logger = new Logger(new LogMessageDumpStub(), this.GetType().FullName);
+                logger.Error(exception, "Unable to get ILogger from IKernel. Creating logger explicitly.");
+            }
+
+            return logger;
         }
 
         void AttemptToRestoreAlreadyRunningAppInstance()
@@ -226,7 +236,7 @@ namespace AldursLab.WurmAssistant3
             else ShutdownCurrentApp();
         }
 
-        public bool TryResetConfig()
+        bool TryResetConfig()
         {
             var settings = kernel.TryGet<IWurmAssistantConfig>();
             if (settings != null)
@@ -239,8 +249,7 @@ namespace AldursLab.WurmAssistant3
 
         void ShutdownCurrentApp()
         {
-            Application.Current.Shutdown();
-            kernel.Dispose();
+            System.Windows.Application.Current.Shutdown();
         }
 
         void RestartCurrentApp()

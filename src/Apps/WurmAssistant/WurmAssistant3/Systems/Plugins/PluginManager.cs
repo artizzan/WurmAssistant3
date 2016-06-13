@@ -15,6 +15,7 @@ namespace AldursLab.WurmAssistant3.Systems.Plugins
         readonly DirectoryInfo pluginsDirectory;
         List<PluginInfo> plugins;
         readonly List<Assembly> pluginAssemblies = new List<Assembly>();
+        readonly List<DllLoadError> dllLoadErrors = new List<DllLoadError>();
 
         public PluginManager([NotNull] DirectoryInfo pluginsRootDirectory)
         {
@@ -25,13 +26,12 @@ namespace AldursLab.WurmAssistant3.Systems.Plugins
             {
                 pluginsDirectory.Create();
             }
-
-            EnablePlugins();
         }
 
-        public List<Assembly> PluginAssemblies => pluginAssemblies;
+        public IEnumerable<Assembly> PluginAssemblies => pluginAssemblies;
+        public IEnumerable<DllLoadError> DllLoadErrors => dllLoadErrors;
 
-        void EnablePlugins()
+        public void EnablePlugins()
         {
             LookupAllPlugins();
             EnableAlternativeAssemblyResolvers();
@@ -57,7 +57,14 @@ namespace AldursLab.WurmAssistant3.Systems.Plugins
             {
                 plugin.GetAllAssemblies().ToList().ForEach(info =>
                 {
-                    pluginAssemblies.Add(Assembly.LoadFile(info.FullName));
+                    try
+                    {
+                        pluginAssemblies.Add(Assembly.LoadFile(info.FullName));
+                    }
+                    catch (Exception exception)
+                    {
+                        dllLoadErrors.Add(new DllLoadError(exception, info.FullName));
+                    }
                 });
             }
 
@@ -83,6 +90,20 @@ namespace AldursLab.WurmAssistant3.Systems.Plugins
             }
 
             return null;
+        }
+    }
+
+    public class DllLoadError
+    {
+        public Exception Exception { get; }
+        public string DllFileName { get; }
+
+        public DllLoadError([NotNull] Exception exception, [NotNull] string dllFileName)
+        {
+            if (exception == null) throw new ArgumentNullException(nameof(exception));
+            if (dllFileName == null) throw new ArgumentNullException(nameof(dllFileName));
+            Exception = exception;
+            DllFileName = dllFileName;
         }
     }
 }

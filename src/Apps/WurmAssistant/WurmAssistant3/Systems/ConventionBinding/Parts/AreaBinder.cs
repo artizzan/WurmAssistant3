@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using Ninject;
 using Ninject.Extensions.Factory;
 using Ninject.Infrastructure.Language;
+using Ninject.Syntax;
 
 namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts
 {
@@ -65,13 +66,13 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts
 
         void BindContracts(Type service)
         {
-            var contracts = GetAllImplementedServices(service);
+            var contracts = GetAllImplementedServices(service).ToArray();
             var kernelHint = TryGetKernelHint(service);
             if (kernelHint != null)
             {
                 if (kernelHint.BindingHint == BindingHint.Singleton)
                 {
-                    kernel.Bind(contracts.ToArray()).To(service).InSingletonScope();
+                    kernel.Bind(contracts.ToArray()).To(service).InSingletonScope().Named(service.FullName);
                 }
                 else if (kernelHint.BindingHint == BindingHint.DoNotBind)
                 {
@@ -79,12 +80,12 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts
                 }
                 else
                 {
-                    kernel.Bind(contracts.ToArray()).To(service);
+                    kernel.Bind(contracts.ToArray()).To(service).Named(service.FullName);
                 }
             }
             else
             {
-                kernel.Bind(contracts.ToArray()).To(service);
+                kernel.Bind(contracts.ToArray()).To(service).Named(service.FullName);
             }
         }
             

@@ -2,6 +2,8 @@
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
+using AldursLab.WurmAssistant3.Areas.Debugging.Contracts;
+using AldursLab.WurmAssistant3.Areas.Debugging.Services;
 using AldursLab.WurmAssistant3.Properties;
 using JetBrains.Annotations;
 
@@ -14,20 +16,32 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu.Services
         readonly IProcessStarter processStarter;
         readonly IUserNotifier userNotifier;
         readonly IServersEditorViewFactory serversEditorViewFactory;
+        readonly IDebuggingWindowFactory debuggingWindowFactory;
 
-        public MainMenuUserControl([NotNull] ISettingsEditViewFactory settingsEditViewFactory,
-            [NotNull] IProcessStarter processStarter, [NotNull] IUserNotifier userNotifier,
-            [NotNull] IServersEditorViewFactory serversEditorViewFactory)
+        public MainMenuUserControl(
+            [NotNull] ISettingsEditViewFactory settingsEditViewFactory,
+            [NotNull] IProcessStarter processStarter, 
+            [NotNull] IUserNotifier userNotifier,
+            [NotNull] IServersEditorViewFactory serversEditorViewFactory,
+            [NotNull] IDebuggingWindowFactory debuggingWindowFactory)
         {
             if (settingsEditViewFactory == null) throw new ArgumentNullException("settingsEditViewFactory");
             if (processStarter == null) throw new ArgumentNullException("processStarter");
             if (userNotifier == null) throw new ArgumentNullException("userNotifier");
             if (serversEditorViewFactory == null) throw new ArgumentNullException("serversEditorViewFactory");
+            if (debuggingWindowFactory == null) throw new ArgumentNullException(nameof(debuggingWindowFactory));
             this.settingsEditViewFactory = settingsEditViewFactory;
             this.processStarter = processStarter;
             this.userNotifier = userNotifier;
             this.serversEditorViewFactory = serversEditorViewFactory;
+            this.debuggingWindowFactory = debuggingWindowFactory;
+
             InitializeComponent();
+
+            debugToolStripMenuItem.Visible = false;
+#if DEBUG
+            debugToolStripMenuItem.Visible = true;
+#endif
         }
 
         private void changeSettingsToolStripMenuItem_Click(object sender, System.EventArgs e)
@@ -53,18 +67,6 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu.Services
             processStarter.StartSafe(
                 "http://forum.wurmonline.com/index.php?/user/6302-aldur/");
         }
-
-        //private void contributorsToolStripMenuItem_Click(object sender, System.EventArgs e)
-        //{
-        //    processStarter.StartSafe(
-        //        "http://blog.aldurcraft.com/WurmAssistant/page/Contributors-and-Supporters");
-        //}
-
-        //private void donatorsToolStripMenuItem_Click(object sender, System.EventArgs e)
-        //{
-        //    processStarter.StartSafe(
-        //        "http://blog.aldurcraft.com/WurmAssistant/page/Contributors-and-Supporters");
-        //}
 
         private void viewRoadmapToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
@@ -126,6 +128,11 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu.Services
         private void videoCombatStatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             processStarter.StartSafe(Resources.CombatStatsVideoUrl);
+        }
+
+        private void debugToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            debuggingWindowFactory.CreateDebuggingWindow().Show();
         }
     }
 }
