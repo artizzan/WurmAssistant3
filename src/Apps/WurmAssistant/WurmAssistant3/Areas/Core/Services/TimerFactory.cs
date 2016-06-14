@@ -3,7 +3,7 @@ using AldursLab.WurmAssistant3.Areas.Core.Parts;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     class TimerFactory : ITimerFactory
     {
         public ITimer CreateUiThreadTimer()

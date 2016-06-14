@@ -14,7 +14,7 @@ namespace AldursLab.WurmAssistant3.Areas.TrayPopups.Services
     /// This wrapper runs NotificationWindow in another thread to minimize the likelyhood,
     /// that popup will steal user focus, however it still sometimes happens and the cause is unknown.
     /// </remarks>
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     class TrayPopups : ITrayPopups
     {
         readonly ILogger logger;

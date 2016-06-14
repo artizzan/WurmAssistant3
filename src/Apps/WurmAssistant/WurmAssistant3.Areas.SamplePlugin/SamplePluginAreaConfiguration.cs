@@ -11,9 +11,9 @@ namespace AldursLab.WurmAssistant3.Areas.SamplePlugin
     // This class is used automatically by Wurm Assistant to setup your plugin.
 
     [UsedImplicitly]
-    public class AreaConfiguration : IAreaConfiguration
+    public class SamplePluginAreaConfiguration : AreaConfig
     {
-        public void Configure(IKernel kernel)
+        public override void Configure(IKernel kernel)
         {
             // If conventions work for you, this method can be left empty.
 

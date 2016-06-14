@@ -17,7 +17,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Services.Timers.Prayer
 {
-    [PersistentObject("TimersFeature_PrayerTimer")]
+    [KernelBind, PersistentObject("TimersFeature_PrayerTimer")]
     public class PrayerTimer : WurmTimer
     {
         class PrayHistoryEntry : IComparable<PrayHistoryEntry>

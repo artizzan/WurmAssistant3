@@ -11,7 +11,7 @@ using AldursLab.WurmAssistant3.Areas.Timers.Services.Timers.Sermon;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public class TimerTypes
     {
         readonly BidirectionalMap<RuntimeTypeId, Type> map = new BidirectionalMap<RuntimeTypeId, Type>();

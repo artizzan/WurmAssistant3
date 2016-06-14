@@ -14,7 +14,7 @@ using AldursLab.WurmAssistant3.Areas.TrayPopups.Contracts;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Services.Timers.Custom
 {
-    [PersistentObject("TimersFeature_CustomTimer")]
+    [KernelBind, PersistentObject("TimersFeature_CustomTimer")]
     public class CustomTimer : WurmTimer
     {
         readonly ILogger logger;

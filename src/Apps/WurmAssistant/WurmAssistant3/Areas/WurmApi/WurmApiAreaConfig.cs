@@ -14,9 +14,9 @@ using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.WurmApi
 {
-    public class AreaConfiguration : IAreaConfiguration
+    public class WurmApiAreaConfig : AreaConfig
     {
-        public void Configure(IKernel kernel)
+        public override void Configure(IKernel kernel)
         {
             kernel.Bind<IWurmApi>().ToMethod(BuildWurmApiFactory(kernel)).InSingletonScope();
         }

@@ -1,13 +1,15 @@
 ﻿using System.Threading;
+using JetBrains.Annotations;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.TestArea1
 {
-    public class AreaConfiguration : IAreaConfiguration
+    [UsedImplicitly]
+    public class TestArea1Config : AreaConfig
     {
         public static bool HasBeenRun { get; private set; }
 
-        public void Configure(IKernel kernel)
+        public override void Configure(IKernel kernel)
         {
             HasBeenRun = true;
         }

@@ -6,7 +6,7 @@ using Caliburn.Micro;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public class BinDirectory : IBinDirectory, IHandle<string>
     {
         public BinDirectory()

@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Config.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("Config_ServerInfoManager")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("Config_ServerInfoManager")]
     public class ServerInfoManager : PersistentObjectBase
     {
         [JsonProperty]

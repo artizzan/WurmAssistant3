@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.SoundManager.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public class SoundManagerFeature : IFeature
     {
         readonly ISoundManager soundManager;

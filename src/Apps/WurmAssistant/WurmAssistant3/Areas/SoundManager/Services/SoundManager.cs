@@ -12,7 +12,7 @@ using WurmAssistantDataTransfer.Dtos;
 
 namespace AldursLab.WurmAssistant3.Areas.SoundManager.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("SoundEngine")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("SoundEngine")]
     public sealed class SoundManager : PersistentObjectBase, ISoundManager, IInitializable
     {
         readonly ISoundsLibrary soundsLibrary;

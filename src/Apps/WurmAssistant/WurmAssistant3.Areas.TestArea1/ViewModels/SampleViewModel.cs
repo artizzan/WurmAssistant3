@@ -7,6 +7,7 @@ using AldursLab.WurmAssistant3.Areas.TestArea1.Contracts;
 
 namespace AldursLab.WurmAssistant3.Areas.TestArea1.ViewModels
 {
+    [KernelBind]
     public class SampleViewModel : ISampleViewModel
     {
     }

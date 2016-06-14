@@ -11,7 +11,7 @@ using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Features.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public class FeaturesManager : IFeaturesManager
     {
         readonly IKernel kernel;

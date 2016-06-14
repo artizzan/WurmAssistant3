@@ -7,7 +7,7 @@ using AldursLab.WurmAssistant3.Areas.Debugging.Services;
 
 namespace AldursLab.WurmAssistant3.Areas.Debugging.Contracts
 {
-    [NinjectFactory]
+    [KernelBind(BindingHint.FactoryProxy)]
     public interface IDebuggingWindowFactory
     {
         DebuggingWindow CreateDebuggingWindow();

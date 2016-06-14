@@ -9,7 +9,6 @@ using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
-    [KernelHint(BindingHint.DoNotBind)]
     public class WurmAssistantDataDirectory : IWurmAssistantDataDirectory, IDisposable
     {
         readonly DirectoryInfo dataDir;

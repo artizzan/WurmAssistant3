@@ -2,7 +2,7 @@
 
 namespace AldursLab.WurmAssistant3.Areas.Config.Contracts
 {
-    [NinjectFactory]
+    [KernelBind(BindingHint.FactoryProxy)]
     public interface ISettingsEditViewFactory
     {
         SettingsEditForm CreateSettingsEditView();

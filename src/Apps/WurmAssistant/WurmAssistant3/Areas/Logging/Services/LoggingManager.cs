@@ -13,13 +13,13 @@ using LogLevel = NLog.LogLevel;
 
 namespace AldursLab.WurmAssistant3.Areas.Logging.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public sealed class LoggingManager : ILoggerFactory, IWurmApiLoggerFactory, ILogMessageSteam, ILogMessageDump, ILoggingConfig
     {
         readonly IThreadMarshaller threadMarshaller;
         readonly Logger factoryLogger;
 
-        readonly LoggingConfig loggingConfig;
+        readonly Modules.LoggingConfig loggingConfig;
         readonly ConcurrentQueue<LogMessageEventArgs> missedEvents = new ConcurrentQueue<LogMessageEventArgs>();
 
         public LoggingManager([NotNull] IThreadMarshaller threadMarshaller,
@@ -30,7 +30,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging.Services
             this.threadMarshaller = threadMarshaller;
 
             var logOutputDirFullPath = Path.Combine(wurmAssistantDataDirectory.DirectoryPath, "Logs");
-            loggingConfig = new LoggingConfig(logOutputDirFullPath);
+            loggingConfig = new Modules.LoggingConfig(logOutputDirFullPath);
 
             factoryLogger = new Logger(this, "LoggingManager");
         }

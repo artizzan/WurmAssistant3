@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Config.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("WurmAssistantConfig")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("WurmAssistantConfig")]
     public class WurmAssistantConfig : PersistentObjectBase, IWurmAssistantConfig
     {
         readonly IConsoleArgs consoleArgs;

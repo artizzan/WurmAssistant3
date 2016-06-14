@@ -1,5 +1,4 @@
 using System;
-using AldursLab.WurmAssistant3.Systems.ConventionBinding.Parts;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Exceptions
@@ -7,20 +6,20 @@ namespace AldursLab.WurmAssistant3.Systems.ConventionBinding.Exceptions
     [Serializable]
     public class InvalidAreaConfigTypeException : ConventionBindingException
     {
-        readonly AreaTypeReflectionInfo areaType;
+        readonly WaTypeInfo areaWaType;
 
-        public InvalidAreaConfigTypeException([NotNull] AreaTypeReflectionInfo areaType, Exception innerException)
+        public InvalidAreaConfigTypeException([NotNull] WaTypeInfo areaWaType, Exception innerException)
             : base(innerException)
         {
-            if (areaType == null) throw new ArgumentNullException(nameof(areaType));
-            this.areaType = areaType;
+            if (areaWaType == null) throw new ArgumentNullException(nameof(areaWaType));
+            this.areaWaType = areaWaType;
         }
 
         public override string ToString()
         {
             return
-                $"Type {areaType.Type.FullName} cannot be used as proper {nameof(IAreaConfiguration)}. "
-                + "Type should implement this interface, be public and have a parameterless constructor. " 
+                $"Type {areaWaType.Type.FullName} cannot be used as proper {nameof(AreaConfig)}. "
+                + "Type should implement this abstract class, be public and have a parameterless constructor. " 
                 + "See inner exception for details. "
                 + base.ToString();
         }

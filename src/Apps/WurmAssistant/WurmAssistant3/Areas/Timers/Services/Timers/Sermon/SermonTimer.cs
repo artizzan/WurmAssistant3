@@ -11,7 +11,7 @@ using AldursLab.WurmAssistant3.Areas.TrayPopups.Contracts;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Services.Timers.Sermon
 {
-    [PersistentObject("TimersFeature_SermonTimer")]
+    [KernelBind, PersistentObject("TimersFeature_SermonTimer")]
     public class SermonTimer : WurmTimer
     {
         private static readonly TimeSpan SermonPreacherCooldown = new TimeSpan(3, 0, 0);

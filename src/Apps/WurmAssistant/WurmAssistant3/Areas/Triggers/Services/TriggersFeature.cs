@@ -20,7 +20,7 @@ using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("TriggersFeature")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("TriggersFeature")]
     public class TriggersFeature : PersistentObjectBase, IFeature, IInitializable, IDisposable
     {
         readonly ISoundManager soundManager;

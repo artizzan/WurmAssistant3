@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Config.Services
 {
+    [KernelBind]
     public partial class SettingsEditForm : ExtendedForm
     {
         readonly IWurmAssistantConfig wurmAssistantConfig;

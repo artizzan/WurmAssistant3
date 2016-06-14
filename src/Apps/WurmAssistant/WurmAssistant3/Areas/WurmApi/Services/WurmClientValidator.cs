@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.WurmApi.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("WurmClientValidator")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("WurmClientValidator")]
     public class WurmClientValidator : PersistentObjectBase, IWurmClientValidator
     {
         readonly IWurmApi wurmApi;

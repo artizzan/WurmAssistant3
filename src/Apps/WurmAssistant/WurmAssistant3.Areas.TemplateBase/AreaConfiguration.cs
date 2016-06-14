@@ -2,9 +2,9 @@
 
 namespace AldursLab.WurmAssistant3.Areas.TemplateBase
 {
-    public class AreaConfiguration : IAreaConfiguration
+    public class AreaConfiguration : AreaConfig
     {
-        public void Configure(IKernel kernel)
+        public override void Configure(IKernel kernel)
         {
         }
     }

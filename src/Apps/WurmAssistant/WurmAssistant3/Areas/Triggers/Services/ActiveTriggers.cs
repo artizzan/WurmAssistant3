@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.Services
 {
-    [PersistentObject("TriggersFeature_ActiveTriggers")]
+    [KernelBind, PersistentObject("TriggersFeature_ActiveTriggers")]
     public class ActiveTriggers : PersistentObjectBase
     {
         readonly ISoundManager soundManager;

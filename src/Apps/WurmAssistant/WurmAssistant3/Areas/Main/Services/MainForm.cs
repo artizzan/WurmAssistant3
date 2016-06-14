@@ -15,10 +15,10 @@ using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Areas.Core.Services
+namespace AldursLab.WurmAssistant3.Areas.Main.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("MainForm")]
-    public partial class MainForm : PersistentForm
+    [KernelBind(BindingHint.Singleton)]
+    public partial class MainForm : ExtendedForm
     {
         readonly IConsoleArgs consoleArgs;
         readonly CombinedLogsUserControl combinedLogsUserControl;
@@ -28,10 +28,9 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Services
         readonly IChangelogManager changelogManager;
         readonly IUserNotifier userNotifier;
         readonly ILogger logger;
+        readonly MainDataContext dataContext;
         readonly MouseDragManager mouseDragManager;
         readonly MinimizationManager minimizationManager;
-
-        [JsonProperty] readonly Settings settings;
         
         bool persistentStateLoaded;
 
@@ -44,7 +43,8 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Services
             [NotNull] IWaVersionInfoProvider waVersionInfoProvider,
             [NotNull] IChangelogManager changelogManager,
             [NotNull] IUserNotifier userNotifier,
-            [NotNull] ILogger logger)
+            [NotNull] ILogger logger,
+            [NotNull] MainDataContext dataContext)
         {
             if (consoleArgs == null) throw new ArgumentNullException(nameof(consoleArgs));
             if (combinedLogsUserControl == null) throw new ArgumentNullException(nameof(combinedLogsUserControl));
@@ -55,6 +55,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Services
             if (changelogManager == null) throw new ArgumentNullException(nameof(changelogManager));
             if (userNotifier == null) throw new ArgumentNullException(nameof(userNotifier));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (dataContext == null) throw new ArgumentNullException(nameof(dataContext));
             this.consoleArgs = consoleArgs;
             this.combinedLogsUserControl = combinedLogsUserControl;
             this.mainMenuUserControl = mainMenuUserControl;
@@ -63,10 +64,10 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Services
             this.changelogManager = changelogManager;
             this.userNotifier = userNotifier;
             this.logger = logger;
+            this.dataContext = dataContext;
 
             InitializeComponent();
-
-            settings = new Settings();
+            
             minimizationManager = new MinimizationManager(this);
             mouseDragManager = new MouseDragManager(this);
             mouseDragManager.Hook();
@@ -117,19 +118,14 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Services
             }
         }
 
-        protected override void OnPersistentDataLoaded()
-        {
-            settings.MainForm = this;
-        }
-
         void RestoreSizeFromSaved()
         {
-            if (settings.SavedWidth != default(int) && settings.SavedHeight != default(int))
+            if (dataContext.MainWindowSettings.Width != default(int) && dataContext.MainWindowSettings.Height != default(int))
             {
                 this.Size = new Size()
                 {
-                    Height = settings.SavedHeight,
-                    Width = settings.SavedWidth
+                    Height = dataContext.MainWindowSettings.Height,
+                    Width = dataContext.MainWindowSettings.Width
                 };
             }
         }
@@ -181,40 +177,9 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Services
             {
                 if (persistentStateLoaded)
                 {
-                    settings.SavedWidth = this.Width;
-                    settings.SavedHeight = this.Height;
+                    dataContext.MainWindowSettings.Width = this.Width;
+                    dataContext.MainWindowSettings.Height = this.Height;
                 }
-            }
-        }
-
-        [JsonObject(MemberSerialization.OptIn)]
-        class Settings
-        {
-            public MainForm MainForm { get; set; }
-
-            [JsonProperty]
-            int savedWidth;
-            [JsonProperty]
-            int savedHeight;
-            [JsonProperty]
-            bool baloonTrayTooltipShown;
-
-            public int SavedWidth
-            {
-                get { return savedWidth; }
-                set { savedWidth = value; MainForm.FlagAsChanged(); }
-            }
-
-            public int SavedHeight
-            {
-                get { return savedHeight; }
-                set { savedHeight = value; MainForm.FlagAsChanged(); }
-            }
-
-            public bool BaloonTrayTooltipShown
-            {
-                get { return baloonTrayTooltipShown; }
-                set { baloonTrayTooltipShown = value; MainForm.FlagAsChanged(); }
             }
         }
 

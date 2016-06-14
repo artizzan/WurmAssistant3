@@ -11,7 +11,7 @@ using WurmAssistantDataTransfer.Dtos;
 
 namespace AldursLab.WurmAssistant3.Areas.LogSearcher.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     class LogSearchFeature : IFeature
     {
         private readonly IWurmApi wurmApi;

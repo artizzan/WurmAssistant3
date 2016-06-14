@@ -87,6 +87,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Caliburn.Micro.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -138,28 +139,23 @@
       <DependentUpon>DebuggingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Areas\Features\Contracts\IFeaturesFactory.cs" />
-    <Compile Include="Areas\Logging\AreaConfiguration.cs" />
+    <Compile Include="Areas\Logging\LoggingAreaConfig.cs" />
     <Compile Include="Areas\Logging\Modules\LogMessageDumpStub.cs" />
-    <Compile Include="Areas\Persistence\AreaConfiguration.cs" />
+    <Compile Include="Areas\Main\Model\MainWindowSettings.cs" />
+    <Compile Include="Areas\Main\Services\MainDataContext.cs" />
+    <Compile Include="Areas\Persistence\PersistenceAreaConfig.cs" />
     <Compile Include="Areas\Persistence\Components\PersistenceEnabler.cs" />
     <Compile Include="Areas\Persistence\Contracts\IPersistentContextProvider.cs" />
     <Compile Include="Areas\Persistence\Contracts\PersistentContextOptions.cs" />
     <Compile Include="Areas\Persistence\Services\PersistentContextsManager.cs" />
     <Compile Include="Areas\SoundManager\Services\SoundManagerFeature.cs" />
-    <Compile Include="Areas\WurmApi\AreaConfiguration.cs" />
+    <Compile Include="Areas\WurmApi\WurmApiAreaConfig.cs" />
     <Compile Include="Systems\AppUpgrades\VersionUpgradeManager.cs" />
-    <Compile Include="Systems\ConventionBinding\Exceptions\AreaTypesSpreadAcrossAssembliesException.cs" />
-    <Compile Include="Systems\ConventionBinding\Parts\AreaHelpers.cs" />
-    <Compile Include="Systems\ConventionBinding\Parts\AreasBinder.cs" />
-    <Compile Include="Systems\ConventionBinding\Parts\AreaBinder.cs" />
-    <Compile Include="Systems\ConventionBinding\Parts\AreaTypeLibrary.cs" />
-    <Compile Include="Systems\ConventionBinding\Parts\AreaTypeReflectionInfo.cs" />
-    <Compile Include="Systems\ConventionBinding\Parts\AreaTypesManager.cs" />
-    <Compile Include="Systems\ConventionBinding\Exceptions\ConventionBindingException.cs" />
     <Compile Include="Systems\ConventionBinding\ConventionBindingManager.cs" />
-    <Compile Include="Systems\ConventionBinding\Exceptions\DuplicatedAreaConfigurationException.cs" />
+    <Compile Include="Systems\ConventionBinding\Exceptions\ConventionBindingException.cs" />
     <Compile Include="Systems\ConventionBinding\Exceptions\InvalidAreaConfigTypeException.cs" />
-    <Compile Include="Systems\ConventionBinding\Exceptions\MislocatedAreaConfigurationException.cs" />
+    <Compile Include="Systems\ConventionBinding\Exceptions\KernelBindException.cs" />
+    <Compile Include="Systems\ConventionBinding\WaTypeInfo.cs" />
     <Compile Include="Systems\Plugins\PluginInfo.cs" />
     <Compile Include="Systems\Plugins\PluginManager.cs" />
     <Compile Include="Utils\IrrklangDependencyValidator.cs" />
@@ -177,10 +173,10 @@
     <Compile Include="Areas\Core\Contracts\IWaVersionInfoProvider.cs" />
     <Compile Include="Areas\Core\Contracts\IWaVersion.cs" />
     <Compile Include="Areas\Core\Parts\DispatcherTimerProxy.cs" />
-    <Compile Include="Areas\Core\Services\MainForm.cs">
+    <Compile Include="Areas\Main\Services\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\Core\Services\MainForm.Designer.cs">
+    <Compile Include="Areas\Main\Services\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Core\Services\SendBugReportForm.cs">
@@ -1045,7 +1041,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Core\Services\MainForm.resx">
+    <EmbeddedResource Include="Areas\Main\Services\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Core\Services\SendBugReportForm.resx">
@@ -1165,6 +1161,9 @@
     <Folder Include="Areas\CraftingAssistant\Contracts\" />
     <Folder Include="Areas\Granger\Contracts\" />
     <Folder Include="Areas\MainMenu\Contracts\" />
+    <Folder Include="Areas\Main\Contracts\" />
+    <Folder Include="Areas\Main\ViewModels\" />
+    <Folder Include="Areas\Main\Views\" />
     <Folder Include="Areas\Native\Contracts\" />
     <Folder Include="Areas\RevealCreatures\Contracts\" />
     <Folder Include="Messages\Events\" />

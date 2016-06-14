@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Services.Timers.MeditPath
 {
-    [PersistentObject("TimersFeature_MeditPathTimer")]
+    [KernelBind, PersistentObject("TimersFeature_MeditPathTimer")]
     public class MeditPathTimer : WurmTimer
     {
         enum PathSwitchKind { PathAdvance, PathBegin, PathReset }

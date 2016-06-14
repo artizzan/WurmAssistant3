@@ -17,6 +17,7 @@ namespace AldursLab.WurmAssistant3.Areas.Debugging.Services
     /// <summary>
     /// Interaction logic for DebuggingWindow.xaml
     /// </summary>
+    [KernelBind]
     public partial class DebuggingWindow : Window
     {
         public DebuggingWindow()

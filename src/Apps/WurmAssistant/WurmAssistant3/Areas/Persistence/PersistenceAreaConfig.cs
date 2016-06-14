@@ -17,9 +17,9 @@ using Ninject;
 namespace AldursLab.WurmAssistant3.Areas.Persistence
 {
     [UsedImplicitly]
-    public class AreaConfiguration : IAreaConfiguration
+    public class PersistenceAreaConfig : AreaConfig
     {
-        public void Configure(IKernel kernel)
+        public override void Configure(IKernel kernel)
         {
             // this relies on specific Area binding order, as set in Bootstrapper.
             // todo: remove once current persistence is deprecated.
@@ -49,10 +49,6 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
 
             kernel.Bind<IPersistentObjectResolver>().To<PersistentObjectResolver>().InSingletonScope();
             kernel.Bind(typeof(IPersistentObjectResolver<>)).To(typeof(PersistentObjectResolver<>)).InSingletonScope();
-
-            // this step is required, so that objects resolved after this step, can be properly populated.
-            var persistentDataManager = kernel.Get<PersistenceEnabler>();
-            persistentDataManager.SetupPersistenceActivation();
         }
     }
 }

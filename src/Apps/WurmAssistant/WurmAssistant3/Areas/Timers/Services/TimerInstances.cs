@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public class TimerInstances
     {
         readonly IPersistentObjectResolver persistentObjectResolver;

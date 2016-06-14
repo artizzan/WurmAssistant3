@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("GrangerFeature_GrangerSimpleDb")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("GrangerFeature_GrangerSimpleDb")]
     public class GrangerSimpleDb : PersistentObjectBase
     {
         public GrangerSimpleDb()

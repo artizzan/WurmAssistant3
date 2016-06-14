@@ -2,7 +2,7 @@
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public class AppManager : IAppManager
     {
         public AppManager()

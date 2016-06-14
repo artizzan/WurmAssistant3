@@ -5,7 +5,7 @@ using AldursLab.WurmApi;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     class DispatcherThreadMarshaller : IThreadMarshaller, IWurmApiEventMarshaller
     {
         void IThreadMarshaller.Marshal(Action action)

@@ -8,7 +8,7 @@ using AldursLab.Essentials.Extensions;
 
 namespace AldursLab.Persistence.Simple
 {
-    public class PersistentContext
+    public class PersistentContext : IPersistentContext
     {
         readonly ISerializer serializer;
         readonly IDataStorage dataStorage;

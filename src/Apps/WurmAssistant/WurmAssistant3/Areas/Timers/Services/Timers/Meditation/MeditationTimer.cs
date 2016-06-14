@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Services.Timers.Meditation
 {
-    [PersistentObject("TimersFeature_MeditationTimer")]
+    [KernelBind, PersistentObject("TimersFeature_MeditationTimer")]
     public class MeditationTimer : WurmTimer
     {
         class MeditHistoryEntry

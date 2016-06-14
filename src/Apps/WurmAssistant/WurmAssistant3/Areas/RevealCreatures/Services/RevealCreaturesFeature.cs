@@ -6,10 +6,11 @@ using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.RevealCreatures.Parts;
 using AldursLab.WurmAssistant3.Properties;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.RevealCreatures.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton), UsedImplicitly]
     public class RevealCreaturesFeature : IFeature
     {
         readonly IWurmApi wurmApi;

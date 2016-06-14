@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Forms;
@@ -13,8 +14,10 @@ using AldursLab.WurmAssistant3.Areas.Core.Services;
 using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Modules;
+using AldursLab.WurmAssistant3.Areas.Main.Services;
 using AldursLab.WurmAssistant3.Areas.Native.Contracts;
 using AldursLab.WurmAssistant3.Areas.Native.Services;
+using AldursLab.WurmAssistant3.Areas.Persistence.Components;
 using AldursLab.WurmAssistant3.Systems.AppUpgrades;
 using AldursLab.WurmAssistant3.Systems.ConventionBinding;
 using AldursLab.WurmAssistant3.Systems.Plugins;
@@ -41,6 +44,8 @@ namespace AldursLab.WurmAssistant3
 
             try
             {
+                kernel.Bind<IWindowManager>().To<WindowManager>().InSingletonScope();
+
                 consoleArgs = new ConsoleArgs();
                 kernel.Bind<IConsoleArgs>().ToConstant(consoleArgs);
 
@@ -81,18 +86,13 @@ namespace AldursLab.WurmAssistant3
                         }
                     });
 
-                var priorityBindingOrder = new List<string>()
-                {
-                    "Core",
-                    "Logging",
-                    "Persistence",
-                };
-
                 var conventionBindingManager = new ConventionBindingManager(
                     kernel, 
-                    priorityBindingOrder,
                     new [] { this.GetType().Assembly }.Concat(pluginManager.PluginAssemblies).ToArray());
-                conventionBindingManager.BindAreasByConvention();
+                conventionBindingManager.BindAssembliesByConvention();
+
+                var persistentDataManager = kernel.Get<PersistenceEnabler>();
+                persistentDataManager.SetupPersistenceActivation();
 
                 var logger = GetLogger();
 

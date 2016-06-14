@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AldursLab.WurmAssistant3.Areas.Features.Contracts
 {
-    [NinjectFactory]
+    [KernelBind(BindingHint.FactoryProxy)]
     public interface IFeaturesFactory
     {
         IEnumerable<IFeature> CreateFeatures();

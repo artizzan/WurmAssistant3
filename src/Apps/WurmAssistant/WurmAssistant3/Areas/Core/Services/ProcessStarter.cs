@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     class ProcessStarter : IProcessStarter
     {
         readonly ILogger logger;

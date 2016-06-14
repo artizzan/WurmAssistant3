@@ -13,7 +13,7 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Persistence.Services
 {
-    [KernelHint(BindingHint.Singleton), UsedImplicitly]
+    [KernelBind(BindingHint.Singleton), UsedImplicitly]
     class PersistentContextsManager : IPersistentContextProvider, IDisposable
     {
         const string ContextIdValidationPattern = @"^[a-z0-9\-]+$";
@@ -42,14 +42,13 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence.Services
             PerformAutoSave(saveAll:false);
         }
 
-        public PersistentContext GetPersistentContext(string contextId, PersistentContextOptions options)
+        public IPersistentContext GetPersistentContext(string contextId, PersistentContextOptions options)
         {
             if (!Validate(contextId))
             {
                 throw new InvalidOperationException($"Format of contextId is not valid. " +
                                                     $"Format must match regex \"{ContextIdValidationPattern}\" " +
-                                                    $"(lowercase letters, numbers and dashes, no whitespaces). " +
-                                                    $"It must also match IDataStore validation rules.");
+                                                    $"(lowercase letters, numbers and dashes, no whitespaces).");
             }
 
             lock (locker)
@@ -63,6 +62,11 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence.Services
                 activeContexts.Add(contextId, new PersistentContextContainer(context, options));
                 return context;
             }
+        }
+
+        public IPersistentContext GetPersistentContext(string contextId)
+        {
+            return GetPersistentContext(contextId, new PersistentContextOptions());
         }
 
         void PerformAutoSave(bool saveAll)

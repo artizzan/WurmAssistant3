@@ -8,7 +8,7 @@ using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.CraftingAssistant.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public partial class CraftingAssistantForm : ExtendedForm
     {
         readonly IWurmApi wurmApi;

@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Services.Timers.JunkSale
 {
-    [PersistentObject("TimersFeature_JunkSaleTimer")]
+    [KernelBind, PersistentObject("TimersFeature_JunkSaleTimer")]
     public class JunkSaleTimer : WurmTimer
     {
         [JsonProperty]

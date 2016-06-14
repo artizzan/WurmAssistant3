@@ -17,7 +17,7 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("GrangerFeature")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("GrangerFeature")]
     public class GrangerFeature : PersistentObjectBase, IFeature, IDisposable
     {
         readonly ILogger logger;

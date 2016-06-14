@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.MainMenu.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public partial class MainMenuUserControl : UserControl
     {
         readonly ISettingsEditViewFactory settingsEditViewFactory;

@@ -1,4 +1,4 @@
-﻿namespace AldursLab.WurmAssistant3.Areas.Core.Services
+﻿namespace AldursLab.WurmAssistant3.Areas.Main.Services
 {
     partial class MainForm
     {

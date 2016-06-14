@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("ChangelogManager")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("ChangelogManager")]
     public class ChangelogManager : PersistentObjectBase, IChangelogManager
     {
         readonly IBinDirectory binDirectory;

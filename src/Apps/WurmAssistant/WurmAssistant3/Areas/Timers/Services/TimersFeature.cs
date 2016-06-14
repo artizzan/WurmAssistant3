@@ -20,7 +20,7 @@ using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("TimersFeature")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("TimersFeature")]
     public sealed class TimersFeature : PersistentObjectBase, IFeature, IInitializable, IDisposable
     {
         readonly ILogger logger;

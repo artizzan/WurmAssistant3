@@ -3,7 +3,7 @@ using AldursLab.WurmAssistant3.Areas.SoundManager.Parts.Irrklang;
 
 namespace AldursLab.WurmAssistant3.Areas.SoundManager.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     class IrrklangSoundEngineProxy : ISoundEngine
     {
         readonly IrrKlang.ISoundEngine engine;

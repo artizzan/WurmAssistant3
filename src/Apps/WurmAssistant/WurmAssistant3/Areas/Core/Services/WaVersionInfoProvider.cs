@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     class WaVersionInfoProvider : IWaVersionInfoProvider
     {
         readonly IWurmAssistantConfig wurmAssistantConfig;

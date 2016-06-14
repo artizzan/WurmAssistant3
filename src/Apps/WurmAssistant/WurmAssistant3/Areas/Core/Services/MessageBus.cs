@@ -5,7 +5,6 @@ using Action = System.Action;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
-    [KernelHint(BindingHint.DoNotBind)]
     class MessageBus : IMessageBus
     {
         readonly IEventAggregator eventAggregator;

@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Calendar.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("Calendar_WurmSeasonsManager")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("Calendar_WurmSeasonsManager")]
     public class WurmSeasonsManager : PersistentObjectBase
     {
         List<WurmSeasonDefinition> defaultDefinitions = new List<WurmSeasonDefinition>();

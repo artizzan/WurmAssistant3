@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("ActionQueueParsing_ConditionsManager")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("ActionQueueParsing_ConditionsManager")]
     public class ConditionsManager : PersistentObjectBase, IActionQueueConditions
     {
         [JsonProperty]

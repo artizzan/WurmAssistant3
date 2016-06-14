@@ -6,12 +6,12 @@ namespace AldursLab.WurmAssistant3
     /// Use this attribute to tell Kernel, that this class 
     /// should be bound using custom binding strategy.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class)]
-    public class KernelHintAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
+    public class KernelBindAttribute : Attribute
     {
         public BindingHint BindingHint { get; }
 
-        public KernelHintAttribute(BindingHint bindingHint)
+        public KernelBindAttribute(BindingHint bindingHint = BindingHint.Transient)
         {
             BindingHint = bindingHint;
         }
@@ -19,7 +19,8 @@ namespace AldursLab.WurmAssistant3
 
     public enum BindingHint
     {
+        Transient,
         Singleton,
-        DoNotBind
+        FactoryProxy
     }
 }

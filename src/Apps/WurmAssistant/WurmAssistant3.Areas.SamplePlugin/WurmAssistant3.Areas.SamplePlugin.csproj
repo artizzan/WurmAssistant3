@@ -55,7 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AreaConfiguration.cs" />
+    <Compile Include="SamplePluginAreaConfiguration.cs" />
     <Compile Include="CustomViews\SamplePluginForm.cs">
       <SubType>Form</SubType>
     </Compile>

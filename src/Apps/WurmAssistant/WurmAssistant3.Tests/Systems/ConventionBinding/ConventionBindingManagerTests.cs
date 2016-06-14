@@ -28,12 +28,12 @@ namespace AldursLab.WurmAssistant3.Tests.Systems.ConventionBinding
         {
             kernel = new StandardKernel();
             kernel.Components.Remove<IMissingBindingResolver, SelfBindingResolver>();
-            manager = new ConventionBindingManager(kernel, new string[0], new[]
+            manager = new ConventionBindingManager(kernel, new[]
             {
                 typeof(Areas.TestArea1.Anchor).Assembly,
                 typeof(Areas.TestArea1.Contracts.Anchor).Assembly
             });
-            manager.BindAreasByConvention();
+            manager.BindAssembliesByConvention();
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace AldursLab.WurmAssistant3.Tests.Systems.ConventionBinding
         [Test]
         public void ConfigHasBeenRun()
         {
-            AreaConfiguration.HasBeenRun.Should().BeTrue();
+            Areas.TestArea1.TestArea1Config.HasBeenRun.Should().BeTrue();
         }
 
         [Test]

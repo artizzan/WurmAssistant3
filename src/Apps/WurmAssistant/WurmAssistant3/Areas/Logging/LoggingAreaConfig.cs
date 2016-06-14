@@ -10,9 +10,9 @@ using Ninject;
 namespace AldursLab.WurmAssistant3.Areas.Logging
 {
     [UsedImplicitly]
-    public class AreaConfiguration : IAreaConfiguration
+    public class LoggingAreaConfig : AreaConfig
     {
-        public void Configure(IKernel kernel)
+        public override void Configure(IKernel kernel)
         {
             kernel.Bind<ILogger>().ToMethod(context =>
             {

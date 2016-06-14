@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("GrangerFeature_GrangerSettings")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("GrangerFeature_GrangerSettings")]
     public class GrangerSettings : PersistentObjectBase
     {
         readonly ILogger logger;

@@ -7,7 +7,7 @@ using AldursLab.WurmAssistant3.Properties;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     class TrayMenu : ISystemTrayContextMenu, IDisposable
     {
         readonly NotifyIcon notifyIcon;

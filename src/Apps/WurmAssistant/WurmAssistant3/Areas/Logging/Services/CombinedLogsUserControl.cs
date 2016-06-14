@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Logging.Services
 {
+    [KernelBind]
     public partial class CombinedLogsUserControl : UserControl
     {
         readonly ILogMessageSteam logMessageSteam;

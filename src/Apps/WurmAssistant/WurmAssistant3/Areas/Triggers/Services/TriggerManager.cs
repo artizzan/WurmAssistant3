@@ -17,7 +17,7 @@ using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.Services
 {
-    [PersistentObject("TriggersFeature_TriggerManager")]
+    [KernelBind, PersistentObject("TriggersFeature_TriggerManager")]
     public class TriggerManager : PersistentObjectBase, IInitializable, IDisposable
     {
         [JsonProperty] bool muted = false;

@@ -9,7 +9,7 @@ using AldursLab.WurmAssistant3.Properties;
 
 namespace AldursLab.WurmAssistant3.Areas.SkillStats.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public class SkillStatsFeature : IFeature
     {
         readonly IWurmApi wurmApi;

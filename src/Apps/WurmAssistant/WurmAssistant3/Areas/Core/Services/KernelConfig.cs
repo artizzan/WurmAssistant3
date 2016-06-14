@@ -10,7 +10,6 @@ using Ninject.Planning.Bindings.Resolvers;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
-    [KernelHint(BindingHint.DoNotBind)]
     class KernelConfig : IKernelConfig
     {
         readonly IKernel kernel;

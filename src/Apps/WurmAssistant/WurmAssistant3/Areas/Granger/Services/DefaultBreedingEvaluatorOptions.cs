@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("GrangerFeature_DefaultBreedingEvaluatorOptions")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("GrangerFeature_DefaultBreedingEvaluatorOptions")]
     public class DefaultBreedingEvaluatorOptions : PersistentObjectBase
     {
         public DefaultBreedingEvaluatorOptions()

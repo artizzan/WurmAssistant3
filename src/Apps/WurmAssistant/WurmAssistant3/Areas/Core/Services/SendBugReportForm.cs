@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
+    [KernelBind]
     public partial class SendBugReportForm : ExtendedForm
     {
         readonly IProcessStarter processStarter;

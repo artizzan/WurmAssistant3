@@ -11,7 +11,7 @@ using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("TimersFeature_WurmTimerDescriptors")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("TimersFeature_WurmTimerDescriptors")]
     public class TimerDefinitions : PersistentObjectBase, IInitializable
     {
         [JsonProperty] 

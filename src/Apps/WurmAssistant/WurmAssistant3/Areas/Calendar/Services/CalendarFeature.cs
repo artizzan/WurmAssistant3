@@ -20,7 +20,7 @@ using ILogger = AldursLab.WurmAssistant3.Areas.Logging.Contracts.ILogger;
 
 namespace AldursLab.WurmAssistant3.Areas.Calendar.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("CalendarFeature")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("CalendarFeature")]
     public sealed class CalendarFeature : PersistentObjectBase, IFeature
     {
         readonly IWurmApi wurmApi;

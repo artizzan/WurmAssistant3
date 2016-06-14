@@ -2,7 +2,7 @@
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Contracts
 {
-    [NinjectFactory]
+    [KernelBind(BindingHint.FactoryProxy)]
     public interface ISendBugReportViewFactory
     {
         SendBugReportForm CreateSendBugReportView();

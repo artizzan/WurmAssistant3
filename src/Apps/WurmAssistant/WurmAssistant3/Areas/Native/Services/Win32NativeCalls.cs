@@ -6,7 +6,7 @@ using AldursLab.WurmAssistant3.Areas.Native.Contracts;
 
 namespace AldursLab.WurmAssistant3.Areas.Native.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     class Win32NativeCalls : INativeCalls
     {
         [DllImport("user32.dll")]

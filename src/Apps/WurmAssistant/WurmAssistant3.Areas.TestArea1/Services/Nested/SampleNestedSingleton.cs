@@ -2,7 +2,7 @@
 
 namespace AldursLab.WurmAssistant3.Areas.TestArea1.Services.Nested
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public class SampleNestedSingleton : ISampleNestedSingleton
     {
     }

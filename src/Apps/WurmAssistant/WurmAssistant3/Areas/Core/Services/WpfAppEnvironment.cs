@@ -3,7 +3,7 @@ using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     class WpfAppEnvironment : IEnvironment
     {
         public void Shutdown()

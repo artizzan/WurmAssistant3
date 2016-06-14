@@ -10,7 +10,7 @@ using AldursLab.WurmAssistant3.Properties;
 
 namespace AldursLab.WurmAssistant3.Areas.CombatAssistant.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public class CombatAssistantFeature : IFeature
     {
         readonly IWurmApi wurmApi;

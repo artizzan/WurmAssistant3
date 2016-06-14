@@ -2,7 +2,7 @@
 
 namespace AldursLab.WurmAssistant3.Areas.CombatAssistant.Services
 {
-    [KernelHint(BindingHint.Singleton), PersistentObject("CombatStatsFeature_Settings")]
+    [KernelBind(BindingHint.Singleton), PersistentObject("CombatStatsFeature_Settings")]
     public class FeatureSettings : PersistentObjectBase
     {
         byte[] combatResultViewState = new byte[0];

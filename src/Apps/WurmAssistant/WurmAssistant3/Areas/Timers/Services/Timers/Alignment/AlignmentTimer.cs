@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Timers.Services.Timers.Alignment
 {
-    [PersistentObject("TimersFeature_AlignmentTimer")]
+    [KernelBind, PersistentObject("TimersFeature_AlignmentTimer")]
     public class AlignmentTimer : WurmTimer
     {
         private static class AlignmentVerifier

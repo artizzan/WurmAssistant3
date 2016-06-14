@@ -8,7 +8,7 @@ using AldursLab.WurmAssistant3.Properties;
 
 namespace AldursLab.WurmAssistant3.Areas.CraftingAssistant.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public class CraftingAssistantFeature : IFeature
     {
         readonly IWurmApi wurmApi;

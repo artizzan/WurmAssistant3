@@ -6,7 +6,7 @@ using Ninject.Parameters;
 
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
-    [KernelHint(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton)]
     public class SuperFactory : ISuperFactory
     {
         readonly IKernel kernel;
