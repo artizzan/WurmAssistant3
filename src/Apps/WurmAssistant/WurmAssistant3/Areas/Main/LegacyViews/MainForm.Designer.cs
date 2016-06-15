@@ -1,4 +1,4 @@
-﻿namespace AldursLab.WurmAssistant3.Areas.Main.Services
+﻿namespace AldursLab.WurmAssistant3.Areas.Main.LegacyViews
 {
     partial class MainForm
     {
@@ -88,11 +88,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(606, 413);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "Window tilte is set in code";
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

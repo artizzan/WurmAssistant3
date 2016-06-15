@@ -1,9 +1,9 @@
 ﻿using System;
-using AldursLab.WurmAssistant3.Areas.Main.Model;
+using AldursLab.WurmAssistant3.Areas.Main.Data.Model;
 using AldursLab.WurmAssistant3.Areas.Persistence.Contracts;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Areas.Main.Services
+namespace AldursLab.WurmAssistant3.Areas.Main.Data
 {
     [KernelBind(BindingHint.Singleton), UsedImplicitly]
     public class MainDataContext

@@ -1,17 +1,16 @@
 ﻿using System.Runtime.Serialization;
 using Caliburn.Micro;
-using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Areas.Main.Model
+namespace AldursLab.WurmAssistant3.Areas.Main.Data.Model
 {
     [DataContract]
     public class MainWindowSettings : PropertyChangedBase
     {
-        int width = 622;
-        int height = 452;
+        double width = 622;
+        double height = 452;
 
         [DataMember]
-        public int Width
+        public double Width
         {
             get
             {
@@ -26,7 +25,7 @@ namespace AldursLab.WurmAssistant3.Areas.Main.Model
         }
 
         [DataMember]
-        public int Height
+        public double Height
         {
             get
             {

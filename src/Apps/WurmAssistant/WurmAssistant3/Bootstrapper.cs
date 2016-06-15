@@ -14,7 +14,7 @@ using AldursLab.WurmAssistant3.Areas.Core.Services;
 using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Modules;
-using AldursLab.WurmAssistant3.Areas.Main.Services;
+using AldursLab.WurmAssistant3.Areas.Main.ViewModels;
 using AldursLab.WurmAssistant3.Areas.Native.Contracts;
 using AldursLab.WurmAssistant3.Areas.Native.Services;
 using AldursLab.WurmAssistant3.Areas.Persistence.Components;
@@ -99,9 +99,11 @@ namespace AldursLab.WurmAssistant3
                 var featureManager = kernel.Get<IFeaturesManager>();
                 featureManager.InitFeaturesAsync();
 
-                var mainForm = kernel.Get<MainForm>();
-                mainForm.Closed += (o, args) => ShutdownCurrentApp();
-                mainForm.Show();
+                //var mainForm = kernel.Get<MainForm>();
+                //mainForm.Closed += (o, args) => ShutdownCurrentApp();
+                //mainForm.Show();
+
+                DisplayRootViewFor<MainViewModel>();
 
                 foreach (var dllLoadError in pluginManager.DllLoadErrors)
                 {

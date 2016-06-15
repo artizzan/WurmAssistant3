@@ -102,9 +102,11 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -141,8 +143,12 @@
     <Compile Include="Areas\Features\Contracts\IFeaturesFactory.cs" />
     <Compile Include="Areas\Logging\LoggingAreaConfig.cs" />
     <Compile Include="Areas\Logging\Modules\LogMessageDumpStub.cs" />
-    <Compile Include="Areas\Main\Model\MainWindowSettings.cs" />
-    <Compile Include="Areas\Main\Services\MainDataContext.cs" />
+    <Compile Include="Areas\Main\Data\Model\MainWindowSettings.cs" />
+    <Compile Include="Areas\Main\Data\MainDataContext.cs" />
+    <Compile Include="Areas\Main\ViewModels\MainViewModel.cs" />
+    <Compile Include="Areas\Main\Views\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Areas\Persistence\PersistenceAreaConfig.cs" />
     <Compile Include="Areas\Persistence\Components\PersistenceEnabler.cs" />
     <Compile Include="Areas\Persistence\Contracts\IPersistentContextProvider.cs" />
@@ -158,6 +164,7 @@
     <Compile Include="Systems\ConventionBinding\WaTypeInfo.cs" />
     <Compile Include="Systems\Plugins\PluginInfo.cs" />
     <Compile Include="Systems\Plugins\PluginManager.cs" />
+    <Compile Include="Utils\Extensions\IconExtensions.cs" />
     <Compile Include="Utils\IrrklangDependencyValidator.cs" />
     <Compile Include="Areas\Core\Contracts\IBinDirectory.cs" />
     <Compile Include="Areas\Core\Contracts\IChangelogManager.cs" />
@@ -173,10 +180,10 @@
     <Compile Include="Areas\Core\Contracts\IWaVersionInfoProvider.cs" />
     <Compile Include="Areas\Core\Contracts\IWaVersion.cs" />
     <Compile Include="Areas\Core\Parts\DispatcherTimerProxy.cs" />
-    <Compile Include="Areas\Main\Services\MainForm.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Areas\Main\LegacyViews\MainForm.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Areas\Main\Services\MainForm.Designer.cs">
+    <Compile Include="Areas\Main\LegacyViews\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Core\Services\SendBugReportForm.cs">
@@ -1041,7 +1048,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Main\Services\MainForm.resx">
+    <EmbeddedResource Include="Areas\Main\LegacyViews\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Core\Services\SendBugReportForm.resx">
@@ -1162,8 +1169,7 @@
     <Folder Include="Areas\Granger\Contracts\" />
     <Folder Include="Areas\MainMenu\Contracts\" />
     <Folder Include="Areas\Main\Contracts\" />
-    <Folder Include="Areas\Main\ViewModels\" />
-    <Folder Include="Areas\Main\Views\" />
+    <Folder Include="Areas\Main\Services\" />
     <Folder Include="Areas\Native\Contracts\" />
     <Folder Include="Areas\RevealCreatures\Contracts\" />
     <Folder Include="Messages\Events\" />
@@ -1171,6 +1177,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Areas\Debugging\Services\DebuggingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Areas\Main\Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
