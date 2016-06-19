@@ -119,7 +119,7 @@
     </Compile>
     <Compile Include="Areas\Core\Contracts\IAppManager.cs" />
     <Compile Include="Areas\Core\Contracts\IWurmAssistantDataDirectory.cs" />
-    <Compile Include="Areas\Core\Services\AppManager.cs" />
+    <Compile Include="Areas\Core\Services\AppMigrationsManager.cs" />
     <Compile Include="Areas\Core\Services\BinDirectory.cs" />
     <Compile Include="Areas\Core\Services\ChangelogManager.cs" />
     <Compile Include="Areas\Core\Services\WpfAppEnvironment.cs" />
@@ -143,11 +143,22 @@
     <Compile Include="Areas\Features\Contracts\IFeaturesFactory.cs" />
     <Compile Include="Areas\Logging\LoggingAreaConfig.cs" />
     <Compile Include="Areas\Logging\Modules\LogMessageDumpStub.cs" />
-    <Compile Include="Areas\Main\Data\Model\MainWindowSettings.cs" />
+    <Compile Include="Areas\Main\Contracts\INewsViewModelFactory.cs" />
+    <Compile Include="Areas\Main\Data\Model\MainWindow.cs" />
     <Compile Include="Areas\Main\Data\MainDataContext.cs" />
+    <Compile Include="Areas\Main\Data\Model\News.cs" />
+    <Compile Include="Areas\Main\Services\AppRuntimeManager.cs" />
+    <Compile Include="Areas\Main\Services\NewsServices\DirectoryNewsInstance.cs" />
+    <Compile Include="Areas\Main\Services\NewsServices\NewsInstance.cs" />
+    <Compile Include="Areas\Main\Services\NewsServices\NewsService.cs" />
+    <Compile Include="Areas\Main\Services\NewsServices\PatchReleaseNewsInstance.cs" />
     <Compile Include="Areas\Main\ViewModels\MainViewModel.cs" />
+    <Compile Include="Areas\Main\ViewModels\NewsViewModel.cs" />
     <Compile Include="Areas\Main\Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Main\Views\NewsView.xaml.cs">
+      <DependentUpon>NewsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Areas\Persistence\PersistenceAreaConfig.cs" />
     <Compile Include="Areas\Persistence\Components\PersistenceEnabler.cs" />
@@ -195,6 +206,7 @@
     <Compile Include="Messages\Message.cs" />
     <Compile Include="Utils\IoC\CustomActionsStrategyBase.cs" />
     <Compile Include="Utils\IoC\PostInitializeActionsStrategy.cs" />
+    <Compile Include="Utils\WPF\WebBrowserBehaviors.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Calendar\Contracts\WurmSeasonDefinition.cs" />
@@ -1117,9 +1129,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Releases\README.md" />
-    <Content Include="Releases\3.0\index.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\WurmAssistantUnlimitedIcon.ico" />
@@ -1127,6 +1136,12 @@
     <None Include="Resources\ActionQueueModdingHelp.txt" />
     <None Include="Resources\beer.png" />
     <None Include="Resources\2016-02-26_20h57_49.png" />
+    <Content Include="Releases\3.0\release.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Releases\3.1\release.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\close_icon.gif" />
     <None Include="Resources\combat1.png" />
     <None Include="Resources\Combat.png" />
@@ -1168,8 +1183,6 @@
     <Folder Include="Areas\CraftingAssistant\Contracts\" />
     <Folder Include="Areas\Granger\Contracts\" />
     <Folder Include="Areas\MainMenu\Contracts\" />
-    <Folder Include="Areas\Main\Contracts\" />
-    <Folder Include="Areas\Main\Services\" />
     <Folder Include="Areas\Native\Contracts\" />
     <Folder Include="Areas\RevealCreatures\Contracts\" />
     <Folder Include="Messages\Events\" />
@@ -1181,6 +1194,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Areas\Main\Views\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Areas\Main\Views\NewsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

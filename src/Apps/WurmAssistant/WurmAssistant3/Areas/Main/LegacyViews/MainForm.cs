@@ -5,6 +5,7 @@ using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Services;
+using AldursLab.WurmAssistant3.Areas.Main.Contracts;
 using AldursLab.WurmAssistant3.Areas.MainMenu.Services;
 using JetBrains.Annotations;
 
@@ -16,32 +17,23 @@ namespace AldursLab.WurmAssistant3.Areas.Main.LegacyViews
         readonly CombinedLogsUserControl combinedLogsUserControl;
         readonly MainMenuUserControl mainMenuUserControl;
         readonly IFeaturesManager featuresManager;
-        readonly IChangelogManager changelogManager;
-        readonly IUserNotifier userNotifier;
-        readonly ILogger logger;
+
 
         public MainForm(
             [NotNull] IConsoleArgs consoleArgs,
             [NotNull] CombinedLogsUserControl combinedLogsUserControl,
             [NotNull] MainMenuUserControl mainMenuUserControl,
             [NotNull] IFeaturesManager featuresManager,
-            [NotNull] IChangelogManager changelogManager,
-            [NotNull] IUserNotifier userNotifier,
-            [NotNull] ILogger logger)
+            [NotNull] INewsViewModelFactory newsViewModelFactory)
         {
             if (consoleArgs == null) throw new ArgumentNullException(nameof(consoleArgs));
             if (combinedLogsUserControl == null) throw new ArgumentNullException(nameof(combinedLogsUserControl));
             if (mainMenuUserControl == null) throw new ArgumentNullException(nameof(mainMenuUserControl));
             if (featuresManager == null) throw new ArgumentNullException(nameof(featuresManager));
-            if (changelogManager == null) throw new ArgumentNullException(nameof(changelogManager));
-            if (userNotifier == null) throw new ArgumentNullException(nameof(userNotifier));
-            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (newsViewModelFactory == null) throw new ArgumentNullException(nameof(newsViewModelFactory));
             this.combinedLogsUserControl = combinedLogsUserControl;
             this.mainMenuUserControl = mainMenuUserControl;
             this.featuresManager = featuresManager;
-            this.changelogManager = changelogManager;
-            this.userNotifier = userNotifier;
-            this.logger = logger;
 
             InitializeComponent();
         }
@@ -51,26 +43,6 @@ namespace AldursLab.WurmAssistant3.Areas.Main.LegacyViews
             SetupFeaturesManager();
             SetupLogView();
             SetupMenuView();
-
-            ShowChangelog();
-        }
-
-        void ShowChangelog()
-        {
-            try
-            {
-                var changes = changelogManager.GetNewChanges();
-                if (!string.IsNullOrWhiteSpace(changes))
-                {
-                    changelogManager.ShowChanges(changes);
-                    changelogManager.UpdateLastChangeDate();
-                }
-            }
-            catch (Exception exception)
-            {
-                logger.Warn(exception, "Error at parsing or opening changelog");
-                userNotifier.NotifyWithMessageBox("Error opening changelog, see logs for details.", NotifyKind.Warning);
-            }
         }
 
         public void SetupLogView()

@@ -50,6 +50,8 @@
             this.roadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewRoadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showNewsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,7 +64,7 @@
             this.debugToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(278, 24);
+            this.menuStrip.Size = new System.Drawing.Size(340, 24);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -96,6 +98,8 @@
             this.wikiToolStripMenuItem,
             this.pMAldurToolStripMenuItem,
             this.toolStripSeparator2,
+            this.showNewsToolStripMenuItem,
+            this.toolStripSeparator1,
             this.videoSoundManagerToolStripMenuItem,
             this.videoLogSearcherToolStripMenuItem,
             this.videoCalendarToolStripMenuItem,
@@ -217,7 +221,7 @@
             // viewRoadmapToolStripMenuItem
             // 
             this.viewRoadmapToolStripMenuItem.Name = "viewRoadmapToolStripMenuItem";
-            this.viewRoadmapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.viewRoadmapToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.viewRoadmapToolStripMenuItem.Text = "View roadmap";
             this.viewRoadmapToolStripMenuItem.Click += new System.EventHandler(this.viewRoadmapToolStripMenuItem_Click);
             // 
@@ -229,13 +233,25 @@
             this.debugToolStripMenuItem.Visible = false;
             this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
             // 
+            // showNewsToolStripMenuItem
+            // 
+            this.showNewsToolStripMenuItem.Name = "showNewsToolStripMenuItem";
+            this.showNewsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.showNewsToolStripMenuItem.Text = "Show News";
+            this.showNewsToolStripMenuItem.Click += new System.EventHandler(this.showNewsToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(229, 6);
+            // 
             // MainMenuUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.menuStrip);
             this.Name = "MainMenuUserControl";
-            this.Size = new System.Drawing.Size(278, 33);
+            this.Size = new System.Drawing.Size(340, 33);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -267,5 +283,7 @@
         private System.Windows.Forms.ToolStripMenuItem videoSkillStatsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem videoCombatAssistToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showNewsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }

@@ -16,7 +16,7 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence.Services
     [KernelBind(BindingHint.Singleton), UsedImplicitly]
     class PersistentContextsManager : IPersistentContextProvider, IDisposable
     {
-        const string ContextIdValidationPattern = @"^[a-z0-9\-]+$";
+        const string ContextIdValidationPattern = @"^[a-zA-Z0-9\-]+$";
 
         readonly IWurmAssistantDataDirectory wurmAssistantDataDirectory;
         readonly Dictionary<string, PersistentContextContainer> activeContexts = new Dictionary<string, PersistentContextContainer>();
@@ -48,8 +48,10 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence.Services
             {
                 throw new InvalidOperationException($"Format of contextId is not valid. " +
                                                     $"Format must match regex \"{ContextIdValidationPattern}\" " +
-                                                    $"(lowercase letters, numbers and dashes, no whitespaces).");
+                                                    $"(only letters, numbers and dashes, no whitespaces).");
             }
+
+            contextId = contextId.ToLowerInvariant();
 
             lock (locker)
             {

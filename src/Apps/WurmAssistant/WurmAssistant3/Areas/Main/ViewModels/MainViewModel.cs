@@ -24,7 +24,7 @@ using Screen = Caliburn.Micro.Screen;
 namespace AldursLab.WurmAssistant3.Areas.Main.ViewModels
 {
     [KernelBind(BindingHint.Singleton)]
-    public class MainViewModel : Screen
+    class MainViewModel : Screen
     {
         readonly ISystemTrayContextMenu trayMenu;
         readonly IConsoleArgs consoleArgs;
@@ -94,14 +94,14 @@ namespace AldursLab.WurmAssistant3.Areas.Main.ViewModels
 
         public double Width
         {
-            get { return DataContext.MainWindowSettings.Width; }
-            set { DataContext.MainWindowSettings.Width = value; }
+            get { return DataContext.MainWindow.Width; }
+            set { DataContext.MainWindow.Width = value; }
         }
 
         public double Height
         {
-            get { return DataContext.MainWindowSettings.Height; }
-            set { DataContext.MainWindowSettings.Height = value; }
+            get { return DataContext.MainWindow.Height; }
+            set { DataContext.MainWindow.Height = value; }
         }
 
         public Visibility Visibility

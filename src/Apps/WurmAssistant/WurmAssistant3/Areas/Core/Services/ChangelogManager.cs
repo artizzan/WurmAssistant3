@@ -29,7 +29,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Services
             changelogPath = Path.Combine(binDirectory.FullPath, "changelog-raw.txt");
         }
 
-        public DateTimeOffset LastKnownChangeDate
+        internal DateTimeOffset LastKnownChangeDate
         {
             get { return lastKnownChangeDate; }
             set { lastKnownChangeDate = value; FlagAsChanged(); }
@@ -37,7 +37,12 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Services
 
         public string GetNewChanges()
         {
-            var newChanges = GetNewChangelogEntries(changelogPath);
+            return GetChanges(LastKnownChangeDate);
+        }
+
+        public string GetChanges(DateTimeOffset sinceDate)
+        {
+            var newChanges = GetNewChangelogEntries(changelogPath, sinceDate);
             StringBuilder sb = new StringBuilder();
             if (newChanges.Any())
             {
@@ -89,7 +94,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Services
         public void UpdateLastChangeDate()
         {
             var lastChange =
-                GetNewChangelogEntries(changelogPath)
+                GetNewChangelogEntries(changelogPath, LastKnownChangeDate)
                     .OrderByDescending(change => change.Date)
                     .FirstOrDefault();
             if (lastChange != null) LastKnownChangeDate = lastChange.Date;
@@ -103,7 +108,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Services
             view.Show();
         }
 
-        ICollection<Change> GetNewChangelogEntries(string filePath)
+        ICollection<Change> GetNewChangelogEntries(string filePath, DateTimeOffset sinceDate)
         {
             List<Change> newChanges = new List<Change>();
             using (StreamReader sr = new StreamReader(filePath))
@@ -125,7 +130,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Services
                                          (sb, @string) => sb.Append("|").Append(@string))
                                      .ToString().Remove(0, 1)
                         };
-                        if (change.Date > LastKnownChangeDate)
+                        if (change.Date > sinceDate)
                         {
                             newChanges.Add(change);
                         }

@@ -13,11 +13,13 @@ namespace AldursLab.WurmAssistant3.Areas.Main.Data
             if (persistentContextProvider == null) throw new ArgumentNullException(nameof(persistentContextProvider));
             
             var context = persistentContextProvider.GetPersistentContext("main");
-            var defaultObjectSet = context.GetOrCreateObjectSet("DefaultObjectSet");
+            var defaultObjectSet = context.GetOrCreateObjectSet("default-object-set");
 
-            MainWindowSettings = defaultObjectSet.GetOrCreate<MainWindowSettings>("MainWindowSettings");
+            MainWindow = defaultObjectSet.GetOrCreate<MainWindow>("main-window");
+            News = defaultObjectSet.GetOrCreate<News>("news");
         }
 
-        public MainWindowSettings MainWindowSettings { get; }
+        public MainWindow MainWindow { get; }
+        public News News { get; }
     }
 }

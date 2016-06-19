@@ -3,9 +3,9 @@
 namespace AldursLab.WurmAssistant3.Areas.Core.Services
 {
     [KernelBind(BindingHint.Singleton)]
-    public class AppManager : IAppManager
+    public class AppMigrationsManager : IAppManager
     {
-        public AppManager()
+        public AppMigrationsManager()
         {
         }
 

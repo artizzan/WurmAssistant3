@@ -4,7 +4,7 @@ using Caliburn.Micro;
 namespace AldursLab.WurmAssistant3.Areas.Main.Data.Model
 {
     [DataContract]
-    public class MainWindowSettings : PropertyChangedBase
+    public class MainWindow : PropertyChangedBase
     {
         double width = 622;
         double height = 452;

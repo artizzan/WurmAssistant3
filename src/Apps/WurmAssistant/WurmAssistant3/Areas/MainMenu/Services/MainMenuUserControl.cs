@@ -4,6 +4,8 @@ using AldursLab.WurmAssistant3.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Debugging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Debugging.Services;
+using AldursLab.WurmAssistant3.Areas.Main.Contracts;
+using AldursLab.WurmAssistant3.Areas.Main.Services.NewsServices;
 using AldursLab.WurmAssistant3.Properties;
 using JetBrains.Annotations;
 
@@ -17,24 +19,28 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu.Services
         readonly IUserNotifier userNotifier;
         readonly IServersEditorViewFactory serversEditorViewFactory;
         readonly IDebuggingWindowFactory debuggingWindowFactory;
+        readonly INewsViewModelFactory newsViewModelFactory;
 
         public MainMenuUserControl(
             [NotNull] ISettingsEditViewFactory settingsEditViewFactory,
             [NotNull] IProcessStarter processStarter, 
             [NotNull] IUserNotifier userNotifier,
             [NotNull] IServersEditorViewFactory serversEditorViewFactory,
-            [NotNull] IDebuggingWindowFactory debuggingWindowFactory)
+            [NotNull] IDebuggingWindowFactory debuggingWindowFactory,
+            [NotNull] INewsViewModelFactory newsViewModelFactory)
         {
             if (settingsEditViewFactory == null) throw new ArgumentNullException("settingsEditViewFactory");
             if (processStarter == null) throw new ArgumentNullException("processStarter");
             if (userNotifier == null) throw new ArgumentNullException("userNotifier");
             if (serversEditorViewFactory == null) throw new ArgumentNullException("serversEditorViewFactory");
             if (debuggingWindowFactory == null) throw new ArgumentNullException(nameof(debuggingWindowFactory));
+            if (newsViewModelFactory == null) throw new ArgumentNullException(nameof(newsViewModelFactory));
             this.settingsEditViewFactory = settingsEditViewFactory;
             this.processStarter = processStarter;
             this.userNotifier = userNotifier;
             this.serversEditorViewFactory = serversEditorViewFactory;
             this.debuggingWindowFactory = debuggingWindowFactory;
+            this.newsViewModelFactory = newsViewModelFactory;
 
             InitializeComponent();
 
@@ -133,6 +139,12 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu.Services
         private void debugToolStripMenuItem_Click(object sender, EventArgs e)
         {
             debuggingWindowFactory.CreateDebuggingWindow().Show();
+        }
+
+        private void showNewsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var vm = newsViewModelFactory.CreateNewsViewModel();
+            vm.ShowForAllNews();
         }
     }
 }
