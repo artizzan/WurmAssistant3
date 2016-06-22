@@ -7,6 +7,7 @@ using AldursLab.WurmAssistant3.Areas.Core.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Main.Contracts;
 using JetBrains.Annotations;
+using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Main.Services
 {
@@ -28,6 +29,7 @@ namespace AldursLab.WurmAssistant3.Areas.Main.Services
             this.userNotifier = userNotifier;
             this.logger = logger;
             this.newsViewModelFactory = newsViewModelFactory;
+            
         }
 
         public void ExecuteAfterStartupSteps()

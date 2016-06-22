@@ -33,21 +33,13 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi
                     new WurmInstallDirectoryOverride(config.WurmGameClientInstallDirectory);
                 ServerInfoManager serverInfoManager = kernel.Get<ServerInfoManager>();
 
-                WurmApiConfig wurmApiConfig;
-                if (config.RunningPlatform != Platform.Unknown)
+                var wurmApiConfig = new WurmApiConfig
                 {
-                    wurmApiConfig = new WurmApiConfig
-                    {
-                        Platform = config.RunningPlatform,
-                        ClearAllCaches = config.DropAllWurmApiCachesToggle,
-                        WurmUnlimitedMode = config.WurmUnlimitedMode
-                    };
-                    serverInfoManager.UpdateWurmApiConfigDictionary(wurmApiConfig.ServerInfoMap);
-                }
-                else
-                {
-                    throw new InvalidOperationException("config.RunningPlatform is Unknown");
-                }
+                    Platform = Platform.Windows,
+                    ClearAllCaches = config.DropAllWurmApiCachesToggle,
+                    WurmUnlimitedMode = config.WurmUnlimitedMode
+                };
+                serverInfoManager.UpdateWurmApiConfigDictionary(wurmApiConfig.ServerInfoMap);
 
                 var wurmApiDataDir = new DirectoryInfo(Path.Combine(config.WurmGameClientInstallDirectory, "WurmApi"));
 

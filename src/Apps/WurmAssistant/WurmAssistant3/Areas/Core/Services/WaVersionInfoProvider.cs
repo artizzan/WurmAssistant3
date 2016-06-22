@@ -30,7 +30,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core.Services
             {
                 s += "unknown version";
             }
-            s += " P:" + wurmAssistantConfig.RunningPlatform;
+            s += " P:" + "Windows";
             return s;
         }
     }

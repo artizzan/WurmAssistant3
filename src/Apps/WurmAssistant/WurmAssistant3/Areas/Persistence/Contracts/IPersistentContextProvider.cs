@@ -3,7 +3,7 @@ using AldursLab.Persistence.Simple;
 
 namespace AldursLab.WurmAssistant3.Areas.Persistence.Contracts
 {
-    public  interface IPersistentContextProvider
+    public interface IPersistentContextProvider
     {
         /// <summary>
         /// </summary>

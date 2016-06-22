@@ -16,8 +16,9 @@ namespace AldursLab.WurmAssistant3.Areas.SamplePlugin
         public override void Configure(IKernel kernel)
         {
             // If conventions work for you, this method can be left empty.
+            // You don't even need this class.
 
-            // If you don't like conventions or they are too simple for your needs,
+            // But if you don't like conventions or they are too simple for your needs,
             // you can setup all your bindings here, as you see fit.
         }
     }

@@ -55,9 +55,9 @@ namespace AldursLab.WurmAssistant3.Areas.Features.Services
 
         void Init()
         {
-            // todo: temporary fix for order, remove after feature gui is improved
-            // order got broken after wiring ConventionBindingManager
-            ReorderFeatures(new[]
+            // Introducing ConventionBindingManager has affected the order.
+            // Ensure that core features are always ordered like so...
+            ReorderCoreFeatures(new[]
             {
                 "Sounds Manager",
                 "Log Searcher",
@@ -113,7 +113,7 @@ namespace AldursLab.WurmAssistant3.Areas.Features.Services
             }
         }
 
-        void ReorderFeatures(string[] orderedFeatureNames)
+        void ReorderCoreFeatures(string[] orderedFeatureNames)
         {
             var otherFeatures = Features.Where(feature => orderedFeatureNames.All(s => s != feature.Name)).ToArray();
 

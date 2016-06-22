@@ -16,6 +16,8 @@ namespace AldursLab.WurmAssistant3.Areas.SoundManager.Services
     [KernelBind(BindingHint.Singleton), PersistentObject("SoundEngine_SoundsLibrary")]
     public class SoundsLibrary : PersistentObjectBase, ISoundsLibrary
     {
+        public const string SoundbankDirName = "SoundBank";
+
         readonly string soundFilesPath;
         readonly ILogger logger;
 
@@ -28,7 +30,7 @@ namespace AldursLab.WurmAssistant3.Areas.SoundManager.Services
         {
             if (wurmAssistantDataDirectory == null) throw new ArgumentNullException(nameof(wurmAssistantDataDirectory));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
-            this.soundFilesPath = Path.Combine(wurmAssistantDataDirectory.DirectoryPath, "SoundBank");
+            this.soundFilesPath = Path.Combine(wurmAssistantDataDirectory.DirectoryPath, SoundbankDirName);
             this.logger = logger;
 
             tempSoundsDirPath = Path.Combine(soundFilesPath, "Temp");

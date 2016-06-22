@@ -64,8 +64,6 @@ namespace AldursLab.WurmAssistant3.Areas.Config.Services
             }
         }
 
-        public Platform RunningPlatform => Platform.Windows;
-
         public bool WurmUnlimitedMode => consoleArgs.WurmUnlimitedMode;
 
         public string WurmGameClientInstallDirectory

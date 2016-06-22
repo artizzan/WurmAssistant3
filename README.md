@@ -1,9 +1,9 @@
 Wurm Assistant 3
 ====================
 
-Wurm Assistant 3 is an extension application to [Wurm Online][] sandbox MMORPG. It provides various tools, that enrich the game experience.
+Wurm Assistant 3 is a bundle of tools for [Wurm Online][] sandbox MMORPG. Its architecture is based on a variation of Kernel pattern, making it easy to expand the toolbox with custom plugins.
 
-Video feature showcase:
+Core toolbox feature showcase:
 [Playlist link](https://www.youtube.com/playlist?list=PLfBWOgqhq7n5SoTFrwsO2-qIu8WQxYYOG)
 
 For more information about Wurm Assistant, please visit:
@@ -12,59 +12,24 @@ For more information about Wurm Assistant, please visit:
 Quick start
 --------------
 
-1. (Recommended) Fork this repository.
-2. (Recommended) Use SourceTree from Atlassian to clone your fork or this repository. This will handle submodules for you.
-2. Might need to open and rebuild WurmApi.sln and AldursLab.sln
-3. Build and run WurmAssistant3.sln
+1. Get Visual Studio 2015 Community (it's free) or higher edition. For installation config, you only need core features and git support.
+2. Fork this repository on github, so you can have your own master.
+3. Use Visual Studio integrated git to clone your fork.
+4. Open src\Complete.sln
+5. If you use launcher version of WA and would like to avoid messing your data, go to WurmAssistant3 project properties, Debug tab and add startup parameter *-relativedatadir*
+6. Build and run WurmAssistant3 project.
+7. Profit!
 
-Compiles under VS 2013 Community and higher.
-
-Branches, Pull requests
+Add your own tools!
 --------------
 
-beta -> stable-x
+Feeling adventurous? Wurm Assistant supports plugins and it's easy to make them! Wiki has the details.
 
-Any pulls should be directed at Beta, unless hotfixing issues in lower branches.
-
-About the source
---------------
-Project is composed of following parts:
-
-Solutions:
-
-1. WurmAssistant3 - The core standalone, WinForms .NET 4.5 application. It has been built with platform independency in mind and relies only on libraries, that claim to support Windows, Mac and Linux.
-2. WurmAssistantWebService - Simple MVC application serving as a web backend to WurmAssistant3. Currently only serves new releases for the launcher. 
-3. WurmAssistant.Launcher - Simple WinForms application, which allows downloading latest WA3 version among all of it's flavors.
-4. WurmAssistant.PublishRobot - Simple app used by CI server to automatically push new successful builds to the web service.
-5. WurmAssistantLite - Obsolete.
-
-Submodules:
-
-1. WurmApi - API library, that abstracts rather complex process of reading and parsing game client log output into manageable events and queries categorized by game characters and server groups.
-2. AldursLab - Common utility library.
-3. WurmAssistantDataTransfer - data structures shared between WA3 and WA2 (different repository), required for data import from WA2 to WA3.
-
-Major external libraries used:
-
-1. Irrklang sound engine.
-2. Ninject dependency injection framework.
-3. NUnit, JustMoq (unit testing).
-4. ObjectListView.
-5. Json.NET.
-6. NLog.
-6. EntityFramework (web service only)
-7. FastZipSharp (publish robot only)
 
 License details
 -------------
 
-This project is licensed under GPL v3 license. 
-
-Original author of this repository, reserves the right to relicense this repository, or any of it's parts, under less restrictive license.
-
-Some or all 3rd party components and/or libraries, used within this project, may already be licensed under different, less or more restrictive terms, by their original authors. This project license **does not overwrite** these licenses in any way.
-
-Any and all licensing queries and questions should be sent to aldurcraft@gmail.com
+This project, excluding 3rd party packages, is licensed under MIT.
 
 [Wurm Online]:http://www.wurmonline.com/
 [official thread]:http://forum.wurmonline.com/index.php?/topic/68031-wurm-assistant-enrich-your-wurm-experience/

@@ -6,6 +6,7 @@ using AldursLab.WurmAssistant3.Areas.SamplePlugin.Properties;
 
 namespace AldursLab.WurmAssistant3.Areas.SamplePlugin.Services
 {
+    [KernelBind(BindingHint.Singleton)]
     public class SamplePluginFeature : IFeature
     {
         readonly SamplePluginForm mainForm = new SamplePluginForm();

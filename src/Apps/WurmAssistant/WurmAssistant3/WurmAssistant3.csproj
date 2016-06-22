@@ -135,7 +135,6 @@
     <Compile Include="Areas\Core\Services\WaVersion.cs" />
     <Compile Include="Areas\Core\Obsolete\WinFormsThreadMarshaller.cs" />
     <Compile Include="Areas\Core\Services\WurmAssistantDataDirectory.cs" />
-    <Compile Include="Areas\Core\Contracts\IConsoleArgs.cs" />
     <Compile Include="Areas\Debugging\Contracts\IDebuggingWindowFactory.cs" />
     <Compile Include="Areas\Debugging\Services\DebuggingWindow.xaml.cs">
       <DependentUpon>DebuggingWindow.xaml</DependentUpon>
@@ -177,16 +176,11 @@
     <Compile Include="Systems\Plugins\PluginManager.cs" />
     <Compile Include="Utils\Extensions\IconExtensions.cs" />
     <Compile Include="Utils\IrrklangDependencyValidator.cs" />
-    <Compile Include="Areas\Core\Contracts\IBinDirectory.cs" />
     <Compile Include="Areas\Core\Contracts\IChangelogManager.cs" />
     <Compile Include="Areas\Core\Contracts\IEnvironment.cs" />
     <Compile Include="Areas\Core\Contracts\IMessageBus.cs" />
-    <Compile Include="Areas\Core\Contracts\IKernelConfig.cs" />
-    <Compile Include="Areas\Core\Contracts\IProcessStarter.cs" />
     <Compile Include="Areas\Core\Contracts\ISendBugReportViewFactory.cs" />
     <Compile Include="Areas\Core\Contracts\ISystemTrayContextMenu.cs" />
-    <Compile Include="Areas\Core\Contracts\ITimer.cs" />
-    <Compile Include="Areas\Core\Contracts\ITimerFactory.cs" />
     <Compile Include="Areas\Core\Contracts\IUserNotifier.cs" />
     <Compile Include="Areas\Core\Contracts\IWaVersionInfoProvider.cs" />
     <Compile Include="Areas\Core\Contracts\IWaVersion.cs" />
@@ -269,7 +263,6 @@
     <Compile Include="Areas\Config\Contracts\ConfigCancelledException.cs" />
     <Compile Include="Areas\Config\Contracts\IServersEditorViewFactory.cs" />
     <Compile Include="Areas\Config\Contracts\ISettingsEditViewFactory.cs" />
-    <Compile Include="Areas\Config\Contracts\IWurmAssistantConfig.cs" />
     <Compile Include="Areas\Config\Contracts\ServerInformation.cs" />
     <Compile Include="Areas\Config\Services\ServerInfoManager.cs" />
     <Compile Include="Utils\VisualCppRedistDetector.cs" />
@@ -445,7 +438,6 @@
     <Compile Include="Areas\Granger\Parts\ValuePreset\UCGrangerTraitValueEdit.Designer.cs">
       <DependentUpon>UCGrangerTraitValueEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Logging\Contracts\ILogger.cs" />
     <Compile Include="Areas\Logging\Contracts\ILoggerFactory.cs" />
     <Compile Include="Areas\Logging\Contracts\ILoggingConfig.cs" />
     <Compile Include="Areas\Logging\Contracts\ILogMessageSteam.cs" />
@@ -669,8 +661,6 @@
     <Compile Include="Areas\Timers\Parts\Timers\TimerDisplayView.Designer.cs">
       <DependentUpon>TimerDisplayView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\TrayPopups\Contracts\ITrayPopups.cs" />
-    <Compile Include="Areas\TrayPopups\Contracts\PopupMessage.cs" />
     <Compile Include="Areas\TrayPopups\Parts\PopupManager.cs" />
     <Compile Include="Areas\TrayPopups\Services\TrayPopups.cs" />
     <Compile Include="Areas\TrayPopups\Parts\FormPopupContainer.cs">
@@ -1185,6 +1175,7 @@
     <Folder Include="Areas\MainMenu\Contracts\" />
     <Folder Include="Areas\Native\Contracts\" />
     <Folder Include="Areas\RevealCreatures\Contracts\" />
+    <Folder Include="Areas\TrayPopups\Contracts\" />
     <Folder Include="Messages\Events\" />
     <Folder Include="Messages\Requests\" />
   </ItemGroup>
