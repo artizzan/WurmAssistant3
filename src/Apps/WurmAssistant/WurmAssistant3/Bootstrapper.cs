@@ -32,11 +32,35 @@ namespace AldursLab.WurmAssistant3
     public class Bootstrapper : BootstrapperBase
     {
         readonly IKernel kernel = new StandardKernel();
-        IConsoleArgs consoleArgs;
+        readonly IConsoleArgs consoleArgs;
+        readonly WurmAssistantDataDirectory dataDirectory;
+        readonly PluginManager pluginManager;
 
         public Bootstrapper()
         {
+            consoleArgs = new ConsoleArgs();
+            kernel.Bind<IConsoleArgs>().ToConstant(consoleArgs);
+
+            dataDirectory = new WurmAssistantDataDirectory(consoleArgs);
+            kernel.Bind<IWurmAssistantDataDirectory, WurmAssistantDataDirectory>()
+                  .ToConstant(dataDirectory);
+
+            var pluginsDir = new DirectoryInfo(Path.Combine(dataDirectory.DirectoryPath, "Plugins"));
+            pluginManager = new PluginManager(pluginsDir);
+            pluginManager.EnablePlugins();
+            kernel.Bind<PluginManager>().ToConstant(pluginManager);
+
             Initialize();
+        }
+
+        protected override IEnumerable<Assembly> SelectAssemblies()
+        {
+            return
+                base.SelectAssemblies()
+                    .Concat(new[] {this.GetType().Assembly})
+                    .Concat(pluginManager.PluginAssemblies)
+                    .Distinct()
+                    .ToArray();
         }
 
         protected override void OnStartup(object sender, StartupEventArgs e)
@@ -46,18 +70,6 @@ namespace AldursLab.WurmAssistant3
             try
             {
                 kernel.Bind<IWindowManager>().To<WindowManager>().InSingletonScope();
-
-                consoleArgs = new ConsoleArgs();
-                kernel.Bind<IConsoleArgs>().ToConstant(consoleArgs);
-
-                var dataDirectory = new WurmAssistantDataDirectory(consoleArgs);
-                kernel.Bind<IWurmAssistantDataDirectory, WurmAssistantDataDirectory>()
-                      .ToConstant(dataDirectory);
-
-                var pluginsDir = new DirectoryInfo(Path.Combine(dataDirectory.DirectoryPath, "Plugins"));
-                var pluginManager = new PluginManager(pluginsDir);
-                pluginManager.EnablePlugins();
-                kernel.Bind<PluginManager>().ToConstant(pluginManager);
 
                 VersionUpgradeManager upgradeManager = new VersionUpgradeManager(dataDirectory, consoleArgs);
                 upgradeManager.RunUpgrades();

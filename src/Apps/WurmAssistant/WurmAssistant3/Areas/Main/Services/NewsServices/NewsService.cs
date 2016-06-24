@@ -38,7 +38,7 @@ namespace AldursLab.WurmAssistant3.Areas.Main.Services.NewsServices
                            .Select(info => new DirectoryNewsInstance(info, logger))
                            .Cast<NewsInstance>()
                            .ToArray();
-                newsInstances = allVersions.OrderBy(instance => instance.Version).ToList();
+                newsInstances = allVersions.OrderByDescending(instance => instance.Version).ToList();
                 var errors = allVersions.Where(instance => !instance.VersionParsed);
                 foreach (var newsInstance in errors)
                 {

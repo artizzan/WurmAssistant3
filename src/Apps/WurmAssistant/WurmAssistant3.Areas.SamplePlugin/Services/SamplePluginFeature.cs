@@ -1,15 +1,23 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Threading.Tasks;
 using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Areas.SamplePlugin.CustomViews;
 using AldursLab.WurmAssistant3.Areas.SamplePlugin.Properties;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.SamplePlugin.Services
 {
     [KernelBind(BindingHint.Singleton)]
     public class SamplePluginFeature : IFeature
     {
-        readonly SamplePluginForm mainForm = new SamplePluginForm();
+        readonly SamplePluginForm mainForm;
+
+        public SamplePluginFeature([NotNull] SamplePluginForm mainForm)
+        {
+            if (mainForm == null) throw new ArgumentNullException(nameof(mainForm));
+            this.mainForm = mainForm;
+        }
 
         public void Show()
         {

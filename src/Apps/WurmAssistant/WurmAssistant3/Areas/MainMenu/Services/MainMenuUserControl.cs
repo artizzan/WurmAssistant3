@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Areas.Core.Contracts;
@@ -20,6 +21,7 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu.Services
         readonly IServersEditorViewFactory serversEditorViewFactory;
         readonly IDebuggingWindowFactory debuggingWindowFactory;
         readonly INewsViewModelFactory newsViewModelFactory;
+        readonly IWurmAssistantDataDirectory wurmAssistantDataDirectory;
 
         public MainMenuUserControl(
             [NotNull] ISettingsEditViewFactory settingsEditViewFactory,
@@ -27,7 +29,8 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu.Services
             [NotNull] IUserNotifier userNotifier,
             [NotNull] IServersEditorViewFactory serversEditorViewFactory,
             [NotNull] IDebuggingWindowFactory debuggingWindowFactory,
-            [NotNull] INewsViewModelFactory newsViewModelFactory)
+            [NotNull] INewsViewModelFactory newsViewModelFactory,
+            [NotNull] IWurmAssistantDataDirectory wurmAssistantDataDirectory)
         {
             if (settingsEditViewFactory == null) throw new ArgumentNullException("settingsEditViewFactory");
             if (processStarter == null) throw new ArgumentNullException("processStarter");
@@ -35,12 +38,14 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu.Services
             if (serversEditorViewFactory == null) throw new ArgumentNullException("serversEditorViewFactory");
             if (debuggingWindowFactory == null) throw new ArgumentNullException(nameof(debuggingWindowFactory));
             if (newsViewModelFactory == null) throw new ArgumentNullException(nameof(newsViewModelFactory));
+            if (wurmAssistantDataDirectory == null) throw new ArgumentNullException(nameof(wurmAssistantDataDirectory));
             this.settingsEditViewFactory = settingsEditViewFactory;
             this.processStarter = processStarter;
             this.userNotifier = userNotifier;
             this.serversEditorViewFactory = serversEditorViewFactory;
             this.debuggingWindowFactory = debuggingWindowFactory;
             this.newsViewModelFactory = newsViewModelFactory;
+            this.wurmAssistantDataDirectory = wurmAssistantDataDirectory;
 
             InitializeComponent();
 
@@ -72,12 +77,6 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu.Services
         {
             processStarter.StartSafe(
                 "http://forum.wurmonline.com/index.php?/user/6302-aldur/");
-        }
-
-        private void viewRoadmapToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            processStarter.StartSafe(
-                "https://trello.com/b/FlIPQ7TW/wurm-assistant-3-roadmap");
         }
 
         void modifyServersListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -145,6 +144,19 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu.Services
         {
             var vm = newsViewModelFactory.CreateNewsViewModel();
             vm.ShowForAllNews();
+        }
+
+        private void viewRoadmapToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            processStarter.StartSafe(
+                "https://trello.com/b/FlIPQ7TW/wurm-assistant-3-roadmap");
+        }
+
+        private void manageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe(Path.Combine(
+                wurmAssistantDataDirectory.DirectoryPath,
+                "Plugins"));
         }
     }
 }

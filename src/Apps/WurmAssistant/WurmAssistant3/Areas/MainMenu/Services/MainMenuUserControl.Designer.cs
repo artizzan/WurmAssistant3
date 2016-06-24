@@ -37,6 +37,8 @@
             this.wikiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pMAldurToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.showNewsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.videoSoundManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.videoLogSearcherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.videoCalendarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,10 +50,9 @@
             this.videoSkillStatsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.videoCombatAssistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.roadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewRoadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showNewsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.viewRoadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.manageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -98,6 +99,7 @@
             this.wikiToolStripMenuItem,
             this.pMAldurToolStripMenuItem,
             this.toolStripSeparator2,
+            this.viewRoadmapToolStripMenuItem,
             this.showNewsToolStripMenuItem,
             this.toolStripSeparator1,
             this.videoSoundManagerToolStripMenuItem,
@@ -139,6 +141,18 @@
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(229, 6);
+            // 
+            // showNewsToolStripMenuItem
+            // 
+            this.showNewsToolStripMenuItem.Name = "showNewsToolStripMenuItem";
+            this.showNewsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.showNewsToolStripMenuItem.Text = "Show News";
+            this.showNewsToolStripMenuItem.Click += new System.EventHandler(this.showNewsToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(229, 6);
             // 
             // videoSoundManagerToolStripMenuItem
             // 
@@ -213,17 +227,10 @@
             // roadmapToolStripMenuItem
             // 
             this.roadmapToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.viewRoadmapToolStripMenuItem});
+            this.manageToolStripMenuItem});
             this.roadmapToolStripMenuItem.Name = "roadmapToolStripMenuItem";
-            this.roadmapToolStripMenuItem.Size = new System.Drawing.Size(70, 20);
-            this.roadmapToolStripMenuItem.Text = "Roadmap";
-            // 
-            // viewRoadmapToolStripMenuItem
-            // 
-            this.viewRoadmapToolStripMenuItem.Name = "viewRoadmapToolStripMenuItem";
-            this.viewRoadmapToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
-            this.viewRoadmapToolStripMenuItem.Text = "View roadmap";
-            this.viewRoadmapToolStripMenuItem.Click += new System.EventHandler(this.viewRoadmapToolStripMenuItem_Click);
+            this.roadmapToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
+            this.roadmapToolStripMenuItem.Text = "Plugins";
             // 
             // debugToolStripMenuItem
             // 
@@ -233,17 +240,19 @@
             this.debugToolStripMenuItem.Visible = false;
             this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
             // 
-            // showNewsToolStripMenuItem
+            // viewRoadmapToolStripMenuItem
             // 
-            this.showNewsToolStripMenuItem.Name = "showNewsToolStripMenuItem";
-            this.showNewsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
-            this.showNewsToolStripMenuItem.Text = "Show News";
-            this.showNewsToolStripMenuItem.Click += new System.EventHandler(this.showNewsToolStripMenuItem_Click);
+            this.viewRoadmapToolStripMenuItem.Name = "viewRoadmapToolStripMenuItem";
+            this.viewRoadmapToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.viewRoadmapToolStripMenuItem.Text = "View Roadmap";
+            this.viewRoadmapToolStripMenuItem.Click += new System.EventHandler(this.viewRoadmapToolStripMenuItem_Click_1);
             // 
-            // toolStripSeparator1
+            // manageToolStripMenuItem
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(229, 6);
+            this.manageToolStripMenuItem.Name = "manageToolStripMenuItem";
+            this.manageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.manageToolStripMenuItem.Text = "Manage";
+            this.manageToolStripMenuItem.Click += new System.EventHandler(this.manageToolStripMenuItem_Click);
             // 
             // MainMenuUserControl
             // 
@@ -269,7 +278,6 @@
         private System.Windows.Forms.ToolStripMenuItem wikiToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pMAldurToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem roadmapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewRoadmapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem modifyServersListToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem videoSoundManagerToolStripMenuItem;
@@ -285,5 +293,7 @@
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showNewsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem viewRoadmapToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem manageToolStripMenuItem;
     }
 }
