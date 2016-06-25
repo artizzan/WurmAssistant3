@@ -26,48 +26,43 @@ using AldursLab.WurmAssistant3.Utils;
 using AldursLab.WurmAssistant3.Utils.WinForms.Reusables;
 using Caliburn.Micro;
 using Ninject;
+using Action = System.Action;
 
 namespace AldursLab.WurmAssistant3
 {
     public class Bootstrapper : BootstrapperBase
     {
         readonly IKernel kernel = new StandardKernel();
-        readonly IConsoleArgs consoleArgs;
-        readonly WurmAssistantDataDirectory dataDirectory;
-        readonly PluginManager pluginManager;
+
+        IConsoleArgs consoleArgs;
+        WurmAssistantDataDirectory dataDirectory;
+        PluginManager pluginManager;
 
         public Bootstrapper()
         {
-            consoleArgs = new ConsoleArgs();
-            kernel.Bind<IConsoleArgs>().ToConstant(consoleArgs);
+            HandleExceptions(() =>
+            {
+                consoleArgs = new ConsoleArgs();
+                kernel.Bind<IConsoleArgs>().ToConstant(consoleArgs);
 
-            dataDirectory = new WurmAssistantDataDirectory(consoleArgs);
-            kernel.Bind<IWurmAssistantDataDirectory, WurmAssistantDataDirectory>()
-                  .ToConstant(dataDirectory);
+                dataDirectory = new WurmAssistantDataDirectory(consoleArgs);
+                kernel.Bind<IWurmAssistantDataDirectory, WurmAssistantDataDirectory>()
+                      .ToConstant(dataDirectory);
 
-            var pluginsDir = new DirectoryInfo(Path.Combine(dataDirectory.DirectoryPath, "Plugins"));
-            pluginManager = new PluginManager(pluginsDir);
-            pluginManager.EnablePlugins();
-            kernel.Bind<PluginManager>().ToConstant(pluginManager);
+                var pluginsDir = new DirectoryInfo(Path.Combine(dataDirectory.DirectoryPath, "Plugins"));
+                pluginManager = new PluginManager(pluginsDir);
+                pluginManager.EnablePlugins();
+                kernel.Bind<PluginManager>().ToConstant(pluginManager);
 
-            Initialize();
-        }
-
-        protected override IEnumerable<Assembly> SelectAssemblies()
-        {
-            return
-                base.SelectAssemblies()
-                    .Concat(new[] {this.GetType().Assembly})
-                    .Concat(pluginManager.PluginAssemblies)
-                    .Distinct()
-                    .ToArray();
+                Initialize();
+            });
         }
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
             base.OnStartup(sender, e);
 
-            try
+            HandleExceptions(() =>
             {
                 kernel.Bind<IWindowManager>().To<WindowManager>().InSingletonScope();
 
@@ -100,8 +95,8 @@ namespace AldursLab.WurmAssistant3
                     });
 
                 var conventionBindingManager = new ConventionBindingManager(
-                    kernel, 
-                    new [] { this.GetType().Assembly }.Concat(pluginManager.PluginAssemblies).ToArray());
+                    kernel,
+                    new[] { this.GetType().Assembly }.Concat(pluginManager.PluginAssemblies).ToArray());
                 conventionBindingManager.BindAssembliesByConvention();
 
                 var persistentDataManager = kernel.Get<PersistenceEnabler>();
@@ -121,6 +116,14 @@ namespace AldursLab.WurmAssistant3
                 {
                     logger.Error(dllLoadError.Exception, "Failed to load plugin DLL: " + dllLoadError.DllFileName);
                 }
+            });
+        }
+
+        void HandleExceptions(Action action)
+        {
+            try
+            {
+                action();
             }
             catch (LockFailedException)
             {
@@ -154,6 +157,16 @@ namespace AldursLab.WurmAssistant3
 
                 ShutdownCurrentApp();
             }
+        }
+
+        protected override IEnumerable<Assembly> SelectAssemblies()
+        {
+            return
+                base.SelectAssemblies()
+                    .Concat(new[] {this.GetType().Assembly})
+                    .Concat(pluginManager.PluginAssemblies)
+                    .Distinct()
+                    .ToArray();
         }
 
         protected override void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
@@ -205,13 +218,14 @@ namespace AldursLab.WurmAssistant3
         void ShowErrorAsDialog(Exception exception)
         {
             bool restart = false;
-            var btn1 = new Button()
+
+            var resetConfigButton = new Button()
             {
                 Text = "Reset Wurm Assistant config",
                 Height = 28,
                 Width = 220
             };
-            btn1.Click += (o, args) =>
+            resetConfigButton.Click += (o, args) =>
             {
                 if (TryResetConfig())
                 {
@@ -219,25 +233,28 @@ namespace AldursLab.WurmAssistant3
                 }
                 else
                 {
-                    System.Windows.Forms.MessageBox.Show("Reset was not possible.", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    System.Windows.Forms.MessageBox.Show("Config is unavailable.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
-            var btn2 = new Button()
+
+            var restartAppButton = new Button()
             {
                 Text = "Restart Wurm Assistant",
                 Height = 28,
                 Width = 220,
                 DialogResult = DialogResult.OK
             };
-            btn2.Click += (o, args) => restart = true;
-            var btn3 = new Button()
+            restartAppButton.Click += (o, args) => restart = true;
+
+            var closeAppButton = new Button()
             {
                 Text = "Close Wurm Assistant",
                 Height = 28,
                 Width = 220,
                 DialogResult = DialogResult.OK
             };
-            var view = new UniversalTextDisplayView(btn3, btn2, btn1)
+
+            var view = new UniversalTextDisplayView(closeAppButton, restartAppButton, resetConfigButton)
             {
                 Text = "OH NO!!",
                 ContentText = "Application startup was interrupted by an ugly error! "
