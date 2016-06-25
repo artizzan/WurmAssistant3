@@ -376,7 +376,15 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Parts.LogFeedManager
             if (line.Content.Contains("You cast"))
             {
                 grangerDebug.Log("Found maybe genesis log event: " + line);
-                Match match = Regex.Match(line.Content, @"You cast 'Genesis' on (.+)\.");
+                // New matcher after changes in wurm caves update.
+                Match match = Regex.Match(line.Content,
+                    @"You cast 'Genesis' on(?: a| an| the) (.+)\.",
+                    RegexOptions.Compiled);
+                if (!match.Success)
+                {
+                    // Old matcher for older WU servers.
+                    match = Regex.Match(line.Content, @"You cast 'Genesis' on (.+)\.", RegexOptions.Compiled);
+                }
                 if (match.Success)
                 {
                     string prefixedCreatureName = match.Groups[1].Value;
