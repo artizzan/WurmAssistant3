@@ -1,7 +1,7 @@
 ﻿using System;
 using AldursLab.WurmApi.Extensions.DotNet;
 using FluentAssertions;
-using Xunit;
+using NUnit.Framework;
 
 namespace AldursLab.WurmApi.Tests.Unit.Extensions
 {
@@ -10,7 +10,7 @@ namespace AldursLab.WurmApi.Tests.Unit.Extensions
         event EventHandler<EventArgs> Event1;
         event EventHandler<TestEventArgs> Event2;
 
-        [Fact]
+        [Test]
         public void SafeInvoke_WhenExplicitArgs()
         {
             bool invoked = false;
@@ -19,7 +19,7 @@ namespace AldursLab.WurmApi.Tests.Unit.Extensions
             invoked.Should().BeTrue();
         }
 
-        [Fact]
+        [Test]
         public void SafeInvoke_WhenNullArgs()
         {
             bool invoked = false;
@@ -28,7 +28,7 @@ namespace AldursLab.WurmApi.Tests.Unit.Extensions
             invoked.Should().BeTrue();
         }
 
-        [Fact]
+        [Test]
         public void SafeInvoke_WithCustomEventArgs_WhenExplicitArgs()
         {
             bool invoked = false;

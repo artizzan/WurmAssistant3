@@ -44,8 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataSerializer.cs" />
+    <Compile Include="IObjectSet.cs" />
+    <Compile Include="IDataStorage.cs" />
+    <Compile Include="IPersistentContext.cs" />
+    <Compile Include="ISerializer.cs" />
     <Compile Include="JsonTypelessSerializer.cs" />
+    <Compile Include="PersistencePathValidator.cs" />
     <Compile Include="Persistent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

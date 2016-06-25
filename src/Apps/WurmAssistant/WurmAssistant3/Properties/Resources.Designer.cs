@@ -59,5 +59,409 @@ namespace AldursLab.WurmAssistant3.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _2016_02_26_20h57_49 {
+            get {
+                object obj = ResourceManager.GetObject("_2016_02_26_20h57_49", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Action Queue Trigger modding how-to
+        ///
+        ///Trigger parses new log events from the game logs, matching them against all configured conditions.
+        ///After each bunch of events, it will make a decision whether action was started or finished. 
+        ///Based on that, it schedules notifications.
+        ///
+        ///
+        ///There are following types of checks (Condition Types), that can be adjusted:
+        ///
+        ///ActionStart -  
+        ///	flags the log event as starting an in-game action 
+        ///	NOTE: Every time ActionStart is found, it resets the script, eg. resets notifica [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ActionQueueModdingHelp {
+            get {
+                return ResourceManager.GetString("ActionQueueModdingHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap beer {
+            get {
+                object obj = ResourceManager.GetObject("beer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CalendarIcon {
+            get {
+                object obj = ResourceManager.GetObject("CalendarIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=Dpt2cVNkRz8.
+        /// </summary>
+        internal static string CalendarVideoUrl {
+            get {
+                return ResourceManager.GetString("CalendarVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap close_icon {
+            get {
+                object obj = ResourceManager.GetObject("close_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Combat {
+            get {
+                object obj = ResourceManager.GetObject("Combat", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All data in a row applies in the context of the attacks done by the Attacker against the Defender.
+        ///Each Attacker vs Defender row aggregates ALL combat between these 2 combat actors types, so if 5 spiders were slain, the data will reflect total stats for these 5 fights.
+        ///
+        ///Columns:
+        ///
+        ///Damage caused / Attack Strengths - detailed list of damage caused to Defender and actual strengths of attacks, which caused this damage.
+        ///Slain - number of creatures slain. Counts only for &quot;You&quot; vs something else, when that so [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CombatStatisticsLegend {
+            get {
+                return ResourceManager.GetString("CombatStatisticsLegend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=RmZ1qO7iDV0.
+        /// </summary>
+        internal static string CombatStatsVideoUrl {
+            get {
+                return ResourceManager.GetString("CombatStatsVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=E8EdzHp9L4U.
+        /// </summary>
+        internal static string CraftingAssistantVideoUrl {
+            get {
+                return ResourceManager.GetString("CraftingAssistantVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DeleteRed {
+            get {
+                object obj = ResourceManager.GetObject("DeleteRed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DeleteRed_small {
+            get {
+                object obj = ResourceManager.GetObject("DeleteRed_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GrangerIcon {
+            get {
+                object obj = ResourceManager.GetObject("GrangerIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=y2qzyhdnvVo.
+        /// </summary>
+        internal static string GrangerVideoUrl {
+            get {
+                return ResourceManager.GetString("GrangerVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Grip {
+            get {
+                object obj = ResourceManager.GetObject("Grip", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Hammer {
+            get {
+                object obj = ResourceManager.GetObject("Hammer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Improvement {
+            get {
+                object obj = ResourceManager.GetObject("Improvement", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap irrklang_small {
+            get {
+                object obj = ResourceManager.GetObject("irrklang_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LogSearcherIcon {
+            get {
+                object obj = ResourceManager.GetObject("LogSearcherIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=S_LmnDRZwUk.
+        /// </summary>
+        internal static string LogSearcherVideoUrl {
+            get {
+                return ResourceManager.GetString("LogSearcherVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap paypal_donate {
+            get {
+                object obj = ResourceManager.GetObject("paypal_donate", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Radar {
+            get {
+                object obj = ResourceManager.GetObject("Radar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=5ouJzu999_g.
+        /// </summary>
+        internal static string RevealCreaturesVideoUrl {
+            get {
+                return ResourceManager.GetString("RevealCreaturesVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://dl.dropboxusercontent.com/u/74314315/Publish/WurmAssistant3/SampleSounds/sounds_wav.zip.
+        /// </summary>
+        internal static string SampleSoundPackUrl {
+            get {
+                return ResourceManager.GetString("SampleSoundPackUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=4J5b_Tlmsus.
+        /// </summary>
+        internal static string SkillStatsVideoUrl {
+            get {
+                return ResourceManager.GetString("SkillStatsVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SoundDisabled {
+            get {
+                object obj = ResourceManager.GetObject("SoundDisabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SoundDisabledSmall {
+            get {
+                object obj = ResourceManager.GetObject("SoundDisabledSmall", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SoundEnabled {
+            get {
+                object obj = ResourceManager.GetObject("SoundEnabled", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SoundEnabledSmall {
+            get {
+                object obj = ResourceManager.GetObject("SoundEnabledSmall", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SoundManagerIcon {
+            get {
+                object obj = ResourceManager.GetObject("SoundManagerIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=Pv2h89jsoC4.
+        /// </summary>
+        internal static string SoundManagerVideoUrl {
+            get {
+                return ResourceManager.GetString("SoundManagerVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SoundNotifyIcon {
+            get {
+                object obj = ResourceManager.GetObject("SoundNotifyIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TimersIcon {
+            get {
+                object obj = ResourceManager.GetObject("TimersIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=5oB44KiFCuY.
+        /// </summary>
+        internal static string TimersVideoUrl {
+            get {
+                return ResourceManager.GetString("TimersVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TriggersIcon {
+            get {
+                object obj = ResourceManager.GetObject("TriggersIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.youtube.com/watch?v=R2siIpHxc_g.
+        /// </summary>
+        internal static string TriggersVideoUrl {
+            get {
+                return ResourceManager.GetString("TriggersVideoUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon WurmAssistantIcon {
+            get {
+                object obj = ResourceManager.GetObject("WurmAssistantIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WurmAssistantIcon1 {
+            get {
+                object obj = ResourceManager.GetObject("WurmAssistantIcon1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon WurmAssistantUnlimitedIcon {
+            get {
+                object obj = ResourceManager.GetObject("WurmAssistantUnlimitedIcon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap WurmAssistantUnlimitedPicture {
+            get {
+                object obj = ResourceManager.GetObject("WurmAssistantUnlimitedPicture", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

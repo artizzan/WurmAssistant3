@@ -1,7 +1,7 @@
 ﻿using System;
 using AldursLab.WurmApi.Extensions.DotNet;
 using FluentAssertions;
-using Xunit;
+using NUnit.Framework;
 
 namespace AldursLab.WurmApi.Tests.Unit.Extensions
 {
@@ -9,7 +9,7 @@ namespace AldursLab.WurmApi.Tests.Unit.Extensions
     {
         public class AddDaysSnapToMinMaxTests : DateTimeExtTests
         {
-            [Fact]
+            [Test]
             public void WhenLessThanMin_ShouldBeMin()
             {
                 DateTimeOffset dt = DateTimeOffset.MinValue.AddDays(1);
@@ -18,7 +18,7 @@ namespace AldursLab.WurmApi.Tests.Unit.Extensions
                 dt2.Should().Be(DateTimeOffset.MinValue);
             }
 
-            [Fact]
+            [Test]
             public void WhenMoreThanMax_ShouldBeMax()
             {
                 DateTimeOffset dt = DateTimeOffset.MaxValue.AddDays(-1);
@@ -27,7 +27,7 @@ namespace AldursLab.WurmApi.Tests.Unit.Extensions
                 dt2.Should().Be(DateTimeOffset.MaxValue);
             }
 
-            [Fact]
+            [Test]
             public void WhenWithinMinMax_ShouldBeAdded()
             {
                 DateTimeOffset dt = DateTimeOffset.MinValue.AddDays(3);
@@ -39,7 +39,7 @@ namespace AldursLab.WurmApi.Tests.Unit.Extensions
 
         public class AddSafeTests : DateTimeExtTests
         {
-            [Fact]
+            [Test]
             public void AddSafe_WhenNoOverflow_ReturnsResult()
             {
                 var dt = new DateTime(DateTime.MaxValue.Ticks / 2);
@@ -49,7 +49,7 @@ namespace AldursLab.WurmApi.Tests.Unit.Extensions
                 dt.Should().Be(controlDt);
             }
 
-            [Fact]
+            [Test]
             public void AddSafe_WhenOverflowNegativeReturnsMin()
             {
                 var dt = new DateTime(DateTime.MaxValue.Ticks / 2);
@@ -58,7 +58,7 @@ namespace AldursLab.WurmApi.Tests.Unit.Extensions
                 dt.Should().Be(DateTime.MaxValue);
             }
 
-            [Fact]
+            [Test]
             public void AddSafe_WhenOverflowPositive_ReturnsMax()
             {
                 var dt = new DateTime(DateTime.MaxValue.Ticks / 2);

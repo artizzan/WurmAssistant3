@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using AldursLab.Essentials.Synchronization;
 using AldursLab.Testing;
@@ -8,74 +9,116 @@ namespace AldursLab.Essentials.Tests.Synchronization
 {
     class FileLockTests : AssertionHelper
     {
-        DirectoryHandle tempDir;
-        const string LockFileName = "test.lock";
+        protected DirectoryHandle TempDir;
+        WeakReference<FileLock> fileLockWeakRef;
+        FileLock fileLock;
+        protected const string LockFileName = "test.lock";
+
+        protected FileLock FileLock
+        {
+            get { return fileLock; }
+            set
+            {
+                fileLock = value;
+                fileLockWeakRef = new WeakReference<FileLock>(value);
+            }
+        }
 
         [SetUp]
         public void Setup()
         {
-            tempDir = TempDirectoriesFactory.CreateEmpty();
+            TempDir = TempDirectoriesFactory.CreateEmpty();
         }
 
         [TearDown]
         public void Teardown()
         {
-            tempDir.Dispose();
-        }
-        
-        [Test]
-        public void Enter_LocksAndReleases()
-        {
-            var lockFilePath = Path.Combine(tempDir.AbsolutePath, LockFileName);
-            File.Create(lockFilePath).Dispose();
-
-            AssertNoLock(lockFilePath);
-
-            var exclusiveLock = FileLock.Enter(lockFilePath);
-            
-            AssertLockFails(lockFilePath);
-
-            exclusiveLock.Dispose();
-
-            AssertNoLock(lockFilePath);
+            FileLock fLock;
+            fileLockWeakRef.TryGetTarget(out fLock);
+            fLock?.Dispose();
+            TempDir.Dispose();
         }
 
-        [Test]
-        public void EnterWithCreate_LocksAndReleases()
+        class EnterTests : FileLockTests
         {
-            var lockFilePath = Path.Combine(tempDir.AbsolutePath, LockFileName);
+            [Test]
+            public void LocksAndReleases()
+            {
+                var lockFilePath = Path.Combine(TempDir.AbsolutePath, LockFileName);
+                File.Create(lockFilePath).Dispose();
 
-            AssertNoFile(lockFilePath);
+                AssertNoLock(lockFilePath);
 
-            var exclusiveLock = FileLock.EnterWithCreate(lockFilePath);
+                FileLock = FileLock.Enter(lockFilePath);
 
-            AssertLockFails(lockFilePath);
+                AssertLockFails(lockFilePath);
 
-            exclusiveLock.Dispose();
+                FileLock.Dispose();
 
-            AssertNoLock(lockFilePath);
+                AssertNoLock(lockFilePath);
+            }
+
+            [Test]
+            public void WritesProcessInfo()
+            {
+                var lockFilePath = Path.Combine(TempDir.AbsolutePath, LockFileName);
+                File.Create(lockFilePath).Dispose();
+
+                FileLock = FileLock.Enter(lockFilePath);
+
+                AssertHasProcessInfo(lockFilePath);
+            }
         }
 
-        [Test]
-        public void ReleasesOnFinalization()
+        class EnterWithCreateTests : FileLockTests
         {
-            var lockFilePath = Path.Combine(tempDir.AbsolutePath, LockFileName);
-            var handle = FileLock.EnterWithCreate(lockFilePath);
-            AssertLockFails(lockFilePath);
-            handle = null;
-            GC.Collect(3, GCCollectionMode.Forced, true);
-            GC.WaitForPendingFinalizers();
-            GC.Collect(3, GCCollectionMode.Forced, true);
-            AssertNoLock(lockFilePath);
+            [Test]
+            public void LocksAndReleases()
+            {
+                var lockFilePath = Path.Combine(TempDir.AbsolutePath, LockFileName);
+
+                AssertNoFile(lockFilePath);
+
+                FileLock = FileLock.EnterWithCreate(lockFilePath);
+
+                AssertLockFails(lockFilePath);
+
+                FileLock.Dispose();
+
+                AssertNoLock(lockFilePath);
+            }
+
+            [Test]
+            public void WritesProcessInfo()
+            {
+                var lockFilePath = Path.Combine(TempDir.AbsolutePath, LockFileName);
+
+                FileLock = FileLock.EnterWithCreate(lockFilePath);
+                
+                AssertHasProcessInfo(lockFilePath);
+            }
+
+            [Test]
+            public void ReleasesOnFinalization()
+            {
+                var lockFilePath = Path.Combine(TempDir.AbsolutePath, LockFileName);
+                FileLock = FileLock.EnterWithCreate(lockFilePath);
+                AssertLockFails(lockFilePath);
+                FileLock = null;
+                GC.Collect(3, GCCollectionMode.Forced, true);
+                GC.WaitForPendingFinalizers();
+                GC.Collect(3, GCCollectionMode.Forced, true);
+                AssertNoLock(lockFilePath);
+            }
         }
 
         static void AssertLockFails(string lockFilePath)
         {
-            // trying least exclusive file access
+            // trying file access
             Assert.Throws<IOException>(
                 () =>
                 {
-                    File.Open(lockFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).Dispose();
+                    File.Open(lockFilePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite).Dispose();
                 });
 
             // trying to enter another lock
@@ -95,6 +138,22 @@ namespace AldursLab.Essentials.Tests.Synchronization
         void AssertNoFile(string lockFilePath)
         {
             Expect(!File.Exists(lockFilePath));
+        }
+
+        protected static void AssertHasProcessInfo(string lockFilePath)
+        {
+            string contents;
+            using (
+                StreamReader sr =
+                    new StreamReader(new FileStream(lockFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            {
+                contents = sr.ReadToEnd();
+            }
+
+            var currentProcess = Process.GetCurrentProcess();
+            Assert.IsFalse(string.IsNullOrWhiteSpace(contents));
+            Assert.IsTrue(contents.Contains(currentProcess.Id.ToString()));
+            Assert.IsTrue(contents.Contains(currentProcess.ProcessName));
         }
     }
 }

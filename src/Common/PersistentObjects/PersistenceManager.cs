@@ -20,7 +20,7 @@ namespace AldursLab.PersistentObjects
         public PersistenceManager([NotNull] PersistenceManagerConfig config,
             ISerializationStrategy serializationStrategy, IPersistenceStrategy persistenceStrategy)
         {
-            if (config == null) throw new ArgumentNullException("config");
+            if (config == null) throw new ArgumentNullException(nameof(config));
             this.config = config;
 
             SerializationStrategy = serializationStrategy;

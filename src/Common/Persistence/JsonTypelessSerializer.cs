@@ -6,9 +6,9 @@ using Newtonsoft.Json.Serialization;
 
 namespace AldursLab.Persistence
 {
-    public class JsonTypelessSerializer : DataSerializer
+    public class JsonTypelessSerializer : ISerializer
     {
-        private readonly JsonSerializer serializer;
+        readonly JsonSerializer serializer;
 
         public JsonTypelessSerializer()
         {
@@ -24,7 +24,7 @@ namespace AldursLab.Persistence
             serializer = JsonSerializer.Create(settings);
         }
 
-        public override string Serialize<T>(T @object)
+        public string Serialize<T>(T @object)
         {
             var sb = new StringBuilder();
             using (var sw = new StringWriter(sb))
@@ -37,7 +37,7 @@ namespace AldursLab.Persistence
             return sb.ToString();
         }
 
-        public override T Deserialize<T>(string data)
+        public T Deserialize<T>(string data)
         {
             using (var sr = new StringReader(data))
             {

@@ -1,0 +1,41 @@
+﻿<Window x:Class="AldursLab.WurmAssistant3.Areas.Main.Views.NewsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AldursLab.WurmAssistant3.Areas.Main.Views"
+        xmlns:viewModels="clr-namespace:AldursLab.WurmAssistant3.Areas.Main.ViewModels"
+        xmlns:wpf="clr-namespace:AldursLab.WurmAssistant3.Utils.WPF"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=viewModels:NewsViewModel}"
+        Title="{Binding Title}" 
+        MinWidth="600"
+        MinHeight="600">
+    <Grid>
+        <TabControl SelectedIndex="{Binding TabControlIndex}">
+            <TabItem Header="News" Height="22" VerticalAlignment="Top">
+                <Grid Background="#FFE5E5E5">
+                    <ScrollViewer>
+                        <ItemsControl ItemsSource="{Binding NewsInstances}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <GroupBox Header="{Binding VersionString}">
+                                        <WebBrowser wpf:WebBrowserBehaviors.BindableSource="{Binding NewsUrl}"
+                                                        Navigating="WebBrowser_OnNavigating"
+                                                        LoadCompleted="WebBrowser_OnLoadCompleted" />
+                                    </GroupBox>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Changelog">
+                <Grid Background="#FFE5E5E5">
+                    <TextBlock Text="{Binding ChangelogText}"></TextBlock>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

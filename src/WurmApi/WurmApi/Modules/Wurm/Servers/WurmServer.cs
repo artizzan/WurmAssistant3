@@ -20,15 +20,11 @@ namespace AldursLab.WurmApi.Modules.Wurm.Servers
             if (jobRunner == null) throw new ArgumentNullException(nameof(jobRunner));
             this.wurmServerInfo = wurmServerInfo;
             this.jobRunner = jobRunner;
-            ServerScopedServerGroup = ServerGroup.CreateServerScoped(wurmServerInfo.ServerName);
         }
 
         public ServerName ServerName => wurmServerInfo.ServerName;
 
         public ServerGroup ServerGroup => wurmServerInfo.ServerGroup;
-
-        [Obsolete]
-        public ServerGroup ServerScopedServerGroup { get; }
 
         #region TryGetCurrentTime
 

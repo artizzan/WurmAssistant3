@@ -6,16 +6,16 @@ namespace AldursLab.Persistence
 {
     public class Persistent<T> where T:class, new()
     {
-        private readonly string filePath;
+        readonly string filePath;
         public T Data { get; private set; }
 
-        private readonly DataSerializer serializer = new JsonTypelessSerializer();
+        readonly ISerializer serializer = new JsonTypelessSerializer();
 
         public Persistent(string filePath)
         {
             if (filePath == null)
             {
-                throw new ArgumentNullException("filePath");
+                throw new ArgumentNullException(nameof(filePath));
             }
             if (!Path.IsPathRooted(filePath))
             {

@@ -114,4 +114,125 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+    <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="CalendarIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CalendarIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="close_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\close_icon.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DeleteRed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeleteRed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DeleteRed_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DeleteRed_small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GrangerIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GrangerIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Grip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Grip.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="irrklang_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\irrklang_small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="LogSearcherIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\LogSearcherIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="paypal_donate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\paypal_donate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SoundDisabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SoundDisabled.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SoundDisabledSmall" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SoundDisabledSmall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SoundEnabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SoundEnabled.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SoundEnabledSmall" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SoundEnabledSmall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SoundManagerIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SoundManagerIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SoundNotifyIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SoundNotifyIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TimersIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TimersIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WurmAssistantIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WurmAssistantIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WurmAssistantIcon1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WurmAssistantIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TriggersIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\triggersicon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ActionQueueModdingHelp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ActionQueueModdingHelp.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
+  </data>
+  <data name="beer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\beer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WurmAssistantUnlimitedPicture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WurmAssistantUnlimitedIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WurmAssistantUnlimitedIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WurmAssistantUnlimitedIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Hammer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Hammer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Radar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Radar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Improvement" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Improvement.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CalendarVideoUrl" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=Dpt2cVNkRz8</value>
+  </data>
+  <data name="CombatStatsVideoUrl" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=RmZ1qO7iDV0</value>
+  </data>
+  <data name="CraftingAssistantVideoUrl" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=E8EdzHp9L4U</value>
+  </data>
+  <data name="GrangerVideoUrl" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=y2qzyhdnvVo</value>
+  </data>
+  <data name="LogSearcherVideoUrl" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=S_LmnDRZwUk</value>
+  </data>
+  <data name="RevealCreaturesVideoUrl" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=5ouJzu999_g</value>
+  </data>
+  <data name="SkillStatsVideoUrl" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=4J5b_Tlmsus</value>
+  </data>
+  <data name="SoundManagerVideoUrl" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=Pv2h89jsoC4</value>
+  </data>
+  <data name="TimersVideoUrl" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=5oB44KiFCuY</value>
+  </data>
+  <data name="TriggersVideoUrl" xml:space="preserve">
+    <value>https://www.youtube.com/watch?v=R2siIpHxc_g</value>
+  </data>
+  <data name="SampleSoundPackUrl" xml:space="preserve">
+    <value>https://dl.dropboxusercontent.com/u/74314315/Publish/WurmAssistant3/SampleSounds/sounds_wav.zip</value>
+  </data>
+  <data name="Combat" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Combat.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CombatStatisticsLegend" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CombatStatisticsLegend.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
+  </data>
+  <data name="_2016_02_26_20h57_49" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\2016-02-26_20h57_49.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

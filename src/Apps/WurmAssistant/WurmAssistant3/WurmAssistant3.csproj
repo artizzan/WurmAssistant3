@@ -27,7 +27,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -80,12 +80,14 @@
       <HintPath>..\..\..\..\packages\NLog.4.3.0\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ObjectListView, Version=2.9.0.25611, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\ObjectListView.Official.2.9.0\lib\net20\ObjectListView.dll</HintPath>
+    <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Caliburn.Micro.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -100,9 +102,11 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -113,9 +117,700 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Areas\Core\Contracts\IAppManager.cs" />
+    <Compile Include="Areas\Core\Contracts\IWurmAssistantDataDirectory.cs" />
+    <Compile Include="Areas\Core\Services\AppMigrationsManager.cs" />
+    <Compile Include="Areas\Core\Services\BinDirectory.cs" />
+    <Compile Include="Areas\Core\Services\ChangelogManager.cs" />
+    <Compile Include="Areas\Core\Services\WpfAppEnvironment.cs" />
+    <Compile Include="Areas\Core\Services\KernelConfig.cs" />
+    <Compile Include="Areas\Core\Services\ConsoleArgs.cs" />
+    <Compile Include="Areas\Core\Services\DispatcherThreadMarshaller.cs" />
+    <Compile Include="Areas\Core\Services\MessageBus.cs" />
+    <Compile Include="Areas\Core\Services\ProcessStarter.cs" />
+    <Compile Include="Areas\Core\Services\TimerFactory.cs" />
+    <Compile Include="Areas\Core\Services\TrayMenu.cs" />
+    <Compile Include="Areas\Core\Services\UserNotifier.cs" />
+    <Compile Include="Areas\Core\Services\WaVersionInfoProvider.cs" />
+    <Compile Include="Areas\Core\Services\WaVersion.cs" />
+    <Compile Include="Areas\Core\Obsolete\WinFormsThreadMarshaller.cs" />
+    <Compile Include="Areas\Core\Services\WurmAssistantDataDirectory.cs" />
+    <Compile Include="Areas\Debugging\Contracts\IDebuggingWindowFactory.cs" />
+    <Compile Include="Areas\Debugging\Services\DebuggingWindow.xaml.cs">
+      <DependentUpon>DebuggingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Features\Contracts\IFeaturesFactory.cs" />
+    <Compile Include="Areas\Logging\LoggingAreaConfig.cs" />
+    <Compile Include="Areas\Logging\Modules\LogMessageDumpStub.cs" />
+    <Compile Include="Areas\Main\Contracts\INewsViewModelFactory.cs" />
+    <Compile Include="Areas\Main\Data\Model\MainWindow.cs" />
+    <Compile Include="Areas\Main\Data\MainDataContext.cs" />
+    <Compile Include="Areas\Main\Data\Model\News.cs" />
+    <Compile Include="Areas\Main\Services\AppRuntimeManager.cs" />
+    <Compile Include="Areas\Main\Services\NewsServices\DirectoryNewsInstance.cs" />
+    <Compile Include="Areas\Main\Services\NewsServices\NewsInstance.cs" />
+    <Compile Include="Areas\Main\Services\NewsServices\NewsService.cs" />
+    <Compile Include="Areas\Main\Services\NewsServices\PatchReleaseNewsInstance.cs" />
+    <Compile Include="Areas\Main\ViewModels\MainViewModel.cs" />
+    <Compile Include="Areas\Main\ViewModels\NewsViewModel.cs" />
+    <Compile Include="Areas\Main\Views\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Main\Views\NewsView.xaml.cs">
+      <DependentUpon>NewsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Persistence\PersistenceAreaConfig.cs" />
+    <Compile Include="Areas\Persistence\Components\PersistenceEnabler.cs" />
+    <Compile Include="Areas\Persistence\Contracts\IPersistentContextProvider.cs" />
+    <Compile Include="Areas\Persistence\Contracts\PersistentContextOptions.cs" />
+    <Compile Include="Areas\Persistence\Services\PersistentContextsManager.cs" />
+    <Compile Include="Areas\SoundManager\Services\SoundManagerFeature.cs" />
+    <Compile Include="Areas\WurmApi\WurmApiAreaConfig.cs" />
+    <Compile Include="Systems\AppUpgrades\VersionUpgradeManager.cs" />
+    <Compile Include="Systems\ConventionBinding\ConventionBindingManager.cs" />
+    <Compile Include="Systems\ConventionBinding\Exceptions\ConventionBindingException.cs" />
+    <Compile Include="Systems\ConventionBinding\Exceptions\InvalidAreaConfigTypeException.cs" />
+    <Compile Include="Systems\ConventionBinding\Exceptions\KernelBindException.cs" />
+    <Compile Include="Systems\ConventionBinding\WaTypeInfo.cs" />
+    <Compile Include="Systems\Plugins\PluginInfo.cs" />
+    <Compile Include="Systems\Plugins\PluginManager.cs" />
+    <Compile Include="Utils\Extensions\IconExtensions.cs" />
+    <Compile Include="Utils\IrrklangDependencyValidator.cs" />
+    <Compile Include="Areas\Core\Contracts\IChangelogManager.cs" />
+    <Compile Include="Areas\Core\Contracts\IEnvironment.cs" />
+    <Compile Include="Areas\Core\Contracts\IMessageBus.cs" />
+    <Compile Include="Areas\Core\Contracts\ISendBugReportViewFactory.cs" />
+    <Compile Include="Areas\Core\Contracts\ISystemTrayContextMenu.cs" />
+    <Compile Include="Areas\Core\Contracts\IUserNotifier.cs" />
+    <Compile Include="Areas\Core\Contracts\IWaVersionInfoProvider.cs" />
+    <Compile Include="Areas\Core\Contracts\IWaVersion.cs" />
+    <Compile Include="Areas\Core\Parts\DispatcherTimerProxy.cs" />
+    <Compile Include="Areas\Main\LegacyViews\MainForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Main\LegacyViews\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Core\Services\SendBugReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Core\Services\SendBugReportForm.Designer.cs">
+      <DependentUpon>SendBugReportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Messages\Message.cs" />
+    <Compile Include="Utils\IoC\CustomActionsStrategyBase.cs" />
+    <Compile Include="Utils\IoC\PostInitializeActionsStrategy.cs" />
+    <Compile Include="Utils\WPF\WebBrowserBehaviors.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Calendar\Contracts\WurmSeasonDefinition.cs" />
+    <Compile Include="Areas\Calendar\Services\CalendarFeature.cs" />
+    <Compile Include="Areas\Calendar\Services\WurmSeasonsManager.cs" />
+    <Compile Include="Areas\Calendar\Parts\CalendarForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Calendar\Parts\CalendarForm.Designer.cs">
+      <DependentUpon>CalendarForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Calendar\Parts\ChooseSeasonsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Calendar\Parts\ChooseSeasonsForm.Designer.cs">
+      <DependentUpon>ChooseSeasonsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Calendar\Parts\SeasonsEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Calendar\Parts\SeasonsEditForm.Designer.cs">
+      <DependentUpon>SeasonsEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\CombatAssistant\Contracts\ICombatDataSource.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\Attack.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\CombatActor.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\CombatActorPairStats.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\CombatStatus.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\CountableStrings.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\CurrentAttackers.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\Evasion.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\Focus.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\KilledCounts.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\Parry.cs" />
+    <Compile Include="Areas\CombatAssistant\Data\Combat\TargetPreference.cs" />
+    <Compile Include="Areas\CombatAssistant\Services\CombatAssistantFeature.cs" />
+    <Compile Include="Areas\CombatAssistant\Parts\CombatResultsProcessor.cs" />
+    <Compile Include="Areas\CombatAssistant\Services\FeatureSettings.cs" />
+    <Compile Include="Areas\CombatAssistant\Parts\LiveLogsEventsMonitor.cs" />
+    <Compile Include="Areas\CombatAssistant\Parts\LogSearchEventsParser.cs" />
+    <Compile Include="Areas\CombatAssistant\Parts\CombatActorViewModel.cs" />
+    <Compile Include="Areas\CombatAssistant\Parts\CombatAssistantFeatureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\CombatAssistant\Parts\CombatAssistantFeatureForm.Designer.cs">
+      <DependentUpon>CombatAssistantFeatureForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\CombatAssistant\Parts\CombatResultsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\CombatAssistant\Parts\CombatResultsForm.Designer.cs">
+      <DependentUpon>CombatResultsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\CombatAssistant\Parts\CombatWidgetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\CombatAssistant\Parts\CombatWidgetForm.Designer.cs">
+      <DependentUpon>CombatWidgetForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Config\Contracts\ConfigCancelledException.cs" />
+    <Compile Include="Areas\Config\Contracts\IServersEditorViewFactory.cs" />
+    <Compile Include="Areas\Config\Contracts\ISettingsEditViewFactory.cs" />
+    <Compile Include="Areas\Config\Contracts\ServerInformation.cs" />
+    <Compile Include="Areas\Config\Services\ServerInfoManager.cs" />
+    <Compile Include="Utils\VisualCppRedistDetector.cs" />
+    <Compile Include="Areas\Config\Services\WurmAssistantConfig.cs" />
+    <Compile Include="Areas\WurmApi\Parts\WurmApiSetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\WurmApi\Parts\WurmApiSetupForm.Designer.cs">
+      <DependentUpon>WurmApiSetupForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Config\Services\ServersEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Config\Services\ServersEditorForm.Designer.cs">
+      <DependentUpon>ServersEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Config\Services\SettingsEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Config\Services\SettingsEditForm.Designer.cs">
+      <DependentUpon>SettingsEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\VisualCppMissingHelperView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Utils\VisualCppMissingHelperView.Designer.cs">
+      <DependentUpon>VisualCppMissingHelperView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\CraftingAssistant\Services\CraftingAssistantFeature.cs" />
+    <Compile Include="Areas\CraftingAssistant\Services\CraftingAssistantForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\CraftingAssistant\Services\CraftingAssistantForm.Designer.cs">
+      <DependentUpon>CraftingAssistantForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\CraftingAssistant\Parts\Widget.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\CraftingAssistant\Parts\Widget.Designer.cs">
+      <DependentUpon>Widget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Features\Contracts\IFeaturesManager.cs" />
+    <Compile Include="Areas\Features\Services\FeaturesManager.cs" />
+    <Compile Include="Areas\Granger\Parts\Advisor\BreedingAdvisor.cs" />
+    <Compile Include="Areas\Granger\Parts\Advisor\BreedingEvaluator.cs" />
+    <Compile Include="Areas\Granger\Parts\Advisor\Default\ColorWeight.cs" />
+    <Compile Include="Areas\Granger\Parts\Advisor\Default\DefaultBreedingEvaluator.cs" />
+    <Compile Include="Areas\Granger\Services\DefaultBreedingEvaluatorOptions.cs" />
+    <Compile Include="Areas\Granger\Parts\Advisor\Disabled\DisabledBreedingEvaluator.cs" />
+    <Compile Include="Areas\Granger\Parts\Creature.cs" />
+    <Compile Include="Areas\Granger\Parts\CreatureEdit\CreatureViewEditOpType.cs" />
+    <Compile Include="Areas\Granger\Parts\CreatureTrait.cs" />
+    <Compile Include="Areas\Granger\Parts\DataLayer\CreatureEntity.cs" />
+    <Compile Include="Areas\Granger\Parts\DataLayer\GrangerContext.cs" />
+    <Compile Include="Areas\Granger\Services\GrangerSimpleDb.cs" />
+    <Compile Include="Areas\Granger\Parts\DataLayer\HerdEntity.cs" />
+    <Compile Include="Areas\Granger\Parts\DataLayer\TraitValueEntity.cs" />
+    <Compile Include="Areas\Granger\Parts\Enums.cs" />
+    <Compile Include="Areas\Granger\Parts\Exceptions.cs" />
+    <Compile Include="Areas\Granger\Services\GrangerFeature.cs" />
+    <Compile Include="Areas\Granger\Services\GrangerSettings.cs" />
+    <Compile Include="Areas\Granger\Parts\ImportExport\Legacy\HerdExporter.cs" />
+    <Compile Include="Areas\Granger\Parts\ImportExport\Legacy\HerdImporter.cs" />
+    <Compile Include="Areas\Granger\Parts\LogFeedManager\AhSkillInfo.cs" />
+    <Compile Include="Areas\Granger\Parts\LogFeedManager\CreatureUpdatesManager.cs" />
+    <Compile Include="Areas\Granger\Parts\LogFeedManager\GrangerDebugLogger.cs" />
+    <Compile Include="Areas\Granger\Parts\LogFeedManager\GrangerHelpers.cs" />
+    <Compile Include="Areas\Granger\Parts\LogFeedManager\LogsFeedManager.cs" />
+    <Compile Include="Areas\Granger\Parts\LogFeedManager\PlayerManager.cs" />
+    <Compile Include="Areas\Granger\Parts\LogFeedManager\SmileXamineProcessor.cs" />
+    <Compile Include="Areas\Granger\Parts\TraitViewManager.cs" />
+    <Compile Include="Areas\Granger\Parts\ValuePreset\TraitValuator.cs" />
+    <Compile Include="Areas\Granger\Parts\ValuePreset\TraitValueMap.cs" />
+    <Compile Include="Areas\Granger\Parts\Advisor\Default\BreedingEvaluatorDefaultConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\Advisor\Default\BreedingEvaluatorDefaultConfig.Designer.cs">
+      <DependentUpon>BreedingEvaluatorDefaultConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormChooseHerd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormChooseHerd.Designer.cs">
+      <DependentUpon>FormChooseHerd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormChoosePlayers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormChoosePlayers.Designer.cs">
+      <DependentUpon>FormChoosePlayers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormEditComments.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormEditComments.Designer.cs">
+      <DependentUpon>FormEditComments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormGrangerGeneralOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormGrangerGeneralOptions.Designer.cs">
+      <DependentUpon>FormGrangerGeneralOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormGrangerImportExport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormGrangerImportExport.Designer.cs">
+      <DependentUpon>FormGrangerImportExport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormGrangerMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormGrangerMain.Designer.cs">
+      <DependentUpon>FormGrangerMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormGrangerNewInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormGrangerNewInfo.Designer.cs">
+      <DependentUpon>FormGrangerNewInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormHerdMerge.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormHerdMerge.Designer.cs">
+      <DependentUpon>FormHerdMerge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormHerdName.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\FormHerdName.Designer.cs">
+      <DependentUpon>FormHerdName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\HorseEdit\FormCreatureViewEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\HorseEdit\FormCreatureViewEdit.Designer.cs">
+      <DependentUpon>FormCreatureViewEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\UCGrangerCreatureList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\UCGrangerCreatureList.Designer.cs">
+      <DependentUpon>UCGrangerCreatureList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\UCGrangerHerdList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\UCGrangerHerdList.Designer.cs">
+      <DependentUpon>UCGrangerHerdList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\UCGrangerTraitView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\UCGrangerTraitView.Designer.cs">
+      <DependentUpon>UCGrangerTraitView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\ValuePreset\FormEditValuePresets.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\ValuePreset\FormEditValuePresets.Designer.cs">
+      <DependentUpon>FormEditValuePresets.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\ValuePreset\FormEditValuePresetsNewNameDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\ValuePreset\FormEditValuePresetsNewNameDialog.Designer.cs">
+      <DependentUpon>FormEditValuePresetsNewNameDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\ValuePreset\UCGrangerTraitValueEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\Parts\ValuePreset\UCGrangerTraitValueEdit.Designer.cs">
+      <DependentUpon>UCGrangerTraitValueEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Logging\Contracts\ILoggerFactory.cs" />
+    <Compile Include="Areas\Logging\Contracts\ILoggingConfig.cs" />
+    <Compile Include="Areas\Logging\Contracts\ILogMessageSteam.cs" />
+    <Compile Include="Areas\Logging\Contracts\ILogMessageDump.cs" />
+    <Compile Include="Areas\Logging\Contracts\IWurmApiLoggerFactory.cs" />
+    <Compile Include="Areas\Logging\Contracts\LogMessageEventArgs.cs" />
+    <Compile Include="Areas\Logging\Modules\Logger.cs" />
+    <Compile Include="Areas\Logging\Modules\LoggerStub.cs" />
+    <Compile Include="Areas\Logging\Modules\LoggingConfig.cs" />
+    <Compile Include="Areas\Logging\Services\LoggingManager.cs" />
+    <Compile Include="Areas\Logging\Services\CombinedLogsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Logging\Services\CombinedLogsUserControl.Designer.cs">
+      <DependentUpon>CombinedLogsUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\LogSearcher\Contracts\SearchParams.cs" />
+    <Compile Include="Areas\LogSearcher\Services\LogSearchFeature.cs" />
+    <Compile Include="Areas\LogSearcher\Parts\LogSearchForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\LogSearcher\Parts\LogSearchForm.Designer.cs">
+      <DependentUpon>LogSearchForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\LogSearcher\Parts\SearchTypeId.cs" />
+    <Compile Include="Areas\LogSearcher\Parts\SingleSearchMatch.cs" />
+    <Compile Include="Areas\MainMenu\Services\MainMenuUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\MainMenu\Services\MainMenuUserControl.Designer.cs">
+      <DependentUpon>MainMenuUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Native\Services\Win32NativeCalls.cs" />
+    <Compile Include="Areas\Persistence\Components\JsonExtendedErrorHandlingStrategy.cs" />
+    <Compile Include="Areas\Persistence\Components\PersistentObjectResolver.cs" />
+    <Compile Include="Areas\Persistence\Contracts\IPersistentObjectResolver.cs" />
+    <Compile Include="Areas\Persistence\Views\DeserializationErrorResolverForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Persistence\Views\DeserializationErrorResolverForm.Designer.cs">
+      <DependentUpon>DeserializationErrorResolverForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\RevealCreatures\Data\Direction.cs" />
+    <Compile Include="Areas\RevealCreatures\Data\Distance.cs" />
+    <Compile Include="Areas\RevealCreatures\Data\FindResult.cs" />
+    <Compile Include="Areas\RevealCreatures\Services\RevealCreaturesFeature.cs" />
+    <Compile Include="Areas\RevealCreatures\Parts\RevealCreaturesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\RevealCreatures\Parts\RevealCreaturesForm.Designer.cs">
+      <DependentUpon>RevealCreaturesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Data\QueryParams.cs" />
+    <Compile Include="Areas\SkillStats\Data\SkillReportItem.cs" />
+    <Compile Include="Areas\SkillStats\Services\SkillStatsFeature.cs" />
+    <Compile Include="Areas\SkillStats\Parts\LiveSessionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Parts\LiveSessionForm.Designer.cs">
+      <DependentUpon>LiveSessionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Parts\SkillGainsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Parts\SkillGainsForm.Designer.cs">
+      <DependentUpon>SkillGainsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Parts\SkillLevelsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Parts\SkillLevelsForm.Designer.cs">
+      <DependentUpon>SkillLevelsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Parts\SkillStatsFeatureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SkillStats\Parts\SkillStatsFeatureForm.Designer.cs">
+      <DependentUpon>SkillStatsFeatureForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SoundManager\Contracts\IPlayingSoundHandle.cs" />
+    <Compile Include="Areas\SoundManager\Contracts\ISound.cs" />
+    <Compile Include="Areas\SoundManager\Contracts\ISoundEngine.cs" />
+    <Compile Include="Areas\SoundManager\Contracts\ISoundManager.cs" />
+    <Compile Include="Areas\SoundManager\Contracts\ISoundResource.cs" />
+    <Compile Include="Areas\SoundManager\Contracts\ISoundsLibrary.cs" />
+    <Compile Include="Areas\SoundManager\Parts\BuiltIn\DefaultSound.cs" />
+    <Compile Include="Areas\SoundManager\Parts\BuiltIn\DefaultSoundEngine.cs" />
+    <Compile Include="Areas\SoundManager\Parts\Irrklang\IrrklangSound.cs" />
+    <Compile Include="Areas\SoundManager\Services\IrrklangSoundEngineProxy.cs" />
+    <Compile Include="Areas\SoundManager\Parts\PlayingSoundHandle.cs" />
+    <Compile Include="Areas\SoundManager\Parts\PlayingSoundHandleNullObject.cs" />
+    <Compile Include="Areas\SoundManager\Services\SoundManager.cs" />
+    <Compile Include="Areas\SoundManager\Parts\SoundResource.cs" />
+    <Compile Include="Areas\SoundManager\Parts\SoundResourceNullObject.cs" />
+    <Compile Include="Areas\SoundManager\Services\SoundsLibrary.cs" />
+    <Compile Include="Areas\SoundManager\Parts\Stub\StubSound.cs" />
+    <Compile Include="Areas\SoundManager\Parts\Stub\StubSoundEngine.cs" />
+    <Compile Include="Areas\SoundManager\Parts\ChooseSoundForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SoundManager\Parts\ChooseSoundForm.Designer.cs">
+      <DependentUpon>ChooseSoundForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SoundManager\Parts\SoundManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SoundManager\Parts\SoundManagerForm.Designer.cs">
+      <DependentUpon>SoundManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\SoundManager\Parts\SoundRenameForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\SoundManager\Parts\SoundRenameForm.Designer.cs">
+      <DependentUpon>SoundRenameForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Contracts\RuntimeTypeId.cs" />
+    <Compile Include="Areas\Timers\Contracts\TimerDefinition.cs" />
+    <Compile Include="Areas\Timers\Parts\CustomTimerDefinition.cs" />
+    <Compile Include="Areas\Timers\Parts\PlayerTimersGroup.cs" />
+    <Compile Include="Areas\Timers\Services\TimerDefinitions.cs" />
+    <Compile Include="Areas\Timers\Services\TimerInstances.cs" />
+    <Compile Include="Areas\Timers\Services\TimersFeature.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\Alignment\AlignmentTimer.cs" />
+    <Compile Include="Areas\Timers\Parts\Timers\CooldownHandler.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\Custom\CustomTimer.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\JunkSale\JunkSaleTimer.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\Meditation\MeditationTimer.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\MeditPath\MeditPathTimer.cs" />
+    <Compile Include="Areas\Timers\Parts\Timers\NotifyHandler.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\Prayer\PrayerTimer.cs" />
+    <Compile Include="Areas\Timers\Services\Timers\Sermon\SermonTimer.cs" />
+    <Compile Include="Areas\Timers\Parts\Timers\WurmTimer.cs" />
+    <Compile Include="Areas\Timers\Services\TimerTypes.cs" />
+    <Compile Include="Areas\Timers\Parts\EditTimerGroups.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\EditTimerGroups.Designer.cs">
+      <DependentUpon>EditTimerGroups.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\GlobalTimerSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\GlobalTimerSettingsForm.Designer.cs">
+      <DependentUpon>GlobalTimerSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\TimersChoiceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\TimersChoiceForm.Designer.cs">
+      <DependentUpon>TimersChoiceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\TimersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\TimersForm.Designer.cs">
+      <DependentUpon>TimersForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\Alignment\AlignmentTimerOptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\Alignment\AlignmentTimerOptionsForm.Designer.cs">
+      <DependentUpon>AlignmentTimerOptionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\Alignment\VerifyAlignmentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\Alignment\VerifyAlignmentForm.Designer.cs">
+      <DependentUpon>VerifyAlignmentForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\Custom\CustomTimersManagerEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\Custom\CustomTimersManagerEditForm.Designer.cs">
+      <DependentUpon>CustomTimersManagerEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\Custom\CustomTimersManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\Custom\CustomTimersManagerForm.Designer.cs">
+      <DependentUpon>CustomTimersManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\Meditation\MeditationTimerOptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\Meditation\MeditationTimerOptionsForm.Designer.cs">
+      <DependentUpon>MeditationTimerOptionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\MeditPath\ChooseQuestionTimerManuallyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\MeditPath\ChooseQuestionTimerManuallyForm.Designer.cs">
+      <DependentUpon>ChooseQuestionTimerManuallyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\MeditPath\MeditPathTimerOptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\MeditPath\MeditPathTimerOptionsForm.Designer.cs">
+      <DependentUpon>MeditPathTimerOptionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\PlayerLayoutView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\PlayerLayoutView.Designer.cs">
+      <DependentUpon>PlayerLayoutView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\Prayer\PrayerTimerOptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\Prayer\PrayerTimerOptionsForm.Designer.cs">
+      <DependentUpon>PrayerTimerOptionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\TimerDefaultSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\TimerDefaultSettingsForm.Designer.cs">
+      <DependentUpon>TimerDefaultSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\TimerDisplayView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Timers\Parts\Timers\TimerDisplayView.Designer.cs">
+      <DependentUpon>TimerDisplayView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\TrayPopups\Parts\PopupManager.cs" />
+    <Compile Include="Areas\TrayPopups\Services\TrayPopups.cs" />
+    <Compile Include="Areas\TrayPopups\Parts\FormPopupContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\TrayPopups\Parts\FormPopupContainer.Designer.cs">
+      <DependentUpon>FormPopupContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\TrayPopups\Parts\PopupNotifier.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Areas\TrayPopups\Parts\PopupNotifierForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Contracts\ActionQueueParsing\ConditionKind.cs" />
+    <Compile Include="Areas\Triggers\Contracts\ActionQueueParsing\IActionQueueConditions.cs" />
+    <Compile Include="Areas\Triggers\Contracts\ActionQueueParsing\IActionQueueParsingCondition.cs" />
+    <Compile Include="Areas\Triggers\Contracts\ActionQueueParsing\MatchingKind.cs" />
+    <Compile Include="Areas\Triggers\Services\ActiveTriggers.cs" />
+    <Compile Include="Areas\Triggers\Data\TriggerData.cs" />
+    <Compile Include="Areas\Triggers\Data\TriggerKind.cs" />
+    <Compile Include="Areas\Triggers\Parts\ActionQueueParsing\Condition.cs" />
+    <Compile Include="Areas\Triggers\Services\ConditionsManager.cs" />
+    <Compile Include="Areas\Triggers\Parts\Notifiers\INotifier.cs" />
+    <Compile Include="Areas\Triggers\Parts\Notifiers\NotifierAbstract.cs" />
+    <Compile Include="Areas\Triggers\Parts\Notifiers\NotifierBase.cs" />
+    <Compile Include="Areas\Triggers\Parts\Notifiers\NotifierException.cs" />
+    <Compile Include="Areas\Triggers\Parts\Notifiers\PopupNotifier.cs" />
+    <Compile Include="Areas\Triggers\Parts\Notifiers\SoundNotifier.cs" />
+    <Compile Include="Areas\Triggers\Services\TriggerManager.cs" />
+    <Compile Include="Areas\Triggers\Services\TriggersFeature.cs" />
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\ActionQueueTrigger.cs" />
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\ITrigger.cs" />
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\RegexTrigger.cs" />
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\SimpleConditionTriggerBase.cs" />
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\SimpleTrigger.cs" />
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\SkillLevelTrigger.cs" />
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\TriggerAbstract.cs" />
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\TriggerBase.cs" />
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\TriggerException.cs" />
+    <Compile Include="Areas\Triggers\Parts\ActionQueueParsing\EditGui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\ActionQueueParsing\EditGui.Designer.cs">
+      <DependentUpon>EditGui.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\EditTrigger.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\EditTrigger.Designer.cs">
+      <DependentUpon>EditTrigger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\FormChoosePlayer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\FormChoosePlayer.Designer.cs">
+      <DependentUpon>FormChoosePlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\FormTriggersConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\FormTriggersConfig.Designer.cs">
+      <DependentUpon>FormTriggersConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\FormTriggersMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\FormTriggersMain.Designer.cs">
+      <DependentUpon>FormTriggersMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\Notifiers\ChooseNotifierType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\Notifiers\ChooseNotifierType.Designer.cs">
+      <DependentUpon>ChooseNotifierType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\Notifiers\MessageConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\Notifiers\MessageConfig.Designer.cs">
+      <DependentUpon>MessageConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\Notifiers\PopupConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\Notifiers\PopupConfig.Designer.cs">
+      <DependentUpon>PopupConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\Notifiers\SoundConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\Notifiers\SoundConfig.Designer.cs">
+      <DependentUpon>SoundConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\ActionQueueTriggerConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\ActionQueueTriggerConfig.Designer.cs">
+      <DependentUpon>ActionQueueTriggerConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\RegexTriggerConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\RegexTriggerConfig.Designer.cs">
+      <DependentUpon>RegexTriggerConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\SimpleConditionTriggerBaseConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\SimpleConditionTriggerBaseConfig.Designer.cs">
+      <DependentUpon>SimpleConditionTriggerBaseConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\SkillLevelTriggerConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\SkillLevelTriggerConfig.Designer.cs">
+      <DependentUpon>SkillLevelTriggerConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\TriggerBaseConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\TriggerBaseConfig.Designer.cs">
+      <DependentUpon>TriggerBaseConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\TriggerChoice.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\TriggerChoice.Designer.cs">
+      <DependentUpon>TriggerChoice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\UcPlayerTriggersController.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Areas\Triggers\Parts\TriggersManager\UcPlayerTriggersController.Designer.cs">
+      <DependentUpon>UcPlayerTriggersController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\WurmApi\Contracts\IWurmClientValidator.cs" />
+    <Compile Include="Areas\WurmApi\Services\WurmClientValidator.cs" />
+    <Compile Include="Areas\WurmApi\Parts\WurmInstallDirectoryOverride.cs" />
+    <Compile Include="Areas\WurmApi\Parts\ValidationResultForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\WurmApi\Parts\ValidationResultForm.Designer.cs">
+      <DependentUpon>ValidationResultForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Areas\Core\Contracts\ISuperFactory.cs" />
+    <Compile Include="Utils\IoC\KernelExtensions.cs" />
+    <Compile Include="Utils\IoC\PreInitializeActionsStrategy.cs" />
+    <Compile Include="Areas\Core\Services\SuperFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -129,9 +824,237 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Areas\Calendar\Parts\CalendarForm.resx">
+      <DependentUpon>CalendarForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Calendar\Parts\ChooseSeasonsForm.resx">
+      <DependentUpon>ChooseSeasonsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Calendar\Parts\SeasonsEditForm.resx">
+      <DependentUpon>SeasonsEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\CombatAssistant\Parts\CombatAssistantFeatureForm.resx">
+      <DependentUpon>CombatAssistantFeatureForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\CombatAssistant\Parts\CombatResultsForm.resx">
+      <DependentUpon>CombatResultsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\CombatAssistant\Parts\CombatWidgetForm.resx">
+      <DependentUpon>CombatWidgetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\WurmApi\Parts\WurmApiSetupForm.resx">
+      <DependentUpon>WurmApiSetupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Config\Services\ServersEditorForm.resx">
+      <DependentUpon>ServersEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Config\Services\SettingsEditForm.resx">
+      <DependentUpon>SettingsEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Utils\VisualCppMissingHelperView.resx">
+      <DependentUpon>VisualCppMissingHelperView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\CraftingAssistant\Services\CraftingAssistantForm.resx">
+      <DependentUpon>CraftingAssistantForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\CraftingAssistant\Parts\Widget.resx">
+      <DependentUpon>Widget.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\Advisor\Default\BreedingEvaluatorDefaultConfig.resx">
+      <DependentUpon>BreedingEvaluatorDefaultConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\FormChooseHerd.resx">
+      <DependentUpon>FormChooseHerd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\FormChoosePlayers.resx">
+      <DependentUpon>FormChoosePlayers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\FormEditComments.resx">
+      <DependentUpon>FormEditComments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\FormGrangerGeneralOptions.resx">
+      <DependentUpon>FormGrangerGeneralOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\FormGrangerImportExport.resx">
+      <DependentUpon>FormGrangerImportExport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\FormGrangerMain.resx">
+      <DependentUpon>FormGrangerMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\FormGrangerNewInfo.resx">
+      <DependentUpon>FormGrangerNewInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\FormHerdMerge.resx">
+      <DependentUpon>FormHerdMerge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\FormHerdName.resx">
+      <DependentUpon>FormHerdName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\HorseEdit\FormCreatureViewEdit.resx">
+      <DependentUpon>FormCreatureViewEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\UCGrangerCreatureList.resx">
+      <DependentUpon>UCGrangerCreatureList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\UCGrangerHerdList.resx">
+      <DependentUpon>UCGrangerHerdList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\UCGrangerTraitView.resx">
+      <DependentUpon>UCGrangerTraitView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\ValuePreset\FormEditValuePresets.resx">
+      <DependentUpon>FormEditValuePresets.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\ValuePreset\FormEditValuePresetsNewNameDialog.resx">
+      <DependentUpon>FormEditValuePresetsNewNameDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\Parts\ValuePreset\UCGrangerTraitValueEdit.resx">
+      <DependentUpon>UCGrangerTraitValueEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Logging\Services\CombinedLogsUserControl.resx">
+      <DependentUpon>CombinedLogsUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\LogSearcher\Parts\LogSearchForm.resx">
+      <DependentUpon>LogSearchForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\MainMenu\Services\MainMenuUserControl.resx">
+      <DependentUpon>MainMenuUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Persistence\Views\DeserializationErrorResolverForm.resx">
+      <DependentUpon>DeserializationErrorResolverForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\RevealCreatures\Parts\RevealCreaturesForm.resx">
+      <DependentUpon>RevealCreaturesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SkillStats\Parts\LiveSessionForm.resx">
+      <DependentUpon>LiveSessionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SkillStats\Parts\SkillGainsForm.resx">
+      <DependentUpon>SkillGainsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SkillStats\Parts\SkillLevelsForm.resx">
+      <DependentUpon>SkillLevelsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SkillStats\Parts\SkillStatsFeatureForm.resx">
+      <DependentUpon>SkillStatsFeatureForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SoundManager\Parts\ChooseSoundForm.resx">
+      <DependentUpon>ChooseSoundForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SoundManager\Parts\SoundManagerForm.resx">
+      <DependentUpon>SoundManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\SoundManager\Parts\SoundRenameForm.resx">
+      <DependentUpon>SoundRenameForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\EditTimerGroups.resx">
+      <DependentUpon>EditTimerGroups.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\GlobalTimerSettingsForm.resx">
+      <DependentUpon>GlobalTimerSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\TimersChoiceForm.resx">
+      <DependentUpon>TimersChoiceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\TimersForm.resx">
+      <DependentUpon>TimersForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\Timers\Alignment\AlignmentTimerOptionsForm.resx">
+      <DependentUpon>AlignmentTimerOptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\Timers\Alignment\VerifyAlignmentForm.resx">
+      <DependentUpon>VerifyAlignmentForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\Timers\Custom\CustomTimersManagerEditForm.resx">
+      <DependentUpon>CustomTimersManagerEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\Timers\Custom\CustomTimersManagerForm.resx">
+      <DependentUpon>CustomTimersManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\Timers\Meditation\MeditationTimerOptionsForm.resx">
+      <DependentUpon>MeditationTimerOptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\Timers\MeditPath\ChooseQuestionTimerManuallyForm.resx">
+      <DependentUpon>ChooseQuestionTimerManuallyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\Timers\MeditPath\MeditPathTimerOptionsForm.resx">
+      <DependentUpon>MeditPathTimerOptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\Timers\PlayerLayoutView.resx">
+      <DependentUpon>PlayerLayoutView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\Timers\Prayer\PrayerTimerOptionsForm.resx">
+      <DependentUpon>PrayerTimerOptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\Timers\TimerDefaultSettingsForm.resx">
+      <DependentUpon>TimerDefaultSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Timers\Parts\Timers\TimerDisplayView.resx">
+      <DependentUpon>TimerDisplayView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\TrayPopups\Parts\FormPopupContainer.resx">
+      <DependentUpon>FormPopupContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\ActionQueueParsing\EditGui.resx">
+      <DependentUpon>EditGui.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\EditTrigger.resx">
+      <DependentUpon>EditTrigger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\FormChoosePlayer.resx">
+      <DependentUpon>FormChoosePlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\FormTriggersConfig.resx">
+      <DependentUpon>FormTriggersConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\FormTriggersMain.resx">
+      <DependentUpon>FormTriggersMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\Notifiers\ChooseNotifierType.resx">
+      <DependentUpon>ChooseNotifierType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\Notifiers\MessageConfig.resx">
+      <DependentUpon>MessageConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\Notifiers\PopupConfig.resx">
+      <DependentUpon>PopupConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\Notifiers\SoundConfig.resx">
+      <DependentUpon>SoundConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\TriggersManager\ActionQueueTriggerConfig.resx">
+      <DependentUpon>ActionQueueTriggerConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\TriggersManager\RegexTriggerConfig.resx">
+      <DependentUpon>RegexTriggerConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\TriggersManager\SimpleConditionTriggerBaseConfig.resx">
+      <DependentUpon>SimpleConditionTriggerBaseConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\TriggersManager\SkillLevelTriggerConfig.resx">
+      <DependentUpon>SkillLevelTriggerConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\TriggersManager\TriggerBaseConfig.resx">
+      <DependentUpon>TriggerBaseConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\TriggersManager\TriggerChoice.resx">
+      <DependentUpon>TriggerChoice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Triggers\Parts\TriggersManager\UcPlayerTriggersController.resx">
+      <DependentUpon>UcPlayerTriggersController.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\WurmApi\Parts\ValidationResultForm.resx">
+      <DependentUpon>ValidationResultForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Main\LegacyViews\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Core\Services\SendBugReportForm.resx">
+      <DependentUpon>SendBugReportForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -148,9 +1071,21 @@
       <Project>{e7e145ed-1938-4c09-b432-dc7d7a2d5ddb}</Project>
       <Name>Essentials</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\Persistence.Simple\Persistence.Simple.csproj">
+      <Project>{e1c00979-8878-4e3f-9fff-668e0a4c660b}</Project>
+      <Name>Persistence.Simple</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\Persistence\Persistence.csproj">
+      <Project>{fb65cb05-db0c-4cd6-9a89-cf8e973e1d47}</Project>
+      <Name>Persistence</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Common\PersistentObjects\PersistentObjects.csproj">
       <Project>{d97b40b0-debe-49ea-a630-7aa4e1e46c82}</Project>
       <Name>PersistentObjects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Common\WurmAssistant.Shared\WurmAssistant.Shared.csproj">
+      <Project>{2375aa6c-6b2c-4c4e-8cf0-8b3c1d406aea}</Project>
+      <Name>WurmAssistant.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\WurmApi\WurmApi\WurmApi.csproj">
       <Project>{f23b8ad5-5c3b-4c9a-bc11-3577f1cb3272}</Project>
@@ -164,24 +1099,99 @@
       <Project>{c2591795-c58c-4b9a-a1dd-38669c0b0b3d}</Project>
       <Name>WurmAssistantDataTransfer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WurmAssistant3.Core\WurmAssistant3.Core.csproj">
-      <Project>{da679803-09bd-4d44-9c0b-2dcc4d179f6b}</Project>
-      <Name>WurmAssistant3.Core</Name>
+    <ProjectReference Include="..\WurmAssistant3.Contracts\WurmAssistant3.Contracts.csproj">
+      <Project>{0c56745c-c82b-409a-8a39-5164d8c21e4c}</Project>
+      <Name>WurmAssistant3.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WurmAssistant3.Utils\WurmAssistant3.Utils.csproj">
+      <Project>{668f6d11-97f0-4745-b537-8b3b8bc46ea5}</Project>
+      <Name>WurmAssistant3.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ikpFlac.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ikpMP3.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="README.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Releases\README.md" />
-    <Content Include="Releases\3.0\index.html">
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WurmAssistantUnlimitedIcon.ico" />
+    <None Include="Resources\WurmAssistantUnlimitedIcon.png" />
+    <None Include="Resources\ActionQueueModdingHelp.txt" />
+    <None Include="Resources\beer.png" />
+    <None Include="Resources\2016-02-26_20h57_49.png" />
+    <Content Include="Releases\3.0\release.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Releases\3.1\release.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\close_icon.gif" />
+    <None Include="Resources\combat1.png" />
+    <None Include="Resources\Combat.png" />
+    <None Include="Resources\CombatBeta.png" />
+    <None Include="Resources\CombatStatisticsLegend.txt" />
+    <Content Include="Resources\DeleteRed.png" />
+    <Content Include="Resources\DeleteRed_small.png" />
+    <None Include="Resources\CalendarIcon.png" />
+    <None Include="Resources\Grip.png" />
+    <None Include="Resources\GrangerIcon.png" />
+    <None Include="Resources\Hammer.png" />
+    <None Include="Resources\Improvement.png" />
+    <Content Include="Resources\irrklang_small.png" />
+    <Content Include="Resources\lampsFlow.png" />
+    <None Include="Resources\LogSearcherIcon.png" />
+    <Content Include="Resources\paypal_donate.png" />
+    <Content Include="Resources\QueueSoundMod.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\Radar.png" />
+    <Content Include="Resources\SoundDisabled.png" />
+    <Content Include="Resources\SoundDisabledSmall.png" />
+    <Content Include="Resources\SoundEnabled.png" />
+    <Content Include="Resources\SoundEnabledSmall.png" />
+    <None Include="Resources\SoundNotifyIcon.png" />
+    <None Include="Resources\TimersIcon.png" />
+    <None Include="Resources\SoundManagerIcon.png" />
+    <Content Include="Resources\transp_placeholder.png" />
+    <None Include="Resources\triggersicon.png" />
+    <Content Include="Resources\WurmAssistantIcon.ico" />
+    <Content Include="Resources\WurmAssistantIcon.png" />
+    <Content Include="Resources\WurmAssistantImage.bmp" />
+    <Content Include="Resources\WurmAssistantLiteIcon.png" />
+    <Content Include="changelog-raw.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="changelog-raw.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Folder Include="Areas\CraftingAssistant\Contracts\" />
+    <Folder Include="Areas\Granger\Contracts\" />
+    <Folder Include="Areas\MainMenu\Contracts\" />
+    <Folder Include="Areas\Native\Contracts\" />
+    <Folder Include="Areas\RevealCreatures\Contracts\" />
+    <Folder Include="Areas\TrayPopups\Contracts\" />
+    <Folder Include="Messages\Events\" />
+    <Folder Include="Messages\Requests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Areas\Debugging\Services\DebuggingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Areas\Main\Views\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Areas\Main\Views\NewsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

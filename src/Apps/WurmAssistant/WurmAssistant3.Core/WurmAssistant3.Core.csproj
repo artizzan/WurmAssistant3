@@ -94,21 +94,15 @@
     <Compile Include="Areas\Calendar\Modules\CalendarFeature.cs" />
     <Compile Include="Areas\Calendar\Contracts\WurmSeasonDefinition.cs" />
     <Compile Include="Areas\Calendar\Modules\WurmSeasonsManager.cs" />
-    <Compile Include="Areas\Calendar\Views\FormCalendar.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Calendar\Views\FormCalendar.cs" />
     <Compile Include="Areas\Calendar\Views\FormCalendar.Designer.cs">
       <DependentUpon>FormCalendar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Calendar\Views\FormChooseSeasons.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Calendar\Views\FormChooseSeasons.cs" />
     <Compile Include="Areas\Calendar\Views\FormChooseSeasons.Designer.cs">
       <DependentUpon>FormChooseSeasons.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Calendar\Views\SeasonsEditView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Calendar\Views\SeasonsEditView.cs" />
     <Compile Include="Areas\Calendar\Views\SeasonsEditView.Designer.cs">
       <DependentUpon>SeasonsEditView.cs</DependentUpon>
     </Compile>
@@ -131,15 +125,11 @@
     <Compile Include="Areas\CombatAssistant\Contracts\ICombatDataSource.cs" />
     <Compile Include="Areas\CombatAssistant\Modules\LiveLogsEventsMonitor.cs" />
     <Compile Include="Areas\CombatAssistant\Modules\LogSearchEventsParser.cs" />
-    <Compile Include="Areas\CombatAssistant\Views\CombatWidgetView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\CombatAssistant\Views\CombatWidgetView.cs" />
     <Compile Include="Areas\CombatAssistant\Views\CombatWidgetView.Designer.cs">
       <DependentUpon>CombatWidgetView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\CombatAssistant\Views\CombatResultsView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\CombatAssistant\Views\CombatResultsView.cs" />
     <Compile Include="Areas\CombatAssistant\Views\CombatResultsView.Designer.cs">
       <DependentUpon>CombatResultsView.cs</DependentUpon>
     </Compile>
@@ -151,36 +141,26 @@
     <Compile Include="Areas\Config\Modules\ServerInfoManager.cs" />
     <Compile Include="Areas\Config\Contracts\ServerInformation.cs" />
     <Compile Include="Areas\Config\Modules\VisualCppRedistDetector.cs" />
-    <Compile Include="Areas\Config\Views\ServersEditorView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Config\Views\ServersEditorView.cs" />
     <Compile Include="Areas\Config\Views\ServersEditorView.Designer.cs">
       <DependentUpon>ServersEditorView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Config\Views\SettingsEditView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Config\Views\SettingsEditView.cs" />
     <Compile Include="Areas\Config\Views\SettingsEditView.Designer.cs">
       <DependentUpon>SettingsEditView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Config\Views\VisualCppMissingHelperView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Config\Views\VisualCppMissingHelperView.cs" />
     <Compile Include="Areas\Config\Views\VisualCppMissingHelperView.Designer.cs">
       <DependentUpon>VisualCppMissingHelperView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\CraftingAssistant\CraftingAssistantSetup.cs" />
     <Compile Include="Areas\CraftingAssistant\Modules\CraftingAssistantFeature.cs" />
     <Compile Include="Areas\RevealCreatures\Data\FindResult.cs" />
-    <Compile Include="Areas\CraftingAssistant\Views\CraftingAssistantView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\CraftingAssistant\Views\CraftingAssistantView.cs" />
     <Compile Include="Areas\CraftingAssistant\Views\CraftingAssistantView.Designer.cs">
       <DependentUpon>CraftingAssistantView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\CraftingAssistant\Views\Widget.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\CraftingAssistant\Views\Widget.cs" />
     <Compile Include="Areas\CraftingAssistant\Views\Widget.Designer.cs">
       <DependentUpon>Widget.cs</DependentUpon>
     </Compile>
@@ -193,9 +173,7 @@
     <Compile Include="Areas\RevealCreatures\RevealCreaturesSetup.cs" />
     <Compile Include="Areas\RevealCreatures\Data\Direction.cs" />
     <Compile Include="Areas\RevealCreatures\Data\Distance.cs" />
-    <Compile Include="Areas\RevealCreatures\Views\RevealCreaturesView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\RevealCreatures\Views\RevealCreaturesView.cs" />
     <Compile Include="Areas\RevealCreatures\Views\RevealCreaturesView.Designer.cs">
       <DependentUpon>RevealCreaturesView.cs</DependentUpon>
     </Compile>
@@ -203,33 +181,23 @@
     <Compile Include="Areas\SkillStats\Data\SkillReportItem.cs" />
     <Compile Include="Areas\SkillStats\Modules\SkillStatsFeature.cs" />
     <Compile Include="Areas\SkillStats\SkillStatsSetup.cs" />
-    <Compile Include="Areas\CombatAssistant\Views\CombatAssistantFeatureView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\CombatAssistant\Views\CombatAssistantFeatureView.cs" />
     <Compile Include="Areas\CombatAssistant\Views\CombatAssistantFeatureView.Designer.cs">
       <DependentUpon>CombatAssistantFeatureView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\SkillStats\Views\LiveSessionView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\SkillStats\Views\LiveSessionView.cs" />
     <Compile Include="Areas\SkillStats\Views\LiveSessionView.Designer.cs">
       <DependentUpon>LiveSessionView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\SkillStats\Views\SkillGainsView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillGainsView.cs" />
     <Compile Include="Areas\SkillStats\Views\SkillGainsView.Designer.cs">
       <DependentUpon>SkillGainsView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\SkillStats\Views\SkillStatsFeatureView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillStatsFeatureView.cs" />
     <Compile Include="Areas\SkillStats\Views\SkillStatsFeatureView.Designer.cs">
       <DependentUpon>SkillStatsFeatureView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\SkillStats\Views\SkillLevelsView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\SkillStats\Views\SkillLevelsView.cs" />
     <Compile Include="Areas\SkillStats\Views\SkillLevelsView.Designer.cs">
       <DependentUpon>SkillLevelsView.cs</DependentUpon>
     </Compile>
@@ -247,9 +215,7 @@
     <Compile Include="Areas\Timers\Modules\TimersWa2Importer.cs" />
     <Compile Include="Areas\Triggers\Modules\TriggersManager\SkillLevelTrigger.cs" />
     <Compile Include="Areas\Triggers\Modules\TriggersWa2Importer.cs" />
-    <Compile Include="Areas\Triggers\Views\TriggersManager\SkillLevelTriggerConfig.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\SkillLevelTriggerConfig.cs" />
     <Compile Include="Areas\Triggers\Views\TriggersManager\SkillLevelTriggerConfig.Designer.cs">
       <DependentUpon>SkillLevelTriggerConfig.cs</DependentUpon>
     </Compile>
@@ -260,15 +226,11 @@
     <Compile Include="Areas\Wa2DataImport\Modules\Wa2DataImporter.cs" />
     <Compile Include="Areas\Wa2DataImport\Modules\ImportItem.cs" />
     <Compile Include="Areas\Wa2DataImport\Modules\MergeResult.cs" />
-    <Compile Include="Areas\Wa2DataImport\Views\Wa2DataImportView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Wa2DataImport\Views\Wa2DataImportView.cs" />
     <Compile Include="Areas\Wa2DataImport\Views\Wa2DataImportView.Designer.cs">
       <DependentUpon>Wa2DataImportView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Wa2DataImport\Views\ImportMergeAssistantView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Wa2DataImport\Views\ImportMergeAssistantView.cs" />
     <Compile Include="Areas\Wa2DataImport\Views\ImportMergeAssistantView.Designer.cs">
       <DependentUpon>ImportMergeAssistantView.cs</DependentUpon>
     </Compile>
@@ -280,9 +242,7 @@
     <Compile Include="Areas\Granger\Modules\Advisor\BreedingEvaluator.cs" />
     <Compile Include="Areas\Granger\Modules\ImportExport\Legacy\HerdExporter.cs" />
     <Compile Include="Areas\Granger\Modules\LogFeedManager\AhSkillInfo.cs" />
-    <Compile Include="Areas\Granger\Views\Advisor\Default\BreedingEvaluatorDefaultConfig.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\Advisor\Default\BreedingEvaluatorDefaultConfig.cs" />
     <Compile Include="Areas\Granger\Views\Advisor\Default\BreedingEvaluatorDefaultConfig.Designer.cs">
       <DependentUpon>BreedingEvaluatorDefaultConfig.cs</DependentUpon>
     </Compile>
@@ -297,65 +257,45 @@
     <Compile Include="Areas\Granger\Modules\DataLayer\TraitValueEntity.cs" />
     <Compile Include="Areas\Granger\Modules\Enums.cs" />
     <Compile Include="Areas\Granger\Modules\Exceptions.cs" />
-    <Compile Include="Areas\Granger\Views\FormChooseHerd.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\FormChooseHerd.cs" />
     <Compile Include="Areas\Granger\Views\FormChooseHerd.Designer.cs">
       <DependentUpon>FormChooseHerd.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\FormChoosePlayers.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\FormChoosePlayers.cs" />
     <Compile Include="Areas\Granger\Views\FormChoosePlayers.Designer.cs">
       <DependentUpon>FormChoosePlayers.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\FormEditComments.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\FormEditComments.cs" />
     <Compile Include="Areas\Granger\Views\FormEditComments.Designer.cs">
       <DependentUpon>FormEditComments.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\FormGrangerGeneralOptions.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\FormGrangerGeneralOptions.cs" />
     <Compile Include="Areas\Granger\Views\FormGrangerGeneralOptions.Designer.cs">
       <DependentUpon>FormGrangerGeneralOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\FormGrangerImportExport.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\FormGrangerImportExport.cs" />
     <Compile Include="Areas\Granger\Views\FormGrangerImportExport.Designer.cs">
       <DependentUpon>FormGrangerImportExport.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\FormGrangerMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\FormGrangerMain.cs" />
     <Compile Include="Areas\Granger\Views\FormGrangerMain.Designer.cs">
       <DependentUpon>FormGrangerMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\FormGrangerNewInfo.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\FormGrangerNewInfo.cs" />
     <Compile Include="Areas\Granger\Views\FormGrangerNewInfo.Designer.cs">
       <DependentUpon>FormGrangerNewInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\FormHerdMerge.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\FormHerdMerge.cs" />
     <Compile Include="Areas\Granger\Views\FormHerdMerge.Designer.cs">
       <DependentUpon>FormHerdMerge.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\FormHerdName.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\FormHerdName.cs" />
     <Compile Include="Areas\Granger\Views\FormHerdName.Designer.cs">
       <DependentUpon>FormHerdName.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Granger\Modules\GrangerSettings.cs" />
     <Compile Include="Areas\Granger\Modules\Creature.cs" />
-    <Compile Include="Areas\Granger\Views\HorseEdit\FormCreatureViewEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\HorseEdit\FormCreatureViewEdit.cs" />
     <Compile Include="Areas\Granger\Views\HorseEdit\FormCreatureViewEdit.Designer.cs">
       <DependentUpon>FormCreatureViewEdit.cs</DependentUpon>
     </Compile>
@@ -370,64 +310,46 @@
     <Compile Include="Areas\Granger\Modules\LogFeedManager\PlayerManager.cs" />
     <Compile Include="Areas\Granger\Modules\GrangerFeature.cs" />
     <Compile Include="Areas\Granger\Modules\TraitViewManager.cs" />
-    <Compile Include="Areas\Granger\Views\UCGrangerHerdList.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\UCGrangerHerdList.cs" />
     <Compile Include="Areas\Granger\Views\UCGrangerHerdList.Designer.cs">
       <DependentUpon>UCGrangerHerdList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\UCGrangerCreatureList.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\UCGrangerCreatureList.cs" />
     <Compile Include="Areas\Granger\Views\UCGrangerCreatureList.Designer.cs">
       <DependentUpon>UCGrangerCreatureList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\UCGrangerTraitView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\UCGrangerTraitView.cs" />
     <Compile Include="Areas\Granger\Views\UCGrangerTraitView.Designer.cs">
       <DependentUpon>UCGrangerTraitView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\ValuePreset\FormEditValuePresets.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\ValuePreset\FormEditValuePresets.cs" />
     <Compile Include="Areas\Granger\Views\ValuePreset\FormEditValuePresets.Designer.cs">
       <DependentUpon>FormEditValuePresets.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\Views\ValuePreset\FormEditValuePresetsNewNameDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\ValuePreset\FormEditValuePresetsNewNameDialog.cs" />
     <Compile Include="Areas\Granger\Views\ValuePreset\FormEditValuePresetsNewNameDialog.Designer.cs">
       <DependentUpon>FormEditValuePresetsNewNameDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Granger\Modules\ValuePreset\TraitValuator.cs" />
     <Compile Include="Areas\Granger\Modules\ValuePreset\TraitValueMap.cs" />
-    <Compile Include="Areas\Granger\Views\ValuePreset\UCGrangerTraitValueEdit.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Granger\Views\ValuePreset\UCGrangerTraitValueEdit.cs" />
     <Compile Include="Areas\Granger\Views\ValuePreset\UCGrangerTraitValueEdit.Designer.cs">
       <DependentUpon>UCGrangerTraitValueEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Root\Components\ConsoleArgsManager.cs" />
     <Compile Include="Root\Contracts\ISendBugReportViewFactory.cs" />
-    <Compile Include="Root\Views\SendBugReportView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Root\Views\SendBugReportView.cs" />
     <Compile Include="Root\Views\SendBugReportView.Designer.cs">
       <DependentUpon>SendBugReportView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\MainMenu\MainMenuSetup.cs" />
     <Compile Include="Areas\Persistence\Components\JsonExtendedErrorHandlingStrategy.cs" />
-    <Compile Include="Areas\Persistence\Views\DeserializationErrorResolverView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Persistence\Views\DeserializationErrorResolverView.cs" />
     <Compile Include="Areas\Persistence\Views\DeserializationErrorResolverView.Designer.cs">
       <DependentUpon>DeserializationErrorResolverView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Timers\Modules\TimerInstances.cs" />
-    <Compile Include="Areas\Timers\Views\EditTimerGroups.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\EditTimerGroups.cs" />
     <Compile Include="Areas\Timers\Views\EditTimerGroups.Designer.cs">
       <DependentUpon>EditTimerGroups.cs</DependentUpon>
     </Compile>
@@ -448,101 +370,71 @@
     <Compile Include="Areas\Triggers\Modules\TriggersManager\TriggerAbstract.cs" />
     <Compile Include="Areas\Triggers\Modules\TriggersManager\TriggerBase.cs" />
     <Compile Include="Areas\Triggers\Modules\TriggersManager\TriggerException.cs" />
-    <Compile Include="Areas\Triggers\Views\ActionQueueParsing\EditGui.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\ActionQueueParsing\EditGui.cs" />
     <Compile Include="Areas\Triggers\Views\ActionQueueParsing\EditGui.Designer.cs">
       <DependentUpon>EditGui.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Triggers\Views\EditTrigger.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\EditTrigger.cs" />
     <Compile Include="Areas\Triggers\Views\EditTrigger.Designer.cs">
       <DependentUpon>EditTrigger.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Triggers\Views\FormChoosePlayer.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\FormChoosePlayer.cs" />
     <Compile Include="Areas\Triggers\Views\FormChoosePlayer.Designer.cs">
       <DependentUpon>FormChoosePlayer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Triggers\Views\FormTriggersConfig.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\FormTriggersConfig.cs" />
     <Compile Include="Areas\Triggers\Views\FormTriggersConfig.Designer.cs">
       <DependentUpon>FormTriggersConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Triggers\Views\FormTriggersMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\FormTriggersMain.cs" />
     <Compile Include="Areas\Triggers\Views\FormTriggersMain.Designer.cs">
       <DependentUpon>FormTriggersMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Triggers\Modules\TriggersFeature.cs" />
-    <Compile Include="Areas\Triggers\Views\Notifiers\ChooseNotifierType.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\Notifiers\ChooseNotifierType.cs" />
     <Compile Include="Areas\Triggers\Views\Notifiers\ChooseNotifierType.Designer.cs">
       <DependentUpon>ChooseNotifierType.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Triggers\Modules\Notifiers\INotifier.cs" />
-    <Compile Include="Areas\Triggers\Views\Notifiers\MessageConfig.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\Notifiers\MessageConfig.cs" />
     <Compile Include="Areas\Triggers\Views\Notifiers\MessageConfig.Designer.cs">
       <DependentUpon>MessageConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Triggers\Modules\Notifiers\NotifierAbstract.cs" />
     <Compile Include="Areas\Triggers\Modules\Notifiers\NotifierBase.cs" />
     <Compile Include="Areas\Triggers\Modules\Notifiers\NotifierException.cs" />
-    <Compile Include="Areas\Triggers\Views\Notifiers\PopupConfig.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\Notifiers\PopupConfig.cs" />
     <Compile Include="Areas\Triggers\Views\Notifiers\PopupConfig.Designer.cs">
       <DependentUpon>PopupConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Triggers\Modules\Notifiers\PopupNotifier.cs" />
-    <Compile Include="Areas\Triggers\Views\Notifiers\SoundConfig.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\Notifiers\SoundConfig.cs" />
     <Compile Include="Areas\Triggers\Views\Notifiers\SoundConfig.Designer.cs">
       <DependentUpon>SoundConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Triggers\Modules\Notifiers\SoundNotifier.cs" />
     <Compile Include="Areas\Triggers\Modules\TriggerManager.cs" />
-    <Compile Include="Areas\Triggers\Views\TriggersManager\ActionQueueTriggerConfig.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\ActionQueueTriggerConfig.cs" />
     <Compile Include="Areas\Triggers\Views\TriggersManager\ActionQueueTriggerConfig.Designer.cs">
       <DependentUpon>ActionQueueTriggerConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Triggers\Views\TriggersManager\RegexTriggerConfig.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\RegexTriggerConfig.cs" />
     <Compile Include="Areas\Triggers\Views\TriggersManager\RegexTriggerConfig.Designer.cs">
       <DependentUpon>RegexTriggerConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Triggers\Views\TriggersManager\SimpleConditionTriggerBaseConfig.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\SimpleConditionTriggerBaseConfig.cs" />
     <Compile Include="Areas\Triggers\Views\TriggersManager\SimpleConditionTriggerBaseConfig.Designer.cs">
       <DependentUpon>SimpleConditionTriggerBaseConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Triggers\Views\TriggersManager\TriggerBaseConfig.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\TriggerBaseConfig.cs" />
     <Compile Include="Areas\Triggers\Views\TriggersManager\TriggerBaseConfig.Designer.cs">
       <DependentUpon>TriggerBaseConfig.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Triggers\Views\TriggersManager\TriggerChoice.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\TriggerChoice.cs" />
     <Compile Include="Areas\Triggers\Views\TriggersManager\TriggerChoice.Designer.cs">
       <DependentUpon>TriggerChoice.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Triggers\Views\TriggersManager\UcPlayerTriggersController.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Triggers\Views\TriggersManager\UcPlayerTriggersController.cs" />
     <Compile Include="Areas\Triggers\Views\TriggersManager\UcPlayerTriggersController.Designer.cs">
       <DependentUpon>UcPlayerTriggersController.cs</DependentUpon>
     </Compile>
@@ -557,21 +449,15 @@
     <Compile Include="Areas\SoundManager\Modules\SoundResource.cs" />
     <Compile Include="Areas\SoundManager\Modules\SoundsLibrary.cs" />
     <Compile Include="Areas\SoundManager\SoundManagerSetup.cs" />
-    <Compile Include="Areas\SoundManager\Views\ChooseSoundView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\SoundManager\Views\ChooseSoundView.cs" />
     <Compile Include="Areas\SoundManager\Views\ChooseSoundView.Designer.cs">
       <DependentUpon>ChooseSoundView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\SoundManager\Views\SoundManagerView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\SoundManager\Views\SoundManagerView.cs" />
     <Compile Include="Areas\SoundManager\Views\SoundManagerView.Designer.cs">
       <DependentUpon>SoundManagerView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\SoundManager\Views\SoundRenameView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\SoundManager\Views\SoundRenameView.cs" />
     <Compile Include="Areas\SoundManager\Views\SoundRenameView.Designer.cs">
       <DependentUpon>SoundRenameView.cs</DependentUpon>
     </Compile>
@@ -581,96 +467,68 @@
     <Compile Include="Areas\Timers\Contracts\RuntimeTypeId.cs" />
     <Compile Include="Areas\Timers\Modules\Timers\NotifyHandler.cs" />
     <Compile Include="Areas\Timers\Modules\TimerTypes.cs" />
-    <Compile Include="Areas\Timers\Views\Timers\Alignment\AlignmentTimerOptionsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\Timers\Alignment\AlignmentTimerOptionsForm.cs" />
     <Compile Include="Areas\Timers\Views\Timers\Alignment\AlignmentTimerOptionsForm.Designer.cs">
       <DependentUpon>AlignmentTimerOptionsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Timers\Views\Timers\Alignment\VerifyAlignmentForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\Timers\Alignment\VerifyAlignmentForm.cs" />
     <Compile Include="Areas\Timers\Views\Timers\Alignment\VerifyAlignmentForm.Designer.cs">
       <DependentUpon>VerifyAlignmentForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Timers\Modules\Timers\CooldownHandler.cs" />
     <Compile Include="Areas\Timers\Modules\Timers\Custom\CustomTimer.cs" />
-    <Compile Include="Areas\Timers\Views\Timers\Custom\CustomTimersManagerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\Timers\Custom\CustomTimersManagerForm.cs" />
     <Compile Include="Areas\Timers\Views\Timers\Custom\CustomTimersManagerForm.Designer.cs">
       <DependentUpon>CustomTimersManagerForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Timers\Views\Timers\Custom\CustomTimersManagerEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\Timers\Custom\CustomTimersManagerEditForm.cs" />
     <Compile Include="Areas\Timers\Views\Timers\Custom\CustomTimersManagerEditForm.Designer.cs">
       <DependentUpon>CustomTimersManagerEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Timers\Views\TimersChoiceForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\TimersChoiceForm.cs" />
     <Compile Include="Areas\Timers\Views\TimersChoiceForm.Designer.cs">
       <DependentUpon>TimersChoiceForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Timers\Views\GlobalTimerSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\GlobalTimerSettingsForm.cs" />
     <Compile Include="Areas\Timers\Views\GlobalTimerSettingsForm.Designer.cs">
       <DependentUpon>GlobalTimerSettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Timers\Views\TimersForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\TimersForm.cs" />
     <Compile Include="Areas\Timers\Views\TimersForm.Designer.cs">
       <DependentUpon>TimersForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Timers\Views\Timers\TimerDefaultSettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\Timers\TimerDefaultSettingsForm.cs" />
     <Compile Include="Areas\Timers\Views\Timers\TimerDefaultSettingsForm.Designer.cs">
       <DependentUpon>TimerDefaultSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Timers\Modules\Timers\JunkSale\JunkSaleTimer.cs" />
     <Compile Include="Areas\Timers\Modules\Timers\Meditation\MeditationTimer.cs" />
-    <Compile Include="Areas\Timers\Views\Timers\Meditation\MeditationTimerOptionsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\Timers\Meditation\MeditationTimerOptionsForm.cs" />
     <Compile Include="Areas\Timers\Views\Timers\Meditation\MeditationTimerOptionsForm.Designer.cs">
       <DependentUpon>MeditationTimerOptionsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Timers\Views\Timers\MeditPath\ChooseQuestionTimerManuallyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\Timers\MeditPath\ChooseQuestionTimerManuallyForm.cs" />
     <Compile Include="Areas\Timers\Views\Timers\MeditPath\ChooseQuestionTimerManuallyForm.Designer.cs">
       <DependentUpon>ChooseQuestionTimerManuallyForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Timers\Modules\Timers\MeditPath\MeditPathTimer.cs" />
-    <Compile Include="Areas\Timers\Views\Timers\MeditPath\MeditPathTimerOptionsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\Timers\MeditPath\MeditPathTimerOptionsForm.cs" />
     <Compile Include="Areas\Timers\Views\Timers\MeditPath\MeditPathTimerOptionsForm.Designer.cs">
       <DependentUpon>MeditPathTimerOptionsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Timers\Modules\TimersFeature.cs" />
     <Compile Include="Areas\Timers\Modules\PlayerTimersGroup.cs" />
     <Compile Include="Areas\Timers\Modules\Timers\Prayer\PrayerTimer.cs" />
-    <Compile Include="Areas\Timers\Views\Timers\Prayer\PrayerTimerOptionsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\Timers\Prayer\PrayerTimerOptionsForm.cs" />
     <Compile Include="Areas\Timers\Views\Timers\Prayer\PrayerTimerOptionsForm.Designer.cs">
       <DependentUpon>PrayerTimerOptionsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Timers\Modules\Timers\Sermon\SermonTimer.cs" />
-    <Compile Include="Areas\Timers\Views\Timers\PlayerLayoutView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\Timers\PlayerLayoutView.cs" />
     <Compile Include="Areas\Timers\Views\Timers\PlayerLayoutView.Designer.cs">
       <DependentUpon>PlayerLayoutView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Timers\Views\Timers\TimerDisplayView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Timers\Views\Timers\TimerDisplayView.cs" />
     <Compile Include="Areas\Timers\Views\Timers\TimerDisplayView.Designer.cs">
       <DependentUpon>TimerDisplayView.cs</DependentUpon>
     </Compile>
@@ -678,12 +536,8 @@
     <Compile Include="Areas\Timers\Modules\TimerDefinitions.cs" />
     <Compile Include="Areas\Timers\TimersSetup.cs" />
     <Compile Include="Areas\TrayPopups\Contracts\ITrayPopups.cs" />
-    <Compile Include="Areas\TrayPopups\Views\PopupNotifier.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Areas\TrayPopups\Views\PopupNotifierForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\TrayPopups\Views\PopupNotifier.cs" />
+    <Compile Include="Areas\TrayPopups\Views\PopupNotifierForm.cs" />
     <Compile Include="Areas\TrayPopups\Modules\PopupManager.cs" />
     <Compile Include="Areas\TrayPopups\Contracts\PopupMessage.cs" />
     <Compile Include="Areas\TrayPopups\Modules\TrayPopups.cs" />
@@ -693,9 +547,7 @@
       <DependentUpon>TrayPopupsResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Areas\TrayPopups\TrayPopupsSetup.cs" />
-    <Compile Include="Areas\TrayPopups\Views\FormPopupContainer.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\TrayPopups\Views\FormPopupContainer.cs" />
     <Compile Include="Areas\TrayPopups\Views\FormPopupContainer.Designer.cs">
       <DependentUpon>FormPopupContainer.cs</DependentUpon>
     </Compile>
@@ -724,18 +576,14 @@
     <Compile Include="Areas\Logging\Contracts\IWurmApiLoggerFactory.cs" />
     <Compile Include="Areas\Logging\Contracts\LogMessageEventArgs.cs" />
     <Compile Include="Areas\Logging\LoggingSetup.cs" />
-    <Compile Include="Areas\Logging\Views\LogView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\Logging\Views\LogView.cs" />
     <Compile Include="Areas\Logging\Views\LogView.Designer.cs">
       <DependentUpon>LogView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\LogSearcher\LogSearcherSetup.cs" />
     <Compile Include="Areas\LogSearcher\Contracts\SearchParams.cs" />
     <Compile Include="Areas\LogSearcher\Views\SearchTypeId.cs" />
-    <Compile Include="Areas\LogSearcher\Views\LogSearchView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\LogSearcher\Views\LogSearchView.cs" />
     <Compile Include="Areas\LogSearcher\Views\LogSearchView.Designer.cs">
       <DependentUpon>LogSearchView.cs</DependentUpon>
     </Compile>
@@ -750,9 +598,7 @@
     <Compile Include="Root\Components\ProcessStarter.cs" />
     <Compile Include="Root\Components\UserNotifier.cs" />
     <Compile Include="Areas\WurmApi\Modules\WurmClientValidator.cs" />
-    <Compile Include="Areas\WurmApi\Views\ValidationResultView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\WurmApi\Views\ValidationResultView.cs" />
     <Compile Include="Areas\WurmApi\Views\ValidationResultView.Designer.cs">
       <DependentUpon>ValidationResultView.cs</DependentUpon>
     </Compile>
@@ -763,9 +609,7 @@
     <Compile Include="Root\Contracts\IWaExecutionInfoProvider.cs" />
     <Compile Include="Root\Contracts\IWurmAssistantDataDirectory.cs" />
     <Compile Include="Root\Contracts\IHostEnvironment.cs" />
-    <Compile Include="Areas\Config\Views\FirstTimeSetupView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Areas\Config\Views\FirstTimeSetupView.cs" />
     <Compile Include="Areas\Config\Views\FirstTimeSetupView.Designer.cs">
       <DependentUpon>FirstTimeSetupView.cs</DependentUpon>
     </Compile>
@@ -773,15 +617,11 @@
     <Compile Include="Areas\Logging\Modules\Logger.cs" />
     <Compile Include="Areas\Logging\Modules\LoggingManager.cs" />
     <Compile Include="Areas\Logging\Modules\LoggingConfig.cs" />
-    <Compile Include="Root\MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Root\MainForm.cs" />
     <Compile Include="Root\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\MainMenu\Views\MenuView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Areas\MainMenu\Views\MenuView.cs" />
     <Compile Include="Areas\MainMenu\Views\MenuView.Designer.cs">
       <DependentUpon>MenuView.cs</DependentUpon>
     </Compile>
@@ -793,43 +633,23 @@
     <Compile Include="ReflectionRootAnchor.cs" />
     <Compile Include="Areas\Native\Contracts\INativeCalls.cs" />
     <Compile Include="Areas\Native\Modules\Win32NativeCalls.cs" />
-    <Compile Include="WinForms\Reusables\UniversalTextDisplayView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="WinForms\Reusables\UniversalTextDisplayView.cs" />
     <Compile Include="WinForms\Reusables\UniversalTextDisplayView.Designer.cs">
       <DependentUpon>UniversalTextDisplayView.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\LabelAutowrap.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WinForms\ListViewNf.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WinForms\ExtendedForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WinForms\ExtendedUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="WinForms\LabelAutowrap.cs" />
+    <Compile Include="WinForms\ListViewNf.cs" />
+    <Compile Include="WinForms\ExtendedForm.cs" />
+    <Compile Include="WinForms\ExtendedUserControl.cs" />
     <Compile Include="WinForms\MinimizationManager.cs" />
-    <Compile Include="WinForms\PersistentForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WinForms\PersistentUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="WinForms\TextBoxNf.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WinForms\TimeSpanInput.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="WinForms\PersistentForm.cs" />
+    <Compile Include="WinForms\PersistentUserControl.cs" />
+    <Compile Include="WinForms\TextBoxNf.cs" />
+    <Compile Include="WinForms\TimeSpanInput.cs" />
     <Compile Include="WinForms\TimeSpanInput.Designer.cs">
       <DependentUpon>TimeSpanInput.cs</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\TimeSpanInputCompact.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="WinForms\TimeSpanInputCompact.cs" />
     <Compile Include="WinForms\TimeSpanInputCompact.Designer.cs">
       <DependentUpon>TimeSpanInputCompact.cs</DependentUpon>
     </Compile>

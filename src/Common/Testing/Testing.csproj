@@ -52,6 +52,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Fixtures\TestWithFileSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TeardownHelper.cs" />
     <Compile Include="TempDirectoriesManager.cs" />
     <Compile Include="TempDirectoriesFactory.cs" />
     <Compile Include="TestfulException.cs" />

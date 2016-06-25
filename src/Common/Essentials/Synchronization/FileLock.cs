@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -12,6 +13,7 @@ namespace AldursLab.Essentials.Synchronization
     public sealed class FileLock : IDisposable
     {
         readonly FileStream stream;
+        bool disposed;
 
         private FileLock(FileStream stream)
         {
@@ -34,7 +36,8 @@ namespace AldursLab.Essentials.Synchronization
         {
             try
             {
-                var handle = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                var handle = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.Read);
+                WriteProcessInfoToFile(handle);
                 return new FileLock(handle);
             }
             catch (IOException exception)
@@ -60,7 +63,8 @@ namespace AldursLab.Essentials.Synchronization
                     Directory.CreateDirectory(dir);
                 }
 
-                var handle = File.Open(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                var handle = File.Open(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
+                WriteProcessInfoToFile(handle);
                 return new FileLock(handle);
             }
             catch (IOException exception)
@@ -68,6 +72,21 @@ namespace AldursLab.Essentials.Synchronization
                 if (IsNonLockException(exception)) throw;
                 throw CreateLockFailedException(exception);
             }
+        }
+
+        static void WriteProcessInfoToFile(FileStream handle)
+        {
+            ClearStream(handle);
+            var currentProcess = Process.GetCurrentProcess();
+            var writer = new StreamWriter(handle);
+            writer.Write($"This file is locked by Process Id {currentProcess.Id} named {currentProcess.ProcessName}");
+            writer.Flush();
+            handle.Flush(true);
+        }
+
+        static void ClearStream(FileStream handle)
+        {
+            handle.SetLength(0);
         }
 
         static bool IsNonLockException(Exception exception)
@@ -101,7 +120,20 @@ namespace AldursLab.Essentials.Synchronization
 
         void Cleanup()
         {
-            stream.Dispose();
+            try
+            {
+                if (!disposed)
+                {
+                    ClearStream(stream);
+                    stream.Flush(true);
+                }
+                stream.Dispose();
+                disposed = true;
+            }
+            catch (Exception exception)
+            {
+                Trace.WriteLine(exception);
+            }
         }
     }
 

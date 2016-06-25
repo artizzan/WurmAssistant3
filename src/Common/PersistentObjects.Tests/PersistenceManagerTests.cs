@@ -254,7 +254,7 @@ namespace AldursLab.PersistentObjects.Tests
             }
 
             {
-                bool invoked = false;
+                //bool invoked = false;
                 var oInt = new SimpleObjWithIntData("1");
                 var strategy = new CustomErrorHandlingStrategy();
                 var ss = new JsonSerializationStrategy()

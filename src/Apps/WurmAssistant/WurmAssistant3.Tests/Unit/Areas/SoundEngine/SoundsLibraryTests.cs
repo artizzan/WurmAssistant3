@@ -5,24 +5,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AldursLab.Testing;
-using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Contracts;
-using AldursLab.WurmAssistant3.Core.Areas.SoundManager.Modules;
+using AldursLab.WurmAssistant3.Areas.Core.Contracts;
+using AldursLab.WurmAssistant3.Areas.SoundManager.Contracts;
+using AldursLab.WurmAssistant3.Areas.SoundManager.Services;
 using NUnit.Framework;
+using Telerik.JustMock;
 using Telerik.JustMock.AutoMock;
+using Telerik.JustMock.Helpers;
 
 namespace AldursLab.WurmAssistant3.Tests.Unit.Areas.SoundEngine
 {
     class SoundsLibraryTests : UnitTest<SoundsLibrary>
     {
         DirectoryHandle sourceSoundsDir;
-        DirectoryHandle soundBankDir;
+        DirectoryHandle dataDir;
+        string soundBankDir;
 
         [SetUp]
         public void Setup()
         {
             sourceSoundsDir = TempDirectoriesFactory.CreateByUnzippingFile(Path.Combine("Resources", "sounds_wav.7z"));
-            soundBankDir = TempDirectoriesFactory.CreateEmpty();
-            Kernel.Bind<string>().ToConstant(soundBankDir.FullName).InjectedIntoParameter("soundFilesPath");
+            dataDir = TempDirectoriesFactory.CreateEmpty();
+            var waDataDir = Mock.Create<IWurmAssistantDataDirectory>();
+            waDataDir.Arrange(directory => directory.DirectoryPath).Returns(dataDir.FullName);
+            Kernel.Bind<IWurmAssistantDataDirectory>().ToConstant(waDataDir);
+            soundBankDir = Path.Combine(dataDir.FullName, SoundsLibrary.SoundbankDirName);
         }
 
         [Test]
@@ -38,7 +45,7 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Areas.SoundEngine
             var sound = Service.GetAllSounds().Single();
             Expect(sound.Name, EqualTo("bvvt"));
             Expect(sound.FileFullName.Contains(sound.Id.ToString() + sourceExtension));
-            Expect(File.Exists(Path.Combine(soundBankDir.FullName, sound.FileFullName)));
+            Expect(File.Exists(Path.Combine(soundBankDir, sound.FileFullName)));
             Expect(eventFired, True);
         }
 
@@ -69,7 +76,7 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Areas.SoundEngine
             Expect(Service.TryGetSound(sound.Id), Null);
             Expect(Service.GetAllSounds().FirstOrDefault(resource => resource.Id == sound.Id), Null);
             Expect(eventFired, True);
-            Expect(Directory.GetFiles(soundBankDir.FullName).Length, EqualTo(0));
+            Expect(Directory.GetFiles(soundBankDir).Length, EqualTo(0));
         }
 
         ISoundResource SetupSingleSound()
