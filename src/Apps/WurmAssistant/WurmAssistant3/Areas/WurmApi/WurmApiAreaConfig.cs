@@ -29,6 +29,11 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi
                 IWurmApiLoggerFactory loggerFactory = kernel.Get<IWurmApiLoggerFactory>();
                 IWurmApiEventMarshaller eventMarshaller = kernel.Get<IWurmApiEventMarshaller>();
 
+                if (string.IsNullOrWhiteSpace(config.WurmGameClientInstallDirectory))
+                {
+                    throw new InvalidOperationException("Unknown path to Wurm Game Client installation folder.");
+                }
+
                 IWurmClientInstallDirectory wurmInstallDirectory =
                     new WurmInstallDirectoryOverride(config.WurmGameClientInstallDirectory);
                 ServerInfoManager serverInfoManager = kernel.Get<ServerInfoManager>();

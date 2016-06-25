@@ -13,9 +13,8 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi.Parts
     {
         readonly bool wurmUnlimitedMode;
 
-        public WurmApiSetupForm([NotNull] string currentWurmInstallDirectory, bool wurmUnlimitedMode)
+        public WurmApiSetupForm([CanBeNull] string currentWurmInstallDirectory, bool wurmUnlimitedMode)
         {
-            if (currentWurmInstallDirectory == null) throw new ArgumentNullException(nameof(currentWurmInstallDirectory));
             this.wurmUnlimitedMode = wurmUnlimitedMode;
 
             InitializeComponent();
