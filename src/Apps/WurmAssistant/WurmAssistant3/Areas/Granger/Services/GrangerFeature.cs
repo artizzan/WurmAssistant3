@@ -33,6 +33,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Services
         readonly LogsFeedManager logsFeedMan;
         readonly GrangerContext context;
 
+        readonly ITimer updateLoop;
+
         public GrangerFeature([NotNull] ILogger logger, 
             [NotNull] IWurmAssistantDataDirectory dataDirectory,
             [NotNull] ISoundManager soundManager, 
@@ -41,12 +43,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Services
             GrangerSettings grangerSettings,
             [NotNull] DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions,
             [NotNull] GrangerSimpleDb grangerSimpleDb,
-            [NotNull] IWurmAssistantConfig wurmAssistantConfig)
+            [NotNull] IWurmAssistantConfig wurmAssistantConfig,
+            [NotNull] ITimerFactory timerFactory)
         {
-            this.logger = logger;
-            this.dataDirectory = dataDirectory;
-            this.soundManager = soundManager;
-            this.trayPopups = trayPopups;
             if (logger == null) throw new ArgumentNullException("logger");
             if (dataDirectory == null) throw new ArgumentNullException("dataDirectory");
             if (soundManager == null) throw new ArgumentNullException("soundManager");
@@ -56,6 +55,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Services
                 throw new ArgumentNullException("defaultBreedingEvaluatorOptions");
             if (grangerSimpleDb == null) throw new ArgumentNullException("grangerSimpleDb");
             if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
+            if (timerFactory == null) throw new ArgumentNullException(nameof(timerFactory));
+
+            this.logger = logger;
+            this.dataDirectory = dataDirectory;
+            this.soundManager = soundManager;
+            this.trayPopups = trayPopups;
 
             settings = grangerSettings;
             this.defaultBreedingEvaluatorOptions = defaultBreedingEvaluatorOptions;
@@ -68,6 +73,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Services
             logsFeedMan = new LogsFeedManager(this, context, wurmApi, logger, trayPopups, wurmAssistantConfig);
             logsFeedMan.UpdatePlayers(settings.CaptureForPlayers);
             grangerUi.Granger_PlayerListChanged += GrangerUI_Granger_PlayerListChanged;
+            
+            updateLoop = timerFactory.CreateUiThreadTimer();
+            updateLoop.Interval = TimeSpan.FromMilliseconds(500);
+            updateLoop.Tick += (sender, args) => Update();
+            updateLoop.Start();
         }
 
         void GrangerUI_Granger_PlayerListChanged(object sender, EventArgs e)
@@ -122,6 +132,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Services
 
         public void Dispose()
         {
+            updateLoop.Stop();
             if (grangerUi != null) grangerUi.SaveAllState();
             else logger.Error("Granger UI null when trying to save state on Stop");
             logsFeedMan.Dispose();
