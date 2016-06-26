@@ -31,6 +31,9 @@ namespace AldursLab.WurmAssistant3.Areas.Config.Services
         [JsonProperty]
         bool dropAllWurmApiCachesToggle;
 
+        [JsonProperty]
+        bool skipWurmConfigsValidation;
+
         public WurmAssistantConfig([NotNull] IConsoleArgs consoleArgs)
         {
             if (consoleArgs == null) throw new ArgumentNullException(nameof(consoleArgs));
@@ -98,6 +101,18 @@ namespace AldursLab.WurmAssistant3.Areas.Config.Services
                 if (value == dropAllWurmApiCachesToggle)
                     return;
                 dropAllWurmApiCachesToggle = value;
+                FlagAsChanged();
+            }
+        }
+
+        public bool SkipWurmConfigsValidation
+        {
+            get { return skipWurmConfigsValidation; }
+            set
+            {
+                if (value == skipWurmConfigsValidation)
+                    return;
+                skipWurmConfigsValidation = value;
                 FlagAsChanged();
             }
         }

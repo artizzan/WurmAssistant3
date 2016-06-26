@@ -24,7 +24,7 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi.Parts
 
         private void SkipCheckOnStart_CheckedChanged(object sender, System.EventArgs e)
         {
-            wurmClientValidator.SkipOnStart = SkipCheckOnStart.Enabled;
+            wurmClientValidator.SkipOnStart = SkipCheckOnStart.Checked;
         }
     }
 }

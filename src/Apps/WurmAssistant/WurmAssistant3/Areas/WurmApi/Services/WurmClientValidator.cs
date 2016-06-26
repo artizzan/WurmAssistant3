@@ -4,6 +4,7 @@ using System.Linq;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Areas.Config.Contracts;
 using AldursLab.WurmAssistant3.Areas.WurmApi.Contracts;
 using AldursLab.WurmAssistant3.Areas.WurmApi.Parts;
 using JetBrains.Annotations;
@@ -11,29 +12,24 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.WurmApi.Services
 {
-    [KernelBind(BindingHint.Singleton), PersistentObject("WurmClientValidator")]
-    public class WurmClientValidator : PersistentObjectBase, IWurmClientValidator
+    [KernelBind(BindingHint.Singleton)]
+    public class WurmClientValidator : IWurmClientValidator
     {
         readonly IWurmApi wurmApi;
+        readonly IWurmAssistantConfig config;
 
-        [JsonProperty]
-        bool skipOnStart = false;
-
-        public WurmClientValidator([NotNull] IWurmApi wurmApi)
+        public WurmClientValidator([NotNull] IWurmApi wurmApi, [NotNull] IWurmAssistantConfig config)
         {
             if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (config == null) throw new ArgumentNullException(nameof(config));
             this.wurmApi = wurmApi;
+            this.config = config;
         }
 
         public bool SkipOnStart
         {
-            get { return skipOnStart; }
-            set
-            {
-                if (value == skipOnStart) return;
-                skipOnStart = value;
-                FlagAsChanged();
-            }
+            get { return config.SkipWurmConfigsValidation; }
+            set { config.SkipWurmConfigsValidation = value; }
         }
 
         public IReadOnlyList<WurmClientIssue> Validate()

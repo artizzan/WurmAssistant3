@@ -60,7 +60,7 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi
 
                 config.DropAllWurmApiCachesToggle = false;
 
-                var validator = new WurmClientValidator(wurmApi);
+                var validator = new WurmClientValidator(wurmApi, config);
                 if (!validator.SkipOnStart)
                 {
                     var issues = validator.Validate();
