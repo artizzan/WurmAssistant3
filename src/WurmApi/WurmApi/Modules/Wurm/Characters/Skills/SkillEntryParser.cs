@@ -116,7 +116,7 @@ namespace AldursLab.WurmApi.Modules.Wurm.Characters.Skills
             float level;
             if (float.TryParse(
                 text,
-                System.Globalization.NumberStyles.AllowDecimalPoint,
+                System.Globalization.NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign,
                 CultureInfo.InvariantCulture,
                 out level))
             {
@@ -124,7 +124,7 @@ namespace AldursLab.WurmApi.Modules.Wurm.Characters.Skills
             }
             else if (float.TryParse(
                 text.Replace(",", "."),
-                System.Globalization.NumberStyles.AllowDecimalPoint,
+                System.Globalization.NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign,
                 CultureInfo.InvariantCulture,
                 out level))
             {
