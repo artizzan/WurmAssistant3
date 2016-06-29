@@ -86,7 +86,14 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             controlUi.buttonConfigure.Click += Configure;
             controlUi.buttonRemove.Click += StopAndRemove;
 
-            wurmApi.LogsMonitor.Subscribe(this.CharacterName, LogType.AllLogs, OnNewLogEvents);
+            try
+            {
+                wurmApi.LogsMonitor.Subscribe(this.CharacterName, LogType.AllLogs, OnNewLogEvents);
+            }
+            catch (DataNotFoundException exception)
+            {
+                logger.Warn(exception, $"Unable to subscribe LogsMonitor events for character {this.CharacterName}.");
+            }
         }
 
         public TriggersFeature TriggersFeature { get; set; }
