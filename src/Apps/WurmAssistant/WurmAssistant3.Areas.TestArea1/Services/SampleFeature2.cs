@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 using System.Threading.Tasks;
-using AldursLab.WurmAssistant3.Areas.Features.Contracts;
+using AldursLab.WurmAssistant3.Areas.Features;
 
 namespace AldursLab.WurmAssistant3.Areas.TestArea1.Services
 {

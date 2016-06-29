@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Areas.Calendar.Contracts;
+using AldursLab.WurmAssistant3.Areas.Calendar;
 using NUnit.Framework;
 
 namespace AldursLab.WurmAssistant3.Tests.Unit.Areas.LogSearcher

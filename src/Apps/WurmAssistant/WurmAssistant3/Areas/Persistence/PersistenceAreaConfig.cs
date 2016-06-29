@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 using AldursLab.PersistentObjects;
 using AldursLab.PersistentObjects.Persistence;
 using AldursLab.PersistentObjects.Serialization;
-using AldursLab.WurmAssistant3.Areas.Core.Contracts;
-using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Areas.Persistence.Components;
-using AldursLab.WurmAssistant3.Areas.Persistence.Contracts;
+using AldursLab.WurmAssistant3.Areas.Core;
+using AldursLab.WurmAssistant3.Areas.Logging;
 using JetBrains.Annotations;
 using Ninject;
 

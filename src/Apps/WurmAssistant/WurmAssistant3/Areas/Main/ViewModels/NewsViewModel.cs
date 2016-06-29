@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using AldursLab.WurmAssistant3.Areas.Core.Contracts;
-using AldursLab.WurmAssistant3.Areas.Main.Services;
-using AldursLab.WurmAssistant3.Areas.Main.Services.NewsServices;
+using AldursLab.WurmAssistant3.Areas.Core;
 using Caliburn.Micro;
 using JetBrains.Annotations;
 

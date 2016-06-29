@@ -1,6 +1,6 @@
 ﻿using System;
 using AldursLab.WurmAssistant3.Areas.Main.Data.Model;
-using AldursLab.WurmAssistant3.Areas.Persistence.Contracts;
+using AldursLab.WurmAssistant3.Areas.Persistence;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Main.Data

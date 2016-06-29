@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AldursLab.WurmAssistant3.Areas.Core.Contracts;
+using AldursLab.WurmAssistant3.Areas.Core;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 

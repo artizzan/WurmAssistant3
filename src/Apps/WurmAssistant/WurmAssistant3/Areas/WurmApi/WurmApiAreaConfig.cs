@@ -5,11 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Areas.Config.Contracts;
-using AldursLab.WurmAssistant3.Areas.Config.Services;
-using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
-using AldursLab.WurmAssistant3.Areas.WurmApi.Parts;
-using AldursLab.WurmAssistant3.Areas.WurmApi.Services;
+using AldursLab.WurmAssistant3.Areas.Config;
+using AldursLab.WurmAssistant3.Areas.Logging;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.WurmApi

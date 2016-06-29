@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using AldursLab.WurmAssistant3.Areas.Native.Contracts;
+using AldursLab.WurmAssistant3.Areas.Native;
 
 namespace AldursLab.WurmAssistant3.Utils.WinForms
 {

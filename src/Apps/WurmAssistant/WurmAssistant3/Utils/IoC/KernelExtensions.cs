@@ -1,5 +1,5 @@
 ﻿using System;
-using AldursLab.WurmAssistant3.Areas.Logging.Contracts;
+using AldursLab.WurmAssistant3.Areas.Logging;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Utils.IoC

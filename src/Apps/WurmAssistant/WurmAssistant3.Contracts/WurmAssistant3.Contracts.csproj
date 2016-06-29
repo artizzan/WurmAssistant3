@@ -46,23 +46,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\Config\Contracts\IWurmAssistantConfig.cs" />
-    <Compile Include="Areas\Core\Contracts\IBinDirectory.cs" />
-    <Compile Include="Areas\Core\Contracts\IConsoleArgs.cs" />
-    <Compile Include="Areas\Core\Contracts\IKernelConfig.cs" />
-    <Compile Include="Areas\Core\Contracts\IProcessStarter.cs" />
-    <Compile Include="Areas\Core\Contracts\ITimer.cs" />
-    <Compile Include="Areas\Core\Contracts\ITimerFactory.cs" />
-    <Compile Include="Areas\Features\Contracts\IFeature.cs" />
-    <Compile Include="Areas\Logging\Contracts\ILogger.cs" />
-    <Compile Include="Areas\Native\Contracts\INativeCalls.cs" />
-    <Compile Include="Areas\Native\Contracts\ShowWindowCommands.cs" />
-    <Compile Include="Areas\Native\Contracts\Win32Hooks.cs" />
+    <Compile Include="Areas\Config\IWurmAssistantConfig.cs" />
+    <Compile Include="Areas\Core\IBinDirectory.cs" />
+    <Compile Include="Areas\Core\IConsoleArgs.cs" />
+    <Compile Include="Areas\Core\IKernelConfig.cs" />
+    <Compile Include="Areas\Core\IProcessStarter.cs" />
+    <Compile Include="Areas\Core\ITimer.cs" />
+    <Compile Include="Areas\Core\ITimerFactory.cs" />
+    <Compile Include="Areas\Features\IFeature.cs" />
+    <Compile Include="Areas\Logging\ILogger.cs" />
+    <Compile Include="Areas\Native\INativeCalls.cs" />
+    <Compile Include="Areas\Native\ShowWindowCommands.cs" />
+    <Compile Include="Areas\Native\Win32Hooks.cs" />
     <Compile Include="KernelBindAttribute.cs" />
     <Compile Include="AreaConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TrayPopups\Contracts\ITrayPopups.cs" />
-    <Compile Include="TrayPopups\Contracts\PopupMessage.cs" />
+    <Compile Include="Areas\TrayPopups\ITrayPopups.cs" />
+    <Compile Include="Areas\TrayPopups\PopupMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
