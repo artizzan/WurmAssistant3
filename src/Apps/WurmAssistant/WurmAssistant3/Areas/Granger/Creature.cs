@@ -518,6 +518,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 };
             }
         }
+
+        public DateTime SmilexamineLastDate
+        {
+            get { return (Entity.SmilexamineLastDate ?? DateTime.MinValue); }
+            set { Entity.SmilexamineLastDate = value; }
+        }
     }
 
     public class InnerNameInfo

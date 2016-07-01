@@ -93,6 +93,7 @@
             this.olvColumnBirthDate = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnExactAge = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnBrandedFor = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnSmilexamined = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -449,6 +450,7 @@
             this.objectListView1.AllColumns.Add(this.olvColumnBirthDate);
             this.objectListView1.AllColumns.Add(this.olvColumnExactAge);
             this.objectListView1.AllColumns.Add(this.olvColumnBrandedFor);
+            this.objectListView1.AllColumns.Add(this.olvColumnSmilexamined);
             this.objectListView1.AllowColumnReorder = true;
             this.objectListView1.CellEditUseWholeCell = false;
             this.objectListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -474,7 +476,8 @@
             this.olvColumnComments,
             this.olvColumnBirthDate,
             this.olvColumnExactAge,
-            this.olvColumnBrandedFor});
+            this.olvColumnBrandedFor,
+            this.olvColumnSmilexamined});
             this.objectListView1.Cursor = System.Windows.Forms.Cursors.Default;
             this.objectListView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.objectListView1.FullRowSelect = true;
@@ -646,6 +649,13 @@
             this.olvColumnBrandedFor.MinimumWidth = 20;
             this.olvColumnBrandedFor.Text = "Branded for";
             // 
+            // olvColumnSmilexamined
+            // 
+            this.olvColumnSmilexamined.AspectName = "SmilexamineLastDate";
+            this.olvColumnSmilexamined.Groupable = false;
+            this.olvColumnSmilexamined.MinimumWidth = 20;
+            this.olvColumnSmilexamined.Text = "SmileXamined";
+            // 
             // timer1
             // 
             this.timer1.Interval = 60000;
@@ -737,5 +747,6 @@
         private System.Windows.Forms.ToolStripMenuItem ebonyBlackToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem piebaldPintoToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private BrightIdeasSoftware.OLVColumn olvColumnSmilexamined;
     }
 }

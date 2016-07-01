@@ -461,7 +461,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                                 creatureBuffer.Name), "WARNING");
                         }
                     }
-
+                    oldCreature.SmilexamineLastDate = DateTime.Now;
                     context.SubmitChanges();
                     grangerDebug.Log("successfully updated creature in db");
                     trayPopups.Schedule(String.Format("Updated creature: {0}", oldCreature), "CREATURE UPDATED");
@@ -590,7 +590,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 IsMale = newCreature.IsMale,
                 PregnantUntil = newCreature.PregnantUntil,
                 SecondaryInfoTagSetter = newCreature.SecondaryInfo,
-                ServerName = newCreature.Server != null ? newCreature.Server.ServerName.Original : string.Empty
+                ServerName = newCreature.Server != null ? newCreature.Server.ServerName.Original : string.Empty,
+                SmilexamineLastDate = DateTime.Now
             };
 
             newEntity.EpicCurve = newCreature.Server != null

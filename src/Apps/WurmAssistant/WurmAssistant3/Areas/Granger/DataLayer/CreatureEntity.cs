@@ -207,6 +207,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
             }
         }
 
+        [JsonProperty("SmilexamineLastDate")]
+        public DateTime? SmilexamineLastDate;
+
         [JsonProperty("birthdate")]
         public DateTime? BirthDate;
     }
