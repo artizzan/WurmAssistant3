@@ -119,7 +119,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
                 var totalSize = files.Sum(info => info.Length);
                 if (totalSize > ((long)maxMegabytes) * 1024L * 1024L)
                 {
-                    var fileToDelete = files.Single(file => file.CreationTime == files.Min(info => info.CreationTime));
+                    var fileToDelete = files.First(file => file.CreationTime == files.Min(info => info.CreationTime));
                     fileToDelete.Delete();
                     TrimOlgLogFiles(archiveLogDir, maxMegabytes);
                 }
