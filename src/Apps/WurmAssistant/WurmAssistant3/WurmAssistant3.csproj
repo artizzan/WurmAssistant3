@@ -140,6 +140,15 @@
       <DependentUpon>DebuggingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Areas\Features\IFeaturesFactory.cs" />
+    <Compile Include="Areas\Granger\CreatureAge.cs" />
+    <Compile Include="Areas\Granger\CreatureAgeId.cs" />
+    <Compile Include="Areas\Granger\CreatureColorId.cs" />
+    <Compile Include="Areas\Granger\InnerCreatureNameInfo.cs" />
+    <Compile Include="Areas\Granger\TraitDisplayMode.cs" />
+    <Compile Include="Areas\Granger\CreatureTraitId.cs" />
+    <Compile Include="Areas\Granger\TraitItem.cs" />
+    <Compile Include="Areas\Granger\TraitsInspectedContainer.cs" />
+    <Compile Include="Areas\Granger\UserViewChangedEventArgs.cs" />
     <Compile Include="Areas\Logging\LoggingAreaConfig.cs" />
     <Compile Include="Areas\Logging\LogMessageDumpStub.cs" />
     <Compile Include="Areas\Main\INewsViewModelFactory.cs" />
@@ -320,8 +329,8 @@
     <Compile Include="Areas\Granger\GrangerSimpleDb.cs" />
     <Compile Include="Areas\Granger\DataLayer\HerdEntity.cs" />
     <Compile Include="Areas\Granger\DataLayer\TraitValueEntity.cs" />
-    <Compile Include="Areas\Granger\Enums.cs" />
-    <Compile Include="Areas\Granger\Exceptions.cs" />
+    <Compile Include="Areas\Granger\CreatureColor.cs" />
+    <Compile Include="Areas\Granger\GrangerException.cs" />
     <Compile Include="Areas\Granger\GrangerFeature.cs" />
     <Compile Include="Areas\Granger\GrangerSettings.cs" />
     <Compile Include="Areas\Granger\ImportExport\Legacy\HerdExporter.cs" />
@@ -402,23 +411,23 @@
     <Compile Include="Areas\Granger\HorseEdit\FormCreatureViewEdit.Designer.cs">
       <DependentUpon>FormCreatureViewEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\UCGrangerCreatureList.cs">
+    <Compile Include="Areas\Granger\UcGrangerCreatureList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Areas\Granger\UCGrangerCreatureList.Designer.cs">
-      <DependentUpon>UCGrangerCreatureList.cs</DependentUpon>
+    <Compile Include="Areas\Granger\UcGrangerCreatureList.Designer.cs">
+      <DependentUpon>UcGrangerCreatureList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\UCGrangerHerdList.cs">
+    <Compile Include="Areas\Granger\UcGrangerHerdList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Areas\Granger\UCGrangerHerdList.Designer.cs">
-      <DependentUpon>UCGrangerHerdList.cs</DependentUpon>
+    <Compile Include="Areas\Granger\UcGrangerHerdList.Designer.cs">
+      <DependentUpon>UcGrangerHerdList.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\UCGrangerTraitView.cs">
+    <Compile Include="Areas\Granger\UcGrangerTraitView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Areas\Granger\UCGrangerTraitView.Designer.cs">
-      <DependentUpon>UCGrangerTraitView.cs</DependentUpon>
+    <Compile Include="Areas\Granger\UcGrangerTraitView.Designer.cs">
+      <DependentUpon>UcGrangerTraitView.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Granger\ValuePreset\FormEditValuePresets.cs">
       <SubType>Form</SubType>
@@ -432,11 +441,11 @@
     <Compile Include="Areas\Granger\ValuePreset\FormEditValuePresetsNewNameDialog.Designer.cs">
       <DependentUpon>FormEditValuePresetsNewNameDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\ValuePreset\UCGrangerTraitValueEdit.cs">
+    <Compile Include="Areas\Granger\ValuePreset\UcGrangerTraitValueEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Areas\Granger\ValuePreset\UCGrangerTraitValueEdit.Designer.cs">
-      <DependentUpon>UCGrangerTraitValueEdit.cs</DependentUpon>
+    <Compile Include="Areas\Granger\ValuePreset\UcGrangerTraitValueEdit.Designer.cs">
+      <DependentUpon>UcGrangerTraitValueEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Logging\ILoggerFactory.cs" />
     <Compile Include="Areas\Logging\ILoggingConfig.cs" />
@@ -893,14 +902,14 @@
     <EmbeddedResource Include="Areas\Granger\HorseEdit\FormCreatureViewEdit.resx">
       <DependentUpon>FormCreatureViewEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Granger\UCGrangerCreatureList.resx">
-      <DependentUpon>UCGrangerCreatureList.cs</DependentUpon>
+    <EmbeddedResource Include="Areas\Granger\UcGrangerCreatureList.resx">
+      <DependentUpon>UcGrangerCreatureList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Granger\UCGrangerHerdList.resx">
-      <DependentUpon>UCGrangerHerdList.cs</DependentUpon>
+    <EmbeddedResource Include="Areas\Granger\UcGrangerHerdList.resx">
+      <DependentUpon>UcGrangerHerdList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Granger\UCGrangerTraitView.resx">
-      <DependentUpon>UCGrangerTraitView.cs</DependentUpon>
+    <EmbeddedResource Include="Areas\Granger\UcGrangerTraitView.resx">
+      <DependentUpon>UcGrangerTraitView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Granger\ValuePreset\FormEditValuePresets.resx">
       <DependentUpon>FormEditValuePresets.cs</DependentUpon>
@@ -908,8 +917,8 @@
     <EmbeddedResource Include="Areas\Granger\ValuePreset\FormEditValuePresetsNewNameDialog.resx">
       <DependentUpon>FormEditValuePresetsNewNameDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Granger\ValuePreset\UCGrangerTraitValueEdit.resx">
-      <DependentUpon>UCGrangerTraitValueEdit.cs</DependentUpon>
+    <EmbeddedResource Include="Areas\Granger\ValuePreset\UcGrangerTraitValueEdit.resx">
+      <DependentUpon>UcGrangerTraitValueEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Logging\CombinedLogsUserControl.resx">
       <DependentUpon>CombinedLogsUserControl.cs</DependentUpon>

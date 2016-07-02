@@ -11,129 +11,146 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger
 {
-    public partial class UCGrangerHerdList : UserControl
+    public partial class UcGrangerHerdList : UserControl
     {
-        FormGrangerMain MainForm;
-        GrangerContext Context;
+        FormGrangerMain mainForm;
+        GrangerContext context;
         ILogger logger;
         IWurmApi wurmApi;
 
-        public UCGrangerHerdList()
+        public UcGrangerHerdList()
         {
             InitializeComponent();
         }
 
-        public void Init(FormGrangerMain mainForm, GrangerContext context, [NotNull] ILogger logger,
+        public void Init(
+            [NotNull] FormGrangerMain mainForm,
+            [NotNull] GrangerContext context, 
+            [NotNull] ILogger logger,
             [NotNull] IWurmApi wurmApi)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            MainForm = mainForm;
-            Context = context;
+            if (mainForm == null) throw new ArgumentNullException(nameof(mainForm));
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            this.mainForm = mainForm;
+            this.context = context;
             this.logger = logger;
             this.wurmApi = wurmApi;
 
-            objectListView1.BooleanCheckStateGetter = new BrightIdeasSoftware.BooleanCheckStateGetterDelegate(x =>
-                {
-                    HerdEntity entity = (HerdEntity)x;
-                    return entity.Selected;
-                });
-            objectListView1.BooleanCheckStatePutter = new BrightIdeasSoftware.BooleanCheckStatePutterDelegate((x, y) =>
-                {
-                    HerdEntity entity = (HerdEntity)x;
-                    Context.UpdateHerdSelectedState(entity.HerdID, y);
-                    return entity.Selected;
-                });
+            CustomizeOlv();
 
-            Context.OnHerdsModified += RefreshHerdList;
-            RefreshHerdList(this, new EventArgs());
+            this.context.OnHerdsModified += RefreshHerdList;
+            RefreshHerdList(this, EventArgs.Empty);
+        }
+
+        HerdEntity SelectedHerd => (HerdEntity)objectListView1.SelectedObject;
+
+        void CustomizeOlv()
+        {
+            objectListView1.BooleanCheckStateGetter = new BrightIdeasSoftware.BooleanCheckStateGetterDelegate(x =>
+            {
+                HerdEntity entity = (HerdEntity)x;
+                return entity.Selected;
+            });
+            objectListView1.BooleanCheckStatePutter = new BrightIdeasSoftware.BooleanCheckStatePutterDelegate((x, y) =>
+            {
+                HerdEntity entity = (HerdEntity)x;
+                this.context.UpdateHerdSelectedState(entity.HerdID, y);
+                return entity.Selected;
+            });
         }
 
         public void RefreshHerdList(object sender, EventArgs e)
         {
-            HerdEntity[] Herds = Context.Herds.ToArray();
-            objectListView1.SetObjects(Herds, true);
+            HerdEntity[] herds = context.Herds.ToArray();
+            objectListView1.SetObjects(herds, true);
         }
 
         private void addNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormHerdName ui = new FormHerdName(Context, MainForm, logger);
-            ui.ShowDialogCenteredOnForm(MainForm);
+            FormHerdName ui = new FormHerdName(context, mainForm, logger);
+            ui.ShowDialogCenteredOnForm(mainForm);
         }
 
         private void renameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var selHerd = selectedHerd;
-            if (selHerd == null) MessageBox.Show("select a herd first");
+            var selHerd = SelectedHerd;
+            if (selHerd == null)
+            {
+                MessageBox.Show("Please select a herd first.");
+            }
             else
             {
-                FormHerdName ui = new FormHerdName(Context, MainForm, logger, selHerd.HerdID);
-                ui.ShowDialogCenteredOnForm(MainForm);
+                FormHerdName ui = new FormHerdName(context, mainForm, logger, selHerd.HerdID);
+                ui.ShowDialogCenteredOnForm(mainForm);
             }
         }
 
         private void combineToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var selHerd = selectedHerd;
-            if (selHerd == null) MessageBox.Show("select a herd first");
+            var selHerd = SelectedHerd;
+            if (selHerd == null)
+            {
+                MessageBox.Show("Please select a herd first.");
+            }
             else
             {
-                FormHerdMerge ui = new FormHerdMerge(Context, MainForm, selHerd.HerdID, logger);
-                ui.ShowDialogCenteredOnForm(MainForm);
+                FormHerdMerge ui = new FormHerdMerge(context, mainForm, selHerd.HerdID, logger);
+                ui.ShowDialogCenteredOnForm(mainForm);
             }
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var selHerd = selectedHerd;
-            if (selHerd == null) MessageBox.Show("select a herd first");
+            var selHerd = SelectedHerd;
+            if (selHerd == null)
+            {
+                MessageBox.Show("Please select a herd first.");
+            }
             else
             {
-                CreatureEntity[] creatures = Context.Creatures.Where(x => x.Herd == selHerd.HerdID).ToArray();
-                if (MessageBox.Show("Following herd will be deleted: " + selHerd + "\r\n" + "all creatures in this herd will also be deleted:" + "\r\n"
-                    + (creatures.Length == 0 ? "no creatures in this herd" : string.Join(", ", (IEnumerable<CreatureEntity>)creatures)) + "\r\n\r\n" +
-                    "Continue?", "confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
+                CreatureEntity[] creatures = context.Creatures.Where(x => x.Herd == selHerd.HerdID).ToArray();
+                if (MessageBox.Show(
+                    $"Herd {selHerd}\r\n will be deleted. " +
+                    $"All creatures in this herd will also be deleted:\r\n" +
+                    $"{(creatures.Length == 0 ? "no creatures in this herd" : string.Join(", ", creatures.AsEnumerable()))}\r\n\r\nContinue?",
+                    "confirm",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Exclamation) == DialogResult.OK)
                 {
-                    Context.DeleteHerd(selHerd.HerdID);
+                    context.DeleteHerd(selHerd.HerdID);
                 }
             }
         }
 
-        HerdEntity selectedHerd { get { return (HerdEntity)objectListView1.SelectedObject; } }
-
         private void addCreatureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var selHerd = selectedHerd;
-            if (selHerd == null) MessageBox.Show("select a herd first");
+            var selHerd = SelectedHerd;
+            if (selHerd == null)
+            {
+                MessageBox.Show("Please select a herd first.");
+            }
             else
             {
-                FormCreatureViewEdit ui = new FormCreatureViewEdit(MainForm, null, Context, CreatureViewEditOpType.New, selHerd.HerdID, logger, wurmApi);
+                FormCreatureViewEdit ui = new FormCreatureViewEdit(mainForm,
+                    null,
+                    context,
+                    CreatureViewEditOpType.New,
+                    selHerd.HerdID,
+                    logger,
+                    wurmApi);
                 ui.ShowDialog();
             }
         }
 
-        //olv
-        private void objectListView1_ItemChecked(object sender, ItemCheckedEventArgs e)
-        {
-
-        }
-
         private void objectListView1_CellRightClick(object sender, BrightIdeasSoftware.CellRightClickEventArgs e)
         {
-            if (e.Model == null)
-            {
-                addCreatureToolStripMenuItem.Enabled = false;
-                deleteToolStripMenuItem.Enabled = false;
-                combineToolStripMenuItem.Enabled = false;
-                renameToolStripMenuItem.Enabled = false;
-            }
-            else
-            {
-                addCreatureToolStripMenuItem.Enabled = true;
-                deleteToolStripMenuItem.Enabled = true;
-                combineToolStripMenuItem.Enabled = true;
-                renameToolStripMenuItem.Enabled = true;
-            }
+            addCreatureToolStripMenuItem.Enabled =
+                deleteToolStripMenuItem.Enabled =
+                    combineToolStripMenuItem.Enabled =
+                        renameToolStripMenuItem.Enabled =
+                            e.Model != null;
         }
     }
 }

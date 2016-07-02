@@ -1,145 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger
 {
-    public enum CreatureColorId
-    {
-        Unknown = 0, Black = 1, White = 2, Grey = 3, Brown = 4,
-        Gold = 5, BloodBay = 6, EbonyBlack = 7, PiebaldPinto = 8
-    }
-
-    [JsonObject(MemberSerialization.OptIn)]
-    public class CreatureColor
-    {
-        [JsonProperty] 
-        readonly CreatureColorId creatureColorId;
-
-        public CreatureColor(CreatureColorId creatureColorId)
-        {
-            this.creatureColorId = creatureColorId;
-        }
-
-        public CreatureColor(string DBValue)
-        {
-            if (string.IsNullOrEmpty(DBValue)) creatureColorId = CreatureColorId.Unknown;
-            else creatureColorId = (CreatureColorId)int.Parse(DBValue);
-        }
-
-        public CreatureColorId CreatureColorId
-        {
-            get { return creatureColorId; }
-        }
-
-        public static CreatureColor GetDefaultColor()
-        {
-            return new CreatureColor(CreatureColorId.Unknown);
-        }
-
-        public static string[] GetColorsEnumStrArray()
-        {
-            return Enum.GetNames(typeof(CreatureColorId));
-        }
-
-        public static IEnumerable<CreatureColor> GetAll()
-        {
-            return Enum.GetValues(typeof (CreatureColorId)).Cast<CreatureColorId>().Select(x => new CreatureColor(x));
-        }
-
-        public override string ToString()
-        {
-            return creatureColorId.ToString();
-        }
-
-        public string ToDbValue()
-        {
-            return ((int)creatureColorId).ToString();
-        }
-
-        public bool Equals(CreatureColor other)
-        {
-            return creatureColorId.Equals(other.creatureColorId);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (!(obj is CreatureColor)) return false;
-            CreatureColor other = (CreatureColor)obj;
-            return Equals(other);
-        }
-
-        public override int GetHashCode()
-        {
-            return creatureColorId.GetHashCode();
-        }
-
-        public static bool operator ==(CreatureColor left, CreatureColor right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(CreatureColor left, CreatureColor right)
-        {
-            return !(left == right);
-        }
-
-        internal static CreatureColor CreateColorFromEnumString(string enumStr)
-        {
-            try
-            {
-                return new CreatureColor((CreatureColorId)Enum.Parse(typeof(CreatureColorId), enumStr, true));
-            }
-            catch (Exception)
-            {
-                return new CreatureColor(CreatureColorId.Unknown);
-            }
-        }
-
-        internal static string GetDefaultColorStr()
-        {
-            return Enum.GetName(typeof(CreatureColorId), CreatureColorId.Unknown);
-        }
-
-        internal System.Drawing.Color? ToSystemDrawingColor()
-        {
-            switch (creatureColorId)
-            {
-                case CreatureColorId.Unknown:
-                    return null;
-                case CreatureColorId.White:
-                    return System.Drawing.Color.GhostWhite;
-                case CreatureColorId.Black:
-                    return System.Drawing.Color.DarkSlateGray;
-                case CreatureColorId.Brown:
-                    return System.Drawing.Color.Brown;
-                case CreatureColorId.Gold:
-                    return System.Drawing.Color.Gold;
-                case CreatureColorId.Grey:
-                    return System.Drawing.Color.LightGray;
-                case CreatureColorId.BloodBay:
-                    return System.Drawing.Color.RosyBrown;
-                case CreatureColorId.EbonyBlack:
-                    return System.Drawing.Color.Black;
-                case CreatureColorId.PiebaldPinto:
-                    return System.Drawing.Color.DarkGray;
-                default:
-                    return null;
-            }
-        }
-    }
-
     [JsonObject(MemberSerialization.OptIn)]
     public class CreatureAge : IComparable, IComparable<CreatureAge>
     {
-        //enum int value is used for comparable, this is limited design but whatever
-
         static readonly Dictionary<string, CreatureAge> WurmStringToAgeMap = new Dictionary<string, CreatureAge>();
 
         [JsonProperty]
-        CreatureAgeId creatureAgeId;
+        readonly CreatureAgeId creatureAgeId;
 
         static CreatureAge()
         {
@@ -156,16 +29,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.creatureAgeId = creatureAgeId;
         }
 
-        public CreatureAge(string DBValue)
+        public CreatureAge(string dbValue)
         {
-            if (string.IsNullOrEmpty(DBValue)) creatureAgeId = CreatureAgeId.Unknown;
-            else creatureAgeId = (CreatureAgeId)int.Parse(DBValue);
+            if (string.IsNullOrEmpty(dbValue)) creatureAgeId = CreatureAgeId.Unknown;
+            else creatureAgeId = (CreatureAgeId)int.Parse(dbValue);
         }
 
-        public CreatureAgeId CreatureAgeId
-        {
-            get { return creatureAgeId; }
-        }
+        public CreatureAgeId CreatureAgeId => creatureAgeId;
 
         public static string[] GetColorsEnumStrArray()
         {
@@ -196,7 +66,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public override int GetHashCode()
         {
-            //todo: remove mutable field as hashcode, not touching for now
             return (int)creatureAgeId;
         }
 
@@ -250,13 +119,21 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             return new CreatureAge(this.creatureAgeId);
         }
 
-        public void Foalize()
+        public static CreatureAge Foalize([NotNull] CreatureAge creatureAge)
         {
-            if (this.creatureAgeId == CreatureAgeId.Young)
-                this.creatureAgeId = CreatureAgeId.YoungFoal;
-            else if (this.creatureAgeId == CreatureAgeId.Adolescent)
-                this.creatureAgeId = CreatureAgeId.AdolescentFoal;
-            else throw new InvalidOperationException("foals do not come with this age type! " + this.creatureAgeId.ToString());
+            if (creatureAge == null) throw new ArgumentNullException(nameof(creatureAge));
+
+            if (creatureAge.creatureAgeId == CreatureAgeId.Young)
+            {
+                return new CreatureAge(CreatureAgeId.YoungFoal);
+            }
+            if (creatureAge.creatureAgeId == CreatureAgeId.Adolescent)
+            {
+                return new CreatureAge(CreatureAgeId.AdolescentFoal);
+            }
+
+            throw new InvalidOperationException("Foalization is not available for age: "
+                                                + creatureAge.creatureAgeId.ToString());
         }
 
         public int CompareTo(CreatureAge other)
@@ -300,10 +177,5 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             return !(left == right);
         }
-    }
-
-    public enum CreatureAgeId : int
-    { 
-        Unknown=0, YoungFoal=100, AdolescentFoal=200, Young=300, Adolescent=400, Mature=500, Aged=600, Old=700, Venerable=800 
     }
 }

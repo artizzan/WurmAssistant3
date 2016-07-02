@@ -2,45 +2,25 @@
 using System.Linq;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
 using AldursLab.WurmAssistant3.Utils.WinForms;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger
 {
     public partial class FormChooseHerd : ExtendedForm
     {
-        private GrangerContext Context;
-        private UCGrangerCreatureList controlGrangerCreatureList;
-        private FormGrangerMain MainForm;
-        public string Result
+        public FormChooseHerd([NotNull] GrangerContext context)
         {
-            get
-            {
-                if (listBox1.SelectedItem == null) return null;
-                return listBox1.SelectedItem.ToString();
-            }
-        }
-
-        public FormChooseHerd(FormGrangerMain mainForm, GrangerContext Context)
-        {
-            this.MainForm = mainForm;
-            this.Context = Context;
+            if (context == null) throw new ArgumentNullException(nameof(context));
             InitializeComponent();
 
-            var herds = Context.Herds.ToArray();
-
-            listBox1.Items.AddRange(herds);
+            listBox1.Items.AddRange(context.Herds.Cast<object>().ToArray());
         }
+
+        public string Result => listBox1.SelectedItem?.ToString();
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBox1.SelectedItem != null)
-            {
-                buttonOK.Enabled = true;
-            }
-            else
-            {
-                buttonOK.Enabled = false;
-            }
+            buttonOK.Enabled = listBox1.SelectedItem != null;
         }
-
     }
 }

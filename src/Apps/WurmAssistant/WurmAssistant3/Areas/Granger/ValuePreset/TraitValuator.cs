@@ -7,46 +7,40 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
 {
     public class TraitValuator
     {
-        public class NoValuesAvailableException : Exception
-        {
-            public NoValuesAvailableException() : base(){}
-            public NoValuesAvailableException(string message):base(message){}
-        }
-
         public const string DefaultId = "default";
 
         readonly GrangerContext context;
         readonly FormGrangerMain mainForm;
-        public string ValueMapId { get; private set; }
 
         readonly Dictionary<CreatureTrait, int> valueMap = new Dictionary<CreatureTrait, int>();
         bool usingDefault = false;
         bool thisValueMapIsNoMore = false;
+
         /// <summary>
-        /// generates new valuator with default hardcoded trait values
+        /// Creates new valuator with default hardcoded trait values
         /// </summary>
-        public TraitValuator(FormGrangerMain mainForm)
+        public TraitValuator()
         {
             usingDefault = true;
         }
 
         /// <summary>
-        /// generates new valuator attempting to use custom values from database,
-        /// exception when no values found
+        /// Creates new valuator with values loaded from database
         /// </summary>
-        /// <param name="valueMapID"></param>
-        public TraitValuator(FormGrangerMain mainForm, string valueMapID, GrangerContext context)
+        public TraitValuator(FormGrangerMain mainForm, string valueMapId, GrangerContext context)
         {
             this.mainForm = mainForm;
             this.context = context;
-            ValueMapId = valueMapID;
-            if (valueMapID == DefaultId) usingDefault = true;
+            ValueMapId = valueMapId;
+            if (valueMapId == DefaultId) usingDefault = true;
             else
             {
                 RebuildValues();
                 context.OnTraitValuesModified += context_OnTraitValuesModified;
             }
         }
+
+        public string ValueMapId { get; private set; }
 
         void context_OnTraitValuesModified(object sender, EventArgs e)
         {
@@ -61,7 +55,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
             {
                 foreach (var traitvalue in traitvalues)
                 { 
-                    valueMap.Add(new CreatureTrait(traitvalue.Trait.Trait), traitvalue.Value); 
+                    valueMap.Add(new CreatureTrait(traitvalue.Trait.CreatureTraitId), traitvalue.Value); 
                 }
                 var goodtraits = valueMap.Select(x => x.Value).Where(x => x > 0);
                 MaxPossibleValue = goodtraits.Sum();

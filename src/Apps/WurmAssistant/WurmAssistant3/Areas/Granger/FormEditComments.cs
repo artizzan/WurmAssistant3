@@ -6,16 +6,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 {
     public partial class FormEditComments : ExtendedForm
     {
-        private string CreatureComments;
-        private FormGrangerMain formGrangerMain;
-
-        public FormEditComments(FormGrangerMain formGrangerMain, string creatureComments, string creatureName)
+        public FormEditComments(string creatureComments, string creatureName)
         {
-            this.formGrangerMain = formGrangerMain;
-            this.CreatureComments = creatureComments;
             InitializeComponent();
+
             this.Text = "Edit comments for: " + creatureName;
-            this.textBox1.Text = CreatureComments;
+            this.textBox1.Text = creatureComments ?? string.Empty;
             textBox1.Select();
         }
 

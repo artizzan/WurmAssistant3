@@ -188,7 +188,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     grangerDebug.Log("applying foalization to the creature");
                     try
                     {
-                        creatureBuffer.Age.Foalize();
+                        creatureBuffer.Age = CreatureAge.Foalize(creatureBuffer.Age);
                         verifyList.Foalization = true;
                     }
                     catch (InvalidOperationException exception)

@@ -47,7 +47,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
             }
         }
 
-        public FormCreatureViewEdit(FormGrangerMain mainForm, Creature creature, GrangerContext context,
+        public FormCreatureViewEdit(FormGrangerMain mainForm, [CanBeNull] Creature creature, GrangerContext context,
             CreatureViewEditOpType optype, string herdId, [NotNull] ILogger logger,
             [NotNull] IWurmApi wurmApi)
         {
@@ -151,7 +151,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
             {
                 checkedListBoxTraits.Items.Add(
                     CreatureTrait.GetWurmTextForTrait(trait),
-                    traits.Where(x => x.Trait == trait).Count() == 1);
+                    traits.Count(x => x.CreatureTraitId == trait) == 1);
             }
         }
 

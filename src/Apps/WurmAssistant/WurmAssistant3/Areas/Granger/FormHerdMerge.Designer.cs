@@ -125,7 +125,6 @@
             this.listBoxFromHerd.Name = "listBoxFromHerd";
             this.listBoxFromHerd.Size = new System.Drawing.Size(199, 212);
             this.listBoxFromHerd.TabIndex = 13;
-            this.listBoxFromHerd.DoubleClick += new System.EventHandler(this.listBoxFromHerd_DoubleClick);
             // 
             // listBoxToHerd
             // 
@@ -138,7 +137,6 @@
             this.listBoxToHerd.Name = "listBoxToHerd";
             this.listBoxToHerd.Size = new System.Drawing.Size(196, 212);
             this.listBoxToHerd.TabIndex = 14;
-            this.listBoxToHerd.DoubleClick += new System.EventHandler(this.listBoxToHerd_DoubleClick);
             // 
             // tableLayoutPanel1
             // 

@@ -12,69 +12,50 @@ using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
 using AldursLab.WurmAssistant3.Areas.Granger.HorseEdit;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using BrightIdeasSoftware;
+using Castle.Core.Internal;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger
 {
-    public partial class UCGrangerCreatureList : UserControl
+    public partial class UcGrangerCreatureList : UserControl
     {
         FormGrangerMain mainForm;
         GrangerContext context;
         IWurmApi wurmApi;
-
         ILogger logger;
 
-        List<Creature> CurrentCreatures = new List<Creature>(); //cached
-
+        List<Creature> currentCreatures = new List<Creature>();
+        List<HerdEntity> activeHerds = new List<HerdEntity>();
+        Creature selectedSingleCreature = null;
+        Creature[] lastSelectedCreatures = null;
         readonly DateTime treshholdDtValueForBirthDate = new DateTime(1990, 1, 1);
         readonly TimeSpan treshholdTsValueForExactAge = DateTime.Now - new DateTime(1990, 1, 1);
         readonly int treshholdDaysValueForExactAge = (int)(DateTime.Now - new DateTime(1990, 1, 1)).TotalDays;
 
-        public Creature[] SelectedCreatures
-        {
-            get
-            {
-                var array = objectListView1.SelectedObjects.Cast<Creature>().ToArray();
-                return array;
-            }
-        }
+        bool _debugMainFormAssigned = false;
+        bool listViewIsBeingUpdated = false;
 
-        List<HerdEntity> activeHerds = new List<HerdEntity>(); //cached
-
-        Creature selectedSingleCreature = null;
-
-        public Creature SelectedSingleCreature
-        {
-            get { return selectedSingleCreature; }
-            set
-            {
-                selectedSingleCreature = value;
-                if (mainForm != null) //some designer bug, this prop appear in designer which tries to set it to null initially
-                {
-                    mainForm.TriggerSelectedSingleCreatureChanged();
-                    UpdateDataForView();
-                }
-            }
-        }
-
-        bool _debug_MainFormAssigned = false;
-
-        public UCGrangerCreatureList()
+        public UcGrangerCreatureList()
         {
             InitializeComponent();
         }
 
-        public void Init([NotNull] FormGrangerMain mainForm, [NotNull] GrangerContext context, [NotNull] ILogger logger,
+        public void Init(
+            [NotNull] FormGrangerMain mainForm, 
+            [NotNull] GrangerContext context, 
+            [NotNull] ILogger logger,
             [NotNull] IWurmApi wurmApi)
         {
-            if (mainForm == null) throw new ArgumentNullException("mainForm");
-            if (context == null) throw new ArgumentNullException("context");
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
+            if (mainForm == null) throw new ArgumentNullException(nameof(mainForm));
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
             this.logger = logger;
             this.wurmApi = wurmApi;
             this.mainForm = mainForm;
-            _debug_MainFormAssigned = true;
+            this.context = context;
+
+            _debugMainFormAssigned = true;
 
             if (this.mainForm.Settings.AdjustForDarkThemes)
             {
@@ -85,25 +66,38 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             {
                 this.objectListView1.RestoreState(mainForm.Settings.CreatureListState);
             }
-            this.context = context;
+
+            SetupOlvCustomizations();
+
+            this.context.OnHerdsModified += Context_OnHerdsModified;
+            this.context.OnEntitiesModified += ContextOnEntitiesModified;
+            this.mainForm.GrangerUserViewChanged += MainForm_UserViewChanged;
+            this.mainForm.GrangerAdvisorChanged += MainForm_Granger_AdvisorChanged;
+            this.mainForm.GrangerValuatorChanged += MainForm_Granger_ValuatorChanged;
+
+            UpdateCurrentCreaturesData();
+            UpdateDataForView();
+            timer1.Enabled = true;
+        }
+
+        void SetupOlvCustomizations()
+        {
+            // GroupKeyGetter needs to be IComparable (non generic) to properly support ordering,
+            // GroupKeyToTitleConverter converts that key into something more meaningful to display
+            // AspectToStringConverter converts aspect into custom display string
 
             olvColumnPairedWith.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
+            {
+                Creature creature = (Creature)x;
+                Creature mate = creature.GetMate();
+                if (mate != null)
                 {
-                    Creature creature = (Creature)x;
-                    Creature mate = creature.GetMate();
-                    if (mate != null)
-                    {
-                        string[] output = new string[2] { creature.ToString(), mate.ToString() };
-                        return string.Join(" + ", output.OrderBy(y => y));
-                    }
-                    else return "Free";
-                });
+                    string[] output = new string[2] { creature.ToString(), mate.ToString() };
+                    return string.Join(" + ", output.OrderBy(y => y));
+                }
+                else return "Free";
+            });
 
-            //olvColumnValue.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
-            //    {
-            //        Creature creature = (Creature)x;
-            //        return creature.ValueAspect;
-            //    });
             olvColumnValue.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
             {
                 Creature creature = (Creature)x;
@@ -115,137 +109,124 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 return x.ToString();
             });
 
-            //olvColumnBreedValue.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
-            //    {
-            //        Creature creature = (Creature)x;
-            //        var result = creature.BreedValueAspect;
-            //        return result != null ? result.ToString() : "Not comparing";
-            //    });
             olvColumnBreedValue.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
-                {
-                    Creature creature = (Creature)x;
-                    double? val = creature.BreedValueAspect;
-                    if (val == null) return "Being Compared / Not comparing";
-                    else return "Candidates";
-                });
+            {
+                Creature creature = (Creature)x;
+                double? val = creature.BreedValueAspect;
+                if (val == null) return "Being Compared / Not comparing";
+                else return "Candidates";
+            });
             olvColumnBreedValue.AspectToStringConverter = new BrightIdeasSoftware.AspectToStringConverterDelegate(x =>
+            {
+                if (x is double)
                 {
-                    if (x is double)
-                    {
-                        double val = (double)x;
-                        if (val == double.NegativeInfinity) return "-inf";
-                        else return val.ToString("F0");
-                    }
-                    else if (x == null) return string.Empty;
-                    else return x.ToString();
-                });
+                    double val = (double)x;
+                    if (val == double.NegativeInfinity) return "-inf";
+                    else return val.ToString("F0");
+                }
+                else if (x == null) return string.Empty;
+                else return x.ToString();
+            });
 
             olvColumnTraits.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
-                {
-                    Creature creature = (Creature)x;
-                    var traits = creature.Traits;
-                    CreatureTrait[] positives = CreatureTrait.GetGoodTraits(traits, this.mainForm.CurrentValuator);
-                    CreatureTrait[] negatives = CreatureTrait.GetBadTraits(traits, this.mainForm.CurrentValuator);
-                    return string.Format("Good: {0}, Neutral: {1}, Bad: {2}",
-                        positives.Length,
-                        traits.Length - positives.Length - negatives.Length,
-                        negatives.Length);
-                });
+            {
+                Creature creature = (Creature)x;
+                var traits = creature.Traits;
+                CreatureTrait[] positives = CreatureTrait.GetGoodTraits(traits, this.mainForm.CurrentValuator);
+                CreatureTrait[] negatives = CreatureTrait.GetBadTraits(traits, this.mainForm.CurrentValuator);
+                return string.Format("Good: {0}, Neutral: {1}, Bad: {2}",
+                    positives.Length,
+                    traits.Length - positives.Length - negatives.Length,
+                    negatives.Length);
+            });
 
             olvColumnTraitsInspectedAt.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
-                {
-                    Creature creature = (Creature)x;
-                    var traitinfo = creature.TraitsInspectedAtSkillAspect;
-                    if (traitinfo.Skill > CreatureTrait.GetFullTraitVisibilityCap(traitinfo.EpicCurve))
-                        return "Fully known";
-                    else return "Known partially";
-                });
+            {
+                Creature creature = (Creature)x;
+                var traitinfo = creature.TraitsInspectedAtSkillAspect;
+                if (traitinfo.Skill > CreatureTrait.GetFullTraitVisibilityCap(traitinfo.EpicCurve))
+                    return "Fully known";
+                else return "Known partially";
+            });
 
             olvColumnAge.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
-                {
-                    CreatureAge age = ((Creature)x).Age;
-                    return (int)age.CreatureAgeId;
-                });
+            {
+                CreatureAge age = ((Creature)x).Age;
+                return (int)age.CreatureAgeId;
+            });
             olvColumnAge.GroupKeyToTitleConverter = new BrightIdeasSoftware.GroupKeyToTitleConverterDelegate(x =>
-                {
-                    int result = (int)x;
-                    return (new CreatureAge(result.ToString()).ToString());
-                });
-
-            //////////////
-            // GroupKeyGetter needs to be sortable to position them correctly,
-            // GroupKeyToTitleConverter converts that key into something more meaningful to display
-            // AspectToStringConverter converts aspect into display string in special way
+            {
+                int result = (int)x;
+                return (new CreatureAge(result.ToString()).ToString());
+            });
 
             olvColumnNotInMoodFor.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
+            {
+                Creature creature = (Creature)x;
+                TimeSpan tms = creature.NotInMoodForAspect;// notInMoodUntil - DateTime.Now;
+                if (tms.TotalDays >= 0)
                 {
-                    Creature creature = (Creature)x;
-                    //DateTime notInMoodUntil = creature.NotInMoodUntil;
-                    TimeSpan tms = creature.NotInMoodForAspect;// notInMoodUntil - DateTime.Now;
-                    if (tms.TotalDays >= 0)
-                    {
-                        return 0; // "Not in mood";
-                    }
-                    else
-                    {
-                        return 1; // "In mood";
-                    }
-                });
+                    return 0; // "Not in mood";
+                }
+                else
+                {
+                    return 1; // "In mood";
+                }
+            });
             olvColumnNotInMoodFor.AspectToStringConverter = new BrightIdeasSoftware.AspectToStringConverterDelegate(x =>
+            {
+                if (x is TimeSpan)
                 {
-                    if (x is TimeSpan)
-                    {
-                        TimeSpan ts = (TimeSpan)x;
-                        if (ts.TotalDays >= 0)
-                            return ts.ToStringCompact();
-                        else return string.Empty;
-                    }
+                    TimeSpan ts = (TimeSpan)x;
+                    if (ts.TotalDays >= 0)
+                        return ts.ToStringCompact();
                     else return string.Empty;
-                });
+                }
+                else return string.Empty;
+            });
             olvColumnNotInMoodFor.GroupKeyToTitleConverter = new BrightIdeasSoftware.GroupKeyToTitleConverterDelegate(x =>
+            {
+                int result = (int)x;
+                switch (result)
                 {
-                    int result = (int)x;
-                    switch (result)
-                    {
-                        case 0:
-                            return "Not in mood";
-                        case 1:
-                            return "In mood";
-                        default:
-                            return "";
-                    }
-                });
+                    case 0:
+                        return "Not in mood";
+                    case 1:
+                        return "In mood";
+                    default:
+                        return "";
+                }
+            });
 
 
             olvColumnGroomedAgo.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
+            {
+                Creature creature = (Creature)x;
+                TimeSpan tms = creature.GroomedAgoAspect; // DateTime.Now - groomedon;
+                if (tms.TotalHours <= 1)
                 {
-                    Creature creature = (Creature)x;
-                    //DateTime groomedon = creature.GroomedOn;
-                    TimeSpan tms = creature.GroomedAgoAspect; // DateTime.Now - groomedon;
-                    if (tms.TotalHours <= 1)
-                    {
-                        return "Less than 1 hour ago";
-                    }
-                    else
-                    {
-                        return "More than 1 hour ago";
-                    }
-                });
+                    return "Less than 1 hour ago";
+                }
+                else
+                {
+                    return "More than 1 hour ago";
+                }
+            });
             olvColumnGroomedAgo.AspectToStringConverter = new BrightIdeasSoftware.AspectToStringConverterDelegate(x =>
+            {
+                if (x is TimeSpan)
                 {
-                    if (x is TimeSpan)
-                    {
-                        TimeSpan ts = (TimeSpan)x;
-                        if (ts < this.mainForm.Settings.ShowGroomingTime)
-                            return ts.ToStringCompact();
-                        else return string.Empty;
-                    }
+                    TimeSpan ts = (TimeSpan)x;
+                    if (ts < this.mainForm.Settings.ShowGroomingTime)
+                        return ts.ToStringCompact();
                     else return string.Empty;
-                });
+                }
+                else return string.Empty;
+            });
             olvColumnGroomedAgo.GroupKeyToTitleConverter = new BrightIdeasSoftware.GroupKeyToTitleConverterDelegate(x =>
-                {
-                    return x.ToString();
-                });
+            {
+                return x.ToString();
+            });
 
 
             olvColumnPregnantFor.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
@@ -324,7 +305,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             });
             olvColumnBirthDate.GroupKeyToTitleConverter = new BrightIdeasSoftware.GroupKeyToTitleConverterDelegate(x =>
             {
-                DateTime dt = (DateTime) x;
+                DateTime dt = (DateTime)x;
                 if (dt < treshholdDtValueForBirthDate)
                 {
                     return "No birth date available";
@@ -371,17 +352,30 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     return string.Format("{0} real days", gkey);
                 }
             });
+        }
 
+        public Creature[] SelectedCreatures
+        {
+            get
+            {
+                var array = objectListView1.SelectedObjects.Cast<Creature>().ToArray();
+                return array;
+            }
+        }
 
-            this.context.OnHerdsModified += Context_OnHerdsModified;
-            this.context.OnEntitiesModified += ContextOnEntitiesModified;
-            this.mainForm.Granger_UserViewChanged += MainForm_UserViewChanged;
-            this.mainForm.Granger_AdvisorChanged += MainForm_Granger_AdvisorChanged;
-            this.mainForm.Granger_ValuatorChanged += MainForm_Granger_ValuatorChanged;
-
-            UpdateCurrentCreaturesData();
-            UpdateDataForView();
-            timer1.Enabled = true;
+        public Creature SelectedSingleCreature
+        {
+            get { return selectedSingleCreature; }
+            set
+            {
+                selectedSingleCreature = value;
+                //checking for null to prevent designer issue, which tries to set it to null initially
+                if (mainForm != null) 
+                {
+                    mainForm.TriggerSelectedSingleCreatureChanged();
+                    UpdateDataForView();
+                }
+            }
         }
 
         private void MakeDarkHighContrastFriendly()
@@ -420,7 +414,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             UpdateDataForView();
         }
 
-        void MainForm_UserViewChanged(object sender, FormGrangerMain.UserViewChangedEventArgs e)
+        void MainForm_UserViewChanged(object sender, UserViewChangedEventArgs e)
         {
             if (e.HerdViewVisible) tableLayoutPanel1.RowStyles[0].Height = 0;
             else tableLayoutPanel1.RowStyles[0].Height = 30;
@@ -432,33 +426,31 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             UpdateDataForView();
         }
 
-        void UpdateCurrentCreaturesData() //on init and model updates
+        void UpdateCurrentCreaturesData()
         {
             activeHerds = context.Herds.AsEnumerable().Where(x => x.Selected == true).OrderBy(x => x.HerdID).ToList();
 
             textBoxHerds.Text = string.Join(", ", activeHerds.Select(x => x.HerdID));
 
-            CurrentCreatures = context.Creatures
+            // take creatures only from selected herds
+            currentCreatures = context.Creatures
                 .AsEnumerable()
                 .Where(x => activeHerds
-                    .Select(y => y.HerdID) //create a temporary collection of herdID's
-                    .Contains(x.Herd)) //select this creature if herd is in temp collection
+                    .Select(y => y.HerdID)
+                    .Contains(x.Herd))
                 .Select(x => new Creature(mainForm, x, context))
                 .ToList();
         }
 
-        //is this really useful at all?
-        bool _updatingListView = false;
         void UpdateDataForView()
         {
-            _updatingListView = true;
+            listViewIsBeingUpdated = true;
 
-            // here goes breeding update!
-            //cache breeding eval
+            // updating breeding advisor feedback
             double maxValue = 0;
             double minValue = 0;
 
-            foreach (var creature in CurrentCreatures)
+            foreach (var creature in currentCreatures)
             {
                 creature.RebuildCachedBreedValue();
                 if (creature.CachedBreedValue.HasValue)
@@ -470,7 +462,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 }
             }
 
-            foreach (var creature in CurrentCreatures)
+            foreach (var creature in currentCreatures)
             {
                 creature.ClearColorHints();
                 if (!mainForm.Settings.DisableRowColoring)
@@ -479,46 +471,49 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 }
             }
 
-            objectListView1.SetObjects(CurrentCreatures, true);
+            objectListView1.SetObjects(currentCreatures, true);
             
-            _updatingListView = false;
-        }
-
-        private void UCGrangerCreatureList_Load(object sender, EventArgs e)
-        {
-
+            listViewIsBeingUpdated = false;
         }
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (objectListView1.SelectedObjects.Count > 1)
-                MessageBox.Show("Select a single creature for editing");
+            {
+                MessageBox.Show("Please first select a creature for editing.");
+            }
             else
             {
-                var selected = objectListView1.SelectedObjects.Cast<Creature>().ToArray();
-                foreach (var creature in selected)
-                {
-                    FormCreatureViewEdit ui = new FormCreatureViewEdit(mainForm,
-                        creature,
-                        context,
-                        CreatureViewEditOpType.Edit,
-                        creature.HerdAspect,
-                        logger,
-                        wurmApi);
-                    ui.ShowDialogCenteredOnForm(mainForm);
-                }
+                objectListView1.SelectedObjects
+                               .Cast<Creature>()
+                               .ToArray()
+                               .ForEach(creature =>
+                               {
+                                   FormCreatureViewEdit ui = new FormCreatureViewEdit(mainForm,
+                                       creature,
+                                       context,
+                                       CreatureViewEditOpType.Edit,
+                                       creature.HerdAspect,
+                                       logger,
+                                       wurmApi);
+                                   ui.ShowDialogCenteredOnForm(mainForm);
+                               });
             }
         }
 
         private void moveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var selected = objectListView1.SelectedObjects.Cast<Creature>().ToArray();
-            FormChooseHerd ui = new FormChooseHerd(mainForm, context);
+            FormChooseHerd ui = new FormChooseHerd(context);
             if (ui.ShowDialogCenteredOnForm(mainForm) == DialogResult.OK)
             {
                 string herdId = ui.Result;
 
-                var targetHerd = context.Creatures.Where(x => x.Herd == herdId).Select(x => new Creature(mainForm, x, context)).ToArray();
+                var targetHerd =
+                    context.Creatures
+                           .Where(x => x.Herd == herdId)
+                           .Select(x => new Creature(mainForm, x, context))
+                           .ToArray();
 
                 List<Creature> nonuniqueCreatures = new List<Creature>();
                 foreach (var creature in selected)
@@ -536,8 +531,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 }
 
                 if (nonuniqueCreatures.Count > 0)
-                    MessageBox.Show("could not change herd for selected creatures, because following creatures have same identity (name and server if known):\r\n"
+                {
+                    MessageBox.Show(
+                        "Unable to change herd for selected creatures. Some creatures have same identity (name and server if known):\r\n"
                         + string.Join(", ", nonuniqueCreatures.Select(x => x.ToString())));
+                }
                 else
                 {
                     foreach (var creature in selected)
@@ -552,7 +550,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var selected = objectListView1.SelectedObjects.Cast<Creature>().OrderBy(x => x.NameAspect).ToArray();
-            if (MessageBox.Show("This will permanently delete following creatures:\r\n" +
+            if (MessageBox.Show("Creatures will be permanently deleted:\r\n" +
                 string.Join(",\r\n", (IEnumerable<Creature>)selected) + "\r\nContinue?",
                 "Confirm", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
             {
@@ -563,21 +561,25 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         private void viewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (objectListView1.SelectedObjects.Count > 1)
-                MessageBox.Show("Select a single creature for viewing");
+            {
+                MessageBox.Show("Please select a single creature for viewing.");
+            }
             else
             {
-                var selected = objectListView1.SelectedObjects.Cast<Creature>().ToArray();
-                foreach (var creature in selected)
-                {
-                    FormCreatureViewEdit ui = new FormCreatureViewEdit(mainForm,
-                        creature,
-                        context,
-                        CreatureViewEditOpType.View,
-                        creature.HerdAspect,
-                        logger,
-                        wurmApi);
-                    ui.ShowDialogCenteredOnForm(mainForm);
-                }
+                objectListView1.SelectedObjects
+                               .Cast<Creature>()
+                               .ToArray()
+                               .ForEach(creature =>
+                               {
+                                   FormCreatureViewEdit ui = new FormCreatureViewEdit(mainForm,
+                                       creature,
+                                       context,
+                                       CreatureViewEditOpType.View,
+                                       creature.HerdAspect,
+                                       logger,
+                                       wurmApi);
+                                   ui.ShowDialogCenteredOnForm(mainForm);
+                               });
             }
         }
 
@@ -605,8 +607,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             MessageBox.Show(result);
         }
 
-        //set creature color
-
         private void blackToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UpdateCreaturesColors(new CreatureColor(CreatureColorId.Black));
@@ -632,6 +632,21 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             UpdateCreaturesColors(new CreatureColor(CreatureColorId.Gold));
         }
 
+        private void bloodBayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateCreaturesColors(new CreatureColor(CreatureColorId.BloodBay));
+        }
+
+        private void ebonyBlackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateCreaturesColors(new CreatureColor(CreatureColorId.EbonyBlack));
+        }
+
+        private void piebaldPintoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateCreaturesColors(new CreatureColor(CreatureColorId.PiebaldPinto));
+        }
+
         private void notACreatureToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UpdateCreaturesColors(new CreatureColor(CreatureColorId.Unknown));
@@ -643,7 +658,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
             if (selected.Length > 2)
             {
-                if (System.Windows.Forms.MessageBox.Show("This will set color for following creatures:\r\n" +
+                if (System.Windows.Forms.MessageBox.Show("Color will be changed for creatures:\r\n" +
                     string.Join(", ", (IEnumerable<Creature>)selected) + "\r\nContinue?",
                     "Confirm", System.Windows.Forms.MessageBoxButtons.OKCancel) != System.Windows.Forms.DialogResult.OK)
                 {
@@ -685,13 +700,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         void ToggleTag(string tag)
         {
-            var selected = objectListView1.SelectedObjects.Cast<Creature>().ToArray();
-
-            foreach (var creature in selected)
-            {
-                bool tagState = creature.CheckTag(tag);
-                creature.SetTag(tag, !tagState);
-            }
+            objectListView1.SelectedObjects.Cast<Creature>().ToArray().ForEach(
+                creature =>
+                {
+                    bool tagState = creature.CheckTag(tag);
+                    creature.SetTag(tag, !tagState);
+                });
 
             context.SubmitChanges();
         }
@@ -708,20 +722,20 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public void SaveStateToSettings()
         {
-            //this causes crash on Win XP, ordering events happen before mainform assigned,
-            //because mainform is assigned after constructor
-            if (!_debug_MainFormAssigned && mainForm == null) return;
+            // On Windows XP ordering events fire before mainform is assigned, 
+            // due to mainform being assigned outside constructor.
+            // Wurm Assistant is no longer Win XP compatible, but keeping this safeguard, just in case.
+            if (!_debugMainFormAssigned && mainForm == null) return;
 
             var settings = this.objectListView1.SaveState();
             try
             {
                 mainForm.Settings.CreatureListState = settings;
             }
-            catch (Exception _e)
+            catch (Exception exception)
             {
-                logger.Error(_e,
-                    string.Format("Something went wrong when trying to save creaturelist layout, mainform null: {0}",
-                        mainForm));
+                logger.Error(exception,
+                    $"Something went wrong at saving creaturelist layout, mainform: {mainForm?.ToString() ?? "NULL"}");
             }
         }
 
@@ -730,7 +744,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             var selected = objectListView1.SelectedObjects.Cast<Creature>().ToArray();
             if (selected.Length != 2)
             {
-                MessageBox.Show("Select exactly 2 creatures that should be paired together");
+                MessageBox.Show("Please select exactly 2 creatures for pairing together.");
                 return;
             }
 
@@ -738,15 +752,15 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             Creature secondCreatureMate = selected[1].GetMate();
             if (firstCreatureMate != null || secondCreatureMate != null)
             {
-                if (MessageBox.Show("At least one of selected creatures already has a mate. Continue to change their mates?",
+                if (MessageBox.Show("At least one of the selected creatures already has a mate. Change their mates anyway?",
                     "Confirm", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 {
                     return;
                 }
                 else
                 {
-                    if (firstCreatureMate != null) firstCreatureMate.SetMate(null);
-                    if (secondCreatureMate != null) secondCreatureMate.SetMate(null);
+                    firstCreatureMate?.SetMate(null);
+                    secondCreatureMate?.SetMate(null);
                 }
             }
 
@@ -761,7 +775,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
             if (selected.Length > 0)
             {
-                if (MessageBox.Show("Mates will be cleared for following creatures:\r\n" +
+                if (MessageBox.Show("Mates will be cleared for creatures:\r\n" +
                     string.Join(",\r\n", (IEnumerable<Creature>)selected) + "\r\nContinue?",
                     "Confirm", MessageBoxButtons.OKCancel) != DialogResult.OK)
                 {
@@ -777,13 +791,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             }
         }
 
-        Creature[] lastSelectedCreatures = null;
-        private void objectListView1_SelectionChanged(object sender, EventArgs e)
-        {
-            // disabled: not fired properly under WPF application, replaced by SelectedIndexChanged
-            //SelectionChanged();
-        }
-
         private void objectListView1_SelectedIndexChanged(object sender, EventArgs e)
         {
             SelectionChanged();
@@ -793,17 +800,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             var newSelectedCreatures = SelectedCreatures;
             bool changed = SelectionChangedCheck(lastSelectedCreatures, newSelectedCreatures);
-            if (!_updatingListView && changed)
+            if (!listViewIsBeingUpdated && changed)
             {
                 var selectedCreatures = newSelectedCreatures;
-                //logger.Debug("Selected creatures changed, array count: " + selectedCreatures.Length);
                 if (selectedCreatures.Length == 1)
                 {
-                    //logger.Debug("Selected single creature, array count: " + selectedCreatures.Length);
                     var creature = selectedCreatures[0];
-                    if (!creature.Equals(SelectedSingleCreature)) //change only if new selected creature is different
+                    if (!creature.Equals(SelectedSingleCreature))
                     {
-                        //logger.Debug("Selected single creature changing");
                         SelectedSingleCreature = selectedCreatures[0];
                     }
                 }
@@ -812,22 +816,15 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             lastSelectedCreatures = newSelectedCreatures;
         }
 
-        private bool SelectionChangedCheck(Creature[] lastSelectedCreatures, Creature[] newSelectedCreatures)
+        private bool SelectionChangedCheck(Creature[] previouslySelectedCreatures, Creature[] newSelectedCreatures)
         {
-            if (lastSelectedCreatures == null && newSelectedCreatures == null)
-                return false;
+            if (previouslySelectedCreatures == null && newSelectedCreatures == null) return false;
+            if (previouslySelectedCreatures == null || newSelectedCreatures == null) return true;
+            if (previouslySelectedCreatures.Length != newSelectedCreatures.Length) return true;
 
-            if (lastSelectedCreatures == null && newSelectedCreatures != null ||
-                lastSelectedCreatures != null && newSelectedCreatures == null)
-                return true;
-
-            if (lastSelectedCreatures.Length != newSelectedCreatures.Length) return true;
-            else
+            foreach (var creature in previouslySelectedCreatures)
             {
-                foreach (var creature in lastSelectedCreatures)
-                {
-                    if (!newSelectedCreatures.Contains(creature)) return true;
-                }
+                if (!newSelectedCreatures.Contains(creature)) return true;
             }
 
             return false;
@@ -850,16 +847,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         private void objectListView1_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
         {
-            // moved to row coloring code
-            //if (e.Column == olvColumnName)
-            //{
-            //    creature creature = (Creature)e.Model;
-            //    Color? color = creature.CreatureBestCandidateColor;
-            //    if (color != null)
-            //    {
-            //        e.SubItem.BackColor = color.Value;
-            //    }
-            //}
             if (e.Column == olvColumnColor)
             {
                 Creature creature = (Creature)e.Model;
@@ -872,25 +859,21 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             }
         }
 
-        //not in mood
         private void clearToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             SetNotInMood(new TimeSpan(0));
         }
 
-        //not in mood
         private void set45MinutesFromNowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetNotInMood(TimeSpan.FromMinutes(45));
         }
 
-        //not in mood
         private void setTo1HourFromNowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetNotInMood(TimeSpan.FromHours(1));
         }
 
-        //not in mood
         private void setTo24HoursFromNowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetNotInMood(TimeSpan.FromHours(24));
@@ -911,38 +894,18 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             }
         }
 
-        private void objectListView1_CellClick(object sender, BrightIdeasSoftware.CellClickEventArgs e)
-        {
-            
-        }
-
         private void objectListView1_DoubleClick(object sender, EventArgs e)
         {
             if (SelectedSingleCreature != null)
             {
-                Creature tempCreatureRef = SelectedSingleCreature;
-                FormEditComments ui = new FormEditComments(this.mainForm, tempCreatureRef.Comments, tempCreatureRef.Name);
+                Creature creature = SelectedSingleCreature;
+                FormEditComments ui = new FormEditComments(creature.Comments, creature.Name);
                 if (ui.ShowDialogCenteredOnForm(mainForm) == DialogResult.OK)
                 {
-                    tempCreatureRef.Comments = ui.Result;
+                    creature.Comments = ui.Result;
                     context.SubmitChanges();
                 }
             }
-        }
-
-        private void bloodBayToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateCreaturesColors(new CreatureColor(CreatureColorId.BloodBay));
-        }
-
-        private void ebonyBlackToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateCreaturesColors(new CreatureColor(CreatureColorId.EbonyBlack));
-        }
-
-        private void piebaldPintoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateCreaturesColors(new CreatureColor(CreatureColorId.PiebaldPinto));
         }
     }
 }

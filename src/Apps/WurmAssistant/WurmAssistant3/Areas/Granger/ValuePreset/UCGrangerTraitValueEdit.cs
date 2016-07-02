@@ -4,22 +4,22 @@ using AldursLab.Essentials.Extensions.DotNet;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
 {
-    public partial class UCGrangerTraitValueEditBox : UserControl
+    public partial class UcGrangerTraitValueEditBox : UserControl
     {
-        private CreatureTrait _Trait;
+        CreatureTrait trait;
 
-        public CreatureTrait Trait { get { return _Trait; } set { _Trait = value; textBox1.Text = value.ToString(); } }
-        public int Value { get { return (int)numericUpDown1.Value; } set { numericUpDown1.Value = value.ConstrainToRange(-1000, 1000); } }
-        public bool ReadOnly { set { numericUpDown1.Enabled = !value; } }
-
-        public UCGrangerTraitValueEditBox()
+        public UcGrangerTraitValueEditBox()
         {
             InitializeComponent();
         }
 
+        public CreatureTrait Trait { get { return trait; } set { trait = value; textBox1.Text = value.ToString(); } }
+        public int Value { get { return (int)numericUpDown1.Value; } set { numericUpDown1.Value = value.ConstrainToRange(-1000, 1000); } }
+        public bool ReadOnly { set { numericUpDown1.Enabled = !value; } }
+
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            if (TraitValueChanged != null) TraitValueChanged(this, EventArgs.Empty);
+            TraitValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler TraitValueChanged;

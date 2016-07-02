@@ -11,32 +11,39 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 {
     public partial class FormHerdName : ExtendedForm
     {
-        GrangerContext Context;
+        readonly GrangerContext context;
         string[] allHerdNames;
-        //public string Result;
-        Form MainForm;
+        Form mainForm;
         readonly ILogger logger;
 
-        string RenamingHerd;
+        readonly string renamingHerd;
 
-        public FormHerdName(GrangerContext context, Form mainForm, [NotNull] ILogger logger, string renamingHerd = null)
+        public FormHerdName(
+            [NotNull] GrangerContext context,
+            [NotNull] Form mainForm, 
+            [NotNull] ILogger logger, 
+            [CanBeNull] string renamingHerd = null)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
-            MainForm = mainForm;
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (mainForm == null) throw new ArgumentNullException(nameof(mainForm));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            this.mainForm = mainForm;
             this.logger = logger;
-            RenamingHerd = renamingHerd;
-            Context = context;
+            this.renamingHerd = renamingHerd;
+            this.context = context;
+
             InitializeComponent();
+
             allHerdNames = context.Herds.Select(x => x.HerdID).ToArray();
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            if (RenamingHerd != null)
+            if (renamingHerd != null)
             {
                 try
                 {
-                    Context.RenameHerd(RenamingHerd, textBox1.Text);
+                    context.RenameHerd(renamingHerd, textBox1.Text);
                 }
                 catch (Exception _e)
                 {
@@ -48,7 +55,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             {
                 try
                 {
-                    Context.InsertHerd(textBox1.Text);
+                    context.InsertHerd(textBox1.Text);
                 }
                 catch (Exception _e)
                 {
@@ -77,7 +84,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     labelInfo.Text = "must be one word made of letters and/or numbers";
                     return false;
                 }
-                else if (Context.Herds.Where(x => x.HerdID == textBox1.Text).Count() > 0)
+                else if (context.Herds.Any(x => x.HerdID == textBox1.Text))
                 {
                     labelInfo.Text = "herd with this name already exists";
                     return false;
@@ -92,8 +99,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            buttonOK.Enabled = false;
-            if (NameIsValid) buttonOK.Enabled = true;
+            buttonOK.Enabled = NameIsValid;
         }
 
         private void FormHerdName_Load(object sender, EventArgs e)

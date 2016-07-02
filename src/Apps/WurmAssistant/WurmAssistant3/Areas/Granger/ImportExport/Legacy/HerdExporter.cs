@@ -8,7 +8,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ImportExport.Legacy
 {
     public class HerdExporter
     {
-        public XDocument CreateXML(GrangerContext context, string herdName)
+        public XDocument CreateXml(GrangerContext context, string herdName)
         {
             if (herdName == null) throw new GrangerException("No herd specified");
 
@@ -30,28 +30,27 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ImportExport.Legacy
                         new XElement("Mother", creatureEntity.MotherName),
                         new XElement("Traits", GetTraitListXML(creatureEntity)),
                         new XElement("NotInMoodUntil",
-                            creatureEntity.NotInMood.HasValue
-                                ? creatureEntity.NotInMood.Value.ToString(CultureInfo.InvariantCulture)
-                                : string.Empty),
+                            creatureEntity.NotInMood?.ToString(CultureInfo.InvariantCulture) ?? string.Empty),
                         new XElement("PregnantUntil",
-                            creatureEntity.PregnantUntil.HasValue
-                                ? creatureEntity.PregnantUntil.Value.ToString(
-                                    CultureInfo.InvariantCulture)
-                                : string.Empty),
+                            creatureEntity.PregnantUntil?.ToString(
+                                CultureInfo.InvariantCulture) ?? string.Empty),
                         new XElement("GroomedOn",
-                            creatureEntity.GroomedOn.HasValue
-                                ? creatureEntity.GroomedOn.Value.ToString(CultureInfo.InvariantCulture)
-                                : string.Empty),
+                            creatureEntity.GroomedOn?.ToString(CultureInfo.InvariantCulture) ?? string.Empty),
                         new XElement("Gender", GetGender(creatureEntity)),
                         new XElement("CaredBy", creatureEntity.TakenCareOfBy),
-                        new XElement("InspectSkill", creatureEntity.TraitsInspectedAtSkill,
-                            new XAttribute("IsEpic", creatureEntity.EpicCurve.HasValue ? creatureEntity.EpicCurve.ToString() : bool.FalseString)),
+                        new XElement("InspectSkill",
+                            creatureEntity.TraitsInspectedAtSkill,
+                            new XAttribute("IsEpic",
+                                creatureEntity.EpicCurve.HasValue
+                                    ? creatureEntity.EpicCurve.ToString()
+                                    : bool.FalseString)),
                         new XElement("Age", creatureEntity.Age),
                         new XElement("Color", creatureEntity.Color),
                         new XElement("Comments", creatureEntity.Comments),
                         new XElement("Tags", creatureEntity.SpecialTagsRaw),
                         new XElement("BrandedFor", creatureEntity.BrandedFor),
-                        new XElement("ServerName", creatureEntity.ServerName));
+                        new XElement("ServerName", creatureEntity.ServerName),
+                        new XElement("SmilexamineLastDate", creatureEntity.SmilexamineLastDate));
                 root.Add(creature);
             }
 
@@ -65,7 +64,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ImportExport.Legacy
             var result = new List<XElement>();
             foreach (var trait in creatureEntity.Traits)
             {
-                result.Add(new XElement("Trait", new XAttribute("TraitId", (int)trait.Trait), trait.ToString()));
+                result.Add(new XElement("Trait", new XAttribute("TraitId", (int)trait.CreatureTraitId), trait.ToString()));
             }
             return result;
         }

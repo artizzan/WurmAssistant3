@@ -9,24 +9,22 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
 {
     public partial class FormEditValuePresetsNewNameDialog : ExtendedForm
     {
-        private FormEditValuePresets FormEditValuePresets;
-        private GrangerContext Context;
+        FormEditValuePresets formEditValuePresets;
 
         public string Result { get; private set; }
 
-        HashSet<string> TakenValueMapIDs = new HashSet<string>();
+        readonly HashSet<string> takenValueMapIDs = new HashSet<string>();
 
         public FormEditValuePresetsNewNameDialog(FormEditValuePresets formEditValuePresets, GrangerContext context)
         {
-            this.FormEditValuePresets = formEditValuePresets;
-            this.Context = context;
+            this.formEditValuePresets = formEditValuePresets;
 
             InitializeComponent();
 
-            var uniqueValMapIDs = Context.TraitValues.AsEnumerable().Select(x => x.ValueMapID).Distinct();
-            foreach (var mapID in uniqueValMapIDs)
+            var uniqueValMapIDs = context.TraitValues.AsEnumerable().Select(x => x.ValueMapID).Distinct();
+            foreach (var mapId in uniqueValMapIDs)
             {
-                TakenValueMapIDs.Add(mapID);
+                takenValueMapIDs.Add(mapId);
             }
         }
 
@@ -36,7 +34,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
             {
                 buttonOK.Enabled = false;
             }
-            else if (TakenValueMapIDs.Contains(textBox1.Text.Trim()))
+            else if (takenValueMapIDs.Contains(textBox1.Text.Trim()))
             {
                 buttonOK.Enabled = false;
                 labelWarn.Visible = true;

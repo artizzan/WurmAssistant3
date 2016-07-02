@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger
 {
+    /// <summary>
+    /// This class is an adapted DAL from when GrangerDb was using SqLite.
+    /// </summary>
     [KernelBind(BindingHint.Singleton), PersistentObject("GrangerFeature_GrangerSimpleDb")]
     public class GrangerSimpleDb : PersistentObjectBase
     {

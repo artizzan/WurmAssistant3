@@ -6,7 +6,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 {
     public partial class FormGrangerGeneralOptions : ExtendedForm
     {
-        private readonly GrangerSettings settings; 
+        readonly GrangerSettings settings; 
 
         public FormGrangerGeneralOptions(GrangerSettings settings)
         {
@@ -23,6 +23,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             checkBoxDisableRowColoring.Checked = settings.DisableRowColoring;
             checkBoxAdjustForDarkThemes.Checked = settings.AdjustForDarkThemes;
             checkBoxUseServerNameAsIdComponent.Checked = settings.UseServerNameAsCreatureIdComponent;
+            checkBoxhideLiveTrackerPopups.Checked = settings.HideLiveTrackerPopups;
         }
 
         private void CommitChanges()
@@ -33,6 +34,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             settings.DisableRowColoring = checkBoxDisableRowColoring.Checked;
             settings.AdjustForDarkThemes = checkBoxAdjustForDarkThemes.Checked;
             settings.UseServerNameAsCreatureIdComponent = checkBoxUseServerNameAsIdComponent.Checked;
+            settings.HideLiveTrackerPopups = checkBoxhideLiveTrackerPopups.Checked;
         }
 
         private void buttonOK_Click(object sender, EventArgs e)

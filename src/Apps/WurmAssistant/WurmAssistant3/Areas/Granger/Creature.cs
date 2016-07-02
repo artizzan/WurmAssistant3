@@ -9,39 +9,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 {
     public class Creature
     {
-        public struct TraitsInspectedContainer : IComparable
-        {
-            public float Skill;
-            public bool EpicCurve;
-
-            public override string ToString()
-            {
-                return EpicCurve == true ? Skill.ToString() + " (epic)" : Skill.ToString();
-            }
-
-            public int CompareTo(TraitsInspectedContainer other)
-            {
-                return Skill.CompareTo(other.Skill);
-            }
-
-            public int CompareTo(object obj)
-            {
-                if (obj == null)
-                    return 1;
-
-                if (obj is TraitsInspectedContainer)
-                {
-                    return CompareTo((TraitsInspectedContainer)obj);
-                }
-                else
-                    throw new ArgumentException("Object is not a TraitsInspectedContained");
-            }
-        }
-
         static readonly System.Drawing.Color? DefaultBestBreedHintColor = (System.Drawing.Color)(new HslColor(120D, 240D, 180D));
 
         readonly GrangerContext context;
-        private readonly FormGrangerMain mainForm;
+        readonly FormGrangerMain mainForm;
+
+        double? cachedBreedValue = null;
 
         public Creature(FormGrangerMain mainForm, CreatureEntity entity, GrangerContext context)
         {
@@ -53,12 +26,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public CreatureEntity Entity { get; private set; }
 
-        public int Value { get { return mainForm.CurrentValuator.GetValueForCreature(this); } }
+        public int Value => mainForm.CurrentValuator.GetValueForCreature(this);
 
-        public int PotentialPositiveValue { get { return mainForm.CurrentValuator.GetPotentialPositiveValueForCreature(this); } }
+        public int PotentialPositiveValue => mainForm.CurrentValuator.GetPotentialPositiveValueForCreature(this);
 
-        public int PotentialNegativeValue { get { return mainForm.CurrentValuator.GetPotentialNegativeValueForCreature(this); } }
-        
+        public int PotentialNegativeValue => mainForm.CurrentValuator.GetPotentialNegativeValueForCreature(this);
+
         double? BreedValue 
         { 
             get 
@@ -74,26 +47,20 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             } 
         }
 
-        double? cachedBreedValue = null;
-        public double? CachedBreedValue
-        {
-            get
-            {
-                return cachedBreedValue;
-            }
-        }
+        public double? CachedBreedValue => cachedBreedValue;
+
         public void RebuildCachedBreedValue()
         {
             cachedBreedValue = BreedValue;
         }
 
         /// <summary>
-        /// Use to color entire row, null if no color set
+        ///  Used to color entire row, null if no color set
         /// </summary>
         public System.Drawing.Color? BreedHintColor { get; private set; }
 
         /// <summary>
-        /// null if candidate is not best, else contains default best candidate color
+        /// Null if candidate is not best, else contains default best candidate color
         /// </summary>
         public System.Drawing.Color? CreatureBestCandidateColor { get; set; }
 
@@ -242,7 +209,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public string Name { get { return Entity.Name; } set { Entity.Name = value; } }
 
-        public string InnerName { get { return GetInnerNameInfo(Entity.Name).InnerName; } }
+        public string InnerName => GetInnerNameInfo(Entity.Name).InnerName;
 
         public string Father { get { return Entity.FatherName; } set { Entity.FatherName = value; } }
 
@@ -287,11 +254,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             return !this.Entity.IsUniquelyIdentifiableWhenComparedTo(other.Entity);
         }
 
-        public string HerdAspect { get { return Entity.Herd; } }
-        public string NameAspect { get { return Entity.Name; } }
-        public string FatherAspect { get { return Entity.FatherName; } }
-        public string MotherAspect { get { return Entity.MotherName; } }
-        public string TraitsAspect { get { return CreatureTrait.GetShortString(Entity.Traits.ToArray(), mainForm.CurrentValuator); } }
+        public string HerdAspect => Entity.Herd;
+        public string NameAspect => Entity.Name;
+        public string FatherAspect => Entity.FatherName;
+        public string MotherAspect => Entity.MotherName;
+        public string TraitsAspect => CreatureTrait.GetShortString(Entity.Traits.ToArray(), mainForm.CurrentValuator);
 
         public TimeSpan NotInMoodForAspect
         {
@@ -329,56 +296,39 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             }
         }
 
-        public DateTime BirthDateAspect
-        {
-            get { return Entity.BirthDate ?? DateTime.MinValue; }
-        }
+        public DateTime BirthDateAspect => Entity.BirthDate ?? DateTime.MinValue;
 
-        public TimeSpan ExactAgeAspect
-        {
-            get { return !Entity.BirthDate.HasValue ? TimeSpan.MaxValue : DateTime.Now - Entity.BirthDate.Value; }
-        }
+        public TimeSpan ExactAgeAspect => !Entity.BirthDate.HasValue ? TimeSpan.MaxValue : DateTime.Now - Entity.BirthDate.Value;
 
-        public string GenderAspect
-        {
-            get
-            {
-                return Entity.GenderAspect;
-            }
-        }
+        public string GenderAspect => Entity.GenderAspect;
 
-        public string TakenCareOfByAspect { get { return Entity.TakenCareOfBy; } }
+        public string TakenCareOfByAspect => Entity.TakenCareOfBy;
 
 
         public TraitsInspectedContainer TraitsInspectedAtSkillAspect
         {
             get
             {
-                float val = Entity.TraitsInspectedAtSkill.HasValue ? Entity.TraitsInspectedAtSkill.Value : 0;
+                float val = Entity.TraitsInspectedAtSkill ?? 0;
                 return new TraitsInspectedContainer() 
                 { 
                     Skill = val, 
-                    EpicCurve = Entity.EpicCurve.HasValue ? Entity.EpicCurve.Value : false 
+                    EpicCurve = Entity.EpicCurve ?? false 
                 };
             }
         }
 
 
-        public CreatureAge AgeAspect { get { return this.Age; } }
-        public string ColorAspect
-        {
-            get
-            {
-                return Entity.Color.CreatureColorId == CreatureColorId.Unknown ? string.Empty : Entity.Color.ToString();
-            }
-        }
-        public string TagsAspect { get { return string.Join(", ", Entity.SpecialTags.OrderBy(x => x)); } }
-        public string CommentsAspect { get { return Entity.Comments; } }
+        public CreatureAge AgeAspect => this.Age;
 
-        public int ValueAspect
-        {
-            get { return this.Value; }
-        }
+        public string ColorAspect
+            => Entity.Color.CreatureColorId == CreatureColorId.Unknown ? string.Empty : Entity.Color.ToString();
+
+        public string TagsAspect { get { return string.Join(", ", Entity.SpecialTags.OrderBy(x => x)); } }
+
+        public string CommentsAspect => Entity.Comments;
+
+        public int ValueAspect => this.Value;
 
         public string PotentialValueAspect
         {
@@ -392,10 +342,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             }
         }
 
-        public double? BreedValueAspect
-        {
-            get { return this.CachedBreedValue; }
-        }
+        public double? BreedValueAspect => this.CachedBreedValue;
 
         public string PairedWithAspect
         {
@@ -407,41 +354,33 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             }
         }
 
-        public string BrandedForAspect
-        {
-            get { return Entity.BrandedFor ?? string.Empty; }
-        }
+        public string BrandedForAspect => Entity.BrandedFor ?? string.Empty;
 
-        public string ServerAspect { get { return Entity.ServerName ?? "-Unknown-"; } }
+        public string ServerAspect => Entity.ServerName ?? "-Unknown-";
 
         public override bool Equals(System.Object obj)
         {
-            // If parameter is null return false.
             if (obj == null)
             {
                 return false;
             }
-
-            // If parameter cannot be cast to Point return false.
+            
             Creature p = obj as Creature;
             if ((System.Object)p == null)
             {
                 return false;
             }
-
-            // Return true if the fields match:
+            
             return this.Entity.Id == p.Entity.Id;
         }
 
         public bool Equals(Creature p)
         {
-            // If parameter is null return false:
             if ((object)p == null)
             {
                 return false;
             }
-
-            // Return true if the fields match:
+            
             return this.Entity.Id == p.Entity.Id;
         }
 
@@ -452,19 +391,16 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public static bool operator ==(Creature a, Creature b)
         {
-            // If both are null, or both are same instance, return true.
             if (System.Object.ReferenceEquals(a, b))
             {
                 return true;
             }
-
-            // If one is null, but not both, return false.
+            
             if (((object)a == null) || ((object)b == null))
             {
                 return false;
             }
-
-            // Return true if the fields match:
+            
             return a.Equals(b);
         }
 
@@ -473,13 +409,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             return !(a == b);
         }
 
-        // utility
+        public bool NotInMood => this.NotInMoodUntil > DateTime.Now;
 
-        public bool NotInMood { get { return this.NotInMoodUntil > DateTime.Now; } }
+        public bool Pregnant => this.PregnantUntil > DateTime.Now;
 
-        public bool Pregnant { get { return this.PregnantUntil > DateTime.Now; } }
-
-        public bool PregnantInLast24H { get { return this.PregnantUntil > DateTime.Now - TimeSpan.FromHours(24); } }
+        public bool PregnantInLast24H => this.PregnantUntil > DateTime.Now - TimeSpan.FromHours(24);
 
         internal bool IsInbreedWith(Creature otherCreature)
         {
@@ -498,12 +432,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             return Age.CreatureAgeId == CreatureAgeId.YoungFoal || Age.CreatureAgeId == CreatureAgeId.AdolescentFoal;
         }
 
-        public static InnerNameInfo GetInnerNameInfo(string name)
+        public static InnerCreatureNameInfo GetInnerNameInfo(string name)
         {
             var match = Regex.Match(name, @"'(.+)'", RegexOptions.Compiled);
             if (match.Success)
             {
-                return new InnerNameInfo()
+                return new InnerCreatureNameInfo()
                 {
                     HasInnerName = true,
                     InnerName = match.Groups[1].Value
@@ -511,7 +445,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             }
             else
             {
-                return new InnerNameInfo()
+                return new InnerCreatureNameInfo()
                 {
                     HasInnerName = false,
                     InnerName = string.Empty
@@ -524,11 +458,5 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             get { return (Entity.SmilexamineLastDate ?? DateTime.MinValue); }
             set { Entity.SmilexamineLastDate = value; }
         }
-    }
-
-    public class InnerNameInfo
-    {
-        public bool HasInnerName { get; set; }
-        public string InnerName { get; set; }
     }
 }

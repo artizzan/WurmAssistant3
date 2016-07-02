@@ -1,6 +1,6 @@
 ﻿namespace AldursLab.WurmAssistant3.Areas.Granger
 {
-    partial class UCGrangerCreatureList
+    partial class UcGrangerCreatureList
     {
         /// <summary> 
         /// Required designer variable.
@@ -499,11 +499,9 @@
             this.objectListView1.UseCompatibleStateImageBehavior = false;
             this.objectListView1.UseFiltering = true;
             this.objectListView1.View = System.Windows.Forms.View.Details;
-            this.objectListView1.CellClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.objectListView1_CellClick);
             this.objectListView1.CellRightClick += new System.EventHandler<BrightIdeasSoftware.CellRightClickEventArgs>(this.objectListView1_CellRightClick);
             this.objectListView1.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.objectListView1_FormatCell);
             this.objectListView1.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.objectListView1_FormatRow);
-            this.objectListView1.SelectionChanged += new System.EventHandler(this.objectListView1_SelectionChanged);
             this.objectListView1.ColumnReordered += new System.Windows.Forms.ColumnReorderedEventHandler(this.objectListView1_ColumnReordered);
             this.objectListView1.ColumnWidthChanged += new System.Windows.Forms.ColumnWidthChangedEventHandler(this.objectListView1_ColumnWidthChanged);
             this.objectListView1.SelectedIndexChanged += new System.EventHandler(this.objectListView1_SelectedIndexChanged);
@@ -667,9 +665,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "UCGrangerCreatureList";
+            this.Name = "UcGrangerCreatureList";
             this.Size = new System.Drawing.Size(366, 316);
-            this.Load += new System.EventHandler(this.UCGrangerCreatureList_Load);
             this.VisibleChanged += new System.EventHandler(this.UCGrangerCreatureList_VisibleChanged);
             this.contextMenuStrip1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);

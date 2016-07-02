@@ -10,23 +10,33 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 {
     public partial class FormHerdMerge : ExtendedForm
     {
-        private GrangerContext Context;
-        private FormGrangerMain MainForm;
-        private string SourceHerdName;
+        private readonly GrangerContext context;
+        private FormGrangerMain mainForm;
+        private readonly string sourceHerdName;
         readonly ILogger logger;
 
-        public FormHerdMerge(GrangerContext context, FormGrangerMain mainForm, string sourceHerdName,
+        public FormHerdMerge(
+            [NotNull] GrangerContext context,
+            [NotNull] FormGrangerMain mainForm,
+            [NotNull] string sourceHerdName,
             [NotNull] ILogger logger)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
-            this.Context = context;
-            this.MainForm = mainForm;
-            this.SourceHerdName = sourceHerdName;
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (mainForm == null) throw new ArgumentNullException(nameof(mainForm));
+            if (sourceHerdName == null) throw new ArgumentNullException(nameof(sourceHerdName));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            this.context = context;
+            this.mainForm = mainForm;
+            this.sourceHerdName = sourceHerdName;
             this.logger = logger;
+
             InitializeComponent();
-            textBoxFromHerd.Text = SourceHerdName;
-            comboBoxToHerd.Items.AddRange(Context.Herds.Where(x => x.HerdID != sourceHerdName).ToArray());
-            listBoxFromHerd.Items.AddRange(Context.Creatures.Where(x => x.Herd == SourceHerdName).ToArray());
+
+            textBoxFromHerd.Text = this.sourceHerdName;
+            comboBoxToHerd.Items.AddRange(
+                this.context.Herds.Where(x => x.HerdID != sourceHerdName).Cast<object>().ToArray());
+            listBoxFromHerd.Items.AddRange(
+                this.context.Creatures.Where(x => x.Herd == this.sourceHerdName).Cast<object>().ToArray());
         }
 
         private void comboBoxToHerd_SelectedIndexChanged(object sender, EventArgs e)
@@ -35,7 +45,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             {
                 listBoxToHerd.Items.Clear();
                 listBoxToHerd.Items.AddRange(
-                    Context.Creatures.Where(x => x.Herd == comboBoxToHerd.SelectedItem.ToString()).ToArray());
+                    context.Creatures.Where(x => x.Herd == comboBoxToHerd.SelectedItem.ToString())
+                           .Cast<object>()
+                           .ToArray());
                 buttonOK.Enabled = true;
             }
             else buttonOK.Enabled = false;
@@ -45,30 +57,20 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             try
             {
-                Context.MergeHerds(textBoxFromHerd.Text, comboBoxToHerd.Text);
+                context.MergeHerds(textBoxFromHerd.Text, comboBoxToHerd.Text);
             }
-            catch (Exception _e)
+            catch (Exception exception)
             {
-                MessageBox.Show("there was a problem with merging herds:\r\n" + _e.Message);
-                if (_e is GrangerContext.DuplicateCreatureIdentityException)
+                MessageBox.Show($"Merging herds failed:\r\n{exception.Message}");
+                if (exception is GrangerContext.DuplicateCreatureIdentityException)
                 {
-                    logger.Info(_e, "merging herds failed due non-unique creatures");
+                    logger.Info(exception, "merging herds failed due to non-unique creature identities");
                 }
                 else
                 {
-                    logger.Error(_e, "merge herd problem");
+                    logger.Error(exception, "merging herds failed");
                 }
             }
-        }
-
-        private void listBoxFromHerd_DoubleClick(object sender, EventArgs e)
-        {
-            //TODO show creature info
-        }
-
-        private void listBoxToHerd_DoubleClick(object sender, EventArgs e)
-        {
-            //TODO show creature info
         }
     }
 }

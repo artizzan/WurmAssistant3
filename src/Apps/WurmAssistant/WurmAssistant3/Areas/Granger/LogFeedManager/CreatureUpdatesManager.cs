@@ -12,7 +12,6 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 {
-
     class CreatureUpdatesManager
     {
         class CreatureData
@@ -20,14 +19,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             public CreatureEntity Creature = null;
             public CreatureAge Age = new CreatureAge(CreatureAgeId.Unknown);
             public string SecondaryInfo = null;
-
-            public string ErrorMessage = null;
             public bool TooManyCreaturesFound;
         }
 
-        private readonly GrangerFeature parentModule;
-        private readonly GrangerContext context;
-        private readonly PlayerManager playerMan;
+        readonly GrangerFeature parentModule;
+        readonly GrangerContext context;
+        readonly PlayerManager playerManager;
         readonly ITrayPopups trayPopups;
         readonly ILogger logger;
 
@@ -39,16 +36,24 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
         readonly GrangerDebugLogger grangerDebug;
 
-        public CreatureUpdatesManager(GrangerFeature parentModule, GrangerContext context, PlayerManager playerManager,
-            [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger,
+        public CreatureUpdatesManager(
+            [NotNull] GrangerFeature parentModule,
+            [NotNull] GrangerContext context,
+            [NotNull] PlayerManager playerManager,
+            [NotNull] ITrayPopups trayPopups, 
+            [NotNull] ILogger logger,
             [NotNull] IWurmAssistantConfig wurmAssistantConfig)
         {
-            if (trayPopups == null) throw new ArgumentNullException("trayPopups");
-            if (logger == null) throw new ArgumentNullException("logger");
+            if (parentModule == null) throw new ArgumentNullException(nameof(parentModule));
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (playerManager == null) throw new ArgumentNullException(nameof(playerManager));
+            if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
+
             this.parentModule = parentModule;
             this.context = context;
-            playerMan = playerManager;
+            this.playerManager = playerManager;
             this.trayPopups = trayPopups;
             this.logger = logger;
 
@@ -56,7 +61,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
             smileXamineProcessor = new SmileXamineProcessor(this.parentModule,
                 this.context,
-                playerMan,
+                this.playerManager,
                 grangerDebug,
                 trayPopups,
                 logger,
@@ -65,7 +70,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
         internal void ProcessEventForCreatureUpdates(LogEntry line)
         {
-            // continuously processing lines for all kinds of possible updates
+            // This method should process the stream of live log events 
+            // for all kinds of possible creature updates
 
             HandleAgeAndTagsUpdates(line);
 
@@ -82,16 +88,16 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         {
             if (CreatureUpdateAnyEvent && MaybeCreatureAgeLine(line.Content))
             {
-                // first try selected herds
+                // First try currently selected herds in granger
                 CreatureData data = GetCreatureDataFromAnyLogEvent(line.Content, false);
 
                 bool cont = true;
 
                 if (data != null && data.TooManyCreaturesFound)
                 {
-                    // if we found too many same named in selected, can't continue
+                    // If found multiple creatures, the update is ambiguous and can't continue.
                     var partialMessage = "selected herds";
-                    trayPopups.Schedule(
+                    ScheduleTrayPopup(
                         String.Format(
                             "There are multiple creatures named {0} in {1}, can't update health/age!",
                             data.Creature.Name,
@@ -108,7 +114,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     {
                         // again if multiple found in db, we can't continue
                         var partialMessage = "database";
-                        trayPopups.Schedule(
+                        ScheduleTrayPopup(
                             String.Format(
                                 "There are multiple creatures named {0} in {1}, can't update health/age!",
                                 data.Creature.Name,
@@ -184,7 +190,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                             string age = null;
                             if (ageChanged) age = "updated age to " + data.Age;
 
-                            trayPopups.Schedule(data.Creature + ": " + health + " " + age, "HEALTH/AGE UPDATE");
+                            ScheduleTrayPopup(data.Creature + ": " + health + " " + age, "HEALTH/AGE UPDATE");
                         }
 
                         data.Creature.Age = data.Age;
@@ -221,12 +227,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     grangerDebug.Log("LIVETRACKER: applying groomed flag due to: " + line);
                     string prefixedName = match.Groups[1].Value;
                     string fixedName = GrangerHelpers.RemoveAllPrefixes(prefixedName);
-                    CreatureEntity[] creatureEntities = GetCreatureToUpdate(fixedName, playerMan.CurrentServer);
+                    CreatureEntity[] creatureEntities = GetCreatureToUpdate(fixedName, playerManager.CurrentServer);
                     if (EntireDbSetting && creatureEntities.Length > 1)
                     {
-                        trayPopups.Schedule(
+                        ScheduleTrayPopup(
                             String.Format(
-                                "There are multiple creatures named {0} in database, going to mark them all!",
+                                "There are multiple creatures named {0} in database, marking them all as groomed!",
                                 fixedName),
                             "GROOMING ISSUE DETECTED",
                             6000);
@@ -257,8 +263,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     string name2 = match.Groups[2].Value;
                     string fixedName1 = GrangerHelpers.RemoveAllPrefixes(name1);
                     string fixedName2 = GrangerHelpers.RemoveAllPrefixes(name2);
-                    CreatureEntity[] creatures1 = GetCreatureToUpdate(fixedName1, playerMan.CurrentServer);
-                    CreatureEntity[] creatures2 = GetCreatureToUpdate(fixedName2, playerMan.CurrentServer);
+                    CreatureEntity[] creatures1 = GetCreatureToUpdate(fixedName1, playerManager.CurrentServer);
+                    CreatureEntity[] creatures2 = GetCreatureToUpdate(fixedName2, playerManager.CurrentServer);
 
                     ExtractBreedingPairCreature(fixedName1, creatures1);
                     ExtractBreedingPairCreature(fixedName2, creatures2);
@@ -273,10 +279,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 {
                     grangerDebug.Log("LIVETRACKER: applying breeding update due to: " + line);
 
-                    // we don't need to requery female creature entity, because any other changes done to this creature
-                    // will be reflected on current entity. 
-                    // This is true only as long, as entire module uses only a single GrangerContext !!!
-
                     Match match = Regex.Match(line.Content, @"The (.+) will probably give birth in a while");
                     if (match.Success)
                     {
@@ -285,36 +287,39 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
                         if (lastBreedingFemale != null)
                         {
-                            if (lastBreedingFemale.Name == fixedName) //sanity check
+                            if (lastBreedingFemale.Name == fixedName) //sanity check? maybe pointless
                             {
                                 lastBreedingFemale.PregnantUntil = DateTime.Now + GrangerHelpers.LongestPregnancyPossible;
-                                trayPopups.Schedule(
+                                ScheduleTrayPopup(
                                     String.Format(
                                         "({0}) is now marked as pregnant. Be sure to smilexamine to get more accurate pregnancy duration!",
                                         lastBreedingFemale.Name),
                                     "BREED UPDATE",
-                                    6000);
+                                    6000,
+                                    forceShow:true);
                                 context.SubmitChanges();
                             }
                             else
                             {
-                                trayPopups.Schedule(
+                                ScheduleTrayPopup(
                                     String.Format("Female name ({0}) does not match the cached name ({1})!",
                                         lastBreedingFemale.Name,
                                         fixedName),
                                     "BREED UPDATE PROBLEM",
-                                    6000);
+                                    6000,
+                                    forceShow: true);
                             }
                         }
                         if (lastBreedingMale != null)
                         {
                             lastBreedingMale.NotInMood = DateTime.Now + GrangerHelpers.Breeding_NotInMood_Duration;
-                            trayPopups.Schedule(
+                            ScheduleTrayPopup(
                                 String.Format(
                                     "({0}) is now marked as Not In Mood. You can't breed this creature for next 45 minutes.",
                                     lastBreedingMale.Name),
                                 "BREED UPDATE",
-                                6000);
+                                6000,
+                                forceShow: true);
                             context.SubmitChanges();
                         }
                     }
@@ -335,13 +340,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                             lastBreedingMale.NotInMood = DateTime.Now + GrangerHelpers.Breeding_NotInMood_Duration;
                         if (lastBreedingFemale != null)
                             lastBreedingFemale.NotInMood = DateTime.Now + GrangerHelpers.Breeding_NotInMood_Duration;
-                        trayPopups.Schedule(
+                        ScheduleTrayPopup(
                             String.Format(
                                 "Breeding appears to have failed, {0} and {1} will be Not In Mood for next 45 minutes.",
                                 lastBreedingMale == null ? "Some creature" : lastBreedingMale.Name,
                                 lastBreedingFemale == null ? "Some creature" : lastBreedingFemale.Name),
                             "BREED UPDATE",
-                            6000);
+                            6000,
+                            forceShow: true);
                     }
                 }
             }
@@ -403,9 +409,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 grangerDebug.Log("LIVETRACKER: R.I.P. log line detected, checking if it's a creature from herds, line: " + line);
                 string lowercasename = match.Groups[1].Value;
                 string fixedName = GrangerHelpers.FixCase(lowercasename);
-                CreatureEntity[] creatures = GetCreatureToUpdate(fixedName, playerMan.CurrentServer);
-                //its perfectly possible for this to set few creatures as dead,
-                //but this tag is just informative, so it's ok
+                CreatureEntity[] creatures = GetCreatureToUpdate(fixedName, playerManager.CurrentServer);
                 foreach (var creature in creatures)
                 {
                     grangerDebug.Log("LIVETRACKER: applying maybedead flag to "+creature+" due to: " + line);
@@ -421,14 +425,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             else return false;
         }
 
-        /// <param name="line"></param>
-        /// <param name="entireDbSetting">false to try selected herds, true to try entire DB</param>
         /// <returns></returns>
-        CreatureData GetCreatureDataFromAnyLogEvent(string line, bool entireDbSetting)
+        CreatureData GetCreatureDataFromAnyLogEvent(string line, bool searchEntireDb)
         {
             var creaturesQuery = context.Creatures;
 
-            if (!entireDbSetting)
+            if (!searchEntireDb)
             {
                 var selectedHerds = context.Herds.Where(x => x.Selected).Select(x => x.HerdID).ToArray();
                 creaturesQuery = creaturesQuery.Where(x => selectedHerds.Contains(x.Herd)).ToArray();
@@ -436,7 +438,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
             if (UseServerAsCreatureId)
             {
-                var server = playerMan.CurrentServer;
+                var server = playerManager.CurrentServer;
                 if (server == null)
                 {
                     logger.Info(
@@ -458,9 +460,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             var result = new CreatureData();
             foreach (CreatureEntity creatureEntity in filteredCreatures)
             {
-                // it is possible we have found event lines that simply contain creature name
-                // in a totally unrelated context
-                // attempting to get creature age should fail for those and loop continues
                 result.SecondaryInfo = null;
                 Match match = Regex.Match(line, @"(\w+) (\w+) " + creatureEntity.Name, RegexOptions.IgnoreCase);
                 if (match.Success)
@@ -484,30 +483,27 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     }
                     if (result.Age.CreatureAgeId != CreatureAgeId.Unknown)
                     {
-                        // we have found the correct creature data
                         result.Creature = creatureEntity;
 
-                        // transforming age with foal stage in mind
-                        // regular log events do not indicate foal stage,
-                        // if in doubt, do not change age
+                        // Attempting to advance age, unless it's ambiguous.
                         var prevAge = result.Creature.Age.CreatureAgeId;
                         var newAge = result.Age.CreatureAgeId;
 
                         if (prevAge == CreatureAgeId.YoungFoal)
                         {
-                            // we don't know if this is young foal or young mature, keep old value
+                            // Ambiguous: young foal or young mature, keep old value
                             if (newAge == CreatureAgeId.Young) 
                                 result.Age = new CreatureAge(prevAge);
-                            // we don't know if this is adolescent foal or adolescent mature, keep old value
+                            // Ambiguous: adolescent foal or adolescent mature, keep old value
                             if (newAge == CreatureAgeId.Adolescent)
                                 result.Age = new CreatureAge(prevAge);
                         }
                         if (prevAge == CreatureAgeId.AdolescentFoal)
                         {
-                            // young in this context can only mean young mature
+                            // Acceptable: young in this context can only mean young mature
                             if (newAge == CreatureAgeId.Young)
                                 result.Age = new CreatureAge(CreatureAgeId.Young);
-                            // we don't know if this is adolescent foal or adolescent mature, keep old value
+                            // Ambiguous: adolescent foal or adolescent mature, keep old value
                             if (newAge == CreatureAgeId.Adolescent)
                                 result.Age = new CreatureAge(prevAge);
                         }
@@ -534,20 +530,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             return null;
         }
 
-        bool EntireDbSetting
-        {
-            get { return parentModule.Settings.DoNotBlockDataUpdateUnlessMultiplesInEntireDb; }
-        }
+        bool EntireDbSetting => parentModule.Settings.DoNotBlockDataUpdateUnlessMultiplesInEntireDb;
 
-        bool CreatureUpdateAnyEvent
-        {
-            get { return parentModule.Settings.UpdateCreatureDataFromAnyEventLine; }
-        }
+        bool CreatureUpdateAnyEvent => parentModule.Settings.UpdateCreatureDataFromAnyEventLine;
 
-        bool UseServerAsCreatureId
-        {
-            get { return parentModule.Settings.UseServerNameAsCreatureIdComponent; }
-        }
+        bool UseServerAsCreatureId => parentModule.Settings.UseServerNameAsCreatureIdComponent;
+
+        bool HideLiveTrackerPopups => parentModule.Settings.HideLiveTrackerPopups;
 
         private void ExtractBreedingPairCreature(string fixedName, CreatureEntity[] creatures)
         {
@@ -584,7 +573,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                                   + " herds don't have a creature named: " + fixedName;
                     }
                 }
-                if (message != null) trayPopups.Schedule(message, title ?? "BREED UPDATE PROBLEM", 6000);
+                if (message != null)
+                {
+                    ScheduleTrayPopup(message,
+                        title ?? "BREED UPDATE PROBLEM",
+                        6000,
+                        forceShow: true);
+                }
             }
         }
 
@@ -621,6 +616,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         internal void Update()
         {
             smileXamineProcessor.Update();
+        }
+
+        void ScheduleTrayPopup(string message, string title, int durationMillis = 3000, bool forceShow = false)
+        {
+            if (forceShow || !HideLiveTrackerPopups)
+            {
+                trayPopups.Schedule(message ?? string.Empty, title ?? string.Empty, durationMillis);
+            }
         }
     }
 }

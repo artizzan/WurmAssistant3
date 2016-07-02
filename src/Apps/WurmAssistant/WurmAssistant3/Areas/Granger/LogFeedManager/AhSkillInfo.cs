@@ -23,15 +23,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             this.lastCheck = lastCheck;
         }
 
-        public string ServerGroupId
-        {
-            get { return serverGroupId; }
-        }
+        public string ServerGroupId => serverGroupId;
 
-        public string PlayerName
-        {
-            get { return playerName; }
-        }
+        public string PlayerName => playerName;
 
         public float SkillValue
         {
@@ -59,8 +53,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
         public override int GetHashCode()
         {
-            return unchecked((
-                playerName == null ? String.Empty.GetHashCode() : playerName.GetHashCode()) * serverGroupId.GetHashCode());
+            return unchecked((playerName?.GetHashCode() ?? String.Empty.GetHashCode())*serverGroupId.GetHashCode());
         }
     }
 }

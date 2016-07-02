@@ -35,25 +35,26 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         readonly ITimer updateLoop;
 
-        public GrangerFeature([NotNull] ILogger logger, 
+        public GrangerFeature(
+            [NotNull] ILogger logger, 
             [NotNull] IWurmAssistantDataDirectory dataDirectory,
             [NotNull] ISoundManager soundManager, 
             [NotNull] ITrayPopups trayPopups, 
-            [NotNull] IWurmApi wurmApi, 
-            GrangerSettings grangerSettings,
+            [NotNull] IWurmApi wurmApi,
+            [NotNull] GrangerSettings grangerSettings,
             [NotNull] DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions,
             [NotNull] GrangerSimpleDb grangerSimpleDb,
             [NotNull] IWurmAssistantConfig wurmAssistantConfig,
             [NotNull] ITimerFactory timerFactory)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (dataDirectory == null) throw new ArgumentNullException("dataDirectory");
-            if (soundManager == null) throw new ArgumentNullException("soundManager");
-            if (trayPopups == null) throw new ArgumentNullException("trayPopups");
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (defaultBreedingEvaluatorOptions == null)
-                throw new ArgumentNullException("defaultBreedingEvaluatorOptions");
-            if (grangerSimpleDb == null) throw new ArgumentNullException("grangerSimpleDb");
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (dataDirectory == null) throw new ArgumentNullException(nameof(dataDirectory));
+            if (soundManager == null) throw new ArgumentNullException(nameof(soundManager));
+            if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
+            if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (grangerSettings == null) throw new ArgumentNullException(nameof(grangerSettings));
+            if (defaultBreedingEvaluatorOptions == null) throw new ArgumentNullException(nameof(defaultBreedingEvaluatorOptions));
+            if (grangerSimpleDb == null) throw new ArgumentNullException(nameof(grangerSimpleDb));
             if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
             if (timerFactory == null) throw new ArgumentNullException(nameof(timerFactory));
 
@@ -72,7 +73,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
             logsFeedMan = new LogsFeedManager(this, context, wurmApi, logger, trayPopups, wurmAssistantConfig);
             logsFeedMan.UpdatePlayers(settings.CaptureForPlayers);
-            grangerUi.Granger_PlayerListChanged += GrangerUI_Granger_PlayerListChanged;
+            grangerUi.GrangerPlayerListChanged += GrangerUI_Granger_PlayerListChanged;
             
             updateLoop = timerFactory.CreateUiThreadTimer();
             updateLoop.Interval = TimeSpan.FromMilliseconds(500);
@@ -108,20 +109,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
         }
 
-        string IFeature.Name
-        {
-            get { return "Granger"; }
-        }
+        string IFeature.Name => "Granger";
 
-        Image IFeature.Icon
-        {
-            get { return Resources.GrangerIcon; }
-        }
+        Image IFeature.Icon => Resources.GrangerIcon;
 
-        public GrangerSettings Settings
-        {
-            get { return settings; }
-        }
+        public GrangerSettings Settings => settings;
 
         async Task IFeature.InitAsync()
         {
@@ -133,8 +125,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         public void Dispose()
         {
             updateLoop.Stop();
-            if (grangerUi != null) grangerUi.SaveAllState();
-            else logger.Error("Granger UI null when trying to save state on Stop");
+            if (grangerUi != null)
+            {
+                grangerUi.SaveAllState();
+            }
+            else
+            {
+                logger.Error("Granger UI null at saving state on Stop");
+            }
             logsFeedMan.Dispose();
         }
     }

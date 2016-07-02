@@ -34,10 +34,10 @@
             this.buttonEditValuePreset = new System.Windows.Forms.Button();
             this.buttonTraitView = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.ucGrangerHerdList1 = new UCGrangerHerdList();
+            this.ucGrangerHerdList1 = new UcGrangerHerdList();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.ucGrangerTraitView1 = new UCGrangerTraitView();
-            this.ucGrangerCreatureList1 = new UCGrangerCreatureList();
+            this.ucGrangerTraitView1 = new UcGrangerTraitView();
+            this.ucGrangerCreatureList1 = new UcGrangerCreatureList();
             this.buttonHerdView = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -141,7 +141,6 @@
             this.splitContainer2.SplitterDistance = 264;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 4;
-            this.splitContainer2.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer2_SplitterMoved);
             // 
             // ucGrangerTraitView1
             // 
@@ -348,9 +347,9 @@
         private System.Windows.Forms.Button buttonTraitView;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button buttonHerdView;
-        private UCGrangerHerdList ucGrangerHerdList1;
-        private UCGrangerCreatureList ucGrangerCreatureList1;
-        private UCGrangerTraitView ucGrangerTraitView1;
+        private UcGrangerHerdList ucGrangerHerdList1;
+        private UcGrangerCreatureList ucGrangerCreatureList1;
+        private UcGrangerTraitView ucGrangerTraitView1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button buttonChangePlayers;

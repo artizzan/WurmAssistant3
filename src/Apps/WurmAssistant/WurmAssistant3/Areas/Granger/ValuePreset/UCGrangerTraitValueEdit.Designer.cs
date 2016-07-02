@@ -1,6 +1,6 @@
 ﻿namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
 {
-    partial class UCGrangerTraitValueEditBox
+    partial class UcGrangerTraitValueEditBox
     {
         /// <summary> 
         /// Required designer variable.
@@ -92,7 +92,7 @@
             this.AutoSize = true;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "UCGrangerTraitValueEditBox";
+            this.Name = "UcGrangerTraitValueEditBox";
             this.Size = new System.Drawing.Size(349, 22);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);

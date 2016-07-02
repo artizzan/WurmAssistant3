@@ -19,7 +19,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ImportExport.Legacy
             // check if this herd already exists in database
             if (context.Herds.Any(x => x.HerdID == newHerdName))
             {
-                throw new GrangerException(string.Format("there is already a herd with named {0} in database", newHerdName));
+                throw new GrangerException($"there is already a herd with named {newHerdName} in database");
             }
 
             XDocument doc = XDocument.Load(xmlFilePath);
@@ -31,10 +31,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ImportExport.Legacy
                 entity.Herd = newHerdName;
                 entity.Name = x.Element("Name").Value;
 
-                // verify this name is not present in current list
                 if (creatureEntities.Any(y => y.Name.Equals(entity.Name, StringComparison.InvariantCultureIgnoreCase)))
                 {
-                    throw new GrangerException(string.Format("Creature named {0} was already added from this XML file. Review the file for any errors.", entity.Name));
+                    throw new GrangerException(
+                        $"Creature named {entity.Name} was already added from this XML file. Review the file for any errors.");
                 }
 
                 entity.FatherName = x.Element("Father").Value;
@@ -83,9 +83,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ImportExport.Legacy
                 entity.Comments = x.Element("Comments").Value;
                 entity.SpecialTagsRaw = x.Element("Tags").Value;
                 entity.BrandedFor = x.Element("BrandedFor").Value;
+                var smilexaminedElement = x.Element("SmilexamineLastDate");
+                if (smilexaminedElement != null)
+                {
+                    entity.SmilexamineLastDate = DateTime.Parse(smilexaminedElement.Value, CultureInfo.InvariantCulture);
+                }
 
                 var serverNameElem = x.Element("ServerName");
-                entity.ServerName = serverNameElem != null ? serverNameElem.Value : null;
+                entity.ServerName = serverNameElem?.Value;
 
                 creatureEntities.Add(entity);
             }

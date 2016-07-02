@@ -10,6 +10,78 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
     [KernelBind(BindingHint.Singleton), PersistentObject("GrangerFeature_DefaultBreedingEvaluatorOptions")]
     public class DefaultBreedingEvaluatorOptions : PersistentObjectBase
     {
+        [JsonProperty]
+        bool ignoreNotInMood;
+
+        [JsonProperty]
+        bool ignorePregnant;
+
+        [JsonProperty]
+        bool ignoreRecentlyPregnant;
+
+        [JsonProperty]
+        bool ignoreOtherHerds;
+
+        [JsonProperty]
+        bool ignorePairedCreatures;
+
+        [JsonProperty]
+        bool ignoreSold;
+
+        [JsonProperty]
+        bool ignoreDead;
+
+        [JsonProperty]
+        bool ignoreFoals;
+
+        [JsonProperty]
+        bool ignoreYoung;
+
+        [JsonProperty]
+        bool ignoreAdolescent;
+
+        [JsonProperty]
+        bool ageIgnoreOnlyOtherCreatures;
+
+        [JsonProperty]
+        bool includePotentialValue;
+
+        [JsonProperty]
+        bool preferUniqueTraits;
+
+        [JsonProperty]
+        bool discardOnInbreeding;
+
+        [JsonProperty]
+        int numPotentialTraitsToConsider;
+
+        [JsonProperty]
+        bool excludeExactAgeEnabled;
+
+        [JsonProperty]
+        TimeSpan excludeExactAgeValue;
+
+        [JsonProperty]
+        bool discardOnAnyNegativeTraits;
+
+        [JsonProperty]
+        double potentialValuePositiveWeight;
+
+        [JsonProperty]
+        double potentialValueNegativeWeight;
+
+        [JsonProperty]
+        double uniqueTraitWeight;
+
+        [JsonProperty]
+        double negativeTraitPenaltyWeight;
+
+        [JsonProperty]
+        double inbreedingPenaltyWeight;
+
+        [JsonProperty]
+        readonly Dictionary<CreatureColorId, float> creatureColorValues;
+
         public DefaultBreedingEvaluatorOptions()
         {
             ignoreNotInMood = true;
@@ -57,8 +129,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             }
         }
 
-        [JsonProperty]
-        bool ignoreNotInMood;
+
 
         public bool IgnoreNotInMood
         {
@@ -66,17 +137,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set { ignoreNotInMood = value; FlagAsChanged(); }
         }
 
-        [JsonProperty]
-        bool ignorePregnant;
-
         public bool IgnorePregnant
         {
             get { return ignorePregnant; }
             set { ignorePregnant = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        bool ignoreRecentlyPregnant;
 
         public bool IgnoreRecentlyPregnant
         {
@@ -84,26 +149,17 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set { ignoreRecentlyPregnant = value; FlagAsChanged(); }
         }
 
-        [JsonProperty]
-        bool ignoreOtherHerds;
-
         public bool IgnoreOtherHerds
         {
             get { return ignoreOtherHerds; }
             set { ignoreOtherHerds = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        bool ignorePairedCreatures;
-
+        
         public bool IgnorePairedCreatures
         {
             get { return ignorePairedCreatures; }
             set { ignorePairedCreatures = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        bool ignoreSold;
 
         public bool IgnoreSold
         {
@@ -111,17 +167,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set { ignoreSold = value; FlagAsChanged(); }
         }
 
-        [JsonProperty]
-        bool ignoreDead;
-
         public bool IgnoreDead
         {
             get { return ignoreDead; }
             set { ignoreDead = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        bool ignoreFoals;
 
         public bool IgnoreFoals
         {
@@ -129,17 +179,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set { ignoreFoals = value; FlagAsChanged(); }
         }
 
-        [JsonProperty]
-        bool ignoreYoung;
-
         public bool IgnoreYoung
         {
             get { return ignoreYoung; }
             set { ignoreYoung = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        bool ignoreAdolescent;
 
         public bool IgnoreAdolescent
         {
@@ -147,81 +191,54 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set { ignoreAdolescent = value; FlagAsChanged(); }
         }
 
-        [JsonProperty]
-        bool ageIgnoreOnlyOtherCreatures;
-
         public bool AgeIgnoreOnlyOtherCreatures
         {
             get { return ageIgnoreOnlyOtherCreatures; }
             set { ageIgnoreOnlyOtherCreatures = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        bool includePotentialValue;
-
+        
         public bool IncludePotentialValue
         {
             get { return includePotentialValue; }
             set { includePotentialValue = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        bool preferUniqueTraits;
-
+        
         public bool PreferUniqueTraits
         {
             get { return preferUniqueTraits; }
             set { preferUniqueTraits = value; FlagAsChanged(); }
         }
 
-        [JsonProperty]
-        bool discardOnInbreeding;
-
         public bool DiscardOnInbreeding
         {
             get { return discardOnInbreeding; }
             set { discardOnInbreeding = value; FlagAsChanged(); }
         }
-
-        [JsonProperty] 
-        int numPotentialTraitsToConsider;
-
+        
         public int NumPotentialTraitsToConsider
         {
             get { return numPotentialTraitsToConsider; }
             set { numPotentialTraitsToConsider = value; FlagAsChanged(); }
         }
 
-        [JsonProperty]
-        bool excludeExactAgeEnabled;
-
         public bool ExcludeExactAgeEnabled
         {
             get { return excludeExactAgeEnabled; }
             set { excludeExactAgeEnabled = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        TimeSpan excludeExactAgeValue;
-
+        
         public TimeSpan ExcludeExactAgeValue
         {
             get { return excludeExactAgeValue; }
             set { excludeExactAgeValue = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        bool discardOnAnyNegativeTraits;
-
+        
         public bool DiscardOnAnyNegativeTraits
         {
             get { return discardOnAnyNegativeTraits; }
             set { discardOnAnyNegativeTraits = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        double potentialValuePositiveWeight;
-
+        
         public double PotentialValuePositiveWeight
         {
             get { return potentialValuePositiveWeight; }
@@ -232,10 +249,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 FlagAsChanged();
             }
         }
-
-        [JsonProperty]
-        double potentialValueNegativeWeight;
-
+        
         public double PotentialValueNegativeWeight
         {
             get { return potentialValueNegativeWeight; }
@@ -246,10 +260,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 FlagAsChanged();
             }
         }
-
-        [JsonProperty]
-        double uniqueTraitWeight;
-
+        
         public double UniqueTraitWeight
         {
             get { return uniqueTraitWeight; }
@@ -260,11 +271,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 FlagAsChanged();
             }
         }
-
-
-        [JsonProperty]
-        double negativeTraitPenaltyWeight;
-
+        
         public double BadTraitWeight
         {
             get { return negativeTraitPenaltyWeight; }
@@ -275,10 +282,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 FlagAsChanged();
             }
         }
-
-        [JsonProperty]
-        double inbreedingPenaltyWeight;
-
+        
         public double InbreedingPenaltyWeight
         {
             get { return inbreedingPenaltyWeight; }
@@ -289,10 +293,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 FlagAsChanged();
             }
         }
-
-        [JsonProperty]
-        readonly Dictionary<CreatureColorId, float> creatureColorValues;
-
+        
         public IEnumerable<ColorWeight> CreatureColorValues
         {
             get { return creatureColorValues.Select(x => new ColorWeight(new CreatureColor(x.Key), x.Value)).ToArray(); }

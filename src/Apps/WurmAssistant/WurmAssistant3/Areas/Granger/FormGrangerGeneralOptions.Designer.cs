@@ -32,7 +32,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGrangerGeneralOptions));
             this.checkBoxAlwaysUpdateUnlessMultiples = new System.Windows.Forms.CheckBox();
-            this.timeSpanInputGroomingTime = new TimeSpanInput();
+            this.timeSpanInputGroomingTime = new AldursLab.WurmAssistant3.Utils.WinForms.TimeSpanInput();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -40,6 +40,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.checkBoxDisableRowColoring = new System.Windows.Forms.CheckBox();
             this.checkBoxAdjustForDarkThemes = new System.Windows.Forms.CheckBox();
             this.checkBoxUseServerNameAsIdComponent = new System.Windows.Forms.CheckBox();
+            this.checkBoxhideLiveTrackerPopups = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // checkBoxAlwaysUpdateUnlessMultiples
@@ -55,7 +56,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // 
             // timeSpanInputGroomingTime
             // 
-            this.timeSpanInputGroomingTime.Location = new System.Drawing.Point(12, 252);
+            this.timeSpanInputGroomingTime.Location = new System.Drawing.Point(12, 288);
             this.timeSpanInputGroomingTime.Margin = new System.Windows.Forms.Padding(2);
             this.timeSpanInputGroomingTime.Name = "timeSpanInputGroomingTime";
             this.timeSpanInputGroomingTime.Size = new System.Drawing.Size(231, 45);
@@ -65,7 +66,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(221, 349);
+            this.buttonOK.Location = new System.Drawing.Point(221, 382);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(92, 29);
             this.buttonOK.TabIndex = 3;
@@ -76,7 +77,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.Location = new System.Drawing.Point(319, 349);
+            this.buttonCancel.Location = new System.Drawing.Point(319, 382);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(92, 29);
             this.buttonCancel.TabIndex = 4;
@@ -87,7 +88,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 237);
+            this.label1.Location = new System.Drawing.Point(9, 273);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(359, 13);
             this.label1.TabIndex = 5;
@@ -135,11 +136,22 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.checkBoxUseServerNameAsIdComponent.Text = resources.GetString("checkBoxUseServerNameAsIdComponent.Text");
             this.checkBoxUseServerNameAsIdComponent.UseVisualStyleBackColor = true;
             // 
+            // checkBoxhideLiveTrackerPopups
+            // 
+            this.checkBoxhideLiveTrackerPopups.AutoSize = true;
+            this.checkBoxhideLiveTrackerPopups.Location = new System.Drawing.Point(12, 218);
+            this.checkBoxhideLiveTrackerPopups.Name = "checkBoxhideLiveTrackerPopups";
+            this.checkBoxhideLiveTrackerPopups.Size = new System.Drawing.Size(324, 17);
+            this.checkBoxhideLiveTrackerPopups.TabIndex = 10;
+            this.checkBoxhideLiveTrackerPopups.Text = "Hide popups from creature updates triggered by live log events.";
+            this.checkBoxhideLiveTrackerPopups.UseVisualStyleBackColor = true;
+            // 
             // FormGrangerGeneralOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(423, 390);
+            this.ClientSize = new System.Drawing.Size(423, 423);
+            this.Controls.Add(this.checkBoxhideLiveTrackerPopups);
             this.Controls.Add(this.checkBoxUseServerNameAsIdComponent);
             this.Controls.Add(this.checkBoxAdjustForDarkThemes);
             this.Controls.Add(this.checkBoxDisableRowColoring);
@@ -170,5 +182,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         private System.Windows.Forms.CheckBox checkBoxDisableRowColoring;
         private System.Windows.Forms.CheckBox checkBoxAdjustForDarkThemes;
         private System.Windows.Forms.CheckBox checkBoxUseServerNameAsIdComponent;
+        private System.Windows.Forms.CheckBox checkBoxhideLiveTrackerPopups;
     }
 }

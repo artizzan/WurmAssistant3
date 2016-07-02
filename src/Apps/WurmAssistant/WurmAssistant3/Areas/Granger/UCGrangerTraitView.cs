@@ -8,36 +8,42 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger
 {
-    public partial class UCGrangerTraitView : UserControl
+    public partial class UcGrangerTraitView : UserControl
     {
-        FormGrangerMain MainForm;
-        GrangerContext Context;
-        TraitViewManager Manager;
+        FormGrangerMain mainForm;
+        GrangerContext context;
+        TraitViewManager traitViewManager;
         ILogger logger;
 
-        bool _debug_MainFormAssigned = false;
-        public UCGrangerTraitView()
+        bool _debugMainFormAssigned = false;
+        public UcGrangerTraitView()
         {
             InitializeComponent();
         }
 
-        internal void Init([NotNull] FormGrangerMain formGrangerMain, [NotNull] GrangerContext context, [NotNull] ILogger logger)
+        internal void Init(
+            [NotNull] FormGrangerMain formGrangerMain, 
+            [NotNull] GrangerContext context, 
+            [NotNull] ILogger logger)
         {
-            if (formGrangerMain == null) throw new ArgumentNullException("formGrangerMain");
-            if (context == null) throw new ArgumentNullException("context");
-            if (logger == null) throw new ArgumentNullException("logger");
+            if (formGrangerMain == null) throw new ArgumentNullException(nameof(formGrangerMain));
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            this.mainForm = formGrangerMain;
+            this.context = context;
             this.logger = logger;
-            MainForm = formGrangerMain;
-            _debug_MainFormAssigned = true;
+            _debugMainFormAssigned = true;
 
-            if (MainForm.Settings.AdjustForDarkThemes)
+            if (mainForm.Settings.AdjustForDarkThemes)
             {
                 MakeDarkHighContrastFriendly();
             }
 
-            Context = context;
-            if (MainForm.Settings.TraitViewState != null) objectListView1.RestoreState(MainForm.Settings.TraitViewState);
-            Manager = new TraitViewManager(MainForm, Context, objectListView1);
+            if (mainForm.Settings.TraitViewState != null)
+            {
+                objectListView1.RestoreState(mainForm.Settings.TraitViewState);
+            }
+            traitViewManager = new TraitViewManager(mainForm, this.context, objectListView1);
         }
 
         private void MakeDarkHighContrastFriendly()
@@ -62,31 +68,32 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public void SaveStateToSettings()
         {
-            if (!_debug_MainFormAssigned && MainForm == null) return;
+            if (!_debugMainFormAssigned && mainForm == null) return;
 
             try
             {
-                MainForm.Settings.TraitViewState = objectListView1.SaveState();
+                mainForm.Settings.TraitViewState = objectListView1.SaveState();
             }
-            catch (Exception _e)
+            catch (Exception exception)
             {
-                logger.Error(_e, "Something went wrong when trying to save trait list state, mainform null: " + (MainForm == null));
+                logger.Error(exception,
+                    $"Something went wrong on saving trait list state, mainform: {mainForm?.ToString() ?? "NULL"}");
             }
         }
 
         private void fullToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainForm.TraitViewDisplayMode = TraitViewManager.TraitDisplayMode.Full;
+            mainForm.TraitViewDisplayMode = TraitDisplayMode.Full;
         }
 
         private void compactToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainForm.TraitViewDisplayMode = TraitViewManager.TraitDisplayMode.Compact;
+            mainForm.TraitViewDisplayMode = TraitDisplayMode.Compact;
         }
 
         private void shortcutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MainForm.TraitViewDisplayMode = TraitViewManager.TraitDisplayMode.Shortcut;
+            mainForm.TraitViewDisplayMode = TraitDisplayMode.Shortcut;
         }
 
         private void objectListView1_ColumnReordered(object sender, ColumnReorderedEventArgs e)

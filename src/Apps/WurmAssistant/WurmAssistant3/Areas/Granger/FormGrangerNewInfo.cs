@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Windows.Forms;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger
 {
     public partial class FormGrangerNewInfo : Form
     {
-        private GrangerSettings Settings;
+        readonly GrangerSettings settings;
 
-        public FormGrangerNewInfo(GrangerSettings Settings)
+        public FormGrangerNewInfo([NotNull] GrangerSettings settings)
         {
-            this.Settings = Settings;
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
+            this.settings = settings;
             InitializeComponent();
         }
 
@@ -19,7 +21,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.DoNotShowReadFirstWindow = checkBox1.Checked;
+            settings.DoNotShowReadFirstWindow = checkBox1.Checked;
         }
     }
 }

@@ -15,8 +15,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public GrangerSettings([NotNull] ILogger logger)
         {
-            if (logger == null)
-                throw new ArgumentNullException("logger");
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
             this.logger = logger;
 
             doNotShowReadFirstWindow = false;
@@ -41,7 +40,64 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         }
 
         [JsonProperty]
+        System.Drawing.Size mainWindowSize;
+
+        [JsonProperty]
         TimeSpan showGroomingTime;
+
+        [JsonProperty]
+        bool doNotBlockDataUpdateUnlessMultiplesInEntireDb;
+
+        [JsonProperty]
+        bool updateCreatureDataFromAnyEventLine;
+
+        [JsonProperty]
+        bool doNotShowReadFirstWindow;
+
+        [JsonProperty]
+        bool traitViewVisible;
+
+        [JsonProperty]
+        bool herdViewVisible;
+
+        [JsonProperty]
+        bool logCaptureEnabled;
+
+        [JsonProperty]
+        string valuePresetId;
+
+        [JsonProperty]
+        string advisorId;
+
+        [JsonProperty]
+        byte[] creatureListState;
+
+        [JsonProperty]
+        TraitDisplayMode traitViewDisplayMode;
+
+        [JsonProperty]
+        int herdViewSplitterPosition;
+
+        [JsonProperty]
+        byte[] traitViewState;
+
+        [JsonProperty]
+        bool disableRowColoring;
+
+        [JsonProperty]
+        bool adjustForDarkThemes;
+
+        [JsonProperty]
+        readonly Dictionary<string, DateTime> genesisLog;
+
+        [JsonProperty]
+        List<string> captureForPlayers;
+
+        [JsonProperty]
+        bool useServerNameAsCreatureIdComponent;
+
+        [JsonProperty]
+        bool hideLiveTrackerPopups;
 
         public TimeSpan ShowGroomingTime
         {
@@ -50,21 +106,16 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         }
 
         /// <summary>
-        /// By default creatures can't be updated if wrong herds are selected.
-        /// This option makes update possible as long, as creature name
-        /// is unique in entire database
+        /// This option changes how Granger does creature updates.
+        /// By default, only creatures from selected herds are considered for update.
+        /// This option will skip this check and all creatures in the database will be considered.
+        /// However, the unique creature identity constraint is not bypassed by this setting.
         /// </summary>
-        [JsonProperty]
-        bool doNotBlockDataUpdateUnlessMultiplesInEntireDb;
-
         public bool DoNotBlockDataUpdateUnlessMultiplesInEntireDb
         {
             get { return doNotBlockDataUpdateUnlessMultiplesInEntireDb; }
             set { doNotBlockDataUpdateUnlessMultiplesInEntireDb = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        bool updateCreatureDataFromAnyEventLine;
 
         public bool UpdateCreatureDataFromAnyEventLine
         {
@@ -72,33 +123,23 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set { updateCreatureDataFromAnyEventLine = value; FlagAsChanged(); }
         }
 
-        [JsonProperty]
-        bool doNotShowReadFirstWindow;
-
         public bool DoNotShowReadFirstWindow
         {
             get { return doNotShowReadFirstWindow; }
             set { doNotShowReadFirstWindow = value; FlagAsChanged(); }
         }
 
-        [JsonProperty]
-        bool traitViewVisible;
-
         public bool TraitViewVisible
         {
             get { return traitViewVisible; }
             set { traitViewVisible = value; FlagAsChanged(); }
         }
-        [JsonProperty]
-        bool herdViewVisible;
 
         public bool HerdViewVisible
         {
             get { return herdViewVisible; }
             set { herdViewVisible = value; FlagAsChanged(); }
         }
-        [JsonProperty]
-        bool logCaptureEnabled;
 
         public bool LogCaptureEnabled
         {
@@ -106,17 +147,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set { logCaptureEnabled = value; FlagAsChanged(); }
         }
 
-        [JsonProperty]
-        System.Drawing.Size mainWindowSize;
-
         public Size MainWindowSize
         {
             get { return mainWindowSize; }
             set { mainWindowSize = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        string valuePresetId;
 
         public string ValuePresetId
         {
@@ -124,17 +159,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set { valuePresetId = value; FlagAsChanged(); }
         }
 
-        [JsonProperty]
-        string advisorId;
-
         public string AdvisorId
         {
             get { return advisorId; }
             set { advisorId = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        byte[] creatureListState;
 
         public byte[] CreatureListState
         {
@@ -142,17 +171,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set { creatureListState = value; FlagAsChanged(); }
         }
 
-        [JsonProperty]
-        TraitViewManager.TraitDisplayMode traitViewDisplayMode;
-
-        public TraitViewManager.TraitDisplayMode TraitViewDisplayMode
+        public TraitDisplayMode TraitViewDisplayMode
         {
             get { return traitViewDisplayMode; }
             set { traitViewDisplayMode = value; FlagAsChanged(); }
         }
-
-        [JsonProperty]
-        int herdViewSplitterPosition;
 
         public int HerdViewSplitterPosition
         {
@@ -160,17 +183,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set { herdViewSplitterPosition = value; FlagAsChanged(); }
         }
 
-        [JsonProperty]
-        byte[] traitViewState;
-
         public byte[] TraitViewState
         {
             get { return traitViewState; }
             set { traitViewState = value; FlagAsChanged(); }
         }
-
-        [JsonProperty] 
-        bool disableRowColoring;
 
         public bool DisableRowColoring
         {
@@ -178,17 +195,29 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set { disableRowColoring = value; FlagAsChanged(); }
         }
 
-        [JsonProperty] 
-        bool adjustForDarkThemes;
-
         public bool AdjustForDarkThemes
         {
             get { return adjustForDarkThemes; }
             set { adjustForDarkThemes = value; FlagAsChanged(); }
         }
 
-        [JsonProperty] 
-        readonly Dictionary<string, DateTime> genesisLog;
+        public IEnumerable<string> CaptureForPlayers
+        {
+            get { return captureForPlayers; }
+            set { captureForPlayers = new List<string>(value); FlagAsChanged(); }
+        }
+
+        public bool UseServerNameAsCreatureIdComponent
+        {
+            get { return useServerNameAsCreatureIdComponent; }
+            set { useServerNameAsCreatureIdComponent = value; FlagAsChanged(); }
+        }
+
+        public bool HideLiveTrackerPopups
+        {
+            get { return hideLiveTrackerPopups; }
+            set { hideLiveTrackerPopups = value; FlagAsChanged(); }
+        }
 
         internal void AddGenesisCast(DateTime castDate, string creatureName)
         {
@@ -199,7 +228,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 if (keyval.Value < dtTreshhold)
                 {
                     if (keysToRemove == null)
+                    {
                         keysToRemove = new List<string>();
+                    }
                     keysToRemove.Add(keyval.Key);
                 }
             }
@@ -232,23 +263,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             genesisLog.Remove(creatureName);
             FlagAsChanged();
-        }
-
-        [JsonProperty] List<string> captureForPlayers;
-
-        public IEnumerable<string> CaptureForPlayers
-        {
-            get { return captureForPlayers; }
-            set { captureForPlayers = new List<string>(value); FlagAsChanged(); }
-        }
-
-        [JsonProperty]
-        bool useServerNameAsCreatureIdComponent;
-
-        public bool UseServerNameAsCreatureIdComponent
-        {
-            get { return useServerNameAsCreatureIdComponent; }
-            set { useServerNameAsCreatureIdComponent = value; FlagAsChanged(); }
         }
     }
 }

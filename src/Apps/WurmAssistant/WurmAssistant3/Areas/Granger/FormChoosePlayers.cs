@@ -8,9 +8,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 {
     public partial class FormChoosePlayers : ExtendedForm
     {
-        public string[] Result = new string[0];
+        public IReadOnlyCollection<string> Result = new string[0];
 
-        public FormChoosePlayers(string[] currentPlayers, IWurmApi wurmApi)
+        public FormChoosePlayers(IReadOnlyCollection<string> currentPlayers, IWurmApi wurmApi)
         {
             InitializeComponent();
             string[] allPlayers = wurmApi.Characters.All.Select(character => character.Name.Capitalized)

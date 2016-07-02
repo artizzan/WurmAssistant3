@@ -1,6 +1,6 @@
 ﻿namespace AldursLab.WurmAssistant3.Areas.Granger
 {
-    partial class UCGrangerHerdList
+    partial class UcGrangerHerdList
     {
         /// <summary> 
         /// Required designer variable.
@@ -135,7 +135,6 @@
             this.objectListView1.UseCompatibleStateImageBehavior = false;
             this.objectListView1.View = System.Windows.Forms.View.Details;
             this.objectListView1.CellRightClick += new System.EventHandler<BrightIdeasSoftware.CellRightClickEventArgs>(this.objectListView1_CellRightClick);
-            this.objectListView1.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.objectListView1_ItemChecked);
             // 
             // olvColumnHerd
             // 

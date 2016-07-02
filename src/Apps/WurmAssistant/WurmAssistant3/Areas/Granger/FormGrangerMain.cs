@@ -14,53 +14,45 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 {
     public partial class FormGrangerMain : ExtendedForm
     {
-        public class UserViewChangedEventArgs : EventArgs
-        {
-            public readonly bool HerdViewVisible;
-            public readonly bool TraitViewVisible;
-            public UserViewChangedEventArgs(bool herdViewVisible, bool traitViewVisible)
-            {
-                this.HerdViewVisible = herdViewVisible;
-                this.TraitViewVisible = traitViewVisible;
-            }
-        }
-        public event EventHandler<UserViewChangedEventArgs> Granger_UserViewChanged;
+        public event EventHandler<UserViewChangedEventArgs> GrangerUserViewChanged;
 
-        public event EventHandler Granger_ValuatorChanged;
-        public event EventHandler Granger_AdvisorChanged;
+        public event EventHandler GrangerValuatorChanged;
+        public event EventHandler GrangerAdvisorChanged;
 
-        public event EventHandler Granger_PlayerListChanged;
-        public event EventHandler Granger_SelectedSingleCreatureChanged;
-        public event EventHandler Granger_TraitViewDisplayModeChanged;
+        public event EventHandler GrangerPlayerListChanged;
+        public event EventHandler GrangerSelectedSingleCreatureChanged;
+        public event EventHandler GrangerTraitViewDisplayModeChanged;
 
-        public GrangerSettings Settings;
+        GrangerSettings settings;
 
-        private GrangerFeature ParentModule;
-        private GrangerContext Context;
+        GrangerFeature parentModule;
+        readonly GrangerContext context;
         readonly ILogger logger;
         readonly IWurmApi wurmApi;
         readonly DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions;
 
-        public TraitValuator CurrentValuator { get; private set; }
-        public BreedingAdvisor CurrentAdvisor { get; private set; }
+        readonly bool _windowInitCompleted = false;
+        bool _rebuildingValuePresets = false;
+        bool _rebuildingAdvisors = false;
+        FormGrangerNewInfo newcomerHelpUi;
 
-        /// <summary>
-        /// null if none or more creatures selected, else ref to creature
-        /// </summary>
-        public Creature SelectedSingleCreature { get { return ucGrangerCreatureList1.SelectedSingleCreature; } }
-
-        bool _WindowInitCompleted = false;
-        public FormGrangerMain(GrangerFeature grangerFeature, GrangerSettings settings, GrangerContext context,
-            [NotNull] ILogger logger, [NotNull] IWurmApi wurmApi,
+        public FormGrangerMain(
+            [NotNull] GrangerFeature grangerFeature,
+            [NotNull] GrangerSettings settings,
+            [NotNull] GrangerContext context,
+            [NotNull] ILogger logger, 
+            [NotNull] IWurmApi wurmApi,
             [NotNull] DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (defaultBreedingEvaluatorOptions == null)
-                throw new ArgumentNullException("defaultBreedingEvaluatorOptions");
-            this.ParentModule = grangerFeature;
-            this.Settings = settings;
-            this.Context = context;
+            if (grangerFeature == null) throw new ArgumentNullException(nameof(grangerFeature));
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (defaultBreedingEvaluatorOptions == null) throw new ArgumentNullException(nameof(defaultBreedingEvaluatorOptions));
+            this.parentModule = grangerFeature;
+            this.settings = settings;
+            this.context = context;
             this.logger = logger;
             this.wurmApi = wurmApi;
             this.defaultBreedingEvaluatorOptions = defaultBreedingEvaluatorOptions;
@@ -76,24 +68,31 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             ucGrangerCreatureList1.Init(this, context, logger, wurmApi);
             ucGrangerTraitView1.Init(this, context, logger);
 
-            Context.OnTraitValuesModified += Context_OnTraitValuesModified;
+            this.context.OnTraitValuesModified += Context_OnTraitValuesModified;
 
-            this.Size = Settings.MainWindowSize;
+            this.Size = this.settings.MainWindowSize;
 
-            this.checkBoxCapturingEnabled.Checked = Settings.LogCaptureEnabled;
+            this.checkBoxCapturingEnabled.Checked = this.settings.LogCaptureEnabled;
             this.UpdateViewsVisibility();
             this.Update_textBoxCaptureForPlayers();
 
-            _WindowInitCompleted = true;
+            _windowInitCompleted = true;
         }
+
+        public TraitValuator CurrentValuator { get; private set; }
+        public BreedingAdvisor CurrentAdvisor { get; private set; }
+
+        /// <summary>
+        /// This value should be null unless exactly one creature is selected in the list.
+        /// </summary>
+        public Creature SelectedSingleCreature => ucGrangerCreatureList1.SelectedSingleCreature;
 
         /// <summary>
         /// triggers Granger_SelectedSingleCreatureChanged event
         /// </summary>
         internal void TriggerSelectedSingleCreatureChanged()
         {
-            if (Granger_SelectedSingleCreatureChanged != null) 
-                Granger_SelectedSingleCreatureChanged(this, EventArgs.Empty);
+            GrangerSelectedSingleCreatureChanged?.Invoke(this, EventArgs.Empty);
         }
 
         #region TRAIT VALUES
@@ -110,8 +109,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             RefreshValuator();
         }
 
-        bool _rebuildingValuePresets = false;
-        private void comboBoxValuePreset_TextChanged(object sender, EventArgs e)
+        void comboBoxValuePreset_TextChanged(object sender, EventArgs e)
         {
             if (!_rebuildingValuePresets)
             {
@@ -123,12 +121,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             _rebuildingValuePresets = true;
             comboBoxValuePreset.Items.Clear();
-            var valuemaps = Context.TraitValues.AsEnumerable().Select(x => x.ValueMapID).Distinct().ToArray();
+            var valuemaps = context.TraitValues.AsEnumerable().Select(x => x.ValueMapID).Distinct().ToArray();
             comboBoxValuePreset.Items.Add(TraitValuator.DefaultId);
-            comboBoxValuePreset.Items.AddRange(valuemaps);
-            if (valuemaps.Contains(Settings.ValuePresetId))
-                comboBoxValuePreset.Text = Settings.ValuePresetId;
-            else comboBoxValuePreset.Text = TraitValuator.DefaultId;
+            comboBoxValuePreset.Items.AddRange(valuemaps.Cast<object>().ToArray());
+            comboBoxValuePreset.Text = valuemaps.Contains(settings.ValuePresetId)
+                ? settings.ValuePresetId
+                : TraitValuator.DefaultId;
             _rebuildingValuePresets = false;
         }
 
@@ -136,22 +134,22 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             try
             {
-                CurrentValuator = new TraitValuator(this, comboBoxValuePreset.Text, Context);
+                CurrentValuator = new TraitValuator(this, comboBoxValuePreset.Text, context);
             }
-            catch (Exception _e)
+            catch (Exception exception)
             {
-                CurrentValuator = new TraitValuator(this);
-                logger.Error(_e, "failed to create TraitValuator for valuemapid: " + comboBoxValuePreset.Text + "; using defaults");
+                CurrentValuator = new TraitValuator();
+                logger.Error(exception, "TraitValuator creation failed for valuemapid: " + comboBoxValuePreset.Text + "; reverting to defaults");
             }
-            Settings.ValuePresetId = CurrentValuator.ValueMapId;
+            settings.ValuePresetId = CurrentValuator.ValueMapId;
 
-            if (Granger_ValuatorChanged != null) Granger_ValuatorChanged(this, new EventArgs());
+            GrangerValuatorChanged?.Invoke(this, new EventArgs());
         }
 
         private void buttonEditValuePreset_Click(object sender, EventArgs e)
         {
             //dialog to edit value presets
-            FormEditValuePresets ui = new FormEditValuePresets(Context);
+            FormEditValuePresets ui = new FormEditValuePresets(context);
             ui.ShowCenteredOnForm(this);
         }
 
@@ -159,18 +157,15 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         #region ADVISORS
 
-        bool _rebuildingAdvisors = false;
         void RebuildAdvisors()
         {
             _rebuildingAdvisors = true;
             comboBoxAdvisor.Items.Clear();
             var advisors = BreedingAdvisor.DefaultAdvisorIDs;
-            comboBoxAdvisor.Items.AddRange(advisors);
-            if (advisors.Contains(Settings.AdvisorId))
-            {
-                comboBoxAdvisor.Text = Settings.AdvisorId;
-            }
-            else comboBoxAdvisor.Text = BreedingAdvisor.DEFAULT_id;
+            comboBoxAdvisor.Items.AddRange(advisors.Cast<object>().ToArray());
+            comboBoxAdvisor.Text = advisors.Contains(settings.AdvisorId)
+                ? settings.AdvisorId
+                : BreedingAdvisor.DEFAULT_id;
             _rebuildingAdvisors = false;
         }
 
@@ -180,22 +175,22 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             {
                 CurrentAdvisor = new BreedingAdvisor(this,
                     comboBoxAdvisor.Text,
-                    Context,
+                    context,
                     logger,
                     defaultBreedingEvaluatorOptions);
             }
-            catch (Exception _e)
+            catch (Exception exception)
             {
                 CurrentAdvisor = new BreedingAdvisor(this,
                     BreedingAdvisor.DEFAULT_id,
-                    Context,
+                    context,
                     logger,
                     defaultBreedingEvaluatorOptions);
-                logger.Error(_e,
-                    "failed to create BreedingAdvisor for advisorid: " + comboBoxAdvisor.Text + "; using defaults");
+                logger.Error(exception,
+                    "BreedingAdvisor creation failed for advisorid: " + comboBoxAdvisor.Text + "; reverting to defaults");
             }
-            Settings.AdvisorId = CurrentAdvisor.AdvisorID;
-            if (Granger_AdvisorChanged != null) Granger_AdvisorChanged(this, new EventArgs());
+            settings.AdvisorId = CurrentAdvisor.AdvisorID;
+            GrangerAdvisorChanged?.Invoke(this, new EventArgs());
         }
 
         private void comboBoxAdvisor_TextChanged(object sender, EventArgs e)
@@ -205,46 +200,39 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         private void buttonAdvisorOptions_Click(object sender, EventArgs e)
         {
-            if (CurrentAdvisor != null)
+            if (CurrentAdvisor == null) return;
+
+            if (CurrentAdvisor.ShowOptions(this))
             {
-                if (CurrentAdvisor.ShowOptions(this))
-                {
-                    //do not call refresh advisor, rebuilds are not needed if options are changed!
-                    if (Granger_AdvisorChanged != null) Granger_AdvisorChanged(this, new EventArgs());
-                }
+                GrangerAdvisorChanged?.Invoke(this, new EventArgs());
             }
         }
 
         #endregion
 
         #region MISC
-
-        FormGrangerNewInfo NewcomerHelpUI;
-
         
         private void FormGrangerMain_Load(object sender, EventArgs e)
         {
             try
             {
-                splitContainer2.SplitterDistance = Settings.HerdViewSplitterPosition;
-                splitContainer2.Panel2Collapsed = Settings.TraitViewVisible;
+                splitContainer2.SplitterDistance = settings.HerdViewSplitterPosition;
+                splitContainer2.Panel2Collapsed = settings.TraitViewVisible;
             }
-            catch (Exception _e)
+            catch (Exception exception)
             {
-                logger.Error(_e, "FormGrangerMain_Load");
+                logger.Error(exception, "FormGrangerMain_Load");
                 throw;
             }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (this.Visible && !Settings.DoNotShowReadFirstWindow)
-            {
-                NewcomerHelpUI = new FormGrangerNewInfo(Settings);
-                NewcomerHelpUI.Show(); //show here so its in front
-                //TODO remove this when wiki complete
-                timer1.Enabled = false;
-            }
+            if (!this.Visible || settings.DoNotShowReadFirstWindow) return;
+
+            newcomerHelpUi = new FormGrangerNewInfo(settings);
+            newcomerHelpUi.Show();
+            timer1.Enabled = false;
         }
 
         internal void BringBackFromAbyss()
@@ -276,9 +264,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 }
                 SaveAllState();
             }
-            catch (Exception _e)
+            catch (Exception exception)
             {
-                logger.Error(_e, "FormGrangerMain_FormClosing");
+                logger.Error(exception, "FormGrangerMain_FormClosing");
                 throw;
             }
         }
@@ -289,18 +277,23 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             {
                 if (!this.IsDisposed)
                 {
-                    //show panel if hidden, so correct SplitterDistance can be saved
+
                     ucGrangerTraitView1.SaveStateToSettings();
                     ucGrangerCreatureList1.SaveStateToSettings();
+
+                    //Showing panel in necessary to save correct SplitterDistance.
                     splitContainer2.Panel2Collapsed = false;
-                    Settings.HerdViewSplitterPosition = splitContainer2.SplitterDistance;
+
+                    settings.HerdViewSplitterPosition = splitContainer2.SplitterDistance;
                 }
                 else
+                {
                     logger.Error("SaveAllState when already disposed");
+                }
             }
-            catch (Exception _e)
+            catch (Exception exception)
             {
-                logger.Error(_e, "SaveAllState");
+                logger.Error(exception, "SaveAllState");
                 throw;
             }
         }
@@ -309,14 +302,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             try
             {
-                if (_WindowInitCompleted)
+                if (_windowInitCompleted)
                 {
-                    Settings.MainWindowSize = this.Size;
+                    settings.MainWindowSize = this.Size;
                 }
             }
-            catch (Exception _e)
+            catch (Exception exception)
             {
-                logger.Error(_e, "FormGrangerMain_Resize");
+                logger.Error(exception, "FormGrangerMain_Resize");
                 throw;
             }
         }
@@ -327,40 +320,44 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         private void buttonHerdView_Click(object sender, EventArgs e)
         {
-            Settings.HerdViewVisible = !Settings.HerdViewVisible;
+            settings.HerdViewVisible = !settings.HerdViewVisible;
             UpdateViewsVisibility();
         }
 
         private void buttonTraitView_Click(object sender, EventArgs e)
         {
             splitContainer2.Panel2Collapsed = !splitContainer2.Panel2Collapsed;
-            Settings.TraitViewVisible = splitContainer2.Panel2Collapsed;
+            settings.TraitViewVisible = splitContainer2.Panel2Collapsed;
             UpdateViewsVisibility();
         }
 
         void UpdateViewsVisibility()
         {
-            if (Settings.HerdViewVisible)
-                tableLayoutPanel1.ColumnStyles[0].Width = 150;
-            else tableLayoutPanel1.ColumnStyles[0].Width = 0;
+            tableLayoutPanel1.ColumnStyles[0].Width = settings.HerdViewVisible ? 150 : 0;
 
-            if (Granger_UserViewChanged != null)
-                Granger_UserViewChanged(this, new UserViewChangedEventArgs(
-                    Settings.HerdViewVisible,
-                    Settings.TraitViewVisible));
+            GrangerUserViewChanged?.Invoke(this,
+                new UserViewChangedEventArgs(
+                    settings.HerdViewVisible,
+                    settings.TraitViewVisible));
         }
 
-        public TraitViewManager.TraitDisplayMode TraitViewDisplayMode
+        public TraitDisplayMode TraitViewDisplayMode
         {
             get
             {
-                return Settings.TraitViewDisplayMode;
+                return settings.TraitViewDisplayMode;
             }
             set
             {
-                Settings.TraitViewDisplayMode = value;
-                if (Granger_TraitViewDisplayModeChanged != null) Granger_TraitViewDisplayModeChanged(this, EventArgs.Empty);
+                settings.TraitViewDisplayMode = value;
+                GrangerTraitViewDisplayModeChanged?.Invoke(this, EventArgs.Empty);
             }
+        }
+
+        public GrangerSettings Settings
+        {
+            get { return settings; }
+            set { settings = value; }
         }
 
         #endregion
@@ -369,50 +366,36 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         private void checkBoxCapturingEnabled_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.LogCaptureEnabled = checkBoxCapturingEnabled.Checked;
+            settings.LogCaptureEnabled = checkBoxCapturingEnabled.Checked;
         }
 
         private void buttonChangePlayers_Click(object sender, EventArgs e)
         {
-            FormChoosePlayers dialog = new FormChoosePlayers((Settings.CaptureForPlayers ?? new List<string>()).ToArray(), wurmApi);
+            var dialog = new FormChoosePlayers((settings.CaptureForPlayers ?? new List<string>()).ToArray(), wurmApi);
             if (dialog.ShowDialogCenteredOnForm(this) == System.Windows.Forms.DialogResult.OK)
             {
-                Settings.CaptureForPlayers = dialog.Result.ToList();
+                settings.CaptureForPlayers = dialog.Result.ToList();
                 Update_textBoxCaptureForPlayers();
-                if (Granger_PlayerListChanged != null) Granger_PlayerListChanged(this, new EventArgs());
+                GrangerPlayerListChanged?.Invoke(this, new EventArgs());
             }
         }
 
         void Update_textBoxCaptureForPlayers()
         {
-            textBoxCaptureForPlayers.Text = String.Join(", ", Settings.CaptureForPlayers);
+            textBoxCaptureForPlayers.Text = string.Join(", ", settings.CaptureForPlayers);
         }
 
         #endregion
 
-        private void splitContainer2_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-            
-        }
-
-        private void buttonOptions_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void buttonGrangerGeneralOptions_Click(object sender, EventArgs e)
         {
-            var ui = new FormGrangerGeneralOptions(Settings);
-            if (ui.ShowDialogCenteredOnForm(this) == DialogResult.OK)
-            {
-                //do something with results?
-                //nope
-            }
+            var ui = new FormGrangerGeneralOptions(settings);
+            ui.ShowDialogCenteredOnForm(this);
         }
 
         private void buttonImportExport_Click(object sender, EventArgs e)
         {
-            var ui = new FormGrangerImportExport(Context, logger);
+            var ui = new FormGrangerImportExport(context, logger);
             ui.ShowDialogCenteredOnForm(this);
         }
     }

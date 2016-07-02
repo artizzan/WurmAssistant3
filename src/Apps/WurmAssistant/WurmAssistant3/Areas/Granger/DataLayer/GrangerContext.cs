@@ -153,7 +153,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
 
         #endregion
 
-        internal void UpdateOrCreateTraitValueMap(Dictionary<CreatureTrait.TraitEnum, int> valueMap, string traitValueMapId)
+        internal void UpdateOrCreateTraitValueMap(IReadOnlyDictionary<CreatureTraitId, int> valueMap, string traitValueMapId)
         {
             var entities = TraitValues.Where(x => x.ValueMapID == traitValueMapId).ToArray();
             if (entities.Length > 0)

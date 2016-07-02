@@ -8,17 +8,15 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
     class TraitValueMap
     {
         readonly string traitValueMapId;
-        public readonly Dictionary<CreatureTrait.TraitEnum, int> ValueMap;
+        readonly Dictionary<CreatureTraitId, int> valueMap;
         readonly GrangerContext context;
-
-        public bool ReadOnly {get;private set;}
 
         public TraitValueMap(GrangerContext context, string traitValueMapId)
         {
             this.context = context;
             this.traitValueMapId = traitValueMapId;
 
-            ValueMap = CreatureTrait.GetAllDefaultValues();
+            valueMap = CreatureTrait.GetAllDefaultValues();
 
             if (traitValueMapId == TraitValuator.DefaultId)
             {
@@ -30,16 +28,20 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
                 var entities = this.context.TraitValues.Where(x => x.ValueMapID == traitValueMapId);
                 foreach (var entity in entities)
                 {
-                    ValueMap[entity.Trait.Trait] = entity.Value;
+                    valueMap[entity.Trait.CreatureTraitId] = entity.Value;
                 }
             }
         }
 
-        public void ModifyTraitValue(CreatureTrait.TraitEnum trait, int newValue)
+        public bool ReadOnly { get; private set; }
+
+        public IReadOnlyDictionary<CreatureTraitId, int> ValueMap => valueMap;
+
+        public void ModifyTraitValue(CreatureTraitId creatureTrait, int newValue)
         {
             if (ReadOnly) throw new InvalidOperationException("this list is read-only");
 
-            ValueMap[trait] = newValue;
+            valueMap[creatureTrait] = newValue;
         }
 
         /// <summary>
@@ -49,7 +51,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
         {
             if (ReadOnly) throw new InvalidOperationException("this list is read-only");
 
-            context.UpdateOrCreateTraitValueMap(ValueMap, traitValueMapId);
+            context.UpdateOrCreateTraitValueMap(valueMap, traitValueMapId);
         }
     }
 }

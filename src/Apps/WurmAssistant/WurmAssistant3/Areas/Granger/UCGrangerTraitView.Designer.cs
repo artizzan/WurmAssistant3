@@ -1,6 +1,6 @@
 ﻿namespace AldursLab.WurmAssistant3.Areas.Granger
 {
-    partial class UCGrangerTraitView
+    partial class UcGrangerTraitView
     {
         /// <summary> 
         /// Required designer variable.
