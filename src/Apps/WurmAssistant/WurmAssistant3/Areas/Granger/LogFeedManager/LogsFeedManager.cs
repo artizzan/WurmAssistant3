@@ -20,13 +20,19 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         readonly GrangerFeature parentModule;
         readonly Dictionary<string, PlayerManager> playerManagers = new Dictionary<string, PlayerManager>();
 
-        public LogsFeedManager(GrangerFeature parentModule, GrangerContext context, [NotNull] IWurmApi wurmApi,
-            [NotNull] ILogger logger, [NotNull] ITrayPopups trayPopups,
+        public LogsFeedManager(
+            [NotNull] GrangerFeature parentModule,
+            [NotNull] GrangerContext context, 
+            [NotNull] IWurmApi wurmApi,
+            [NotNull] ILogger logger, 
+            [NotNull] ITrayPopups trayPopups,
             [NotNull] IWurmAssistantConfig wurmAssistantConfig)
         {
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (trayPopups == null) throw new ArgumentNullException("trayPopups");
+            if (parentModule == null) throw new ArgumentNullException(nameof(parentModule));
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
             if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
             this.parentModule = parentModule;
             this.context = context;

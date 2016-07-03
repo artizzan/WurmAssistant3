@@ -34,7 +34,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
             InitializeComponent();
 
-            allHerdNames = context.Herds.Select(x => x.HerdID).ToArray();
+            allHerdNames = context.Herds.Select(x => x.HerdId).ToArray();
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -84,7 +84,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     labelInfo.Text = "must be one word made of letters and/or numbers";
                     return false;
                 }
-                else if (context.Herds.Any(x => x.HerdID == textBox1.Text))
+                else if (context.Herds.Any(x => x.HerdId == textBox1.Text))
                 {
                     labelInfo.Text = "herd with this name already exists";
                     return false;

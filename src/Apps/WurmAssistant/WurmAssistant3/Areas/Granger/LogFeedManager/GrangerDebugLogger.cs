@@ -10,7 +10,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
         public GrangerDebugLogger([NotNull] ILogger logger)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
             this.logger = logger;
         }
 

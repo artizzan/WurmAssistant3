@@ -17,7 +17,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ImportExport.Legacy
             }
 
             // check if this herd already exists in database
-            if (context.Herds.Any(x => x.HerdID == newHerdName))
+            if (context.Herds.Any(x => x.HerdId == newHerdName))
             {
                 throw new GrangerException($"there is already a herd with named {newHerdName} in database");
             }

@@ -23,13 +23,21 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
         readonly Dictionary<ServerGroup, float> serverGroupToAhSkillMap = new Dictionary<ServerGroup, float>();
 
-        public PlayerManager(GrangerFeature parentModule, GrangerContext context, string playerName,
-            [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger, [NotNull] ITrayPopups trayPopups,
+        public PlayerManager(
+            [NotNull] GrangerFeature parentModule,
+            [NotNull] GrangerContext context,
+            [NotNull] string playerName,
+            [NotNull] IWurmApi wurmApi, 
+            [NotNull] ILogger logger, 
+            [NotNull] ITrayPopups trayPopups,
             [NotNull] IWurmAssistantConfig wurmAssistantConfig)
         {
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (trayPopups == null) throw new ArgumentNullException("trayPopups");
+            if (parentModule == null) throw new ArgumentNullException(nameof(parentModule));
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (playerName == null) throw new ArgumentNullException(nameof(playerName));
+            if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
             if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
             this.parentModule = parentModule;
             this.wurmApi = wurmApi;
@@ -47,7 +55,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             BeginUpdateSkillInfo();
         }
 
-        public string PlayerName { get; private set; }
+        public string PlayerName { get; }
 
         [CanBeNull]
         public IWurmServer CurrentServer { get; private set; }
@@ -81,7 +89,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             }
             catch (Exception exception)
             {
-                logger.Error(exception, "Something went wrong while updating AH skill for " + PlayerName);
+                logger.Error(exception, "Error at updating Animal Husbandry skill for " + PlayerName);
             }
         }
 

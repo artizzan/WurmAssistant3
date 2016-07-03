@@ -34,7 +34,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
             textBoxFromHerd.Text = this.sourceHerdName;
             comboBoxToHerd.Items.AddRange(
-                this.context.Herds.Where(x => x.HerdID != sourceHerdName).Cast<object>().ToArray());
+                this.context.Herds.Where(x => x.HerdId != sourceHerdName).Cast<object>().ToArray());
             listBoxFromHerd.Items.AddRange(
                 this.context.Creatures.Where(x => x.Herd == this.sourceHerdName).Cast<object>().ToArray());
         }

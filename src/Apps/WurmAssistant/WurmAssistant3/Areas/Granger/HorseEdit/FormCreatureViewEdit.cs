@@ -16,14 +16,18 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
 {
     public partial class FormCreatureViewEdit : ExtendedForm
     {
-        Creature creature;
-        GrangerContext Context;
-        FormGrangerMain MainForm;
 
-        CreatureViewEditOpType _opType;
-        private string HerdID;
+        readonly GrangerContext context;
+        readonly FormGrangerMain mainForm;
+        readonly string herdId;
         readonly ILogger logger;
         readonly IWurmApi wurmApi;
+
+        Creature creature;
+        CreatureViewEditOpType _opType;
+
+        bool textBoxPasteUpdateSelfUpdating = false;
+        CreatureTrait[] currentParsedTraits = null;
 
         CreatureViewEditOpType OpMode
         {
@@ -33,57 +37,65 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
                 _opType = value;
                 if (value == CreatureViewEditOpType.Edit)
                 {
-                    prepareFieldsForEdit();
+                    PrepareFieldsForEdit();
                 }
                 else if (value == CreatureViewEditOpType.New)
                 {
-                    prepareFieldsForNew();
+                    PrepareFieldsForNew();
                 }
                 else if (value == CreatureViewEditOpType.View)
                 {
-                    prepareFieldsForView();
+                    PrepareFieldsForView();
                 }
                 else throw new InvalidOperationException("bad op type");
             }
         }
 
-        public FormCreatureViewEdit(FormGrangerMain mainForm, [CanBeNull] Creature creature, GrangerContext context,
-            CreatureViewEditOpType optype, string herdId, [NotNull] ILogger logger,
-            [NotNull] IWurmApi wurmApi)
+        public FormCreatureViewEdit(
+            [NotNull] FormGrangerMain mainForm,
+            [NotNull] GrangerContext context,
+            [NotNull] ILogger logger,
+            [NotNull] IWurmApi wurmApi, 
+            [CanBeNull] Creature creature,
+            CreatureViewEditOpType optype,
+            string herdId)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            this.MainForm = mainForm;
+            if (mainForm == null) throw new ArgumentNullException(nameof(mainForm));
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            this.mainForm = mainForm;
             this.creature = creature;
-            this.Context = context;
-            this.HerdID = herdId;
+            this.context = context;
+            this.herdId = herdId;
             this.logger = logger;
             this.wurmApi = wurmApi;
             InitializeComponent();
 
-            disableAllFields();
+            DisableAllFields();
 
             comboBoxServerName.Items.AddRange(
                 wurmApi.Servers.All.Select(server => server.ServerName.Original).Cast<object>().ToArray());
 
             List<string> list = new List<string>();
-            list.AddRange(Context.Creatures.Select(x => x.Name));
-            list.AddRange(Context.Creatures.Select(x => x.MotherName));
-            list.AddRange(Context.Creatures.Select(x => x.FatherName));
-            string[] allCreatureNamesInDatabase = list.Distinct().Where(x => x != null).ToArray();
+            list.AddRange(this.context.Creatures.Select(x => x.Name));
+            list.AddRange(this.context.Creatures.Select(x => x.MotherName));
+            list.AddRange(this.context.Creatures.Select(x => x.FatherName));
+
+            var allCreatureNamesInDatabase = list.Distinct().Where(x => x != null).Cast<object>().ToArray();
 
             comboBoxFather.Items.AddRange(allCreatureNamesInDatabase);
             comboBoxMother.Items.AddRange(allCreatureNamesInDatabase);
 
-            comboBoxColor.Items.AddRange(CreatureColor.GetColorsEnumStrArray());
+            comboBoxColor.Items.AddRange(CreatureColor.GetColorsEnumStrArray().Cast<object>().ToArray());
             comboBoxColor.Text = CreatureColor.GetDefaultColorStr();
-            comboBoxAge.Items.AddRange(CreatureAge.GetColorsEnumStrArray());
+            comboBoxAge.Items.AddRange(CreatureAge.GetColorsEnumStrArray().Cast<object>().ToArray());
             comboBoxAge.Text = CreatureAge.GetDefaultAgeStr();
 
             this.OpMode = optype;
         }
 
-        void disableAllFields()
+        void DisableAllFields()
         {
             panel1.Enabled = false;
             dateTimePickerBred.Value = DateTimePicker.MinimumDateTime;
@@ -93,15 +105,15 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
             buttonEdit.Visible = true;
         }
 
-        void enableAllFields()
+        void EnableAllFields()
         {
             panel1.Enabled = true;
             buttonEdit.Visible = false;
         }
 
-        void prepareFieldsForView()
+        void PrepareFieldsForView()
         {
-            buildTraits();
+            BuildTraits();
 
             textBoxName.Text = creature.NameAspect;
             comboBoxMother.Text = creature.MotherAspect;
@@ -129,18 +141,18 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
             Creature mate = creature.GetMate();
             if (mate != null) textBoxMate.Text = mate.ToString();
 
-            this.Text = "Viewing creature: " + creature.NameAspect + " in herd: " + HerdID;
+            this.Text = "Viewing creature: " + creature.NameAspect + " in herd: " + herdId;
         }
 
-        void prepareFieldsForEdit()
+        void PrepareFieldsForEdit()
         {
-            prepareFieldsForView();
-            enableAllFields();
-            this.Text = "Editing creature: " + creature.NameAspect + " in herd: " + HerdID;
+            PrepareFieldsForView();
+            EnableAllFields();
+            this.Text = "Editing creature: " + creature.NameAspect + " in herd: " + herdId;
             ValidateCreatureIdentity();
         }
 
-        void buildTraits()
+        void BuildTraits()
         {
             checkedListBoxTraits.Items.Clear();
 
@@ -155,13 +167,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
             }
         }
 
-        void prepareFieldsForNew()
+        void PrepareFieldsForNew()
         {
             checkedListBoxTraits.Items.Clear();
-            checkedListBoxTraits.Items.AddRange(CreatureTrait.GetAllTraitWurmText());
+            checkedListBoxTraits.Items.AddRange(CreatureTrait.GetAllTraitWurmText().Cast<object>().ToArray());
 
-            enableAllFields();
-            this.Text = "Adding new creature to herd: " + HerdID;
+            EnableAllFields();
+            this.Text = "Adding new creature to herd: " + herdId;
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -176,8 +188,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
                 {
                     if (OpMode == CreatureViewEditOpType.New)
                     {
-                        var newEntity = new CreatureEntity() { Id = CreatureEntity.GenerateNewCreatureId(Context) };
-                        creature = new Creature(MainForm, newEntity, Context);
+                        var newEntity = new CreatureEntity() { Id = CreatureEntity.GenerateNewCreatureId(context) };
+                        creature = new Creature(mainForm, newEntity, context);
                     }
 
                     List<CreatureTrait> traitlist = new List<CreatureTrait>();
@@ -226,12 +238,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
 
                     if (OpMode == CreatureViewEditOpType.New)
                     {
-                        creature.Herd = HerdID;
-                        Context.InsertCreature(creature.Entity);
+                        creature.Herd = herdId;
+                        context.InsertCreature(creature.Entity);
                     }
                     else
                     {
-                        Context.SubmitChanges();
+                        context.SubmitChanges();
                     }
                     this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 }
@@ -247,7 +259,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
         private void buttonEdit_Click(object sender, EventArgs e)
         {
             OpMode = CreatureViewEditOpType.Edit;
-            prepareFieldsForEdit();
+            PrepareFieldsForEdit();
         }
 
         private void textBoxName_Validating(object sender, CancelEventArgs e)
@@ -278,7 +290,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
                 return false;
             }
 
-            var otherCreatures = Context.Creatures.Where(x => x.Herd == HerdID).ToArray();
+            var otherCreatures = context.Creatures.Where(x => x.Herd == herdId).ToArray();
 
             var nonuniques = otherCreatures.Where(x =>
                 x.Name == textBoxName.Text.Trim()).ToArray();
@@ -338,36 +350,35 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
         {
         }
 
-        bool _textBoxPasteUpdate_selfUpdating = false;
-        CreatureTrait[] CurrentParsedTraits = null;
+
         private void textBoxPasteUpdate_TextChanged(object sender, EventArgs e)
         {
-            if (!_textBoxPasteUpdate_selfUpdating)
+            if (!textBoxPasteUpdateSelfUpdating)
             {
-                _textBoxPasteUpdate_selfUpdating = true;
-                CreatureTrait[] parsedTraits = GrangerHelpers.GetTraitsFromLine(textBoxPasteUpdate.Text);
+                textBoxPasteUpdateSelfUpdating = true;
+                CreatureTrait[] parsedTraits = GrangerHelpers.ParseTraitsFromLine(textBoxPasteUpdate.Text);
                 if (parsedTraits.Length == 0)
                 {
                     textBoxPasteUpdate.Text = "> no traits found in text <";
                     buttonApplyTraitsFromPasteText.Enabled = false;
-                    CurrentParsedTraits = null;
+                    currentParsedTraits = null;
                 }
                 else
                 {
-                    CurrentParsedTraits = parsedTraits;
+                    currentParsedTraits = parsedTraits;
                     buttonApplyTraitsFromPasteText.Enabled = true;
                     textBoxPasteUpdate.Text = "Found traits: " + string.Join(", ", parsedTraits.Select(x => x.ToCompactString()));
                 }
 
-                _textBoxPasteUpdate_selfUpdating = false;
+                textBoxPasteUpdateSelfUpdating = false;
             }
         }
 
         private void buttonApplyTraitsFromPasteText_Click(object sender, EventArgs e)
         {
-            if (CurrentParsedTraits != null)
+            if (currentParsedTraits != null)
             {
-                var parsedTraitsToString = CurrentParsedTraits.Select(x => x.ToString()).ToArray();
+                var parsedTraitsToString = currentParsedTraits.Select(x => x.ToString()).ToArray();
                 for (int i = 0; i < checkedListBoxTraits.Items.Count; i++)
                 {
                     string currentTraitText = checkedListBoxTraits.Items[i].ToString();
@@ -377,7 +388,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
                     }
                 }
             }
-            CurrentParsedTraits = null;
+            currentParsedTraits = null;
             buttonApplyTraitsFromPasteText.Enabled = false;
         }
 

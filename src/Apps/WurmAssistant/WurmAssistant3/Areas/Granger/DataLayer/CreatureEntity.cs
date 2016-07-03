@@ -138,7 +138,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
         [JsonProperty("brandedfor")]
         public string BrandedFor;
 
-        static public int GenerateNewCreatureId(GrangerContext context)
+        public static int GenerateNewCreatureId(GrangerContext context)
         {
             if (!context.Creatures.Any())
             {
@@ -156,22 +156,18 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
         }
 
         /// <summary>
-        /// This method determines, if otherCreature can be reliably distinguished from this creature.
-        /// In Wurm, it is possible for 2 creatures to be different actual entities, but share same qualities - names, parents, even server.
-        /// There is no way to Id such creatures from logs alone.
-        /// This method should tell, if 2 creatures can be distinguished from each other, based purely on always available log information,
-        /// which currently is just creature name and the server it originates from (since creatures cannot travel between servers 
-        /// and WurmApi always knows current character server name)
+        /// Determines, if this creature can be uniquely identified by Granger, when compared to other creature.
         /// </summary>
-        /// <param name="otherCreature"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// Wurm does not provide any unique ID of a creature.
+        /// </remarks>
         public bool IsUniquelyIdentifiableWhenComparedTo(CreatureEntity otherCreature)
         {
             var hasSameName = this.Name == otherCreature.Name;
 
             if (hasSameName)
             {
-                // if names are equal, we might still be able to differentiate by server names
+                // if names are equal, might still be able to differentiate by server names
                 if (string.IsNullOrWhiteSpace(this.ServerName) || string.IsNullOrWhiteSpace(otherCreature.ServerName))
                 {
                     // if server is unknown for one or both of these creatures, creatures are not uniquely identifiable
@@ -187,7 +183,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
             }
             else
             {
-                // if names are different, the creature are uniquely identifiable
+                // if names are different, creatures are uniquely identifiable
                 return true;
             }
         }

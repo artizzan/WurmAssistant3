@@ -122,8 +122,6 @@
             this.objectListView1.FullRowSelect = true;
             this.objectListView1.HasCollapsibleGroups = false;
             this.objectListView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.objectListView1.SelectedBackColor = System.Drawing.Color.Empty;
-            this.objectListView1.SelectedForeColor = System.Drawing.Color.Empty;
             this.objectListView1.Location = new System.Drawing.Point(0, 0);
             this.objectListView1.Margin = new System.Windows.Forms.Padding(2);
             this.objectListView1.MultiSelect = false;
@@ -138,20 +136,20 @@
             // 
             // olvColumnHerd
             // 
-            this.olvColumnHerd.AspectName = "HerdIDAspect";
+            this.olvColumnHerd.AspectName = "HerdIdAspect";
             this.olvColumnHerd.FillsFreeSpace = true;
             this.olvColumnHerd.MinimumWidth = 20;
             this.olvColumnHerd.Text = "Active herds";
             this.olvColumnHerd.Width = 104;
             // 
-            // UCGrangerHerdList
+            // UcGrangerHerdList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.objectListView1);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "UCGrangerHerdList";
+            this.Name = "UcGrangerHerdList";
             this.Size = new System.Drawing.Size(309, 318);
             this.contextMenuStripHerds.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.objectListView1)).EndInit();

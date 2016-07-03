@@ -56,14 +56,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxDiscardAllCausingInbreed = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.checkBoxSkipPaired = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxExcludeFoals = new System.Windows.Forms.CheckBox();
             this.checkBoxExcludeYoung = new System.Windows.Forms.CheckBox();
             this.checkBoxExcludeAdolescent = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.checkBoxExcludeExactAge = new System.Windows.Forms.CheckBox();
-            this.timeSpanInputExcludeExactAge = new TimeSpanInput();
+            this.timeSpanInputExcludeExactAge = new AldursLab.WurmAssistant3.Utils.WinForms.TimeSpanInput();
             this.checkBoxKeepComparingSelected = new System.Windows.Forms.CheckBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.checkBoxIgnoreDead = new System.Windows.Forms.CheckBox();
@@ -72,7 +71,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.olvColumnColorType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnColorWeight = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.labelAutowrap1 = new LabelAutowrap();
+            this.labelAutowrap1 = new AldursLab.WurmAssistant3.Utils.WinForms.LabelAutowrap();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBadTraitWeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPotValBadWeight)).BeginInit();
@@ -375,19 +374,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxSkipPaired.TabIndex = 6;
             this.checkBoxSkipPaired.Text = "Skip any paired creatures";
             this.checkBoxSkipPaired.UseVisualStyleBackColor = true;
-            this.checkBoxSkipPaired.CheckedChanged += new System.EventHandler(this.checkBoxSkipPaired_CheckedChanged);
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(9, 354);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(77, 29);
-            this.button1.TabIndex = 15;
-            this.button1.Text = "More help";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // toolTip1
             // 
@@ -406,7 +392,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxExcludeFoals.TabIndex = 7;
             this.checkBoxExcludeFoals.Text = "Foals (young foal and adolescent foal)";
             this.checkBoxExcludeFoals.UseVisualStyleBackColor = true;
-            this.checkBoxExcludeFoals.CheckedChanged += new System.EventHandler(this.checkBoxExcludeFoals_CheckedChanged);
             // 
             // checkBoxExcludeYoung
             // 
@@ -418,7 +403,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxExcludeYoung.TabIndex = 8;
             this.checkBoxExcludeYoung.Text = "Regular young";
             this.checkBoxExcludeYoung.UseVisualStyleBackColor = true;
-            this.checkBoxExcludeYoung.CheckedChanged += new System.EventHandler(this.checkBoxExcludeYoung_CheckedChanged);
             // 
             // checkBoxExcludeAdolescent
             // 
@@ -430,7 +414,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxExcludeAdolescent.TabIndex = 9;
             this.checkBoxExcludeAdolescent.Text = "Regular adolescent";
             this.checkBoxExcludeAdolescent.UseVisualStyleBackColor = true;
-            this.checkBoxExcludeAdolescent.CheckedChanged += new System.EventHandler(this.checkBoxExcludeAdolescent_CheckedChanged);
             // 
             // groupBox5
             // 
@@ -448,7 +431,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.groupBox5.TabIndex = 16;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Age exclude options";
-            this.groupBox5.Enter += new System.EventHandler(this.groupBox5_Enter);
             // 
             // checkBoxExcludeExactAge
             // 
@@ -482,7 +464,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxKeepComparingSelected.TabIndex = 10;
             this.checkBoxKeepComparingSelected.Text = "Keep comparing the selected creature";
             this.checkBoxKeepComparingSelected.UseVisualStyleBackColor = true;
-            this.checkBoxKeepComparingSelected.CheckedChanged += new System.EventHandler(this.checkBoxKeepComparingSelected_CheckedChanged);
             // 
             // groupBox6
             // 
@@ -525,9 +506,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.objectListViewColorWeights.AllColumns.Add(this.olvColumnColorWeight);
             this.objectListViewColorWeights.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.SingleClick;
             this.objectListViewColorWeights.CellEditTabChangesRows = true;
+            this.objectListViewColorWeights.CellEditUseWholeCell = false;
             this.objectListViewColorWeights.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnColorType,
             this.olvColumnColorWeight});
+            this.objectListViewColorWeights.Cursor = System.Windows.Forms.Cursors.Default;
             this.objectListViewColorWeights.GridLines = true;
             this.objectListViewColorWeights.HasCollapsibleGroups = false;
             this.objectListViewColorWeights.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -581,8 +564,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.labelAutowrap1.Name = "labelAutowrap1";
             this.labelAutowrap1.Size = new System.Drawing.Size(204, 39);
             this.labelAutowrap1.TabIndex = 19;
-            this.labelAutowrap1.Text = "Total breeding value will be multiplied by an average of both creatures color weight" +
-    "s. ex: (1.5 + 1.2 ) / 2 = 1.35";
+            this.labelAutowrap1.Text = "Total breeding value will be multiplied by an average of both creatures color wei" +
+    "ghts. ex: (1.5 + 1.2 ) / 2 = 1.35";
             // 
             // BreedingEvaluatorDefaultConfig
             // 
@@ -592,7 +575,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
@@ -655,7 +637,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
         private System.Windows.Forms.NumericUpDown numericUpDownInbreedPenaltyWeight;
         private System.Windows.Forms.CheckBox checkBoxDiscardAllCausingInbreed;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox checkBoxSkipPaired;
         private System.Windows.Forms.CheckBox checkBoxExcludeFoals;

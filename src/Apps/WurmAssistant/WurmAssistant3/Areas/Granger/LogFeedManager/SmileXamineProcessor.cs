@@ -13,7 +13,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 {
     class SmileXamineProcessor
     {
-        class ProcessorVerifyList
+        class ValidationList
         {
             public bool Name;
             public bool Parents;
@@ -24,10 +24,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             public bool Foalization;
             public bool Branding;
 
-            public bool IsValid
-            {
-                get { return (Name && (Gender || Parents || Traits || CaredBy)); }
-            }
+            public bool IsValid => (Name && (Gender || Parents || Traits || CaredBy));
         }
 
         class CreatureBuffer
@@ -48,7 +45,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
         static readonly TimeSpan ProcessorTimeout = new TimeSpan(0, 0, 5);
 
-        readonly GrangerDebugLogger grangerDebug;
+        readonly GrangerDebugLogger debugLogger;
         readonly ITrayPopups trayPopups;
         readonly ILogger logger;
         readonly IWurmAssistantConfig wurmAssistantConfig;
@@ -56,21 +53,28 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         bool isProcessing = false;
         DateTime startedProcessingOn;
         CreatureBuffer creatureBuffer;
-        ProcessorVerifyList verifyList;
+        ValidationList verifyList;
 
         private readonly GrangerFeature parentModule;
         private readonly GrangerContext context;
         private readonly PlayerManager playerMan;
 
-        public SmileXamineProcessor(GrangerFeature parentModule, GrangerContext context, PlayerManager playerMan,
-            GrangerDebugLogger debugLogger,
+        public SmileXamineProcessor(
+            [NotNull] GrangerFeature parentModule,
+            [NotNull] GrangerContext context,
+            [NotNull] PlayerManager playerMan,
+            [NotNull] GrangerDebugLogger debugLogger,
             [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger,
             [NotNull] IWurmAssistantConfig wurmAssistantConfig)
         {
-            if (trayPopups == null) throw new ArgumentNullException("trayPopups");
-            if (logger == null) throw new ArgumentNullException("logger");
+            if (parentModule == null) throw new ArgumentNullException(nameof(parentModule));
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (playerMan == null) throw new ArgumentNullException(nameof(playerMan));
+            if (debugLogger == null) throw new ArgumentNullException(nameof(debugLogger));
+            if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
-            grangerDebug = debugLogger;
+            this.debugLogger = debugLogger;
             this.trayPopups = trayPopups;
             this.logger = logger;
             this.wurmAssistantConfig = wurmAssistantConfig;
@@ -81,27 +85,29 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
         public void HandleLogEvent(string line)
         {
-            //attempt to start building new creature data
+            // Smile emote triggers processing of new creature. 
+            // If previous processing is still active, it should be finalized.
             if (line.StartsWith("You smile at", StringComparison.Ordinal))
             {
-                grangerDebug.Log("smile cond: " + line);
+                debugLogger.Log("smile cond: " + line);
                 AttemptToStartProcessing(line);
             }
-            // append/update incoming data to current creature in buffer
+
+            // While processing creature, log events are parsed and valid data buffered into the current buffer.
             if (isProcessing)
             {
                 //[20:23:18] It has fleeter movement than normal. It has a strong body. It has lightning movement. It can carry more than average. It seems overly aggressive.                           
                 if (!verifyList.Traits && CreatureTrait.CanThisBeTraitLogMessage(line))
                 {
-                    grangerDebug.Log("found maybe trait line: " + line);
-                    var extractedTraits = GrangerHelpers.GetTraitsFromLine(line);
+                    debugLogger.Log("found maybe trait line: " + line);
+                    var extractedTraits = GrangerHelpers.ParseTraitsFromLine(line);
                     foreach (var trait in extractedTraits)
                     {
-                        grangerDebug.Log("found trait: " + trait);
+                        debugLogger.Log("found trait: " + trait);
                         creatureBuffer.Traits.Add(trait);
                         verifyList.Traits = true;
                     }
-                    grangerDebug.Log("trait parsing finished");
+                    debugLogger.Log("trait parsing finished");
                     if (creatureBuffer.InspectSkill == 0 && creatureBuffer.Traits.Count > 0)
                     {
                         var message =
@@ -117,19 +123,19 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 {
                     creatureBuffer.IsMale = true;
                     verifyList.Gender = true;
-                    grangerDebug.Log("creature set to male");
+                    debugLogger.Log("creature set to male");
                 }
                 if (line.StartsWith("She", StringComparison.Ordinal) && !verifyList.Gender)
                 {
                     creatureBuffer.IsMale = false;
                     verifyList.Gender = true;
-                    grangerDebug.Log("creature set to female");
+                    debugLogger.Log("creature set to female");
                 }
                 //[22:34:28] His mother is the old fat Painthop. His father is the venerable fat Starkclip. 
                 //[22:34:28] Her mother is the old fat Painthop. Her father is the venerable fat Starkclip. 
                 if (IsParentIdentifyingLine(line) && !verifyList.Parents)
                 {
-                    grangerDebug.Log("found maybe parents line");
+                    debugLogger.Log("found maybe parents line");
                     
                     Match motherMatch = ParseMother(line);
                     if (motherMatch.Success)
@@ -137,7 +143,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                         string mother = motherMatch.Groups["g"].Value;
                         mother = GrangerHelpers.ExtractCreatureName(mother);
                         creatureBuffer.Mother = mother;
-                        grangerDebug.Log("mother set to: " + mother);
+                        debugLogger.Log("mother set to: " + mother);
                     }
                     Match fatherMatch = ParseFather(line);
                     if (fatherMatch.Success)
@@ -145,38 +151,38 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                         string father = fatherMatch.Groups["g"].Value;
                         father = GrangerHelpers.ExtractCreatureName(father);
                         creatureBuffer.Father = father;
-                        grangerDebug.Log("father set to: " + father);
+                        debugLogger.Log("father set to: " + father);
                     }
                     verifyList.Parents = true;
-                    grangerDebug.Log("finished parsing parents line");
+                    debugLogger.Log("finished parsing parents line");
                 }
                 //[20:23:18] It is being taken care of by Darkprincevale.
                 if (line.Contains("It is being taken care") && !verifyList.CaredBy)
                 {
-                    grangerDebug.Log("found maybe take care of line");
+                    debugLogger.Log("found maybe take care of line");
                     Match caredby = Regex.Match(line, @"care of by (\w+)");
                     if (caredby.Success)
                     {
                         creatureBuffer.CaredBy = caredby.Groups[1].Value;
-                        grangerDebug.Log("cared set to: " + creatureBuffer.CaredBy);
+                        debugLogger.Log("cared set to: " + creatureBuffer.CaredBy);
                     }
                     verifyList.CaredBy = true;
-                    grangerDebug.Log("finished parsing care line");
+                    debugLogger.Log("finished parsing care line");
                 }
                 //[17:11:42] She will deliver in about 4 days.
                 //[17:11:42] She will deliver in about 1 day.
                 if (line.Contains("She will deliver in") && !verifyList.Pregnant)
                 {
-                    grangerDebug.Log("found maybe pregnant line");
+                    debugLogger.Log("found maybe pregnant line");
                     Match match = Regex.Match(line, @"She will deliver in about (\d+)");
                     if (match.Success)
                     {
                         double length = Double.Parse(match.Groups[1].Value) + 1D;
                         creatureBuffer.PregnantUntil = DateTime.Now + TimeSpan.FromDays(length);
-                        grangerDebug.Log("found creature to be pregnant, estimated delivery: " + creatureBuffer.PregnantUntil);
+                        debugLogger.Log("found creature to be pregnant, estimated delivery: " + creatureBuffer.PregnantUntil);
                     }
                     verifyList.Pregnant = true;
-                    grangerDebug.Log("finished parsing pregnant line");
+                    debugLogger.Log("finished parsing pregnant line");
                 }
                 //[20:58:26] A foal skips around here merrily
                 //[01:59:09] This calf looks happy and free.
@@ -185,7 +191,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     || line.Contains("A small cuddly ball of fluff"))
                     && !verifyList.Foalization)
                 {
-                    grangerDebug.Log("applying foalization to the creature");
+                    debugLogger.Log("applying foalization to the creature");
                     try
                     {
                         creatureBuffer.Age = CreatureAge.Foalize(creatureBuffer.Age);
@@ -199,13 +205,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 //[20:57:27] It has been branded by and belongs to the settlement of Silver Hill Estate.
                 if (line.Contains("It has been branded") && !verifyList.Branding)
                 {
-                    grangerDebug.Log("found maybe branding line");
+                    debugLogger.Log("found maybe branding line");
                     Match match = Regex.Match(line, @"belongs to the settlement of (.+)\.");
                     if (match.Success)
                     {
                         string settlementName = match.Groups[1].Value;
                         creatureBuffer.BrandedBy = settlementName;
-                        grangerDebug.Log("found creature to be branded for: " + creatureBuffer.BrandedBy);
+                        debugLogger.Log("found creature to be branded for: " + creatureBuffer.BrandedBy);
                         verifyList.Branding = true;
                     }
                 }
@@ -215,10 +221,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         bool IsParentIdentifyingLine(string line)
         {
             return 
-                // after Rift update for WO
+                // Proper parsing after Rift update for WO:
                 line.Contains("mother is")
                 || line.Contains("father is")
-                // WU client was not updated together with WO Rift update, old conditions are still needed.
+                // WU server was not updated together with WO Rift update, old conditions are still needed:
                 || line.Contains("Mother is")
                 || line.Contains("Father is");
         }
@@ -229,7 +235,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 @"mother is \w+ (?<g>\w+ \w+ .+?)\.|mother is \w+ (?<g>\w+ .+?)\.",
                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-            // WU client was not updated together with WO Rift update, need old check for WU
+            // WU server was not updated together with WO Rift update, need old check for WU:
             if (!result.Success && wurmAssistantConfig.WurmUnlimitedMode)
             {
                 result = Regex.Match(line,
@@ -245,7 +251,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 @"father is \w+ (?<g>\w+ \w+ .+?)\.|father is \w+ (?<g>\w+ .+?)\.",
                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-            // WU client was not updated together with WO Rift update, need old check for WU
+            // WU server was not updated together with WO Rift update, need old check for WU:
             if (!result.Success && wurmAssistantConfig.WurmUnlimitedMode)
             {
                 result = Regex.Match(line,
@@ -261,11 +267,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             {
                 try
                 {
-                    grangerDebug.Log("finishing processing creature: " + creatureBuffer.Name);
-                    //verify if enough fields are filled to warrant updating
+                    debugLogger.Log("finishing processing creature: " + creatureBuffer.Name);
+
                     if (verifyList.IsValid)
                     {
-                        grangerDebug.Log("Creature data is valid");
+                        debugLogger.Log("Creature data is valid");
 
                         var selectedHerds = GetSelectedHerds();
 
@@ -275,8 +281,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                             herdsFinds = GetHerdsFinds(selectedHerds, creatureBuffer, checkInnerName: true);
                         }
                         var selectedHerdsFinds = herdsFinds;
-                        // if there isn't any creature found in selected herds,
-                        // try all herds if setting is enabled
+
                         bool allHerdSearch = false;
                         if (herdsFinds.Length == 0 &&
                             parentModule.Settings.DoNotBlockDataUpdateUnlessMultiplesInEntireDb)
@@ -291,28 +296,24 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                             }
                         }
 
-                        // first try to update
-                        // update only if found exactly one creature
                         if (!TryUpdateExistingCreature(herdsFinds))
                         {
-                            // no update performed, try to add
                             if (!TryAddNewCreature(selectedHerds, selectedHerdsFinds))
                             {
-                                // no update or add performed, figure what went wrong
                                 AnalyzeWhyNothingHappened(herdsFinds, allHerdSearch, selectedHerds);
                             }
                         }
                     }
                     else
                     {
-                        grangerDebug.Log("creature data was invalid, data: " + GetVerifyListData(verifyList));
+                        debugLogger.Log("creature data was invalid, data: " + GetVerifyListData(verifyList));
                     }
                 }
                 finally
                 {
                     //clear the buffer
                     creatureBuffer = null;
-                    grangerDebug.Log("processor buffer cleared");
+                    debugLogger.Log("processor buffer cleared");
                 }
             }
         }
@@ -327,15 +328,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
                 #region SANITY_CHECKS
 
-                // comment: are these sanity checks really needed?
-
                 string sanityFailReason = null;
 
-                // note: dropped age check, due to foal recognition issues with non-horses
+                // Verifying if creature parents match.
 
-                // if both creatures have a mother name or father name, they cant change
-                // however its possible a mother or father dies and reference is lost (thats how it works in Wurm), 
-                // creature appears then as if it had no father or mother
+                // Wurm trivia:
+                // If a creature has a mother name or a father name, these names cannot change.
+                // However when parent dies, Wurm loses reference and the name is no longer in the log event! 
 
                 // father checks
                 if (String.IsNullOrEmpty(oldCreature.FatherName) &&
@@ -373,18 +372,20 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                         sanityFailReason = "Old data mother name was different than new mother name";
                 }
 
-                //need to compare traits up to lower AH inspect level,
-                //if they mismatch, thats also sanity fail
-                //we should treat null ah inspect value as 0
+                // Verifying if creature traits match.
+
+                // Have to take into account current AH level of the player,
+                // as well as the level this creature has been previously inspected at.
 
                 if (oldCreature.TraitsInspectedAtSkill.HasValue)
                 {
-                    //exclude this check if creature had genesis cast within last 1 hour
-                    grangerDebug.Log(string.Format("Checking creature for Genesis cast (creature name: {0}",
+                    // Skip this check if creature had genesis cast within last 1 hour.
+                    // Genesis clears some negative traits.
+                    debugLogger.Log(string.Format("Checking creature for Genesis cast (creature name: {0}",
                         creatureBuffer.Name));
                     if (!parentModule.Settings.HasGenesisCast(creatureBuffer.Name))
                     {
-                        grangerDebug.Log("No genesis cast found");
+                        debugLogger.Log("No genesis cast found");
                         var lowskill = Math.Min(oldCreature.TraitsInspectedAtSkill.Value, creatureBuffer.InspectSkill);
                         CreatureTrait[] certainTraits = CreatureTrait.GetTraitsUpToSkillLevel(lowskill,
                             oldCreature.EpicCurve ?? false);
@@ -404,9 +405,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     }
                     else
                     {
-                        grangerDebug.Log("Genesis cast found, skipping trait sanity check");
+                        debugLogger.Log("Genesis cast found, skipping trait sanity check");
                         parentModule.Settings.RemoveGenesisCast(creatureBuffer.Name);
-                        grangerDebug.Log(string.Format("Removed cached genesis cast data for {0}",
+                        debugLogger.Log(string.Format("Removed cached genesis cast data for {0}",
                             creatureBuffer.Name));
                     }
                 }
@@ -415,7 +416,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
                 if (sanityFail)
                 {
-                    grangerDebug.Log("sanity check failed for creature update: " + oldCreature + ". Reason: " +
+                    debugLogger.Log("sanity check failed for creature update: " + oldCreature + ". Reason: " +
                                      sanityFailReason);
                     trayPopups.Schedule("There was data mismatch when trying to update creature, reason: " + sanityFailReason,
                         "ERROR AT UPDATE CREATURE",
@@ -438,7 +439,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     }
                     else
                     {
-                        grangerDebug.Log("old creature data had more accurate trait info, skipping");
+                        debugLogger.Log("old creature data had more accurate trait info, skipping");
                     }
                     oldCreature.SetTag("dead", false);
                     oldCreature.SetSecondaryInfoTag(creatureBuffer.SecondaryInfo);
@@ -446,7 +447,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     oldCreature.PregnantUntil = creatureBuffer.PregnantUntil;
                     if (oldCreature.Name != creatureBuffer.Name)
                     {
-                        if (NameUniqueInHerd(creatureBuffer.Name, oldCreature.Herd))
+                        if (NameIsUniqueInHerd(creatureBuffer.Name, oldCreature.Herd))
                         {
                             trayPopups.Schedule(String.Format("Updating name of creature {0} to {1}",
                                 oldCreature.Name,
@@ -463,17 +464,17 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     }
                     oldCreature.SmilexamineLastDate = DateTime.Now;
                     context.SubmitChanges();
-                    grangerDebug.Log("successfully updated creature in db");
+                    debugLogger.Log("successfully updated creature in db");
                     trayPopups.Schedule(String.Format("Updated creature: {0}", oldCreature), "CREATURE UPDATED");
                 }
 
-                grangerDebug.Log("processor buffer cleared");
+                debugLogger.Log("processor buffer cleared");
                 return true;
             }
             return false;
         }
 
-        bool NameUniqueInHerd(string creatureName, string herdName)
+        bool NameIsUniqueInHerd(string creatureName, string herdName)
         {
             return !context.Creatures.Any(x => x.Name == creatureName && x.Herd == herdName);
         }
@@ -483,18 +484,16 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             if (selectedHerds.Length == 1 ||
                 (parentModule.Settings.DoNotBlockDataUpdateUnlessMultiplesInEntireDb && selectedHerds.Length > 0))
             {
-                // can't add a creature if it's already in selected herds
-                // also with entireDB, this will trigger if for some reason 2 or more creatures are already in db (update is skipped)
+                // Creature can be added only if it's identity does not collide with any other creature within a pool.
+                // Pool can be either creatures from selected herds, or everything from the database, depending on user settings.
                 if (selectedHerdsFinds.Length == 0)
                 {
-                    //do a sanity check to verify this creature name is not in current herd already
                     string herd = selectedHerds[0];
                     var existing =
                         context.Creatures.Where(x => creatureBuffer.Name == x.Name && x.Herd == herd).ToArray();
 
                     if (!existing.Any())
                     {
-                        //add creature
                         AddNewCreature(herd, creatureBuffer);
                     }
                     else
@@ -509,10 +508,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                             message += " (creature server name mismatch)";
                         }
                         trayPopups.Schedule(message, "CAN'T ADD CREATURE", 4000);
-                        grangerDebug.Log(message);
+                        debugLogger.Log(message);
                     }
 
-                    grangerDebug.Log("processor buffer cleared");
+                    debugLogger.Log("processor buffer cleared");
                     return true;
                 }
                 else if (!parentModule.Settings.DoNotBlockDataUpdateUnlessMultiplesInEntireDb)
@@ -521,7 +520,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                                      " already exists in active herd";
 
                     trayPopups.Schedule(message, "CAN'T ADD CREATURE", 4000);
-                    grangerDebug.Log(message);
+                    debugLogger.Log(message);
                 }
             }
             return false;
@@ -532,7 +531,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             if (herdsFinds.Length > 1)
             {
                 var partialMessage = allHerdSearch ? "database" : "selected herds";
-                grangerDebug.Log("many creatures named " + creatureBuffer.Name + " found in "
+                debugLogger.Log("many creatures named " + creatureBuffer.Name + " found in "
                                  + partialMessage
                                  +
                                  ", add/update aborted");
@@ -541,33 +540,31 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     + ", narrow herd selection",
                     "CAN'T ADD OR UPDATE CREATURE",
                     6000);
-                //notify user to narrow the herd selection
             }
             else if (!parentModule.Settings.DoNotBlockDataUpdateUnlessMultiplesInEntireDb
                      && (selectedHerds.Length == 0 || selectedHerds.Length > 1))
             {
                 const string message = "exactly one herd has to be active to add new creature";
-                grangerDebug.Log(message);
+                debugLogger.Log(message);
                 trayPopups.Schedule(message, "CAN'T ADD OR UPDATE CREATURE", 4000);
             }
             else if (parentModule.Settings.DoNotBlockDataUpdateUnlessMultiplesInEntireDb
                      && selectedHerds.Length == 0)
             {
                 const string message = "at least one herd must be select to add new creature";
-                grangerDebug.Log(message);
+                debugLogger.Log(message);
                 trayPopups.Schedule(message, "CAN'T ADD OR UPDATE CREATURE", 4000);
             }
             else
             {
-                //shield against any possibly missed situations
                 const string message = "add/update creature failed for unknown reasons";
-                grangerDebug.Log(message);
+                debugLogger.Log(message);
                 logger.Error(message);
                 trayPopups.Schedule(message, "CAN'T ADD OR UPDATE CREATURE", 4000);
             }
         }
 
-        private string GetVerifyListData(ProcessorVerifyList verifyList)
+        private string GetVerifyListData(ValidationList verifyList)
         {
             return string.Format("(name: {0}, Gender: {1}, Parents: {2}, Traits: {3}, CaredBy: {4})",
                 verifyList.Name, verifyList.Gender, verifyList.Parents, verifyList.Traits, verifyList.CaredBy);
@@ -598,14 +595,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                                   && newCreature.Server.ServerGroup.ServerGroupId == ServerGroup.EpicId;
 
             context.InsertCreature(newEntity);
-            grangerDebug.Log("successfully inserted creature to db");
+            debugLogger.Log("successfully inserted creature to db");
             trayPopups.Schedule(String.Format("Added new creature to herd {0}: {1}", selectedHerd, newEntity), "CREATURE ADDED");
         }
 
         private string[] GetAllHerds()
         {
             return context.Herds.ToArray()
-                .Select(x => x.HerdID.ToString()).ToArray();
+                .Select(x => x.HerdId.ToString()).ToArray();
         }
 
         private CreatureEntity[] GetHerdsFinds(IEnumerable<string> viableHerds, CreatureBuffer creatureBuffer, bool checkInnerName)
@@ -616,14 +613,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 var bufferInnerNameInfo = Creature.GetInnerNameInfo(creatureBuffer.Name);
                 if (!bufferInnerNameInfo.HasInnerName)
                 {
-                    // cannot match by inner name, this creature doesn't have one
                     return new CreatureEntity[0];
                 }
                 query = context.Creatures
                                .Where(x =>
                                {
                                    var iteratedInnerNameInfo = Creature.GetInnerNameInfo(x.Name);
-                                   // consider only those creatures, which have inner names
                                    if (!iteratedInnerNameInfo.HasInnerName)
                                    {
                                        return false;
@@ -655,23 +650,22 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         {
             return context.Herds.ToArray()
                 .Where(x => x.Selected)
-                .Select(x => x.HerdID.ToString()).ToArray();
+                .Select(x => x.HerdId.ToString()).ToArray();
         }
 
         void AttemptToStartProcessing(string line)
         {
-            grangerDebug.Log("attempting to start processing creature due to line: " + line);
-            //clean up if there is still non-timed out process
+            debugLogger.Log("attempting to start processing creature due to line: " + line);
+            // Apply previous processing, if still active.
             VerifyAndApplyProcessing();
 
-            //it is unknown if smiled at creature or something else
-            //attempt to extract the name of game object
             try
             {
-                grangerDebug.Log("extracting object name");
+                debugLogger.Log("extracting object name");
 
                 // [20:48:42] You smile at the Adolescent diseased Mountainheart.
-                // Preserving condition without expected determiner from before WO Rift update, because WU client was not updated.
+                // This regex preserves condition from before WO Rift update, where determiner was not present.
+                // This is kept, because WU servers cannot be guaranteed to have been updated by their administrators.
                 Match match = Regex.Match(line,
                     @"You smile at (a|an|the) (?<g>.+)\.|You smile at (?<g>.+)\.",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -683,16 +677,16 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
                 if (GrangerHelpers.HasAgeInName(objectNameWithPrefixes, ignoreCase:true))
                 {
-                    grangerDebug.Log("object assumed to be a creature");
+                    debugLogger.Log("object assumed to be a creature");
                     var server = playerMan.CurrentServer;
                     var skill = playerMan.CurrentServerAhSkill;
                     if (server != null && skill != null)
                     {
-                        grangerDebug.Log("building new creature object and moving to processor");
+                        debugLogger.Log("building new creature object and moving to processor");
 
                         isProcessing = true;
                         startedProcessingOn = DateTime.Now;
-                        verifyList = new ProcessorVerifyList();
+                        verifyList = new ValidationList();
                         creatureBuffer = new CreatureBuffer
                         {
                             Name = GrangerHelpers.ExtractCreatureName(objectNameWithPrefixes),
@@ -701,32 +695,31 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                             InspectSkill = skill.Value,
                         };
 
-                        var fat = GrangerHelpers.LineContainsFat(objectNameWithPrefixes);
+                        var fat = GrangerHelpers.TryParseCreatureNameIfLineContainsFat(objectNameWithPrefixes);
                         if (fat != null) creatureBuffer.SecondaryInfo = CreatureEntity.SecondaryInfoTag.Fat;
 
-                        var starving = GrangerHelpers.LineContainsStarving(objectNameWithPrefixes);
+                        var starving = GrangerHelpers.TryParseCreatureNameIfLineContainsStarving(objectNameWithPrefixes);
                         if (starving != null) creatureBuffer.SecondaryInfo = CreatureEntity.SecondaryInfoTag.Starving;
 
-                        var diseased = GrangerHelpers.LineContainsDiseased(objectNameWithPrefixes);
+                        var diseased = GrangerHelpers.TryParseCreatureNameIfLineContainsDiseased(objectNameWithPrefixes);
                         if (diseased != null) creatureBuffer.SecondaryInfo = CreatureEntity.SecondaryInfoTag.Diseased;
 
                         verifyList.Name = true;
-                        grangerDebug.Log("finished building");
+                        debugLogger.Log("finished building");
                     }
                     else
                     {
                         trayPopups.Schedule(
                             "Server or AH skill level unknown for " + playerMan.PlayerName +
                             ". If WA was just started, give it a few seconds.", "CAN'T PROCESS CREATURE", 5000);
-                        grangerDebug.Log(string.Format("processing creature cancelled, AH skill or server group unknown for player {0} (skill: {1} ; server: {2}", playerMan.PlayerName, skill, server));
+                        debugLogger.Log(string.Format("processing creature cancelled, AH skill or server group unknown for player {0} (skill: {1} ; server: {2}", playerMan.PlayerName, skill, server));
                     }
                 }
-                else grangerDebug.Log(objectNameWithPrefixes + " cannot be added. Only named creatures can be added to Granger.");
+                else debugLogger.Log(objectNameWithPrefixes + " was not recognized as a named creature.");
             }
             catch (Exception exception)
             {
-                //this shouldn't happen, there is always something player is smiling at, unless error happened elsewhere
-                grangerDebug.Log("! Granger: error while BeginProcessing, event: " + line, true, exception);
+                debugLogger.Log("! Granger: error while BeginProcessing, event: " + line, true, exception);
             }
         }
 
@@ -736,7 +729,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             {
                 if (DateTime.Now > startedProcessingOn + ProcessorTimeout)
                 {
-                    grangerDebug.Log("processing timed out, attempting to verify and apply last inspected creature");
+                    debugLogger.Log("processing timed out, attempting to verify and apply last inspected creature");
                     isProcessing = false;
                     VerifyAndApplyProcessing();
                 }

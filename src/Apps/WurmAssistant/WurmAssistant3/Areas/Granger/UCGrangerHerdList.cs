@@ -56,7 +56,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             objectListView1.BooleanCheckStatePutter = new BrightIdeasSoftware.BooleanCheckStatePutterDelegate((x, y) =>
             {
                 HerdEntity entity = (HerdEntity)x;
-                this.context.UpdateHerdSelectedState(entity.HerdID, y);
+                this.context.UpdateHerdSelectedState(entity.HerdId, y);
                 return entity.Selected;
             });
         }
@@ -82,7 +82,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             }
             else
             {
-                FormHerdName ui = new FormHerdName(context, mainForm, logger, selHerd.HerdID);
+                FormHerdName ui = new FormHerdName(context, mainForm, logger, selHerd.HerdId);
                 ui.ShowDialogCenteredOnForm(mainForm);
             }
         }
@@ -96,7 +96,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             }
             else
             {
-                FormHerdMerge ui = new FormHerdMerge(context, mainForm, selHerd.HerdID, logger);
+                FormHerdMerge ui = new FormHerdMerge(context, mainForm, selHerd.HerdId, logger);
                 ui.ShowDialogCenteredOnForm(mainForm);
             }
         }
@@ -110,7 +110,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             }
             else
             {
-                CreatureEntity[] creatures = context.Creatures.Where(x => x.Herd == selHerd.HerdID).ToArray();
+                CreatureEntity[] creatures = context.Creatures.Where(x => x.Herd == selHerd.HerdId).ToArray();
                 if (MessageBox.Show(
                     $"Herd {selHerd}\r\n will be deleted. " +
                     $"All creatures in this herd will also be deleted:\r\n" +
@@ -119,7 +119,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     MessageBoxButtons.OKCancel,
                     MessageBoxIcon.Exclamation) == DialogResult.OK)
                 {
-                    context.DeleteHerd(selHerd.HerdID);
+                    context.DeleteHerd(selHerd.HerdId);
                 }
             }
         }
@@ -133,13 +133,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             }
             else
             {
-                FormCreatureViewEdit ui = new FormCreatureViewEdit(mainForm,
-                    null,
+                FormCreatureViewEdit ui = new FormCreatureViewEdit(
+                    mainForm,
                     context,
-                    CreatureViewEditOpType.New,
-                    selHerd.HerdID,
                     logger,
-                    wurmApi);
+                    wurmApi,
+                    null,
+                    CreatureViewEditOpType.New,
+                    selHerd.HerdId);
                 ui.ShowDialog();
             }
         }

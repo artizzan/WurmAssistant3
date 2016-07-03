@@ -41,8 +41,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         }
 
         public void Init(
-            [NotNull] FormGrangerMain mainForm, 
-            [NotNull] GrangerContext context, 
+            [NotNull] FormGrangerMain mainForm,
+            [NotNull] GrangerContext context,
             [NotNull] ILogger logger,
             [NotNull] IWurmApi wurmApi)
         {
@@ -370,7 +370,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             {
                 selectedSingleCreature = value;
                 //checking for null to prevent designer issue, which tries to set it to null initially
-                if (mainForm != null) 
+                if (mainForm != null)
                 {
                     mainForm.TriggerSelectedSingleCreatureChanged();
                     UpdateDataForView();
@@ -428,15 +428,15 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         void UpdateCurrentCreaturesData()
         {
-            activeHerds = context.Herds.AsEnumerable().Where(x => x.Selected == true).OrderBy(x => x.HerdID).ToList();
+            activeHerds = context.Herds.AsEnumerable().Where(x => x.Selected == true).OrderBy(x => x.HerdId).ToList();
 
-            textBoxHerds.Text = string.Join(", ", activeHerds.Select(x => x.HerdID));
+            textBoxHerds.Text = string.Join(", ", activeHerds.Select(x => x.HerdId));
 
             // take creatures only from selected herds
             currentCreatures = context.Creatures
                 .AsEnumerable()
                 .Where(x => activeHerds
-                    .Select(y => y.HerdID)
+                    .Select(y => y.HerdId)
                     .Contains(x.Herd))
                 .Select(x => new Creature(mainForm, x, context))
                 .ToList();
@@ -472,7 +472,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             }
 
             objectListView1.SetObjects(currentCreatures, true);
-            
+
             listViewIsBeingUpdated = false;
         }
 
@@ -489,13 +489,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                                .ToArray()
                                .ForEach(creature =>
                                {
-                                   FormCreatureViewEdit ui = new FormCreatureViewEdit(mainForm,
-                                       creature,
+                                   FormCreatureViewEdit ui = new FormCreatureViewEdit(
+                                       mainForm,
                                        context,
-                                       CreatureViewEditOpType.Edit,
-                                       creature.HerdAspect,
                                        logger,
-                                       wurmApi);
+                                       wurmApi,
+                                       creature,
+                                       CreatureViewEditOpType.Edit,
+                                       creature.HerdAspect);
                                    ui.ShowDialogCenteredOnForm(mainForm);
                                });
             }
@@ -571,13 +572,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                                .ToArray()
                                .ForEach(creature =>
                                {
-                                   FormCreatureViewEdit ui = new FormCreatureViewEdit(mainForm,
-                                       creature,
-                                       context,
-                                       CreatureViewEditOpType.View,
-                                       creature.HerdAspect,
+                                   FormCreatureViewEdit ui = new FormCreatureViewEdit(
+                                       mainForm,
+                                       context, 
                                        logger,
-                                       wurmApi);
+                                       wurmApi,
+                                       creature,
+                                       CreatureViewEditOpType.View,
+                                       creature.HerdAspect);
                                    ui.ShowDialogCenteredOnForm(mainForm);
                                });
             }

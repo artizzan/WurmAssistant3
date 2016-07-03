@@ -16,12 +16,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         static CreatureAge()
         {
-            WurmStringToAgeMap.Add(GrangerHelpers.YOUNG.ToUpperInvariant(), new CreatureAge(CreatureAgeId.Young));
-            WurmStringToAgeMap.Add(GrangerHelpers.ADOLESCENT.ToUpperInvariant(), new CreatureAge(CreatureAgeId.Adolescent));
-            WurmStringToAgeMap.Add(GrangerHelpers.MATURE.ToUpperInvariant(), new CreatureAge(CreatureAgeId.Mature));
-            WurmStringToAgeMap.Add(GrangerHelpers.AGED.ToUpperInvariant(), new CreatureAge(CreatureAgeId.Aged));
-            WurmStringToAgeMap.Add(GrangerHelpers.OLD.ToUpperInvariant(), new CreatureAge(CreatureAgeId.Old));
-            WurmStringToAgeMap.Add(GrangerHelpers.VENERABLE.ToUpperInvariant(), new CreatureAge(CreatureAgeId.Venerable));
+            WurmStringToAgeMap.Add(GrangerHelpers.Ages.Young.ToUpperInvariant(), new CreatureAge(CreatureAgeId.Young));
+            WurmStringToAgeMap.Add(GrangerHelpers.Ages.Adolescent.ToUpperInvariant(), new CreatureAge(CreatureAgeId.Adolescent));
+            WurmStringToAgeMap.Add(GrangerHelpers.Ages.Mature.ToUpperInvariant(), new CreatureAge(CreatureAgeId.Mature));
+            WurmStringToAgeMap.Add(GrangerHelpers.Ages.Aged.ToUpperInvariant(), new CreatureAge(CreatureAgeId.Aged));
+            WurmStringToAgeMap.Add(GrangerHelpers.Ages.Old.ToUpperInvariant(), new CreatureAge(CreatureAgeId.Old));
+            WurmStringToAgeMap.Add(GrangerHelpers.Ages.Venerable.ToUpperInvariant(), new CreatureAge(CreatureAgeId.Venerable));
         }
 
         public CreatureAge(CreatureAgeId creatureAgeId)

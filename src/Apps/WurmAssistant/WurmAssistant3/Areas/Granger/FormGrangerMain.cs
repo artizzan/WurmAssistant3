@@ -121,7 +121,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             _rebuildingValuePresets = true;
             comboBoxValuePreset.Items.Clear();
-            var valuemaps = context.TraitValues.AsEnumerable().Select(x => x.ValueMapID).Distinct().ToArray();
+            var valuemaps = context.TraitValues.AsEnumerable().Select(x => x.ValueMapId).Distinct().ToArray();
             comboBoxValuePreset.Items.Add(TraitValuator.DefaultId);
             comboBoxValuePreset.Items.AddRange(valuemaps.Cast<object>().ToArray());
             comboBoxValuePreset.Text = valuemaps.Contains(settings.ValuePresetId)
@@ -165,7 +165,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             comboBoxAdvisor.Items.AddRange(advisors.Cast<object>().ToArray());
             comboBoxAdvisor.Text = advisors.Contains(settings.AdvisorId)
                 ? settings.AdvisorId
-                : BreedingAdvisor.DEFAULT_id;
+                : BreedingAdvisor.DefaultId;
             _rebuildingAdvisors = false;
         }
 
@@ -174,7 +174,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             try
             {
                 CurrentAdvisor = new BreedingAdvisor(this,
-                    comboBoxAdvisor.Text,
+                    comboBoxAdvisor.Text ?? string.Empty,
                     context,
                     logger,
                     defaultBreedingEvaluatorOptions);
@@ -182,14 +182,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             catch (Exception exception)
             {
                 CurrentAdvisor = new BreedingAdvisor(this,
-                    BreedingAdvisor.DEFAULT_id,
+                    BreedingAdvisor.DefaultId,
                     context,
                     logger,
                     defaultBreedingEvaluatorOptions);
                 logger.Error(exception,
                     "BreedingAdvisor creation failed for advisorid: " + comboBoxAdvisor.Text + "; reverting to defaults");
             }
-            settings.AdvisorId = CurrentAdvisor.AdvisorID;
+            settings.AdvisorId = CurrentAdvisor.AdvisorId;
             GrangerAdvisorChanged?.Invoke(this, new EventArgs());
         }
 

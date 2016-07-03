@@ -12,7 +12,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Disabled
 
         public DisabledBreedingEvaluator([NotNull] ILogger logger)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
             this.logger = logger;
         }
 
@@ -22,16 +22,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Disabled
             return false;
         }
 
-        public override object GetOptions()
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// null if evaluation did not return any valid results
-        /// </summary>
-        /// <param name="valuator"></param>
-        /// <returns></returns>
         public override BreedingEvalResults? Evaluate(Creature creature1, Creature creature2, TraitValuator valuator)
         {
             return null;

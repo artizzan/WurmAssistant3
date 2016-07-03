@@ -50,7 +50,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
         void RebuildValues()
         {
             valueMap.Clear();
-            TraitValueEntity[] traitvalues = context.TraitValues.Where(x => x.ValueMapID == ValueMapId).ToArray();
+            TraitValueEntity[] traitvalues = context.TraitValues.Where(x => x.ValueMapId == ValueMapId).ToArray();
             if (traitvalues.Length > 0)
             {
                 foreach (var traitvalue in traitvalues)

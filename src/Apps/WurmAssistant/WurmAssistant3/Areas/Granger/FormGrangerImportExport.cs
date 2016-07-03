@@ -73,7 +73,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         private void textBoxImportedHerd_TextChanged(object sender, EventArgs e)
         {
-            labelImportError.Text = context.Herds.Any(x => x.HerdID == textBoxImportedHerd.Text.Trim())
+            labelImportError.Text = context.Herds.Any(x => x.HerdId == textBoxImportedHerd.Text.Trim())
                 ? "This herd already exists"
                 : "";
         }

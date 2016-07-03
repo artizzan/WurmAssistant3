@@ -28,7 +28,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
             listBox1.Items.Clear();
 
             var allPresets = new List<string> {TraitValuator.DefaultId};
-            allPresets.AddRange(context.TraitValues.AsEnumerable().Select(x => x.ValueMapID).Distinct().OrderBy(x => x));
+            allPresets.AddRange(context.TraitValues.AsEnumerable().Select(x => x.ValueMapId).Distinct().OrderBy(x => x));
 
             listBox1.Items.AddRange(allPresets.Cast<object>().ToArray());
         }

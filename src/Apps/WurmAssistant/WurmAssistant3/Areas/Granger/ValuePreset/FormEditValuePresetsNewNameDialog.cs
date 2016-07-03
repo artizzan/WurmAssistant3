@@ -21,7 +21,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
 
             InitializeComponent();
 
-            var uniqueValMapIDs = context.TraitValues.AsEnumerable().Select(x => x.ValueMapID).Distinct();
+            var uniqueValMapIDs = context.TraitValues.AsEnumerable().Select(x => x.ValueMapId).Distinct();
             foreach (var mapId in uniqueValMapIDs)
             {
                 takenValueMapIDs.Add(mapId);

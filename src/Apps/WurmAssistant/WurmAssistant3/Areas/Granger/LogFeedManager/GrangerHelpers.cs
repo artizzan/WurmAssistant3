@@ -8,40 +8,40 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 {
     public static class GrangerHelpers
     {
-        public static TimeSpan Breeding_NotInMood_Duration = TimeSpan.FromMinutes(45);
-
-        public const string
-            YOUNG = "Young",
-            ADOLESCENT = "Adolescent",
-            MATURE = "Mature",
-            AGED = "Aged",
-            OLD = "Old",
-            VENERABLE = "Venerable";
-
-        public const string
-            STARVING = "starving",
-            DISEASED = "diseased",
-            FAT = "fat";
-
-        public static string[] CreatureAges = 
+        public static class Ages
         {
-            YOUNG, ADOLESCENT, MATURE, AGED, OLD, VENERABLE
+            public const string
+                Young = "Young",
+                Adolescent = "Adolescent",
+                Mature = "Mature",
+                Aged = "Aged",
+                Old = "Old",
+                Venerable = "Venerable";
+        }
+
+        public static class Tags
+        {
+            public const string
+                Starving = "starving",
+                Diseased = "diseased",
+                Fat = "fat";
+        }
+
+        public static readonly TimeSpan BreedingNotInMoodDuration = TimeSpan.FromMinutes(45);
+
+        static readonly IReadOnlyCollection<string> CreatureAges = new List<string>()
+        {
+            Ages.Young, Ages.Adolescent, Ages.Mature, Ages.Aged, Ages.Old, Ages.Venerable
         };
 
-        public static string[] CreatureAgesUpcase;
+        public static readonly IReadOnlyCollection<string> CreatureAgesUpcase;
 
-        static string[] WildCreatureNames = 
+        public static readonly IReadOnlyCollection<string> OtherNamePrefixes = new List<string>()
         {
-            //todo: this is no longer useful, remove functionality
-            "Horse", "Hell horse", "deer", "cow", "bull", "bison", 
+            Tags.Fat, Tags.Starving, Tags.Diseased
         };
 
-        public static string[] OtherNamePrefixes =
-        {
-            FAT, STARVING, DISEASED
-        };
-
-        public static string[] AllNamePrefixes;
+        public static readonly IReadOnlyCollection<string> AllNamePrefixes;
 
         static GrangerHelpers()
         {
@@ -53,6 +53,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
             AllNamePrefixes = allnameprefixesBuilder.ToArray<string>();
         }
+
+        public static TimeSpan LongestPregnancyPossible { get; } = TimeSpan.FromHours(273);
 
         public static string RemoveAllPrefixes(string creatureName)
         {
@@ -67,12 +69,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             return creatureName;
         }
 
-        /// <summary>
-        /// capitalizes lower-case creature name
-        /// </summary>
-        /// <param name="lowercasename"></param>
-        /// <returns></returns>
-        internal static string FixCase(string lowercasename)
+        internal static string CapitalizeCreatureName(string lowercasename)
         {
             char firstletter = lowercasename[0];
             firstletter = Char.ToUpperInvariant(firstletter);
@@ -80,27 +77,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             return fixedName;
         }
 
-        static TimeSpan _LongestPregnancyPossible = TimeSpan.FromHours(273);
-        public static TimeSpan LongestPregnancyPossible { get { return _LongestPregnancyPossible; } }
-
         public static CreatureAge ExtractCreatureAge(string prefixedObjectName)
         {
             return CreatureAge.CreateAgeFromRawCreatureNameStartsWith(prefixedObjectName);
-        }
-
-        /// <summary>
-        /// Checks if provided string is EQUAL to blacklisted (wild) creature name.
-        /// </summary>
-        /// <param name="fixedCreatureName"></param>
-        /// <returns></returns>
-        public static bool IsBlacklistedCreatureName_EqualCheck(string fixedCreatureName)
-        {
-            fixedCreatureName = fixedCreatureName.ToUpperInvariant();
-            foreach (string name in WildCreatureNames)
-            {
-                if (fixedCreatureName == name.ToUpperInvariant()) return true;
-            }
-            return false;
         }
 
         public static bool HasAgeInName(string prefixedObjectName, bool ignoreCase = false)
@@ -124,51 +103,33 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             return RemoveAllPrefixes(prefixedObjectName);
         }
 
-        /// <summary>
-        /// Returns possible creature name if line contains DISEASED. Null if no matches.
-        /// </summary>
-        /// <param name="inputLine"></param>
-        /// <returns></returns>
-        public static string LineContainsDiseased(string inputLine)
+        public static string TryParseCreatureNameIfLineContainsDiseased(string inputLine)
         {
-            // try to match for [age] diseased [creaturename]
-            return LineContains(inputLine, DISEASED);
+            return TryParseCreatureNameIfLineContains(inputLine, Tags.Diseased);
         }
 
-        /// <summary>
-        /// Returns possible creature name if line contains FAT. Null if no matches.
-        /// </summary>
-        /// <param name="inputLine"></param>
-        /// <returns></returns>
-        public static string LineContainsFat(string inputLine)
+        public static string TryParseCreatureNameIfLineContainsFat(string inputLine)
         {
-            // try to match for [age] diseased [creaturename]
-            return LineContains(inputLine, FAT);
+            return TryParseCreatureNameIfLineContains(inputLine, Tags.Fat);
         }
 
-        /// <summary>
-        /// Returns possible creature name if line contains STARVING. Null if no matches.
-        /// </summary>
-        /// <param name="inputLine"></param>
-        /// <returns></returns>
-        public static string LineContainsStarving(string inputLine)
+        public static string TryParseCreatureNameIfLineContainsStarving(string inputLine)
         {
-            // try to match for [age] diseased [creaturename]
-            return LineContains(inputLine, STARVING);
+            return TryParseCreatureNameIfLineContains(inputLine, Tags.Starving);
         }
 
-        static string LineContains(string input, string value)
+        static string TryParseCreatureNameIfLineContains(string line, string value)
         {
-            Match match = Regex.Match(input, value + @" (\w+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            Match match = Regex.Match(line, value + @" (\w+)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
             if (match.Success)
             {
                 string possibleCreatureName = match.Groups[1].Value;
-                return FixCase(possibleCreatureName);
+                return CapitalizeCreatureName(possibleCreatureName);
             }
             else return null;
         }
 
-        public static CreatureTrait[] GetTraitsFromLine(string line)
+        public static CreatureTrait[] ParseTraitsFromLine(string line)
         {
             List<CreatureTrait> result = new List<CreatureTrait>();
             foreach (var trait in CreatureTrait.GetAllPossibleTraits())

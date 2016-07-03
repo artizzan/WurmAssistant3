@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default;
 using AldursLab.WurmAssistant3.Areas.Granger.Advisor.Disabled;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
@@ -9,70 +10,64 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor
 {
     public class BreedingAdvisor
     {
-        public const string DISABLED_id = "DISABLED";
-        public const string DEFAULT_id = "default";
-        public static string[] DefaultAdvisorIDs = new string[] { DISABLED_id, DEFAULT_id };
+        public const string DisabledId = "DISABLED";
+        public const string DefaultId = "default";
+        public static readonly IReadOnlyCollection<string> DefaultAdvisorIDs = new string[] { DisabledId, DefaultId };
+
+        readonly GrangerContext context;
+        readonly ILogger logger;
+        readonly FormGrangerMain mainForm;
+        readonly BreedingEvaluator breedEvalutator;
 
         public bool IsDisabled { get; private set; }
-        public string AdvisorID { get; private set; }
-        private GrangerContext Context;
-        readonly ILogger logger;
-        private FormGrangerMain MainForm;
+        public string AdvisorId { get; private set; }
 
-        private BreedingEvaluator BreedEvalutator;
-
-        public BreedingAdvisor(FormGrangerMain mainForm, string advisorID, GrangerContext Context,
-            [NotNull] ILogger logger, [NotNull] DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions)
+        public BreedingAdvisor(
+            [NotNull] FormGrangerMain mainForm,
+            [NotNull] string advisorId,
+            [NotNull] GrangerContext context,
+            [NotNull] ILogger logger, 
+            [NotNull] DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (defaultBreedingEvaluatorOptions == null)
-                throw new ArgumentNullException("defaultBreedingEvaluatorOptions");
-            this.MainForm = mainForm;
-            this.AdvisorID = advisorID;
-            this.Context = Context;
+            if (mainForm == null) throw new ArgumentNullException(nameof(mainForm));
+            if (advisorId == null) throw new ArgumentNullException(nameof(advisorId));
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (defaultBreedingEvaluatorOptions == null) throw new ArgumentNullException(nameof(defaultBreedingEvaluatorOptions));
+            this.mainForm = mainForm;
+            this.AdvisorId = advisorId;
+            this.context = context;
             this.logger = logger;
 
             IsDisabled = false;
-            if (advisorID == DISABLED_id)
+            if (advisorId == DisabledId)
             {
-                BreedEvalutator = new DisabledBreedingEvaluator(logger);
+                breedEvalutator = new DisabledBreedingEvaluator(logger);
                 IsDisabled = true;
             }
 
-            if (advisorID == DEFAULT_id)
+            if (advisorId == DefaultId)
             {
-                BreedEvalutator = new DefaultBreedingEvaluator(logger, defaultBreedingEvaluatorOptions);
+                breedEvalutator = new DefaultBreedingEvaluator(logger, defaultBreedingEvaluatorOptions);
             }
         }
 
         internal BreedingEvalResults? GetBreedingValue(Creature creature)
         {
             if (IsDisabled) return null;
-            if (MainForm.SelectedSingleCreature != null) //this is cached value
+            if (mainForm.SelectedSingleCreature != null)
             {
-                // this is the currently user-selected creature, while parameter creatures are iterated by display process
-                Creature evaluatedCreature = MainForm.SelectedSingleCreature;
-                return BreedEvalutator.Evaluate(evaluatedCreature, creature, MainForm.CurrentValuator);
+                Creature evaluatedCreature = mainForm.SelectedSingleCreature;
+                return breedEvalutator.Evaluate(evaluatedCreature, creature, mainForm.CurrentValuator);
             }
             else return null;
         }
 
-        internal System.Drawing.Color? GetColorForThisValue(int? compareValue)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Options persistence is handled automatically,
-        /// advisor rebuild is not needed
-        /// </summary>
-        /// <param name="formGrangerMain"></param>
-        /// <returns></returns>
         internal bool ShowOptions(FormGrangerMain formGrangerMain)
         {
-            if (BreedEvalutator != null)
+            if (breedEvalutator != null)
             {
-                if (BreedEvalutator.EditOptions(formGrangerMain))
+                if (breedEvalutator.EditOptions(formGrangerMain))
                 {
                     return true;
                 }
@@ -87,11 +82,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor
 
         internal System.Drawing.Color? GetHintColor(Creature creature, double minBreedValue, double maxBreedValue)
         {
-            if (BreedEvalutator == null) return null;
-            else
-            {
-                return BreedEvalutator.GetHintColor(creature, minBreedValue, maxBreedValue);
-            }
+            return breedEvalutator?.GetHintColor(creature, minBreedValue, maxBreedValue);
         }
     }
 }

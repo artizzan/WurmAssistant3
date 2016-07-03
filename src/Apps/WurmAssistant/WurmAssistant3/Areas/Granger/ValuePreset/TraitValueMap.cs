@@ -25,7 +25,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
             else
             {
                 ReadOnly = false;
-                var entities = this.context.TraitValues.Where(x => x.ValueMapID == traitValueMapId);
+                var entities = this.context.TraitValues.Where(x => x.ValueMapId == traitValueMapId);
                 foreach (var entity in entities)
                 {
                     valueMap[entity.Trait.CreatureTraitId] = entity.Value;

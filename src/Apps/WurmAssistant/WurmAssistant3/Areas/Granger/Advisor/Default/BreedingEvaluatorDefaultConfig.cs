@@ -12,59 +12,62 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
 {
     public partial class BreedingEvaluatorDefaultConfig : ExtendedForm
     {
-        private DefaultBreedingEvaluatorOptions OptionsRef;
+        private readonly DefaultBreedingEvaluatorOptions options;
         readonly ILogger logger;
 
-        const string SKIP_PREGNANT_CREATURES_TOOLTIP = "Pregnancy is hard to track accurately, the error can be up to a day, Assistant always assumes longest time. Creature needs to be smilexamined after breeding, else Assistant will asume longest possible pregnancy.";
-        const string SKIP_PREGNANT_LAST_24H_TOOLTIP = "This adds 24h to last creature pregnancy";
-        const string BAD_TRAIT_WEIGHT_TOOLTIP = "Bad trait value will be multiplied by this weight";
-        const string DISCARD_WITH_ANY_BAD_TRAITS_TOOLTIP = "Skips a creature that has one or more bad traits. This does not include potential bad traits. The selected creature is not discarded, you can still click one with bad traits and get breeding suggestions against any non-bad traited creatures.";
-        const string INCLUDE_POTENTIAL_VALUE_TOOLTIP = "This will asume that creature has ALL traits that were not visible upon last inspection (based on inspector animal husbandry skill at that time). It is far from very useful and it is suggested to have skilled player inspect creature for you and then update it manually.";
-        const string POTENTIAL_GOOD_WEIGHT_TOOLTIP = "Each potential good trait will be multiplied by this weight";
-        const string POTENTIAL_BAD_WEIGHT_TOOLTIP = "Each potential bad trait will be multiplied by this weight";
-        const string PREFER_UNIQUE_TRAITS_TOOLTOP = "This will adjust good trait value, if it's present only on one creature. This option is useful for improving your chances to get a creature with more good traits, at expense of getting overall worse creatures";
-        const string UNIQ_TRAIT_WEIGHT_TOOLTIP = "Unique good trait value will be multiplied by this value";
-        const string INBREED_WEIGHT_TOOLTIP = "Fictional bad trait will be multiplied by this value. Check assistant wiki for a current list of which traits are considered for inbreeding";
-        const string SKIP_PAIRED_CREATURES_TOOLTIP = "If you have created any creature pairs, they will be completely excluded from breeding results";
-        const string AGE_KEEP_COMPARING_OTHER_TOOLTIP = "Normally age excluded creatures will not be compared at all. This will let you still see comparisons for the selected underage creature.";
+        const string SkipPregnantCreaturesTooltip = "Pregnancy is hard to track accurately, the error can be up to a day, Assistant always assumes longest time. Creature needs to be smilexamined after breeding, else Assistant will asume longest possible pregnancy.";
+        const string SkipPregnantLast24HTooltip = "This adds 24h to last creature pregnancy";
+        const string BadTraitWeightTooltip = "Bad trait value will be multiplied by this weight";
+        const string DiscardWithAnyBadTraitsTooltip = "Skips a creature that has one or more bad traits. This does not include potential bad traits. The selected creature is not discarded, you can still click one with bad traits and get breeding suggestions against any non-bad traited creatures.";
+        const string IncludePotentialValueTooltip = "This will asume that creature has ALL traits that were not visible upon last inspection (based on inspector animal husbandry skill at that time). It is far from very useful and it is suggested to have skilled player inspect creature for you and then update it manually.";
+        const string PotentialGoodWeightTooltip = "Each potential good trait will be multiplied by this weight";
+        const string PotentialBadWeightTooltip = "Each potential bad trait will be multiplied by this weight";
+        const string PreferUniqueTraitsTooltop = "This will adjust good trait value, if it's present only on one creature. This option is useful for improving your chances to get a creature with more good traits, at expense of getting overall worse creatures";
+        const string UniqTraitWeightTooltip = "Unique good trait value will be multiplied by this value";
+        const string InbreedWeightTooltip = "Fictional bad trait will be multiplied by this value. Check assistant wiki for a current list of which traits are considered for inbreeding";
+        const string SkipPairedCreaturesTooltip = "If you have created any creature pairs, they will be completely excluded from breeding results";
+        const string AgeKeepComparingOtherTooltip = "Normally age excluded creatures will not be compared at all. This will let you still see comparisons for the selected underage creature.";
 
-        public BreedingEvaluatorDefaultConfig(DefaultBreedingEvaluatorOptions options, [NotNull] ILogger logger)
+        public BreedingEvaluatorDefaultConfig(
+            [NotNull] DefaultBreedingEvaluatorOptions options, 
+            [NotNull] ILogger logger)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
-            OptionsRef = options;
+            if (options == null) throw new ArgumentNullException(nameof(options));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            this.options = options;
             this.logger = logger;
             InitializeComponent();
 
-            checkBoxSkipNotInMood.Checked = OptionsRef.IgnoreNotInMood;
-            checkBoxSkipPregnant.Checked = OptionsRef.IgnorePregnant;
-            checkBoxSkipGaveBirthInLast24h.Checked = OptionsRef.IgnoreRecentlyPregnant;
-            checkBoxSkipCreaturesInOtherHerds.Checked = OptionsRef.IgnoreOtherHerds;
-            checkBoxSkipPaired.Checked = OptionsRef.IgnorePairedCreatures;
+            checkBoxSkipNotInMood.Checked = this.options.IgnoreNotInMood;
+            checkBoxSkipPregnant.Checked = this.options.IgnorePregnant;
+            checkBoxSkipGaveBirthInLast24h.Checked = this.options.IgnoreRecentlyPregnant;
+            checkBoxSkipCreaturesInOtherHerds.Checked = this.options.IgnoreOtherHerds;
+            checkBoxSkipPaired.Checked = this.options.IgnorePairedCreatures;
 
-            checkBoxIgnoreSold.Checked = OptionsRef.IgnoreSold;
-            checkBoxIgnoreDead.Checked = OptionsRef.IgnoreDead;
+            checkBoxIgnoreSold.Checked = this.options.IgnoreSold;
+            checkBoxIgnoreDead.Checked = this.options.IgnoreDead;
 
-            checkBoxExcludeFoals.Checked = OptionsRef.IgnoreFoals;
-            checkBoxExcludeYoung.Checked = OptionsRef.IgnoreYoung;
-            checkBoxExcludeAdolescent.Checked = OptionsRef.IgnoreAdolescent;
+            checkBoxExcludeFoals.Checked = this.options.IgnoreFoals;
+            checkBoxExcludeYoung.Checked = this.options.IgnoreYoung;
+            checkBoxExcludeAdolescent.Checked = this.options.IgnoreAdolescent;
 
-            checkBoxKeepComparingSelected.Checked = OptionsRef.AgeIgnoreOnlyOtherCreatures;
+            checkBoxKeepComparingSelected.Checked = this.options.AgeIgnoreOnlyOtherCreatures;
 
-            numericUpDownBadTraitWeight.Value = ((decimal)OptionsRef.BadTraitWeight).ConstrainToRange(0, 100);
-            checkBoxDiscardWithBadTraits.Checked = OptionsRef.DiscardOnAnyNegativeTraits;
-            checkBoxIncludePotentialValue.Checked = OptionsRef.IncludePotentialValue;
-            numericUpDownPotValGoodWeight.Value = ((decimal)OptionsRef.PotentialValuePositiveWeight).ConstrainToRange(0, 100);
-            numericUpDownPotValBadWeight.Value = ((decimal)OptionsRef.PotentialValueNegativeWeight).ConstrainToRange(0, 100);
+            numericUpDownBadTraitWeight.Value = ((decimal)this.options.BadTraitWeight).ConstrainToRange(0, 100);
+            checkBoxDiscardWithBadTraits.Checked = this.options.DiscardOnAnyNegativeTraits;
+            checkBoxIncludePotentialValue.Checked = this.options.IncludePotentialValue;
+            numericUpDownPotValGoodWeight.Value = ((decimal)this.options.PotentialValuePositiveWeight).ConstrainToRange(0, 100);
+            numericUpDownPotValBadWeight.Value = ((decimal)this.options.PotentialValueNegativeWeight).ConstrainToRange(0, 100);
 
-            checkBoxPreferUniqueTraits.Checked = OptionsRef.PreferUniqueTraits;
-            numericUpDownUniqueTraitWeight.Value = ((decimal)OptionsRef.UniqueTraitWeight).ConstrainToRange(0, 100);
+            checkBoxPreferUniqueTraits.Checked = this.options.PreferUniqueTraits;
+            numericUpDownUniqueTraitWeight.Value = ((decimal)this.options.UniqueTraitWeight).ConstrainToRange(0, 100);
 
-            numericUpDownInbreedPenaltyWeight.Value = ((decimal)OptionsRef.InbreedingPenaltyWeight.ConstrainToRange(0, 100));
-            checkBoxDiscardAllCausingInbreed.Checked = OptionsRef.DiscardOnInbreeding;
+            numericUpDownInbreedPenaltyWeight.Value = ((decimal)this.options.InbreedingPenaltyWeight.ConstrainToRange(0, 100));
+            checkBoxDiscardAllCausingInbreed.Checked = this.options.DiscardOnInbreeding;
 
-            checkBoxExcludeExactAge.Checked = OptionsRef.ExcludeExactAgeEnabled;
+            checkBoxExcludeExactAge.Checked = this.options.ExcludeExactAgeEnabled;
             UpdateCheckBoxEcludeExactAge();
-            timeSpanInputExcludeExactAge.Value = OptionsRef.ExcludeExactAgeValue;
+            timeSpanInputExcludeExactAge.Value = this.options.ExcludeExactAgeValue;
 
             olvColumnColorWeight.AspectPutter +=
                 ((rowObject, value) =>
@@ -82,21 +85,21 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
                     }
                 });
 
-            objectListViewColorWeights.SetObjects(OptionsRef.CreatureColorValues);
+            objectListViewColorWeights.SetObjects(this.options.CreatureColorValues);
 
             UpdateCtrlsEnabledStates();
 
-            Tip(checkBoxSkipPregnant, SKIP_PREGNANT_CREATURES_TOOLTIP);
-            Tip(checkBoxSkipGaveBirthInLast24h, SKIP_PREGNANT_LAST_24H_TOOLTIP);
-            Tip(numericUpDownBadTraitWeight, BAD_TRAIT_WEIGHT_TOOLTIP);
-            Tip(checkBoxDiscardWithBadTraits, DISCARD_WITH_ANY_BAD_TRAITS_TOOLTIP);
-            Tip(checkBoxIncludePotentialValue, INCLUDE_POTENTIAL_VALUE_TOOLTIP);
-            Tip(numericUpDownPotValGoodWeight, POTENTIAL_GOOD_WEIGHT_TOOLTIP);
-            Tip(numericUpDownPotValBadWeight, POTENTIAL_BAD_WEIGHT_TOOLTIP);
-            Tip(checkBoxPreferUniqueTraits, PREFER_UNIQUE_TRAITS_TOOLTOP);
-            Tip(numericUpDownUniqueTraitWeight, UNIQ_TRAIT_WEIGHT_TOOLTIP);
-            Tip(numericUpDownInbreedPenaltyWeight, INBREED_WEIGHT_TOOLTIP);
-            Tip(checkBoxSkipPaired, SKIP_PAIRED_CREATURES_TOOLTIP);
+            Tip(checkBoxSkipPregnant, SkipPregnantCreaturesTooltip);
+            Tip(checkBoxSkipGaveBirthInLast24h, SkipPregnantLast24HTooltip);
+            Tip(numericUpDownBadTraitWeight, BadTraitWeightTooltip);
+            Tip(checkBoxDiscardWithBadTraits, DiscardWithAnyBadTraitsTooltip);
+            Tip(checkBoxIncludePotentialValue, IncludePotentialValueTooltip);
+            Tip(numericUpDownPotValGoodWeight, PotentialGoodWeightTooltip);
+            Tip(numericUpDownPotValBadWeight, PotentialBadWeightTooltip);
+            Tip(checkBoxPreferUniqueTraits, PreferUniqueTraitsTooltop);
+            Tip(numericUpDownUniqueTraitWeight, UniqTraitWeightTooltip);
+            Tip(numericUpDownInbreedPenaltyWeight, InbreedWeightTooltip);
+            Tip(checkBoxSkipPaired, SkipPairedCreaturesTooltip);
         }
 
         private void UpdateCheckBoxEcludeExactAge()
@@ -111,37 +114,37 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            OptionsRef.IgnoreNotInMood = checkBoxSkipNotInMood.Checked;
-            OptionsRef.IgnorePregnant = checkBoxSkipPregnant.Checked;
-            OptionsRef.IgnoreRecentlyPregnant = checkBoxSkipGaveBirthInLast24h.Checked;
-            OptionsRef.IgnoreOtherHerds = checkBoxSkipCreaturesInOtherHerds.Checked;
-            OptionsRef.IgnorePairedCreatures = checkBoxSkipPaired.Checked;
+            options.IgnoreNotInMood = checkBoxSkipNotInMood.Checked;
+            options.IgnorePregnant = checkBoxSkipPregnant.Checked;
+            options.IgnoreRecentlyPregnant = checkBoxSkipGaveBirthInLast24h.Checked;
+            options.IgnoreOtherHerds = checkBoxSkipCreaturesInOtherHerds.Checked;
+            options.IgnorePairedCreatures = checkBoxSkipPaired.Checked;
 
-            OptionsRef.IgnoreSold = checkBoxIgnoreSold.Checked;
-            OptionsRef.IgnoreDead = checkBoxIgnoreDead.Checked;
+            options.IgnoreSold = checkBoxIgnoreSold.Checked;
+            options.IgnoreDead = checkBoxIgnoreDead.Checked;
 
-            OptionsRef.IgnoreFoals = checkBoxExcludeFoals.Checked;
-            OptionsRef.IgnoreYoung = checkBoxExcludeYoung.Checked;
-            OptionsRef.IgnoreAdolescent = checkBoxExcludeAdolescent.Checked;
+            options.IgnoreFoals = checkBoxExcludeFoals.Checked;
+            options.IgnoreYoung = checkBoxExcludeYoung.Checked;
+            options.IgnoreAdolescent = checkBoxExcludeAdolescent.Checked;
 
-            OptionsRef.AgeIgnoreOnlyOtherCreatures = checkBoxKeepComparingSelected.Checked;
+            options.AgeIgnoreOnlyOtherCreatures = checkBoxKeepComparingSelected.Checked;
 
-            OptionsRef.BadTraitWeight = (double)numericUpDownBadTraitWeight.Value;
-            OptionsRef.DiscardOnAnyNegativeTraits = checkBoxDiscardWithBadTraits.Checked;
-            OptionsRef.IncludePotentialValue = checkBoxIncludePotentialValue.Checked;
-            OptionsRef.PotentialValuePositiveWeight = (double)numericUpDownPotValGoodWeight.Value;
-            OptionsRef.PotentialValueNegativeWeight = (double)numericUpDownPotValBadWeight.Value;
+            options.BadTraitWeight = (double)numericUpDownBadTraitWeight.Value;
+            options.DiscardOnAnyNegativeTraits = checkBoxDiscardWithBadTraits.Checked;
+            options.IncludePotentialValue = checkBoxIncludePotentialValue.Checked;
+            options.PotentialValuePositiveWeight = (double)numericUpDownPotValGoodWeight.Value;
+            options.PotentialValueNegativeWeight = (double)numericUpDownPotValBadWeight.Value;
 
-            OptionsRef.PreferUniqueTraits = checkBoxPreferUniqueTraits.Checked;
-            OptionsRef.UniqueTraitWeight = (double)numericUpDownUniqueTraitWeight.Value;
+            options.PreferUniqueTraits = checkBoxPreferUniqueTraits.Checked;
+            options.UniqueTraitWeight = (double)numericUpDownUniqueTraitWeight.Value;
 
-            OptionsRef.InbreedingPenaltyWeight = (double)numericUpDownInbreedPenaltyWeight.Value;
-            OptionsRef.DiscardOnInbreeding = checkBoxDiscardAllCausingInbreed.Checked;
+            options.InbreedingPenaltyWeight = (double)numericUpDownInbreedPenaltyWeight.Value;
+            options.DiscardOnInbreeding = checkBoxDiscardAllCausingInbreed.Checked;
 
-            OptionsRef.ExcludeExactAgeEnabled = checkBoxExcludeExactAge.Checked;
-            OptionsRef.ExcludeExactAgeValue = timeSpanInputExcludeExactAge.Value;
+            options.ExcludeExactAgeEnabled = checkBoxExcludeExactAge.Checked;
+            options.ExcludeExactAgeValue = timeSpanInputExcludeExactAge.Value;
 
-            OptionsRef.CreatureColorValues =
+            options.CreatureColorValues =
                 ((IEnumerable<ColorWeight>)objectListViewColorWeights.Objects).ToArray();
         }
 
@@ -157,30 +160,21 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
         private void checkBoxDiscardWithBadTraits_CheckedChanged(object sender, EventArgs e)
         {
             UpdateCtrlsEnabledStates();
-            //numericUpDownBadTraitWeight.Enabled = !checkBoxDiscardWithBadTraits.Checked;
         }
 
         private void checkBoxIncludePotentialValue_CheckedChanged(object sender, EventArgs e)
         {
             UpdateCtrlsEnabledStates();
-            //numericUpDownPotValBadWeight.Enabled = checkBoxIncludePotentialValue.Checked;
-            //numericUpDownPotValGoodWeight.Enabled = checkBoxIncludePotentialValue.Checked;
         }
 
         private void checkBoxPreferUniqueTraits_CheckedChanged(object sender, EventArgs e)
         {
             UpdateCtrlsEnabledStates();
-            //numericUpDownUniqueTraitWeight.Enabled = checkBoxPreferUniqueTraits.Checked;
         }
 
         private void checkBoxDiscardAllCausingInbreed_CheckedChanged(object sender, EventArgs e)
         {
             UpdateCtrlsEnabledStates();
-            //numericUpDownInbreedPenaltyWeight.Enabled = checkBoxDiscardAllCausingInbreed.Checked;
-        }
-
-        private void checkBoxSkipPaired_CheckedChanged(object sender, EventArgs e)
-        {
         }
 
         private void checkBoxSkipGaveBirthInLast24h_CheckedChanged(object sender, EventArgs e)
@@ -195,31 +189,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             {
                 checkBoxSkipGaveBirthInLast24h.Checked = false;
             }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Still not written after 3 years! Lazy Aldur!");
-        }
-
-        private void checkBoxExcludeFoals_CheckedChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void checkBoxExcludeYoung_CheckedChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void checkBoxExcludeAdolescent_CheckedChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void groupBox5_Enter(object sender, EventArgs e)
-        {
-        }
-
-        private void checkBoxKeepComparingSelected_CheckedChanged(object sender, EventArgs e)
-        {
         }
 
         private void objectListViewColorWeights_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)

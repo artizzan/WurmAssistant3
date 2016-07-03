@@ -12,25 +12,25 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
         public int Id;
 
         [JsonProperty("valuemapid")]
-        public string ValueMapID;
+        public string ValueMapId;
 
         [JsonProperty("traitid")]
-        string _TraitEnumINTStr;
+        string traitEnumIntStr;
         public CreatureTrait Trait
         {
             get
             {
-                return CreatureTrait.FromEnumIntStr(_TraitEnumINTStr);
+                return CreatureTrait.FromEnumIntStr(traitEnumIntStr);
             }
             set
             {
-                _TraitEnumINTStr = value.ToInt32().ToString();
+                traitEnumIntStr = value.ToInt32().ToString();
             }
         }
         [JsonProperty("traitvalue")]
         public int Value;
 
-        public static int GenerateNewTraitValueID(GrangerContext context)
+        public static int GenerateNewTraitValueId(GrangerContext context)
         {
             try
             {

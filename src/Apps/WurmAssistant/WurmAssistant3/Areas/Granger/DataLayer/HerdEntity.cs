@@ -11,36 +11,30 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
 
         //primary key
         [JsonProperty("herdId")]
-        public string HerdID;
+        public string HerdId;
 
         [JsonProperty("selected")]
-        bool? _Selected;
+        bool? selected;
         public bool Selected
         {
-            get { return _Selected == null ? false : _Selected.Value; }
-            set { _Selected = value; }
+            get { return selected ?? false; }
+            set { selected = value; }
         }
 
         public override string ToString()
         {
-            return HerdID;
+            return HerdId;
         }
 
         internal HerdEntity CloneMe(string newHerdName)
         {
             var newEntity = (HerdEntity)this.MemberwiseClone();
-            newEntity.HerdID = newHerdName;
+            newEntity.HerdId = newHerdName;
             return newEntity;
         }
 
-        public string HerdIDAspect
-        {
-            get { return this.HerdID; }
-        }
+        public string HerdIdAspect => this.HerdId;
 
-        public bool CheckedAspect
-        {
-            get { return this.Selected; }
-        }
+        public bool CheckedAspect => this.Selected;
     }
 }
