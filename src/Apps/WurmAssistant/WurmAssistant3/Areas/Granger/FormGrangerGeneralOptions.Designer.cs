@@ -41,6 +41,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.checkBoxAdjustForDarkThemes = new System.Windows.Forms.CheckBox();
             this.checkBoxUseServerNameAsIdComponent = new System.Windows.Forms.CheckBox();
             this.checkBoxhideLiveTrackerPopups = new System.Windows.Forms.CheckBox();
+            this.checkBoxDoNotMatchCreaturesByBrandName = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // checkBoxAlwaysUpdateUnlessMultiples
@@ -56,7 +57,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // 
             // timeSpanInputGroomingTime
             // 
-            this.timeSpanInputGroomingTime.Location = new System.Drawing.Point(12, 288);
+            this.timeSpanInputGroomingTime.Location = new System.Drawing.Point(12, 327);
             this.timeSpanInputGroomingTime.Margin = new System.Windows.Forms.Padding(2);
             this.timeSpanInputGroomingTime.Name = "timeSpanInputGroomingTime";
             this.timeSpanInputGroomingTime.Size = new System.Drawing.Size(231, 45);
@@ -66,7 +67,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(221, 382);
+            this.buttonOK.Location = new System.Drawing.Point(238, 418);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(92, 29);
             this.buttonOK.TabIndex = 3;
@@ -77,7 +78,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.Location = new System.Drawing.Point(319, 382);
+            this.buttonCancel.Location = new System.Drawing.Point(336, 418);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(92, 29);
             this.buttonCancel.TabIndex = 4;
@@ -88,7 +89,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 273);
+            this.label1.Location = new System.Drawing.Point(9, 312);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(359, 13);
             this.label1.TabIndex = 5;
@@ -146,11 +147,22 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.checkBoxhideLiveTrackerPopups.Text = "Hide popups from creature updates triggered by live log events.";
             this.checkBoxhideLiveTrackerPopups.UseVisualStyleBackColor = true;
             // 
+            // checkBoxDoNotMatchCreaturesByBrandName
+            // 
+            this.checkBoxDoNotMatchCreaturesByBrandName.AutoSize = true;
+            this.checkBoxDoNotMatchCreaturesByBrandName.Location = new System.Drawing.Point(12, 241);
+            this.checkBoxDoNotMatchCreaturesByBrandName.Name = "checkBoxDoNotMatchCreaturesByBrandName";
+            this.checkBoxDoNotMatchCreaturesByBrandName.Size = new System.Drawing.Size(411, 56);
+            this.checkBoxDoNotMatchCreaturesByBrandName.TabIndex = 11;
+            this.checkBoxDoNotMatchCreaturesByBrandName.Text = resources.GetString("checkBoxDoNotMatchCreaturesByBrandName.Text");
+            this.checkBoxDoNotMatchCreaturesByBrandName.UseVisualStyleBackColor = true;
+            // 
             // FormGrangerGeneralOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(423, 423);
+            this.ClientSize = new System.Drawing.Size(440, 459);
+            this.Controls.Add(this.checkBoxDoNotMatchCreaturesByBrandName);
             this.Controls.Add(this.checkBoxhideLiveTrackerPopups);
             this.Controls.Add(this.checkBoxUseServerNameAsIdComponent);
             this.Controls.Add(this.checkBoxAdjustForDarkThemes);
@@ -183,5 +195,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         private System.Windows.Forms.CheckBox checkBoxAdjustForDarkThemes;
         private System.Windows.Forms.CheckBox checkBoxUseServerNameAsIdComponent;
         private System.Windows.Forms.CheckBox checkBoxhideLiveTrackerPopups;
+        private System.Windows.Forms.CheckBox checkBoxDoNotMatchCreaturesByBrandName;
     }
 }

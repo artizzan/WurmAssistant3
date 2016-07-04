@@ -276,7 +276,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                         var selectedHerds = GetSelectedHerds();
 
                         var herdsFinds = GetHerdsFinds(selectedHerds, creatureBuffer, checkInnerName: false);
-                        if (herdsFinds.Length == 0)
+                        if (herdsFinds.Length == 0 && !parentModule.Settings.DoNotMatchCreaturesByBrandName)
                         {
                             herdsFinds = GetHerdsFinds(selectedHerds, creatureBuffer, checkInnerName: true);
                         }
@@ -290,7 +290,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                             string[] allHerds = GetAllHerds();
 
                             herdsFinds = GetHerdsFinds(allHerds, creatureBuffer, checkInnerName: false);
-                            if (herdsFinds.Length == 0)
+                            if (herdsFinds.Length == 0 && !parentModule.Settings.DoNotMatchCreaturesByBrandName)
                             {
                                 herdsFinds = GetHerdsFinds(allHerds, creatureBuffer, checkInnerName: true);
                             }

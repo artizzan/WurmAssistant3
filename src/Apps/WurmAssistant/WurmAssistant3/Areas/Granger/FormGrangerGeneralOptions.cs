@@ -24,6 +24,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             checkBoxAdjustForDarkThemes.Checked = settings.AdjustForDarkThemes;
             checkBoxUseServerNameAsIdComponent.Checked = settings.UseServerNameAsCreatureIdComponent;
             checkBoxhideLiveTrackerPopups.Checked = settings.HideLiveTrackerPopups;
+            checkBoxDoNotMatchCreaturesByBrandName.Checked = settings.DoNotMatchCreaturesByBrandName;
         }
 
         private void CommitChanges()
@@ -35,6 +36,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             settings.AdjustForDarkThemes = checkBoxAdjustForDarkThemes.Checked;
             settings.UseServerNameAsCreatureIdComponent = checkBoxUseServerNameAsIdComponent.Checked;
             settings.HideLiveTrackerPopups = checkBoxhideLiveTrackerPopups.Checked;
+            settings.DoNotMatchCreaturesByBrandName = checkBoxDoNotMatchCreaturesByBrandName.Checked;
         }
 
         private void buttonOK_Click(object sender, EventArgs e)

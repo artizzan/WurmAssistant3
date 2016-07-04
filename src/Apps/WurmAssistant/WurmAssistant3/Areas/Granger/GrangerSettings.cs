@@ -99,6 +99,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         [JsonProperty]
         bool hideLiveTrackerPopups;
 
+        [JsonProperty]
+        bool doNotMatchCreaturesByBrandName;
+
         public TimeSpan ShowGroomingTime
         {
             get { return showGroomingTime; }
@@ -217,6 +220,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             get { return hideLiveTrackerPopups; }
             set { hideLiveTrackerPopups = value; FlagAsChanged(); }
+        }
+
+        public bool DoNotMatchCreaturesByBrandName
+        {
+            get { return doNotMatchCreaturesByBrandName; }
+            set { doNotMatchCreaturesByBrandName = value; FlagAsChanged(); }
         }
 
         internal void AddGenesisCast(DateTime castDate, string creatureName)

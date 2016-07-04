@@ -124,4 +124,10 @@ current server is known and matches creature server.
 This may break if WU server name changes (WO server names are stable)
 Creature server can be edited manually.</value>
   </data>
+  <data name="checkBoxDoNotMatchCreaturesByBrandName.Text" xml:space="preserve">
+    <value>Use branding name as just part of creature name.
+This disables treating branding name, as alternative creature identity.
+Use this option, if you name creatures by some convention eg. positive trait count,
+and are having issues with adding/updating/breeding.</value>
+  </data>
 </root>
