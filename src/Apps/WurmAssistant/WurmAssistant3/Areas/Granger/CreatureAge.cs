@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace AldursLab.WurmAssistant3.Areas.Granger
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class CreatureAge : IComparable, IComparable<CreatureAge>
+    public sealed class CreatureAge : IComparable, IComparable<CreatureAge>, IEquatable<CreatureAge>
     {
         static readonly Dictionary<string, CreatureAge> WurmStringToAgeMap = new Dictionary<string, CreatureAge>();
 
@@ -54,19 +54,22 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public bool Equals(CreatureAge other)
         {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
             return creatureAgeId == other.creatureAgeId;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is CreatureAge)) return false;
-            CreatureAge other = (CreatureAge)obj;
-            return Equals(other);
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((CreatureAge) obj);
         }
 
         public override int GetHashCode()
         {
-            return (int)creatureAgeId;
+            return (int) creatureAgeId;
         }
 
         internal static CreatureAge CreateAgeFromEnumString(string enumStr)
@@ -169,13 +172,15 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             return left.CompareTo(right) >= 0;
         }
+
         public static bool operator ==(CreatureAge left, CreatureAge right)
         {
-            return left.Equals(right);
+            return Equals(left, right);
         }
+
         public static bool operator !=(CreatureAge left, CreatureAge right)
         {
-            return !(left == right);
+            return !Equals(left, right);
         }
     }
 }

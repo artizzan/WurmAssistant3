@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace AldursLab.WurmAssistant3.Areas.Granger
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class CreatureColor
+    public sealed class CreatureColor : IEquatable<CreatureColor>
     {
         [JsonProperty] 
         readonly CreatureColorId creatureColorId;
@@ -52,29 +52,32 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public bool Equals(CreatureColor other)
         {
-            return creatureColorId.Equals(other.creatureColorId);
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return creatureColorId == other.creatureColorId;
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is CreatureColor)) return false;
-            CreatureColor other = (CreatureColor)obj;
-            return Equals(other);
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((CreatureColor) obj);
         }
 
         public override int GetHashCode()
         {
-            return creatureColorId.GetHashCode();
+            return (int) creatureColorId;
         }
 
         public static bool operator ==(CreatureColor left, CreatureColor right)
         {
-            return left.Equals(right);
+            return Equals(left, right);
         }
 
         public static bool operator !=(CreatureColor left, CreatureColor right)
         {
-            return !(left == right);
+            return !Equals(left, right);
         }
 
         internal static CreatureColor CreateColorFromEnumString(string enumStr)
@@ -120,5 +123,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     return null;
             }
         }
+
+
     }
 }
