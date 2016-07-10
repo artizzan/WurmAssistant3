@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -446,34 +447,54 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             listViewIsBeingUpdated = true;
 
-            // updating breeding advisor feedback
-            double maxValue = 0;
-            double minValue = 0;
-
-            foreach (var creature in currentCreatures)
+            try
             {
-                creature.RebuildCachedBreedValue();
-                if (creature.CachedBreedValue.HasValue)
+                // updating breeding advisor feedback
+                double maxValue = 0;
+                double minValue = 0;
+
+                foreach (var creature in currentCreatures)
                 {
-                    if (double.IsInfinity(creature.CachedBreedValue.Value)) continue;
+                    creature.RebuildCachedBreedValue();
+                    if (creature.CachedBreedValue.HasValue)
+                    {
+                        if (double.IsInfinity(creature.CachedBreedValue.Value)) continue;
 
-                    if (creature.CachedBreedValue > maxValue) maxValue = creature.CachedBreedValue.Value;
-                    if (creature.CachedBreedValue < minValue) minValue = creature.CachedBreedValue.Value;
+                        if (creature.CachedBreedValue > maxValue) maxValue = creature.CachedBreedValue.Value;
+                        if (creature.CachedBreedValue < minValue) minValue = creature.CachedBreedValue.Value;
+                    }
                 }
-            }
 
-            foreach (var creature in currentCreatures)
+                foreach (var creature in currentCreatures)
+                {
+                    creature.ClearColorHints();
+                    if (!mainForm.Settings.DisableRowColoring)
+                    {
+                        creature.RefreshBreedHintColor(minValue, maxValue);
+                    }
+                }
+
+                // #fix
+                // hack fix for an AccessViolationException after clicking object list view group header. 
+                // Issue is caused by rebuilding the objectlist during group header click handling, 
+                // which itself seems to be asynchronous.
+                var anyGroupSelected = objectListView1.OLVGroups?.Any(group => group.Selected) ?? false;
+                var listCountChanged = currentCreatures.Count != objectListView1.Objects?.Cast<object>().Count();
+
+                if (!anyGroupSelected || listCountChanged)
+                {
+                    objectListView1.SetObjects(currentCreatures, true);
+                }
+                else
+                {
+                    objectListView1.RefreshObjects(currentCreatures);
+                }
+                // #endfix
+            }
+            finally
             {
-                creature.ClearColorHints();
-                if (!mainForm.Settings.DisableRowColoring)
-                {
-                    creature.RefreshBreedHintColor(minValue, maxValue);
-                }
+                listViewIsBeingUpdated = false;
             }
-
-            objectListView1.SetObjects(currentCreatures, true);
-
-            listViewIsBeingUpdated = false;
         }
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
@@ -813,7 +834,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                         SelectedSingleCreature = selectedCreatures[0];
                     }
                 }
-                else SelectedSingleCreature = null;
+                else
+                {
+                    SelectedSingleCreature = null;
+                }
             }
             lastSelectedCreatures = newSelectedCreatures;
         }
