@@ -3,5 +3,6 @@
     public interface IEnvironment
     {
         void Shutdown();
+        void Restart();
     }
 }

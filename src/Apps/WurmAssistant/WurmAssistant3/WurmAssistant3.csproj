@@ -117,7 +117,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Areas\Core\DialogService.cs" />
     <Compile Include="Areas\Core\IAppManager.cs" />
+    <Compile Include="Areas\Core\IDialogService.cs" />
     <Compile Include="Areas\Core\IWurmAssistantDataDirectory.cs" />
     <Compile Include="Areas\Core\AppMigrationsManager.cs" />
     <Compile Include="Areas\Core\BinDirectory.cs" />
@@ -174,6 +176,7 @@
     <Compile Include="Areas\Persistence\PersistentContextOptions.cs" />
     <Compile Include="Areas\Persistence\PersistentContextsManager.cs" />
     <Compile Include="Areas\SoundManager\SoundManagerFeature.cs" />
+    <Compile Include="Areas\WurmApi\IWurmClientValidatorFactory.cs" />
     <Compile Include="Areas\WurmApi\WurmApiAreaConfig.cs" />
     <Compile Include="Systems\AppUpgrades\VersionUpgradeManager.cs" />
     <Compile Include="Systems\ConventionBinding\ConventionBindingManager.cs" />
@@ -271,7 +274,6 @@
     </Compile>
     <Compile Include="Areas\Config\ConfigCancelledException.cs" />
     <Compile Include="Areas\Config\IServersEditorViewFactory.cs" />
-    <Compile Include="Areas\Config\ISettingsEditViewFactory.cs" />
     <Compile Include="Areas\Config\ServerInformation.cs" />
     <Compile Include="Areas\Config\ServerInfoManager.cs" />
     <Compile Include="Utils\VisualCppRedistDetector.cs" />
@@ -287,12 +289,6 @@
     </Compile>
     <Compile Include="Areas\Config\ServersEditorForm.Designer.cs">
       <DependentUpon>ServersEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Areas\Config\SettingsEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Areas\Config\SettingsEditForm.Designer.cs">
-      <DependentUpon>SettingsEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\VisualCppMissingHelperView.cs">
       <SubType>Form</SubType>
@@ -856,9 +852,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Config\ServersEditorForm.resx">
       <DependentUpon>ServersEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Config\SettingsEditForm.resx">
-      <DependentUpon>SettingsEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Utils\VisualCppMissingHelperView.resx">
       <DependentUpon>VisualCppMissingHelperView.cs</DependentUpon>

@@ -43,7 +43,8 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi
                 };
                 serverInfoManager.UpdateWurmApiConfigDictionary(wurmApiConfig.ServerInfoMap);
 
-                var wurmApiDataDir = new DirectoryInfo(Path.Combine(config.WurmGameClientInstallDirectory, "WurmApi"));
+                var wurmApiDataDir =
+                    new DirectoryInfo(Path.Combine(config.WurmGameClientInstallDirectory, "WurmApi"));
 
                 var wurmApi = AldursLab.WurmApi.WurmApiFactory.Create(
                     new WurmApiCreationOptions()

@@ -30,13 +30,13 @@
         {
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.changeSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modifyServersListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.officialForumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wikiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pMAldurToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.viewRoadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showNewsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.videoSoundManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,9 +50,12 @@
             this.videoSkillStatsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.videoCombatAssistToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.roadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewRoadmapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeGameClientPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearWurmApiCachesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.validateWurmGameClientConfigsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,23 +75,19 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.changeSettingsToolStripMenuItem,
-            this.modifyServersListToolStripMenuItem});
+            this.validateWurmGameClientConfigsToolStripMenuItem,
+            this.modifyServersListToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.clearWurmApiCachesToolStripMenuItem,
+            this.changeGameClientPathToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
             // 
-            // changeSettingsToolStripMenuItem
-            // 
-            this.changeSettingsToolStripMenuItem.Name = "changeSettingsToolStripMenuItem";
-            this.changeSettingsToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-            this.changeSettingsToolStripMenuItem.Text = "Change settings";
-            this.changeSettingsToolStripMenuItem.Click += new System.EventHandler(this.changeSettingsToolStripMenuItem_Click);
-            // 
             // modifyServersListToolStripMenuItem
             // 
             this.modifyServersListToolStripMenuItem.Name = "modifyServersListToolStripMenuItem";
-            this.modifyServersListToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.modifyServersListToolStripMenuItem.Size = new System.Drawing.Size(315, 22);
             this.modifyServersListToolStripMenuItem.Text = "Modify servers list";
             this.modifyServersListToolStripMenuItem.Click += new System.EventHandler(this.modifyServersListToolStripMenuItem_Click);
             // 
@@ -141,6 +140,13 @@
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(229, 6);
+            // 
+            // viewRoadmapToolStripMenuItem
+            // 
+            this.viewRoadmapToolStripMenuItem.Name = "viewRoadmapToolStripMenuItem";
+            this.viewRoadmapToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.viewRoadmapToolStripMenuItem.Text = "View Roadmap";
+            this.viewRoadmapToolStripMenuItem.Click += new System.EventHandler(this.viewRoadmapToolStripMenuItem_Click_1);
             // 
             // showNewsToolStripMenuItem
             // 
@@ -232,6 +238,13 @@
             this.roadmapToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
             this.roadmapToolStripMenuItem.Text = "Plugins";
             // 
+            // manageToolStripMenuItem
+            // 
+            this.manageToolStripMenuItem.Name = "manageToolStripMenuItem";
+            this.manageToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.manageToolStripMenuItem.Text = "Manage";
+            this.manageToolStripMenuItem.Click += new System.EventHandler(this.manageToolStripMenuItem_Click);
+            // 
             // debugToolStripMenuItem
             // 
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
@@ -240,19 +253,31 @@
             this.debugToolStripMenuItem.Visible = false;
             this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
             // 
-            // viewRoadmapToolStripMenuItem
+            // changeGameClientPathToolStripMenuItem
             // 
-            this.viewRoadmapToolStripMenuItem.Name = "viewRoadmapToolStripMenuItem";
-            this.viewRoadmapToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
-            this.viewRoadmapToolStripMenuItem.Text = "View Roadmap";
-            this.viewRoadmapToolStripMenuItem.Click += new System.EventHandler(this.viewRoadmapToolStripMenuItem_Click_1);
+            this.changeGameClientPathToolStripMenuItem.Name = "changeGameClientPathToolStripMenuItem";
+            this.changeGameClientPathToolStripMenuItem.Size = new System.Drawing.Size(315, 22);
+            this.changeGameClientPathToolStripMenuItem.Text = "Change game client path (will restart the app)";
+            this.changeGameClientPathToolStripMenuItem.Click += new System.EventHandler(this.changeGameClientPathToolStripMenuItem_Click);
             // 
-            // manageToolStripMenuItem
+            // clearWurmApiCachesToolStripMenuItem
             // 
-            this.manageToolStripMenuItem.Name = "manageToolStripMenuItem";
-            this.manageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.manageToolStripMenuItem.Text = "Manage";
-            this.manageToolStripMenuItem.Click += new System.EventHandler(this.manageToolStripMenuItem_Click);
+            this.clearWurmApiCachesToolStripMenuItem.Name = "clearWurmApiCachesToolStripMenuItem";
+            this.clearWurmApiCachesToolStripMenuItem.Size = new System.Drawing.Size(315, 22);
+            this.clearWurmApiCachesToolStripMenuItem.Text = "Clear WurmApi caches (will restart the app)";
+            this.clearWurmApiCachesToolStripMenuItem.Click += new System.EventHandler(this.clearWurmApiCachesToolStripMenuItem_Click);
+            // 
+            // validateWurmGameClientConfigsToolStripMenuItem
+            // 
+            this.validateWurmGameClientConfigsToolStripMenuItem.Name = "validateWurmGameClientConfigsToolStripMenuItem";
+            this.validateWurmGameClientConfigsToolStripMenuItem.Size = new System.Drawing.Size(315, 22);
+            this.validateWurmGameClientConfigsToolStripMenuItem.Text = "Analyze Wurm game client configs for issues";
+            this.validateWurmGameClientConfigsToolStripMenuItem.Click += new System.EventHandler(this.validateWurmGameClientConfigsToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(312, 6);
             // 
             // MainMenuUserControl
             // 
@@ -272,7 +297,6 @@
 
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem changeSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem officialForumToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wikiToolStripMenuItem;
@@ -295,5 +319,9 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem viewRoadmapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem manageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem changeGameClientPathToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem validateWurmGameClientConfigsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem clearWurmApiCachesToolStripMenuItem;
     }
 }
