@@ -61,12 +61,12 @@ namespace AldursLab.WurmAssistant3.Areas.Main.ViewModels
 
             if (consoleArgs.WurmUnlimitedMode)
             {
-                WindowTitle = "Wurm Assistant Unlimited";
+                WindowTitle = "Aldur's Wurm Assistant Unlimited";
                 Icon = Resources.WurmAssistantUnlimitedIcon.ToImageSource();
             }
             else
             {
-                WindowTitle = "Wurm Assistant";
+                WindowTitle = "Aldur's Wurm Assistant";
                 Icon = Resources.WurmAssistantIcon.ToImageSource();
             }
 

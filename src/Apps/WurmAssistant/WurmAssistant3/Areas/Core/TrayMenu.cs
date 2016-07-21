@@ -21,17 +21,17 @@ namespace AldursLab.WurmAssistant3.Areas.Core
             notifyIcon = new NotifyIcon
             {
                 BalloonTipText = "I\'ll be here if you need me!",
-                BalloonTipTitle = "Wurm Assistant 3",
+                BalloonTipTitle = "Aldur's Wurm Assistant 3",
                 ContextMenuStrip = contextMenuStrip,
                 Icon = Resources.WurmAssistantIcon,
-                Text = "Wurm Assistant 3",
+                Text = "Aldur's Wurm Assistant 3",
                 Visible = true
             };
 
             if (consoleArgs.WurmUnlimitedMode)
             {
-                notifyIcon.BalloonTipTitle = "Wurm Assistant 3 Unlimited";
-                notifyIcon.Text = "Wurm Assistant 3 Unlimited";
+                notifyIcon.BalloonTipTitle = "Aldur's Wurm Assistant 3 Unlimited";
+                notifyIcon.Text = "Aldur's Wurm Assistant 3 Unlimited";
                 notifyIcon.Icon = Resources.WurmAssistantUnlimitedIcon;
             }
 

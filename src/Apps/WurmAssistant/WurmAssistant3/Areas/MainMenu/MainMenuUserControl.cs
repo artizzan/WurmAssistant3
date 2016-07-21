@@ -201,5 +201,15 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
             wurmAssistantConfig.WurmApiResetRequested = true;
             environment.Restart();
         }
+
+        private void howtoManagePluginsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe("https://github.com/mdsolver/WurmAssistant3/wiki/Managing-Plugins");
+        }
+
+        private void howtoCreatePluginsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe("https://github.com/mdsolver/WurmAssistant3/wiki/Plugin-Quick-Start");
+        }
     }
 }

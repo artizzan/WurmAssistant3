@@ -30,7 +30,10 @@ namespace AldursLab.WurmAssistant3.Systems.Plugins
             var text = "Put each new plugin into a separate folder here.\r\n" +
                        "They will be loaded after Wurm Assistant is restarted.\r\n" +
                        "\r\n" +
-                       "How to make new plugins? See the wiki:\r\n" +
+                       "More on managing plugins:\r\n" +
+                       "https://github.com/mdsolver/WurmAssistant3/wiki/Managing-Plugins" +
+                       "\r\n" +
+                       "More on making a plugin:\r\n" +
                        "https://github.com/mdsolver/WurmAssistant3/wiki/Plugin-Quick-Start";
             if (!helpFile.Exists || File.ReadAllText(helpFile.FullName) != text)
             {
