@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Routing;
 using AldursLab.WurmAssistant.Shared.Dtos;
@@ -30,7 +31,7 @@ namespace AldursLab.WurmAssistantWebService.Controllers
         [Route("UpdateSourceHost")]
         public string GetUpdateSourceHost()
         {
-            return "http://wurmassistant.azurewebsites.net/api/WurmAssistant3";
+            return WebConfigurationManager.AppSettings.Get("UpdateSourceHost");
         }
 
         [Route("AvailabilityCheck")]

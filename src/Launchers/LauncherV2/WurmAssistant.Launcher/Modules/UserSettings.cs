@@ -11,7 +11,8 @@ namespace AldursLab.WurmAssistant.Launcher.Modules
         {
             public Data()
             {
-                WurmAssistantWebServiceUrl = "http://wurmassistant.azurewebsites.net/api/WurmAssistant3";
+                // note: default value is actually set in appSettings
+                WurmAssistantWebServiceUrl = "http://wa-ws.azurewebsites.net/api/WurmAssistant3";
             }
 
             public bool UseRelativeDataDir { get; set; }
