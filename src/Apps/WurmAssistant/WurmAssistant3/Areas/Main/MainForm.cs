@@ -2,7 +2,8 @@
 using System.Drawing;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Areas.Core;
-using AldursLab.WurmAssistant3.Areas.Features.Contracts;
+using AldursLab.WurmAssistant3.Areas.Features;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.MainMenu;
 using JetBrains.Annotations;
@@ -15,6 +16,7 @@ namespace AldursLab.WurmAssistant3.Areas.Main
         readonly CombinedLogsUserControl combinedLogsUserControl;
         readonly MainMenuUserControl mainMenuUserControl;
         readonly IFeaturesManager featuresManager;
+        readonly ITelemetry telemetry;
 
 
         public MainForm(
@@ -22,16 +24,19 @@ namespace AldursLab.WurmAssistant3.Areas.Main
             [NotNull] CombinedLogsUserControl combinedLogsUserControl,
             [NotNull] MainMenuUserControl mainMenuUserControl,
             [NotNull] IFeaturesManager featuresManager,
-            [NotNull] INewsViewModelFactory newsViewModelFactory)
+            [NotNull] INewsViewModelFactory newsViewModelFactory,
+            [NotNull] ITelemetry telemetry)
         {
             if (consoleArgs == null) throw new ArgumentNullException(nameof(consoleArgs));
             if (combinedLogsUserControl == null) throw new ArgumentNullException(nameof(combinedLogsUserControl));
             if (mainMenuUserControl == null) throw new ArgumentNullException(nameof(mainMenuUserControl));
             if (featuresManager == null) throw new ArgumentNullException(nameof(featuresManager));
             if (newsViewModelFactory == null) throw new ArgumentNullException(nameof(newsViewModelFactory));
+            if (telemetry == null) throw new ArgumentNullException(nameof(telemetry));
             this.combinedLogsUserControl = combinedLogsUserControl;
             this.mainMenuUserControl = mainMenuUserControl;
             this.featuresManager = featuresManager;
+            this.telemetry = telemetry;
 
             InitializeComponent();
         }
@@ -67,7 +72,11 @@ namespace AldursLab.WurmAssistant3.Areas.Main
                     BackColor = Color.Gainsboro
                 };
 
-                btn.Click += (o, args) => feature.Show();
+                btn.Click += (o, args) =>
+                {
+                    telemetry.TrackEvent($"Feature clicked: " + f.Name);
+                    feature.Show();
+                };
                 toolTips.SetToolTip(btn, feature.Name);
                 featuresFlowPanel.Controls.Add(btn);
             }

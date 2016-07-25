@@ -16,7 +16,7 @@ namespace AldursLab.WurmAssistant3.Areas.Config
         readonly IConsoleArgs consoleArgs;
 
         [JsonProperty]
-        int version = 0;
+        int version = 2;
 
         [JsonProperty]
         string wurmGameClientInstallDirectory;
@@ -28,10 +28,16 @@ namespace AldursLab.WurmAssistant3.Areas.Config
         bool wurmApiResetRequested;
 
         [JsonProperty]
-        bool dropAllWurmApiCachesToggle;
+        bool dropAllWurmApiCachesToggle = false;
 
         [JsonProperty]
         bool skipWurmConfigsValidation;
+
+        [JsonProperty]
+        Guid installationId = Guid.NewGuid();
+
+        [JsonProperty]
+        bool allowInsights = true;
 
         public WurmAssistantConfig([NotNull] IConsoleArgs consoleArgs)
         {
@@ -43,8 +49,14 @@ namespace AldursLab.WurmAssistant3.Areas.Config
         {
             if (version == 0)
             {
-                dropAllWurmApiCachesToggle = true;
-                version = 1;
+                DropAllWurmApiCachesToggle = true;
+                Version = 1;
+                FlagAsChanged();
+            }
+            if (version == 1)
+            {
+                InstallationId = Guid.NewGuid();
+                Version = 2;
             }
 
             if (this.WurmApiResetRequested || WurmGameClientInstallDirectory.IsNullOrEmpty())
@@ -112,6 +124,42 @@ namespace AldursLab.WurmAssistant3.Areas.Config
                 if (value == skipWurmConfigsValidation)
                     return;
                 skipWurmConfigsValidation = value;
+                FlagAsChanged();
+            }
+        }
+
+        public Guid InstallationId
+        {
+            get { return installationId; }
+            set
+            {
+                if (value == installationId)
+                    return;
+                installationId = value;
+                FlagAsChanged();
+            }
+        }
+
+        public bool AllowInsights
+        {
+            get { return allowInsights; }
+            set
+            {
+                if (value == allowInsights)
+                    return;
+                allowInsights = value;
+                FlagAsChanged();
+            }
+        }
+
+        int Version
+        {
+            get { return version; }
+            set
+            {
+                if (value == version)
+                    return;
+                version = value;
                 FlagAsChanged();
             }
         }

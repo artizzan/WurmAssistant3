@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AldursLab.WurmAssistant3.Areas.Features.Contracts
+namespace AldursLab.WurmAssistant3.Areas.Features
 {
     public interface IFeaturesManager
     {

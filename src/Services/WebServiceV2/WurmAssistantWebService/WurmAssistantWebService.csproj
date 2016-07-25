@@ -337,6 +337,7 @@
     </None>
     <None Include="Properties\PublishProfiles\Package.pubxml" />
     <None Include="Properties\PublishProfiles\wa-ws - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\wurmassistant - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\wurmassistant.aldurslab.net - Web Deploy.pubxml" />
     <Content Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />

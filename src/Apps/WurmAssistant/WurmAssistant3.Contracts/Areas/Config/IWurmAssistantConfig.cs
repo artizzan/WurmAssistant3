@@ -1,3 +1,5 @@
+using System;
+
 namespace AldursLab.WurmAssistant3.Areas.Config
 {
     public interface IWurmAssistantConfig
@@ -7,5 +9,7 @@ namespace AldursLab.WurmAssistant3.Areas.Config
         bool DropAllWurmApiCachesToggle { get; set; }
         bool WurmUnlimitedMode { get; }
         bool SkipWurmConfigsValidation { get; set; }
+        Guid InstallationId { get; set; }
+        bool AllowInsights { get; set; }
     }
 }

@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AldursLab.WurmAssistant3.Areas.Core;
-using AldursLab.WurmAssistant3.Areas.Features.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using JetBrains.Annotations;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Features
 {
-    [KernelBind(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton), UsedImplicitly]
     public class FeaturesManager : IFeaturesManager
     {
         readonly IKernel kernel;

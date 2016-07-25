@@ -60,6 +60,10 @@
       <HintPath>..\..\..\..\packages\JetBrains.Annotations.10.1.4\lib\net20\JetBrains.Annotations.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Microsoft.ApplicationInsights.2.1.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -151,8 +155,17 @@
     <Compile Include="Areas\Granger\TraitItem.cs" />
     <Compile Include="Areas\Granger\TraitsInspectedContainer.cs" />
     <Compile Include="Areas\Granger\UserViewChangedEventArgs.cs" />
+    <Compile Include="Areas\Insights\ITelemetry.cs" />
+    <Compile Include="Areas\Insights\Telemetry.cs" />
     <Compile Include="Areas\Logging\LoggingAreaConfig.cs" />
     <Compile Include="Areas\Logging\LogMessageDumpStub.cs" />
+    <Compile Include="Areas\MainMenu\IOptionsFormFactory.cs" />
+    <Compile Include="Areas\MainMenu\OptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\MainMenu\OptionsForm.Designer.cs">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\Main\INewsViewModelFactory.cs" />
     <Compile Include="Areas\Main\Data\Model\MainWindow.cs" />
     <Compile Include="Areas\Main\Data\MainDataContext.cs" />
@@ -846,6 +859,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\CombatAssistant\CombatWidgetForm.resx">
       <DependentUpon>CombatWidgetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\MainMenu\OptionsForm.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\WurmApi\WurmApiSetupForm.resx">
       <DependentUpon>WurmApiSetupForm.cs</DependentUpon>

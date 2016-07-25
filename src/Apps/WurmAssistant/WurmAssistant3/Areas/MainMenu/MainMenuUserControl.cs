@@ -26,6 +26,7 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
         readonly IEnvironment environment;
         readonly IWurmClientValidatorFactory wurmClientValidatorFactory;
         readonly ILogger logger;
+        readonly IOptionsFormFactory optionsFormFactory;
 
         public MainMenuUserControl(
             [NotNull] IProcessStarter processStarter, 
@@ -37,7 +38,8 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
             [NotNull] IWurmAssistantConfig wurmAssistantConfig,
             [NotNull] IEnvironment environment,
             [NotNull] IWurmClientValidatorFactory wurmClientValidatorFactory,
-            [NotNull] ILogger logger)
+            [NotNull] ILogger logger,
+            [NotNull] IOptionsFormFactory optionsFormFactory)
         {
             if (processStarter == null) throw new ArgumentNullException(nameof(processStarter));
             if (userNotifier == null) throw new ArgumentNullException(nameof(userNotifier));
@@ -49,6 +51,7 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
             if (environment == null) throw new ArgumentNullException(nameof(environment));
             if (wurmClientValidatorFactory == null) throw new ArgumentNullException(nameof(wurmClientValidatorFactory));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (optionsFormFactory == null) throw new ArgumentNullException(nameof(optionsFormFactory));
             this.processStarter = processStarter;
             this.userNotifier = userNotifier;
             this.serversEditorViewFactory = serversEditorViewFactory;
@@ -59,6 +62,7 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
             this.environment = environment;
             this.wurmClientValidatorFactory = wurmClientValidatorFactory;
             this.logger = logger;
+            this.optionsFormFactory = optionsFormFactory;
 
             InitializeComponent();
 
@@ -210,6 +214,20 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
         private void howtoCreatePluginsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             processStarter.StartSafe("https://github.com/mdsolver/WurmAssistant3/wiki/Plugin-Quick-Start");
+        }
+
+        private void optionsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            var form = optionsFormFactory.CreateOptionsForm();
+            if (this.ParentForm != null)
+            {
+                form.ShowDialogCenteredOnForm(this.ParentForm);
+            }
+            else
+            {
+                form.StartPosition = FormStartPosition.CenterScreen;
+                form.ShowDialog();
+            }
         }
     }
 }

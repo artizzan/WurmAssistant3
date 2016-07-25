@@ -10,7 +10,7 @@ using System.Windows.Threading;
 using AldursLab.Essentials.Synchronization;
 using AldursLab.WurmAssistant3.Areas.Config;
 using AldursLab.WurmAssistant3.Areas.Core;
-using AldursLab.WurmAssistant3.Areas.Features.Contracts;
+using AldursLab.WurmAssistant3.Areas.Features;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.Main;
 using AldursLab.WurmAssistant3.Areas.Main.ViewModels;
