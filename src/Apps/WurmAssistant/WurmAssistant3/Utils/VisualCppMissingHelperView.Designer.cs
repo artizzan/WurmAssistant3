@@ -34,8 +34,8 @@ namespace AldursLab.WurmAssistant3.Utils
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.labelAutowrap1 = new AldursLab.WurmAssistant3.Utils.WinForms.LabelAutowrap();
             this.button1 = new System.Windows.Forms.Button();
-            this.labelAutowrap1 = new LabelAutowrap();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -75,16 +75,6 @@ namespace AldursLab.WurmAssistant3.Utils
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(10, 394);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(172, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Show the error batman found";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // labelAutowrap1
             // 
             this.labelAutowrap1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -95,6 +85,16 @@ namespace AldursLab.WurmAssistant3.Utils
             this.labelAutowrap1.Size = new System.Drawing.Size(348, 112);
             this.labelAutowrap1.TabIndex = 1;
             this.labelAutowrap1.Text = resources.GetString("labelAutowrap1.Text");
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(10, 394);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(172, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Show the error batman found";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // VisualCppMissingHelperView
             // 
@@ -107,7 +107,7 @@ namespace AldursLab.WurmAssistant3.Utils
             this.Name = "VisualCppMissingHelperView";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Batman comes to save you!";
+            this.Text = "Batman!";
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

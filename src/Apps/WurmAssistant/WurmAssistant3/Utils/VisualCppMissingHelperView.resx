@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="labelAutowrap1.Text" xml:space="preserve">
-    <value>I have noticed you are missing something very important and cannot run this program.
+    <value>I have noticed your machine is missing something very important and will not run Wurm Assistant properly.
 
-Please install Visual C++ Redistributable x86 SP1, as it is required for Wurm Assistant on Windows. Then try again.
+Please install Visual C++ Redistributable x86 SP1, as it is required for Wurm Assistant on Windows.
 
-It can be downloaded for here:</value>
+It can be downloaded from here:</value>
   </data>
 </root>

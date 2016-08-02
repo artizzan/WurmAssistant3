@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AldursLab.WurmAssistant3.Areas.Core;
 using AldursLab.WurmAssistant3.Areas.Logging;
+using AldursLab.WurmAssistant3.Utils;
 using JetBrains.Annotations;
 using Ninject;
 
@@ -92,6 +94,9 @@ namespace AldursLab.WurmAssistant3.Areas.Features
                 {
                     tasks.Add(new Tuple<Task, IFeature>(feature.InitAsync(), feature));
                 }
+
+                bool irrklangDependencyMissingHandled = false;
+
                 foreach (var tuple in tasks)
                 {
                     try
@@ -101,6 +106,13 @@ namespace AldursLab.WurmAssistant3.Areas.Features
                     }
                     catch (Exception exception)
                     {
+                        if (!irrklangDependencyMissingHandled)
+                        {
+                            var validator = new IrrklangDependencyValidator();
+                            irrklangDependencyMissingHandled =
+                                validator.HandleWhenMissingIrrklangDependency(exception);
+                        }
+
                         logger.Error(exception, string.Format("Error at feature initialization: {0}", tuple.Item2.Name));
                     }
                 }
