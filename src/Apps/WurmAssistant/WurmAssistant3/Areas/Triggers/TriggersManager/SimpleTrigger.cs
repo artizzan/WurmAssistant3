@@ -4,14 +4,15 @@ using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
+using AldursLab.WurmAssistant3.Areas.Triggers.Data.Model;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 {
     public class SimpleTrigger : SimpleConditionTriggerBase
     {
-        public SimpleTrigger(TriggerData triggerData, ISoundManager soundManager, ITrayPopups trayPopups, IWurmApi wurmApi,
+        public SimpleTrigger(TriggerEntity triggerEntity, ISoundManager soundManager, ITrayPopups trayPopups, IWurmApi wurmApi,
             ILogger logger)
-            : base(triggerData, soundManager, trayPopups, wurmApi, logger)
+            : base(triggerEntity, soundManager, trayPopups, wurmApi, logger)
         {
             ConditionHelp = "Text to match against log entry content, case insensitive";
             SourceHelp =
@@ -23,20 +24,20 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 
         protected override bool CheckCondition(LogEntry logMessage)
         {
-            if (!string.IsNullOrWhiteSpace(TriggerData.Source) 
-                && !string.Equals(logMessage.Source, TriggerData.Source, StringComparison.InvariantCultureIgnoreCase))
+            if (!string.IsNullOrWhiteSpace(TriggerEntity.Source) 
+                && !string.Equals(logMessage.Source, TriggerEntity.Source, StringComparison.InvariantCultureIgnoreCase))
             {
                 return false;
             }
 
-            if (TriggerData.MatchEveryLine) return true;
-            if (string.IsNullOrEmpty(TriggerData.Condition)) return false;
+            if (TriggerEntity.MatchEveryLine) return true;
+            if (string.IsNullOrEmpty(TriggerEntity.Condition)) return false;
             return CheckCaseInsensitive(logMessage.Content);
         }
 
         private bool CheckCaseInsensitive(string logMessage)
         {
-            return logMessage.Contains(TriggerData.Condition, StringComparison.OrdinalIgnoreCase);
+            return logMessage.Contains(TriggerEntity.Condition, StringComparison.OrdinalIgnoreCase);
         }
 
         public override string TypeAspect

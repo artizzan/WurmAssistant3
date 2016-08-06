@@ -1,6 +1,6 @@
 ﻿namespace AldursLab.WurmAssistant3.Areas.Core
 {
-    public interface IAppManager
+    public interface IAppMigrationsManager
     {
         void RunMigrations();
     }

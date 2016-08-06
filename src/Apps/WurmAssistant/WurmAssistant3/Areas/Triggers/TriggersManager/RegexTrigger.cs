@@ -5,6 +5,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
+using AldursLab.WurmAssistant3.Areas.Triggers.Data.Model;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 {
@@ -13,9 +14,9 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
     {
         readonly ILogger logger;
 
-        public RegexTrigger(TriggerData triggerData, ISoundManager soundManager, ITrayPopups trayPopups, IWurmApi wurmApi,
+        public RegexTrigger(TriggerEntity triggerEntity, ISoundManager soundManager, ITrayPopups trayPopups, IWurmApi wurmApi,
             ILogger logger)
-            : base(triggerData, soundManager, trayPopups, wurmApi, logger)
+            : base(triggerEntity, soundManager, trayPopups, wurmApi, logger)
         {
             if (logger == null) throw new ArgumentNullException("logger");
             this.logger = logger;
@@ -30,22 +31,22 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(TriggerData.Source))
+                if (!string.IsNullOrWhiteSpace(TriggerEntity.Source))
                 {
-                    if (!Regex.IsMatch(logMessage.Source, TriggerData.Source))
+                    if (!Regex.IsMatch(logMessage.Source, TriggerEntity.Source))
                     {
                         return false;
                     }
                 }
 
-                if (TriggerData.MatchEveryLine) return true;
+                if (TriggerEntity.MatchEveryLine) return true;
 
-                if (string.IsNullOrEmpty(TriggerData.Condition))
+                if (string.IsNullOrEmpty(TriggerEntity.Condition))
                 {
                     return false;
                 }
 
-                return Regex.IsMatch(logMessage.Content, TriggerData.Condition);
+                return Regex.IsMatch(logMessage.Content, TriggerEntity.Condition);
             }
             catch (Exception exception)
             {
@@ -53,7 +54,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
                     string.Format(
                         "Exception while checking regex trigger condition. Trigger name: {0}, Condition: {1}",
                         Name,
-                        TriggerData.Condition));
+                        TriggerEntity.Condition));
                 return false;
             }
         }

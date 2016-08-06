@@ -5,23 +5,31 @@ using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager;
 using AldursLab.WurmAssistant3.Properties;
 using AldursLab.WurmAssistant3.Utils.WinForms;
+using Caliburn.Micro;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers
 {
-    public partial class FormTriggersConfig : ExtendedForm
+    partial class FormTriggersConfig : ExtendedForm
     {
         readonly TriggerManager triggerManager;
         readonly ISoundManager soundManager;
+        readonly IWindowManager windowManager;
+
         private const string DisplayName = "Triggers";
 
-        public FormTriggersConfig([NotNull] TriggerManager triggerManager, [NotNull] ISoundManager soundManager)
+        public FormTriggersConfig(
+            [NotNull] TriggerManager triggerManager, 
+            [NotNull] ISoundManager soundManager,
+            [NotNull] IWindowManager windowManager)
         {
-            if (triggerManager == null) throw new ArgumentNullException("triggerManager");
-            if (soundManager == null) throw new ArgumentNullException("soundManager");
+            if (triggerManager == null) throw new ArgumentNullException(nameof(triggerManager));
+            if (soundManager == null) throw new ArgumentNullException(nameof(soundManager));
+            if (windowManager == null) throw new ArgumentNullException(nameof(windowManager));
             InitializeComponent();
             this.triggerManager = triggerManager;
             this.soundManager = soundManager;
+            this.windowManager = windowManager;
             BuildFormText();
             UpdateMutedState();
             TriggersListView.SetObjects(this.triggerManager.Triggers);
@@ -48,7 +56,6 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
                 var ui2 = ui.Result.ShowAndGetEditUi(this);
                 ui2.Closed += (o, args) =>
                 {
-                    triggerManager.FlagAsChanged();
                     RefreshBankAndList();
                 };
             }
@@ -73,7 +80,6 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         private void EditTriggerClosed(object o, EventArgs args)
         {
             TriggersListView.BuildList(true);
-            triggerManager.FlagAsChanged();
         }
 
         private void buttonRemove_Click(object sender, EventArgs e)
@@ -88,7 +94,6 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             {
                 triggerManager.RemoveTrigger((ITrigger)selected);
                 RefreshBankAndList();
-                triggerManager.FlagAsChanged();
             }
         }
 
@@ -106,7 +111,6 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         private void buttonMute_Click(object sender, EventArgs e)
         {
             triggerManager.Muted = !triggerManager.Muted;
-            triggerManager.FlagAsChanged();
             UpdateMutedState();
         }
 
@@ -199,7 +203,6 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         {
             var settings = TriggersListView.SaveState();
             triggerManager.TriggerListState = settings;
-            triggerManager.FlagAsChanged();
         }
 
         private void TriggersListView_KeyUp(object sender, KeyEventArgs e)

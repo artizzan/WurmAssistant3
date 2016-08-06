@@ -12,6 +12,8 @@ using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.Persistence;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
+using AldursLab.WurmAssistant3.Areas.Triggers.Data;
+using AldursLab.WurmAssistant3.Areas.Triggers.Factories;
 using AldursLab.WurmAssistant3.Properties;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
@@ -19,21 +21,19 @@ using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers
 {
-    [KernelBind(BindingHint.Singleton), PersistentObject("TriggersFeature")]
-    public class TriggersFeature : PersistentObjectBase, IFeature, IInitializable, IDisposable
+    [KernelBind(BindingHint.Singleton)]
+    public class TriggersFeature : IFeature, IDisposable
     {
         readonly ISoundManager soundManager;
         readonly IWurmAssistantDataDirectory wurmAssistantDataDirectory;
         readonly IWurmApi wurmApi;
-        readonly IPersistentObjectResolver<TriggerManager> triggerManagerResolver;
         readonly ITrayPopups trayPopups;
         readonly ILogger logger;
+        readonly TriggersDataContext triggersDataContext;
+        readonly ITriggerManagerFactory triggerManagerFactory;
         readonly ITimer updateTimer;
 
-        [JsonProperty]
-        readonly HashSet<string> activeCharacterNames = new HashSet<string>();
-
-        FormTriggersMain mainUi;
+        readonly FormTriggersMain mainUi;
         readonly Dictionary<string, TriggerManager> triggerManagers = new Dictionary<string, TriggerManager>();
 
         public TriggersFeature(
@@ -41,31 +41,31 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             [NotNull] IWurmAssistantDataDirectory wurmAssistantDataDirectory,
             [NotNull] ITimerFactory timerFactory,
             [NotNull] IWurmApi wurmApi,
-            [NotNull] IPersistentObjectResolver<TriggerManager> triggerManagerResolver, 
             [NotNull] ITrayPopups trayPopups,
-            [NotNull] ILogger logger)
+            [NotNull] ILogger logger,
+            [NotNull] TriggersDataContext triggersDataContext,
+            [NotNull] ITriggerManagerFactory triggerManagerFactory)
         {
             if (soundManager == null) throw new ArgumentNullException(nameof(soundManager));
             if (wurmAssistantDataDirectory == null) throw new ArgumentNullException(nameof(wurmAssistantDataDirectory));
             if (timerFactory == null) throw new ArgumentNullException(nameof(timerFactory));
             if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
-            if (triggerManagerResolver == null) throw new ArgumentNullException(nameof(triggerManagerResolver));
             if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (triggersDataContext == null) throw new ArgumentNullException(nameof(triggersDataContext));
+            if (triggerManagerFactory == null) throw new ArgumentNullException(nameof(triggerManagerFactory));
             this.soundManager = soundManager;
             this.wurmAssistantDataDirectory = wurmAssistantDataDirectory;
             this.wurmApi = wurmApi;
-            this.triggerManagerResolver = triggerManagerResolver;
             this.trayPopups = trayPopups;
             this.logger = logger;
+            this.triggersDataContext = triggersDataContext;
+            this.triggerManagerFactory = triggerManagerFactory;
 
             updateTimer = timerFactory.CreateUiThreadTimer();
             updateTimer.Interval = TimeSpan.FromMilliseconds(500);
             updateTimer.Tick += (sender, args) => Update();
-        }
 
-        public void Initialize()
-        {
             mainUi = new FormTriggersMain(this, soundManager);
             foreach (var name in GetAllActiveCharacters())
             {
@@ -92,25 +92,22 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         {
             triggerManagers.Remove(notifier.CharacterName);
             RemoveActiveCharacter(notifier.CharacterName);
-            FlagAsChanged();
-            mainUi.RemoveNotifierController(notifier.GetUIHandle());
+            mainUi.RemoveNotifierController(notifier.GetUiHandle());
         }
 
         private void AddActiveCharacter(string characterName)
         {
-            activeCharacterNames.Add(characterName);
-            FlagAsChanged();
+            triggersDataContext.TriggersConfig.ActiveCharacterNames.Add(characterName);
         }
 
         private void RemoveActiveCharacter(string characterName)
         {
-            activeCharacterNames.Remove(characterName);
-            FlagAsChanged();
+            triggersDataContext.TriggersConfig.ActiveCharacterNames.Remove(characterName);
         }
 
         private ICollection<string> GetAllActiveCharacters()
         {
-            return activeCharacterNames.ToArray();
+            return triggersDataContext.TriggersConfig.ActiveCharacterNames.ToArray();
         }
 
         private void Update()
@@ -125,7 +122,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         {
             try
             {
-                var triggerManager = triggerManagerResolver.Get(charName);
+                var triggerManager = triggerManagerFactory.CreateTriggerManager(charName);
                 AddManager(triggerManager);
             }
             catch (Exception exception)
@@ -137,10 +134,9 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         private void AddManager(TriggerManager triggerManager)
         {
             triggerManager.TriggersFeature = this;
-            mainUi.AddNotifierController(triggerManager.GetUIHandle());
+            mainUi.AddNotifierController(triggerManager.GetUiHandle());
             triggerManagers.Add(triggerManager.CharacterName, triggerManager);
             AddActiveCharacter(triggerManager.CharacterName);
-            FlagAsChanged();
         }
 
         #region IFeature

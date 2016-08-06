@@ -1,22 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using AldursLab.WurmApi;
+using Caliburn.Micro;
 using Newtonsoft.Json;
 
-namespace AldursLab.WurmAssistant3.Areas.Triggers
+namespace AldursLab.WurmAssistant3.Areas.Triggers.Data.Model
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class TriggerData
+    public class TriggerEntity : PropertyChangedBase
     {
-        [JsonProperty("triggerId")]
-        public Guid TriggerId { get; private set; }
-
-        [JsonProperty("triggerKind")]
-        public TriggerKind TriggerKind { get; private set; }
-
-        public event EventHandler<EventArgs> DataChanged;
-
-        public TriggerData(Guid triggerId, TriggerKind triggerKind)
+        public TriggerEntity(Guid triggerId, TriggerKind triggerKind)
         {
             TriggerId = triggerId;
             TriggerKind = triggerKind;
@@ -28,10 +22,28 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             logTypes = new HashSet<LogType>();
         }
 
-        private void OnDataChanged()
+        [JsonProperty("triggerId")]
+        public Guid TriggerId
         {
-            var handler = DataChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
+            get { return triggerId; }
+            private set
+            {
+                if (value.Equals(triggerId)) return;
+                triggerId = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        [JsonProperty("triggerKind")]
+        public TriggerKind TriggerKind
+        {
+            get { return triggerKind; }
+            private set
+            {
+                if (value == triggerKind) return;
+                triggerKind = value;
+                NotifyOfPropertyChange();
+            }
         }
 
         [JsonProperty]
@@ -42,7 +54,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 soundId = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
@@ -54,7 +66,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 popupTitle = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
@@ -66,7 +78,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 popupContent = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
@@ -78,7 +90,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 popupDurationMillis = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
@@ -90,7 +102,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 name = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
@@ -102,7 +114,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 cooldown = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
         [JsonProperty]
@@ -113,7 +125,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 cooldownUntil = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
         [JsonProperty]
@@ -124,7 +136,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 cooldownEnabled = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
         [JsonProperty]
@@ -135,7 +147,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 active = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
         [JsonProperty]
@@ -147,19 +159,20 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 logTypes = new HashSet<LogType>(value);
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
         
         public void AddLogType(LogType logType)
         {
-            logTypes.Add(logType); OnDataChanged();
+            logTypes.Add(logType);
+            NotifyOfPropertyChange();
         }
 
         public void RemoveLogType(LogType logType)
         {
             logTypes.Remove(logType);
-            OnDataChanged();
+            NotifyOfPropertyChange();
         }
 
         public bool HasLogType(LogType logType)
@@ -175,7 +188,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 resetOnConditonHit = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
         [JsonProperty]
@@ -186,7 +199,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 delayEnabled = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
         [JsonProperty]
@@ -197,7 +210,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 delay = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
@@ -209,7 +222,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 condition = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
@@ -221,7 +234,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 notificationDelay = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
@@ -233,7 +246,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 stayUntilClicked = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
@@ -245,7 +258,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 hasSound = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
@@ -257,7 +270,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 hasPopup = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
@@ -269,7 +282,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 matchEveryLine = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
@@ -281,7 +294,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 source = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
@@ -293,19 +306,23 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             set
             {
                 skillTriggerTreshhold = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
 
         [JsonProperty]
         string skillTriggerSkillName = string.Empty;
+
+        Guid triggerId;
+        TriggerKind triggerKind;
+
         public string SkillTriggerSkillName
         {
             get { return skillTriggerSkillName; }
             set
             {
                 skillTriggerSkillName = value;
-                OnDataChanged();
+                NotifyOfPropertyChange();
             }
         }
     }

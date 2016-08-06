@@ -6,6 +6,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
+using AldursLab.WurmAssistant3.Areas.Triggers.Data.Model;
 using AldursLab.WurmAssistant3.Areas.Triggers.Notifiers;
 using JetBrains.Annotations;
 using PopupNotifier = AldursLab.WurmAssistant3.Areas.Triggers.Notifiers.PopupNotifier;
@@ -14,22 +15,22 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 {
     public abstract class TriggerBase : TriggerAbstract, ITrigger
     {
-        protected readonly TriggerData TriggerData;
+        protected readonly TriggerEntity TriggerEntity;
 
         protected readonly ISoundManager SoundManager;
         protected readonly ITrayPopups TrayPopups;
         protected readonly IWurmApi WurmApi;
         protected readonly ILogger Logger;
 
-        public TriggerBase([NotNull] TriggerData triggerData, [NotNull] ISoundManager soundManager, [NotNull] ITrayPopups trayPopups,
+        public TriggerBase([NotNull] TriggerEntity triggerEntity, [NotNull] ISoundManager soundManager, [NotNull] ITrayPopups trayPopups,
             [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger)
         {
-            if (triggerData == null) throw new ArgumentNullException("triggerData");
+            if (triggerEntity == null) throw new ArgumentNullException("triggerEntity");
             if (soundManager == null) throw new ArgumentNullException("soundManager");
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
-            this.TriggerData = triggerData;
+            this.TriggerEntity = triggerEntity;
             this.SoundManager = soundManager;
             this.TrayPopups = trayPopups;
             this.WurmApi = wurmApi;
@@ -38,33 +39,33 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
             MuteChecker = () => false;
             Active = true;
 
-            if (triggerData.HasSound)
+            if (triggerEntity.HasSound)
             {
                 Sound = new SoundNotifier(this, soundManager);
             }
-            if (triggerData.HasPopup)
+            if (triggerEntity.HasPopup)
             {
                 Popup = new PopupNotifier(this, trayPopups);
             }
         }
 
-        public Guid TriggerId { get { return TriggerData.TriggerId; } }
+        public Guid TriggerId { get { return TriggerEntity.TriggerId; } }
 
-        public TriggerKind TriggerKind { get { return TriggerData.TriggerKind; } }
+        public TriggerKind TriggerKind { get { return TriggerEntity.TriggerKind; } }
 
         public bool DelayEnabled
         {
-            get { return TriggerData.DelayEnabled; }
+            get { return TriggerEntity.DelayEnabled; }
             set
             {
-                TriggerData.DelayEnabled = value;
+                TriggerEntity.DelayEnabled = value;
             }
         }
 
         public TimeSpan Delay
         {
-            get { return TriggerData.Delay; }
-            set { TriggerData.Delay = value; }
+            get { return TriggerEntity.Delay; }
+            set { TriggerEntity.Delay = value; }
         }
 
         public Func<bool> MuteChecker { private get; set; }
@@ -80,17 +81,17 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
         public void AddLogType(LogType type)
         {
             if (LogTypesLocked) throw new TriggerException("child has blocked adding log types to this trigger");
-            TriggerData.AddLogType(type);
+            TriggerEntity.AddLogType(type);
         }
 
         public void RemoveLogType(LogType type)
         {
-            TriggerData.RemoveLogType(type);
+            TriggerEntity.RemoveLogType(type);
         }
 
         public virtual bool CheckLogType(LogType type)
         {
-            return TriggerData.HasLogType(type);
+            return TriggerEntity.HasLogType(type);
         }
 
         public SoundNotifier Sound { get; private set; }
@@ -99,36 +100,36 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 
         public string Name
         {
-            get { return TriggerData.Name; }
-            set { TriggerData.Name = value; }
+            get { return TriggerEntity.Name; }
+            set { TriggerEntity.Name = value; }
         }
 
         protected DateTime CooldownUntil
         {
-            get { return TriggerData.CooldownUntil; }
-            set { TriggerData.CooldownUntil = value; }
+            get { return TriggerEntity.CooldownUntil; }
+            set { TriggerEntity.CooldownUntil = value; }
         }
 
         public bool CooldownEnabled
         {
-            get { return TriggerData.CooldownEnabled; }
+            get { return TriggerEntity.CooldownEnabled; }
             set
             {
-                TriggerData.CooldownEnabled = value;
+                TriggerEntity.CooldownEnabled = value;
                 if (!value) CooldownUntil = DateTime.MinValue;
             }
         }
 
         public TimeSpan Cooldown
         {
-            get { return TriggerData.Cooldown; }
-            set { TriggerData.Cooldown = value; }
+            get { return TriggerEntity.Cooldown; }
+            set { TriggerEntity.Cooldown = value; }
         }
 
         public bool Active
         {
-            get { return TriggerData.Active; }
-            set { TriggerData.Active = value; }
+            get { return TriggerEntity.Active; }
+            set { TriggerEntity.Active = value; }
         }
 
         public virtual void Update(LogEntry logEntry, DateTime dateTimeNow)
@@ -212,7 +213,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
             {
                 if (notifier is ISoundNotifier)
                 {
-                    TriggerData.HasSound = true;
+                    TriggerEntity.HasSound = true;
                     Sound = (SoundNotifier)notifier;
                     return;
                 }
@@ -221,7 +222,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
             {
                 if (notifier is IPopupNotifier)
                 {
-                    TriggerData.HasPopup = true;
+                    TriggerEntity.HasPopup = true;
                     Popup = (PopupNotifier)notifier;
                     return;
                 }
@@ -236,13 +237,13 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
         {
             if (notifier is ISoundNotifier)
             {
-                TriggerData.HasSound = false;
+                TriggerEntity.HasSound = false;
                 Sound = null;
                 return;
             }
             if (notifier is IPopupNotifier)
             {
-                TriggerData.HasPopup = false;
+                TriggerEntity.HasPopup = false;
                 Popup = null;
                 return;
             }
@@ -251,7 +252,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 
         public virtual string LogTypesAspect
         {
-            get { return string.Join(", ", TriggerData.LogTypes); }
+            get { return string.Join(", ", TriggerEntity.LogTypes); }
         }
 
         public virtual string ConditionAspect { get { return "Unknown"; } }
@@ -325,29 +326,29 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 
         public Guid SoundId
         {
-            get { return TriggerData.SoundId; }
-            set { TriggerData.SoundId = value; }
+            get { return TriggerEntity.SoundId; }
+            set { TriggerEntity.SoundId = value; }
         }
 
         public string PopupTitle
         {
-            get { return TriggerData.PopupTitle; }
-            set { TriggerData.PopupTitle = value; }
+            get { return TriggerEntity.PopupTitle; }
+            set { TriggerEntity.PopupTitle = value; }
         }
         public string PopupContent
         {
-            get { return TriggerData.PopupContent; }
-            set { TriggerData.PopupContent = value; }
+            get { return TriggerEntity.PopupContent; }
+            set { TriggerEntity.PopupContent = value; }
         }
         public bool StayUntilClicked
         {
-            get { return TriggerData.StayUntilClicked; }
-            set { TriggerData.StayUntilClicked = value; }
+            get { return TriggerEntity.StayUntilClicked; }
+            set { TriggerEntity.StayUntilClicked = value; }
         }
         public int PopupDurationMillis
         {
-            get { return TriggerData.PopupDurationMillis; }
-            set { TriggerData.PopupDurationMillis = value; }
+            get { return TriggerEntity.PopupDurationMillis; }
+            set { TriggerEntity.PopupDurationMillis = value; }
         }
 
         private EditTrigger _currentEditUi = null;
@@ -375,8 +376,8 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 
         public bool ResetOnConditonHit
         {
-            get { return TriggerData.ResetOnConditonHit; }
-            set { TriggerData.ResetOnConditonHit = value; }
+            get { return TriggerEntity.ResetOnConditonHit; }
+            set { TriggerEntity.ResetOnConditonHit = value; }
         }
 
         internal void SetLogType(LogType logType, System.Windows.Forms.CheckState checkState)

@@ -7,15 +7,15 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers
 {
-    public partial class FormTriggersMain : ExtendedForm
+    partial class FormTriggersMain : ExtendedForm
     {
         readonly TriggersFeature parent;
         readonly ISoundManager soundManager;
 
         public FormTriggersMain([NotNull] TriggersFeature parent, [NotNull] ISoundManager soundManager)
         {
-            if (parent == null) throw new ArgumentNullException("parent");
-            if (soundManager == null) throw new ArgumentNullException("soundManager");
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
+            if (soundManager == null) throw new ArgumentNullException(nameof(soundManager));
             this.parent = parent;
             this.soundManager = soundManager;
             InitializeComponent();

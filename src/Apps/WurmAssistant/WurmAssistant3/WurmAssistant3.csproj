@@ -121,8 +121,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Areas\Core\Data\CoreDataContext.cs" />
     <Compile Include="Areas\Core\DialogService.cs" />
-    <Compile Include="Areas\Core\IAppManager.cs" />
+    <Compile Include="Areas\Core\IAppMigrationsManager.cs" />
     <Compile Include="Areas\Core\IDialogService.cs" />
     <Compile Include="Areas\Core\IWurmAssistantDataDirectory.cs" />
     <Compile Include="Areas\Core\AppMigrationsManager.cs" />
@@ -189,9 +190,26 @@
     <Compile Include="Areas\Persistence\PersistentContextOptions.cs" />
     <Compile Include="Areas\Persistence\PersistentContextsManager.cs" />
     <Compile Include="Areas\SoundManager\SoundManagerFeature.cs" />
+    <Compile Include="Areas\TrayPopups\TrayPopupsStub.cs" />
+    <Compile Include="Areas\Triggers\Data\Migrations\TriggersV2Migration.cs" />
+    <Compile Include="Areas\Triggers\Data\Migrations\V1Data\ActiveTriggersObj.cs" />
+    <Compile Include="Areas\Triggers\Data\Migrations\V1Data\ConditionsManagerObj.cs" />
+    <Compile Include="Areas\Triggers\Data\Migrations\V1Data\TriggerManagerObj.cs" />
+    <Compile Include="Areas\Triggers\Data\Model\ActionQueueTriggerConfig.cs" />
+    <Compile Include="Areas\Triggers\Data\Model\CharacterTriggersConfig.cs" />
+    <Compile Include="Areas\Triggers\Data\Model\TriggersConfig.cs" />
+    <Compile Include="Areas\Triggers\Data\TriggersDataContext.cs" />
+    <Compile Include="Areas\Triggers\Data\Migrations\V1Data\TriggersFeatureObj.cs" />
+    <Compile Include="Areas\Triggers\Data\Migrations\V1Data\ObsoleteDataProvider.cs" />
+    <Compile Include="Areas\Triggers\Data\Model\TriggerEntity.cs" />
+    <Compile Include="Areas\Triggers\Factories\IActiveTriggersFactory.cs" />
+    <Compile Include="Areas\Triggers\Factories\ITriggerManagerFactory.cs" />
+    <Compile Include="Areas\Triggers\ImportExport\Exporter.cs" />
+    <Compile Include="Areas\Triggers\ImportExport\IExporterFactory.cs" />
+    <Compile Include="Areas\Triggers\ImportExport\IImporterFactory.cs" />
+    <Compile Include="Areas\Triggers\ImportExport\Importer.cs" />
     <Compile Include="Areas\WurmApi\IWurmClientValidatorFactory.cs" />
     <Compile Include="Areas\WurmApi\WurmApiAreaConfig.cs" />
-    <Compile Include="Systems\AppUpgrades\VersionUpgradeManager.cs" />
     <Compile Include="Systems\ConventionBinding\ConventionBindingManager.cs" />
     <Compile Include="Systems\ConventionBinding\Exceptions\ConventionBindingException.cs" />
     <Compile Include="Systems\ConventionBinding\Exceptions\InvalidAreaConfigTypeException.cs" />
@@ -199,6 +217,9 @@
     <Compile Include="Systems\ConventionBinding\WaTypeInfo.cs" />
     <Compile Include="Systems\Plugins\PluginInfo.cs" />
     <Compile Include="Systems\Plugins\PluginManager.cs" />
+    <Compile Include="Utils\Collections\MemberChangeNotifyingDictionary.cs" />
+    <Compile Include="Utils\Collections\MemberChangeNotifyingHashset.cs" />
+    <Compile Include="Utils\Collections\MemberChangeNotifyingList.cs" />
     <Compile Include="Utils\Extensions\IconExtensions.cs" />
     <Compile Include="Utils\IrrklangDependencyValidator.cs" />
     <Compile Include="Areas\Core\IChangelogManager.cs" />
@@ -698,7 +719,6 @@
     <Compile Include="Areas\Triggers\ActionQueueParsing\IActionQueueParsingCondition.cs" />
     <Compile Include="Areas\Triggers\ActionQueueParsing\MatchingKind.cs" />
     <Compile Include="Areas\Triggers\ActiveTriggers.cs" />
-    <Compile Include="Areas\Triggers\TriggerData.cs" />
     <Compile Include="Areas\Triggers\TriggerKind.cs" />
     <Compile Include="Areas\Triggers\ActionQueueParsing\Condition.cs" />
     <Compile Include="Areas\Triggers\ConditionsManager.cs" />
@@ -1188,6 +1208,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Core\Data\Model\" />
     <Folder Include="Messages\Events\" />
     <Folder Include="Messages\Requests\" />
   </ItemGroup>

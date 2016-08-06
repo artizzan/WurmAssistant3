@@ -7,6 +7,7 @@ using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
 using AldursLab.WurmAssistant3.Areas.Triggers.ActionQueueParsing;
+using AldursLab.WurmAssistant3.Areas.Triggers.Data.Model;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
@@ -26,9 +27,9 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
         // wurm log line that triggered queue sound
         private string logEntryThatTriggeredLastQueueSound;
 
-        public ActionQueueTrigger(TriggerData triggerData, ISoundManager soundManager, ITrayPopups trayPopups,
+        public ActionQueueTrigger(TriggerEntity triggerEntity, ISoundManager soundManager, ITrayPopups trayPopups,
             IWurmApi wurmApi, ILogger logger, [NotNull] IActionQueueConditions conditionsManager)
-            : base(triggerData, soundManager, trayPopups, wurmApi, logger)
+            : base(triggerEntity, soundManager, trayPopups, wurmApi, logger)
         {
             if (logger == null) throw new ArgumentNullException("logger");
             if (conditionsManager == null) throw new ArgumentNullException("conditionsManager");
@@ -42,8 +43,8 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 
         public double NotificationDelay
         {
-            get { return TriggerData.NotificationDelay; }
-            set { TriggerData.NotificationDelay = value; }
+            get { return TriggerEntity.NotificationDelay; }
+            set { TriggerEntity.NotificationDelay = value; }
         }
 
         public override bool CheckLogType(LogType type)
@@ -148,12 +149,12 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
                 lastActionFinished = DateTime.Now;
                 // if action finished, older action started is no longer valid
                 // and should not disable queuesound in next conditional
-                lastActionStarted = lastActionStarted.AddSeconds(-TriggerData.NotificationDelay);
+                lastActionStarted = lastActionStarted.AddSeconds(-TriggerEntity.NotificationDelay);
                 notificationScheduled = true;
             }
 
             // cancel scheduled queue sound if new action started before its played
-            if (lastActionStarted.AddSeconds(TriggerData.NotificationDelay) >= DateTime.Now)
+            if (lastActionStarted.AddSeconds(TriggerEntity.NotificationDelay) >= DateTime.Now)
             {
                 notificationScheduled = false;
             }
@@ -165,7 +166,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 
         public override void FixedUpdate(DateTime dateTimeNow)
         {
-            if (Active && notificationScheduled && dateTimeNow >= lastActionFinished.AddSeconds(TriggerData.NotificationDelay))
+            if (Active && notificationScheduled && dateTimeNow >= lastActionFinished.AddSeconds(TriggerEntity.NotificationDelay))
             {
                 if (!CooldownEnabled)
                 {

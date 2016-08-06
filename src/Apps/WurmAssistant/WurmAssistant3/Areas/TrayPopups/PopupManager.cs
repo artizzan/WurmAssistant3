@@ -12,6 +12,8 @@ namespace AldursLab.WurmAssistant3.Areas.TrayPopups
         FormPopupContainer popupContainer;
         Thread popupThread;
 
+        ManualResetEvent mre = new ManualResetEvent(false);
+
         internal PopupManager([NotNull] ILogger logger)
         {
             if (logger == null) throw new ArgumentNullException("logger");
@@ -25,11 +27,16 @@ namespace AldursLab.WurmAssistant3.Areas.TrayPopups
             popupThread.Priority = ThreadPriority.BelowNormal;
             popupThread.IsBackground = true;
             popupThread.Start();
+            if (!mre.WaitOne(TimeSpan.FromSeconds(5)))
+            {
+                logger.Error("Timeout at ManualResetEvent.WaitOne");
+            }
         }
 
         void PopupThreadStart()
         {
             popupContainer = new FormPopupContainer();
+            popupContainer.Load += (sender, args) => mre.Set();
             Application.Run(popupContainer);
         }
 

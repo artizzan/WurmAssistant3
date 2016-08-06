@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
@@ -16,7 +17,7 @@ using AldursLab.WurmAssistant3.Areas.Main;
 using AldursLab.WurmAssistant3.Areas.Main.ViewModels;
 using AldursLab.WurmAssistant3.Areas.Native;
 using AldursLab.WurmAssistant3.Areas.Persistence;
-using AldursLab.WurmAssistant3.Systems.AppUpgrades;
+using AldursLab.WurmAssistant3.Areas.TrayPopups;
 using AldursLab.WurmAssistant3.Systems.ConventionBinding;
 using AldursLab.WurmAssistant3.Systems.Plugins;
 using AldursLab.WurmAssistant3.Utils;
@@ -39,6 +40,10 @@ namespace AldursLab.WurmAssistant3
         {
             HandleExceptions(() =>
             {
+                System.Windows.Forms.Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+                System.Windows.Forms.Application.EnableVisualStyles();
+                Regex.CacheSize = 1000;
+
                 consoleArgs = new ConsoleArgs();
                 kernel.Bind<IConsoleArgs>().ToConstant(consoleArgs);
 
@@ -62,12 +67,6 @@ namespace AldursLab.WurmAssistant3
             HandleExceptions(() =>
             {
                 kernel.Bind<IWindowManager>().To<WindowManager>().InSingletonScope();
-
-                VersionUpgradeManager upgradeManager = new VersionUpgradeManager(dataDirectory, consoleArgs);
-                upgradeManager.RunUpgrades();
-
-                System.Windows.Forms.Application.EnableVisualStyles();
-                Regex.CacheSize = 1000;
 
                 var kernelConfig = KernelConfig.EnableFor(kernel);
                 kernel.Bind<IKernelConfig>().ToConstant(kernelConfig);
@@ -101,6 +100,9 @@ namespace AldursLab.WurmAssistant3
 
                 var logger = GetLogger();
 
+                var appMigrationsManager = kernel.Get<IAppMigrationsManager>();
+                appMigrationsManager.RunMigrations();
+
                 var featureManager = kernel.Get<IFeaturesManager>();
                 featureManager.InitFeaturesAsync();
 
@@ -113,6 +115,8 @@ namespace AldursLab.WurmAssistant3
                 {
                     logger.Error(dllLoadError.Exception, "Failed to load plugin DLL: " + dllLoadError.DllFileName);
                 }
+
+                System.Windows.Forms.Application.ThreadException += ApplicationOnThreadException;
             });
         }
 
@@ -168,10 +172,21 @@ namespace AldursLab.WurmAssistant3
 
         protected override void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            GetLogger().Error(e.Exception, "Something went very wrong!");
+            LogError(e.Exception);
             // Errors should not crash the application.
             e.Handled = true;
             base.OnUnhandledException(sender, e);
+        }
+
+        void ApplicationOnThreadException(object sender, ThreadExceptionEventArgs threadExceptionEventArgs)
+        {
+            LogError(threadExceptionEventArgs.Exception);
+        }
+
+        void LogError(Exception e)
+        {
+            GetLogger().Error(e, "Something went wrong!");
+            GetTrayPopups().Schedule("Wurm Assistant error: " + e.Message + Environment.NewLine + "Check logs for details", "Error!");
         }
 
         protected override void OnExit(object sender, EventArgs e)
@@ -194,6 +209,23 @@ namespace AldursLab.WurmAssistant3
             }
 
             return logger;
+        }
+
+        ITrayPopups GetTrayPopups()
+        {
+            ITrayPopups tp;
+            try
+            {
+                tp = kernel.Get<ITrayPopups>();
+                return tp;
+            }
+            catch (Exception exception)
+            {
+                var logger = GetLogger();
+                logger.Error(exception, "Unable to get ITrayPopups from IKernel. Skipping.");
+            }
+
+            return new TrayPopupsStub();
         }
 
         void AttemptToRestoreAlreadyRunningAppInstance()

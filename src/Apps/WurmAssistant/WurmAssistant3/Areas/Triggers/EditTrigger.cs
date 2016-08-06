@@ -18,10 +18,13 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         readonly ISoundManager soundManager;
         readonly ITrayPopups trayPopups;
 
-        public EditTrigger(ITrigger trigger, [NotNull] ISoundManager soundManager, [NotNull] ITrayPopups trayPopups)
+        public EditTrigger(
+            ITrigger trigger, 
+            [NotNull] ISoundManager soundManager, 
+            [NotNull] ITrayPopups trayPopups)
         {
-            if (soundManager == null) throw new ArgumentNullException("soundManager");
-            if (trayPopups == null) throw new ArgumentNullException("trayPopups");
+            if (soundManager == null) throw new ArgumentNullException(nameof(soundManager));
+            if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
             _trigger = trigger;
             this.soundManager = soundManager;
             this.trayPopups = trayPopups;

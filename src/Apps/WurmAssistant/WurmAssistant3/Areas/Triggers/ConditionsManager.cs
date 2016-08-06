@@ -4,16 +4,17 @@ using System.Linq;
 using System.Windows.Forms;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmAssistant3.Areas.Triggers.ActionQueueParsing;
+using AldursLab.WurmAssistant3.Areas.Triggers.Data;
+using AldursLab.WurmAssistant3.Utils.Collections;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers
 {
-    [KernelBind(BindingHint.Singleton), PersistentObject("ActionQueueParsing_ConditionsManager")]
-    public class ConditionsManager : PersistentObjectBase, IActionQueueConditions
+    [KernelBind(BindingHint.Singleton)]
+    public class ConditionsManager : IActionQueueConditions
     {
-        [JsonProperty]
-        Dictionary<Guid, Condition> allConditions = new Dictionary<Guid, Condition>();
-
+        readonly TriggersDataContext triggersDataContext;
         List<IActionQueueParsingCondition> actionStart = new List<IActionQueueParsingCondition>();
         List<IActionQueueParsingCondition> actionFalstart = new List<IActionQueueParsingCondition>();
         List<IActionQueueParsingCondition> actionEnd = new List<IActionQueueParsingCondition>();
@@ -22,8 +23,11 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         List<IActionQueueParsingCondition> levelingStart = new List<IActionQueueParsingCondition>();
         List<IActionQueueParsingCondition> levelingEnd = new List<IActionQueueParsingCondition>();
 
-        protected override void OnPersistentDataLoaded()
+        public ConditionsManager([NotNull] TriggersDataContext triggersDataContext)
         {
+            if (triggersDataContext == null) throw new ArgumentNullException(nameof(triggersDataContext));
+            this.triggersDataContext = triggersDataContext;
+
             MergeAllDefaultConditions();
             RebuildConditionsCache();
         }
@@ -174,9 +178,9 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         void MergeDefault(string guidString, string pattern, ConditionKind conditionKind, MatchingKind matchingKind)
         {
             var id = new Guid(guidString);
-            if (!allConditions.ContainsKey(id))
+            if (!triggersDataContext.ActionQueueTriggerConfig.Conditions.ContainsKey(id))
             {
-                allConditions.Add(
+                triggersDataContext.ActionQueueTriggerConfig.Conditions.Add(
                     id,
                     new Condition(id, true)
                     {
@@ -193,9 +197,12 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             var editgui = new EditGui(this);
             if (editgui.ShowDialog() == DialogResult.OK)
             {
-                allConditions = editgui.GetEditedConditions()
-                                       .ToDictionary(condition => condition.ConditionId, condition => condition);
-                
+                triggersDataContext.ActionQueueTriggerConfig.Conditions.Clear();
+                foreach (var editedCondition in editgui.GetEditedConditions())
+                {
+                    triggersDataContext.ActionQueueTriggerConfig.Conditions.Add(editedCondition.ConditionId, editedCondition);
+                }
+
                 RebuildConditionsCache();
                 OnConditionsChanged();
             }
@@ -204,12 +211,12 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         protected virtual void OnConditionsChanged()
         {
             var handler = ConditionsChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
+            handler?.Invoke(this, EventArgs.Empty);
         }
 
         public void RestoreDefaults()
         {
-            allConditions = new Dictionary<Guid, Condition>();
+            triggersDataContext.ActionQueueTriggerConfig.Conditions = new MemberChangeNotifyingDictionary<Guid, Condition>();
             MergeAllDefaultConditions();
             RebuildConditionsCache();
             OnConditionsChanged();
@@ -228,15 +235,18 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
 
         private List<IActionQueueParsingCondition> CreateKindList(ConditionKind kind)
         {
-            return allConditions.Where(pair => pair.Value.ConditionKind == kind && !pair.Value.Disabled)
-                             .Select(pair => pair.Value)
-                             .Cast<IActionQueueParsingCondition>()
-                             .ToList();
+            return
+                triggersDataContext.ActionQueueTriggerConfig.Conditions.Where(
+                    pair => pair.Value.ConditionKind == kind && !pair.Value.Disabled)
+                                   .Select(pair => pair.Value)
+                                   .Cast<IActionQueueParsingCondition>()
+                                   .ToList();
         }
 
         public IEnumerable<Condition> GetCurrentConditionsCopies()
         {
-            return allConditions.Select(pair => pair.Value.CreateCopy()).ToList();
+            return
+                triggersDataContext.ActionQueueTriggerConfig.Conditions.Select(pair => pair.Value.CreateCopy()).ToList();
         }
     }
 }

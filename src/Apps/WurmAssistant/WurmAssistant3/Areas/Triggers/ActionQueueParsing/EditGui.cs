@@ -12,14 +12,14 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.ActionQueueParsing
 {
-    public partial class EditGui : Form
+    partial class EditGui : Form
     {
         readonly ConditionsManager conditionsManager;
         BindingList<Condition> conditions;
 
         public EditGui([NotNull] ConditionsManager conditionsManager)
         {
-            if (conditionsManager == null) throw new ArgumentNullException("conditionsManager");
+            if (conditionsManager == null) throw new ArgumentNullException(nameof(conditionsManager));
             this.conditionsManager = conditionsManager;
             InitializeComponent();
 

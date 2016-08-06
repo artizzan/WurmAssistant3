@@ -67,7 +67,7 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
             return GetPersistentContext(contextId, new PersistentContextOptions());
         }
 
-        void PerformAutoSave(bool saveAll)
+        public void PerformAutoSave(bool saveAll)
         {
             lock (locker)
             {

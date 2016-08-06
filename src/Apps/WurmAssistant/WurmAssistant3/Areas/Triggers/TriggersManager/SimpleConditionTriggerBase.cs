@@ -3,14 +3,15 @@ using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
+using AldursLab.WurmAssistant3.Areas.Triggers.Data.Model;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 {
     public abstract class SimpleConditionTriggerBase : TriggerBase
     {
-        protected SimpleConditionTriggerBase(TriggerData triggerData, ISoundManager soundManager, ITrayPopups trayPopups, IWurmApi wurmApi,
+        protected SimpleConditionTriggerBase(TriggerEntity triggerEntity, ISoundManager soundManager, ITrayPopups trayPopups, IWurmApi wurmApi,
             ILogger logger)
-            : base(triggerData, soundManager, trayPopups, wurmApi, logger)
+            : base(triggerEntity, soundManager, trayPopups, wurmApi, logger)
         {
         }
 
@@ -19,7 +20,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 
         public override string ConditionAspect
         {
-            get { return TriggerData.Condition; }
+            get { return TriggerEntity.Condition; }
         }
 
         public override IEnumerable<ITriggerConfig> Configs
@@ -32,20 +33,20 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 
         public string Condition
         {
-            get { return TriggerData.Condition; }
-            set { TriggerData.Condition = value; }
+            get { return TriggerEntity.Condition; }
+            set { TriggerEntity.Condition = value; }
         }
 
         public bool MatchEveryLine
         {
-            get { return TriggerData.MatchEveryLine; }
-            set { TriggerData.MatchEveryLine = value; }
+            get { return TriggerEntity.MatchEveryLine; }
+            set { TriggerEntity.MatchEveryLine = value; }
         }
 
         public string Source
         {
-            get { return TriggerData.Source; }
-            set { TriggerData.Source = value; }
+            get { return TriggerEntity.Source; }
+            set { TriggerEntity.Source = value; }
         }
     }
 }

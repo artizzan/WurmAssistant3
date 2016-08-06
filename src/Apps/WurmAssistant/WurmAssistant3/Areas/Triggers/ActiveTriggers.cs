@@ -7,64 +7,67 @@ using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
 using AldursLab.WurmAssistant3.Areas.Triggers.ActionQueueParsing;
+using AldursLab.WurmAssistant3.Areas.Triggers.Data;
+using AldursLab.WurmAssistant3.Areas.Triggers.Data.Model;
 using AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers
 {
-    [KernelBind, PersistentObject("TriggersFeature_ActiveTriggers")]
-    public class ActiveTriggers : PersistentObjectBase
+    [KernelBind]
+    public class ActiveTriggers
     {
         readonly ISoundManager soundManager;
         readonly ITrayPopups trayPopups;
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
         readonly IActionQueueConditions actionQueueConditions;
-
-        [JsonProperty]
-        private readonly Dictionary<Guid,TriggerData> triggerDatas = new Dictionary<Guid,TriggerData>();
+        readonly CharacterTriggersConfig triggersConfig;
 
         private readonly Dictionary<Guid,ITrigger> triggers = new Dictionary<Guid,ITrigger>();
         Func<bool> mutedEvaluator;
 
-        public ActiveTriggers(string persistentObjectId, [NotNull] ISoundManager soundManager,
-            [NotNull] ITrayPopups trayPopups, [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger,
-            [NotNull] IActionQueueConditions actionQueueConditions) : base(persistentObjectId)
+        public ActiveTriggers(
+            string characterName, 
+            [NotNull] ISoundManager soundManager,
+            [NotNull] ITrayPopups trayPopups, 
+            [NotNull] IWurmApi wurmApi, 
+            [NotNull] ILogger logger,
+            [NotNull] IActionQueueConditions actionQueueConditions,
+            [NotNull] TriggersDataContext triggersDataContext)
         {
-            if (soundManager == null) throw new ArgumentNullException("soundManager");
-            if (trayPopups == null) throw new ArgumentNullException("trayPopups");
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (actionQueueConditions == null) throw new ArgumentNullException("actionQueueConditions");
+            if (soundManager == null) throw new ArgumentNullException(nameof(soundManager));
+            if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
+            if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (actionQueueConditions == null) throw new ArgumentNullException(nameof(actionQueueConditions));
+            if (triggersDataContext == null) throw new ArgumentNullException(nameof(triggersDataContext));
 
-            CharacterName = persistentObjectId;
+            CharacterName = characterName;
 
             this.soundManager = soundManager;
             this.trayPopups = trayPopups;
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.actionQueueConditions = actionQueueConditions;
-        }
+            this.triggersConfig = triggersDataContext.CharacterTriggersConfigs.GetOrCreate(characterName);
 
-        public string CharacterName { get; private set; }
-
-        protected override void OnPersistentDataLoaded()
-        {
-            foreach (var settings in triggerDatas.Values)
+            foreach (var entity in triggersConfig.TriggerEntities.Values)
             {
-                settings.DataChanged += DataOnDataChanged;
                 try
                 {
-                    triggers.Add(settings.TriggerId, BuildTrigger(settings));
+                    triggers.Add(entity.TriggerId, BuildTrigger(entity));
                 }
                 catch (Exception exception)
                 {
                     logger.Error(exception,
-                        string.Format("Error initializing trigger id {0}, name: {1}", settings.TriggerId, settings.Name));
+                        string.Format("Error initializing trigger id {0}, name: {1}", entity.TriggerId, entity.Name));
                 }
             }
         }
+
+        public string CharacterName { get; private set; }
 
         public Func<bool> MutedEvaluator
         {
@@ -79,7 +82,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             }
         }
 
-        ITrigger BuildTrigger(TriggerData settings)
+        ITrigger BuildTrigger(TriggerEntity settings)
         {
             switch (settings.TriggerKind)
             {
@@ -100,34 +103,25 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
 
         public ITrigger CreateNewTrigger(TriggerKind kind)
         {
-            var settings = new TriggerData(Guid.NewGuid(), kind);
-            var trigger = BuildTrigger(settings);
-            triggers.Add(settings.TriggerId, trigger);
-            triggerDatas.Add(settings.TriggerId, settings);
-            settings.DataChanged += DataOnDataChanged;
-            FlagAsChanged();
+            var entity = new TriggerEntity(Guid.NewGuid(), kind);
+            var trigger = BuildTrigger(entity);
+            triggers.Add(entity.TriggerId, trigger);
+            triggersConfig.TriggerEntities.Add(entity.TriggerId, entity);
             return trigger;
         }
 
         public bool RemoveTrigger(ITrigger trigger)
         {
-            TriggerData data;
-            if (triggerDatas.TryGetValue(trigger.TriggerId, out data))
+            TriggerEntity entity;
+            if (triggersConfig.TriggerEntities.TryGetValue(trigger.TriggerId, out entity))
             {
-                if (data != null) data.DataChanged -= DataOnDataChanged;
                 triggers.Remove(trigger.TriggerId);
-                triggerDatas.Remove(trigger.TriggerId);
+                triggersConfig.TriggerEntities.Remove(trigger.TriggerId);
                 trigger.Dispose();
-                FlagAsChanged();
                 return true;
             }
 
             return false;
-        }
-
-        void DataOnDataChanged(object sender, EventArgs eventArgs)
-        {
-            FlagAsChanged();
         }
 
         public void DisposeAll()

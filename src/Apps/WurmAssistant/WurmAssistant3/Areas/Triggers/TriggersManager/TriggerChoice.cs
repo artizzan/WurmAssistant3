@@ -4,7 +4,7 @@ using AldursLab.WurmAssistant3.Utils.WinForms;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 {
-    public partial class TriggerChoice : ExtendedForm
+    partial class TriggerChoice : ExtendedForm
     {
         public ITrigger Result = null;
 

@@ -9,6 +9,7 @@ using AldursLab.WurmApi.Modules.Wurm.Characters.Skills;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
+using AldursLab.WurmAssistant3.Areas.Triggers.Data.Model;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 {
@@ -25,9 +26,9 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 
         WeakReference<SkillLevelTriggerConfig> configViewWeakRef;
 
-        public SkillLevelTrigger(string characterName, TriggerData triggerData, ISoundManager soundManager,
+        public SkillLevelTrigger(string characterName, TriggerEntity triggerEntity, ISoundManager soundManager,
             ITrayPopups trayPopups, IWurmApi wurmApi, ILogger logger)
-            : base(triggerData, soundManager, trayPopups, wurmApi, logger)
+            : base(triggerEntity, soundManager, trayPopups, wurmApi, logger)
         {
             if (characterName == null) throw new ArgumentNullException("characterName");
             this.characterName = characterName;
@@ -58,7 +59,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
                 if (currentServer != null)
                 {
                     var skillInfo =
-                        await character.Skills.TryGetCurrentSkillLevelAsync(TriggerData.SkillTriggerSkillName,
+                        await character.Skills.TryGetCurrentSkillLevelAsync(TriggerEntity.SkillTriggerSkillName,
                             currentServer.ServerGroup,
                             TimeSpan.FromDays(90));
                     if (skillInfo != null)
@@ -79,10 +80,10 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 
         public string SkillName
         {
-            get { return TriggerData.SkillTriggerSkillName; }
+            get { return TriggerEntity.SkillTriggerSkillName; }
             set
             {
-                TriggerData.SkillTriggerSkillName = value ?? string.Empty;
+                TriggerEntity.SkillTriggerSkillName = value ?? string.Empty;
                 lastSkillLevel = null;
                 SkillFeedback = "(no data)";
                 UpdateConfigView();
@@ -92,8 +93,8 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
 
         public double TriggerSkillLevel
         {
-            get { return TriggerData.SkillTriggerTreshhold; }
-            set { TriggerData.SkillTriggerTreshhold = value; }
+            get { return TriggerEntity.SkillTriggerTreshhold; }
+            set { TriggerEntity.SkillTriggerTreshhold = value; }
         }
 
         public string SkillFeedback { get; private set; }
@@ -114,12 +115,12 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
                 var info = skillEntryParser.TryParseSkillInfoFromLogLine(logMessage);
                 if (info != null)
                 {
-                    if (info.IsSkillName(TriggerData.SkillTriggerSkillName))
+                    if (info.IsSkillName(TriggerEntity.SkillTriggerSkillName))
                     {
                         if (lastSkillLevel != null)
                         {
-                            if (lastSkillLevel.Value <= TriggerData.SkillTriggerTreshhold
-                                && info.Value > TriggerData.SkillTriggerTreshhold)
+                            if (lastSkillLevel.Value <= TriggerEntity.SkillTriggerTreshhold
+                                && info.Value > TriggerEntity.SkillTriggerTreshhold)
                             {
                                 conditionMatched = true;
                             }

@@ -110,6 +110,7 @@
             this.TriggersListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.TriggersListView.CellEditUseWholeCell = false;
             this.TriggersListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnTriggerName,
             this.olvColumnTriggerType,
@@ -119,6 +120,7 @@
             this.olvColumnTriggerActive,
             this.olvColumnSound,
             this.olvColumnPopup});
+            this.TriggersListView.Cursor = System.Windows.Forms.Cursors.Default;
             this.TriggersListView.FullRowSelect = true;
             this.TriggersListView.GridLines = true;
             this.TriggersListView.Location = new System.Drawing.Point(5, 18);
@@ -259,7 +261,7 @@
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(604, 446);
+            this.MinimumSize = new System.Drawing.Size(700, 446);
             this.Name = "FormTriggersConfig";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Triggers";
@@ -295,6 +297,5 @@
         private System.Windows.Forms.Panel panel1;
         private BrightIdeasSoftware.OLVColumn olvColumnSound;
         private BrightIdeasSoftware.OLVColumn olvColumnPopup;
-
     }
 }

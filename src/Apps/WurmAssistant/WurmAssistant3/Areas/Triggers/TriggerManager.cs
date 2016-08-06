@@ -7,31 +7,26 @@ using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.Persistence;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
+using AldursLab.WurmAssistant3.Areas.Triggers.Data;
+using AldursLab.WurmAssistant3.Areas.Triggers.Data.Model;
+using AldursLab.WurmAssistant3.Areas.Triggers.Factories;
 using AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager;
 using AldursLab.WurmAssistant3.Properties;
+using Caliburn.Micro;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Ninject;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers
 {
-    [KernelBind, PersistentObject("TriggersFeature_TriggerManager")]
-    public class TriggerManager : PersistentObjectBase, IInitializable, IDisposable
+    [KernelBind]
+    public class TriggerManager : IDisposable
     {
-        [JsonProperty] bool muted = false;
-
-        [JsonProperty]
-        public byte[] TriggerListState;
-
-        //todo: this wont work any more, deserializer wont have a clue about actual type
-
-        //merge all trigger types into one type
-
         ActiveTriggers activeTriggers;
 
         UcPlayerTriggersController controlUi;
 
-        public readonly string CharacterName;
+        public string CharacterName { get; }
 
         FormTriggersConfig triggersConfigUi;
 
@@ -42,43 +37,50 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         readonly ILogger logger;
 
         readonly ITrayPopups trayPopups;
-        readonly IPersistentObjectResolver<ActiveTriggers> activeTriggersResolver;
-        // previous processed line
+        readonly IActiveTriggersFactory activeTriggersFactory;
+        readonly IWindowManager windowManager;
 
+        // previously processed line
         string lastLineContent;
 
-        public TriggerManager([NotNull] string persistentObjectId, [NotNull] IWurmApi wurmApi,
-            [NotNull] ISoundManager soundManager, [NotNull] ILogger logger,
-            [NotNull] ITrayPopups trayPopups, [NotNull] IPersistentObjectResolver<ActiveTriggers> activeTriggersResolver)
-            : base(persistentObjectId)
-        {
-            if (persistentObjectId == null) throw new ArgumentNullException("persistentObjectId");
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (soundManager == null) throw new ArgumentNullException("soundManager");
-            if (logger == null) throw new ArgumentNullException("logger");
-            if (trayPopups == null) throw new ArgumentNullException("trayPopups");
-            if (activeTriggersResolver == null) throw new ArgumentNullException("activeTriggersResolver");
-            CharacterName = persistentObjectId;
+        readonly CharacterTriggersConfig triggersConfig;
 
+        public TriggerManager(
+            [NotNull] string characterName,
+            [NotNull] IWurmApi wurmApi,
+            [NotNull] ISoundManager soundManager, 
+            [NotNull] ILogger logger,
+            [NotNull] ITrayPopups trayPopups, 
+            [NotNull] IActiveTriggersFactory activeTriggersFactory,
+            [NotNull] IWindowManager windowManager,
+            [NotNull] TriggersDataContext triggersDataContext)
+        {
+            if (characterName == null) throw new ArgumentNullException(nameof(characterName));
+            if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (soundManager == null) throw new ArgumentNullException(nameof(soundManager));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
+            if (activeTriggersFactory == null) throw new ArgumentNullException(nameof(activeTriggersFactory));
+            if (windowManager == null) throw new ArgumentNullException(nameof(windowManager));
+            if (triggersDataContext == null) throw new ArgumentNullException(nameof(triggersDataContext));
+
+            this.CharacterName = characterName;
             this.wurmApi = wurmApi;
             this.soundManager = soundManager;
             this.logger = logger;
             this.trayPopups = trayPopups;
-            this.activeTriggersResolver = activeTriggersResolver;
+            this.activeTriggersFactory = activeTriggersFactory;
+            this.windowManager = windowManager;
+            this.triggersConfig = triggersDataContext.CharacterTriggersConfigs.GetOrCreate(characterName);
 
-            TriggerListState = new byte[0];
-        }
-
-        public void Initialize()
-        {
-            activeTriggers = activeTriggersResolver.Get(CharacterName);
+            activeTriggers = activeTriggersFactory.CreateActiveTriggers(CharacterName);
             activeTriggers.MutedEvaluator = GetMutedEvaluator();
 
             //create control for Module UI
             controlUi = new UcPlayerTriggersController();
 
             //create this notifier UI
-            triggersConfigUi = new FormTriggersConfig(this, soundManager);
+            triggersConfigUi = new FormTriggersConfig(this, soundManager, windowManager);
 
             UpdateMutedState();
             controlUi.label1.Text = CharacterName;
@@ -100,7 +102,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
 
         private bool IsMuted()
         {
-            return muted;
+            return triggersConfig.Muted;
         }
 
         public Func<bool> GetMutedEvaluator()
@@ -108,15 +110,18 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             return IsMuted;
         }
 
-        public IEnumerable<ITrigger> Triggers
-        {
-            get { return activeTriggers.All; }
-        }
+        public IEnumerable<ITrigger> Triggers => activeTriggers.All;
 
         public bool Muted
         {
-            get { return muted; }
-            set { muted = value; }
+            get { return triggersConfig.Muted; }
+            set { triggersConfig.Muted = value; }
+        }
+
+        public byte[] TriggerListState
+        {
+            get { return triggersConfig.TriggerListState; }
+            set { triggersConfig.TriggerListState = value; }
         }
 
         public void RemoveTrigger(ITrigger trigger)
@@ -129,24 +134,23 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             return activeTriggers.CreateNewTrigger(kind);
         }
 
-        public UcPlayerTriggersController GetUIHandle()
+        public UcPlayerTriggersController GetUiHandle()
         {
             return controlUi;
         }
 
         private void ToggleMute(object sender, EventArgs e)
         {
-            muted = !muted;
-            FlagAsChanged();
+            triggersConfig.Muted = !triggersConfig.Muted;
             UpdateMutedState();
             triggersConfigUi.UpdateMutedState();
         }
 
         public void UpdateMutedState()
         {
-            if (muted)
-                controlUi.buttonMute.BackgroundImage = Resources.SoundDisabledSmall;
-            else controlUi.buttonMute.BackgroundImage = Resources.SoundEnabledSmall;
+            controlUi.buttonMute.BackgroundImage = triggersConfig.Muted
+                ? Resources.SoundDisabledSmall
+                : Resources.SoundEnabledSmall;
         }
 
         public void Update()
