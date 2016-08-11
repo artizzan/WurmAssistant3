@@ -109,7 +109,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
             try
             {
                 Process.Start(
-                    @"http://forum.wurmonline.com/index.php?/topic/68031-wurm-assistant-2x-bundle-of-useful-tools/#entry948073");
+                    @"http://forum.wurmonline.com/index.php?/topic/68031-wurm-assistant-enrich-your-wurm-experience/&do=findComment&comment=948073");
             }
             catch (Exception exception)
             {

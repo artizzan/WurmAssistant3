@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using AldursLab.Persistence;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Areas.Triggers.Data.Model;
 using AldursLab.WurmAssistant3.Areas.Triggers.Notifiers;
 
 namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
@@ -68,6 +70,10 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
         int PopupDurationMillis { get; set; }
 
         EditTrigger ShowAndGetEditUi(Form parent);
+
+        TriggerEntity GetTriggerEntityCopy(ISerializer serializer);
+
+        string GetDescription();
     }
 
     public interface ITriggerConfig

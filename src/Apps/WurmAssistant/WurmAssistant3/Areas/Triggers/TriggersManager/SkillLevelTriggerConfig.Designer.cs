@@ -31,11 +31,11 @@
             this.SkillNameTbox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label4 = new System.Windows.Forms.Label();
             this.SkillLevelInput = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.skillFeedbackLbl = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SkillLevelInput)).BeginInit();
             this.SuspendLayout();
@@ -83,6 +83,18 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(320, 134);
             this.tableLayoutPanel1.TabIndex = 3;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label4.Location = new System.Drawing.Point(0, 93);
+            this.label4.Margin = new System.Windows.Forms.Padding(0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(90, 41);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "Feedback:";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // SkillLevelInput
             // 
@@ -133,18 +145,6 @@
             this.skillFeedbackLbl.Size = new System.Drawing.Size(49, 13);
             this.skillFeedbackLbl.TabIndex = 6;
             this.skillFeedbackLbl.Text = "(no data)";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(0, 93);
-            this.label4.Margin = new System.Windows.Forms.Padding(0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(90, 41);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Feedback:";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // SkillLevelTriggerConfig
             // 

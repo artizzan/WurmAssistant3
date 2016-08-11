@@ -26,7 +26,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Data.Model
         public Guid TriggerId
         {
             get { return triggerId; }
-            private set
+            set
             {
                 if (value.Equals(triggerId)) return;
                 triggerId = value;
@@ -38,7 +38,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Data.Model
         public TriggerKind TriggerKind
         {
             get { return triggerKind; }
-            private set
+            set
             {
                 if (value == triggerKind) return;
                 triggerKind = value;
@@ -324,6 +324,11 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.Data.Model
                 skillTriggerSkillName = value;
                 NotifyOfPropertyChange();
             }
+        }
+
+        public string GetDescription()
+        {
+            return $"{TriggerKind} trigger named {Name}";
         }
     }
 }

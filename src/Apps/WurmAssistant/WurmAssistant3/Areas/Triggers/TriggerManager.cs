@@ -10,6 +10,7 @@ using AldursLab.WurmAssistant3.Areas.TrayPopups;
 using AldursLab.WurmAssistant3.Areas.Triggers.Data;
 using AldursLab.WurmAssistant3.Areas.Triggers.Data.Model;
 using AldursLab.WurmAssistant3.Areas.Triggers.Factories;
+using AldursLab.WurmAssistant3.Areas.Triggers.ImportExport;
 using AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager;
 using AldursLab.WurmAssistant3.Properties;
 using Caliburn.Micro;
@@ -39,6 +40,8 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         readonly ITrayPopups trayPopups;
         readonly IActiveTriggersFactory activeTriggersFactory;
         readonly IWindowManager windowManager;
+        readonly IExporterFactory exporterFactory;
+        readonly IImporterFactory importerFactory;
 
         // previously processed line
         string lastLineContent;
@@ -53,7 +56,9 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             [NotNull] ITrayPopups trayPopups, 
             [NotNull] IActiveTriggersFactory activeTriggersFactory,
             [NotNull] IWindowManager windowManager,
-            [NotNull] TriggersDataContext triggersDataContext)
+            [NotNull] TriggersDataContext triggersDataContext,
+            [NotNull] IExporterFactory exporterFactory,
+            [NotNull] IImporterFactory importerFactory)
         {
             if (characterName == null) throw new ArgumentNullException(nameof(characterName));
             if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
@@ -63,6 +68,8 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             if (activeTriggersFactory == null) throw new ArgumentNullException(nameof(activeTriggersFactory));
             if (windowManager == null) throw new ArgumentNullException(nameof(windowManager));
             if (triggersDataContext == null) throw new ArgumentNullException(nameof(triggersDataContext));
+            if (exporterFactory == null) throw new ArgumentNullException(nameof(exporterFactory));
+            if (importerFactory == null) throw new ArgumentNullException(nameof(importerFactory));
 
             this.CharacterName = characterName;
             this.wurmApi = wurmApi;
@@ -71,6 +78,8 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             this.trayPopups = trayPopups;
             this.activeTriggersFactory = activeTriggersFactory;
             this.windowManager = windowManager;
+            this.exporterFactory = exporterFactory;
+            this.importerFactory = importerFactory;
             this.triggersConfig = triggersDataContext.CharacterTriggersConfigs.GetOrCreate(characterName);
 
             activeTriggers = activeTriggersFactory.CreateActiveTriggers(CharacterName);
@@ -80,7 +89,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             controlUi = new UcPlayerTriggersController();
 
             //create this notifier UI
-            triggersConfigUi = new FormTriggersConfig(this, soundManager, windowManager);
+            triggersConfigUi = new FormTriggersConfig(this, soundManager, windowManager, exporterFactory, importerFactory);
 
             UpdateMutedState();
             controlUi.label1.Text = CharacterName;
@@ -132,6 +141,11 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         public ITrigger CreateTrigger(TriggerKind kind)
         {
             return activeTriggers.CreateNewTrigger(kind);
+        }
+
+        public ITrigger CreateTriggerFromEntity(TriggerEntity triggerEntity)
+        {
+            return activeTriggers.CreateNewTriggerFromEntity(triggerEntity);
         }
 
         public UcPlayerTriggersController GetUiHandle()
@@ -214,6 +228,16 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
 
             controlUi.Dispose();
             triggersConfigUi.Close();
+        }
+
+        public ITrigger FindTriggerById(Guid triggerId)
+        {
+            return Triggers.FirstOrDefault(trigger => trigger.TriggerId == triggerId);
+        }
+
+        public ITrigger FindTriggerByName(string name)
+        {
+            return Triggers.FirstOrDefault(trigger => string.Equals(trigger.Name, name, StringComparison.CurrentCultureIgnoreCase));
         }
     }
 }

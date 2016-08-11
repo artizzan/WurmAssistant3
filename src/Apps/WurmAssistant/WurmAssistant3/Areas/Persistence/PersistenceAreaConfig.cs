@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AldursLab.Persistence;
+using AldursLab.Persistence.Simple;
 using AldursLab.PersistentObjects;
 using AldursLab.PersistentObjects.Persistence;
 using AldursLab.PersistentObjects.Serialization;
@@ -47,6 +49,8 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
 
             kernel.Bind<IPersistentObjectResolver>().To<PersistentObjectResolver>().InSingletonScope();
             kernel.Bind(typeof(IPersistentObjectResolver<>)).To(typeof(PersistentObjectResolver<>)).InSingletonScope();
+
+            kernel.Bind<ISerializer>().To<DefaultJsonSerializer>();
         }
     }
 }

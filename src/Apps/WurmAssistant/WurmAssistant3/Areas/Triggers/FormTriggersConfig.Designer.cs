@@ -33,6 +33,8 @@
             this.buttonAdd = new System.Windows.Forms.Button();
             this.buttonRemove = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonImport = new System.Windows.Forms.Button();
+            this.buttonExportSelected = new System.Windows.Forms.Button();
             this.TriggersListView = new BrightIdeasSoftware.ObjectListView();
             this.olvColumnTriggerName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnTriggerType = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -80,6 +82,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonImport);
+            this.groupBox1.Controls.Add(this.buttonExportSelected);
             this.groupBox1.Controls.Add(this.TriggersListView);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.buttonManageSNDBank);
@@ -96,6 +100,30 @@
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "All your triggers";
+            // 
+            // buttonImport
+            // 
+            this.buttonImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonImport.Location = new System.Drawing.Point(412, 351);
+            this.buttonImport.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonImport.Name = "buttonImport";
+            this.buttonImport.Size = new System.Drawing.Size(68, 38);
+            this.buttonImport.TabIndex = 15;
+            this.buttonImport.Text = "Import";
+            this.buttonImport.UseVisualStyleBackColor = true;
+            this.buttonImport.Click += new System.EventHandler(this.buttonImport_Click);
+            // 
+            // buttonExportSelected
+            // 
+            this.buttonExportSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonExportSelected.Location = new System.Drawing.Point(340, 351);
+            this.buttonExportSelected.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonExportSelected.Name = "buttonExportSelected";
+            this.buttonExportSelected.Size = new System.Drawing.Size(68, 38);
+            this.buttonExportSelected.TabIndex = 14;
+            this.buttonExportSelected.Text = "Export Selected";
+            this.buttonExportSelected.UseVisualStyleBackColor = true;
+            this.buttonExportSelected.Click += new System.EventHandler(this.buttonExportSelected_Click);
             // 
             // TriggersListView
             // 
@@ -189,12 +217,13 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(615, 356);
+            this.label5.Location = new System.Drawing.Point(528, 351);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(110, 26);
+            this.label5.Size = new System.Drawing.Size(200, 39);
             this.label5.TabIndex = 12;
-            this.label5.Text = "Right-click a trigger to\r\nenable/disable it";
+            this.label5.Text = "Right-click a trigger to enable/disable it\r\nShift-click triggers to select many a" +
+    "t once\r\nUse \'delete\' key for quick delete";
             // 
             // buttonManageSNDBank
             // 
@@ -261,7 +290,7 @@
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(700, 446);
+            this.MinimumSize = new System.Drawing.Size(856, 447);
             this.Name = "FormTriggersConfig";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Triggers";
@@ -297,5 +326,7 @@
         private System.Windows.Forms.Panel panel1;
         private BrightIdeasSoftware.OLVColumn olvColumnSound;
         private BrightIdeasSoftware.OLVColumn olvColumnPopup;
+        private System.Windows.Forms.Button buttonImport;
+        private System.Windows.Forms.Button buttonExportSelected;
     }
 }

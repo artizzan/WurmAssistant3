@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
+using AldursLab.Persistence;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
@@ -372,6 +373,16 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
                 _currentEditUi = null;
                 return ShowAndGetEditUi(parent);
             }
+        }
+
+        public TriggerEntity GetTriggerEntityCopy(ISerializer serializer)
+        {
+            return serializer.Deserialize<TriggerEntity>(serializer.Serialize(this.TriggerEntity));
+        }
+
+        public string GetDescription()
+        {
+            return TriggerEntity.GetDescription();
         }
 
         public bool ResetOnConditonHit

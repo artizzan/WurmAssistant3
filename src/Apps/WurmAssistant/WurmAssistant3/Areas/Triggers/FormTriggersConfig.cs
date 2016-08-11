@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
+using AldursLab.WurmAssistant3.Areas.Triggers.ImportExport;
 using AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager;
 using AldursLab.WurmAssistant3.Properties;
 using AldursLab.WurmAssistant3.Utils.WinForms;
@@ -15,21 +17,29 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         readonly TriggerManager triggerManager;
         readonly ISoundManager soundManager;
         readonly IWindowManager windowManager;
+        readonly IExporterFactory exporterFactory;
+        readonly IImporterFactory importerFactory;
 
         private const string DisplayName = "Triggers";
 
         public FormTriggersConfig(
             [NotNull] TriggerManager triggerManager, 
             [NotNull] ISoundManager soundManager,
-            [NotNull] IWindowManager windowManager)
+            [NotNull] IWindowManager windowManager,
+            [NotNull] IExporterFactory exporterFactory,
+            [NotNull] IImporterFactory importerFactory)
         {
             if (triggerManager == null) throw new ArgumentNullException(nameof(triggerManager));
             if (soundManager == null) throw new ArgumentNullException(nameof(soundManager));
             if (windowManager == null) throw new ArgumentNullException(nameof(windowManager));
+            if (exporterFactory == null) throw new ArgumentNullException(nameof(exporterFactory));
+            if (importerFactory == null) throw new ArgumentNullException(nameof(importerFactory));
             InitializeComponent();
             this.triggerManager = triggerManager;
             this.soundManager = soundManager;
             this.windowManager = windowManager;
+            this.exporterFactory = exporterFactory;
+            this.importerFactory = importerFactory;
             BuildFormText();
             UpdateMutedState();
             TriggersListView.SetObjects(this.triggerManager.Triggers);
@@ -84,15 +94,28 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
 
         private void buttonRemove_Click(object sender, EventArgs e)
         {
-            RemoveCurrentItem();
+            RemoveCurrentItems();
         }
 
-        void RemoveCurrentItem()
+        void RemoveCurrentItems()
         {
-            var selected = TriggersListView.SelectedObject;
-            if (selected != null)
+            var selected = TriggersListView.SelectedObjects.Cast<ITrigger>().ToArray();
+            if (selected.Any())
             {
-                triggerManager.RemoveTrigger((ITrigger)selected);
+                if (selected.Length > 1)
+                {
+                    if (MessageBox.Show($"Are you sure to delete {selected.Length} triggers?",
+                        "Confirm delete",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Asterisk) != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+                foreach (var trigger in selected)
+                {
+                    triggerManager.RemoveTrigger(trigger);
+                }
                 RefreshBankAndList();
             }
         }
@@ -209,7 +232,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         {
             if (e.KeyCode == Keys.Delete)
             {
-                RemoveCurrentItem();
+                RemoveCurrentItems();
             }
         }
 
@@ -241,6 +264,22 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         private void linkLabel1_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
         {
 
+        }
+
+        private void buttonExportSelected_Click(object sender, EventArgs e)
+        {
+            var selectedTriggers = TriggersListView.SelectedObjects.Cast<ITrigger>().ToList();
+            if (selectedTriggers.Any())
+            {
+                var exporter = exporterFactory.CreateExporter();
+                exporter.Export(selectedTriggers);
+            }
+        }
+
+        private void buttonImport_Click(object sender, EventArgs e)
+        {
+            var importer = importerFactory.CreateImporter();
+            importer.Import(triggerManager);
         }
     }
 }

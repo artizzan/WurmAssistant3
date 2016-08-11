@@ -1,8 +1,8 @@
 ﻿namespace AldursLab.WurmAssistant3.Areas.Triggers.ImportExport
 {
     [KernelBind(BindingHint.FactoryProxy)]
-    interface IExporterFactory
+    public interface IExporterFactory
     {
-        Importer CreateExporter();
+        Exporter CreateExporter();
     }
 }

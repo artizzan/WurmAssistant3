@@ -37,12 +37,12 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
             this.LogTypesChklist = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.CooldownInput = new TimeSpanInputCompact();
+            this.CooldownInput = new AldursLab.WurmAssistant3.Utils.WinForms.TimeSpanInputCompact();
             this.ApplicableLogsDisplayTxtbox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.CooldownEnabledChkbox = new System.Windows.Forms.CheckBox();
             this.ResetOnCndHitChkbox = new System.Windows.Forms.CheckBox();
-            this.DelayInput = new TimeSpanInputCompact();
+            this.DelayInput = new AldursLab.WurmAssistant3.Utils.WinForms.TimeSpanInputCompact();
             this.label4 = new System.Windows.Forms.Label();
             this.DelayChkbox = new System.Windows.Forms.CheckBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();

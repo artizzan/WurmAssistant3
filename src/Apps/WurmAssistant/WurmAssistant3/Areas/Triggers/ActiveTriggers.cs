@@ -104,11 +104,23 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         public ITrigger CreateNewTrigger(TriggerKind kind)
         {
             var entity = new TriggerEntity(Guid.NewGuid(), kind);
+            return CreateNewTriggerFromEntity(entity);
+        }
+
+        public ITrigger CreateNewTriggerFromEntity(TriggerEntity entity)
+        {
+            if (triggers.ContainsKey(entity.TriggerId))
+            {
+                throw new InvalidOperationException(
+                    $"Trigger with ID {entity.TriggerId} already exists for player {CharacterName}.");
+            }
+
             var trigger = BuildTrigger(entity);
             triggers.Add(entity.TriggerId, trigger);
             triggersConfig.TriggerEntities.Add(entity.TriggerId, entity);
             return trigger;
         }
+
 
         public bool RemoveTrigger(ITrigger trigger)
         {

@@ -35,7 +35,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
             this.WhatsRegularExprLink = new System.Windows.Forms.LinkLabel();
             this.RegexGuideLink = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
-            this.labelAutowrap1 = new LabelAutowrap();
+            this.labelAutowrap1 = new AldursLab.WurmAssistant3.Utils.WinForms.LabelAutowrap();
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
