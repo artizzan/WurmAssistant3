@@ -1180,9 +1180,9 @@
     <Content Include="Releases\3.0\release.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Releases\3.2\release.xml">
+    <Content Include="Releases\3.2\release.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    </Content>
     <Content Include="Releases\3.1\release.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
