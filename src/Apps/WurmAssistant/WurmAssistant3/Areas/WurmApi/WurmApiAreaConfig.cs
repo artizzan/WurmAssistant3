@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Config;
+using AldursLab.WurmAssistant3.Areas.Core;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using Ninject;
 
@@ -25,6 +26,7 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi
                 IWurmAssistantConfig config = kernel.Get<IWurmAssistantConfig>();
                 IWurmApiLoggerFactory loggerFactory = kernel.Get<IWurmApiLoggerFactory>();
                 IWurmApiEventMarshaller eventMarshaller = kernel.Get<IWurmApiEventMarshaller>();
+                IWurmAssistantDataDirectory wurmAssistantDataDirectory = kernel.Get<IWurmAssistantDataDirectory>();
 
                 if (string.IsNullOrWhiteSpace(config.WurmGameClientInstallDirectory))
                 {
@@ -44,7 +46,7 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi
                 serverInfoManager.UpdateWurmApiConfigDictionary(wurmApiConfig.ServerInfoMap);
 
                 var wurmApiDataDir =
-                    new DirectoryInfo(Path.Combine(config.WurmGameClientInstallDirectory, "WurmApi"));
+                    new DirectoryInfo(Path.Combine(wurmAssistantDataDirectory.DirectoryPath, "WurmApi"));
 
                 var wurmApi = AldursLab.WurmApi.WurmApiFactory.Create(
                     new WurmApiCreationOptions()

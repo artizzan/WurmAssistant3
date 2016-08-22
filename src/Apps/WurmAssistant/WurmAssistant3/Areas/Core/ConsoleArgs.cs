@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Core
 {
     public class ConsoleArgs : IConsoleArgs
     {
+        readonly string executingAssemblyNameWithoutExtension;
+
         const string WurmUnlimitedFlag = "-wurmunlimited";
         const string RelativeDataDirFlag = "-relativedatadir";
 
@@ -13,8 +16,11 @@ namespace AldursLab.WurmAssistant3.Areas.Core
         bool wurmUnlimitedMode = false;
         bool useRelativeDataDir = false;
 
-        public ConsoleArgs() //todo: use IEnvironment?
+        public ConsoleArgs([NotNull] string executingAssemblyNameWithoutExtension) //todo: use IEnvironment?
         {
+            if (executingAssemblyNameWithoutExtension == null) throw new ArgumentNullException(nameof(executingAssemblyNameWithoutExtension));
+
+            this.executingAssemblyNameWithoutExtension = executingAssemblyNameWithoutExtension;
             this.args = Environment.GetCommandLineArgs();
 
             ParseArgs();
@@ -29,7 +35,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core
 
             for (int i = 0; i < args.Length; i++)
             {
-                var arg = args[i];
+                var arg = args[i] ?? string.Empty;
 
                 if (ParamMatch(arg, RelativeDataDirFlag))
                 {
@@ -39,6 +45,13 @@ namespace AldursLab.WurmAssistant3.Areas.Core
                 {
                     wurmUnlimitedMode = true;
                 }
+                else
+                {
+                    if (!CommonArgument(arg))
+                    {
+                        throw new WurmAssistantException("Unknown console argument: " + arg);
+                    }
+                }
             }
         }
 
@@ -47,15 +60,9 @@ namespace AldursLab.WurmAssistant3.Areas.Core
             return string.Join(" ", args);
         }
 
-        public bool WurmUnlimitedMode
-        {
-            get { return wurmUnlimitedMode; }
-        }
+        public bool WurmUnlimitedMode => wurmUnlimitedMode;
 
-        public bool UseRelativeDataDir
-        {
-            get { return useRelativeDataDir; }
-        }
+        public bool UseRelativeDataDir => useRelativeDataDir;
 
         bool ParamMatch(string arg, string param)
         {
@@ -81,6 +88,12 @@ namespace AldursLab.WurmAssistant3.Areas.Core
             {
                 return args[nextIndex];
             }
+        }
+
+        bool CommonArgument(string arg)
+        {
+            return arg.EndsWith(executingAssemblyNameWithoutExtension + ".vshost.exe", StringComparison.OrdinalIgnoreCase)
+                   || arg.EndsWith(executingAssemblyNameWithoutExtension + "exe", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

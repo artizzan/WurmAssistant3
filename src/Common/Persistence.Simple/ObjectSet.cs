@@ -64,9 +64,16 @@ namespace AldursLab.Persistence.Simple
                     if (data != null)
                     {
                         o = serializer.Deserialize<T>(data);
-                        po = new PersistentObject(objectId, o);
+                        if (o != null)
+                        {
+                            // unexpectedly, 'o' can be null, if 'data' is a NUL string.
+                            po = new PersistentObject(objectId, o);
+                        }
+                        
                     }
-                    else
+                    
+                    // if object never existed or could not be deserialized, create a new object
+                    if (po == null)
                     {
                         o = new T();
                         po = new PersistentObject(objectId, o);

@@ -257,6 +257,7 @@
     <Compile Include="Utils\IoC\CustomActionsStrategyBase.cs" />
     <Compile Include="Utils\IoC\PostInitializeActionsStrategy.cs" />
     <Compile Include="Utils\WPF\WebBrowserBehaviors.cs" />
+    <Compile Include="WurmAssistantException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Calendar\WurmSeasonDefinition.cs" />

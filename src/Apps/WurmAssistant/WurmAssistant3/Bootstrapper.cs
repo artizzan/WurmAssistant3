@@ -33,7 +33,6 @@ namespace AldursLab.WurmAssistant3
         readonly IKernel kernel = new StandardKernel();
 
         IConsoleArgs consoleArgs;
-        WurmAssistantDataDirectory dataDirectory;
         PluginManager pluginManager;
 
         public Bootstrapper()
@@ -44,10 +43,12 @@ namespace AldursLab.WurmAssistant3
                 System.Windows.Forms.Application.EnableVisualStyles();
                 Regex.CacheSize = 1000;
 
-                consoleArgs = new ConsoleArgs();
+                var executingAssemblyName = this.GetType().Assembly.GetName();
+
+                consoleArgs = new ConsoleArgs(executingAssemblyName.Name);
                 kernel.Bind<IConsoleArgs>().ToConstant(consoleArgs);
 
-                dataDirectory = new WurmAssistantDataDirectory(consoleArgs);
+                var dataDirectory = new WurmAssistantDataDirectory(consoleArgs);
                 kernel.Bind<IWurmAssistantDataDirectory, WurmAssistantDataDirectory>()
                       .ToConstant(dataDirectory);
 
