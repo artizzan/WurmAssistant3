@@ -45,13 +45,16 @@ namespace AldursLab.WurmAssistant3.Areas.Core
                 {
                     wurmUnlimitedMode = true;
                 }
-                else
-                {
-                    if (!CommonArgument(arg))
-                    {
-                        throw new WurmAssistantException("Unknown console argument: " + arg);
-                    }
-                }
+                //todo: handle common arguments properly. App crashes if run from launcher...
+                // Unknown console argument: E:\Downloads\WurmAssistant3Launcher\bin\wo\stable-win\62\AldursLab.WurmAssistant3.exe
+                // executingAssemblyNameWithoutExtension is probably different than expected?
+                //else
+                //{
+                //    if (!CommonArgument(arg))
+                //    {
+                //        throw new WurmAssistantException("Unknown console argument: " + arg);
+                //    }
+                //}
             }
         }
 
