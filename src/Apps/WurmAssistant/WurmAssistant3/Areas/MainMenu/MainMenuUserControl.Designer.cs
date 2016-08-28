@@ -37,6 +37,7 @@
             this.changeGameClientPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.optionsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataBackupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.officialForumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wikiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,6 +62,7 @@
             this.howtoManagePluginsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.howtoCreatePluginsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -86,6 +88,8 @@
             this.clearWurmApiCachesToolStripMenuItem,
             this.changeGameClientPathToolStripMenuItem,
             this.toolStripSeparator5,
+            this.dataBackupsToolStripMenuItem,
+            this.toolStripSeparator6,
             this.optionsToolStripMenuItem1});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
@@ -133,8 +137,15 @@
             // 
             this.optionsToolStripMenuItem1.Name = "optionsToolStripMenuItem1";
             this.optionsToolStripMenuItem1.Size = new System.Drawing.Size(319, 22);
-            this.optionsToolStripMenuItem1.Text = "Options";
+            this.optionsToolStripMenuItem1.Text = "Other options";
             this.optionsToolStripMenuItem1.Click += new System.EventHandler(this.optionsToolStripMenuItem1_Click);
+            // 
+            // dataBackupsToolStripMenuItem
+            // 
+            this.dataBackupsToolStripMenuItem.Name = "dataBackupsToolStripMenuItem";
+            this.dataBackupsToolStripMenuItem.Size = new System.Drawing.Size(319, 22);
+            this.dataBackupsToolStripMenuItem.Text = "Manage Wurm Assistant data backups";
+            this.dataBackupsToolStripMenuItem.Click += new System.EventHandler(this.dataBackupsToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -320,6 +331,11 @@
             this.debugToolStripMenuItem.Visible = false;
             this.debugToolStripMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
             // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(316, 6);
+            // 
             // MainMenuUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -369,5 +385,7 @@
         private System.Windows.Forms.ToolStripMenuItem howtoCreatePluginsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem dataBackupsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
     }
 }

@@ -7,8 +7,10 @@ using AldursLab.WurmAssistant3.Areas.Core;
 using AldursLab.WurmAssistant3.Areas.Debugging.Contracts;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.Main;
+using AldursLab.WurmAssistant3.Areas.Main.ViewModels;
 using AldursLab.WurmAssistant3.Areas.WurmApi;
 using AldursLab.WurmAssistant3.Properties;
+using Caliburn.Micro;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.MainMenu
@@ -27,6 +29,8 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
         readonly IWurmClientValidatorFactory wurmClientValidatorFactory;
         readonly ILogger logger;
         readonly IOptionsFormFactory optionsFormFactory;
+        readonly IDataBackupsViewModelFactory dataBackupsViewModelFactory;
+        readonly IWindowManager windowManager;
 
         public MainMenuUserControl(
             [NotNull] IProcessStarter processStarter, 
@@ -39,7 +43,9 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
             [NotNull] IEnvironment environment,
             [NotNull] IWurmClientValidatorFactory wurmClientValidatorFactory,
             [NotNull] ILogger logger,
-            [NotNull] IOptionsFormFactory optionsFormFactory)
+            [NotNull] IOptionsFormFactory optionsFormFactory,
+            [NotNull] IDataBackupsViewModelFactory dataBackupsViewModelFactory,
+            [NotNull] IWindowManager windowManager)
         {
             if (processStarter == null) throw new ArgumentNullException(nameof(processStarter));
             if (userNotifier == null) throw new ArgumentNullException(nameof(userNotifier));
@@ -52,6 +58,9 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
             if (wurmClientValidatorFactory == null) throw new ArgumentNullException(nameof(wurmClientValidatorFactory));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (optionsFormFactory == null) throw new ArgumentNullException(nameof(optionsFormFactory));
+            if (dataBackupsViewModelFactory == null)
+                throw new ArgumentNullException(nameof(dataBackupsViewModelFactory));
+            if (windowManager == null) throw new ArgumentNullException(nameof(windowManager));
             this.processStarter = processStarter;
             this.userNotifier = userNotifier;
             this.serversEditorViewFactory = serversEditorViewFactory;
@@ -63,6 +72,8 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
             this.wurmClientValidatorFactory = wurmClientValidatorFactory;
             this.logger = logger;
             this.optionsFormFactory = optionsFormFactory;
+            this.dataBackupsViewModelFactory = dataBackupsViewModelFactory;
+            this.windowManager = windowManager;
 
             InitializeComponent();
 
@@ -228,6 +239,12 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
                 form.StartPosition = FormStartPosition.CenterScreen;
                 form.ShowDialog();
             }
+        }
+
+        private void dataBackupsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var vm = dataBackupsViewModelFactory.CreateDataBackupsViewModel();
+            windowManager.ShowWindow(vm);
         }
     }
 }

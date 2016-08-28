@@ -128,7 +128,12 @@
     <Compile Include="Areas\Core\IDialogService.cs" />
     <Compile Include="Areas\Core\IFileDialogs.cs" />
     <Compile Include="Areas\Core\IWurmAssistantDataDirectory.cs" />
-    <Compile Include="Areas\Core\AppMigrationsManager.cs" />
+    <Compile Include="Areas\Main\ViewModels\DataBackupsViewModel.cs" />
+    <Compile Include="Areas\Main\ViewModels\IDataBackupsViewModelFactory.cs" />
+    <Compile Include="Areas\Main\Views\DataBackupsView.xaml.cs">
+      <DependentUpon>DataBackupsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Systems\AppMigrations\AppMigrationsManager.cs" />
     <Compile Include="Areas\Core\BinDirectory.cs" />
     <Compile Include="Areas\Core\ChangelogManager.cs" />
     <Compile Include="Areas\Core\WpfAppEnvironment.cs" />
@@ -225,6 +230,9 @@
     <Compile Include="Systems\ConventionBinding\Exceptions\InvalidAreaConfigTypeException.cs" />
     <Compile Include="Systems\ConventionBinding\Exceptions\KernelBindException.cs" />
     <Compile Include="Systems\ConventionBinding\WaTypeInfo.cs" />
+    <Compile Include="Systems\DataBackups\BackupManager.cs" />
+    <Compile Include="Systems\DataBackups\DataBackup.cs" />
+    <Compile Include="Systems\DataBackups\DataBackupUserSettings.cs" />
     <Compile Include="Systems\Plugins\PluginInfo.cs" />
     <Compile Include="Systems\Plugins\PluginManager.cs" />
     <Compile Include="Utils\Collections\MemberChangeNotifyingDictionary.cs" />
@@ -1181,6 +1189,9 @@
     <Content Include="Releases\3.0\release.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Releases\3.3\release.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Releases\3.2\release.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1231,6 +1242,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Areas\Debugging\DebuggingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Areas\Main\Views\DataBackupsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

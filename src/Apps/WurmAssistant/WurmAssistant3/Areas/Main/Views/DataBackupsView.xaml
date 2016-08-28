@@ -1,0 +1,57 @@
+﻿<Window x:Class="AldursLab.WurmAssistant3.Areas.Main.Views.DataBackupsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AldursLab.WurmAssistant3.Areas.Main.Views"
+        xmlns:viewModels="clr-namespace:AldursLab.WurmAssistant3.Areas.Main.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:cal="http://www.caliburnproject.org"
+        mc:Ignorable="d"
+        Title="{Binding Title}" Height="404.237" Width="508.475"
+        d:DataContext="{d:DesignInstance d:Type=viewModels:DataBackupsViewModel}">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ListView ItemsSource="{Binding DataBackups}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding BackupName, Mode=OneWay}" Header="Name"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Timestamp, Mode=OneWay}" Header="Date"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding IsComplete, Mode=OneWay}" Header="Completed"/>
+                    <GridViewColumn Header="Action">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Restore" Width="80" cal:Message.Attach="ScheduleRestore($dataContext)" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <StackPanel Grid.Row="1">
+            <Label Content="Backup system status:"></Label>
+            <Border BorderThickness="1" BorderBrush="LightGray">
+                <TextBlock Text="{Binding BackupSystemStatus}" TextWrapping="Wrap"></TextBlock>
+            </Border>
+            <Label Content="Additional options:"></Label>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Margin="5" Grid.Column="0" cal:Message.Attach="ScheduleBackup()">
+                    <TextBlock TextWrapping="Wrap" Text="Schedule for a new backup to be created after Wurm Assistant is restarted. If data restoration is also scheduled, this backup will be created before restoration."></TextBlock>
+                </Button>
+                <Button Margin="5" Grid.Column="1" cal:Message.Attach="CancelAllPendingOperations()">
+                    <TextBlock TextWrapping="Wrap" Text="Cancel all pending backup or restore operations, if scheduled."></TextBlock>
+                </Button>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>
+

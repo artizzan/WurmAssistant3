@@ -18,7 +18,9 @@ using AldursLab.WurmAssistant3.Areas.Main.ViewModels;
 using AldursLab.WurmAssistant3.Areas.Native;
 using AldursLab.WurmAssistant3.Areas.Persistence;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
+using AldursLab.WurmAssistant3.Properties;
 using AldursLab.WurmAssistant3.Systems.ConventionBinding;
+using AldursLab.WurmAssistant3.Systems.DataBackups;
 using AldursLab.WurmAssistant3.Systems.Plugins;
 using AldursLab.WurmAssistant3.Utils;
 using AldursLab.WurmAssistant3.Utils.WinForms.Reusables;
@@ -100,6 +102,27 @@ namespace AldursLab.WurmAssistant3
                 persistentDataManager.SetupPersistenceActivation();
 
                 var logger = GetLogger();
+
+                var backupManager = kernel.Get<BackupManager>();
+                var userSettings = kernel.Get<DataBackupUserSettings>();
+
+                if (userSettings.CreateNewBackupRequested)
+                {
+                    backupManager.CreateDataBackup();
+                    userSettings.CreateNewBackupRequested = false;
+                    userSettings.Save();
+                }
+
+                if (TryRestoreDataBackupIfRequested(backupManager, userSettings, logger))
+                {
+                    // For the persistence systems to properly initialize, restart is required.
+                    RestartCurrentApp();
+                    return;
+                }
+
+                backupManager.CreateTodaysDataBackupIfNotExists();
+                backupManager.TrimOldDataBackups(userSettings.BackupRetentionTreshhold);
+                backupManager.LockRestoreDataBackupForThisSession();
 
                 var appMigrationsManager = kernel.Get<IAppMigrationsManager>();
                 appMigrationsManager.RunMigrations();
@@ -318,6 +341,31 @@ namespace AldursLab.WurmAssistant3
             System.Windows.Forms.Application.Restart();
             // Restart does not automatically shutdown WPF application
             ShutdownCurrentApp();
+        }
+
+        bool TryRestoreDataBackupIfRequested(BackupManager backupManager, DataBackupUserSettings userSettings, ILogger logger)
+        {
+            if (userSettings.RestoreBackupRequested)
+            {
+                try
+                {
+                    backupManager.RestoreDataBackup(userSettings.RestoreBackupName);
+                }
+                catch (Exception exception)
+                {
+                    logger.Error(exception,
+                        $"Unable to restore backup named {userSettings.RestoreBackupName}. Cancelling. Please try to restore another backup.");
+                    throw;
+                }
+
+                userSettings.RestoreBackupRequested = false;
+                userSettings.RestoreBackupName = string.Empty;
+                userSettings.Save();
+
+                return true;
+            }
+
+            return false;
         }
 
         #region Kernel wirings for view resolver
