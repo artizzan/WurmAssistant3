@@ -113,7 +113,7 @@ namespace AldursLab.WurmAssistant3.Areas.Main.ViewModels
                 status += "No operation is currently scheduled.";
             }
 
-            status += Environment.NewLine + $"Backups older than {userSettings.BackupRetentionTreshhold.Days} days are automatically cleared.";
+            status += Environment.NewLine + $"Backups older than {userSettings.BackupRetentionTreshhold.Days} days are automatically cleared (except latest 5 of them).";
 
             BackupSystemStatus = status;
         }
