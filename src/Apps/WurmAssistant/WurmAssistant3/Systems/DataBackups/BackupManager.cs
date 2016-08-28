@@ -99,7 +99,10 @@ namespace AldursLab.WurmAssistant3.Systems.DataBackups
 
         public IEnumerable<DataBackup> GetBackups()
         {
-            var allBackups = new DirectoryInfo(backupDirRootPath).GetDirectories().Select(info => new DataBackup(info.FullName));
+            var rootDir = new DirectoryInfo(backupDirRootPath);
+            // ensure created
+            rootDir.Create();
+            var allBackups = rootDir.GetDirectories().Select(info => new DataBackup(info.FullName));
             return allBackups.ToArray();
         }
 
