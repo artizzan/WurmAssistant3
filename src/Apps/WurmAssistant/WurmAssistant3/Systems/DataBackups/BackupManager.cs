@@ -82,7 +82,14 @@ namespace AldursLab.WurmAssistant3.Systems.DataBackups
 
         public void TrimOldDataBackups(TimeSpan treshholdTime)
         {
-            var oldBackups = GetBackups().Where(backup => backup.Timestamp < DateTime.Now - treshholdTime).ToArray();
+            // keep no less than 5 last backups, but delete old backups above that limit
+            var oldBackups =
+                GetBackups()
+                    .OrderByDescending(backup => backup.Timestamp)
+                    .Skip(5)
+                    .Where(backup => backup.Timestamp < DateTime.Now - treshholdTime)
+                    .ToArray();
+
             foreach (var dataBackup in oldBackups)
             {
                 Directory.Delete(dataBackup.RootDirPath, true);

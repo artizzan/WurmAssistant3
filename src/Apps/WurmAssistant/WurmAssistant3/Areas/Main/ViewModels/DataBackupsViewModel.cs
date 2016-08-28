@@ -8,7 +8,6 @@ using System.Windows;
 using AldursLab.WurmAssistant3.Systems.DataBackups;
 using Caliburn.Micro;
 using JetBrains.Annotations;
-using WPFCustomMessageBox;
 
 namespace AldursLab.WurmAssistant3.Areas.Main.ViewModels
 {
