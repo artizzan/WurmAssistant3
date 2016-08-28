@@ -6,7 +6,6 @@ using AldursLab.WurmAssistant3.Areas.Logging;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Ninject;
-using WurmAssistantDataTransfer.Dtos;
 
 namespace AldursLab.WurmAssistant3.Areas.SoundManager
 {
@@ -62,16 +61,6 @@ namespace AldursLab.WurmAssistant3.Areas.SoundManager
         {
             var sound = soundsLibrary.TryGetFirstSoundMatchingName(name);
             return sound ?? new SoundResourceNullObject();
-        }
-
-        public Guid AddSound(Sound sound)
-        {
-            return soundsLibrary.AddSound(sound);
-        }
-
-        public Guid AddSoundAsNewId(Sound sound)
-        {
-            return soundsLibrary.AddSoundSkipId(sound);
         }
 
         public bool GlobalMute

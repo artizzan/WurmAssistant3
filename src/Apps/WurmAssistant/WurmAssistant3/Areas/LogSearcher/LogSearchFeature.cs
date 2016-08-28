@@ -6,7 +6,6 @@ using AldursLab.WurmAssistant3.Areas.Features;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Properties;
 using JetBrains.Annotations;
-using WurmAssistantDataTransfer.Dtos;
 
 namespace AldursLab.WurmAssistant3.Areas.LogSearcher
 {
@@ -59,15 +58,6 @@ namespace AldursLab.WurmAssistant3.Areas.LogSearcher
         async Task IFeature.InitAsync()
         {
             // no initialization required
-            await Task.FromResult(true);
-        }
-
-        public void PopulateDto(WurmAssistantDto dto)
-        {
-        }
-
-        public async Task ImportDataFromWa2Async(WurmAssistantDto dto)
-        {
             await Task.FromResult(true);
         }
 

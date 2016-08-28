@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using WurmAssistantDataTransfer.Dtos;
 
 namespace AldursLab.WurmAssistant3.Areas.SoundManager
 {
@@ -32,11 +31,6 @@ namespace AldursLab.WurmAssistant3.Areas.SoundManager
         ISoundResource GetSoundById(Guid soundId);
 
         ISoundResource GetFirstSoundByName(string name);
-
-        /// <exception cref="ArgumentException">Sound with this Id already exists.</exception>
-        Guid AddSound(Sound sound);
-
-        Guid AddSoundAsNewId(Sound sound);
 
         void HideGui();
     }

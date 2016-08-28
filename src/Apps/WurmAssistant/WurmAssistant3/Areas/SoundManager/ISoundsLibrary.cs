@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using WurmAssistantDataTransfer.Dtos;
 
 namespace AldursLab.WurmAssistant3.Areas.SoundManager
 {
@@ -14,10 +13,5 @@ namespace AldursLab.WurmAssistant3.Areas.SoundManager
         ISoundResource TryGetSound(Guid id);
         ICollection<ISoundResource> GetAllSounds();
         ISoundResource TryGetFirstSoundMatchingName(string name);
-
-        /// <exception cref="ArgumentException">Sound with this Id already exists.</exception>
-        Guid AddSound(Sound sound);
-
-        Guid AddSoundSkipId(Sound sound);
     }
 }

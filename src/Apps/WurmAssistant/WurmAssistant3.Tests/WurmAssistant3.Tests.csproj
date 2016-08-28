@@ -159,14 +159,6 @@
       <Project>{090b405f-748e-4e4e-83ae-babb93e0821e}</Project>
       <Name>WurmAssistant3</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Common\WurmAssistantDataTransfer.Dtos\WurmAssistantDataTransfer.Dtos.csproj">
-      <Project>{c8867a15-9144-48fd-8816-0283fdb38c6b}</Project>
-      <Name>WurmAssistantDataTransfer.Dtos</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Common\WurmAssistantDataTransfer\WurmAssistantDataTransfer.csproj">
-      <Project>{c2591795-c58c-4b9a-a1dd-38669c0b0b3d}</Project>
-      <Name>WurmAssistantDataTransfer</Name>
-    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

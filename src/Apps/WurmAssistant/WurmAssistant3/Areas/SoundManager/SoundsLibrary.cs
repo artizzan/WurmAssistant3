@@ -7,7 +7,6 @@ using AldursLab.WurmAssistant3.Areas.Core;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
-using WurmAssistantDataTransfer.Dtos;
 
 namespace AldursLab.WurmAssistant3.Areas.SoundManager
 {
@@ -22,16 +21,12 @@ namespace AldursLab.WurmAssistant3.Areas.SoundManager
         [JsonProperty] 
         readonly Dictionary<Guid, SoundResource> soundResources = new Dictionary<Guid, SoundResource>();
 
-        private readonly string tempSoundsDirPath;
-
         public SoundsLibrary([NotNull] IWurmAssistantDataDirectory wurmAssistantDataDirectory, [NotNull] ILogger logger)
         {
             if (wurmAssistantDataDirectory == null) throw new ArgumentNullException(nameof(wurmAssistantDataDirectory));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             this.soundFilesPath = Path.Combine(wurmAssistantDataDirectory.DirectoryPath, SoundbankDirName);
             this.logger = logger;
-
-            tempSoundsDirPath = Path.Combine(soundFilesPath, "Temp");
 
             var dirInfo = new DirectoryInfo(soundFilesPath);
             if (!dirInfo.Exists)
@@ -130,55 +125,9 @@ namespace AldursLab.WurmAssistant3.Areas.SoundManager
                     resource => resource.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public Guid AddSoundSkipId(Sound sound)
-        {
-            return AddSoundInternal(sound, true);
-        }
-
-        public Guid AddSound(Sound sound)
-        {
-            return AddSoundInternal(sound, false);
-        }
-
-        private Guid AddSoundInternal(Sound sound, bool skipGlobalId)
-        {
-            if (!skipGlobalId && sound.Id != null && soundResources.ContainsKey(sound.Id.Value))
-            {
-                throw new ArgumentException(string.Format("sound with id {0} already exists", sound.Id));
-            }
-
-            try
-            {
-                PrepareTempDir();
-                var soundFilePath = Path.Combine(tempSoundsDirPath, sound.FileNameWithExt);
-                File.WriteAllBytes(soundFilePath, sound.FileData);
-                var resource = ImportInternal(soundFilePath, skipGlobalId ? null : sound.Id);
-                Rename(resource, sound.Name);
-                return resource.Id;
-            }
-            finally
-            {
-                ClearTempDir();
-            }
-        }
-
-        void PrepareTempDir()
-        {
-            ClearTempDir();
-            var directory = new DirectoryInfo(tempSoundsDirPath);
-            directory.Create();
-        }
-
-        void ClearTempDir()
-        {
-            var directory = new DirectoryInfo(tempSoundsDirPath);
-            if (directory.Exists) directory.Delete(true);
-        }
-
         protected virtual void OnSoundsChanged()
         {
-            var handler = SoundsChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
+            SoundsChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

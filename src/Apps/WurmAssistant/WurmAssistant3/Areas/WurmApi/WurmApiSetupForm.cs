@@ -44,7 +44,7 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi
             if (wurmUnlimitedMode)
             {
                 this.Text = "Wurm Assistant 3 Unlimited - Wurm Api Setup";
-                labelPathDescription.Text = "Choose directory, where Wurm Unlimited game client keeps player data, "
+                labelPathDescription.Text = "Choose the folder, where Wurm Unlimited game client keeps player data, "
                                             + Environment.NewLine +
                                             @"eg: C:\Games\SteamLibrary\steamapps\common\Wurm Unlimited\WurmLauncher\PlayerFiles";
             }
@@ -52,13 +52,13 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi
             {
 
                 this.Text = "Wurm Assistant 3 - Wurm Api Setup";
-                labelPathDescription.Text = "Choose directory, where Wurm Online game client is installed, "
+                labelPathDescription.Text = "Choose the folder, where Wurm Online game client is installed, "
                                             + Environment.NewLine +
                                             @"eg: C:\Games\wurm";
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnOK_Click(object sender, EventArgs e)
         {
             var rooted = Path.IsPathRooted(wurmOnlineClientDirPath.Text);
             if (!rooted)
@@ -88,6 +88,21 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi
             bool valid;
             string extraInfo = string.Empty;
             var dir = new DirectoryInfo(directoryPath);
+            
+            if (wurmUnlimitedMode)
+            {
+                // trying to guess correct folder name, to compensate for common user errors
+                if (dir.Name.Equals("WurmLauncher", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    dir = new DirectoryInfo(Path.Combine(directoryPath, "PlayerFiles"));
+                    wurmOnlineClientDirPath.Text = dir.FullName;
+                }
+                else if (dir.Name.Equals("Wurm Unlimited", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    dir = new DirectoryInfo(Path.Combine(directoryPath, "WurmLauncher", "PlayerFiles"));
+                    wurmOnlineClientDirPath.Text = dir.FullName;
+                }
+            }
 
             var configsDirExists = dir.GetDirectories()
                                       .Any(

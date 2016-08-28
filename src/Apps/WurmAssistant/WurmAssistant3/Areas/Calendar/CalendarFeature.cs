@@ -13,7 +13,6 @@ using AldursLab.WurmAssistant3.Areas.TrayPopups;
 using AldursLab.WurmAssistant3.Properties;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
-using WurmAssistantDataTransfer.Dtos;
 using ILogger = AldursLab.WurmAssistant3.Areas.Logging.ILogger;
 
 namespace AldursLab.WurmAssistant3.Areas.Calendar
@@ -371,15 +370,6 @@ namespace AldursLab.WurmAssistant3.Areas.Calendar
         async Task IFeature.InitAsync()
         {
             // no initialization required
-            await Task.FromResult(true);
-        }
-
-        public void PopulateDto(WurmAssistantDto dto)
-        {
-        }
-
-        public async Task ImportDataFromWa2Async(WurmAssistantDto dto)
-        {
             await Task.FromResult(true);
         }
 

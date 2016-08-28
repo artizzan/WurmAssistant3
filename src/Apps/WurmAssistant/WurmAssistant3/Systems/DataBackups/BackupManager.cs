@@ -44,8 +44,15 @@ namespace AldursLab.WurmAssistant3.Systems.DataBackups
 
         public DataBackup CreateDataBackup()
         {
-            var backupTimeStamp = DataBackup.GenerateDirNameBasedOnTimestamp(DateTime.Now);
-            var currentBackupRootPath = Path.Combine(backupDirRootPath, backupTimeStamp);
+            var timeNow = DateTime.Now;
+            var backupTimeStampString = DataBackup.GenerateDirNameBasedOnTimestamp(timeNow);
+            var currentBackupRootPath = Path.Combine(backupDirRootPath, backupTimeStampString);
+
+            if (Directory.Exists(currentBackupRootPath))
+            {
+                logger.Warn($"Attemted to create backup, but one already existed for the timestamp {backupTimeStampString}. Skipping.");
+                return new DataBackup(currentBackupRootPath);
+            }
 
             Directory.CreateDirectory(currentBackupRootPath);
 
