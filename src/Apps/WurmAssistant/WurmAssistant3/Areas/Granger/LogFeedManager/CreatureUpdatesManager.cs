@@ -194,13 +194,19 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             //[13:47:19] Venerable fat Kisspick is dead. R.I.P.
             if (line.Content.Contains("is dead."))
             {
-                Match match = Regex.Match(line.Content, @".+ (\w+) is dead\. R\.I\.P\.");
+                Match match = Regex.Match(line.Content, @".+ (\w+) is dead\. R\.I\.P\.", RegexOptions.Compiled);
+                if (!match.Success)
+                {
+                    // maybe branded creature:
+                    match = Regex.Match(line.Content, @".+ (\w+ '\w+') is dead\. R\.I\.P\.", RegexOptions.Compiled);
+                }
                 TryApplyDeadFlag(line.Content, match);
             }
             //[03:10:29] You bury the corpse of venerable tammyrain.
             if (line.Content.StartsWith("You bury the corpse", StringComparison.Ordinal))
             {
-                Match match = Regex.Match(line.Content, @"You bury the corpse of .+ (\w+)");
+                Match match = Regex.Match(line.Content, @"You bury the corpse of .+ (\w+)", RegexOptions.Compiled);
+                // can't try branded creature name pattern - dead creatures don't show a branding name any more
                 TryApplyDeadFlag(line.Content, match);
             }
         }
@@ -584,7 +590,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
             var creaturesQuery =
                 context.Creatures.Where(
-                    x => x.Name == creatureName
+                    x => x.Name.Equals(creatureName, StringComparison.CurrentCultureIgnoreCase)
                          && herdsToCheck.Contains(x.Herd));
 
             if (UseServerAsCreatureId)
