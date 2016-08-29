@@ -364,20 +364,22 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
         void HandleGenesis(LogEntry line)
         {
-            // genesis handling (add a creature to dict after genesis cast, 
-            // ignore creature for smile-examine trait sanity check next time
+            // genesis handling, purpose:
+            // remembering genesis casts so smilexamine can be allowed to update traits, 
+            // even though it would normally be blocked by sanity check
+
             //[2013-08-02] [23:08:54] You cast 'Genesis' on Old fat Jollyhalim.
-            if (line.Content.Contains("You cast"))
+            if (Regex.IsMatch(line.Content, @".+ cast", RegexOptions.Compiled))// optimization
             {
                 grangerDebug.Log("Found maybe genesis log event: " + line);
                 // New matcher after changes in wurm caves update.
                 Match match = Regex.Match(line.Content,
-                    @"You cast 'Genesis' on(?: a| an| the) (.+)\.",
+                    @"(?:You cast|.+ casts) 'Genesis' on(?: a| an| the) (.+)\.",
                     RegexOptions.Compiled);
                 if (!match.Success)
                 {
                     // Old matcher for older WU servers.
-                    match = Regex.Match(line.Content, @"You cast 'Genesis' on (.+)\.", RegexOptions.Compiled);
+                    match = Regex.Match(line.Content, @"(?:You cast|.+ casts) 'Genesis' on (.+)\.", RegexOptions.Compiled);
                 }
                 if (match.Success)
                 {
