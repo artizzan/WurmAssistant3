@@ -12,16 +12,23 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         static readonly System.Drawing.Color? DefaultBestBreedHintColor = (System.Drawing.Color)(new HslColor(120D, 240D, 180D));
 
         readonly GrangerContext context;
+        readonly CreatureColorDefinitions creatureColorDefinitions;
         readonly FormGrangerMain mainForm;
 
         double? cachedBreedValue = null;
 
-        public Creature(FormGrangerMain mainForm, CreatureEntity entity, GrangerContext context)
+        public Creature(
+            FormGrangerMain mainForm, 
+            CreatureEntity entity, 
+            GrangerContext context,
+            [NotNull] CreatureColorDefinitions creatureColorDefinitions)
         {
+            if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
             BreedHintColor = null;
             this.mainForm = mainForm;
             Entity = entity;
             this.context = context;
+            this.creatureColorDefinitions = creatureColorDefinitions;
         }
 
         public CreatureEntity Entity { get; private set; }
@@ -89,7 +96,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             {
                 CreatureColor hcolor = Color;
                 if (hcolor == CreatureColor.GetDefaultColor()) return null;
-                else return hcolor.ToSystemDrawingColor();
+                else return hcolor.SystemDrawingColor;
             }
         }
 
@@ -109,10 +116,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public CreatureColor Color
         {
-            get { return Entity.Color; }
+            get { return creatureColorDefinitions.GetForId(Entity.CreatureColorId); }
             set
             {
-                Entity.Color = value;
+                Entity.CreatureColorId = value.CreatureColorId;
             }
         }
 
@@ -120,7 +127,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             if (!HasMate()) return null;
 
-            var mate = context.Creatures.Where(x => x.Id == this.Entity.PairedWith).Select(x => new Creature(mainForm, x, context)).ToArray();
+            var mate =
+                context.Creatures.Where(x => x.Id == this.Entity.PairedWith)
+                       .Select(x => new Creature(mainForm, x, context, creatureColorDefinitions))
+                       .ToArray();
             if (mate.Length == 1) 
                 return mate.First();
             else if (mate.Length == 0) 
@@ -228,7 +238,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             {
                 if (this.Herd == value) return;
 
-                var targetHerd = context.Creatures.Where(x => x.Herd == value).Select(x => new Creature(mainForm, x, context));
+                var targetHerd =
+                    context.Creatures.Where(x => x.Herd == value)
+                           .Select(x => new Creature(mainForm, x, context, creatureColorDefinitions));
 
                 foreach (var creature in targetHerd)
                 {
@@ -322,7 +334,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         public CreatureAge AgeAspect => this.Age;
 
         public string ColorAspect
-            => Entity.Color.CreatureColorId == CreatureColorId.Unknown ? string.Empty : Entity.Color.ToString();
+            => Entity.CreatureColorId == CreatureColorId.Unknown ? string.Empty : Color.ToString();
 
         public string TagsAspect { get { return string.Join(", ", Entity.SpecialTags.OrderBy(x => x)); } }
 

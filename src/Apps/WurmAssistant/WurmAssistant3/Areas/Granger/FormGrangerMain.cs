@@ -30,6 +30,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         readonly ILogger logger;
         readonly IWurmApi wurmApi;
         readonly DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions;
+        readonly CreatureColorDefinitions creatureColorDefinitions;
 
         readonly bool _windowInitCompleted = false;
         bool _rebuildingValuePresets = false;
@@ -42,7 +43,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             [NotNull] GrangerContext context,
             [NotNull] ILogger logger, 
             [NotNull] IWurmApi wurmApi,
-            [NotNull] DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions)
+            [NotNull] DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions,
+            [NotNull] CreatureColorDefinitions creatureColorDefinitions)
         {
             if (grangerFeature == null) throw new ArgumentNullException(nameof(grangerFeature));
             if (settings == null) throw new ArgumentNullException(nameof(settings));
@@ -50,12 +52,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
             if (defaultBreedingEvaluatorOptions == null) throw new ArgumentNullException(nameof(defaultBreedingEvaluatorOptions));
+            if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
             this.parentModule = grangerFeature;
             this.settings = settings;
             this.context = context;
             this.logger = logger;
             this.wurmApi = wurmApi;
             this.defaultBreedingEvaluatorOptions = defaultBreedingEvaluatorOptions;
+            this.creatureColorDefinitions = creatureColorDefinitions;
 
             InitializeComponent();
 
@@ -64,8 +68,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             RebuildAdvisors();
             RefreshAdvisor();
 
-            ucGrangerHerdList1.Init(this, context, logger, wurmApi);
-            ucGrangerCreatureList1.Init(this, context, logger, wurmApi);
+            ucGrangerHerdList1.Init(this, context, logger, wurmApi, creatureColorDefinitions);
+            ucGrangerCreatureList1.Init(this, context, logger, wurmApi, creatureColorDefinitions);
             ucGrangerTraitView1.Init(this, context, logger);
 
             this.context.OnTraitValuesModified += Context_OnTraitValuesModified;

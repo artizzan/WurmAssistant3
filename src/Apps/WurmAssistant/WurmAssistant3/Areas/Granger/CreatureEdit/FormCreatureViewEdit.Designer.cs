@@ -1,4 +1,4 @@
-﻿namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
+﻿namespace AldursLab.WurmAssistant3.Areas.Granger.CreatureEdit
 {
     partial class FormCreatureViewEdit
     {

@@ -45,12 +45,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ImportExport.Legacy
                                     ? creatureEntity.EpicCurve.ToString()
                                     : bool.FalseString)),
                         new XElement("Age", creatureEntity.Age),
-                        new XElement("Color", creatureEntity.Color),
+                        new XElement("CreatureColorId", creatureEntity.CreatureColorId),
                         new XElement("Comments", creatureEntity.Comments),
                         new XElement("Tags", creatureEntity.SpecialTagsRaw),
                         new XElement("BrandedFor", creatureEntity.BrandedFor),
                         new XElement("ServerName", creatureEntity.ServerName),
-                        new XElement("SmilexamineLastDate", creatureEntity.SmilexamineLastDate));
+                        new XElement("SmilexamineLastDate",
+                            creatureEntity.SmilexamineLastDate?.ToString(CultureInfo.InvariantCulture) ?? string.Empty));
                 root.Add(creature);
             }
 

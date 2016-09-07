@@ -10,7 +10,6 @@ using AldursLab.Essentials.Extensions.DotNet.Drawing;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Granger.CreatureEdit;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
-using AldursLab.WurmAssistant3.Areas.Granger.HorseEdit;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using BrightIdeasSoftware;
 using Castle.Core.Internal;
@@ -24,6 +23,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         GrangerContext context;
         IWurmApi wurmApi;
         ILogger logger;
+        CreatureColorDefinitions creatureColorDefinitons;
 
         List<Creature> currentCreatures = new List<Creature>();
         List<HerdEntity> activeHerds = new List<HerdEntity>();
@@ -45,16 +45,19 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             [NotNull] FormGrangerMain mainForm,
             [NotNull] GrangerContext context,
             [NotNull] ILogger logger,
-            [NotNull] IWurmApi wurmApi)
+            [NotNull] IWurmApi wurmApi,
+            [NotNull] CreatureColorDefinitions creatureColorDefinitons)
         {
             if (mainForm == null) throw new ArgumentNullException(nameof(mainForm));
             if (context == null) throw new ArgumentNullException(nameof(context));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (creatureColorDefinitons == null) throw new ArgumentNullException(nameof(creatureColorDefinitons));
             this.logger = logger;
             this.wurmApi = wurmApi;
             this.mainForm = mainForm;
             this.context = context;
+            this.creatureColorDefinitons = creatureColorDefinitons;
 
             _debugMainFormAssigned = true;
 
@@ -71,7 +74,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             SetupOlvCustomizations();
 
             this.context.OnHerdsModified += Context_OnHerdsModified;
-            this.context.OnEntitiesModified += ContextOnEntitiesModified;
+            this.context.OnCreaturesModified += ContextOnCreaturesModified;
             this.mainForm.GrangerUserViewChanged += MainForm_UserViewChanged;
             this.mainForm.GrangerAdvisorChanged += MainForm_Granger_AdvisorChanged;
             this.mainForm.GrangerValuatorChanged += MainForm_Granger_ValuatorChanged;
@@ -409,7 +412,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             UpdateDataForView();
         }
 
-        void ContextOnEntitiesModified(object sender, EventArgs e)
+        void ContextOnCreaturesModified(object sender, EventArgs e)
         {
             UpdateCurrentCreaturesData();
             UpdateDataForView();
@@ -439,7 +442,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 .Where(x => activeHerds
                     .Select(y => y.HerdId)
                     .Contains(x.Herd))
-                .Select(x => new Creature(mainForm, x, context))
+                .Select(x => new Creature(mainForm, x, context, creatureColorDefinitons))
                 .ToList();
         }
 
@@ -517,7 +520,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                                        wurmApi,
                                        creature,
                                        CreatureViewEditOpType.Edit,
-                                       creature.HerdAspect);
+                                       creature.HerdAspect,
+                                       creatureColorDefinitons);
                                    ui.ShowDialogCenteredOnForm(mainForm);
                                });
             }
@@ -534,7 +538,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 var targetHerd =
                     context.Creatures
                            .Where(x => x.Herd == herdId)
-                           .Select(x => new Creature(mainForm, x, context))
+                           .Select(x => new Creature(mainForm, x, context, creatureColorDefinitons))
                            .ToArray();
 
                 List<Creature> nonuniqueCreatures = new List<Creature>();
@@ -600,7 +604,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                                        wurmApi,
                                        creature,
                                        CreatureViewEditOpType.View,
-                                       creature.HerdAspect);
+                                       creature.HerdAspect,
+                                       creatureColorDefinitons);
                                    ui.ShowDialogCenteredOnForm(mainForm);
                                });
             }
@@ -632,47 +637,48 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         private void blackToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UpdateCreaturesColors(new CreatureColor(CreatureColorId.Black));
+            
+            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.Black));
         }
 
         private void whiteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UpdateCreaturesColors(new CreatureColor(CreatureColorId.White));
+            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.White));
         }
 
         private void greyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UpdateCreaturesColors(new CreatureColor(CreatureColorId.Grey));
+            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.Grey));
         }
 
         private void brownToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UpdateCreaturesColors(new CreatureColor(CreatureColorId.Brown));
+            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.Brown));
         }
 
         private void goldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UpdateCreaturesColors(new CreatureColor(CreatureColorId.Gold));
+            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.Gold));
         }
 
         private void bloodBayToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UpdateCreaturesColors(new CreatureColor(CreatureColorId.BloodBay));
+            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.BloodBay));
         }
 
         private void ebonyBlackToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UpdateCreaturesColors(new CreatureColor(CreatureColorId.EbonyBlack));
+            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.EbonyBlack));
         }
 
         private void piebaldPintoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UpdateCreaturesColors(new CreatureColor(CreatureColorId.PiebaldPinto));
+            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.PiebaldPinto));
         }
 
         private void notACreatureToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UpdateCreaturesColors(new CreatureColor(CreatureColorId.Unknown));
+            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.Unknown));
         }
 
         void UpdateCreaturesColors(CreatureColor color)

@@ -5,14 +5,13 @@ using System.Linq;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Areas.Granger.CreatureEdit;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
 using AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 
-namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
+namespace AldursLab.WurmAssistant3.Areas.Granger.CreatureEdit
 {
     public partial class FormCreatureViewEdit : ExtendedForm
     {
@@ -20,6 +19,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
         readonly GrangerContext context;
         readonly FormGrangerMain mainForm;
         readonly string herdId;
+        readonly CreatureColorDefinitions creatureColorDefinitions;
         readonly ILogger logger;
         readonly IWurmApi wurmApi;
 
@@ -58,16 +58,19 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
             [NotNull] IWurmApi wurmApi, 
             [CanBeNull] Creature creature,
             CreatureViewEditOpType optype,
-            string herdId)
+            string herdId,
+            [NotNull] CreatureColorDefinitions creatureColorDefinitions)
         {
             if (mainForm == null) throw new ArgumentNullException(nameof(mainForm));
             if (context == null) throw new ArgumentNullException(nameof(context));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
             this.mainForm = mainForm;
             this.creature = creature;
             this.context = context;
             this.herdId = herdId;
+            this.creatureColorDefinitions = creatureColorDefinitions;
             this.logger = logger;
             this.wurmApi = wurmApi;
             InitializeComponent();
@@ -86,9 +89,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
 
             comboBoxFather.Items.AddRange(allCreatureNamesInDatabase);
             comboBoxMother.Items.AddRange(allCreatureNamesInDatabase);
-
-            comboBoxColor.Items.AddRange(CreatureColor.GetColorsEnumStrArray().Cast<object>().ToArray());
-            comboBoxColor.Text = CreatureColor.GetDefaultColorStr();
+            ;
+            comboBoxColor.Items.AddRange(
+                creatureColorDefinitions.GetColors().Select(color => color.CreatureColorId).Cast<object>().ToArray());
+            comboBoxColor.Text = CreatureColor.GetDefaultColor().CreatureColorId;
             comboBoxAge.Items.AddRange(CreatureAge.GetColorsEnumStrArray().Cast<object>().ToArray());
             comboBoxAge.Text = CreatureAge.GetDefaultAgeStr();
 
@@ -189,7 +193,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
                     if (OpMode == CreatureViewEditOpType.New)
                     {
                         var newEntity = new CreatureEntity() { Id = CreatureEntity.GenerateNewCreatureId(context) };
-                        creature = new Creature(mainForm, newEntity, context);
+                        creature = new Creature(mainForm, newEntity, context, creatureColorDefinitions);
                     }
 
                     List<CreatureTrait> traitlist = new List<CreatureTrait>();
@@ -222,7 +226,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.HorseEdit
 
                     creature.Comments = textBoxComment.Text;
                     creature.IsMale = radioButtonMale.Checked;
-                    creature.Color = CreatureColor.CreateColorFromEnumString(comboBoxColor.Text);
+                    creature.Color = creatureColorDefinitions.GetForId(comboBoxColor.Text);
                     creature.Age = CreatureAge.CreateAgeFromEnumString(comboBoxAge.Text);
 
                     creature.NotInMoodUntil = dateTimePickerBred.Value;

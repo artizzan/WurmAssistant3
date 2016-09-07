@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using AldursLab.WurmAssistant3.Areas.Core;
+using AldursLab.WurmAssistant3.Areas.Granger.DataLayer.Migrations;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.Persistence;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
@@ -21,7 +22,7 @@ namespace AldursLab.WurmAssistant3.Systems.AppMigrations
         readonly ILogger logger;
         readonly ITrayPopups trayPopups;
 
-        const int LatestVersion = 1;
+        const int LatestVersion = 2;
         int currentVersion;
 
         readonly FileInfo upgradeInfoFile;
@@ -56,15 +57,8 @@ namespace AldursLab.WurmAssistant3.Systems.AppMigrations
         {
             if (currentVersion == 0)
             {
-                trayPopups.Schedule("Upgrading some Wurm Assistant data", "Some Tricky Business");
+                CreateBackup();
 
-                logger.Info($"Wurm Assistant data needs to be upgraded, performing upgrade from data version {currentVersion}");
-                logger.Info($"Creating backup of the current data at {backupManager.BackupDirRootPath}");
-
-                var backup = backupManager.CreateDataBackup();
-                trayPopups.Schedule($"Created backup of current data at {backup.RootDirPath}", "Tricky Business", 5000);
-
-                logger.Info("Backup created");
                 logger.Info("Beginning upgrade...");
                 var migration = kernel.Get<TriggersV2Migration>();
                 migration.Run();
@@ -73,14 +67,41 @@ namespace AldursLab.WurmAssistant3.Systems.AppMigrations
                 persistentContextsManager.PerformAutoSave(saveAll: true);
                 logger.Info("All data saved");
                 SaveCurrentVersion();
-                logger.Info($"Wurm Assistant is now upgraded to data version {currentVersion}");
-
-                trayPopups.Schedule("Data upgrade completed!", "Tricky Business Done");
+                NotifyDataMigrationSuccess();
+            }
+            if (currentVersion == 1)
+            {
+                logger.Info("Beginning upgrade...");
+                var migration = kernel.Get<GrangerHorseColorsMigration>();
+                migration.Run();
+                logger.Info("Migration completed");
+                currentVersion = 2;
+                SaveCurrentVersion();
+                NotifyDataMigrationSuccess();
             }
             else
             {
                 logger.Info($"Wurm Assistant data is at version {currentVersion}. No upgrade required.");
             }
+        }
+
+        void NotifyDataMigrationSuccess()
+        {
+            logger.Info($"Wurm Assistant is now upgraded to data version {currentVersion}");
+            trayPopups.Schedule("Data upgrade completed!", "Tricky Business Done");
+        }
+
+        void CreateBackup()
+        {
+            trayPopups.Schedule("Upgrading some Wurm Assistant data", "Some Tricky Business");
+
+            logger.Info($"Wurm Assistant data needs to be upgraded, performing upgrade from data version {currentVersion}");
+            logger.Info($"Creating backup of the current data at {backupManager.BackupDirRootPath}");
+
+            var backup = backupManager.CreateDataBackup();
+            trayPopups.Schedule($"Created backup of current data at {backup.RootDirPath}", "Tricky Business", 5000);
+
+            logger.Info("Backup created");
         }
 
         void LoadCurrentVersion()

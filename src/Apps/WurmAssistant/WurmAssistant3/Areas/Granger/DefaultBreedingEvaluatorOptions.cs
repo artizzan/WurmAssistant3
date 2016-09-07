@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger
@@ -10,6 +11,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
     [KernelBind(BindingHint.Singleton), PersistentObject("GrangerFeature_DefaultBreedingEvaluatorOptions")]
     public class DefaultBreedingEvaluatorOptions : PersistentObjectBase
     {
+        readonly CreatureColorDefinitions creatureColorDefinitions;
+
         [JsonProperty]
         bool ignoreNotInMood;
 
@@ -80,10 +83,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         double inbreedingPenaltyWeight;
 
         [JsonProperty]
-        readonly Dictionary<CreatureColorId, float> creatureColorValues;
+        readonly Dictionary<string, float> creatureColorValuesForEntityId;
 
-        public DefaultBreedingEvaluatorOptions()
+        public DefaultBreedingEvaluatorOptions([NotNull] CreatureColorDefinitions creatureColorDefinitions)
         {
+            if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
+            this.creatureColorDefinitions = creatureColorDefinitions;
             ignoreNotInMood = true;
             ignorePregnant = true;
             IgnoreRecentlyPregnant = true;
@@ -110,7 +115,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             DiscardOnInbreeding = true;
             InbreedingPenaltyWeight = 1.0;
 
-            creatureColorValues = new Dictionary<CreatureColorId, float>();
+            creatureColorValuesForEntityId = new Dictionary<string, float>();
         }
 
         protected override void OnPersistentDataLoaded()
@@ -120,11 +125,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         void BuildInitialColorValuesDict()
         {
-            foreach (var currentColor in CreatureColor.GetAll())
+            foreach (var currentColor in creatureColorDefinitions.GetColors())
             {
-                if (!creatureColorValues.ContainsKey(currentColor.CreatureColorId))
+                if (!creatureColorValuesForEntityId.ContainsKey(currentColor.CreatureColorId))
                 {
-                    creatureColorValues.Add(currentColor.CreatureColorId, 1.0f);
+                    creatureColorValuesForEntityId.Add(currentColor.CreatureColorId, 1.0f);
                 }
             }
         }
@@ -296,12 +301,17 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         
         public IEnumerable<ColorWeight> CreatureColorValues
         {
-            get { return creatureColorValues.Select(x => new ColorWeight(new CreatureColor(x.Key), x.Value)).ToArray(); }
+            get
+            {
+                return
+                    creatureColorValuesForEntityId.Select(
+                        x => new ColorWeight(creatureColorDefinitions.GetForId(x.Key), x.Value)).ToArray();
+            }
             set
             {
                 foreach (var colorWeight in value)
                 {
-                    creatureColorValues[colorWeight.Color.CreatureColorId] = colorWeight.Weight;
+                    creatureColorValuesForEntityId[colorWeight.Color.CreatureColorId] = colorWeight.Weight;
                 }
                 FlagAsChanged();
             }
@@ -310,7 +320,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         public float GetValueForColor(CreatureColor color)
         {
             float result = 1.0f;
-            creatureColorValues.TryGetValue(color.CreatureColorId, out result);
+            creatureColorValuesForEntityId.TryGetValue(color.CreatureColorId, out result);
             return result;
         }
     }

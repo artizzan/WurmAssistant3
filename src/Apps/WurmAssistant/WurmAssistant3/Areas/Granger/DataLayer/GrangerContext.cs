@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AldursLab.Essentials.Extensions.DotNet.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
 {
+    [KernelBind(BindingHint.Singleton), UsedImplicitly]
     public class GrangerContext
     {
         readonly GrangerSimpleDb grangerSimpleDb;
@@ -21,9 +23,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
 
         public IEnumerable<HerdEntity> Herds => grangerSimpleDb.Herds.Values.ToArray();
 
+        public IEnumerable<CreatureColorEntity> CreatureColorEntities => grangerSimpleDb.CreatureColors.Values.ToArray();
+
         public event EventHandler<EventArgs> OnHerdsModified;
         public event EventHandler<EventArgs> OnTraitValuesModified;
-        public event EventHandler<EventArgs> OnEntitiesModified;
+        public event EventHandler<EventArgs> OnCreaturesModified;
+        public event EventHandler<EventArgs> OnCreatureColorsModified; 
 
         #region HERD OPS
 
@@ -176,7 +181,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
         {
             grangerSimpleDb.Creatures[creature.Id] = creature;
             grangerSimpleDb.Save();
-            OnEntitiesModified?.Invoke(this, new EventArgs());
+            OnCreaturesModified?.Invoke(this, new EventArgs());
         }
 
         internal void SubmitChanges()
@@ -185,7 +190,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
             // Submit changes is no longer transactional, like in LinqToSql, 
             // however this method is preserved because of the published event.
             grangerSimpleDb.Save();
-            OnEntitiesModified?.Invoke(this, new EventArgs());
+            OnCreaturesModified?.Invoke(this, new EventArgs());
         }
 
         internal void DeleteCreatures(CreatureEntity[] creatures)
@@ -195,7 +200,58 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
                 grangerSimpleDb.Creatures.Remove(creatureEntity.Id);
             }
             grangerSimpleDb.Save();
-            OnEntitiesModified?.Invoke(this, new EventArgs());
+            OnCreaturesModified?.Invoke(this, new EventArgs());
+        }
+
+        internal CreatureColorEntity GetCreatureColor(string id)
+        {
+            return grangerSimpleDb.CreatureColors.TryGetByKey(id) ?? CreatureColorEntity.Unknown;
+        }
+
+        /// <summary>
+        /// Adds the color if it does not yet exist in the database.
+        /// </summary>
+        /// <param name="entity"></param>
+        internal void SeedCreatureColor([NotNull] CreatureColorEntity entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            CreatureColorEntity existingEntity;
+            if (!grangerSimpleDb.CreatureColors.TryGetValue(entity.Id, out existingEntity))
+            {
+                grangerSimpleDb.CreatureColors.Add(entity.Id, entity);
+                OnCreatureColorsModified?.Invoke(this, new EventArgs());
+            }
+        }
+
+        internal void AddOrUpdateCreatureColor([NotNull] CreatureColorEntity entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            CreatureColorEntity existingEntity;
+            if (!grangerSimpleDb.CreatureColors.TryGetValue(entity.Id, out existingEntity))
+            {
+                grangerSimpleDb.CreatureColors.Add(entity.Id, entity);
+            }
+            else
+            {
+                if (existingEntity.IsReadOnly)
+                {
+                    throw new InvalidOperationException($"Existing {nameof(CreatureColorEntity)} with Id: {entity.Id} is flagged ReadOnly.");
+                }
+                
+                grangerSimpleDb.CreatureColors[entity.Id] = entity;
+            }
+            OnCreatureColorsModified?.Invoke(this, new EventArgs());
+        }
+
+        internal void RemoveCreatureColor([NotNull] CreatureColorEntity entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (entity.IsReadOnly)
+            {
+                return;
+            }
+            grangerSimpleDb.CreatureColors.Remove(entity.Id);
+            OnCreatureColorsModified?.Invoke(this, new EventArgs());
         }
     }
 }

@@ -40,7 +40,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.mainForm.GrangerValuatorChanged += MainForm_Granger_ValuatorChanged;
             this.mainForm.GrangerTraitViewDisplayModeChanged += MainForm_Granger_TraitViewDisplayModeChanged;
             this.context.OnHerdsModified += Context_OnHerdsModified;
-            this.context.OnEntitiesModified += ContextOnEntitiesModified;
+            this.context.OnCreaturesModified += ContextOnCreaturesModified;
             this.context.OnTraitValuesModified += Context_OnTraitValuesModified;
         }
 
@@ -61,7 +61,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             Decide();
         }
 
-        void ContextOnEntitiesModified(object sender, EventArgs e)
+        void ContextOnCreaturesModified(object sender, EventArgs e)
         {
             Decide();
         }

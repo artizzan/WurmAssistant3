@@ -1,60 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using AldursLab.Essentials.Extensions.DotNet;
+using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger
 {
-    [JsonObject(MemberSerialization.OptIn)]
     public sealed class CreatureColor : IEquatable<CreatureColor>
     {
-        [JsonProperty] 
-        readonly CreatureColorId creatureColorId;
+        readonly CreatureColorEntity creatureColorEntity;
 
-        public CreatureColor(CreatureColorId creatureColorId)
+        public CreatureColor([NotNull] CreatureColorEntity creatureColorEntity)
         {
-            this.creatureColorId = creatureColorId;
+            if (creatureColorEntity == null) throw new ArgumentNullException(nameof(creatureColorEntity));
+            this.creatureColorEntity = creatureColorEntity;
         }
 
-        public CreatureColor(string dbValue)
-        {
-            if (string.IsNullOrEmpty(dbValue)) creatureColorId = CreatureColorId.Unknown;
-            else creatureColorId = (CreatureColorId)int.Parse(dbValue);
-        }
-
-        public CreatureColorId CreatureColorId => creatureColorId;
+        public string CreatureColorId => creatureColorEntity.Id;
 
         public static CreatureColor GetDefaultColor()
         {
-            return new CreatureColor(CreatureColorId.Unknown);
+            return new CreatureColor(CreatureColorEntity.Unknown);
         }
 
-        public static string[] GetColorsEnumStrArray()
-        {
-            return Enum.GetNames(typeof(CreatureColorId));
-        }
-
-        public static IEnumerable<CreatureColor> GetAll()
-        {
-            return Enum.GetValues(typeof (CreatureColorId)).Cast<CreatureColorId>().Select(x => new CreatureColor(x));
-        }
+        public Color SystemDrawingColor => creatureColorEntity.Color;
 
         public override string ToString()
         {
-            return creatureColorId.ToString();
-        }
-
-        public string ToDbValue()
-        {
-            return ((int)creatureColorId).ToString();
+            return creatureColorEntity.Id;
         }
 
         public bool Equals(CreatureColor other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return creatureColorId == other.creatureColorId;
+            return creatureColorEntity.Id == other.creatureColorEntity.Id;
         }
 
         public override bool Equals(object obj)
@@ -67,7 +50,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public override int GetHashCode()
         {
-            return (int) creatureColorId;
+            return (int)creatureColorEntity.Id.GetHashCode();
         }
 
         public static bool operator ==(CreatureColor left, CreatureColor right)
@@ -79,51 +62,5 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             return !Equals(left, right);
         }
-
-        internal static CreatureColor CreateColorFromEnumString(string enumStr)
-        {
-            try
-            {
-                return new CreatureColor((CreatureColorId)Enum.Parse(typeof(CreatureColorId), enumStr, true));
-            }
-            catch (Exception)
-            {
-                return new CreatureColor(CreatureColorId.Unknown);
-            }
-        }
-
-        internal static string GetDefaultColorStr()
-        {
-            return Enum.GetName(typeof(CreatureColorId), CreatureColorId.Unknown);
-        }
-
-        internal System.Drawing.Color? ToSystemDrawingColor()
-        {
-            switch (creatureColorId)
-            {
-                case CreatureColorId.Unknown:
-                    return null;
-                case CreatureColorId.White:
-                    return System.Drawing.Color.GhostWhite;
-                case CreatureColorId.Black:
-                    return System.Drawing.Color.DarkSlateGray;
-                case CreatureColorId.Brown:
-                    return System.Drawing.Color.Brown;
-                case CreatureColorId.Gold:
-                    return System.Drawing.Color.Gold;
-                case CreatureColorId.Grey:
-                    return System.Drawing.Color.LightGray;
-                case CreatureColorId.BloodBay:
-                    return System.Drawing.Color.RosyBrown;
-                case CreatureColorId.EbonyBlack:
-                    return System.Drawing.Color.Black;
-                case CreatureColorId.PiebaldPinto:
-                    return System.Drawing.Color.DarkGray;
-                default:
-                    return null;
-            }
-        }
-
-
     }
 }

@@ -61,12 +61,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
             set { age = value.ToDbValue(); }
         }
         [JsonProperty("color")]
-        string color;
-        public CreatureColor Color
+        string color = CreatureColorEntity.Unknown.Id;
+        public string CreatureColorId
         {
-            get { return new CreatureColor(color); }
-            set { color = value.ToDbValue(); }
+            get { return color ?? CreatureColorEntity.Unknown.Id; }
+            set { color = value; }
         }
+
         [JsonProperty("comments")]
         public string Comments;
 

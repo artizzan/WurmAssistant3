@@ -196,12 +196,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             if (e.Column == olvColumnColorType)
             {
                 var cweight = (ColorWeight)e.Model;
-                var color = cweight.Color.ToSystemDrawingColor();
-                if (color != null)
-                {
-                    e.SubItem.BackColor = color.Value;
-                    e.SubItem.ForeColor = e.SubItem.BackColor.GetContrastingBlackOrWhiteColor();
-                }
+                var color = cweight.Color.SystemDrawingColor;
+                e.SubItem.BackColor = color;
+                e.SubItem.ForeColor = e.SubItem.BackColor.GetContrastingBlackOrWhiteColor();
             }
         }
 

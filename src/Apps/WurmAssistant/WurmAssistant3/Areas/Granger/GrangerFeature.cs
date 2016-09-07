@@ -26,7 +26,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         readonly GrangerSettings settings;
         readonly DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions;
-        readonly GrangerSimpleDb grangerSimpleDb;
+        readonly CreatureColorDefinitions creatureColorDefinitions;
         readonly FormGrangerMain grangerUi;
 
         readonly LogsFeedManager logsFeedMan;
@@ -42,9 +42,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             [NotNull] IWurmApi wurmApi,
             [NotNull] GrangerSettings grangerSettings,
             [NotNull] DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions,
-            [NotNull] GrangerSimpleDb grangerSimpleDb,
             [NotNull] IWurmAssistantConfig wurmAssistantConfig,
-            [NotNull] ITimerFactory timerFactory)
+            [NotNull] ITimerFactory timerFactory,
+            [NotNull] CreatureColorDefinitions creatureColorDefinitions,
+            [NotNull] GrangerContext grangerContext)
         {
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (dataDirectory == null) throw new ArgumentNullException(nameof(dataDirectory));
@@ -53,9 +54,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
             if (grangerSettings == null) throw new ArgumentNullException(nameof(grangerSettings));
             if (defaultBreedingEvaluatorOptions == null) throw new ArgumentNullException(nameof(defaultBreedingEvaluatorOptions));
-            if (grangerSimpleDb == null) throw new ArgumentNullException(nameof(grangerSimpleDb));
             if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
             if (timerFactory == null) throw new ArgumentNullException(nameof(timerFactory));
+            if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
+            if (grangerContext == null) throw new ArgumentNullException(nameof(grangerContext));
 
             this.logger = logger;
             this.dataDirectory = dataDirectory;
@@ -64,11 +66,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
             settings = grangerSettings;
             this.defaultBreedingEvaluatorOptions = defaultBreedingEvaluatorOptions;
-            this.grangerSimpleDb = grangerSimpleDb;
+            this.creatureColorDefinitions = creatureColorDefinitions;
 
-            context = new GrangerContext(grangerSimpleDb);
+            context = grangerContext;
 
-            grangerUi = new FormGrangerMain(this, settings, context, logger, wurmApi, defaultBreedingEvaluatorOptions);
+            grangerUi = new FormGrangerMain(this, settings, context, logger, wurmApi, defaultBreedingEvaluatorOptions, creatureColorDefinitions);
 
             logsFeedMan = new LogsFeedManager(this, context, wurmApi, logger, trayPopups, wurmAssistantConfig);
             logsFeedMan.UpdatePlayers(settings.CaptureForPlayers);

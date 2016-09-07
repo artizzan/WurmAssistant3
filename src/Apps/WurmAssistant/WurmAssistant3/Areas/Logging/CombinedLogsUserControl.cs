@@ -144,7 +144,8 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
         {
             if (logChanged)
             {
-                logOutput.Text = string.Join(Environment.NewLine, messages);
+                var str = string.Join(Environment.NewLine, messages);
+                logOutput.Text = str;
                 logChanged = false;
                 logOutput.SelectionStart = logOutput.Text.Length - 1;
                 logOutput.SelectionLength = 0;

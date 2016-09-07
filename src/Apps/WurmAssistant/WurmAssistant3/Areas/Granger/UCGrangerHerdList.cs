@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Granger.CreatureEdit;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
-using AldursLab.WurmAssistant3.Areas.Granger.HorseEdit;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using JetBrains.Annotations;
 
@@ -17,6 +16,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         GrangerContext context;
         ILogger logger;
         IWurmApi wurmApi;
+        CreatureColorDefinitions creatureColorDefinitions;
 
         public UcGrangerHerdList()
         {
@@ -27,16 +27,19 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             [NotNull] FormGrangerMain mainForm,
             [NotNull] GrangerContext context, 
             [NotNull] ILogger logger,
-            [NotNull] IWurmApi wurmApi)
+            [NotNull] IWurmApi wurmApi,
+            [NotNull] CreatureColorDefinitions creatureColorDefinitions)
         {
             if (mainForm == null) throw new ArgumentNullException(nameof(mainForm));
             if (context == null) throw new ArgumentNullException(nameof(context));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
+            if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
             this.mainForm = mainForm;
             this.context = context;
             this.logger = logger;
             this.wurmApi = wurmApi;
+            this.creatureColorDefinitions = creatureColorDefinitions;
 
             CustomizeOlv();
 
@@ -140,7 +143,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     wurmApi,
                     null,
                     CreatureViewEditOpType.New,
-                    selHerd.HerdId);
+                    selHerd.HerdId,
+                    creatureColorDefinitions);
                 ui.ShowDialog();
             }
         }

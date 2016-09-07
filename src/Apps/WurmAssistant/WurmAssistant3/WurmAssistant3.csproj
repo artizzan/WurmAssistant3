@@ -128,6 +128,9 @@
     <Compile Include="Areas\Core\IDialogService.cs" />
     <Compile Include="Areas\Core\IFileDialogs.cs" />
     <Compile Include="Areas\Core\IWurmAssistantDataDirectory.cs" />
+    <Compile Include="Areas\Granger\CreatureColorDefinitions.cs" />
+    <Compile Include="Areas\Granger\DataLayer\CreatureColorEntity.cs" />
+    <Compile Include="Areas\Granger\DataLayer\Migrations\GrangerHorseColorsMigration.cs" />
     <Compile Include="Areas\Main\ViewModels\DataBackupsViewModel.cs" />
     <Compile Include="Areas\Main\ViewModels\IDataBackupsViewModelFactory.cs" />
     <Compile Include="Areas\Main\Views\DataBackupsView.xaml.cs">
@@ -454,10 +457,10 @@
     <Compile Include="Areas\Granger\FormHerdName.Designer.cs">
       <DependentUpon>FormHerdName.cs</DependentUpon>
     </Compile>
-    <Compile Include="Areas\Granger\HorseEdit\FormCreatureViewEdit.cs">
+    <Compile Include="Areas\Granger\CreatureEdit\FormCreatureViewEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Areas\Granger\HorseEdit\FormCreatureViewEdit.Designer.cs">
+    <Compile Include="Areas\Granger\CreatureEdit\FormCreatureViewEdit.Designer.cs">
       <DependentUpon>FormCreatureViewEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Granger\UcGrangerCreatureList.cs">
@@ -950,7 +953,7 @@
     <EmbeddedResource Include="Areas\Granger\FormHerdName.resx">
       <DependentUpon>FormHerdName.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Areas\Granger\HorseEdit\FormCreatureViewEdit.resx">
+    <EmbeddedResource Include="Areas\Granger\CreatureEdit\FormCreatureViewEdit.resx">
       <DependentUpon>FormCreatureViewEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Granger\UcGrangerCreatureList.resx">

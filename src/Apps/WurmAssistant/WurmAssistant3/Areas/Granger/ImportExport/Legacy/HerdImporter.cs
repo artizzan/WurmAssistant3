@@ -79,12 +79,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ImportExport.Legacy
                 else entity.EpicCurve = bool.Parse(xInspectAttr.Value);
 
                 entity.Age = CreatureAge.CreateAgeFromEnumString(x.Element("Age").Value);
-                entity.Color = CreatureColor.CreateColorFromEnumString(x.Element("Color").Value);
+                entity.CreatureColorId = x.Element("CreatureColorId")?.Value ?? CreatureColorEntity.Unknown.Id;
                 entity.Comments = x.Element("Comments").Value;
                 entity.SpecialTagsRaw = x.Element("Tags").Value;
                 entity.BrandedFor = x.Element("BrandedFor").Value;
                 var smilexaminedElement = x.Element("SmilexamineLastDate");
-                if (smilexaminedElement != null)
+                if (smilexaminedElement != null && !string.IsNullOrWhiteSpace(smilexaminedElement.Value))
                 {
                     entity.SmilexamineLastDate = DateTime.Parse(smilexaminedElement.Value, CultureInfo.InvariantCulture);
                 }
