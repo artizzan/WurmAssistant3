@@ -240,6 +240,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
                 
                 grangerSimpleDb.CreatureColors[entity.Id] = entity;
             }
+            grangerSimpleDb.FlagAsChanged();
             OnCreatureColorsModified?.Invoke(this, new EventArgs());
         }
 
@@ -251,6 +252,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
                 return;
             }
             grangerSimpleDb.CreatureColors.Remove(entity.Id);
+            grangerSimpleDb.FlagAsChanged();
             OnCreatureColorsModified?.Invoke(this, new EventArgs());
         }
     }

@@ -12,6 +12,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
     {
         readonly GrangerContext grangerContext;
 
+        public event EventHandler<EventArgs> DefinitionsChanged;
+
         public CreatureColorDefinitions([NotNull] GrangerContext grangerContext)
         {
             if (grangerContext == null) throw new ArgumentNullException(nameof(grangerContext));
@@ -22,6 +24,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         void SetupDefaultColors()
         {
+            SetupDefaultColor("Unknown", Color.Empty);
             SetupDefaultColor("Black", Color.DarkSlateGray);
             SetupDefaultColor("White", Color.GhostWhite);
             SetupDefaultColor("Grey", Color.LightGray);
@@ -44,6 +47,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     Color = color,
                     IsReadOnly = true
                 });
+                OnDefinitionsChanged();
             }
         }
 
@@ -55,6 +59,35 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         public CreatureColor GetForId(string text)
         {
             return new CreatureColor(grangerContext.GetCreatureColor(text));
+        }
+
+        public void AddNew(string newId)
+        {
+            grangerContext.AddOrUpdateCreatureColor(new CreatureColorEntity()
+            {
+                Id = newId
+            });
+            OnDefinitionsChanged();
+        }
+
+        public void UpdateColor(string id, Color color)
+        {
+            var entity = grangerContext.GetCreatureColor(id);
+            entity.Color = color;
+            grangerContext.AddOrUpdateCreatureColor(entity);
+            OnDefinitionsChanged();
+        }
+
+        public void Remove(string id)
+        {
+            var entity = grangerContext.GetCreatureColor(id);
+            grangerContext.RemoveCreatureColor(entity);
+            OnDefinitionsChanged();
+        }
+
+        protected virtual void OnDefinitionsChanged()
+        {
+            DefinitionsChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

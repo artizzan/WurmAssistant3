@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Utils.WinForms;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger
 {
     public partial class FormGrangerGeneralOptions : ExtendedForm
     {
-        readonly GrangerSettings settings; 
+        readonly GrangerSettings settings;
 
-        public FormGrangerGeneralOptions(GrangerSettings settings)
+        public FormGrangerGeneralOptions(
+            [NotNull] GrangerSettings settings,
+            [NotNull] IFormEditCreatureColorsFactory formEditCreatureColorsFactory)
         {
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
+            if (formEditCreatureColorsFactory == null)
+                throw new ArgumentNullException(nameof(formEditCreatureColorsFactory));
             this.settings = settings;
             InitializeComponent();
             InitGuiValues();

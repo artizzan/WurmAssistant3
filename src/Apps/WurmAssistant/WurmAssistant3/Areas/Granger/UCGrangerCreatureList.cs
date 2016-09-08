@@ -36,6 +36,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         bool _debugMainFormAssigned = false;
         bool listViewIsBeingUpdated = false;
 
+        CreatureColorMenuManager creatureColorMenuManager;
+
         public UcGrangerCreatureList()
         {
             InitializeComponent();
@@ -79,9 +81,18 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.mainForm.GrangerAdvisorChanged += MainForm_Granger_AdvisorChanged;
             this.mainForm.GrangerValuatorChanged += MainForm_Granger_ValuatorChanged;
 
+            creatureColorMenuManager = new CreatureColorMenuManager(setColorToolStripMenuItem,
+                creatureColorDefinitons,
+                SetColorMenuItemClickAction);
+
             UpdateCurrentCreaturesData();
             UpdateDataForView();
             timer1.Enabled = true;
+        }
+
+        void SetColorMenuItemClickAction(string creatureColorId)
+        {
+            UpdateCreaturesColors(creatureColorDefinitons.GetForId(creatureColorId));
         }
 
         void SetupOlvCustomizations()
@@ -635,52 +646,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             MessageBox.Show(result);
         }
 
-        private void blackToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
-            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.Black));
-        }
-
-        private void whiteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.White));
-        }
-
-        private void greyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.Grey));
-        }
-
-        private void brownToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.Brown));
-        }
-
-        private void goldToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.Gold));
-        }
-
-        private void bloodBayToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.BloodBay));
-        }
-
-        private void ebonyBlackToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.EbonyBlack));
-        }
-
-        private void piebaldPintoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.PiebaldPinto));
-        }
-
-        private void notACreatureToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            UpdateCreaturesColors(creatureColorDefinitons.GetForId(CreatureColorId.Unknown));
-        }
-
         void UpdateCreaturesColors(CreatureColor color)
         {
             var selected = objectListView1.SelectedObjects.Cast<Creature>().ToArray();
@@ -937,6 +902,48 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     creature.Comments = ui.Result;
                     context.SubmitChanges();
                 }
+            }
+        }
+
+        class CreatureColorMenuManager
+        {
+            readonly ToolStripMenuItem rootToolStripMenuItem;
+            readonly CreatureColorDefinitions creatureColorDefinitions;
+            readonly Action<string> menuItemClickAction;
+
+            public CreatureColorMenuManager(
+                [NotNull] ToolStripMenuItem rootToolStripMenuItem,
+                [NotNull] CreatureColorDefinitions creatureColorDefinitions,
+                [NotNull] Action<string> menuItemClickAction)
+            {
+                if (rootToolStripMenuItem == null) throw new ArgumentNullException(nameof(rootToolStripMenuItem));
+                if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
+                if (menuItemClickAction == null) throw new ArgumentNullException(nameof(menuItemClickAction));
+                this.rootToolStripMenuItem = rootToolStripMenuItem;
+                this.creatureColorDefinitions = creatureColorDefinitions;
+                this.menuItemClickAction = menuItemClickAction;
+
+                creatureColorDefinitions.DefinitionsChanged += (o, e) => RebuildItems();
+                RebuildItems();
+            }
+
+            void RebuildItems()
+            {
+                rootToolStripMenuItem.DropDownItems.Clear();
+                rootToolStripMenuItem.DropDownItems.AddRange(
+                    creatureColorDefinitions.GetColors()
+                                            .Select(color =>
+                                            {
+                                                var newItem = new ToolStripMenuItem()
+                                                {
+                                                    Text = color.CreatureColorId
+                                                };
+                                                newItem.Click +=
+                                                    (sender, args) => menuItemClickAction.Invoke(color.CreatureColorId);
+                                                return newItem;
+                                            })
+                                            .Cast<ToolStripItem>()
+                                            .ToArray());
             }
         }
     }

@@ -67,7 +67,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(238, 418);
+            this.buttonOK.Location = new System.Drawing.Point(238, 445);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(92, 29);
             this.buttonOK.TabIndex = 3;
@@ -78,7 +78,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.Location = new System.Drawing.Point(336, 418);
+            this.buttonCancel.Location = new System.Drawing.Point(336, 445);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(92, 29);
             this.buttonCancel.TabIndex = 4;
@@ -161,7 +161,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(440, 459);
+            this.ClientSize = new System.Drawing.Size(440, 486);
             this.Controls.Add(this.checkBoxDoNotMatchCreaturesByBrandName);
             this.Controls.Add(this.checkBoxhideLiveTrackerPopups);
             this.Controls.Add(this.checkBoxUseServerNameAsIdComponent);

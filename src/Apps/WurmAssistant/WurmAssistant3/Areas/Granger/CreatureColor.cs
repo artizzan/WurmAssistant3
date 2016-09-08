@@ -28,6 +28,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public Color SystemDrawingColor => creatureColorEntity.Color;
 
+        public bool IsReadOnly => creatureColorEntity.IsReadOnly;
+
         public override string ToString()
         {
             return creatureColorEntity.Id;

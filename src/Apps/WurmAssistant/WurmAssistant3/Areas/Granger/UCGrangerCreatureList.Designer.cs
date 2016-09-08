@@ -31,17 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.blackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.whiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.greyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.brownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.goldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.bloodBayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ebonyBlackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.piebaldPintoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.notACreatureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleTagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.diseasedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -121,94 +110,9 @@
             // 
             // setColorToolStripMenuItem
             // 
-            this.setColorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.blackToolStripMenuItem,
-            this.whiteToolStripMenuItem,
-            this.greyToolStripMenuItem,
-            this.brownToolStripMenuItem,
-            this.goldToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.bloodBayToolStripMenuItem,
-            this.ebonyBlackToolStripMenuItem,
-            this.piebaldPintoToolStripMenuItem,
-            this.toolStripSeparator6,
-            this.notACreatureToolStripMenuItem});
             this.setColorToolStripMenuItem.Name = "setColorToolStripMenuItem";
             this.setColorToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.setColorToolStripMenuItem.Text = "Set color";
-            // 
-            // blackToolStripMenuItem
-            // 
-            this.blackToolStripMenuItem.Name = "blackToolStripMenuItem";
-            this.blackToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.blackToolStripMenuItem.Text = "Black";
-            this.blackToolStripMenuItem.Click += new System.EventHandler(this.blackToolStripMenuItem_Click);
-            // 
-            // whiteToolStripMenuItem
-            // 
-            this.whiteToolStripMenuItem.Name = "whiteToolStripMenuItem";
-            this.whiteToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.whiteToolStripMenuItem.Text = "White";
-            this.whiteToolStripMenuItem.Click += new System.EventHandler(this.whiteToolStripMenuItem_Click);
-            // 
-            // greyToolStripMenuItem
-            // 
-            this.greyToolStripMenuItem.Name = "greyToolStripMenuItem";
-            this.greyToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.greyToolStripMenuItem.Text = "Grey";
-            this.greyToolStripMenuItem.Click += new System.EventHandler(this.greyToolStripMenuItem_Click);
-            // 
-            // brownToolStripMenuItem
-            // 
-            this.brownToolStripMenuItem.Name = "brownToolStripMenuItem";
-            this.brownToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.brownToolStripMenuItem.Text = "Brown";
-            this.brownToolStripMenuItem.Click += new System.EventHandler(this.brownToolStripMenuItem_Click);
-            // 
-            // goldToolStripMenuItem
-            // 
-            this.goldToolStripMenuItem.Name = "goldToolStripMenuItem";
-            this.goldToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.goldToolStripMenuItem.Text = "Gold";
-            this.goldToolStripMenuItem.Click += new System.EventHandler(this.goldToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(141, 6);
-            // 
-            // bloodBayToolStripMenuItem
-            // 
-            this.bloodBayToolStripMenuItem.Name = "bloodBayToolStripMenuItem";
-            this.bloodBayToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.bloodBayToolStripMenuItem.Text = "Blood Bay";
-            this.bloodBayToolStripMenuItem.Click += new System.EventHandler(this.bloodBayToolStripMenuItem_Click);
-            // 
-            // ebonyBlackToolStripMenuItem
-            // 
-            this.ebonyBlackToolStripMenuItem.Name = "ebonyBlackToolStripMenuItem";
-            this.ebonyBlackToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.ebonyBlackToolStripMenuItem.Text = "Ebony Black";
-            this.ebonyBlackToolStripMenuItem.Click += new System.EventHandler(this.ebonyBlackToolStripMenuItem_Click);
-            // 
-            // piebaldPintoToolStripMenuItem
-            // 
-            this.piebaldPintoToolStripMenuItem.Name = "piebaldPintoToolStripMenuItem";
-            this.piebaldPintoToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.piebaldPintoToolStripMenuItem.Text = "Piebald Pinto";
-            this.piebaldPintoToolStripMenuItem.Click += new System.EventHandler(this.piebaldPintoToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(141, 6);
-            // 
-            // notACreatureToolStripMenuItem
-            // 
-            this.notACreatureToolStripMenuItem.Name = "notACreatureToolStripMenuItem";
-            this.notACreatureToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.notACreatureToolStripMenuItem.Text = "None";
-            this.notACreatureToolStripMenuItem.Click += new System.EventHandler(this.notACreatureToolStripMenuItem_Click);
             // 
             // toggleTagToolStripMenuItem
             // 
@@ -712,13 +616,6 @@
         private BrightIdeasSoftware.OLVColumn olvColumnPairedWith;
         private System.Windows.Forms.ToolStripMenuItem tESTToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setColorToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem blackToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem whiteToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem greyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem brownToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem goldToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem notACreatureToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toggleTagToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem diseasedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deadToolStripMenuItem;
@@ -740,10 +637,6 @@
         private BrightIdeasSoftware.OLVColumn olvColumnExactAge;
         private BrightIdeasSoftware.OLVColumn olvColumnBrandedFor;
         private BrightIdeasSoftware.OLVColumn olvColumnServer;
-        private System.Windows.Forms.ToolStripMenuItem bloodBayToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ebonyBlackToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem piebaldPintoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private BrightIdeasSoftware.OLVColumn olvColumnSmilexamined;
     }
 }

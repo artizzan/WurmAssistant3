@@ -31,6 +31,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         readonly LogsFeedManager logsFeedMan;
         readonly GrangerContext context;
+        readonly IFormEditCreatureColorsFactory formEditCreatureColorsFactory;
 
         readonly ITimer updateLoop;
 
@@ -45,7 +46,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             [NotNull] IWurmAssistantConfig wurmAssistantConfig,
             [NotNull] ITimerFactory timerFactory,
             [NotNull] CreatureColorDefinitions creatureColorDefinitions,
-            [NotNull] GrangerContext grangerContext)
+            [NotNull] GrangerContext grangerContext,
+            [NotNull] IFormEditCreatureColorsFactory formEditCreatureColorsFactory)
         {
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (dataDirectory == null) throw new ArgumentNullException(nameof(dataDirectory));
@@ -58,6 +60,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             if (timerFactory == null) throw new ArgumentNullException(nameof(timerFactory));
             if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
             if (grangerContext == null) throw new ArgumentNullException(nameof(grangerContext));
+            if (formEditCreatureColorsFactory == null)
+                throw new ArgumentNullException(nameof(formEditCreatureColorsFactory));
 
             this.logger = logger;
             this.dataDirectory = dataDirectory;
@@ -69,8 +73,16 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.creatureColorDefinitions = creatureColorDefinitions;
 
             context = grangerContext;
+            this.formEditCreatureColorsFactory = formEditCreatureColorsFactory;
 
-            grangerUi = new FormGrangerMain(this, settings, context, logger, wurmApi, defaultBreedingEvaluatorOptions, creatureColorDefinitions);
+            grangerUi = new FormGrangerMain(this,
+                settings,
+                context,
+                logger,
+                wurmApi,
+                defaultBreedingEvaluatorOptions,
+                creatureColorDefinitions,
+                formEditCreatureColorsFactory);
 
             logsFeedMan = new LogsFeedManager(this, context, wurmApi, logger, trayPopups, wurmAssistantConfig);
             logsFeedMan.UpdatePlayers(settings.CaptureForPlayers);

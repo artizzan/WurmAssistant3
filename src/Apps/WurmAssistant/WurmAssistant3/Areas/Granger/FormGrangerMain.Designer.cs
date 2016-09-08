@@ -34,10 +34,7 @@
             this.buttonEditValuePreset = new System.Windows.Forms.Button();
             this.buttonTraitView = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.ucGrangerHerdList1 = new UcGrangerHerdList();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.ucGrangerTraitView1 = new UcGrangerTraitView();
-            this.ucGrangerCreatureList1 = new UcGrangerCreatureList();
             this.buttonHerdView = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -51,6 +48,11 @@
             this.buttonChangePlayers = new System.Windows.Forms.Button();
             this.textBoxCaptureForPlayers = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.button1 = new System.Windows.Forms.Button();
+            this.buttonEditCreatureColors = new System.Windows.Forms.Button();
+            this.ucGrangerHerdList1 = new AldursLab.WurmAssistant3.Areas.Granger.UcGrangerHerdList();
+            this.ucGrangerCreatureList1 = new AldursLab.WurmAssistant3.Areas.Granger.UcGrangerCreatureList();
+            this.ucGrangerTraitView1 = new AldursLab.WurmAssistant3.Areas.Granger.UcGrangerTraitView();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
@@ -86,7 +88,7 @@
             // buttonTraitView
             // 
             this.buttonTraitView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonTraitView.Location = new System.Drawing.Point(500, 41);
+            this.buttonTraitView.Location = new System.Drawing.Point(597, 41);
             this.buttonTraitView.Margin = new System.Windows.Forms.Padding(2);
             this.buttonTraitView.Name = "buttonTraitView";
             this.buttonTraitView.Size = new System.Drawing.Size(72, 23);
@@ -108,19 +110,9 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 303F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(572, 320);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 320F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(669, 320);
             this.tableLayoutPanel1.TabIndex = 8;
-            // 
-            // ucGrangerHerdList1
-            // 
-            this.ucGrangerHerdList1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ucGrangerHerdList1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.ucGrangerHerdList1.Location = new System.Drawing.Point(2, 2);
-            this.ucGrangerHerdList1.Margin = new System.Windows.Forms.Padding(2);
-            this.ucGrangerHerdList1.Name = "ucGrangerHerdList1";
-            this.ucGrangerHerdList1.Size = new System.Drawing.Size(108, 316);
-            this.ucGrangerHerdList1.TabIndex = 0;
             // 
             // splitContainer2
             // 
@@ -137,29 +129,10 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.ucGrangerTraitView1);
-            this.splitContainer2.Size = new System.Drawing.Size(456, 316);
-            this.splitContainer2.SplitterDistance = 264;
+            this.splitContainer2.Size = new System.Drawing.Size(553, 316);
+            this.splitContainer2.SplitterDistance = 362;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 4;
-            // 
-            // ucGrangerTraitView1
-            // 
-            this.ucGrangerTraitView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ucGrangerTraitView1.Location = new System.Drawing.Point(0, 0);
-            this.ucGrangerTraitView1.Margin = new System.Windows.Forms.Padding(2);
-            this.ucGrangerTraitView1.Name = "ucGrangerTraitView1";
-            this.ucGrangerTraitView1.Size = new System.Drawing.Size(189, 316);
-            this.ucGrangerTraitView1.TabIndex = 2;
-            // 
-            // ucGrangerCreatureList1
-            // 
-            this.ucGrangerCreatureList1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ucGrangerCreatureList1.Location = new System.Drawing.Point(0, 0);
-            this.ucGrangerCreatureList1.Margin = new System.Windows.Forms.Padding(2);
-            this.ucGrangerCreatureList1.Name = "ucGrangerCreatureList1";
-            this.ucGrangerCreatureList1.SelectedSingleCreature = null;
-            this.ucGrangerCreatureList1.Size = new System.Drawing.Size(264, 316);
-            this.ucGrangerCreatureList1.TabIndex = 1;
             // 
             // buttonHerdView
             // 
@@ -186,11 +159,12 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 69F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(576, 393);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(673, 393);
             this.tableLayoutPanel2.TabIndex = 10;
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.buttonEditCreatureColors);
             this.panel1.Controls.Add(this.buttonGrangerGeneralOptions);
             this.panel1.Controls.Add(this.buttonImportExport);
             this.panel1.Controls.Add(this.comboBoxAdvisor);
@@ -208,7 +182,7 @@
             this.panel1.Location = new System.Drawing.Point(2, 2);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(572, 65);
+            this.panel1.Size = new System.Drawing.Size(669, 65);
             this.panel1.TabIndex = 0;
             // 
             // buttonGrangerGeneralOptions
@@ -289,7 +263,7 @@
             // buttonChangePlayers
             // 
             this.buttonChangePlayers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonChangePlayers.Location = new System.Drawing.Point(481, 0);
+            this.buttonChangePlayers.Location = new System.Drawing.Point(578, 0);
             this.buttonChangePlayers.Margin = new System.Windows.Forms.Padding(2);
             this.buttonChangePlayers.Name = "buttonChangePlayers";
             this.buttonChangePlayers.Size = new System.Drawing.Size(88, 20);
@@ -306,7 +280,7 @@
             this.textBoxCaptureForPlayers.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxCaptureForPlayers.Name = "textBoxCaptureForPlayers";
             this.textBoxCaptureForPlayers.ReadOnly = true;
-            this.textBoxCaptureForPlayers.Size = new System.Drawing.Size(314, 20);
+            this.textBoxCaptureForPlayers.Size = new System.Drawing.Size(411, 20);
             this.textBoxCaptureForPlayers.TabIndex = 11;
             // 
             // timer1
@@ -314,15 +288,64 @@
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // buttonEditCreatureColors
+            // 
+            this.buttonEditCreatureColors.Location = new System.Drawing.Point(481, 20);
+            this.buttonEditCreatureColors.Name = "buttonEditCreatureColors";
+            this.buttonEditCreatureColors.Size = new System.Drawing.Size(94, 41);
+            this.buttonEditCreatureColors.TabIndex = 20;
+            this.buttonEditCreatureColors.Text = "Edit creature colors";
+            this.buttonEditCreatureColors.UseVisualStyleBackColor = true;
+            this.buttonEditCreatureColors.Click += new System.EventHandler(this.buttonEditCreatureColors_Click);
+            // 
+            // ucGrangerHerdList1
+            // 
+            this.ucGrangerHerdList1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucGrangerHerdList1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.ucGrangerHerdList1.Location = new System.Drawing.Point(2, 2);
+            this.ucGrangerHerdList1.Margin = new System.Windows.Forms.Padding(2);
+            this.ucGrangerHerdList1.Name = "ucGrangerHerdList1";
+            this.ucGrangerHerdList1.Size = new System.Drawing.Size(108, 316);
+            this.ucGrangerHerdList1.TabIndex = 0;
+            // 
+            // ucGrangerCreatureList1
+            // 
+            this.ucGrangerCreatureList1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucGrangerCreatureList1.Location = new System.Drawing.Point(0, 0);
+            this.ucGrangerCreatureList1.Margin = new System.Windows.Forms.Padding(2);
+            this.ucGrangerCreatureList1.Name = "ucGrangerCreatureList1";
+            this.ucGrangerCreatureList1.SelectedSingleCreature = null;
+            this.ucGrangerCreatureList1.Size = new System.Drawing.Size(362, 316);
+            this.ucGrangerCreatureList1.TabIndex = 1;
+            // 
+            // ucGrangerTraitView1
+            // 
+            this.ucGrangerTraitView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucGrangerTraitView1.Location = new System.Drawing.Point(0, 0);
+            this.ucGrangerTraitView1.Margin = new System.Windows.Forms.Padding(2);
+            this.ucGrangerTraitView1.Name = "ucGrangerTraitView1";
+            this.ucGrangerTraitView1.Size = new System.Drawing.Size(188, 316);
+            this.ucGrangerTraitView1.TabIndex = 2;
+            // 
             // FormGrangerMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(576, 393);
+            this.ClientSize = new System.Drawing.Size(673, 393);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(592, 400);
+            this.MinimumSize = new System.Drawing.Size(689, 400);
             this.Name = "FormGrangerMain";
             this.Text = "Granger";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormGrangerMain_FormClosing);
@@ -363,5 +386,7 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button buttonGrangerGeneralOptions;
+        private System.Windows.Forms.Button buttonEditCreatureColors;
+        private System.Windows.Forms.Button button1;
     }
 }

@@ -131,6 +131,13 @@
     <Compile Include="Areas\Granger\CreatureColorDefinitions.cs" />
     <Compile Include="Areas\Granger\DataLayer\CreatureColorEntity.cs" />
     <Compile Include="Areas\Granger\DataLayer\Migrations\GrangerHorseColorsMigration.cs" />
+    <Compile Include="Areas\Granger\FormEditCreatureColors.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\FormEditCreatureColors.Designer.cs">
+      <DependentUpon>FormEditCreatureColors.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Granger\IFormEditCreatureColorsFactory.cs" />
     <Compile Include="Areas\Main\ViewModels\DataBackupsViewModel.cs" />
     <Compile Include="Areas\Main\ViewModels\IDataBackupsViewModelFactory.cs" />
     <Compile Include="Areas\Main\Views\DataBackupsView.xaml.cs">
@@ -901,6 +908,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\CombatAssistant\CombatWidgetForm.resx">
       <DependentUpon>CombatWidgetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\FormEditCreatureColors.resx">
+      <DependentUpon>FormEditCreatureColors.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\MainMenu\OptionsForm.resx">
       <DependentUpon>OptionsForm.cs</DependentUpon>

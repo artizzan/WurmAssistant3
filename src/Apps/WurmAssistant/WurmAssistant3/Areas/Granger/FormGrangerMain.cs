@@ -31,6 +31,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         readonly IWurmApi wurmApi;
         readonly DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions;
         readonly CreatureColorDefinitions creatureColorDefinitions;
+        readonly IFormEditCreatureColorsFactory formEditCreatureColorsFactory;
 
         readonly bool _windowInitCompleted = false;
         bool _rebuildingValuePresets = false;
@@ -44,7 +45,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             [NotNull] ILogger logger, 
             [NotNull] IWurmApi wurmApi,
             [NotNull] DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions,
-            [NotNull] CreatureColorDefinitions creatureColorDefinitions)
+            [NotNull] CreatureColorDefinitions creatureColorDefinitions,
+            [NotNull] IFormEditCreatureColorsFactory formEditCreatureColorsFactory )
         {
             if (grangerFeature == null) throw new ArgumentNullException(nameof(grangerFeature));
             if (settings == null) throw new ArgumentNullException(nameof(settings));
@@ -53,6 +55,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             if (wurmApi == null) throw new ArgumentNullException(nameof(wurmApi));
             if (defaultBreedingEvaluatorOptions == null) throw new ArgumentNullException(nameof(defaultBreedingEvaluatorOptions));
             if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
+            if (formEditCreatureColorsFactory == null)
+                throw new ArgumentNullException(nameof(formEditCreatureColorsFactory));
             this.parentModule = grangerFeature;
             this.settings = settings;
             this.context = context;
@@ -60,6 +64,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.wurmApi = wurmApi;
             this.defaultBreedingEvaluatorOptions = defaultBreedingEvaluatorOptions;
             this.creatureColorDefinitions = creatureColorDefinitions;
+            this.formEditCreatureColorsFactory = formEditCreatureColorsFactory;
 
             InitializeComponent();
 
@@ -393,7 +398,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         private void buttonGrangerGeneralOptions_Click(object sender, EventArgs e)
         {
-            var ui = new FormGrangerGeneralOptions(settings);
+            var ui = new FormGrangerGeneralOptions(settings, formEditCreatureColorsFactory);
             ui.ShowDialogCenteredOnForm(this);
         }
 
@@ -401,6 +406,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             var ui = new FormGrangerImportExport(context, logger);
             ui.ShowDialogCenteredOnForm(this);
+        }
+
+        private void buttonEditCreatureColors_Click(object sender, EventArgs e)
+        {
+            var view = formEditCreatureColorsFactory.CreateFormEditCreatureColors();
+            view.ShowDialog();
         }
     }
 }
