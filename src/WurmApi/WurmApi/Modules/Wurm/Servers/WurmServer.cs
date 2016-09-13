@@ -89,5 +89,10 @@ namespace AldursLab.WurmApi.Modules.Wurm.Servers
         {
             return uptime.Uptime + (Time.Get.LocalNowOffset - uptime.Stamp);
         }
+
+        public override string ToString()
+        {
+            return wurmServerInfo.ToString();
+        }
     }
 }
