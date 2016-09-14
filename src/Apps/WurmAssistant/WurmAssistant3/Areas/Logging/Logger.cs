@@ -7,8 +7,6 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
 {
     public class Logger : ILogger, AldursLab.WurmApi.IWurmApiLogger
     {
-        static readonly string NullCharString = ((char)0).ToString();
-
         readonly ILogMessageDump logMessageDump;
         readonly string category;
         readonly NLog.Logger logger;
@@ -25,7 +23,6 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
 
         public void Log(AldursLab.WurmApi.LogLevel level, string message, object source, Exception exception)
         {
-            message = FixString(message);
             var nlogLevel = Convert(level);
             if (logger.IsEnabled(nlogLevel))
             {
@@ -73,7 +70,6 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
         {
             if (logger.IsErrorEnabled)
             {
-                message = FixString(message);
                 logger.Error(message);
                 logMessageDump.HandleEvent(LogLevel.Error, message, null, category);
             }
@@ -83,7 +79,6 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
         {
             if (logger.IsErrorEnabled)
             {
-                message = FixString(message);
                 logger.Error(exception, message);
                 logMessageDump.HandleEvent(LogLevel.Error, message, exception, category);
             }
@@ -93,7 +88,6 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
         {
             if (logger.IsInfoEnabled)
             {
-                message = FixString(message);
                 logger.Info(message);
                 logMessageDump.HandleEvent(LogLevel.Info, message, null, category);
             }
@@ -103,7 +97,6 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
         {
             if (logger.IsInfoEnabled)
             {
-                message = FixString(message);
                 logger.Info(exception, message);
                 logMessageDump.HandleEvent(LogLevel.Info, message, exception, category);
             }
@@ -113,7 +106,6 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
         {
             if (logger.IsWarnEnabled)
             {
-                message = FixString(message);
                 logger.Warn(message);
                 logMessageDump.HandleEvent(LogLevel.Warn, message, null, category);
             }
@@ -123,7 +115,6 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
         {
             if (logger.IsWarnEnabled)
             {
-                message = FixString(message);
                 logger.Warn(exception, message);
                 logMessageDump.HandleEvent(LogLevel.Warn, message, exception, category);
             }
@@ -133,20 +124,9 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
         {
             if (logger.IsDebugEnabled)
             {
-                message = FixString(message);
                 logger.Debug(message);
                 logMessageDump.HandleEvent(LogLevel.Debug, message, null, category);
             }
-        }
-
-        string FixString(string text)
-        {
-            return ReplaceNullStrings(text);
-        }
-
-        string ReplaceNullStrings(string text)
-        {
-            return text.Replace(NullCharString, "\\0");
         }
     }
 }

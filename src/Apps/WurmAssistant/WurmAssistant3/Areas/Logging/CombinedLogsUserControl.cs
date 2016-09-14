@@ -20,6 +20,8 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
 
         bool logChanged = false;
 
+        static readonly string NullCharString = ((char)0).ToString();
+
         public CombinedLogsUserControl(
             [NotNull] ILogMessageSteam logMessageSteam, 
             [NotNull] ILoggingConfig loggingConfig,
@@ -80,9 +82,16 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
 
         public void AddMessage(string message)
         {
+            message = FixString(message);
             messages.Add(message);
             TrimMessages();
             logChanged = true;
+        }
+
+        string FixString(string text)
+        {
+            // NUL string character causes TextBox renderer to cut short the text.
+            return text.Replace(NullCharString, "\\0");
         }
 
         string FilterCategory(string category)
