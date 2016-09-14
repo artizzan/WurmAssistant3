@@ -49,7 +49,7 @@ namespace AldursLab.Essentials.Tests.Synchronization
 
                 AssertNoLock(lockFilePath);
 
-                FileLock = FileLock.Enter(lockFilePath);
+                FileLock = FileLock.EnterWait(lockFilePath, TimeSpan.Zero);
 
                 AssertLockFails(lockFilePath);
 
@@ -64,7 +64,7 @@ namespace AldursLab.Essentials.Tests.Synchronization
                 var lockFilePath = Path.Combine(TempDir.AbsolutePath, LockFileName);
                 File.Create(lockFilePath).Dispose();
 
-                FileLock = FileLock.Enter(lockFilePath);
+                FileLock = FileLock.EnterWait(lockFilePath, TimeSpan.Zero);
 
                 AssertHasProcessInfo(lockFilePath);
             }
@@ -79,7 +79,7 @@ namespace AldursLab.Essentials.Tests.Synchronization
 
                 AssertNoFile(lockFilePath);
 
-                FileLock = FileLock.EnterWithCreate(lockFilePath);
+                FileLock = FileLock.EnterWithCreateWait(lockFilePath, TimeSpan.Zero);
 
                 AssertLockFails(lockFilePath);
 
@@ -93,7 +93,7 @@ namespace AldursLab.Essentials.Tests.Synchronization
             {
                 var lockFilePath = Path.Combine(TempDir.AbsolutePath, LockFileName);
 
-                FileLock = FileLock.EnterWithCreate(lockFilePath);
+                FileLock = FileLock.EnterWithCreateWait(lockFilePath, TimeSpan.Zero);
                 
                 AssertHasProcessInfo(lockFilePath);
             }
@@ -102,7 +102,7 @@ namespace AldursLab.Essentials.Tests.Synchronization
             public void ReleasesOnFinalization()
             {
                 var lockFilePath = Path.Combine(TempDir.AbsolutePath, LockFileName);
-                FileLock = FileLock.EnterWithCreate(lockFilePath);
+                FileLock = FileLock.EnterWithCreateWait(lockFilePath, TimeSpan.Zero);
                 AssertLockFails(lockFilePath);
                 FileLock = null;
                 GC.Collect(3, GCCollectionMode.Forced, true);
@@ -125,14 +125,14 @@ namespace AldursLab.Essentials.Tests.Synchronization
             Assert.Throws<LockFailedException>(
                 () =>
                 {
-                    FileLock.Enter(lockFilePath).Dispose();
+                    FileLock.EnterWait(lockFilePath, TimeSpan.Zero).Dispose();
                 });
         }
 
         static void AssertNoLock(string lockFilePath)
         {
             File.Open(lockFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite).Dispose();
-            FileLock.Enter(lockFilePath).Dispose();
+            FileLock.EnterWait(lockFilePath, TimeSpan.Zero).Dispose();
         }
 
         void AssertNoFile(string lockFilePath)

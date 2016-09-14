@@ -16,7 +16,7 @@ namespace AldursLab.Persistence.Simple
             if (rootPath == null) throw new ArgumentNullException(nameof(rootPath));
             this.rootPath = rootPath;
 
-            fileLock = FileLock.EnterWithCreate(Path.Combine(rootPath, "dir.lock"));
+            fileLock = FileLock.EnterWithCreateWait(Path.Combine(rootPath, "dir.lock"), TimeSpan.FromSeconds(15));
         }
 
         public void Save(string setId, string objectId, string data)

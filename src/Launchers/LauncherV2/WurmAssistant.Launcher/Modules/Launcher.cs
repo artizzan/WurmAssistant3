@@ -36,7 +36,7 @@ namespace AldursLab.WurmAssistant.Launcher.Modules
         {
             if (!entered)
             {
-                fileLock = FileLock.EnterWithCreate(Path.Combine(launcherDirPath, LockFileName));
+                fileLock = FileLock.EnterWithCreateWait(Path.Combine(launcherDirPath, LockFileName), TimeSpan.Zero);
                 entered = true;
             }
         }

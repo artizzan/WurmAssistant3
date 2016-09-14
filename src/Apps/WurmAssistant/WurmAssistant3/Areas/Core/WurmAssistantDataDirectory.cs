@@ -82,7 +82,7 @@ namespace AldursLab.WurmAssistant3.Areas.Core
                 }
             }
 
-            currentAppLock = FileLock.Enter(lockFile.FullName);
+            currentAppLock = FileLock.EnterWait(lockFile.FullName, TimeSpan.FromSeconds(15));
         }
 
         void Unlock()

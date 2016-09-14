@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 
@@ -21,18 +22,44 @@ namespace AldursLab.Essentials.Synchronization
         }
 
         /// <summary>
-        /// Locks exclusively on existing file.
+        /// Edit-Lock exclusively on existing file. File can be read by any process.
         /// </summary>
         /// <param name="filePath"></param>
+        /// <param name="timeout"></param>
         /// <returns></returns>
         /// <exception cref="LockFailedException">
-        /// Lock could not be established by file system.
+        /// Attempts to establish lock by file system have timed out.
         /// Note that file/directory not existing does not fall under this exception.
         /// </exception>
         /// <exception cref="Exception">
         /// There was a lock-unrelated issue.
         /// </exception>
-        public static FileLock Enter(string filePath)
+        public static FileLock EnterWait(string filePath, TimeSpan timeout)
+        {
+            DateTime beginTimepoint = DateTime.Now;
+            DateTime timeoutTimepoint = beginTimepoint + timeout;
+
+            while (true)
+            {
+                try
+                {
+                    return Enter(filePath);
+                }
+                catch (LockFailedException)
+                {
+                    if (DateTime.Now > timeoutTimepoint)
+                    {
+                        throw;
+                    }
+                    else
+                    {
+                        Thread.Sleep(500);
+                    }
+                }
+            }
+        }
+
+        static FileLock Enter(string filePath)
         {
             try
             {
@@ -48,11 +75,40 @@ namespace AldursLab.Essentials.Synchronization
         }
 
         /// <summary>
+        /// Edit-Lock exclusively on a file, create and lock if file does not exist. File can be read by any process.
         /// </summary>
         /// <param name="filePath"></param>
+        /// <param name="timeout"></param>
         /// <returns></returns>
-        /// <exception cref="LockFailedException">File is already locked or lock could not be established by file system.</exception>
-        public static FileLock EnterWithCreate(string filePath)
+        /// <exception cref="LockFailedException">
+        /// Attempts to establish lock by file system have timed out.
+        /// </exception>
+        public static FileLock EnterWithCreateWait(string filePath, TimeSpan timeout)
+        {
+            DateTime beginTimepoint = DateTime.Now;
+            DateTime timeoutTimepoint = beginTimepoint + timeout;
+
+            while (true)
+            {
+                try
+                {
+                    return EnterWithCreate(filePath);
+                }
+                catch (LockFailedException)
+                {
+                    if (DateTime.Now > timeoutTimepoint)
+                    {
+                        throw;
+                    }
+                    else
+                    {
+                        Thread.Sleep(500);
+                    }
+                }
+            }
+        }
+
+        static FileLock EnterWithCreate(string filePath)
         {
             try
             {
