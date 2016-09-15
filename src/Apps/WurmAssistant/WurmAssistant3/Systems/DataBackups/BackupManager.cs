@@ -99,8 +99,16 @@ namespace AldursLab.WurmAssistant3.Systems.DataBackups
 
             foreach (var dataBackup in oldBackups)
             {
-                Directory.Delete(dataBackup.RootDirPath, true);
-                logger.Info($"Deleted old backup named: {dataBackup.BackupName}");
+                try
+                {
+                    Directory.Delete(dataBackup.RootDirPath, true);
+                    logger.Info($"Deleted old backup named: {dataBackup.BackupName}");
+                }
+                catch (Exception exception)
+                {
+                    logger.Error(exception, "Failed to clean up an old data backup at path: " + dataBackup.RootDirPath
+                        + " ; Please try to delete this backup manually and report this issue.");
+                }
             }
         }
 
