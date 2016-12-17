@@ -300,7 +300,7 @@ namespace AldursLab.WurmAssistant3.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://dl.dropboxusercontent.com/u/74314315/Publish/WurmAssistant3/SampleSounds/sounds_wav.zip.
+        ///   Looks up a localized string similar to http://content.mdsolver.net/wurmassistant/wa3/SampleSounds/sounds_wav.zip.
         /// </summary>
         internal static string SampleSoundPackUrl {
             get {
