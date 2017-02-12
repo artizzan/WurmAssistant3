@@ -9,7 +9,7 @@ namespace AldursLab.WurmAssistant3.Areas.Main
             Version = new Version(0,0,0,0);
             Path = string.Empty;
             VersionParsed = false;
-            NewsUrl = @"http://content.mdsolver.net/wurmassistant/news/patch-release.html";
+            NewsUrl = @"http://content.madsolver.com/wurmassistant/news/patch-release.html";
         }
 
         public override string VersionString => "Patch release";
