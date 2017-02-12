@@ -34,8 +34,8 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Root
         public void ParsingResultShouldMatchExpectedOutput()
         {
             var changes = container.Instance.GetNewChanges();
-            Expect(changes, Contains(ExpectedOutput1));
-            Expect(changes, Contains(ExpectedOutput2));
+            Expect(NormalizeCrLf(changes), Contains(NormalizeCrLf(ExpectedOutput1)));
+            Expect(NormalizeCrLf(changes), Contains(NormalizeCrLf(ExpectedOutput2)));
         }
 
         [Test]
@@ -43,8 +43,13 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Root
         {
             container.Instance.LastKnownChangeDate = new DateTimeOffset(2015, 9, 29, 21, 18, 39, TimeSpan.FromHours(2));
             var changes = container.Instance.GetNewChanges();
-            Expect(changes, Contains(ExpectedPartialOutput1));
-            Expect(changes, Contains(ExpectedPartialOutput2));
+            Expect(NormalizeCrLf(changes), Contains(NormalizeCrLf(ExpectedPartialOutput1)));
+            Expect(NormalizeCrLf(changes), Contains(NormalizeCrLf(ExpectedPartialOutput2)));
+        }
+
+        private string NormalizeCrLf(string input)
+        {
+            return input.Replace("\r\n", "\n");
         }
 
         void WriteSampleChangelog()
