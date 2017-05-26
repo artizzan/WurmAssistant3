@@ -33,14 +33,17 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             public CreatureAge Age;
             public string CaredBy;
             public string BrandedBy;
-            public string Father;
-            public string Mother;
+            public string FatherName;
+            public string MotherName;
             public readonly List<CreatureTrait> Traits = new List<CreatureTrait>();
             public float InspectSkill;
             public bool IsMale;
             public DateTime PregnantUntil = DateTime.MinValue;
             public IWurmServer Server;
             public CreatureEntity.SecondaryInfoTag SecondaryInfo = CreatureEntity.SecondaryInfoTag.None;
+
+            public bool HasFatherName => !string.IsNullOrEmpty(FatherName);
+            public bool HasMotherName => !string.IsNullOrEmpty(MotherName);
         }
 
         static readonly TimeSpan ProcessorTimeout = new TimeSpan(0, 0, 5);
@@ -142,7 +145,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     {
                         string mother = motherMatch.Groups["g"].Value;
                         mother = GrangerHelpers.ExtractCreatureName(mother);
-                        creatureBuffer.Mother = mother;
+                        creatureBuffer.MotherName = mother;
                         debugLogger.Log("mother set to: " + mother);
                     }
                     Match fatherMatch = ParseFather(line);
@@ -150,7 +153,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     {
                         string father = fatherMatch.Groups["g"].Value;
                         father = GrangerHelpers.ExtractCreatureName(father);
-                        creatureBuffer.Father = father;
+                        creatureBuffer.FatherName = father;
                         debugLogger.Log("father set to: " + father);
                     }
                     verifyList.Parents = true;
@@ -338,7 +341,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
                 // father checks
                 if (String.IsNullOrEmpty(oldCreature.FatherName) &&
-                    !String.IsNullOrEmpty(creatureBuffer.Father))
+                    !String.IsNullOrEmpty(creatureBuffer.FatherName))
                 {
                     sanityFail = true;
                     if (sanityFailReason == null)
@@ -346,8 +349,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 }
 
                 if (!String.IsNullOrEmpty(oldCreature.FatherName) &&
-                    !String.IsNullOrEmpty(creatureBuffer.Father) &&
-                    oldCreature.FatherName != creatureBuffer.Father)
+                    !String.IsNullOrEmpty(creatureBuffer.FatherName) &&
+                    oldCreature.FatherName != creatureBuffer.FatherName)
                 {
                     sanityFail = true;
                     if (sanityFailReason == null)
@@ -356,7 +359,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
                 // mother checks
                 if (String.IsNullOrEmpty(oldCreature.MotherName) &&
-                    !String.IsNullOrEmpty(creatureBuffer.Mother))
+                    !String.IsNullOrEmpty(creatureBuffer.MotherName))
                 {
                     sanityFail = true;
                     if (sanityFailReason == null)
@@ -364,8 +367,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 }
 
                 if (!String.IsNullOrEmpty(oldCreature.MotherName) &&
-                    !String.IsNullOrEmpty(creatureBuffer.Mother) &&
-                    oldCreature.MotherName != creatureBuffer.Mother)
+                    !String.IsNullOrEmpty(creatureBuffer.MotherName) &&
+                    oldCreature.MotherName != creatureBuffer.MotherName)
                 {
                     sanityFail = true;
                     if (sanityFailReason == null)
@@ -427,8 +430,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     oldCreature.Age = creatureBuffer.Age;
                     oldCreature.TakenCareOfBy = creatureBuffer.CaredBy;
                     oldCreature.BrandedFor = creatureBuffer.BrandedBy;
-                    oldCreature.FatherName = creatureBuffer.Father;
-                    oldCreature.MotherName = creatureBuffer.Mother;
+                    if (creatureBuffer.HasFatherName)
+                    {
+                        oldCreature.FatherName = creatureBuffer.FatherName;
+                    }
+                    if (creatureBuffer.HasMotherName)
+                    {
+                        oldCreature.MotherName = creatureBuffer.MotherName;
+                    }
                     oldCreature.ServerName = creatureBuffer.Server.ServerName.Original;
                     if (oldCreature.TraitsInspectedAtSkill <= creatureBuffer.InspectSkill ||
                         creatureBuffer.InspectSkill >
@@ -580,8 +589,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 Age = newCreature.Age,
                 TakenCareOfBy = newCreature.CaredBy,
                 BrandedFor = newCreature.BrandedBy,
-                FatherName = newCreature.Father,
-                MotherName = newCreature.Mother,
+                FatherName = newCreature.FatherName,
+                MotherName = newCreature.MotherName,
                 Traits = newCreature.Traits,
                 TraitsInspectedAtSkill = newCreature.InspectSkill,
                 IsMale = newCreature.IsMale,

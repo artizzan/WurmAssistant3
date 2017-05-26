@@ -58,23 +58,35 @@ namespace AldursLab.WurmAssistant3.Systems.DataBackups
 
             {
                 var upgradeVersionFile = Path.Combine(dataDirectory.DirectoryPath, "upgrade.dat");
-                var backupVersionFile = Path.Combine(currentBackupRootPath, "upgrade.dat");
-                File.Copy(upgradeVersionFile, backupVersionFile);
+                if (File.Exists(upgradeVersionFile))
+                {
+                    var backupVersionFile = Path.Combine(currentBackupRootPath, "upgrade.dat");
+                    File.Copy(upgradeVersionFile, backupVersionFile);
+                }
             }
             {
                 var dataDir = Path.Combine(dataDirectory.DirectoryPath, "Data");
-                var backupDir = Path.Combine(currentBackupRootPath, "Data");
-                DirectoryOps.CopyRecursively(dataDir, backupDir);
+                if (Directory.Exists(dataDir))
+                {
+                    var backupDir = Path.Combine(currentBackupRootPath, "Data");
+                    DirectoryOps.CopyRecursively(dataDir, backupDir);
+                }
             }
             {
                 var dataV2Dir = Path.Combine(dataDirectory.DirectoryPath, "DataV2");
-                var backupV2Dir = Path.Combine(currentBackupRootPath, "DataV2");
-                DirectoryOps.CopyRecursively(dataV2Dir, backupV2Dir);
+                if (Directory.Exists(dataV2Dir))
+                {
+                    var backupV2Dir = Path.Combine(currentBackupRootPath, "DataV2");
+                    DirectoryOps.CopyRecursively(dataV2Dir, backupV2Dir);
+                }
             }
             {
                 var soundBankDir = Path.Combine(dataDirectory.DirectoryPath, "SoundBank");
-                var backupSoundBankDir = Path.Combine(currentBackupRootPath, "SoundBank");
-                DirectoryOps.CopyRecursively(soundBankDir, backupSoundBankDir);
+                if (Directory.Exists(soundBankDir))
+                {
+                    var backupSoundBankDir = Path.Combine(currentBackupRootPath, "SoundBank");
+                    DirectoryOps.CopyRecursively(soundBankDir, backupSoundBankDir);
+                }
             }
 
             var confirmFile = Path.Combine(currentBackupRootPath, "completed.dat");
