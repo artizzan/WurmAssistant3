@@ -11,3 +11,7 @@ This file is important for build server, in order to correctly deploy packages.
 Each subdirectory must contain at least one file, set as content and copy to output directory. Else directories will not appear in build output.
 
 Respecting standard html convention, the main html file of every subdirectory should be named *index.html*
+
+----------------------------------
+
+TODO: News are no longer shown in WA, simplify this deployment procedure.

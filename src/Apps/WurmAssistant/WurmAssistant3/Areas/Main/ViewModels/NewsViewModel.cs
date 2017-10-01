@@ -14,28 +14,19 @@ namespace AldursLab.WurmAssistant3.Areas.Main.ViewModels
     public class NewsViewModel : Screen
     {
         readonly IChangelogManager changelogManager;
-        readonly NewsService newsService;
         readonly IWindowManager windowManager;
-        readonly IProcessStarter processStarter;
 
         string _changelogText = string.Empty;
-        IEnumerable<NewsInstance> _newsInstances;
         int tabControlIndex;
 
         public NewsViewModel(
-            [NotNull] IChangelogManager changelogManager, 
-            [NotNull] NewsService newsService,
-            [NotNull] IWindowManager windowManager,
-            [NotNull] IProcessStarter processStarter)
+            [NotNull] IChangelogManager changelogManager,
+            [NotNull] IWindowManager windowManager)
         {
             if (changelogManager == null) throw new ArgumentNullException(nameof(changelogManager));
-            if (newsService == null) throw new ArgumentNullException(nameof(newsService));
             if (windowManager == null) throw new ArgumentNullException(nameof(windowManager));
-            if (processStarter == null) throw new ArgumentNullException(nameof(processStarter));
             this.changelogManager = changelogManager;
-            this.newsService = newsService;
             this.windowManager = windowManager;
-            this.processStarter = processStarter;
         }
 
         public string ChangelogText
@@ -45,17 +36,6 @@ namespace AldursLab.WurmAssistant3.Areas.Main.ViewModels
             {
                 if (value == _changelogText) return;
                 _changelogText = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
-        public IEnumerable<NewsInstance> NewsInstances
-        {
-            get { return _newsInstances; }
-            private set
-            {
-                if (Equals(value, _newsInstances)) return;
-                _newsInstances = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -78,38 +58,23 @@ namespace AldursLab.WurmAssistant3.Areas.Main.ViewModels
 
         public void ShowIfAnyUnshownNews()
         {
-            bool anyNews = false;
-
             var newChangelogEntries = changelogManager.GetNewChanges() ?? string.Empty;
-            var newNewsEntries = newsService.GetNewsSinceLastShown().ToArray();
 
-            anyNews = !string.IsNullOrWhiteSpace(newChangelogEntries) || newNewsEntries.Any();
+            bool anyNews = !string.IsNullOrWhiteSpace(newChangelogEntries);
             
             ChangelogText = newChangelogEntries;
-            NewsInstances = newNewsEntries;
             
             if (anyNews)
             {
-                if (!NewsInstances.Any())
-                {
-                    NewsInstances = new[] { new PatchReleaseNewsInstance() };
-                }
                 windowManager.ShowWindow(this);
                 changelogManager.UpdateLastChangeDate();
-                newsService.SetAllNewsShown();
             }
         }
 
         public void ShowForAllNews()
         {
             ChangelogText = changelogManager.GetChanges(DateTimeOffset.MinValue) ?? string.Empty;
-            NewsInstances = newsService.GetNews(new Version());
             windowManager.ShowWindow(this);
-        }
-
-        public void FollowLink(Uri uri)
-        {
-            processStarter.StartSafe(uri.ToString());
         }
     }
 }

@@ -189,10 +189,6 @@
     <Compile Include="Areas\Main\Data\MainDataContext.cs" />
     <Compile Include="Areas\Main\Data\Model\News.cs" />
     <Compile Include="Areas\Main\AppRuntimeManager.cs" />
-    <Compile Include="Areas\Main\DirectoryNewsInstance.cs" />
-    <Compile Include="Areas\Main\NewsInstance.cs" />
-    <Compile Include="Areas\Main\NewsService.cs" />
-    <Compile Include="Areas\Main\PatchReleaseNewsInstance.cs" />
     <Compile Include="Areas\Main\ViewModels\MainViewModel.cs" />
     <Compile Include="Areas\Main\ViewModels\NewsViewModel.cs" />
     <Compile Include="Areas\Main\Views\MainView.xaml.cs">

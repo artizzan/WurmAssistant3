@@ -28,29 +28,5 @@ namespace AldursLab.WurmAssistant3.Areas.Main.Views
 
             Icon = Properties.Resources.WurmAssistantIcon.ToImageSource();
         }
-
-        void WebBrowser_OnLoadCompleted(object sender, NavigationEventArgs e)
-        {
-            var browser = sender as WebBrowser;
-            if (browser != null)
-            {
-                browser.Height = (browser.Document as dynamic).body.scrollHeight + 20;
-            }
-        }
-
-        void WebBrowser_OnNavigating(object sender, NavigatingCancelEventArgs e)
-        {
-            var webBrowser = sender as WebBrowser;
-            if (webBrowser?.Source != null)
-            {
-                var dataContext = this.DataContext as NewsViewModel;
-                if (dataContext != null)
-                {
-                    dataContext.FollowLink(e.Uri);
-                    e.Cancel = true;
-                }
-            }
-
-        }
     }
 }

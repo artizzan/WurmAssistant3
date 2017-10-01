@@ -14,23 +14,6 @@
         MinHeight="600">
     <Grid>
         <TabControl SelectedIndex="{Binding TabControlIndex}">
-            <TabItem Header="News" Height="22" VerticalAlignment="Top">
-                <Grid Background="#FFE5E5E5">
-                    <ScrollViewer>
-                        <ItemsControl ItemsSource="{Binding NewsInstances}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <GroupBox Header="{Binding VersionString}">
-                                        <WebBrowser wpf:WebBrowserBehaviors.BindableSource="{Binding NewsUrl}"
-                                                        Navigating="WebBrowser_OnNavigating"
-                                                        LoadCompleted="WebBrowser_OnLoadCompleted" />
-                                    </GroupBox>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </Grid>
-            </TabItem>
             <TabItem Header="Changelog">
                 <Grid Background="#FFE5E5E5">
                     <TextBlock Text="{Binding ChangelogText}"></TextBlock>

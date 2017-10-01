@@ -22,6 +22,7 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -281,6 +282,19 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="wurmassistant\news\3.0.html" />
+    <Content Include="wurmassistant\news\3.1.html" />
+    <Content Include="wurmassistant\news\3.2.html" />
+    <Content Include="wurmassistant\news\3.3.html" />
+    <Content Include="wurmassistant\news\img\2016-07-21_20h16_43.png" />
+    <Content Include="wurmassistant\news\img\2016-07-21_20h18_22.png" />
+    <Content Include="wurmassistant\news\img\63-supernova.png" />
+    <Content Include="wurmassistant\news\img\backup-restore.png" />
+    <Content Include="wurmassistant\news\img\import-export.jpg" />
+    <Content Include="wurmassistant\news\img\patch-release.png" />
+    <Content Include="wurmassistant\news\img\plugin_icon.jpg" />
+    <Content Include="wurmassistant\news\img\plugin_icon_sm.jpg" />
+    <Content Include="wurmassistant\news\patch-release.html" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -335,6 +349,9 @@
       <DependentUpon>ApplicationInsights.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
     </None>
+    <Content Include="wurmassistant\wa3\LauncherV2\WurmAssistant3Launcher.zip" />
+    <Content Include="wurmassistant\wa3\SampleSounds\sounds_wav.zip" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Package.pubxml" />
     <None Include="Properties\PublishProfiles\wa-ws - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\wurmassistant - Web Deploy.pubxml" />
