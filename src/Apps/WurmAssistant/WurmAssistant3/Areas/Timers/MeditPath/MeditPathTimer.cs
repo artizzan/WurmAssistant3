@@ -226,7 +226,13 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.MeditPath
                 nextMeditLevel = MeditationPaths.FindLevel(line.Content) + 1;
             }
 
-            cdInHrs = MeditationPaths.GetCooldownHoursForLevel(nextMeditLevel).ConstrainToRange(0, int.MaxValue);
+            var currentMeditationSkill =
+                WurmCharacter.Skills.TryGetCurrentSkillLevel("Meditation",
+                    new ServerGroup(ServerGroupId),
+                    TimeSpan.FromDays(365));
+
+            cdInHrs = MeditationPaths.GetCooldownHoursForLevel(nextMeditLevel, currentMeditationSkill?.Value ?? 0)
+                                     .ConstrainToRange(0, int.MaxValue);
 
             DateOfNextQuestionAttempt = line.Timestamp + TimeSpan.FromHours(cdInHrs);
         }
@@ -240,7 +246,13 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.MeditPath
 
         internal void SetManualQTimer(int meditLevel, DateTime originDate)
         {
-            int hours = MeditationPaths.GetCooldownHoursForLevel(meditLevel).ConstrainToRange(0, int.MaxValue);
+            var currentMeditationSkill =
+                WurmCharacter.Skills.TryGetCurrentSkillLevel("Meditation",
+                    new ServerGroup(ServerGroupId),
+                    TimeSpan.FromDays(365));
+
+            int hours = MeditationPaths.GetCooldownHoursForLevel(meditLevel, currentMeditationSkill?.Value ?? 0)
+                                       .ConstrainToRange(0, int.MaxValue);
             NextQuestionAttemptOverridenUntil = originDate + TimeSpan.FromHours(hours);
             UpdateCooldown();
         }

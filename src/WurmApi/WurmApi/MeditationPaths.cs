@@ -28,7 +28,7 @@ namespace AldursLab.WurmApi
         static readonly Dictionary<int, string[]> LevelToTitlesMap = new Dictionary<int, string[]>();
         static readonly Dictionary<int, int> LevelToCooldownInHoursMap = new Dictionary<int, int>();
 
-        const int CooldownMax = 576;
+        const int CooldownMax = 432;
 
         static MeditationPaths()
         {
@@ -53,20 +53,20 @@ namespace AldursLab.WurmApi
             LevelToCooldownInHoursMap.Add(0, 0);
             LevelToCooldownInHoursMap.Add(1, 12);
             LevelToCooldownInHoursMap.Add(2, 24);
-            LevelToCooldownInHoursMap.Add(3, 72);
-            LevelToCooldownInHoursMap.Add(4, 144);
-            LevelToCooldownInHoursMap.Add(5, 288);
-            LevelToCooldownInHoursMap.Add(6, 576);
-            LevelToCooldownInHoursMap.Add(7, 576);
-            LevelToCooldownInHoursMap.Add(8, 576);
-            LevelToCooldownInHoursMap.Add(9, 576);
-            LevelToCooldownInHoursMap.Add(10, 576);
-            LevelToCooldownInHoursMap.Add(11, 576);
-            LevelToCooldownInHoursMap.Add(12, 576);
-            LevelToCooldownInHoursMap.Add(13, 576);
-            LevelToCooldownInHoursMap.Add(14, 576);
-            LevelToCooldownInHoursMap.Add(15, 576);
-            LevelToCooldownInHoursMap.Add(16, 576);
+            LevelToCooldownInHoursMap.Add(3, 48);
+            LevelToCooldownInHoursMap.Add(4, 108);
+            LevelToCooldownInHoursMap.Add(5, 192);
+            LevelToCooldownInHoursMap.Add(6, 300);
+            LevelToCooldownInHoursMap.Add(7, CooldownMax);
+            LevelToCooldownInHoursMap.Add(8, CooldownMax);
+            LevelToCooldownInHoursMap.Add(9, CooldownMax);
+            LevelToCooldownInHoursMap.Add(10, CooldownMax);
+            LevelToCooldownInHoursMap.Add(11, CooldownMax);
+            LevelToCooldownInHoursMap.Add(12, CooldownMax);
+            LevelToCooldownInHoursMap.Add(13, CooldownMax);
+            LevelToCooldownInHoursMap.Add(14, CooldownMax);
+            LevelToCooldownInHoursMap.Add(15, CooldownMax);
+            LevelToCooldownInHoursMap.Add(16, CooldownMax);
         }
 
         /// <summary>
@@ -96,22 +96,31 @@ namespace AldursLab.WurmApi
         /// If level is invalid (eg -1), returns -1;
         /// </summary>
         /// <param name="nextMeditLevel"></param>
+        /// <param name="currentMeditSkill"></param>
         /// <returns></returns>
-        public static int GetCooldownHoursForLevel(int nextMeditLevel)
+        public static int GetCooldownHoursForLevel(int nextMeditLevel, float currentMeditSkill)
         {
-            int result;
-            if (LevelToCooldownInHoursMap.TryGetValue(nextMeditLevel, out result))
+            if (LevelToCooldownInHoursMap.TryGetValue(nextMeditLevel, out var result))
             {
+                var currentMeditLevel = nextMeditLevel - 1;
+                if (QualifiesForHalvingCooldown(currentMeditLevel, currentMeditSkill))
+                {
+                    result = result / 2;
+                }
                 return result;
             }
-            else if (nextMeditLevel > LevelToTitlesMap.Keys.Max())
+            if (nextMeditLevel > LevelToTitlesMap.Keys.Max())
             {
                 return CooldownMax;
             }
-            else
-            {
-                return -1;
-            }
+            
+             return -1;
+            
+        }
+
+        static bool QualifiesForHalvingCooldown(int currentMeditLevel, float currentMeditSkill)
+        {
+            return currentMeditLevel * 15f > currentMeditSkill;
         }
 
         /// <summary>

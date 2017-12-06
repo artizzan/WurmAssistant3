@@ -25,7 +25,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
 
         protected CooldownHandler CDNotify;
 
-        IWurmCharacter character;
+        protected IWurmCharacter WurmCharacter;
 
         [JsonProperty]
         bool soundNotify;
@@ -80,8 +80,8 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
             };
             if (PopupOnWaLaunch) CDNotify.ResetShownAndPlayed();
 
-            character = WurmApi.Characters.Get(new CharacterName(player));
-            character.LogInOrCurrentServerPotentiallyChanged += _handleServerChange;
+            WurmCharacter = WurmApi.Characters.Get(new CharacterName(player));
+            WurmCharacter.LogInOrCurrentServerPotentiallyChanged += _handleServerChange;
         }
 
         public TimerDisplayView View { get; private set; }
@@ -165,7 +165,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
             //children should basecall this after their own cleanup
             playerTimersGroup.StopTimer(this);
             View.Dispose();
-            character.LogInOrCurrentServerPotentiallyChanged -= _handleServerChange;
+            WurmCharacter.LogInOrCurrentServerPotentiallyChanged -= _handleServerChange;
         }
 
         public virtual void Update()
@@ -184,7 +184,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
         {
             var skillLevel =
                 await
-                    character.Skills.TryGetCurrentSkillLevelAsync(skillName,
+                    WurmCharacter.Skills.TryGetCurrentSkillLevelAsync(skillName,
                         new ServerGroup(playerTimersGroup.ServerGroupId),
                         since);
 
@@ -203,7 +203,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
 
             var skillLevel =
                 await
-                    character.Skills.TryGetCurrentSkillLevelAsync(skillName,
+                    WurmCharacter.Skills.TryGetCurrentSkillLevelAsync(skillName,
                         new ServerGroup(playerTimersGroup.ServerGroupId),
                         HowLongAgoWasThisDate(lastCheckup));
 
@@ -219,7 +219,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
         /// <returns></returns>
         protected async Task<List<LogEntry>> GetLogLinesFromLogHistoryAsync(LogType logType, TimeSpan since)
         {
-            var results = await character.Logs.ScanLogsServerGroupRestrictedAsync(DateTime.Now - since,
+            var results = await WurmCharacter.Logs.ScanLogsServerGroupRestrictedAsync(DateTime.Now - since,
                 DateTime.Now,
                 logType,
                 new ServerGroup(playerTimersGroup.ServerGroupId));
