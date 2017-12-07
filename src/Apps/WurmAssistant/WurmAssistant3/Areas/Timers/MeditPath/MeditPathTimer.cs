@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
+using AldursLab.WurmApi.Modules.Wurm.Characters.Skills;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
@@ -21,8 +23,17 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.MeditPath
         DateTime lastCheckup = DateTime.MinValue;
         [JsonProperty]
         DateTime nextQuestionAttemptOverridenUntil = DateTime.MinValue;
+        [JsonProperty]
+        float meditationSkill;
+        [JsonProperty]
+        DateTime meditSkillLastCheckup;
 
         readonly TimeSpan pathCooldown = TimeSpan.FromDays(1);
+
+        const double FloatAboveZeroCompareValue = 0.00001;
+
+        SkillEntryParser skillEntryParser;
+        
 
         public MeditPathTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundManager soundManager,
             ITrayPopups trayPopups)
@@ -35,6 +46,8 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.MeditPath
             base.Initialize(parentGroup, player, definition);
             View.SetCooldown(pathCooldown);
 
+            skillEntryParser = new SkillEntryParser(WurmApi);
+
             MoreOptionsAvailable = true;
 
             PerformAsyncInits();
@@ -44,6 +57,19 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.MeditPath
         {
             try
             {
+                var hasArchivalLevel = MeditationSkill > FloatAboveZeroCompareValue;
+                float skill = await FindMeditationSkill(hasArchivalLevel);
+
+                if (skill > FloatAboveZeroCompareValue)
+                {
+                    SetMeditationSkill(skill);
+                }
+                else
+                {
+                    SetMeditationSkill(MeditationSkill);
+                }
+                MeditSkillLastCheckup = DateTime.Now;
+
                 List<LogEntry> lines = await GetLogLinesFromLogHistoryAsync(LogType.Event, LastCheckup);
                 if (!ProcessQuestionLogSearch(lines) && DateOfNextQuestionAttempt == default(DateTime))
                 {
@@ -92,6 +118,25 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.MeditPath
             set
             {
                 nextQuestionAttemptOverridenUntil = value;
+                FlagAsChanged();
+            }
+        }
+
+        float MeditationSkill
+        {
+            get { return meditationSkill; }
+            set
+            {
+                SetMeditationSkill(value);
+            }
+        }
+
+        DateTime MeditSkillLastCheckup
+        {
+            get { return meditSkillLastCheckup; }
+            set
+            {
+                meditSkillLastCheckup = value;
                 FlagAsChanged();
             }
         }
@@ -152,6 +197,21 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.MeditPath
                 {
                     UpdateDateOfNextQuestionAttempt(line, PathSwitchKind.PathReset);
                     UpdateCooldown();
+                }
+            }
+        }
+
+        public override void HandleNewSkillLogLine(LogEntry line)
+        {
+            if (line.Content.StartsWith("Meditating increased", StringComparison.Ordinal)
+                || line.Content.StartsWith("Meditating decreased", StringComparison.Ordinal))
+            {
+                //parse into value
+                var info = skillEntryParser.TryParseSkillInfoFromLogLine(line);
+                if (info != null)
+                {
+                    this.MeditationSkill = info.Value;
+                    Logger.Info("updated meditation skill for " + Character + " to " + MeditationSkill);
                 }
             }
         }
@@ -226,12 +286,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.MeditPath
                 nextMeditLevel = MeditationPaths.FindLevel(line.Content) + 1;
             }
 
-            var currentMeditationSkill =
-                WurmCharacter.Skills.TryGetCurrentSkillLevel("Meditation",
-                    new ServerGroup(ServerGroupId),
-                    TimeSpan.FromDays(365));
-
-            cdInHrs = MeditationPaths.GetCooldownHoursForLevel(nextMeditLevel, currentMeditationSkill?.Value ?? 0)
+            cdInHrs = MeditationPaths.GetCooldownHoursForLevel(nextMeditLevel, MeditationSkill)
                                      .ConstrainToRange(0, int.MaxValue);
 
             DateOfNextQuestionAttempt = line.Timestamp + TimeSpan.FromHours(cdInHrs);
@@ -246,15 +301,53 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.MeditPath
 
         internal void SetManualQTimer(int meditLevel, DateTime originDate)
         {
-            var currentMeditationSkill =
-                WurmCharacter.Skills.TryGetCurrentSkillLevel("Meditation",
-                    new ServerGroup(ServerGroupId),
-                    TimeSpan.FromDays(365));
-
-            int hours = MeditationPaths.GetCooldownHoursForLevel(meditLevel, currentMeditationSkill?.Value ?? 0)
+            int hours = MeditationPaths.GetCooldownHoursForLevel(meditLevel, MeditationSkill)
                                        .ConstrainToRange(0, int.MaxValue);
             NextQuestionAttemptOverridenUntil = originDate + TimeSpan.FromHours(hours);
             UpdateCooldown();
+        }
+
+        async Task<float> FindMeditationSkill(bool hasArchivalLevel)
+        {
+            var searchFromDate = DateTime.Now;
+            if (MeditSkillLastCheckup > new DateTime(1900, 1, 1))
+            {
+                searchFromDate = MeditSkillLastCheckup;
+            }
+            searchFromDate -= TimeSpan.FromDays(30);
+            float skill = await TryGetSkillFromLogHistoryAsync("Meditating", searchFromDate);
+            if (skill < FloatAboveZeroCompareValue)
+            {
+                if (!hasArchivalLevel)
+                {
+                    Logger.Info(
+                        string.Format(
+                            "while preparing medit path timer for player: {0} server group: {1}, skill appears to be 0, attempting wider search",
+                            Character,
+                            ServerGroupId));
+                    skill = await TryGetSkillFromLogHistoryAsync("Meditating", TimeSpan.FromDays(365));
+                    if (skill < FloatAboveZeroCompareValue)
+                    {
+                        skill = await TryGetSkillFromLogHistoryAsync("Meditating", TimeSpan.FromDays(1460));
+                        if (skill < FloatAboveZeroCompareValue)
+                        {
+                            Logger.Info(string.Format("could not get any meditation skill for player: {0} server group: {1}", Character, ServerGroupId));
+                        }
+                    }
+                }
+                else
+                {
+                    Logger.Info("Archival level available, skipping wider search for player: " + Character);
+                }
+            }
+            return skill;
+        }
+
+        void SetMeditationSkill(float newValue)
+        {
+            Logger.Info(string.Format("{0} meditation skill is now {1} on {2}", Character, newValue, ServerGroupId));
+            meditationSkill = newValue;
+            FlagAsChanged();
         }
     }
 }

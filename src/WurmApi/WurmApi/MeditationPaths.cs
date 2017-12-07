@@ -120,7 +120,7 @@ namespace AldursLab.WurmApi
 
         static bool QualifiesForHalvingCooldown(int currentMeditLevel, float currentMeditSkill)
         {
-            return currentMeditLevel * 15f > currentMeditSkill;
+            return currentMeditLevel * 15f < currentMeditSkill;
         }
 
         /// <summary>
