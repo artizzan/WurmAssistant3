@@ -32,7 +32,9 @@
             this.objectListView = new BrightIdeasSoftware.ObjectListView();
             this.olvColumnId = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnColor = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnChangeColor = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnDisplayName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnWurmLogText = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnEdit = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnRemove = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.buttonAddNew = new System.Windows.Forms.Button();
             this.textBoxId = new System.Windows.Forms.TextBox();
@@ -47,7 +49,9 @@
             // 
             this.objectListView.AllColumns.Add(this.olvColumnId);
             this.objectListView.AllColumns.Add(this.olvColumnColor);
-            this.objectListView.AllColumns.Add(this.olvColumnChangeColor);
+            this.objectListView.AllColumns.Add(this.olvColumnDisplayName);
+            this.objectListView.AllColumns.Add(this.olvColumnWurmLogText);
+            this.objectListView.AllColumns.Add(this.olvColumnEdit);
             this.objectListView.AllColumns.Add(this.olvColumnRemove);
             this.objectListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -56,7 +60,9 @@
             this.objectListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnId,
             this.olvColumnColor,
-            this.olvColumnChangeColor,
+            this.olvColumnDisplayName,
+            this.olvColumnWurmLogText,
+            this.olvColumnEdit,
             this.olvColumnRemove});
             this.objectListView.Cursor = System.Windows.Forms.Cursors.Default;
             this.objectListView.GridLines = true;
@@ -65,7 +71,7 @@
             this.objectListView.Location = new System.Drawing.Point(12, 12);
             this.objectListView.Name = "objectListView";
             this.objectListView.RowHeight = 25;
-            this.objectListView.Size = new System.Drawing.Size(509, 350);
+            this.objectListView.Size = new System.Drawing.Size(753, 350);
             this.objectListView.TabIndex = 0;
             this.objectListView.UseCellFormatEvents = true;
             this.objectListView.UseCompatibleStateImageBehavior = false;
@@ -87,14 +93,26 @@
             this.olvColumnColor.Text = "Color";
             this.olvColumnColor.Width = 180;
             // 
-            // olvColumnChangeColor
+            // olvColumnDisplayName
             // 
-            this.olvColumnChangeColor.AspectName = "ChangeColorButtonAspect";
-            this.olvColumnChangeColor.ButtonSizing = BrightIdeasSoftware.OLVColumn.ButtonSizingMode.CellBounds;
-            this.olvColumnChangeColor.Groupable = false;
-            this.olvColumnChangeColor.IsButton = true;
-            this.olvColumnChangeColor.Text = "";
-            this.olvColumnChangeColor.Width = 96;
+            this.olvColumnDisplayName.AspectName = "DisplayName";
+            this.olvColumnDisplayName.Text = "Display name";
+            this.olvColumnDisplayName.Width = 100;
+            // 
+            // olvColumnWurmLogText
+            // 
+            this.olvColumnWurmLogText.AspectName = "WurmLogText";
+            this.olvColumnWurmLogText.Text = "Wurm log text";
+            this.olvColumnWurmLogText.Width = 100;
+            // 
+            // olvColumnEdit
+            // 
+            this.olvColumnEdit.AspectName = "EditButtonAspect";
+            this.olvColumnEdit.ButtonSizing = BrightIdeasSoftware.OLVColumn.ButtonSizingMode.CellBounds;
+            this.olvColumnEdit.Groupable = false;
+            this.olvColumnEdit.IsButton = true;
+            this.olvColumnEdit.Text = "";
+            this.olvColumnEdit.Width = 96;
             // 
             // olvColumnRemove
             // 
@@ -162,7 +180,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(533, 461);
+            this.ClientSize = new System.Drawing.Size(777, 461);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.objectListView);
@@ -189,9 +207,11 @@
         private System.Windows.Forms.Label label1;
         private BrightIdeasSoftware.OLVColumn olvColumnId;
         private BrightIdeasSoftware.OLVColumn olvColumnColor;
-        private BrightIdeasSoftware.OLVColumn olvColumnChangeColor;
+        private BrightIdeasSoftware.OLVColumn olvColumnEdit;
         private BrightIdeasSoftware.OLVColumn olvColumnRemove;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label2;
+        private BrightIdeasSoftware.OLVColumn olvColumnDisplayName;
+        private BrightIdeasSoftware.OLVColumn olvColumnWurmLogText;
     }
 }

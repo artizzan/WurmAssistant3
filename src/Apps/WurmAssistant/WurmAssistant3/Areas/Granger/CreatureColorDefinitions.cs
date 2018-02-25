@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
 using JetBrains.Annotations;
 
@@ -24,15 +25,15 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         void SetupDefaultColors()
         {
-            SetupDefaultColor("Unknown", Color.Empty);
-            SetupDefaultColor("Black", Color.DarkSlateGray);
-            SetupDefaultColor("White", Color.GhostWhite);
-            SetupDefaultColor("Grey", Color.LightGray);
-            SetupDefaultColor("Brown", Color.Brown);
-            SetupDefaultColor("Gold", Color.Gold);
-            SetupDefaultColor("BloodBay", Color.RosyBrown);
-            SetupDefaultColor("EbonyBlack", Color.Black);
-            SetupDefaultColor("PiebaldPinto", Color.DarkGray);
+            SetupDefaultColor(DefaultCreatureColorIds.Unknown, Color.Empty);
+            SetupDefaultColor(DefaultCreatureColorIds.Black, Color.DarkSlateGray);
+            SetupDefaultColor(DefaultCreatureColorIds.White, Color.GhostWhite);
+            SetupDefaultColor(DefaultCreatureColorIds.Grey, Color.LightGray);
+            SetupDefaultColor(DefaultCreatureColorIds.Brown, Color.Brown);
+            SetupDefaultColor(DefaultCreatureColorIds.Gold, Color.Gold);
+            SetupDefaultColor(DefaultCreatureColorIds.BloodBay, Color.RosyBrown);
+            SetupDefaultColor(DefaultCreatureColorIds.EbonyBlack, Color.Black);
+            SetupDefaultColor(DefaultCreatureColorIds.PiebaldPinto, Color.DarkGray);
             grangerContext.SubmitChanges();
         }
 
@@ -56,16 +57,23 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             return grangerContext.CreatureColorEntities.Select(entity => new CreatureColor(entity));
         }
 
-        public CreatureColor GetForId(string text)
+        public bool Exists(string colorId)
         {
-            return new CreatureColor(grangerContext.GetCreatureColor(text));
+            return grangerContext.CreatureColorExists(colorId);
+        }
+
+        public CreatureColor GetForId(string colorId)
+        {
+            return new CreatureColor(grangerContext.GetCreatureColor(colorId));
         }
 
         public void AddNew(string newId)
         {
             grangerContext.AddOrUpdateCreatureColor(new CreatureColorEntity()
             {
-                Id = newId
+                Id = newId,
+                WurmLogText = newId.ToLowerInvariant(),
+                DisplayName = newId.Capitalize()
             });
             OnDefinitionsChanged();
         }
@@ -74,6 +82,22 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             var entity = grangerContext.GetCreatureColor(id);
             entity.Color = color;
+            grangerContext.AddOrUpdateCreatureColor(entity);
+            OnDefinitionsChanged();
+        }
+
+        public void UpdateWurmLogText(string id, string wurmLogText)
+        {
+            var entity = grangerContext.GetCreatureColor(id);
+            entity.WurmLogText = wurmLogText;
+            grangerContext.AddOrUpdateCreatureColor(entity);
+            OnDefinitionsChanged();
+        }
+
+        public void UpdateDisplayName(string id, string displayName)
+        {
+            var entity = grangerContext.GetCreatureColor(id);
+            entity.DisplayName = displayName;
             grangerContext.AddOrUpdateCreatureColor(entity);
             OnDefinitionsChanged();
         }
@@ -88,6 +112,24 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         protected virtual void OnDefinitionsChanged()
         {
             DefinitionsChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public string GetColorIdByWurmLogText(string colorWurmLogText)
+        {
+            var colorId = grangerContext.CreatureColorEntities
+                                        .Where(entity => entity.WurmLogText == colorWurmLogText)
+                                        .Select(entity => entity.Id)
+                                        .FirstOrDefault();
+            if (colorId == null)
+            {
+                colorId = colorWurmLogText.Capitalize();
+                AddNew(colorId);
+                UpdateColor(colorId, Color.Empty);
+                UpdateWurmLogText(colorId, colorWurmLogText);
+                UpdateDisplayName(colorId, colorId);
+            }
+
+            return colorId;
         }
     }
 }

@@ -41,9 +41,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             public DateTime PregnantUntil = DateTime.MinValue;
             public IWurmServer Server;
             public CreatureEntity.SecondaryInfoTag SecondaryInfo = CreatureEntity.SecondaryInfoTag.None;
+            public string ColorWurmLogText;
 
             public bool HasFatherName => !string.IsNullOrEmpty(FatherName);
             public bool HasMotherName => !string.IsNullOrEmpty(MotherName);
+            public bool HasColorWurmLogText => !string.IsNullOrEmpty(ColorWurmLogText);
         }
 
         static readonly TimeSpan ProcessorTimeout = new TimeSpan(0, 0, 5);
@@ -52,6 +54,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         readonly ITrayPopups trayPopups;
         readonly ILogger logger;
         readonly IWurmAssistantConfig wurmAssistantConfig;
+        readonly CreatureColorDefinitions creatureColorDefinitions;
 
         bool isProcessing = false;
         DateTime startedProcessingOn;
@@ -68,7 +71,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             [NotNull] PlayerManager playerMan,
             [NotNull] GrangerDebugLogger debugLogger,
             [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger,
-            [NotNull] IWurmAssistantConfig wurmAssistantConfig)
+            [NotNull] IWurmAssistantConfig wurmAssistantConfig,
+            [NotNull] CreatureColorDefinitions creatureColorDefinitions)
         {
             if (parentModule == null) throw new ArgumentNullException(nameof(parentModule));
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -77,10 +81,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
+            if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
             this.debugLogger = debugLogger;
             this.trayPopups = trayPopups;
             this.logger = logger;
             this.wurmAssistantConfig = wurmAssistantConfig;
+            this.creatureColorDefinitions = creatureColorDefinitions;
             this.parentModule = parentModule;
             this.context = context;
             this.playerMan = playerMan;
@@ -215,6 +221,19 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                         string settlementName = match.Groups[1].Value;
                         creatureBuffer.BrandedBy = settlementName;
                         debugLogger.Log("found creature to be branded for: " + creatureBuffer.BrandedBy);
+                        verifyList.Branding = true;
+                    }
+                }
+                //[11:43:35] Its colour is ash.
+                if (line.Contains("Its colour is"))
+                {
+                    debugLogger.Log("found maybe color line");
+                    Match match = Regex.Match(line, @"Its colour is (.+)\.");
+                    if (match.Success)
+                    {
+                        string colorName = match.Groups[1].Value;
+                        creatureBuffer.ColorWurmLogText = colorName;
+                        debugLogger.Log("found creature to have color: " + creatureBuffer.ColorWurmLogText);
                         verifyList.Branding = true;
                     }
                 }
@@ -472,6 +491,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                         }
                     }
                     oldCreature.SmilexamineLastDate = DateTime.Now;
+                    if (creatureBuffer.HasColorWurmLogText)
+                    {
+                        oldCreature.CreatureColorId =
+                            creatureColorDefinitions.GetColorIdByWurmLogText(creatureBuffer.ColorWurmLogText);
+                    }
                     context.SubmitChanges();
                     debugLogger.Log("successfully updated creature in db");
                     trayPopups.Schedule(String.Format("Updated creature: {0}", oldCreature), "CREATURE UPDATED");
@@ -597,7 +621,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 PregnantUntil = newCreature.PregnantUntil,
                 SecondaryInfoTagSetter = newCreature.SecondaryInfo,
                 ServerName = newCreature.Server != null ? newCreature.Server.ServerName.Original : string.Empty,
-                SmilexamineLastDate = DateTime.Now
+                SmilexamineLastDate = DateTime.Now,
+                CreatureColorId = newCreature.HasColorWurmLogText
+                    ? creatureColorDefinitions.GetColorIdByWurmLogText(newCreature.ColorWurmLogText)
+                    : CreatureColor.GetDefaultColor().CreatureColorId
             };
 
             newEntity.EpicCurve = newCreature.Server != null

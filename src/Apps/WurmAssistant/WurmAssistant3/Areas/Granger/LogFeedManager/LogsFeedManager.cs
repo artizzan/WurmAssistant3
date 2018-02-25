@@ -17,6 +17,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         readonly ILogger logger;
         readonly ITrayPopups trayPopups;
         readonly IWurmAssistantConfig wurmAssistantConfig;
+        [NotNull] readonly CreatureColorDefinitions creatureColorDefinitions;
         readonly GrangerFeature parentModule;
         readonly Dictionary<string, PlayerManager> playerManagers = new Dictionary<string, PlayerManager>();
 
@@ -26,7 +27,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             [NotNull] IWurmApi wurmApi,
             [NotNull] ILogger logger, 
             [NotNull] ITrayPopups trayPopups,
-            [NotNull] IWurmAssistantConfig wurmAssistantConfig)
+            [NotNull] IWurmAssistantConfig wurmAssistantConfig,
+            [NotNull] CreatureColorDefinitions creatureColorDefinitions)
         {
             if (parentModule == null) throw new ArgumentNullException(nameof(parentModule));
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -34,12 +36,14 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
             if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
+            if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
             this.parentModule = parentModule;
             this.context = context;
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.trayPopups = trayPopups;
             this.wurmAssistantConfig = wurmAssistantConfig;
+            this.creatureColorDefinitions = creatureColorDefinitions;
         }
 
         public void TryRegisterPlayer(string playerName)
@@ -54,7 +58,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                         wurmApi,
                         logger,
                         trayPopups,
-                        wurmAssistantConfig);
+                        wurmAssistantConfig, 
+                        creatureColorDefinitions);
                 }
                 catch (Exception exception)
                 {

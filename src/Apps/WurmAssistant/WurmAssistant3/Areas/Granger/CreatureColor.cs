@@ -30,9 +30,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public bool IsReadOnly => creatureColorEntity.IsReadOnly;
 
+        public string DisplayName => creatureColorEntity.DisplayName;
+
+        public string WurmLogText => creatureColorEntity.WurmLogText;
+
         public override string ToString()
         {
-            return creatureColorEntity.Id;
+            return creatureColorEntity.DisplayName;
         }
 
         public bool Equals(CreatureColor other)

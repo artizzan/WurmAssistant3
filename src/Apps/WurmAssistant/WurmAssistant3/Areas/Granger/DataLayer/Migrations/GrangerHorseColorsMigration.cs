@@ -25,34 +25,34 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer.Migrations
                 switch (creatureEntity.CreatureColorId)
                 {
                     case "0":
-                        creatureEntity.CreatureColorId = CreatureColorId.Unknown;
+                        creatureEntity.CreatureColorId = DefaultCreatureColorIds.Unknown;
                         break;
                     case "1":
-                        creatureEntity.CreatureColorId = CreatureColorId.Black;
+                        creatureEntity.CreatureColorId = DefaultCreatureColorIds.Black;
                         break;
                     case "2":
-                        creatureEntity.CreatureColorId = CreatureColorId.White;
+                        creatureEntity.CreatureColorId = DefaultCreatureColorIds.White;
                         break;
                     case "3":
-                        creatureEntity.CreatureColorId = CreatureColorId.Grey;
+                        creatureEntity.CreatureColorId = DefaultCreatureColorIds.Grey;
                         break;
                     case "4":
-                        creatureEntity.CreatureColorId = CreatureColorId.Brown;
+                        creatureEntity.CreatureColorId = DefaultCreatureColorIds.Brown;
                         break;
                     case "5":
-                        creatureEntity.CreatureColorId = CreatureColorId.Gold;
+                        creatureEntity.CreatureColorId = DefaultCreatureColorIds.Gold;
                         break;
                     case "6":
-                        creatureEntity.CreatureColorId = CreatureColorId.BloodBay;
+                        creatureEntity.CreatureColorId = DefaultCreatureColorIds.BloodBay;
                         break;
                     case "7":
-                        creatureEntity.CreatureColorId = CreatureColorId.EbonyBlack;
+                        creatureEntity.CreatureColorId = DefaultCreatureColorIds.EbonyBlack;
                         break;
                     case "8":
-                        creatureEntity.CreatureColorId = CreatureColorId.PiebaldPinto;
+                        creatureEntity.CreatureColorId = DefaultCreatureColorIds.PiebaldPinto;
                         break;
                     case null:
-                        creatureEntity.CreatureColorId = CreatureColorId.Unknown;
+                        creatureEntity.CreatureColorId = DefaultCreatureColorIds.Unknown;
                         break;
                     default:
                         break;

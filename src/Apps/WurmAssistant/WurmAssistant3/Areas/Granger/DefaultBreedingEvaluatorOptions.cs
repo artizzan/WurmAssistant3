@@ -4,323 +4,201 @@ using System.Linq;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default;
 using JetBrains.Annotations;
-using Newtonsoft.Json;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger
 {
     [KernelBind(BindingHint.Singleton), PersistentObject("GrangerFeature_DefaultBreedingEvaluatorOptions")]
-    public class DefaultBreedingEvaluatorOptions : PersistentObjectBase
+    public class DefaultBreedingEvaluatorOptions
     {
-        readonly CreatureColorDefinitions creatureColorDefinitions;
+        [NotNull] readonly DefaultBreedingEvaluatorOptionsData defaultBreedingEvaluatorOptionsData;
+        [NotNull] readonly CreatureColorDefinitions creatureColorDefinitions;
 
-        [JsonProperty]
-        bool ignoreNotInMood;
-
-        [JsonProperty]
-        bool ignorePregnant;
-
-        [JsonProperty]
-        bool ignoreRecentlyPregnant;
-
-        [JsonProperty]
-        bool ignoreOtherHerds;
-
-        [JsonProperty]
-        bool ignorePairedCreatures;
-
-        [JsonProperty]
-        bool ignoreSold;
-
-        [JsonProperty]
-        bool ignoreDead;
-
-        [JsonProperty]
-        bool ignoreFoals;
-
-        [JsonProperty]
-        bool ignoreYoung;
-
-        [JsonProperty]
-        bool ignoreAdolescent;
-
-        [JsonProperty]
-        bool ageIgnoreOnlyOtherCreatures;
-
-        [JsonProperty]
-        bool includePotentialValue;
-
-        [JsonProperty]
-        bool preferUniqueTraits;
-
-        [JsonProperty]
-        bool discardOnInbreeding;
-
-        [JsonProperty]
-        int numPotentialTraitsToConsider;
-
-        [JsonProperty]
-        bool excludeExactAgeEnabled;
-
-        [JsonProperty]
-        TimeSpan excludeExactAgeValue;
-
-        [JsonProperty]
-        bool discardOnAnyNegativeTraits;
-
-        [JsonProperty]
-        double potentialValuePositiveWeight;
-
-        [JsonProperty]
-        double potentialValueNegativeWeight;
-
-        [JsonProperty]
-        double uniqueTraitWeight;
-
-        [JsonProperty]
-        double negativeTraitPenaltyWeight;
-
-        [JsonProperty]
-        double inbreedingPenaltyWeight;
-
-        [JsonProperty]
-        readonly Dictionary<string, float> creatureColorValuesForEntityId;
-
-        public DefaultBreedingEvaluatorOptions([NotNull] CreatureColorDefinitions creatureColorDefinitions)
+        public DefaultBreedingEvaluatorOptions([NotNull] DefaultBreedingEvaluatorOptionsData defaultBreedingEvaluatorOptionsData, [NotNull] CreatureColorDefinitions creatureColorDefinitions)
         {
             if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
+            if (defaultBreedingEvaluatorOptionsData == null) throw new ArgumentNullException(nameof(defaultBreedingEvaluatorOptionsData));
             this.creatureColorDefinitions = creatureColorDefinitions;
-            ignoreNotInMood = true;
-            ignorePregnant = true;
-            IgnoreRecentlyPregnant = true;
-            IgnoreOtherHerds = false;
-            IgnorePairedCreatures = false;
-            IgnoreSold = false;
+            this.defaultBreedingEvaluatorOptionsData = defaultBreedingEvaluatorOptionsData;
 
-            IgnoreFoals = true;
-            IgnoreYoung = true;
-            IgnoreAdolescent = false;
-
-            AgeIgnoreOnlyOtherCreatures = false;
-
-            IncludePotentialValue = false;
-            PotentialValuePositiveWeight = 1.0;
-            PotentialValueNegativeWeight = 1.0;
-
-            PreferUniqueTraits = false;
-            UniqueTraitWeight = 3.0;
-
-            DiscardOnAnyNegativeTraits = false;
-            BadTraitWeight = 1.0;
-
-            DiscardOnInbreeding = true;
-            InbreedingPenaltyWeight = 1.0;
-
-            creatureColorValuesForEntityId = new Dictionary<string, float>();
+            SetupColorValuesDict();
         }
 
-        protected override void OnPersistentDataLoaded()
-        {
-            BuildInitialColorValuesDict();
-        }
-
-        void BuildInitialColorValuesDict()
+        void SetupColorValuesDict()
         {
             foreach (var currentColor in creatureColorDefinitions.GetColors())
             {
-                if (!creatureColorValuesForEntityId.ContainsKey(currentColor.CreatureColorId))
+                if (!CreatureColorValuesForEntityId.ContainsKey(currentColor.CreatureColorId))
                 {
-                    creatureColorValuesForEntityId.Add(currentColor.CreatureColorId, 1.0f);
+                    CreatureColorValuesForEntityId.Add(currentColor.CreatureColorId, 1.0f);
                 }
             }
         }
 
-
-
         public bool IgnoreNotInMood
         {
-            get { return ignoreNotInMood; }
-            set { ignoreNotInMood = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.IgnoreNotInMood;
+            set => defaultBreedingEvaluatorOptionsData.IgnoreNotInMood = value;
         }
 
         public bool IgnorePregnant
         {
-            get { return ignorePregnant; }
-            set { ignorePregnant = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.IgnorePregnant;
+            set => defaultBreedingEvaluatorOptionsData.IgnorePregnant = value;
         }
 
         public bool IgnoreRecentlyPregnant
         {
-            get { return ignoreRecentlyPregnant; }
-            set { ignoreRecentlyPregnant = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.IgnoreRecentlyPregnant;
+            set => defaultBreedingEvaluatorOptionsData.IgnoreRecentlyPregnant = value;
         }
 
         public bool IgnoreOtherHerds
         {
-            get { return ignoreOtherHerds; }
-            set { ignoreOtherHerds = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.IgnoreOtherHerds;
+            set => defaultBreedingEvaluatorOptionsData.IgnoreOtherHerds = value;
         }
-        
+
         public bool IgnorePairedCreatures
         {
-            get { return ignorePairedCreatures; }
-            set { ignorePairedCreatures = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.IgnorePairedCreatures;
+            set => defaultBreedingEvaluatorOptionsData.IgnorePairedCreatures = value;
         }
 
         public bool IgnoreSold
         {
-            get { return ignoreSold; }
-            set { ignoreSold = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.IgnoreSold;
+            set => defaultBreedingEvaluatorOptionsData.IgnoreSold = value;
         }
 
         public bool IgnoreDead
         {
-            get { return ignoreDead; }
-            set { ignoreDead = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.IgnoreDead;
+            set => defaultBreedingEvaluatorOptionsData.IgnoreDead = value;
         }
 
         public bool IgnoreFoals
         {
-            get { return ignoreFoals; }
-            set { ignoreFoals = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.IgnoreFoals;
+            set => defaultBreedingEvaluatorOptionsData.IgnoreFoals = value;
         }
 
         public bool IgnoreYoung
         {
-            get { return ignoreYoung; }
-            set { ignoreYoung = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.IgnoreYoung;
+            set => defaultBreedingEvaluatorOptionsData.IgnoreYoung = value;
         }
 
         public bool IgnoreAdolescent
         {
-            get { return ignoreAdolescent; }
-            set { ignoreAdolescent = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.IgnoreAdolescent;
+            set => defaultBreedingEvaluatorOptionsData.IgnoreAdolescent = value;
         }
 
         public bool AgeIgnoreOnlyOtherCreatures
         {
-            get { return ageIgnoreOnlyOtherCreatures; }
-            set { ageIgnoreOnlyOtherCreatures = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.AgeIgnoreOnlyOtherCreatures;
+            set => defaultBreedingEvaluatorOptionsData.AgeIgnoreOnlyOtherCreatures = value;
         }
-        
+
         public bool IncludePotentialValue
         {
-            get { return includePotentialValue; }
-            set { includePotentialValue = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.IncludePotentialValue;
+            set => defaultBreedingEvaluatorOptionsData.IncludePotentialValue = value;
         }
-        
+
         public bool PreferUniqueTraits
         {
-            get { return preferUniqueTraits; }
-            set { preferUniqueTraits = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.PreferUniqueTraits;
+            set => defaultBreedingEvaluatorOptionsData.PreferUniqueTraits = value;
         }
 
         public bool DiscardOnInbreeding
         {
-            get { return discardOnInbreeding; }
-            set { discardOnInbreeding = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.DiscardOnInbreeding;
+            set => defaultBreedingEvaluatorOptionsData.DiscardOnInbreeding = value;
         }
-        
+
         public int NumPotentialTraitsToConsider
         {
-            get { return numPotentialTraitsToConsider; }
-            set { numPotentialTraitsToConsider = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.NumPotentialTraitsToConsider;
+            set => defaultBreedingEvaluatorOptionsData.NumPotentialTraitsToConsider = value;
         }
 
         public bool ExcludeExactAgeEnabled
         {
-            get { return excludeExactAgeEnabled; }
-            set { excludeExactAgeEnabled = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.ExcludeExactAgeEnabled;
+            set => defaultBreedingEvaluatorOptionsData.ExcludeExactAgeEnabled = value;
         }
-        
+
         public TimeSpan ExcludeExactAgeValue
         {
-            get { return excludeExactAgeValue; }
-            set { excludeExactAgeValue = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.ExcludeExactAgeValue;
+            set => defaultBreedingEvaluatorOptionsData.ExcludeExactAgeValue = value;
         }
-        
+
         public bool DiscardOnAnyNegativeTraits
         {
-            get { return discardOnAnyNegativeTraits; }
-            set { discardOnAnyNegativeTraits = value; FlagAsChanged(); }
+            get => defaultBreedingEvaluatorOptionsData.DiscardOnAnyNegativeTraits;
+            set => defaultBreedingEvaluatorOptionsData.DiscardOnAnyNegativeTraits = value;
         }
-        
+
         public double PotentialValuePositiveWeight
         {
-            get { return potentialValuePositiveWeight; }
-            set
-            {
-                if (potentialValuePositiveWeight < 0) potentialValuePositiveWeight = 0;
-                else potentialValuePositiveWeight = value; 
-                FlagAsChanged();
-            }
+            get => defaultBreedingEvaluatorOptionsData.PotentialValuePositiveWeight;
+            set => defaultBreedingEvaluatorOptionsData.PotentialValuePositiveWeight = value;
         }
-        
+
         public double PotentialValueNegativeWeight
         {
-            get { return potentialValueNegativeWeight; }
-            set
-            {
-                if (potentialValueNegativeWeight < 0) potentialValueNegativeWeight = 0;
-                else potentialValueNegativeWeight = value;
-                FlagAsChanged();
-            }
+            get => defaultBreedingEvaluatorOptionsData.PotentialValueNegativeWeight;
+            set => defaultBreedingEvaluatorOptionsData.PotentialValueNegativeWeight = value;
         }
-        
+
         public double UniqueTraitWeight
         {
-            get { return uniqueTraitWeight; }
-            set
-            {
-                if (uniqueTraitWeight < 0) uniqueTraitWeight = 0;
-                else uniqueTraitWeight = value;
-                FlagAsChanged();
-            }
+            get => defaultBreedingEvaluatorOptionsData.UniqueTraitWeight;
+            set => defaultBreedingEvaluatorOptionsData.UniqueTraitWeight = value;
         }
-        
+
         public double BadTraitWeight
         {
-            get { return negativeTraitPenaltyWeight; }
-            set
-            {
-                if (negativeTraitPenaltyWeight < 0) negativeTraitPenaltyWeight = 0;
-                else negativeTraitPenaltyWeight = value;
-                FlagAsChanged();
-            }
+            get => defaultBreedingEvaluatorOptionsData.BadTraitWeight;
+            set => defaultBreedingEvaluatorOptionsData.BadTraitWeight = value;
         }
-        
+
         public double InbreedingPenaltyWeight
         {
-            get { return inbreedingPenaltyWeight; }
-            set
-            {
-                if (inbreedingPenaltyWeight < 0) inbreedingPenaltyWeight = 0;
-                else inbreedingPenaltyWeight = value;
-                FlagAsChanged();
-            }
+            get => defaultBreedingEvaluatorOptionsData.InbreedingPenaltyWeight;
+            set => defaultBreedingEvaluatorOptionsData.InbreedingPenaltyWeight = value;
         }
-        
+
+        public Dictionary<string, float> CreatureColorValuesForEntityId =>  defaultBreedingEvaluatorOptionsData.CreatureColorValuesForEntityId;
+
         public IEnumerable<ColorWeight> CreatureColorValues
         {
             get
             {
+                SetupColorValuesDict();
                 return
-                    creatureColorValuesForEntityId.Select(
-                        x => new ColorWeight(creatureColorDefinitions.GetForId(x.Key), x.Value)).ToArray();
+                    defaultBreedingEvaluatorOptionsData.CreatureColorValuesForEntityId
+                        .Where(x => creatureColorDefinitions.Exists(x.Key))
+                        .Select(x => new ColorWeight(creatureColorDefinitions.GetForId(x.Key), x.Value))
+                        .ToArray();
             }
             set
             {
                 foreach (var colorWeight in value)
                 {
-                    creatureColorValuesForEntityId[colorWeight.Color.CreatureColorId] = colorWeight.Weight;
+                    defaultBreedingEvaluatorOptionsData.CreatureColorValuesForEntityId[colorWeight.Color.CreatureColorId] = colorWeight.Weight;
                 }
-                FlagAsChanged();
+                defaultBreedingEvaluatorOptionsData.FlagAsChanged();
             }
         }
 
         public float GetValueForColor(CreatureColor color)
         {
             float result = 1.0f;
-            creatureColorValuesForEntityId.TryGetValue(color.CreatureColorId, out result);
+            defaultBreedingEvaluatorOptionsData.CreatureColorValuesForEntityId.TryGetValue(color.CreatureColorId, out result);
             return result;
         }
     }

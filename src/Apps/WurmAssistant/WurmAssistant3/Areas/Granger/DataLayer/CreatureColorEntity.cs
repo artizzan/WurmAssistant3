@@ -15,6 +15,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
         [JsonProperty]
         Color color = Color.Empty;
 
+        [JsonProperty]
+        string wurmLogText = string.Empty;
+
+        [JsonProperty]
+        string displayName = string.Empty;
+
         public string Id
         {
             get { return id; }
@@ -33,8 +39,20 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
             set { color = value; }
         }
 
+        public string WurmLogText
+        {
+            get { return wurmLogText; }
+            set { wurmLogText = value; }
+        }
+
+        public string DisplayName
+        {
+            get { return displayName; }
+            set { displayName = value; }
+        }
+
         public bool IsUnknown => Id == Unknown.Id;
 
-        public static CreatureColorEntity Unknown { get; } = new CreatureColorEntity() {Id = "Unknown"};
+        public static CreatureColorEntity Unknown { get; } = new CreatureColorEntity() {Id = DefaultCreatureColorIds.Unknown };
     }
 }

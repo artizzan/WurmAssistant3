@@ -936,7 +936,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                                             {
                                                 var newItem = new ToolStripMenuItem()
                                                 {
-                                                    Text = color.CreatureColorId
+                                                    Text = color.DisplayName
                                                 };
                                                 newItem.Click +=
                                                     (sender, args) => menuItemClickAction.Invoke(color.CreatureColorId);

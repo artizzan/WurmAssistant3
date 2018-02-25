@@ -334,7 +334,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         public CreatureAge AgeAspect => this.Age;
 
         public string ColorAspect
-            => Entity.CreatureColorId == CreatureColorId.Unknown ? string.Empty : Color.ToString();
+            => Entity.CreatureColorId == DefaultCreatureColorIds.Unknown ? string.Empty : Color.ToString();
 
         public string TagsAspect { get { return string.Join(", ", Entity.SpecialTags.OrderBy(x => x)); } }
 

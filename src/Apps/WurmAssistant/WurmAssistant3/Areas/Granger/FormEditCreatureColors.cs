@@ -58,12 +58,20 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         private void objectListView_ButtonClick(object sender, BrightIdeasSoftware.CellClickEventArgs e)
         {
             var obj = (CreatureColorViewObject) e.Model;
-            if (e.Column == olvColumnChangeColor)
+            if (e.Column == olvColumnEdit)
             {
-                if (colorDialog.ShowDialog() == DialogResult.OK)
+                var editForm = new FormEditCreatureColorDialog()
                 {
-                    var color = colorDialog.Color;
-                    creatureColorDefinitions.UpdateColor(obj.Id, color);
+                    Id = obj.Id,
+                    Color = obj.Color,
+                    WurmLogText = obj.WurmLogText,
+                    DisplayName = obj.DisplayName
+                };
+                if (editForm.ShowDialog() == DialogResult.OK)
+                {
+                    creatureColorDefinitions.UpdateColor(obj.Id, editForm.Color);
+                    creatureColorDefinitions.UpdateWurmLogText(obj.Id, editForm.WurmLogText);
+                    creatureColorDefinitions.UpdateDisplayName(obj.Id, editForm.DisplayName);
                     RefreshView();
                 }
             }
@@ -97,6 +105,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             Id = creatureColor.CreatureColorId;
             Color = creatureColor.SystemDrawingColor;
+            DisplayName = creatureColor.DisplayName;
+            WurmLogText = creatureColor.WurmLogText;
+
             BlockedForEditing = creatureColor.IsReadOnly;
         }
 
@@ -108,9 +119,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public string Id { get; private set; } = string.Empty;
         public Color Color { get; set; } = Color.Empty;
+        public string DisplayName { get; set; } = string.Empty;
+        public string WurmLogText { get; set; } = string.Empty;
         public bool BlockedForEditing { get; private set; } = false;
 
-        public string ChangeColorButtonAspect { get; } = "change color";
+        [UsedImplicitly]
+        public string EditButtonAspect { get; } = "edit";
+        [UsedImplicitly]
         public string RemoveButtonAspect { get; } = "remove";
     }
 }

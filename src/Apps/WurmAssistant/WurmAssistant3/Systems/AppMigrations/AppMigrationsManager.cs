@@ -14,7 +14,7 @@ using Ninject;
 
 namespace AldursLab.WurmAssistant3.Systems.AppMigrations
 {
-    [KernelBind(BindingHint.Singleton)]
+    [KernelBind(BindingHint.Singleton), UsedImplicitly]
     class AppMigrationsManager : IAppMigrationsManager
     {
         readonly IKernel kernel;
@@ -76,6 +76,16 @@ namespace AldursLab.WurmAssistant3.Systems.AppMigrations
                 migration.Run();
                 logger.Info("Migration completed");
                 currentVersion = 2;
+                SaveCurrentVersion();
+                NotifyDataMigrationSuccess();
+            }
+            if (currentVersion == 2)
+            {
+                logger.Info("Beginning upgrade...");
+                var migration = kernel.Get<GrangerHorseColorsMigration2>();
+                migration.Run();
+                logger.Info("Migration completed");
+                currentVersion = 3;
                 SaveCurrentVersion();
                 NotifyDataMigrationSuccess();
             }

@@ -131,6 +131,14 @@
     <Compile Include="Areas\Granger\CreatureColorDefinitions.cs" />
     <Compile Include="Areas\Granger\DataLayer\CreatureColorEntity.cs" />
     <Compile Include="Areas\Granger\DataLayer\Migrations\GrangerHorseColorsMigration.cs" />
+    <Compile Include="Areas\Granger\DataLayer\Migrations\GrangerHorseColorsMigration2.cs" />
+    <Compile Include="Areas\Granger\DefaultBreedingEvaluatorOptionsData.cs" />
+    <Compile Include="Areas\Granger\FormEditCreatureColorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Granger\FormEditCreatureColorDialog.Designer.cs">
+      <DependentUpon>FormEditCreatureColorDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Areas\Granger\FormEditCreatureColors.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,7 +174,7 @@
     <Compile Include="Areas\Features\IFeaturesFactory.cs" />
     <Compile Include="Areas\Granger\CreatureAge.cs" />
     <Compile Include="Areas\Granger\CreatureAgeId.cs" />
-    <Compile Include="Areas\Granger\CreatureColorId.cs" />
+    <Compile Include="Areas\Granger\DefaultCreatureColorIds.cs" />
     <Compile Include="Areas\Granger\InnerCreatureNameInfo.cs" />
     <Compile Include="Areas\Granger\TraitDisplayMode.cs" />
     <Compile Include="Areas\Granger\CreatureTraitId.cs" />
@@ -904,6 +912,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\CombatAssistant\CombatWidgetForm.resx">
       <DependentUpon>CombatWidgetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Granger\FormEditCreatureColorDialog.resx">
+      <DependentUpon>FormEditCreatureColorDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Areas\Granger\FormEditCreatureColors.resx">
       <DependentUpon>FormEditCreatureColors.cs</DependentUpon>

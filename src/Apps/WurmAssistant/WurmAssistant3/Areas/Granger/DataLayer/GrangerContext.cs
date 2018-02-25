@@ -203,6 +203,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
             OnCreaturesModified?.Invoke(this, new EventArgs());
         }
 
+        internal bool CreatureColorExists(string id)
+        {
+            return grangerSimpleDb.CreatureColors.ContainsKey(id);
+        }
+
         internal CreatureColorEntity GetCreatureColor(string id)
         {
             return grangerSimpleDb.CreatureColors.TryGetByKey(id) ?? CreatureColorEntity.Unknown;
