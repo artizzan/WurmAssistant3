@@ -18,7 +18,9 @@ namespace AldursLab.WurmApi.Modules.Wurm.Paths
             playersDirPath = Path.Combine(wurmInstallDirectory.FullPath, "players");
         }
 
-        public string LogsDirName => wurmApiConfig.WurmUnlimitedMode ? "test_logs" : "logs";
+        public string LogsDirName => "logs";
+
+        public string OldWuLogsDirName => "test_logs";
 
         public string ConfigsDirFullPath { get; }
 
@@ -28,7 +30,7 @@ namespace AldursLab.WurmApi.Modules.Wurm.Paths
         {
             return Path.Combine(playersDirPath,
                 characterName.Capitalized,
-                wurmApiConfig.WurmUnlimitedMode ? "test_dumps" : "dumps");
+                "dumps");
         }
 
         public string GetLogsDirFullPathForCharacter(CharacterName characterName)
@@ -38,11 +40,18 @@ namespace AldursLab.WurmApi.Modules.Wurm.Paths
                 LogsDirName);
         }
 
+        public string GetOldWuLogsDirFullPathForCharacter(CharacterName characterName)
+        {
+            return Path.Combine(playersDirPath,
+                characterName.Capitalized,
+                OldWuLogsDirName);
+        }
+
         public string GetScreenshotsDirFullPathForCharacter(CharacterName characterName)
         {
             return Path.Combine(playersDirPath,
                 characterName.Capitalized,
-                wurmApiConfig.WurmUnlimitedMode ? "test_screenshots" : "screenshots");
+                "screenshots");
         }
     }
 }

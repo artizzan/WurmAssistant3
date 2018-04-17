@@ -151,6 +151,7 @@
     <Compile Include="Areas\Main\Views\DataBackupsView.xaml.cs">
       <DependentUpon>DataBackupsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Areas\Main\WurmUnlimitedLogsDirChecker.cs" />
     <Compile Include="Systems\AppMigrations\AppMigrationsManager.cs" />
     <Compile Include="Areas\Core\BinDirectory.cs" />
     <Compile Include="Areas\Core\ChangelogManager.cs" />

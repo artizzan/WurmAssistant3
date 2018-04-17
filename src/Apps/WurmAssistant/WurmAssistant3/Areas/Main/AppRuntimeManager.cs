@@ -14,24 +14,22 @@ namespace AldursLab.WurmAssistant3.Areas.Main
         readonly INewsViewModelFactory newsViewModelFactory;
         readonly ITelemetry telemetry;
         readonly IWaVersionInfoProvider waVersionInfoProvider;
+        readonly WurmUnlimitedLogsDirChecker wurmUnlimitedLogsDirChecker;
 
         public AppRuntimeManager(
             [NotNull] IUserNotifier userNotifier,
             [NotNull] ILogger logger,
             [NotNull] INewsViewModelFactory newsViewModelFactory,
             [NotNull] ITelemetry telemetry,
-            [NotNull] IWaVersionInfoProvider waVersionInfoProvider)
+            [NotNull] IWaVersionInfoProvider waVersionInfoProvider,
+            [NotNull] WurmUnlimitedLogsDirChecker wurmUnlimitedLogsDirChecker)
         {
-            if (userNotifier == null) throw new ArgumentNullException(nameof(userNotifier));
-            if (logger == null) throw new ArgumentNullException(nameof(logger));
-            if (newsViewModelFactory == null) throw new ArgumentNullException(nameof(newsViewModelFactory));
-            if (telemetry == null) throw new ArgumentNullException(nameof(telemetry));
-            if (waVersionInfoProvider == null) throw new ArgumentNullException(nameof(waVersionInfoProvider));
-            this.userNotifier = userNotifier;
-            this.logger = logger;
-            this.newsViewModelFactory = newsViewModelFactory;
-            this.telemetry = telemetry;
-            this.waVersionInfoProvider = waVersionInfoProvider;
+            this.userNotifier = userNotifier ?? throw new ArgumentNullException(nameof(userNotifier));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.newsViewModelFactory = newsViewModelFactory ?? throw new ArgumentNullException(nameof(newsViewModelFactory));
+            this.telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
+            this.waVersionInfoProvider = waVersionInfoProvider ?? throw new ArgumentNullException(nameof(waVersionInfoProvider));
+            this.wurmUnlimitedLogsDirChecker = wurmUnlimitedLogsDirChecker ?? throw new ArgumentNullException(nameof(wurmUnlimitedLogsDirChecker));
         }
 
         public void ExecuteAfterStartupSteps()
@@ -40,6 +38,8 @@ namespace AldursLab.WurmAssistant3.Areas.Main
             {
                 var vm = newsViewModelFactory.CreateNewsViewModel();
                 vm.ShowIfAnyUnshownNews();
+
+                wurmUnlimitedLogsDirChecker.HandleOldLogsDirContents();
             }
             catch (Exception exception)
             {
