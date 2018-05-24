@@ -42,6 +42,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.checkBoxUseServerNameAsIdComponent = new System.Windows.Forms.CheckBox();
             this.checkBoxhideLiveTrackerPopups = new System.Windows.Forms.CheckBox();
             this.checkBoxDoNotMatchCreaturesByBrandName = new System.Windows.Forms.CheckBox();
+            this.checkBoxUpdateCreatureColorsOnSmilexamines = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // checkBoxAlwaysUpdateUnlessMultiples
@@ -57,7 +58,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // 
             // timeSpanInputGroomingTime
             // 
-            this.timeSpanInputGroomingTime.Location = new System.Drawing.Point(12, 327);
+            this.timeSpanInputGroomingTime.Location = new System.Drawing.Point(12, 357);
             this.timeSpanInputGroomingTime.Margin = new System.Windows.Forms.Padding(2);
             this.timeSpanInputGroomingTime.Name = "timeSpanInputGroomingTime";
             this.timeSpanInputGroomingTime.Size = new System.Drawing.Size(231, 45);
@@ -89,7 +90,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 312);
+            this.label1.Location = new System.Drawing.Point(9, 342);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(359, 13);
             this.label1.TabIndex = 5;
@@ -157,11 +158,23 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.checkBoxDoNotMatchCreaturesByBrandName.Text = resources.GetString("checkBoxDoNotMatchCreaturesByBrandName.Text");
             this.checkBoxDoNotMatchCreaturesByBrandName.UseVisualStyleBackColor = true;
             // 
+            // checkBoxUpdateCreatureColorsOnSmilexamines
+            // 
+            this.checkBoxUpdateCreatureColorsOnSmilexamines.AutoSize = true;
+            this.checkBoxUpdateCreatureColorsOnSmilexamines.Location = new System.Drawing.Point(12, 303);
+            this.checkBoxUpdateCreatureColorsOnSmilexamines.Name = "checkBoxUpdateCreatureColorsOnSmilexamines";
+            this.checkBoxUpdateCreatureColorsOnSmilexamines.Size = new System.Drawing.Size(295, 30);
+            this.checkBoxUpdateCreatureColorsOnSmilexamines.TabIndex = 12;
+            this.checkBoxUpdateCreatureColorsOnSmilexamines.Text = "Update creature colors on SmileXamines.\r\n(If disabled, color will be set only on " +
+    "adding new creature)";
+            this.checkBoxUpdateCreatureColorsOnSmilexamines.UseVisualStyleBackColor = true;
+            // 
             // FormGrangerGeneralOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(440, 486);
+            this.Controls.Add(this.checkBoxUpdateCreatureColorsOnSmilexamines);
             this.Controls.Add(this.checkBoxDoNotMatchCreaturesByBrandName);
             this.Controls.Add(this.checkBoxhideLiveTrackerPopups);
             this.Controls.Add(this.checkBoxUseServerNameAsIdComponent);
@@ -196,5 +209,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         private System.Windows.Forms.CheckBox checkBoxUseServerNameAsIdComponent;
         private System.Windows.Forms.CheckBox checkBoxhideLiveTrackerPopups;
         private System.Windows.Forms.CheckBox checkBoxDoNotMatchCreaturesByBrandName;
+        private System.Windows.Forms.CheckBox checkBoxUpdateCreatureColorsOnSmilexamines;
     }
 }

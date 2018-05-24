@@ -84,7 +84,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 creatureColorDefinitions,
                 formEditCreatureColorsFactory);
 
-            logsFeedMan = new LogsFeedManager(this, context, wurmApi, logger, trayPopups, wurmAssistantConfig, creatureColorDefinitions);
+            logsFeedMan = new LogsFeedManager(this, context, wurmApi, logger, trayPopups, wurmAssistantConfig, creatureColorDefinitions, grangerSettings);
             logsFeedMan.UpdatePlayers(settings.CaptureForPlayers);
             grangerUi.GrangerPlayerListChanged += GrangerUI_Granger_PlayerListChanged;
             

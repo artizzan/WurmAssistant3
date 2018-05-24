@@ -31,16 +31,18 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         private void InitializeComponent()
         {
             this.comboBoxExportedHerd = new System.Windows.Forms.ComboBox();
-            this.buttonExport = new System.Windows.Forms.Button();
+            this.buttonExportXml = new System.Windows.Forms.Button();
             this.buttonImport = new System.Windows.Forms.Button();
             this.textBoxImportedHerd = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.buttonExportCsv = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.labelImportError = new AldursLab.WurmAssistant3.Utils.WinForms.LabelAutowrap();
             this.label2 = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.labelImportError = new LabelAutowrap();
+            this.saveXmlFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.saveCsvFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -54,15 +56,15 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.comboBoxExportedHerd.Size = new System.Drawing.Size(188, 21);
             this.comboBoxExportedHerd.TabIndex = 0;
             // 
-            // buttonExport
+            // buttonExportXml
             // 
-            this.buttonExport.Location = new System.Drawing.Point(6, 67);
-            this.buttonExport.Name = "buttonExport";
-            this.buttonExport.Size = new System.Drawing.Size(75, 23);
-            this.buttonExport.TabIndex = 1;
-            this.buttonExport.Text = "Export";
-            this.buttonExport.UseVisualStyleBackColor = true;
-            this.buttonExport.Click += new System.EventHandler(this.buttonExport_Click);
+            this.buttonExportXml.Location = new System.Drawing.Point(6, 67);
+            this.buttonExportXml.Name = "buttonExportXml";
+            this.buttonExportXml.Size = new System.Drawing.Size(75, 23);
+            this.buttonExportXml.TabIndex = 1;
+            this.buttonExportXml.Text = "Export XML";
+            this.buttonExportXml.UseVisualStyleBackColor = true;
+            this.buttonExportXml.Click += new System.EventHandler(this.buttonExportXml_Click);
             // 
             // buttonImport
             // 
@@ -84,15 +86,35 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonExportCsv);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.comboBoxExportedHerd);
-            this.groupBox1.Controls.Add(this.buttonExport);
+            this.groupBox1.Controls.Add(this.buttonExportXml);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(200, 101);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Export";
+            // 
+            // buttonExportCsv
+            // 
+            this.buttonExportCsv.Location = new System.Drawing.Point(87, 67);
+            this.buttonExportCsv.Name = "buttonExportCsv";
+            this.buttonExportCsv.Size = new System.Drawing.Size(75, 23);
+            this.buttonExportCsv.TabIndex = 3;
+            this.buttonExportCsv.Text = "Export CSV";
+            this.buttonExportCsv.UseVisualStyleBackColor = true;
+            this.buttonExportCsv.Click += new System.EventHandler(this.buttonExportCsv_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 24);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(114, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Choose herd to export:";
             // 
             // groupBox2
             // 
@@ -107,14 +129,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Import";
             // 
-            // label1
+            // labelImportError
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 24);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(114, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Choose herd to export:";
+            this.labelImportError.ForeColor = System.Drawing.Color.Red;
+            this.labelImportError.Location = new System.Drawing.Point(87, 64);
+            this.labelImportError.Name = "labelImportError";
+            this.labelImportError.Size = new System.Drawing.Size(107, 0);
+            this.labelImportError.TabIndex = 5;
             // 
             // label2
             // 
@@ -129,18 +150,15 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // 
             this.openFileDialog1.Filter = "XML files (*.xml)|*.xml";
             // 
-            // saveFileDialog1
+            // saveXmlFileDialog
             // 
-            this.saveFileDialog1.FileName = "myherd.xml";
-            this.saveFileDialog1.Filter = "XML files (*.xml)|*.xml";
+            this.saveXmlFileDialog.FileName = "myherd.xml";
+            this.saveXmlFileDialog.Filter = "XML files (*.xml)|*.xml";
             // 
-            // labelImportError
+            // saveCsvFileDialog
             // 
-            this.labelImportError.ForeColor = System.Drawing.Color.Red;
-            this.labelImportError.Location = new System.Drawing.Point(87, 64);
-            this.labelImportError.Name = "labelImportError";
-            this.labelImportError.Size = new System.Drawing.Size(107, 0);
-            this.labelImportError.TabIndex = 5;
+            this.saveCsvFileDialog.FileName = "myherd.csv";
+            this.saveCsvFileDialog.Filter = "CSV files (*.csv)|*.csv";
             // 
             // FormGrangerImportExport
             // 
@@ -166,7 +184,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         #endregion
 
         private System.Windows.Forms.ComboBox comboBoxExportedHerd;
-        private System.Windows.Forms.Button buttonExport;
+        private System.Windows.Forms.Button buttonExportXml;
         private System.Windows.Forms.Button buttonImport;
         private System.Windows.Forms.TextBox textBoxImportedHerd;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -174,7 +192,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.SaveFileDialog saveXmlFileDialog;
         private LabelAutowrap labelImportError;
+        private System.Windows.Forms.Button buttonExportCsv;
+        private System.Windows.Forms.SaveFileDialog saveCsvFileDialog;
     }
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
+using AldursLab.Essentials.Csv;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.ImportExport.Legacy
@@ -74,6 +75,41 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ImportExport.Legacy
         {
             if (creatureEntity.IsMale == null) return string.Empty;
             else return creatureEntity.IsMale.Value ? "male" : "female";
+        }
+
+        public string CreateCsv(GrangerContext context, string herdName)
+        {
+            if (herdName == null) throw new GrangerException("No herd specified");
+
+            var creatures = context.Creatures.Where(x => x.Herd == herdName).ToArray();
+
+            if (creatures.Length == 0)
+            {
+                throw new GrangerException(string.Format("No creatures found in {0} herd or herd did not exist", herdName));
+            }
+
+            var builder = new EnumerableToCsvBuilder<CreatureEntity>(creatures)
+                .AddMapping("Name", entity => entity.Name)
+                .AddMapping("Server", entity => entity.ServerName)
+                .AddMapping("Herd", entity => entity.Herd)
+                .AddMapping("Father", entity => entity.FatherName)
+                .AddMapping("Mother", entity => entity.MotherName)
+                .AddMapping("Traits", entity => string.Join(",", entity.Traits.Select(trait => trait.ToShortcutString())))
+                .AddMapping("Not in mood", entity => entity.NotInMood?.ToString(CultureInfo.InvariantCulture))
+                .AddMapping("Give birth", entity => entity.PregnantUntil?.ToString(CultureInfo.InvariantCulture))
+                .AddMapping("Last groomed", entity => entity.GroomedOn?.ToString(CultureInfo.InvariantCulture))
+                .AddMapping("Gender", entity => entity.GenderAspect)
+                .AddMapping("Age", entity => entity.Age.ToString())
+                .AddMapping("Color", entity => entity.CreatureColorId)
+                .AddMapping("Inspect skill", entity => entity.TraitsInspectedAtSkill?.ToString())
+                .AddMapping("Cared by", entity => entity.TakenCareOfBy)
+                .AddMapping("Tags", entity => entity.SpecialTagsRaw)
+                .AddMapping("Comments", entity => entity.Comments)
+                .AddMapping("Birth date", entity => entity.BirthDate?.ToString(CultureInfo.InvariantCulture))
+                .AddMapping("Branded for", entity => entity.BrandedFor)
+                .AddMapping("SmileXamined", entity => entity.SmilexamineLastDate?.ToString(CultureInfo.InvariantCulture));
+
+            return builder.BuildCsv();
         }
     }
 }

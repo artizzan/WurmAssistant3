@@ -64,6 +64,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         private readonly GrangerFeature parentModule;
         private readonly GrangerContext context;
         private readonly PlayerManager playerMan;
+        private readonly GrangerSettings grangerSettings;
 
         public SmileXamineProcessor(
             [NotNull] GrangerFeature parentModule,
@@ -72,7 +73,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             [NotNull] GrangerDebugLogger debugLogger,
             [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger,
             [NotNull] IWurmAssistantConfig wurmAssistantConfig,
-            [NotNull] CreatureColorDefinitions creatureColorDefinitions)
+            [NotNull] CreatureColorDefinitions creatureColorDefinitions,
+            [NotNull] GrangerSettings grangerSettings)
         {
             if (parentModule == null) throw new ArgumentNullException(nameof(parentModule));
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -82,6 +84,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
             if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
+            if (grangerSettings == null) throw new ArgumentNullException(nameof(grangerSettings));
             this.debugLogger = debugLogger;
             this.trayPopups = trayPopups;
             this.logger = logger;
@@ -90,6 +93,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             this.parentModule = parentModule;
             this.context = context;
             this.playerMan = playerMan;
+            this.grangerSettings = grangerSettings;
         }
 
         public void HandleLogEvent(string line)
@@ -491,7 +495,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                         }
                     }
                     oldCreature.SmilexamineLastDate = DateTime.Now;
-                    if (creatureBuffer.HasColorWurmLogText)
+                    if (creatureBuffer.HasColorWurmLogText && grangerSettings.UpdateCreatureColorOnSmilexamines)
                     {
                         oldCreature.CreatureColorId =
                             creatureColorDefinitions.GetColorIdByWurmLogText(creatureBuffer.ColorWurmLogText);

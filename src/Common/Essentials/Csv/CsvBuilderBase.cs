@@ -45,6 +45,12 @@ namespace AldursLab.Essentials.Csv
 
         protected virtual string CreateCsvElement(string rawText)
         {
+            // null should be treated as empty value
+            if (rawText == null)
+            {
+                rawText = string.Empty;
+            }
+
             //csv requires all single quote be replaced with double quotes
             string result = rawText.Replace("\"", "\"\"");
 

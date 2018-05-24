@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
@@ -26,15 +27,38 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             comboBoxExportedHerd.Items.AddRange(context.Herds.Select(x => x.ToString()).Cast<object>().ToArray());
         }
 
-        private void buttonExport_Click(object sender, EventArgs e)
+        private void buttonExportXml_Click(object sender, EventArgs e)
         {
             try
             {
                 var exporter = new HerdExporter();
                 var xml = exporter.CreateXml(context, comboBoxExportedHerd.Text.Trim());
-                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                if (saveXmlFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    xml.Save(saveFileDialog1.FileName);
+                    xml.Save(saveXmlFileDialog.FileName);
+                    MessageBox.Show("Export completed");
+                }
+            }
+            catch (GrangerException ex)
+            {
+                MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                logger.Error(ex, "problem at exporting herd");
+            }
+        }
+
+        private void buttonExportCsv_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var exporter = new HerdExporter();
+                var fileText = exporter.CreateCsv(context, comboBoxExportedHerd.Text.Trim());
+                if (saveCsvFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    File.WriteAllText(saveCsvFileDialog.FileName, fileText);
                     MessageBox.Show("Export completed");
                 }
             }

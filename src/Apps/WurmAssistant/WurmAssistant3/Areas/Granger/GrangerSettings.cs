@@ -37,6 +37,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
             showGroomingTime = TimeSpan.FromMinutes(60);
             updateCreatureDataFromAnyEventLine = true;
+
+            updateCreatureColorOnSmilexamines = true;
         }
 
         [JsonProperty]
@@ -101,6 +103,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         [JsonProperty]
         bool doNotMatchCreaturesByBrandName;
+
+        [JsonProperty]
+        bool updateCreatureColorOnSmilexamines;
 
         public TimeSpan ShowGroomingTime
         {
@@ -226,6 +231,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             get { return doNotMatchCreaturesByBrandName; }
             set { doNotMatchCreaturesByBrandName = value; FlagAsChanged(); }
+        }
+
+        public bool UpdateCreatureColorOnSmilexamines
+        {
+            get { return updateCreatureColorOnSmilexamines; }
+            set { updateCreatureColorOnSmilexamines = value; FlagAsChanged(); }
         }
 
         internal void AddGenesisCast(DateTime castDate, string creatureName)

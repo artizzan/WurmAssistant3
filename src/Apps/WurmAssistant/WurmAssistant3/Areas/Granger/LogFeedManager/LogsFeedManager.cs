@@ -20,6 +20,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         [NotNull] readonly CreatureColorDefinitions creatureColorDefinitions;
         readonly GrangerFeature parentModule;
         readonly Dictionary<string, PlayerManager> playerManagers = new Dictionary<string, PlayerManager>();
+        readonly GrangerSettings grangerSettings;
 
         public LogsFeedManager(
             [NotNull] GrangerFeature parentModule,
@@ -28,7 +29,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             [NotNull] ILogger logger, 
             [NotNull] ITrayPopups trayPopups,
             [NotNull] IWurmAssistantConfig wurmAssistantConfig,
-            [NotNull] CreatureColorDefinitions creatureColorDefinitions)
+            [NotNull] CreatureColorDefinitions creatureColorDefinitions,
+            [NotNull] GrangerSettings grangerSettings)
         {
             if (parentModule == null) throw new ArgumentNullException(nameof(parentModule));
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -37,6 +39,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
             if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
             if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
+            if (grangerSettings == null) throw new ArgumentNullException(nameof(grangerSettings));
             this.parentModule = parentModule;
             this.context = context;
             this.wurmApi = wurmApi;
@@ -44,6 +47,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             this.trayPopups = trayPopups;
             this.wurmAssistantConfig = wurmAssistantConfig;
             this.creatureColorDefinitions = creatureColorDefinitions;
+            this.grangerSettings = grangerSettings;
         }
 
         public void TryRegisterPlayer(string playerName)
@@ -59,7 +63,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                         logger,
                         trayPopups,
                         wurmAssistantConfig, 
-                        creatureColorDefinitions);
+                        creatureColorDefinitions,
+                        grangerSettings);
                 }
                 catch (Exception exception)
                 {

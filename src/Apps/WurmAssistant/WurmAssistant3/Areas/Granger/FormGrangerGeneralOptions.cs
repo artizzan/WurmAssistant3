@@ -31,6 +31,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             checkBoxUseServerNameAsIdComponent.Checked = settings.UseServerNameAsCreatureIdComponent;
             checkBoxhideLiveTrackerPopups.Checked = settings.HideLiveTrackerPopups;
             checkBoxDoNotMatchCreaturesByBrandName.Checked = settings.DoNotMatchCreaturesByBrandName;
+            checkBoxUpdateCreatureColorsOnSmilexamines.Checked = settings.UpdateCreatureColorOnSmilexamines;
         }
 
         private void CommitChanges()
@@ -43,6 +44,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             settings.UseServerNameAsCreatureIdComponent = checkBoxUseServerNameAsIdComponent.Checked;
             settings.HideLiveTrackerPopups = checkBoxhideLiveTrackerPopups.Checked;
             settings.DoNotMatchCreaturesByBrandName = checkBoxDoNotMatchCreaturesByBrandName.Checked;
+            settings.UpdateCreatureColorOnSmilexamines = checkBoxUpdateCreatureColorsOnSmilexamines.Checked;
         }
 
         private void buttonOK_Click(object sender, EventArgs e)

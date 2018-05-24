@@ -31,7 +31,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             [NotNull] ILogger logger, 
             [NotNull] ITrayPopups trayPopups,
             [NotNull] IWurmAssistantConfig wurmAssistantConfig,
-            [NotNull] CreatureColorDefinitions creatureColorDefinitions)
+            [NotNull] CreatureColorDefinitions creatureColorDefinitions,
+            [NotNull] GrangerSettings grangerSettings)
         {
             if (parentModule == null) throw new ArgumentNullException(nameof(parentModule));
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -41,12 +42,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
             if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
             if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
+            if (grangerSettings == null) throw new ArgumentNullException(nameof(grangerSettings));
             this.parentModule = parentModule;
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.PlayerName = playerName;
 
-            creatureUpdateManager = new CreatureUpdatesManager(this.parentModule, context, this, trayPopups, logger, wurmAssistantConfig, creatureColorDefinitions);
+            creatureUpdateManager = new CreatureUpdatesManager(this.parentModule, context, this, trayPopups, logger, wurmAssistantConfig, creatureColorDefinitions, grangerSettings);
 
             wurmApi.LogsMonitor.Subscribe(PlayerName, LogType.Event, OnNewEventLogEvents);
 
