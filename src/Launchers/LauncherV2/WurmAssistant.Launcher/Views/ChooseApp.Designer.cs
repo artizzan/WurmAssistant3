@@ -77,6 +77,7 @@
             // 
             // betaBtn
             // 
+            this.betaBtn.Enabled = false;
             this.betaBtn.Location = new System.Drawing.Point(361, 19);
             this.betaBtn.Name = "betaBtn";
             this.betaBtn.Size = new System.Drawing.Size(75, 43);
@@ -87,6 +88,7 @@
             // 
             // stableLinBtn
             // 
+            this.stableLinBtn.Enabled = false;
             this.stableLinBtn.Location = new System.Drawing.Point(131, 19);
             this.stableLinBtn.Name = "stableLinBtn";
             this.stableLinBtn.Size = new System.Drawing.Size(107, 43);
@@ -97,6 +99,7 @@
             // 
             // stableMacBtn
             // 
+            this.stableMacBtn.Enabled = false;
             this.stableMacBtn.Location = new System.Drawing.Point(244, 19);
             this.stableMacBtn.Name = "stableMacBtn";
             this.stableMacBtn.Size = new System.Drawing.Size(111, 43);
@@ -120,6 +123,7 @@
             // 
             // unlimBetaBtn
             // 
+            this.unlimBetaBtn.Enabled = false;
             this.unlimBetaBtn.Location = new System.Drawing.Point(361, 19);
             this.unlimBetaBtn.Name = "unlimBetaBtn";
             this.unlimBetaBtn.Size = new System.Drawing.Size(75, 43);
@@ -130,6 +134,7 @@
             // 
             // unlimStableLinBtn
             // 
+            this.unlimStableLinBtn.Enabled = false;
             this.unlimStableLinBtn.Location = new System.Drawing.Point(131, 19);
             this.unlimStableLinBtn.Name = "unlimStableLinBtn";
             this.unlimStableLinBtn.Size = new System.Drawing.Size(107, 43);
@@ -140,6 +145,7 @@
             // 
             // unlimStableMacBtn
             // 
+            this.unlimStableMacBtn.Enabled = false;
             this.unlimStableMacBtn.Location = new System.Drawing.Point(244, 19);
             this.unlimStableMacBtn.Name = "unlimStableMacBtn";
             this.unlimStableMacBtn.Size = new System.Drawing.Size(111, 43);
