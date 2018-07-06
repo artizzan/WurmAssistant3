@@ -209,6 +209,10 @@ namespace AldursLab.WurmAssistant3.Systems.DataBackups
 
                 if (backup.HasDataDir)
                 {
+                    // waiting for handle to sqlite to be disposed
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+
                     var dataDir = Path.Combine(dataDirectory.DirectoryPath, "Data");
                     var backupDir = Path.Combine(backup.RootDirPath, "Data");
                     Directory.Delete(dataDir, true);
@@ -219,6 +223,10 @@ namespace AldursLab.WurmAssistant3.Systems.DataBackups
 
                 if (backup.HasDataV2Dir)
                 {
+                    // waiting for handle to sqlite to be disposed
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+
                     var dataV2Dir = Path.Combine(dataDirectory.DirectoryPath, "DataV2");
                     var backupV2Dir = Path.Combine(backup.RootDirPath, "DataV2");
                     Directory.Delete(dataV2Dir, true);

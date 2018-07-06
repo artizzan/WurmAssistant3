@@ -25,6 +25,8 @@ namespace AldursLab.Testing.Fixtures
         [TearDown]
         public void BaseTeardown()
         {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
             directoryHandle.Dispose();
         }
     }
