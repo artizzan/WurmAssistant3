@@ -61,7 +61,9 @@
     <Compile Include="Persistence\IPersistenceStrategy.cs" />
     <Compile Include="IPersistentObject.cs" />
     <Compile Include="Persistence\Keys.cs" />
-    <Compile Include="Persistence\FlatFilesPersistenceStrategy.cs" />
+    <Compile Include="Persistence\FlatFilesDataImporter.cs" />
+    <Compile Include="Persistence\RawDataObject.cs" />
+    <Compile Include="Persistence\SqlitePersistenceStrategy.cs" />
     <Compile Include="PersistentObjectAlreadyTrackedException.cs" />
     <Compile Include="Serialization\ISerializationStrategy.cs" />
     <Compile Include="ObjectCompositeKey.cs" />
