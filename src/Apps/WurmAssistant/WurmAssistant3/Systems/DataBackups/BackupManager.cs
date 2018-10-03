@@ -166,7 +166,7 @@ namespace AldursLab.WurmAssistant3.Systems.DataBackups
                         MessageBoxImage.Asterisk,
                         MessageBoxResult.Cancel) == MessageBoxResult.Cancel)
                 {
-                    throw new InvalidOperationException(
+                    throw new DataBackupRestoreCanceledException(
                         $"Cancelling restoration of backup {backupName} due to user request.");
                 }
             }
