@@ -65,6 +65,15 @@ namespace AldursLab.WurmAssistant3.Areas.RevealCreatures
                     WurmLogString = FairlyCloseBy
                 };
             }
+            else if (text.Contains(QuiteSomeDistance, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return new Distance()
+                {
+                    AverageDistance = 50,
+                    ShortString = "50-80",
+                    WurmLogString = QuiteSomeDistance
+                };
+            }
             else if (text.Contains(SomeDistance, StringComparison.InvariantCultureIgnoreCase))
             {
                 return new Distance()
@@ -72,15 +81,6 @@ namespace AldursLab.WurmAssistant3.Areas.RevealCreatures
                     AverageDistance = 35,
                     ShortString = "20-49",
                     WurmLogString = SomeDistance
-                };
-            }
-            else if (text.Contains(QuiteSomeDistance, StringComparison.InvariantCultureIgnoreCase))
-            {
-                return new Distance()
-                {
-                    AverageDistance = 50,
-                    ShortString = "50",
-                    WurmLogString = QuiteSomeDistance
                 };
             }
             else
