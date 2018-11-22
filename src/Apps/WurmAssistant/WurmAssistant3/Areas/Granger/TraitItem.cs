@@ -31,13 +31,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             get
             {
-                if (Unknown)
-                {
-                    return "?";
-                }
-                else if (Exists)
+                if (Exists)
                 {
                     return "YES";
+                }
+                else if (Unknown)
+                {
+                    return "?";
                 }
                 else
                 {

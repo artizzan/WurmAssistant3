@@ -347,22 +347,29 @@ namespace AldursLab.WurmAssistant3
         {
             if (userSettings.RestoreBackupRequested)
             {
+                bool result = false;
+
                 try
                 {
                     backupManager.RestoreDataBackup(userSettings.RestoreBackupName);
+                    result = true;
+                }
+                catch (DataBackupRestoreCanceledException exception)
+                {
+                    logger.Info(exception,
+                        $"Canceled restore of backup named: {userSettings.RestoreBackupName}.");
                 }
                 catch (Exception exception)
                 {
                     logger.Error(exception,
                         $"Unable to restore backup named {userSettings.RestoreBackupName}. Cancelling. Please try to restore another backup.");
-                    throw;
                 }
 
                 userSettings.RestoreBackupRequested = false;
                 userSettings.RestoreBackupName = string.Empty;
                 userSettings.Save();
 
-                return true;
+                return result;
             }
 
             return false;
