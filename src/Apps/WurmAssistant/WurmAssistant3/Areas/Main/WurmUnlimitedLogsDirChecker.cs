@@ -46,7 +46,7 @@ namespace AldursLab.WurmAssistant3.Areas.Main
                                   .Select(arg => new
                                   {
                                       CharacterName = arg.CharacterName,
-                                      FileCount = Directory.EnumerateFiles(arg.LogsPath).Count(),
+                                      FileCount = Directory.Exists(arg.LogsPath) ? Directory.EnumerateFiles(arg.LogsPath).Count() : 0,
                                       LogsPath = arg.LogsPath
                                   })
                                   .Where(arg => arg.FileCount > 0)
