@@ -88,7 +88,5 @@ namespace AldursLab.Persistence.Simple.Tests
                 }
             }
         }
-        //	DeleteObject
-        //		deletes object
     }
 }

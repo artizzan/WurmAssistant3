@@ -83,7 +83,7 @@ namespace AldursLab.PersistentObjects
                 }
                 else
                 {
-                    throw new PersistentObjectAlreadyTracked(
+                    throw new PersistentObjectAlreadyTrackedException(
                         string.Format("object with the same composite key already exists. Composite key: [ {0} ]",
                             compositeKey.ToString()));
                 }

@@ -66,7 +66,7 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
         /// Note, that object will not go through usual Kernel pipeline, eg. IInitialize will not be called automatically.
         /// </summary>
         /// <param name="object"></param>
-        /// <exception cref="PersistentObjectAlreadyTracked">
+        /// <exception cref="PersistentObjectAlreadyTrackedException">
         /// Object of this type and id is already cached. Use Get method instead.
         /// </exception>
         void StartTracking<T>(T @object) where T : class, IPersistentObject;
@@ -77,7 +77,7 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
         /// Note, that object will not go through usual Kernel pipeline, eg. IInitialize will not be called automatically.
         /// </summary>
         /// <param name="object"></param>
-        /// <exception cref="PersistentObjectAlreadyTracked">
+        /// <exception cref="PersistentObjectAlreadyTrackedException">
         /// Object of this type and id is already cached. Use Get method instead.
         /// </exception>
         /// <exception cref="UnsupportedObjectTypeException">Type does not implement IPersistentObject</exception>
@@ -143,7 +143,7 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
         /// Note, that object will not go through usual Kernel pipeline, eg. IInitialize will not be called automatically.
         /// </summary>
         /// <param name="object"></param>
-        /// <exception cref="PersistentObjectAlreadyTracked">
+        /// <exception cref="PersistentObjectAlreadyTrackedException">
         /// Object of this type and id is already cached. Use Get method instead.
         /// </exception>
         void LoadAndStartTracking(T @object);

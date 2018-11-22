@@ -93,9 +93,9 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
             ISerializer defaultJsonSerializer = options.SerializerOverride ?? new DefaultJsonSerializer();
 
             var dataStorePath = Path.Combine(wurmAssistantDataDirectory.DirectoryPath, "DataV2", contextId);
-            IDataStorage flatFilesDataStorage = options.DataStorageOverride ?? new FlatFilesDataStorage(dataStorePath);
+            IDataStorage dataStorage = options.DataStorageOverride ?? new SqLiteDataStorage(dataStorePath);
 
-            return new PersistentContext(defaultJsonSerializer, flatFilesDataStorage);
+            return new PersistentContext(defaultJsonSerializer, dataStorage);
         }
 
         bool Validate(string contextId)

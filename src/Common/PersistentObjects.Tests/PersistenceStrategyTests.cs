@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AldursLab.PersistentObjects.Persistence;
 using AldursLab.Testing;
 using Newtonsoft.Json;
@@ -9,7 +10,7 @@ namespace AldursLab.PersistentObjects.Tests
 {
     public class PersistenceStrategyTests : AssertionHelper
     {
-        FlatFilesPersistenceStrategy strategy;
+        SqlitePersistenceStrategy strategy;
 
         readonly string entityName1 = "EntityName1";
         readonly string entityName2 = "EntityName2";
@@ -29,14 +30,16 @@ namespace AldursLab.PersistentObjects.Tests
             strategy = CreatePersistenceStrategy();
         }
 
-        FlatFilesPersistenceStrategy CreatePersistenceStrategy()
+        SqlitePersistenceStrategy CreatePersistenceStrategy()
         {
-            return new FlatFilesPersistenceStrategy(new PersistenceManagerConfig() { DataStoreDirectoryPath = dirHandle.FullName });
+            return new SqlitePersistenceStrategy(new PersistenceManagerConfig() { DataStoreDirectoryPath = dirHandle.FullName });
         }
 
         [TearDown]
         public void Teardown()
         {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
             dirHandle.Dispose();
         }
 

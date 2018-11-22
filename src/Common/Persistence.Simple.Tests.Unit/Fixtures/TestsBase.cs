@@ -6,25 +6,25 @@ namespace AldursLab.Persistence.Simple.Tests.Fixtures
     public abstract class TestsBase
     {
         DirectoryHandle dir;
-        FlatFilesDataStorage flatFilesDataStorage;
+        SqLiteDataStorage sqLiteDataStorage;
 
         [SetUp]
         public void Setup()
         {
 
             dir = TempDirectoriesFactory.CreateEmpty();
-            flatFilesDataStorage = new FlatFilesDataStorage(dir.FullName);
+            sqLiteDataStorage = new SqLiteDataStorage(dir.FullName);
         }
 
         [TearDown]
         public void Teardown()
         {
-            TeardownHelper.DisposeAll(flatFilesDataStorage, dir);
+            TeardownHelper.DisposeAll(sqLiteDataStorage, dir);
         }
 
         protected SampleContext CreateContext()
         {
-            return new SampleContext(new DefaultJsonSerializer(), flatFilesDataStorage);
+            return new SampleContext(new DefaultJsonSerializer(), sqLiteDataStorage);
         }
     }
 }

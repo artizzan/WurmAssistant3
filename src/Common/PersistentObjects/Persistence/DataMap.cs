@@ -66,6 +66,11 @@ namespace AldursLab.PersistentObjects.Persistence
             return Path.Combine(dataStoreDirectoryFullPath, keys.DirectoryName, fileName);
         }
 
+        public IEnumerable<string> GetAllCollections()
+        {
+            return collections.CollectionIdToObjectsMap.Keys.ToList();
+        }
+
         public IEnumerable<string> GetAllKeys(string collectionId)
         {
             Keys keys;

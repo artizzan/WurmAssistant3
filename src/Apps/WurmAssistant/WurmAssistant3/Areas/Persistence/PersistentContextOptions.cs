@@ -11,7 +11,7 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
         public ISerializer SerializerOverride { get; set; }
 
         /// <summary>
-        /// If set, will be used instead of <see cref="FlatFilesDataStorage"/>.
+        /// If set, will be used instead of <see cref="FlatFilesDataStorageImporter"/>.
         /// </summary>
         public IDataStorage DataStorageOverride { get; set; }
 

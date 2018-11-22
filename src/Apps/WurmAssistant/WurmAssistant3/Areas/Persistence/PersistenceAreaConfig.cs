@@ -40,7 +40,7 @@ namespace AldursLab.WurmAssistant3.Areas.Persistence
                 };
                 var persistenceManager = new PersistenceManager(config,
                     serializationStrategy,
-                    new FlatFilesPersistenceStrategy(config));
+                    new SqlitePersistenceStrategy(config));
 
                 return persistenceManager;
             }).InSingletonScope();
