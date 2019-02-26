@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
 using ILogger = AldursLab.WurmAssistant3.Areas.Logging.ILogger;
@@ -19,6 +20,7 @@ namespace AldursLab.WurmAssistant3.Areas.LogSearcher
     {
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
+        readonly ITelemetry telemetry;
 
         List<SingleSearchMatch> lastMatches = new List<SingleSearchMatch>();
         bool searching = false;
@@ -30,12 +32,11 @@ namespace AldursLab.WurmAssistant3.Areas.LogSearcher
             get { return new[] { SearchTypeId.RegexEscapedCaseIns, SearchTypeId.RegexCustom }; }
         }
 
-        public LogSearchForm([NotNull] IWurmApi wurmApi, [NotNull] ILogger logger)
+        public LogSearchForm([NotNull] IWurmApi wurmApi, [NotNull] ILogger logger, [NotNull] ITelemetry telemetry)
         {
-            if (wurmApi == null) throw new ArgumentNullException("wurmApi");
-            if (logger == null) throw new ArgumentNullException("logger");
-            this.wurmApi = wurmApi;
-            this.logger = logger;
+            this.wurmApi = wurmApi ?? throw new ArgumentNullException(nameof(wurmApi));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
 
             InitializeComponent();
             lastVisibleWindowState = this.WindowState;
@@ -316,6 +317,7 @@ namespace AldursLab.WurmAssistant3.Areas.LogSearcher
 
         private void buttonCommitSearch_Click(object sender, EventArgs e)
         {
+            telemetry.TrackEvent("Log Search: Search Click");
             PerformSearch();
         }
 

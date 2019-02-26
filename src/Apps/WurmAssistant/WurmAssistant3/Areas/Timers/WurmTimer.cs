@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
@@ -19,6 +20,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
         protected readonly ILogger Logger;
         protected readonly IWurmApi WurmApi;
         protected readonly ISoundManager SoundManager;
+        readonly ITelemetry telemetry;
 
         PlayerTimersGroup playerTimersGroup;
         protected string Player;
@@ -42,8 +44,13 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
         [JsonProperty]
         TimeSpan lastUptimeSnapshot;
 
-        public WurmTimer(string persistentObjectId, [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger,
-            [NotNull] IWurmApi wurmApi, [NotNull] ISoundManager soundManager) : base(persistentObjectId)
+        public WurmTimer(
+            string persistentObjectId, 
+            [NotNull] ITrayPopups trayPopups, 
+            [NotNull] ILogger logger,
+            [NotNull] IWurmApi wurmApi, 
+            [NotNull] ISoundManager soundManager,
+            [NotNull] ITelemetry telemetry) : base(persistentObjectId)
         {
             Id = Guid.Parse(persistentObjectId);
             if (trayPopups == null) throw new ArgumentNullException("trayPopups");
@@ -54,7 +61,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
             this.Logger = logger;
             this.WurmApi = wurmApi;
             this.SoundManager = soundManager;
-
+            this.telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
         }
 
         public virtual void Initialize(PlayerTimersGroup parentGroup, string player, TimerDefinition definition)
@@ -82,6 +89,8 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
 
             WurmCharacter = WurmApi.Characters.Get(new CharacterName(player));
             WurmCharacter.LogInOrCurrentServerPotentiallyChanged += _handleServerChange;
+
+            telemetry.TrackEvent($"Timers: initialized timer {Name}");
         }
 
         public TimerDisplayView View { get; private set; }

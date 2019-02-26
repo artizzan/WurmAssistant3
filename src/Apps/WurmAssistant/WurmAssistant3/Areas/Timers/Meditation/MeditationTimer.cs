@@ -5,6 +5,7 @@ using AldursLab.Essentials.Asynchronous;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters.Skills;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
@@ -136,8 +137,8 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Meditation
         SkillEntryParser skillEntryParser;
 
         public MeditationTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundManager soundManager,
-            ITrayPopups trayPopups)
-            : base(persistentObjectId, trayPopups, logger, wurmApi, soundManager)
+            ITrayPopups trayPopups, ITelemetry telemetry)
+            : base(persistentObjectId, trayPopups, logger, wurmApi, soundManager, telemetry)
         {
             cooldownUpdateOperation = new TriggerableAsyncOperation(UpdateMeditationCooldown);
         }

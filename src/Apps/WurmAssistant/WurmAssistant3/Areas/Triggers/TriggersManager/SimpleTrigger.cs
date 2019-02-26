@@ -1,6 +1,7 @@
 ﻿using System;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
@@ -11,8 +12,8 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
     public class SimpleTrigger : SimpleConditionTriggerBase
     {
         public SimpleTrigger(TriggerEntity triggerEntity, ISoundManager soundManager, ITrayPopups trayPopups, IWurmApi wurmApi,
-            ILogger logger)
-            : base(triggerEntity, soundManager, trayPopups, wurmApi, logger)
+            ILogger logger, ITelemetry telemetry)
+            : base(triggerEntity, soundManager, trayPopups, wurmApi, logger, telemetry)
         {
             ConditionHelp = "Text to match against log entry content, case insensitive";
             SourceHelp =

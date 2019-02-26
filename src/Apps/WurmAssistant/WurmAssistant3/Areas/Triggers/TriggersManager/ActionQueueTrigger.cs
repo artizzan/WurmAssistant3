@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
@@ -28,8 +29,8 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
         private string logEntryThatTriggeredLastQueueSound;
 
         public ActionQueueTrigger(TriggerEntity triggerEntity, ISoundManager soundManager, ITrayPopups trayPopups,
-            IWurmApi wurmApi, ILogger logger, [NotNull] IActionQueueConditions conditionsManager)
-            : base(triggerEntity, soundManager, trayPopups, wurmApi, logger)
+            IWurmApi wurmApi, ILogger logger, [NotNull] IActionQueueConditions conditionsManager, ITelemetry telemetry)
+            : base(triggerEntity, soundManager, trayPopups, wurmApi, logger, telemetry)
         {
             if (logger == null) throw new ArgumentNullException("logger");
             if (conditionsManager == null) throw new ArgumentNullException("conditionsManager");

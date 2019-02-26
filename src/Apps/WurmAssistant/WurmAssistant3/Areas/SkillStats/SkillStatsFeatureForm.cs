@@ -6,8 +6,10 @@ using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters.Skills;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Utils.WinForms;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.SkillStats
 {
@@ -16,8 +18,9 @@ namespace AldursLab.WurmAssistant3.Areas.SkillStats
         readonly SkillStatsFeature feature;
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
+        readonly ITelemetry telemetry;
 
-        public SkillStatsFeatureForm(SkillStatsFeature feature, IWurmApi wurmApi, ILogger logger)
+        public SkillStatsFeatureForm(SkillStatsFeature feature, IWurmApi wurmApi, ILogger logger, [NotNull] ITelemetry telemetry)
         {
             if (feature == null) throw new ArgumentNullException("feature");
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
@@ -25,6 +28,7 @@ namespace AldursLab.WurmAssistant3.Areas.SkillStats
             this.feature = feature;
             this.wurmApi = wurmApi;
             this.logger = logger;
+            this.telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
             InitializeComponent();
 
             var allChars = this.wurmApi.Characters.All.Select(character => character).ToArray();
@@ -83,6 +87,8 @@ namespace AldursLab.WurmAssistant3.Areas.SkillStats
         {
             try
             {
+                telemetry.TrackEvent("Skill Stats: starting live session");
+
                 var gameChar = liveMonCharacterCbox.Text;
                 if (string.IsNullOrWhiteSpace(gameChar))
                 {
@@ -103,6 +109,8 @@ namespace AldursLab.WurmAssistant3.Areas.SkillStats
         {
             try
             {
+                telemetry.TrackEvent("Skill Stats: generating query");
+
                 ThrowIfNoServerGroup();
 
                 generateQueryBtn.Enabled = false;
@@ -165,6 +173,8 @@ namespace AldursLab.WurmAssistant3.Areas.SkillStats
         {
             try
             {
+                telemetry.TrackEvent("Skill Stats: showing total skills");
+
                 ThrowIfNoServerGroup();
 
                 totalSkillReportBtn.Enabled = false;
@@ -192,6 +202,8 @@ namespace AldursLab.WurmAssistant3.Areas.SkillStats
         {
             try
             {
+                telemetry.TrackEvent("Skill Stats: showing best skills");
+
                 ThrowIfNoServerGroup();
 
                 bestSkillsReportBtn.Enabled = false;

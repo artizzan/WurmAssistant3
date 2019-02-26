@@ -8,6 +8,7 @@ using AldursLab.WurmAssistant3.Areas.Core;
 using AldursLab.WurmAssistant3.Areas.Features;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
 using AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
@@ -32,6 +33,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         readonly LogsFeedManager logsFeedMan;
         readonly GrangerContext context;
         readonly IFormEditCreatureColorsFactory formEditCreatureColorsFactory;
+        readonly ITelemetry telemetry;
 
         readonly ITimer updateLoop;
 
@@ -47,7 +49,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             [NotNull] ITimerFactory timerFactory,
             [NotNull] CreatureColorDefinitions creatureColorDefinitions,
             [NotNull] GrangerContext grangerContext,
-            [NotNull] IFormEditCreatureColorsFactory formEditCreatureColorsFactory)
+            [NotNull] IFormEditCreatureColorsFactory formEditCreatureColorsFactory,
+            [NotNull] ITelemetry telemetry)
         {
             if (logger == null) throw new ArgumentNullException(nameof(logger));
             if (dataDirectory == null) throw new ArgumentNullException(nameof(dataDirectory));
@@ -74,6 +77,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
             context = grangerContext;
             this.formEditCreatureColorsFactory = formEditCreatureColorsFactory;
+            this.telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
 
             grangerUi = new FormGrangerMain(this,
                 settings,
@@ -82,9 +86,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 wurmApi,
                 defaultBreedingEvaluatorOptions,
                 creatureColorDefinitions,
-                formEditCreatureColorsFactory);
+                formEditCreatureColorsFactory,
+                telemetry);
 
-            logsFeedMan = new LogsFeedManager(this, context, wurmApi, logger, trayPopups, wurmAssistantConfig, creatureColorDefinitions, grangerSettings);
+            logsFeedMan = new LogsFeedManager(this, context, wurmApi, logger, trayPopups, wurmAssistantConfig, creatureColorDefinitions, grangerSettings, telemetry);
             logsFeedMan.UpdatePlayers(settings.CaptureForPlayers);
             grangerUi.GrangerPlayerListChanged += GrangerUI_Granger_PlayerListChanged;
             

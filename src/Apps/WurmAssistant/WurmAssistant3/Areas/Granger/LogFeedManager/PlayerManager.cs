@@ -5,6 +5,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters;
 using AldursLab.WurmAssistant3.Areas.Config;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
 using JetBrains.Annotations;
@@ -32,7 +33,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             [NotNull] ITrayPopups trayPopups,
             [NotNull] IWurmAssistantConfig wurmAssistantConfig,
             [NotNull] CreatureColorDefinitions creatureColorDefinitions,
-            [NotNull] GrangerSettings grangerSettings)
+            [NotNull] GrangerSettings grangerSettings,
+            [NotNull] ITelemetry telemetry)
         {
             if (parentModule == null) throw new ArgumentNullException(nameof(parentModule));
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -43,12 +45,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
             if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
             if (grangerSettings == null) throw new ArgumentNullException(nameof(grangerSettings));
+            if (telemetry == null) throw new ArgumentNullException(nameof(telemetry));
             this.parentModule = parentModule;
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.PlayerName = playerName;
 
-            creatureUpdateManager = new CreatureUpdatesManager(this.parentModule, context, this, trayPopups, logger, wurmAssistantConfig, creatureColorDefinitions, grangerSettings);
+            creatureUpdateManager = new CreatureUpdatesManager(this.parentModule, context, this, trayPopups, logger, wurmAssistantConfig, creatureColorDefinitions, grangerSettings, telemetry);
 
             wurmApi.LogsMonitor.Subscribe(PlayerName, LogType.Event, OnNewEventLogEvents);
 

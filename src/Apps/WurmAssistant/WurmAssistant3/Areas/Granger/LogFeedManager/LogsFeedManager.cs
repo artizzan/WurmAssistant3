@@ -4,6 +4,7 @@ using System.Linq;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Config;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
 using JetBrains.Annotations;
@@ -21,6 +22,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         readonly GrangerFeature parentModule;
         readonly Dictionary<string, PlayerManager> playerManagers = new Dictionary<string, PlayerManager>();
         readonly GrangerSettings grangerSettings;
+        readonly ITelemetry telemetry;
 
         public LogsFeedManager(
             [NotNull] GrangerFeature parentModule,
@@ -30,7 +32,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             [NotNull] ITrayPopups trayPopups,
             [NotNull] IWurmAssistantConfig wurmAssistantConfig,
             [NotNull] CreatureColorDefinitions creatureColorDefinitions,
-            [NotNull] GrangerSettings grangerSettings)
+            [NotNull] GrangerSettings grangerSettings,
+            [NotNull] ITelemetry telemetry)
         {
             if (parentModule == null) throw new ArgumentNullException(nameof(parentModule));
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -48,6 +51,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             this.wurmAssistantConfig = wurmAssistantConfig;
             this.creatureColorDefinitions = creatureColorDefinitions;
             this.grangerSettings = grangerSettings;
+            this.telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
         }
 
         public void TryRegisterPlayer(string playerName)
@@ -64,7 +68,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                         trayPopups,
                         wurmAssistantConfig, 
                         creatureColorDefinitions,
-                        grangerSettings);
+                        grangerSettings,
+                        telemetry);
                 }
                 catch (Exception exception)
                 {

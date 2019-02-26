@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.Persistence;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
@@ -22,9 +23,11 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
         protected readonly ITrayPopups TrayPopups;
         protected readonly IWurmApi WurmApi;
         protected readonly ILogger Logger;
+        readonly ITelemetry telemetry;
 
         public TriggerBase([NotNull] TriggerEntity triggerEntity, [NotNull] ISoundManager soundManager, [NotNull] ITrayPopups trayPopups,
-            [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger)
+            [NotNull] IWurmApi wurmApi, [NotNull] ILogger logger,
+            [NotNull] ITelemetry telemetry)
         {
             if (triggerEntity == null) throw new ArgumentNullException("triggerEntity");
             if (soundManager == null) throw new ArgumentNullException("soundManager");
@@ -36,6 +39,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
             this.TrayPopups = trayPopups;
             this.WurmApi = wurmApi;
             this.Logger = logger;
+            this.telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
 
             MuteChecker = () => false;
             Active = true;
@@ -48,6 +52,8 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
             {
                 Popup = new PopupNotifier(this, trayPopups);
             }
+
+            telemetry.TrackEvent($"Triggers: initialized trigger {this.GetType().Name}");
         }
 
         public Guid TriggerId { get { return TriggerEntity.TriggerId; } }
@@ -196,6 +202,8 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
         {
             if (Sound != null && !Muted) Sound.Notify();
             if (Popup != null) Popup.Notify();
+
+            telemetry.TrackEvent($"Triggers: fired trigger {this.GetType().Name}");
         }
 
         protected abstract bool CheckCondition(LogEntry logMessage); 

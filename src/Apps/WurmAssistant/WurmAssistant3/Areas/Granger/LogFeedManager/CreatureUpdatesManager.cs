@@ -6,6 +6,7 @@ using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Config;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
 using JetBrains.Annotations;
@@ -27,6 +28,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         readonly PlayerManager playerManager;
         readonly ITrayPopups trayPopups;
         readonly ILogger logger;
+        readonly ITelemetry telemetry;
 
         readonly SmileXamineProcessor smileXamineProcessor;
 
@@ -44,7 +46,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             [NotNull] ILogger logger,
             [NotNull] IWurmAssistantConfig wurmAssistantConfig,
             [NotNull] CreatureColorDefinitions creatureColorDefinitions,
-            [NotNull] GrangerSettings grangerSettings)
+            [NotNull] GrangerSettings grangerSettings,
+            [NotNull] ITelemetry telemetry)
         {
             if (parentModule == null) throw new ArgumentNullException(nameof(parentModule));
             if (context == null) throw new ArgumentNullException(nameof(context));
@@ -60,6 +63,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             this.playerManager = playerManager;
             this.trayPopups = trayPopups;
             this.logger = logger;
+            this.telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
 
             grangerDebug = new GrangerDebugLogger(logger);
 
@@ -71,7 +75,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 logger,
                 wurmAssistantConfig,
                 creatureColorDefinitions,
-                grangerSettings);
+                grangerSettings,
+                telemetry);
         }
 
         internal void ProcessEventForCreatureUpdates(LogEntry line)

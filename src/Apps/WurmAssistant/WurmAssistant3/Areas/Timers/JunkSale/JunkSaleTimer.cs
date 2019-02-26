@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
@@ -18,8 +19,8 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.JunkSale
         int currentTotalAmount;
 
         public JunkSaleTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundManager soundManager,
-            ITrayPopups trayPopups)
-            : base(persistentObjectId, trayPopups, logger, wurmApi, soundManager)
+            ITrayPopups trayPopups, ITelemetry telemetry)
+            : base(persistentObjectId, trayPopups, logger, wurmApi, soundManager, telemetry)
         {
         }
 
