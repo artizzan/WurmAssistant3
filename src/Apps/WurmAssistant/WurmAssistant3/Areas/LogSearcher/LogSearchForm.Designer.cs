@@ -336,7 +336,7 @@
             this.toolTip1.InitialDelay = 100;
             this.toolTip1.ReshowDelay = 10;
             // 
-            // LogSearchView
+            // LogSearchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

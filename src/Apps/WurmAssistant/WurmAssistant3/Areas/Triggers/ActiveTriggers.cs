@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
@@ -23,6 +24,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
         readonly IActionQueueConditions actionQueueConditions;
+        readonly ITelemetry telemetry;
         readonly CharacterTriggersConfig triggersConfig;
 
         private readonly Dictionary<Guid,ITrigger> triggers = new Dictionary<Guid,ITrigger>();
@@ -35,7 +37,8 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             [NotNull] IWurmApi wurmApi, 
             [NotNull] ILogger logger,
             [NotNull] IActionQueueConditions actionQueueConditions,
-            [NotNull] TriggersDataContext triggersDataContext)
+            [NotNull] TriggersDataContext triggersDataContext,
+            [NotNull] ITelemetry telemetry)
         {
             if (soundManager == null) throw new ArgumentNullException(nameof(soundManager));
             if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
@@ -51,6 +54,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             this.wurmApi = wurmApi;
             this.logger = logger;
             this.actionQueueConditions = actionQueueConditions;
+            this.telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
             this.triggersConfig = triggersDataContext.CharacterTriggersConfigs.GetOrCreate(characterName);
 
             foreach (var entity in triggersConfig.TriggerEntities.Values)
@@ -87,13 +91,13 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             switch (settings.TriggerKind)
             {
                 case TriggerKind.Simple:
-                    return new SimpleTrigger(settings, soundManager, trayPopups, wurmApi, logger);
+                    return new SimpleTrigger(settings, soundManager, trayPopups, wurmApi, logger, telemetry);
                 case TriggerKind.Regex:
-                    return new RegexTrigger(settings, soundManager, trayPopups, wurmApi, logger);
+                    return new RegexTrigger(settings, soundManager, trayPopups, wurmApi, logger, telemetry);
                 case TriggerKind.ActionQueue:
-                    return new ActionQueueTrigger(settings, soundManager, trayPopups, wurmApi, logger, actionQueueConditions);
+                    return new ActionQueueTrigger(settings, soundManager, trayPopups, wurmApi, logger, actionQueueConditions, telemetry);
                 case TriggerKind.SkillLevel:
-                    return new SkillLevelTrigger(CharacterName, settings, soundManager, trayPopups, wurmApi, logger);
+                    return new SkillLevelTrigger(CharacterName, settings, soundManager, trayPopups, wurmApi, logger, telemetry);
                 default:
                     throw new ApplicationException("Unknown trigger kind: " + settings.TriggerKind);
             }

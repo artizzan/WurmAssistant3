@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Config;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
 using JetBrains.Annotations;
@@ -65,6 +66,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         private readonly GrangerContext context;
         private readonly PlayerManager playerMan;
         private readonly GrangerSettings grangerSettings;
+        readonly ITelemetry telemetry;
 
         public SmileXamineProcessor(
             [NotNull] GrangerFeature parentModule,
@@ -74,26 +76,19 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             [NotNull] ITrayPopups trayPopups, [NotNull] ILogger logger,
             [NotNull] IWurmAssistantConfig wurmAssistantConfig,
             [NotNull] CreatureColorDefinitions creatureColorDefinitions,
-            [NotNull] GrangerSettings grangerSettings)
+            [NotNull] GrangerSettings grangerSettings,
+            [NotNull] ITelemetry telemetry)
         {
-            if (parentModule == null) throw new ArgumentNullException(nameof(parentModule));
-            if (context == null) throw new ArgumentNullException(nameof(context));
-            if (playerMan == null) throw new ArgumentNullException(nameof(playerMan));
-            if (debugLogger == null) throw new ArgumentNullException(nameof(debugLogger));
-            if (trayPopups == null) throw new ArgumentNullException(nameof(trayPopups));
-            if (logger == null) throw new ArgumentNullException(nameof(logger));
-            if (wurmAssistantConfig == null) throw new ArgumentNullException(nameof(wurmAssistantConfig));
-            if (creatureColorDefinitions == null) throw new ArgumentNullException(nameof(creatureColorDefinitions));
-            if (grangerSettings == null) throw new ArgumentNullException(nameof(grangerSettings));
-            this.debugLogger = debugLogger;
-            this.trayPopups = trayPopups;
-            this.logger = logger;
-            this.wurmAssistantConfig = wurmAssistantConfig;
-            this.creatureColorDefinitions = creatureColorDefinitions;
-            this.parentModule = parentModule;
-            this.context = context;
-            this.playerMan = playerMan;
-            this.grangerSettings = grangerSettings;
+            this.debugLogger = debugLogger ?? throw new ArgumentNullException(nameof(debugLogger));
+            this.trayPopups = trayPopups ?? throw new ArgumentNullException(nameof(trayPopups));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.wurmAssistantConfig = wurmAssistantConfig ?? throw new ArgumentNullException(nameof(wurmAssistantConfig));
+            this.creatureColorDefinitions = creatureColorDefinitions ?? throw new ArgumentNullException(nameof(creatureColorDefinitions));
+            this.parentModule = parentModule ?? throw new ArgumentNullException(nameof(parentModule));
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
+            this.playerMan = playerMan ?? throw new ArgumentNullException(nameof(playerMan));
+            this.grangerSettings = grangerSettings ?? throw new ArgumentNullException(nameof(grangerSettings));
+            this.telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
         }
 
         public void HandleLogEvent(string line)
@@ -293,6 +288,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             {
                 try
                 {
+                    telemetry.TrackEvent("Granger: Smilexamine");
+
                     debugLogger.Log("finishing processing creature: " + creatureBuffer.Name);
 
                     if (verifyList.IsValid)
@@ -720,8 +717,19 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     debugLogger.Log("object assumed to be a creature");
                     var server = playerMan.CurrentServer;
                     var skill = playerMan.CurrentServerAhSkill;
-                    if (server != null && skill != null)
+
+                    if (grangerSettings.RequireServerAndSkillToBeKnownForSmilexamine 
+                        && (server == null || skill == null))
                     {
+                        trayPopups.Schedule(
+                            "Server or AH skill level unknown for " + playerMan.PlayerName +
+                            ". If WA was just started, give it a few seconds. (This check can be disabled in Granger options)", "CAN'T PROCESS CREATURE", 5000);
+                        debugLogger.Log(string.Format(
+                            "processing creature cancelled, AH skill or server group unknown for player {0} (skill: {1} ; server: {2}",
+                            playerMan.PlayerName, skill, server));
+                    }
+                    else
+                    { 
                         debugLogger.Log("building new creature object and moving to processor");
 
                         isProcessing = true;
@@ -732,7 +740,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                             Name = GrangerHelpers.ExtractCreatureName(objectNameWithPrefixes),
                             Age = GrangerHelpers.ExtractCreatureAge(objectNameWithPrefixes),
                             Server = server,
-                            InspectSkill = skill.Value,
+                            InspectSkill = skill ?? 0,
                         };
 
                         var fat = GrangerHelpers.TryParseCreatureNameIfLineContainsFat(objectNameWithPrefixes);
@@ -746,13 +754,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
                         verifyList.Name = true;
                         debugLogger.Log("finished building");
-                    }
-                    else
-                    {
-                        trayPopups.Schedule(
-                            "Server or AH skill level unknown for " + playerMan.PlayerName +
-                            ". If WA was just started, give it a few seconds.", "CAN'T PROCESS CREATURE", 5000);
-                        debugLogger.Log(string.Format("processing creature cancelled, AH skill or server group unknown for player {0} (skill: {1} ; server: {2}", playerMan.PlayerName, skill, server));
                     }
                 }
                 else debugLogger.Log(objectNameWithPrefixes + " was not recognized as a named creature.");

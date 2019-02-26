@@ -6,9 +6,11 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmApi;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using BrightIdeasSoftware;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.RevealCreatures
 {
@@ -16,15 +18,17 @@ namespace AldursLab.WurmAssistant3.Areas.RevealCreatures
     {
         readonly IWurmApi wurmApi;
         readonly ILogger logger;
+        readonly ITelemetry telemetry;
 
         readonly TextMatchFilter filter;
 
-        public RevealCreaturesForm(IWurmApi wurmApi, ILogger logger)
+        public RevealCreaturesForm(IWurmApi wurmApi, ILogger logger, [NotNull] ITelemetry telemetry)
         {
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
             this.wurmApi = wurmApi;
             this.logger = logger;
+            this.telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
             InitializeComponent();
 
             ClearOutput();
@@ -44,6 +48,8 @@ namespace AldursLab.WurmAssistant3.Areas.RevealCreatures
         {
             try
             {
+                telemetry.TrackEvent($"Reveal Creatures: parse clicked");
+
                 findLatest.Enabled = false;
                 var gamechar = gameChar.Text;
                 if (!string.IsNullOrWhiteSpace(gamechar))

@@ -6,6 +6,7 @@ using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Granger.Advisor;
 using AldursLab.WurmAssistant3.Areas.Granger.DataLayer;
 using AldursLab.WurmAssistant3.Areas.Granger.ValuePreset;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using JetBrains.Annotations;
@@ -32,6 +33,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         readonly DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions;
         readonly CreatureColorDefinitions creatureColorDefinitions;
         readonly IFormEditCreatureColorsFactory formEditCreatureColorsFactory;
+        readonly ITelemetry telemetry;
 
         readonly bool _windowInitCompleted = false;
         bool _rebuildingValuePresets = false;
@@ -46,7 +48,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             [NotNull] IWurmApi wurmApi,
             [NotNull] DefaultBreedingEvaluatorOptions defaultBreedingEvaluatorOptions,
             [NotNull] CreatureColorDefinitions creatureColorDefinitions,
-            [NotNull] IFormEditCreatureColorsFactory formEditCreatureColorsFactory )
+            [NotNull] IFormEditCreatureColorsFactory formEditCreatureColorsFactory,
+            [NotNull] ITelemetry telemetry)
         {
             if (grangerFeature == null) throw new ArgumentNullException(nameof(grangerFeature));
             if (settings == null) throw new ArgumentNullException(nameof(settings));
@@ -65,6 +68,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.defaultBreedingEvaluatorOptions = defaultBreedingEvaluatorOptions;
             this.creatureColorDefinitions = creatureColorDefinitions;
             this.formEditCreatureColorsFactory = formEditCreatureColorsFactory;
+            this.telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
 
             InitializeComponent();
 
@@ -157,6 +161,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         private void buttonEditValuePreset_Click(object sender, EventArgs e)
         {
+            telemetry.TrackEvent("Granger: edit presets");
             //dialog to edit value presets
             FormEditValuePresets ui = new FormEditValuePresets(context);
             ui.ShowCenteredOnForm(this);
@@ -209,6 +214,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         private void buttonAdvisorOptions_Click(object sender, EventArgs e)
         {
+            telemetry.TrackEvent("Granger: advisor options");
+
             if (CurrentAdvisor == null) return;
 
             if (CurrentAdvisor.ShowOptions(this))
@@ -404,12 +411,16 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         private void buttonImportExport_Click(object sender, EventArgs e)
         {
+            telemetry.TrackEvent("Granger: import export");
+
             var ui = new FormGrangerImportExport(context, logger);
             ui.ShowDialogCenteredOnForm(this);
         }
 
         private void buttonEditCreatureColors_Click(object sender, EventArgs e)
         {
+            telemetry.TrackEvent("Granger: edit creature colors");
+
             var view = formEditCreatureColorsFactory.CreateFormEditCreatureColors();
             view.ShowDialog();
         }

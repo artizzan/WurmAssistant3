@@ -6,6 +6,7 @@ using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.WurmApi;
 using AldursLab.WurmApi.Modules.Wurm.Characters;
 using AldursLab.WurmApi.Modules.Wurm.Characters.Skills;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.SoundManager;
 using AldursLab.WurmAssistant3.Areas.TrayPopups;
@@ -27,8 +28,8 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers.TriggersManager
         WeakReference<SkillLevelTriggerConfig> configViewWeakRef;
 
         public SkillLevelTrigger(string characterName, TriggerEntity triggerEntity, ISoundManager soundManager,
-            ITrayPopups trayPopups, IWurmApi wurmApi, ILogger logger)
-            : base(triggerEntity, soundManager, trayPopups, wurmApi, logger)
+            ITrayPopups trayPopups, IWurmApi wurmApi, ILogger logger, ITelemetry telemetry)
+            : base(triggerEntity, soundManager, trayPopups, wurmApi, logger, telemetry)
         {
             if (characterName == null) throw new ArgumentNullException("characterName");
             this.characterName = characterName;

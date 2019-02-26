@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using AldursLab.WurmApi;
 using AldursLab.WurmAssistant3.Areas.Features;
+using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Properties;
 using JetBrains.Annotations;
@@ -14,15 +15,17 @@ namespace AldursLab.WurmAssistant3.Areas.LogSearcher
     {
         private readonly IWurmApi wurmApi;
         private readonly ILogger logger;
+        readonly ITelemetry telemetry;
 
         private WeakReference<LogSearchForm> currentView;
 
-        public LogSearchFeature([NotNull] IWurmApi wurmApi, [NotNull] ILogger logger)
+        public LogSearchFeature([NotNull] IWurmApi wurmApi, [NotNull] ILogger logger, [NotNull] ITelemetry telemetry)
         {
             if (wurmApi == null) throw new ArgumentNullException("wurmApi");
             if (logger == null) throw new ArgumentNullException("logger");
             this.wurmApi = wurmApi;
             this.logger = logger;
+            this.telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
         }
 
         #region IFeature
@@ -42,7 +45,7 @@ namespace AldursLab.WurmAssistant3.Areas.LogSearcher
                 }
             }
 
-            form = new LogSearchForm(wurmApi, logger);
+            form = new LogSearchForm(wurmApi, logger, telemetry);
             currentView = new WeakReference<LogSearchForm>(form);
             form.ShowAndBringToFront();
         }

@@ -11,16 +11,15 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
 {
     public class LoggingConfig : ILoggingConfig
     {
-        readonly LoggingConfiguration config;
-        string currentReadableLogFileFullPath;
-        string currentVerboseLogFileFullPath;
+        readonly LoggingConfiguration _config;
+        string _currentReadableLogFileFullPath;
+        string _currentVerboseLogFileFullPath;
 
         public LoggingConfig(string logOutputDirFullPath)
         {
-            if (logOutputDirFullPath == null) throw new ArgumentNullException(nameof(logOutputDirFullPath));
-            this.LogsDirectoryFullPath = logOutputDirFullPath;
+            LogsDirectoryFullPath = logOutputDirFullPath ?? throw new ArgumentNullException(nameof(logOutputDirFullPath));
 
-            config = new LoggingConfiguration();
+            _config = new LoggingConfiguration();
 
             SetupReadableLogging(LogsDirectoryFullPath);
             SetupVerboseLogging(LogsDirectoryFullPath);
@@ -46,7 +45,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
             TrimOlgLogFiles(archiveLogDir, maxMegabytes: 50);
 
             var currentFileName = Time.Get.LocalNow.ToString("yyy-MM-dd_HH-mm-ss-ffffff") + ".txt";
-            currentReadableLogFileFullPath = Path.Combine(currentLogDir, currentFileName);
+            _currentReadableLogFileFullPath = Path.Combine(currentLogDir, currentFileName);
             var fileTarget = new FileTarget
             {
                 ArchiveNumbering = ArchiveNumberingMode.DateAndSequence,
@@ -56,7 +55,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
             };
 
             var globalrule = new LoggingRule("*", LogLevel.Debug, fileTarget);
-            config.LoggingRules.Add(globalrule);
+            _config.LoggingRules.Add(globalrule);
         }
 
         private void SetupVerboseLogging(string logOutputDirFullPath)
@@ -64,18 +63,16 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
             logOutputDirFullPath = Path.Combine(logOutputDirFullPath, "Verbose");
 
             var currentLogDir = Path.Combine(logOutputDirFullPath);
-            if (!Directory.Exists(currentLogDir))
-                Directory.CreateDirectory(currentLogDir);
+            if (!Directory.Exists(currentLogDir)) Directory.CreateDirectory(currentLogDir);
 
             var archiveLogDir = Path.Combine(currentLogDir, "Archive");
-            if (!Directory.Exists(archiveLogDir))
-                Directory.CreateDirectory(archiveLogDir);
+            if (!Directory.Exists(archiveLogDir)) Directory.CreateDirectory(archiveLogDir);
 
             MoveOldLogToArchive(currentLogDir, archiveLogDir);
             TrimOlgLogFiles(archiveLogDir, maxMegabytes: 50);
 
             var currentFileName = Time.Get.LocalNow.ToString("yyy-MM-dd_HH-mm-ss-ffffff") + ".txt";
-            currentVerboseLogFileFullPath = Path.Combine(currentLogDir, currentFileName);
+            _currentVerboseLogFileFullPath = Path.Combine(currentLogDir, currentFileName);
             var fileTarget = new FileTarget
             {
                 ArchiveNumbering = ArchiveNumberingMode.DateAndSequence,
@@ -85,30 +82,30 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
             };
 
             var globalrule = new LoggingRule("*", LogLevel.Debug, fileTarget);
-            config.LoggingRules.Add(globalrule);
+            _config.LoggingRules.Add(globalrule);
         }
 
         private void ApplyLoggingConfig()
         {
-            LogManager.Configuration = config;
+            LogManager.Configuration = _config;
         }
 
         public string GetCurrentReadableLogFileFullPath()
         {
-            if (string.IsNullOrWhiteSpace(currentReadableLogFileFullPath))
+            if (string.IsNullOrWhiteSpace(_currentReadableLogFileFullPath))
             {
                 throw new InvalidOperationException("Logging is not configured");
             }
-            return currentReadableLogFileFullPath;
+            return _currentReadableLogFileFullPath;
         }
 
         public string GetCurrentVerboseLogFileFullPath()
         {
-            if (string.IsNullOrWhiteSpace(currentVerboseLogFileFullPath))
+            if (string.IsNullOrWhiteSpace(_currentVerboseLogFileFullPath))
             {
                 throw new InvalidOperationException("Logging is not configured");
             }
-            return currentVerboseLogFileFullPath;
+            return _currentVerboseLogFileFullPath;
         }
 
         private void TrimOlgLogFiles(string archiveLogDir, int maxMegabytes)
@@ -120,7 +117,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
                 if (totalSize > ((long)maxMegabytes) * 1024L * 1024L)
                 {
                     var fileToDelete = files.First(file => file.CreationTime == files.Min(info => info.CreationTime));
-                    fileToDelete.Delete();
+                    TryDeleteFile(fileToDelete);
                     TrimOlgLogFiles(archiveLogDir, maxMegabytes);
                 }
             }
@@ -133,7 +130,7 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
             {
                 var newPath = Path.Combine(archiveLogDir, file.Name);
                 var uniqueNewPath = GetNewUniqueName(newPath);
-                file.MoveTo(uniqueNewPath);
+                TryMoveFile(file, uniqueNewPath);
             }
         }
 
@@ -155,6 +152,30 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
                 return GetNewUniqueName(newPath, counter);
             }
             return newPath;
+        }
+
+        private void TryDeleteFile(FileInfo file)
+        {
+            try
+            {
+                file.Delete();
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
+        }
+
+        private void TryMoveFile(FileInfo file, string targetPath)
+        {
+            try
+            {
+                file.MoveTo(targetPath);
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
         }
     }
 }
