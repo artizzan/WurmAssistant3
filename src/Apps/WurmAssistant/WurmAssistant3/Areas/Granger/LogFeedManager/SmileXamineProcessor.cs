@@ -717,8 +717,19 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     debugLogger.Log("object assumed to be a creature");
                     var server = playerMan.CurrentServer;
                     var skill = playerMan.CurrentServerAhSkill;
-                    if (server != null && skill != null)
+
+                    if (grangerSettings.RequireServerAndSkillToBeKnownForSmilexamine 
+                        && (server == null || skill == null))
                     {
+                        trayPopups.Schedule(
+                            "Server or AH skill level unknown for " + playerMan.PlayerName +
+                            ". If WA was just started, give it a few seconds. (This check can be disabled in Granger options)", "CAN'T PROCESS CREATURE", 5000);
+                        debugLogger.Log(string.Format(
+                            "processing creature cancelled, AH skill or server group unknown for player {0} (skill: {1} ; server: {2}",
+                            playerMan.PlayerName, skill, server));
+                    }
+                    else
+                    { 
                         debugLogger.Log("building new creature object and moving to processor");
 
                         isProcessing = true;
@@ -729,7 +740,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                             Name = GrangerHelpers.ExtractCreatureName(objectNameWithPrefixes),
                             Age = GrangerHelpers.ExtractCreatureAge(objectNameWithPrefixes),
                             Server = server,
-                            InspectSkill = skill.Value,
+                            InspectSkill = skill ?? 0,
                         };
 
                         var fat = GrangerHelpers.TryParseCreatureNameIfLineContainsFat(objectNameWithPrefixes);
@@ -743,13 +754,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
                         verifyList.Name = true;
                         debugLogger.Log("finished building");
-                    }
-                    else
-                    {
-                        trayPopups.Schedule(
-                            "Server or AH skill level unknown for " + playerMan.PlayerName +
-                            ". If WA was just started, give it a few seconds.", "CAN'T PROCESS CREATURE", 5000);
-                        debugLogger.Log(string.Format("processing creature cancelled, AH skill or server group unknown for player {0} (skill: {1} ; server: {2}", playerMan.PlayerName, skill, server));
                     }
                 }
                 else debugLogger.Log(objectNameWithPrefixes + " was not recognized as a named creature.");

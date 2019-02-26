@@ -252,6 +252,7 @@
     <Compile Include="Systems\ConventionBinding\WaTypeInfo.cs" />
     <Compile Include="Systems\DataBackups\BackupManager.cs" />
     <Compile Include="Systems\DataBackups\DataBackup.cs" />
+    <Compile Include="Systems\DataBackups\DataBackupRestoreCanceledException.cs" />
     <Compile Include="Systems\DataBackups\DataBackupUserSettings.cs" />
     <Compile Include="Systems\Plugins\PluginInfo.cs" />
     <Compile Include="Systems\Plugins\PluginManager.cs" />

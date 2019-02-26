@@ -39,6 +39,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             updateCreatureDataFromAnyEventLine = true;
 
             updateCreatureColorOnSmilexamines = true;
+            requireServerAndSkillToBeKnownForSmilexamine = true;
         }
 
         [JsonProperty]
@@ -106,6 +107,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         [JsonProperty]
         bool updateCreatureColorOnSmilexamines;
+
+        [JsonProperty]
+        bool requireServerAndSkillToBeKnownForSmilexamine;
 
         public TimeSpan ShowGroomingTime
         {
@@ -238,6 +242,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             get { return updateCreatureColorOnSmilexamines; }
             set { updateCreatureColorOnSmilexamines = value; FlagAsChanged(); }
         }
+
+        public bool RequireServerAndSkillToBeKnownForSmilexamine
+        {
+            get { return requireServerAndSkillToBeKnownForSmilexamine; }
+            set { requireServerAndSkillToBeKnownForSmilexamine = value; FlagAsChanged(); }
+        }
+
 
         internal void AddGenesisCast(DateTime castDate, string creatureName)
         {
