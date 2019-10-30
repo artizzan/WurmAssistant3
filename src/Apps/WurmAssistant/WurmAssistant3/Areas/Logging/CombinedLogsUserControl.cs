@@ -74,10 +74,16 @@ namespace AldursLab.WurmAssistant3.Areas.Logging
         {
             var formattedCategory = ShortenCategory(FilterCategory(args.Category));
             AddMessage(string.Format("[{4}] > {0} > {3}{1}{2}",
-                args.Level,
-                args.Message ?? "NULL",
+                args.Level, 
+                HandleOverflowing(args.Message) ?? "NULL",
                 FormatException(args.Exception),
                 formattedCategory != string.Empty ? formattedCategory + " > " : string.Empty, args.Timestamp.ToString("HH:mm:ss")));
+        }
+
+        object HandleOverflowing(string message)
+        {
+            const int maxSensibleLength = 2048;
+            return message.Length > maxSensibleLength ? message.Substring(0, maxSensibleLength) : message;
         }
 
         public void AddMessage(string message)
