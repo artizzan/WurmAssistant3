@@ -76,7 +76,7 @@ namespace AldursLab.WurmApi.Utility
         void Refresh()
         {
             var di = new DirectoryInfo(DirectoryFullPath);
-            var allDirs = di.GetDirectories();
+            var allDirs = di.GetDirectories().Where(info => (info.Attributes & FileAttributes.Hidden) == 0);
             var newMap = new Dictionary<string, string>();
 
             foreach (var directoryInfo in allDirs)
