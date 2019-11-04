@@ -40,16 +40,16 @@ namespace AldursLab.WurmApi.Modules.Wurm.ConfigDirectories
 
         public string GetGameSettingsFileFullPathForConfigName(string directoryName)
         {
+            const string gameSettingsTxt = "gamesettings.txt";
+
             var dirPath = GetFullPathForDirName(directoryName);
             var configDirectoryInfo = new DirectoryInfo(dirPath);
-            var file = configDirectoryInfo.GetFiles("gamesettings.txt").FirstOrDefault();
-            if (file == null)
+            var file = new FileInfo(Path.Combine(configDirectoryInfo.FullName, gameSettingsTxt));
+            if (!file.Exists)
             {
                 throw new DataNotFoundException(
-                    string.Format(
-                        "gamesettings.txt full path not found for name: {0} ; Dir monitor for: {1}",
-                        directoryName,
-                        DirectoryFullPath));
+                    $"{gameSettingsTxt} not found at path {file.FullName} ; "
+                    + $"Config for: {directoryName} ; Dir monitor for: {DirectoryFullPath}");
             }
             return file.FullName;
         }

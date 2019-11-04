@@ -94,7 +94,7 @@ namespace AldursLab.WurmApi.Utility
                 {
                     directoryBlacklist.ReportIssue(directoryInfo.FullName);
                     logger.Log(LogLevel.Warn, "Validation issue", this, exception);
-                    // todo: need to log this as warking, solving with quick solution
+                    // todo: need to log this as warning, solving with quick solution
                     // consider: extend AggregateException to carry logging level and handle that universally in TaskManager
                     task.SetErrorAndRetrigger();
                 }
