@@ -78,8 +78,8 @@ namespace AldursLab.WurmAssistant3.Areas.RevealCreatures
             {
                 return new Distance()
                 {
-                    AverageDistance = 50,
-                    ShortString = "50",
+                    AverageDistance = 65,
+                    ShortString = "50-80",
                     WurmLogString = QuiteSomeDistance
                 };
             }
