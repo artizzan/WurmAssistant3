@@ -109,7 +109,19 @@ namespace AldursLab.WurmApi.Modules.Wurm.Characters.Skills
                 {
                     if (server.ServerGroup == serverGroup)
                     {
-                        foundDump = new RealSkillDump(serverGroup, dumpInfo, logger);
+                        var dump = new RealSkillDump(serverGroup, dumpInfo, logger);
+
+                        if (!dump.All.Any())
+                        {
+                            logger.Log(LogLevel.Warn,
+                                $"Found skill dump with no skills, skipping. File: {dumpInfo.FileInfo.Name}",
+                                this,
+                                null);
+                            
+                            continue;
+                        }
+
+                        foundDump = dump;
                         break;
                     }
                 }
