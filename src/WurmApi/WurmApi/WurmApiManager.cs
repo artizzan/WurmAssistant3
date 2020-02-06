@@ -289,7 +289,7 @@ namespace AldursLab.WurmApi
             var defaultDescriptions = new[]
             {
                 new WurmServerInfo(
-                    "Golden Valley",
+                    Constants.ServerNames.GoldenValley,
                     "http://jenn001.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(

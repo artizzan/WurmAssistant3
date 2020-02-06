@@ -22,10 +22,14 @@ namespace AldursLab.WurmApi
             // attempt some faster matchers first, before trying actual parse
             if (Regex.IsMatch(logEntry.Content, @"other players are online", RegexOptions.Compiled))
             {
-                result = TryGetMatchResult(TryMatch1(logEntry), logEntry);
+                result = TryMatch1(logEntry);
                 if (result == null)
                 {
-                    result = TryGetMatchResult(TryMatch2(logEntry), logEntry);
+                    result = TryMatch2(logEntry);
+                }
+                if (result == null)
+                {
+                    result = TryMatch3(logEntry);
                 }
                 if (result == null)
                 {
@@ -42,23 +46,39 @@ namespace AldursLab.WurmApi
             return result;
         }
 
-        private static Match TryMatch1(LogEntry logEntry)
+        static ServerStamp TryMatch1(LogEntry logEntry)
         {
-            return Regex.Match(
+            return TryGetMatchResult(Regex.Match(
                     logEntry.Content,
                     @"\d+ other players are online.*\. You are on (.+) \(",
-                    RegexOptions.Compiled);
+                    RegexOptions.Compiled), logEntry);
         }
 
-        private static Match TryMatch2(LogEntry logEntry)
+        static ServerStamp TryMatch2(LogEntry logEntry)
         {
-            return Regex.Match(
+            return TryGetMatchResult(Regex.Match(
                     logEntry.Content,
                     @"No other players are online on (.+) \(",
-                    RegexOptions.Compiled);
+                    RegexOptions.Compiled), logEntry);
         }
 
-        private static ServerStamp TryGetMatchResult(Match match, LogEntry logEntry)
+        static ServerStamp TryMatch3(LogEntry logEntry)
+        {
+            // [20:43:08] No other players are online taking tutorials (242 totally in Wurm).
+            var match = Regex.Match(
+                    logEntry.Content,
+                    @"taking tutorials \(",
+                    RegexOptions.Compiled);
+
+            if (match.Success)
+            {
+                return new ServerStamp() {ServerName = new ServerName(Constants.ServerNames.GoldenValley), Timestamp = logEntry.Timestamp};
+            }
+
+            return null;
+        }
+
+        static ServerStamp TryGetMatchResult(Match match, LogEntry logEntry)
         {
             ServerStamp result = null;
             if (match.Success)
