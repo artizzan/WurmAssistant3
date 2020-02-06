@@ -13,6 +13,8 @@ namespace AldursLab.WurmAssistant.Launcher
         [STAThread]
         static void Main(string[] args)
         {
+            ICSharpCode.SharpZipLib.Zip.ZipConstants.DefaultCodePage = 437;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm(args));

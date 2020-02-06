@@ -38,13 +38,21 @@ namespace AldursLab.WurmAssistant3.Areas.Main
             {
                 var vm = newsViewModelFactory.CreateNewsViewModel();
                 vm.ShowIfAnyUnshownNews();
-
-                wurmUnlimitedLogsDirChecker.HandleOldLogsDirContents();
             }
             catch (Exception exception)
             {
                 logger.Error(exception, "Error at showing news");
                 userNotifier.NotifyWithMessageBox("Error at showing news, see logs for details.", NotifyKind.Warning);
+            }
+
+            try
+            {
+                wurmUnlimitedLogsDirChecker.HandleOldLogsDirContents();
+            }
+            catch (Exception exception)
+            {
+                logger.Error(exception, "Error at HandleOldLogsDirContents");
+                userNotifier.NotifyWithMessageBox("Error at HandleOldLogsDirContents, see logs for details.", NotifyKind.Warning);
             }
 
             var version = waVersionInfoProvider.Get();

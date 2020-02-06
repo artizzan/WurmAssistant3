@@ -106,6 +106,7 @@ namespace AldursLab.WurmAssistant3.Areas.Triggers
             MergeDefault("cf7e3ee4-4700-400e-b5f7-fb1835e53e3f", "You use some of the dirt in one corner", ConditionKind.ActionEnd, MatchingKind.StartsWithCaseSensitiveOrdinal);
             MergeDefault("40976d13-3b23-468c-9e14-18a664d25dcd", "You proudly close the gift", ConditionKind.ActionEnd, MatchingKind.StartsWithCaseSensitiveOrdinal);
             MergeDefault("b3583aa4-9e9c-467e-8666-60b5abe996f2", "You add a stone and some mortar", ConditionKind.ActionEnd, MatchingKind.StartsWithCaseSensitiveOrdinal);
+            MergeDefault("ed12099e-5c27-418e-984a-08680adfa544", "You add", ConditionKind.ActionEnd, MatchingKind.StartsWithCaseSensitiveOrdinal);
             MergeDefault("867435fc-096e-47d5-81bd-20558e1da9a3", "The field is now nicely groomed", ConditionKind.ActionEnd, MatchingKind.StartsWithCaseSensitiveOrdinal);
             MergeDefault("33905388-0527-4714-abe3-32b97d8c3d41", "You find", ConditionKind.ActionEnd, MatchingKind.StartsWithCaseSensitiveOrdinal);
             MergeDefault("de0bf98a-ee5a-4ffa-9636-4a24454a2ca0", "You let your love change the area", ConditionKind.ActionEnd, MatchingKind.StartsWithCaseSensitiveOrdinal);

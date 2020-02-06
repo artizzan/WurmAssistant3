@@ -139,7 +139,7 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
 
         private void videoCraftingAssistantToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            processStarter.StartSafe(Resources.RevealCreaturesVideoUrl);
+            processStarter.StartSafe(Resources.CraftingAssistantVideoUrl);
         }
 
         private void videoRevealCreaturesParserToolStripMenuItem_Click(object sender, EventArgs e)
