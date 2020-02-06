@@ -42,7 +42,7 @@ namespace AldursLab.WurmApi.Modules.Wurm.Characters.Skills
                 }
 
                 var match = Regex.Match(wurmLogEntry.Content,
-                    @"^(.+) (?:increased|decreased) (.*) to (\d+(?:\,|\.)\d+|\d+).*$",
+                    @"^(.+) (?:increased|decreased)(.*) to (\d+(?:\,|\.)\d+|\d+).*$",
                     RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
                 string skillName;
                 float? parsedLevel;
