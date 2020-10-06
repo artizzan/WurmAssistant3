@@ -30,6 +30,7 @@
         {
             this.checkBoxGatherInsights = new System.Windows.Forms.CheckBox();
             this.buttonSave = new System.Windows.Forms.Button();
+            this.checkBoxAlternativePopupsStrategy = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // checkBoxGatherInsights
@@ -47,7 +48,7 @@
             // buttonSave
             // 
             this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSave.Location = new System.Drawing.Point(297, 90);
+            this.buttonSave.Location = new System.Drawing.Point(297, 147);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(75, 23);
             this.buttonSave.TabIndex = 1;
@@ -55,11 +56,23 @@
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
+            // checkBoxAlternativePopupsStrategy
+            // 
+            this.checkBoxAlternativePopupsStrategy.AutoSize = true;
+            this.checkBoxAlternativePopupsStrategy.Location = new System.Drawing.Point(12, 70);
+            this.checkBoxAlternativePopupsStrategy.Name = "checkBoxAlternativePopupsStrategy";
+            this.checkBoxAlternativePopupsStrategy.Size = new System.Drawing.Size(320, 30);
+            this.checkBoxAlternativePopupsStrategy.TabIndex = 2;
+            this.checkBoxAlternativePopupsStrategy.Text = "Show notification popups in the top right corner of main screen\r\n(default: bottom" +
+    " right)";
+            this.checkBoxAlternativePopupsStrategy.UseVisualStyleBackColor = true;
+            // 
             // OptionsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 125);
+            this.ClientSize = new System.Drawing.Size(384, 182);
+            this.Controls.Add(this.checkBoxAlternativePopupsStrategy);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.checkBoxGatherInsights);
             this.MaximizeBox = false;
@@ -76,5 +89,6 @@
 
         private System.Windows.Forms.CheckBox checkBoxGatherInsights;
         private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.CheckBox checkBoxAlternativePopupsStrategy;
     }
 }

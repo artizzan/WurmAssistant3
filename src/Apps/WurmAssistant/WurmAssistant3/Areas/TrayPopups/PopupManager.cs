@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
+using AldursLab.WurmAssistant3.Areas.Config;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using JetBrains.Annotations;
 
@@ -9,15 +10,16 @@ namespace AldursLab.WurmAssistant3.Areas.TrayPopups
     class PopupManager
     {
         readonly ILogger logger;
+        readonly IWurmAssistantConfig config;
         FormPopupContainer popupContainer;
         Thread popupThread;
 
         ManualResetEvent mre = new ManualResetEvent(false);
 
-        internal PopupManager([NotNull] ILogger logger)
+        internal PopupManager([NotNull] ILogger logger, [NotNull] IWurmAssistantConfig config)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
-            this.logger = logger;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.config = config ?? throw new ArgumentNullException(nameof(config));
             BuildPopupThread();
         }
 
@@ -35,7 +37,7 @@ namespace AldursLab.WurmAssistant3.Areas.TrayPopups
 
         void PopupThreadStart()
         {
-            popupContainer = new FormPopupContainer();
+            popupContainer = new FormPopupContainer(config);
             popupContainer.Load += (sender, args) => mre.Set();
             Application.Run(popupContainer);
         }

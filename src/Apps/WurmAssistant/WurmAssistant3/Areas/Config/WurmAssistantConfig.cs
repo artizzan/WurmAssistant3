@@ -39,6 +39,9 @@ namespace AldursLab.WurmAssistant3.Areas.Config
         [JsonProperty]
         bool allowInsights = true;
 
+        [JsonProperty]
+        bool useTopRightPopupStrategy = false;
+
         public WurmAssistantConfig([NotNull] IConsoleArgs consoleArgs)
         {
             if (consoleArgs == null) throw new ArgumentNullException(nameof(consoleArgs));
@@ -148,6 +151,18 @@ namespace AldursLab.WurmAssistant3.Areas.Config
                 if (value == allowInsights)
                     return;
                 allowInsights = value;
+                FlagAsChanged();
+            }
+        }
+
+        public bool UseTopRightPopupStrategy
+        {
+            get { return useTopRightPopupStrategy; }
+            set
+            {
+                if (value == useTopRightPopupStrategy)
+                    return;
+                useTopRightPopupStrategy = value;
                 FlagAsChanged();
             }
         }

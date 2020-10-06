@@ -279,23 +279,42 @@ namespace AldursLab.WurmAssistant3.Areas.TrayPopups
         /// Show the notification window if it is not already visible.
         /// If the window is currently disappearing, it is shown again.
         /// </summary>
-        public void Popup()
+        public void Popup(PositionStrategy positionStrategy)
         {
             if (!disposed)
             {
                 if (!frmPopup.Visible)
                 {
                     frmPopup.Size = Size;
-                    if (Scroll)
+                    if (positionStrategy == PositionStrategy.TopRight)
                     {
-                        posStart = Screen.PrimaryScreen.WorkingArea.Bottom;
-                        posStop = Screen.PrimaryScreen.WorkingArea.Bottom - frmPopup.Height;
+                        if (Scroll)
+                        {
+
+                            posStart = Screen.PrimaryScreen.WorkingArea.Top;
+                            posStop = Screen.PrimaryScreen.WorkingArea.Top + frmPopup.Height;
+                        }
+                        else
+                        {
+                            posStart = Screen.PrimaryScreen.WorkingArea.Top + frmPopup.Height;
+                            posStop = Screen.PrimaryScreen.WorkingArea.Top + frmPopup.Height;
+                        }
                     }
                     else
                     {
-                        posStart = Screen.PrimaryScreen.WorkingArea.Bottom - frmPopup.Height;
-                        posStop = Screen.PrimaryScreen.WorkingArea.Bottom - frmPopup.Height;
+                        if (Scroll)
+                        {
+
+                            posStart = Screen.PrimaryScreen.WorkingArea.Bottom;
+                            posStop = Screen.PrimaryScreen.WorkingArea.Bottom - frmPopup.Height;
+                        }
+                        else
+                        {
+                            posStart = Screen.PrimaryScreen.WorkingArea.Bottom - frmPopup.Height;
+                            posStop = Screen.PrimaryScreen.WorkingArea.Bottom - frmPopup.Height;
+                        }
                     }
+
                     opacityStart = 0;
                     opacityStop = 1;
 

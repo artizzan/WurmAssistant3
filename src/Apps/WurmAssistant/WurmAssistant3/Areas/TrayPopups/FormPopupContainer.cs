@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using AldursLab.Essentials.Extensions.DotNet;
+using AldursLab.WurmAssistant3.Areas.Config;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.TrayPopups
 {
     public partial class FormPopupContainer : Form
     {
+        readonly IWurmAssistantConfig wurmAssistantConfig;
+
         protected override bool ShowWithoutActivation
         {
             get { return true; }
@@ -29,8 +33,9 @@ namespace AldursLab.WurmAssistant3.Areas.TrayPopups
         int PopupQueueDelay = 0;
         string DefaultTitle = "";
 
-        public FormPopupContainer()
+        public FormPopupContainer([NotNull] IWurmAssistantConfig wurmAssistantConfig)
         {
+            this.wurmAssistantConfig = wurmAssistantConfig ?? throw new ArgumentNullException(nameof(wurmAssistantConfig));
             InitializeComponent();
             timer1.Enabled = true;
         }
@@ -55,7 +60,7 @@ namespace AldursLab.WurmAssistant3.Areas.TrayPopups
                 popupNotifier1.ContentText = item.Content;
                 AppenedMoreMessagesWithSameTitle(item, 3);
                 popupNotifier1.Delay = item.TimeToShowMillis;
-                popupNotifier1.Popup();
+                popupNotifier1.Popup(wurmAssistantConfig.UseTopRightPopupStrategy ? PositionStrategy.TopRight : PositionStrategy.BottomRight);
                 PopupQueueDelay = item.TimeToShowMillis + 250;
             }
             else PopupQueueDelay -= timer1.Interval;
