@@ -290,55 +290,55 @@ namespace AldursLab.WurmApi
             {
                 new WurmServerInfo(
                     Constants.ServerNames.GoldenValley,
-                    "http://jenn001.game.wurmonline.com/battles/stats.html",
+                    "https://jenn001.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Independence",
-                    "http://freedom001.game.wurmonline.com/battles/stats.html",
+                    "https://freedom001.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Deliverance",
-                    "http://freedom002.game.wurmonline.com/battles/stats.html",
+                    "https://freedom002.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Exodus",
-                    "http://freedom003.game.wurmonline.com/battles/stats.html",
+                    "https://freedom003.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Celebration",
-                    "http://freedom004.game.wurmonline.com/battles/stats.html",
+                    "https://freedom004.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Chaos",
-                    "http://wild001.game.wurmonline.com/battles/stats.html",
+                    "https://wild001.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Pristine",
-                    "http://freedom005.game.wurmonline.com/battles/stats.html",
+                    "https://freedom005.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Release",
-                    "http://freedom006.game.wurmonline.com/battles/stats.html",
+                    "https://freedom006.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Xanadu",
-                    "http://freedom007.game.wurmonline.com/battles/stats.html",
+                    "https://freedom007.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Elevation",
-                    "http://elevation.wurmonline.com/battles/stats.html",
+                    "https://elevation.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.EpicId)),
                 new WurmServerInfo(
                     "Serenity",
-                    "http://serenity.wurmonline.com/battles/stats.html",
+                    "https://serenity.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.EpicId)),
                 new WurmServerInfo(
                     "Desertion",
-                    "http://desertion.wurmonline.com/battles/stats.html",
+                    "https://desertion.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.EpicId)),
                 new WurmServerInfo(
                     "Affliction",
-                    "http://affliction.wurmonline.com/battles/stats.html",
+                    "https://affliction.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.EpicId)),
             };
 
