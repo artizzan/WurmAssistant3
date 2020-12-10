@@ -25,11 +25,13 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
             InitializeComponent();
 
             checkBoxGatherInsights.Checked = wurmAssistantConfig.AllowInsights;
+            checkBoxAlternativePopupsStrategy.Checked = wurmAssistantConfig.UseTopRightPopupStrategy;
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
             wurmAssistantConfig.AllowInsights = checkBoxGatherInsights.Checked;
+            wurmAssistantConfig.UseTopRightPopupStrategy = checkBoxAlternativePopupsStrategy.Checked;
             this.Close();
         }
     }

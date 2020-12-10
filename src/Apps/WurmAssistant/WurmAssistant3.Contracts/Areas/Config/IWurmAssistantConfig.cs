@@ -11,5 +11,6 @@ namespace AldursLab.WurmAssistant3.Areas.Config
         bool SkipWurmConfigsValidation { get; set; }
         Guid InstallationId { get; set; }
         bool AllowInsights { get; set; }
+        bool UseTopRightPopupStrategy { get; set; }
     }
 }

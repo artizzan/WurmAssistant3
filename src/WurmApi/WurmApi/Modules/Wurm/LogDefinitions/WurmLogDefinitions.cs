@@ -15,6 +15,7 @@ namespace AldursLab.WurmApi.Modules.Wurm.LogDefinitions
             new LogDefinition(LogType.Skills, "_Skills", "Skills"),
             new LogDefinition(LogType.Alliance, "Alliance", "Alliance"),
             new LogDefinition(LogType.CaHelp, "CA_HELP", "Community Assistance"),
+            new LogDefinition(LogType.PvpCaHelp, "PvP_CA_HELP", "PvP Community Assistance"),
             new LogDefinition(LogType.Freedom, "Freedom", "Freedom Kingdom"),
             new LogDefinition(LogType.GlFreedom, "GL-Freedom", "Freedom Kingdom Global"),
             new LogDefinition(LogType.Mgmt, "MGMT", "MGMT"),

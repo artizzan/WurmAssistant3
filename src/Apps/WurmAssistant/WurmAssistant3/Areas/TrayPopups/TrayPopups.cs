@@ -1,4 +1,5 @@
 ﻿using System;
+using AldursLab.WurmAssistant3.Areas.Config;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using JetBrains.Annotations;
 
@@ -18,11 +19,11 @@ namespace AldursLab.WurmAssistant3.Areas.TrayPopups
         readonly ILogger logger;
         readonly PopupManager manager;
 
-        public TrayPopups([NotNull] ILogger logger)
+        public TrayPopups([NotNull] ILogger logger, [NotNull] IWurmAssistantConfig config)
         {
-            if (logger == null) throw new ArgumentNullException("logger");
-            this.logger = logger;
-            manager = new PopupManager(logger);
+            if (config == null) throw new ArgumentNullException(nameof(config));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            manager = new PopupManager(logger, config);
         }
 
         /// <summary>

@@ -10,6 +10,7 @@ namespace AldursLab.WurmApi
         Skills,
         Alliance,
         CaHelp,
+        PvpCaHelp,
         Freedom,
         GlFreedom,
         Mgmt,

@@ -38,6 +38,10 @@ namespace AldursLab.WurmApi.Modules.Networking
         static async Task<System.Net.HttpWebResponse> ExecuteRequest(string url)
         {
             var req = (HttpWebRequest) WebRequest.Create(url);
+            if (url.StartsWith("https:"))
+            {
+                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            }
             req.Timeout = 15000;
             var response = (System.Net.HttpWebResponse) await req.GetResponseAsync().ConfigureAwait(false);
             return response;
