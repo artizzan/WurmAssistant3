@@ -68,9 +68,9 @@ namespace AldursLab.WurmApi
             // [22:29:29] 1 other players are online on this server (857 totally in Wurm).
             var match = Regex.Match(
                     logEntry.Content,
-                    @"(?!taking tutorials \()||(?!players are online on this)",
+                    @"taking tutorials|other players are online on this",
                     RegexOptions.Compiled);
-
+            // 
             if (match.Success)
             {
                 return new ServerStamp() {ServerName = new ServerName(Constants.ServerNames.GoldenValley), Timestamp = logEntry.Timestamp};
