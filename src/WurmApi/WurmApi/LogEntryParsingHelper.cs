@@ -65,9 +65,10 @@ namespace AldursLab.WurmApi
         static ServerStamp TryMatch3(LogEntry logEntry)
         {
             // [20:43:08] No other players are online taking tutorials (242 totally in Wurm).
+            // [22:29:29] 1 other players are online on this server (857 totally in Wurm).
             var match = Regex.Match(
                     logEntry.Content,
-                    @"taking tutorials \(",
+                    @"(?!taking tutorials \()||(?!players are online on this)",
                     RegexOptions.Compiled);
 
             if (match.Success)

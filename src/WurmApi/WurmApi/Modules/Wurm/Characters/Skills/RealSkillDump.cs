@@ -31,7 +31,10 @@ namespace AldursLab.WurmApi.Modules.Wurm.Characters.Skills
             var parser = new SkillEntryParser(logger);
             foreach (var line in fileLines)
             {
-                if (line.StartsWith("Skills") 
+                if (line.StartsWith("Skills")
+                    || line.StartsWith("Player:") 
+                    || line.StartsWith("Premium:") 
+                    || line.StartsWith("Server:") 
                     || line.StartsWith("Characteristics") 
                     || line.StartsWith("Religion") 
                     || line.StartsWith("-----"))
