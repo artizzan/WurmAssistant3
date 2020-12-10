@@ -89,9 +89,8 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Telerik.JustMock, Version=2016.1.307.3, Culture=neutral, PublicKeyToken=721b6c5bc0326b3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\JustMock.2016.1.307.3\lib\Net35\Telerik.JustMock.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Telerik.JustMock, Version=2020.3.1124.2, Culture=neutral, PublicKeyToken=721b6c5bc0326b3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\JustMock.2020.3.1124.2\lib\net45\Telerik.JustMock.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>

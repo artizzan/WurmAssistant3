@@ -36,8 +36,8 @@ namespace AldursLab.WurmApi.Tests.Integration.Scenarios.Modules.Wurm
         [TearDown]
         public void WurmTestsTeardown()
         {
-            Fixture.WurmApiManager.Dispose();
-            Fixture.WurmClientMock.Dispose();
+            Fixture?.WurmApiManager?.Dispose();
+            Fixture?.WurmClientMock?.Dispose();
         }
 
         protected void WaitUntilTrue(Func<bool> conditionFunc, int timeoutMillis = 5000)

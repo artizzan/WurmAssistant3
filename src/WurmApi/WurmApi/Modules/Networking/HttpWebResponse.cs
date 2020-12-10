@@ -4,7 +4,7 @@ using System.IO;
 namespace AldursLab.WurmApi.Modules.Networking
 {
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-    class HttpWebResponse
+    public class HttpWebResponse
     {
         private readonly System.Net.HttpWebResponse webResponse;
 
