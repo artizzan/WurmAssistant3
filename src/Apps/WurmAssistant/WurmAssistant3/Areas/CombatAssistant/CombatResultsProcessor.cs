@@ -106,6 +106,17 @@ namespace AldursLab.WurmAssistant3.Areas.CombatAssistant
                            currentTargetName = match.Groups[1].Value;
                        });
 
+            // [23:03:23] You raise your shield and parry against X's maul.
+            matcher.WhenLogEntry().OfLogType(LogType.Combat)
+                .Matches(@"You raise your shield and parry against (.+)'s maul\.")
+                .HandleWith(
+                    (match, entry) =>
+                    {
+                        UsingStatsFor(CharacterName, match.Groups[1].Value)
+                            .GetActorByName(CharacterName)
+                            .ShieldBlockCount += 1;
+                        currentTargetName = match.Groups[1].Value;
+                    });
         }
 
         void SetupParryCounts()
