@@ -1,8 +1,7 @@
-﻿using AldursLab.WurmAssistant3.Areas.SoundManager.Irrklang;
+﻿using System;
 
-namespace AldursLab.WurmAssistant3.Areas.SoundManager
+namespace AldursLab.WurmAssistant3.Areas.SoundManager.Irrklang
 {
-    [KernelBind(BindingHint.Singleton)]
     class IrrklangSoundEngineProxy : ISoundEngine
     {
         readonly IrrKlang.ISoundEngine engine;
@@ -14,8 +13,8 @@ namespace AldursLab.WurmAssistant3.Areas.SoundManager
 
         public float SoundVolume
         {
-            get { return engine.SoundVolume; }
-            set { engine.SoundVolume = value; }
+            get => engine.SoundVolume;
+            set => engine.SoundVolume = value;
         }
 
         public ISound Play2D(string soundFilename, bool playLooped, bool startPaused)

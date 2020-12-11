@@ -157,6 +157,7 @@
       <DependentUpon>DataBackupsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Areas\Main\WurmUnlimitedLogsDirChecker.cs" />
+    <Compile Include="Areas\SoundManager\SoundEngine.cs" />
     <Compile Include="Areas\TrayPopups\PositionStrategy.cs" />
     <Compile Include="Systems\AppMigrations\AppMigrationsManager.cs" />
     <Compile Include="Areas\Core\BinDirectory.cs" />
@@ -606,7 +607,7 @@
     <Compile Include="Areas\SoundManager\BuiltIn\DefaultSound.cs" />
     <Compile Include="Areas\SoundManager\BuiltIn\DefaultSoundEngine.cs" />
     <Compile Include="Areas\SoundManager\Irrklang\IrrklangSound.cs" />
-    <Compile Include="Areas\SoundManager\IrrklangSoundEngineProxy.cs" />
+    <Compile Include="Areas\SoundManager\Irrklang\IrrklangSoundEngineProxy.cs" />
     <Compile Include="Areas\SoundManager\PlayingSoundHandle.cs" />
     <Compile Include="Areas\SoundManager\PlayingSoundHandleNullObject.cs" />
     <Compile Include="Areas\SoundManager\SoundManager.cs" />
