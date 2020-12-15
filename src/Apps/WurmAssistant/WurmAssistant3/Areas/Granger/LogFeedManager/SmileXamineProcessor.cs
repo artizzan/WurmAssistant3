@@ -43,6 +43,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             public IWurmServer Server;
             public CreatureEntity.SecondaryInfoTag SecondaryInfo = CreatureEntity.SecondaryInfoTag.None;
             public string ColorWurmLogText;
+            public bool newBorn;
 
             public bool HasFatherName => !string.IsNullOrEmpty(FatherName);
             public bool HasMotherName => !string.IsNullOrEmpty(MotherName);
@@ -99,6 +100,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             {
                 debugLogger.Log("smile cond: " + line);
                 AttemptToStartProcessing(line);
+            }
+            // Hug emote triggers processing of new born creature. 
+            // If previous processing is still active, it should be finalized.
+            else if (line.StartsWith("You hug", StringComparison.Ordinal))
+            {
+                debugLogger.Log("hug cond: " + line);
+                AttemptToStartProcessing(line, true);
             }
 
             // While processing creature, log events are parsed and valid data buffered into the current buffer.
@@ -625,8 +633,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 SmilexamineLastDate = DateTime.Now,
                 CreatureColorId = newCreature.HasColorWurmLogText
                     ? creatureColorDefinitions.GetColorIdByWurmLogText(newCreature.ColorWurmLogText)
-                    : CreatureColor.GetDefaultColor().CreatureColorId
+                    : CreatureColor.GetDefaultColor().CreatureColorId,
             };
+
+            if (newCreature.newBorn)
+            {
+                newEntity.BirthDate = DateTime.Now;
+            }
 
             newEntity.EpicCurve = newCreature.Server != null
                                   && newCreature.Server.ServerGroup.ServerGroupId == ServerGroup.EpicId;
@@ -690,7 +703,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 .Select(x => x.HerdId.ToString()).ToArray();
         }
 
-        void AttemptToStartProcessing(string line)
+        void AttemptToStartProcessing(string line, bool newBorn = false)
         {
             debugLogger.Log("attempting to start processing creature due to line: " + line);
             // Apply previous processing, if still active.
@@ -699,18 +712,32 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             try
             {
                 debugLogger.Log("extracting object name");
-
-                // [20:48:42] You smile at the Adolescent diseased Mountainheart.
-                // This regex preserves condition from before WO Rift update, where determiner was not present.
-                // This is kept, because WU servers cannot be guaranteed to have been updated by their administrators.
-                Match match = Regex.Match(line,
-                    @"You smile at (a|an|the) (?<g>.+)\.|You smile at (?<g>.+)\.",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
                 string objectNameWithPrefixes = string.Empty;
-                if (match.Success)
+                if (newBorn)
                 {
-                    objectNameWithPrefixes = match.Groups["g"].Value;
+                    // [16:48:25] You hug the aged fat Pinkieflea.
+                    Match match = Regex.Match(line,
+                        @"You hug (a|an|the) (?<g>.+)\.|You hug (?<g>.+)\.",
+                        RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                    if (match.Success)
+                    {
+                        objectNameWithPrefixes = match.Groups["g"].Value;
+                    }
                 }
+                else
+                {
+                    // [20:48:42] You smile at the Adolescent diseased Mountainheart.
+                    // This regex preserves condition from before WO Rift update, where determiner was not present.
+                    // This is kept, because WU servers cannot be guaranteed to have been updated by their administrators.
+                    Match match = Regex.Match(line,
+                        @"You smile at (a|an|the) (?<g>.+)\.|You smile at (?<g>.+)\.",
+                        RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                    if (match.Success)
+                    {
+                        objectNameWithPrefixes = match.Groups["g"].Value;
+                    }
+                }
+               
 
                 if (GrangerHelpers.HasAgeInName(objectNameWithPrefixes, ignoreCase:true))
                 {
@@ -742,6 +769,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                             Server = server,
                             InspectSkill = skill ?? 0,
                         };
+
+                        if (newBorn)
+                        {
+                            creatureBuffer.newBorn = true;
+                        }
 
                         var fat = GrangerHelpers.TryParseCreatureNameIfLineContainsFat(objectNameWithPrefixes);
                         if (fat != null) creatureBuffer.SecondaryInfo = CreatureEntity.SecondaryInfoTag.Fat;
