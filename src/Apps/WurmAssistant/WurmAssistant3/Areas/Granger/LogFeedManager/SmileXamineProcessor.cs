@@ -768,12 +768,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                             Age = GrangerHelpers.ExtractCreatureAge(objectNameWithPrefixes),
                             Server = server,
                             InspectSkill = skill ?? 0,
+                            newBorn = newBorn
                         };
-
-                        if (newBorn)
-                        {
-                            creatureBuffer.newBorn = true;
-                        }
 
                         var fat = GrangerHelpers.TryParseCreatureNameIfLineContainsFat(objectNameWithPrefixes);
                         if (fat != null) creatureBuffer.SecondaryInfo = CreatureEntity.SecondaryInfoTag.Fat;
