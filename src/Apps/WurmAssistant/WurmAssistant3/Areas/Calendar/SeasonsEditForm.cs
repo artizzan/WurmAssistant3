@@ -13,8 +13,7 @@ namespace AldursLab.WurmAssistant3.Areas.Calendar
 
         public SeasonsEditForm([NotNull] WurmSeasonsManager seasonsManager)
         {
-            if (seasonsManager == null) throw new ArgumentNullException("seasonsManager");
-            this.seasonsManager = seasonsManager;
+            this.seasonsManager = seasonsManager ?? throw new ArgumentNullException(nameof(seasonsManager));
             InitializeComponent();
 
             tempSeasons = new BindingList<WurmSeasonDefinition>(seasonsManager.All.Select(
@@ -31,7 +30,11 @@ namespace AldursLab.WurmAssistant3.Areas.Calendar
 
         private void restoreDefaultsButton_Click(object sender, EventArgs e)
         {
-            tempSeasons.Clear();
+            foreach (var item in tempSeasons.Where(definition => definition.IsDefault).ToArray())
+            {
+                tempSeasons.Remove(item);
+            }
+
             foreach (var wurmSeasonDefinition in seasonsManager.GetDefaults())
             {
                 tempSeasons.Add(wurmSeasonDefinition);
