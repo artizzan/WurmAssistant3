@@ -633,8 +633,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                                   && newCreature.Server.ServerGroup.ServerGroupId == ServerGroup.EpicId;
 
             context.InsertCreature(newEntity);
-            debugLogger.Log("successfully inserted creature to db");
-            trayPopups.Schedule($"Added new creature to herd {selectedHerd}: {newEntity}", "CREATURE ADDED");
+            debugLogger.Log(
+                $"successfully inserted {(newCreature.newBorn ? "newborn " : string.Empty)}creature to db");
+            trayPopups.Schedule($"Added new creature to herd {selectedHerd}: {newEntity}{(newCreature.newBorn ? " (with Now as birth date)" : string.Empty)}", "CREATURE ADDED");
         }
 
         private string[] GetAllHerds()
