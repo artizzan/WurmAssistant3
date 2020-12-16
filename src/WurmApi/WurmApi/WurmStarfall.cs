@@ -147,6 +147,11 @@ namespace AldursLab.WurmApi
             }
         }
 
+        public static int GetDaysInStarfall()
+        {
+            return 28;
+        }
+
         public bool Equals(WurmStarfall other)
         {
             return wurmStarfallId == other.wurmStarfallId;

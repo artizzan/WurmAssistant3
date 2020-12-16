@@ -209,6 +209,19 @@ namespace AldursLab.WurmApi
             return TimeSpan.FromSeconds(otherDate.TotalSeconds - TotalSeconds);
         }
 
+        public static int CalculateDayInYear(WurmStarfall starfall, int week, int dayInWeek)
+        {
+            if (week < 1 || week > 4 || dayInWeek < 1 || dayInWeek > 7)
+            {
+                throw new ArgumentException("Week must be between 1-4 and day between 1-7");
+            }
+
+            var daysInStarfall = WurmStarfall.GetDaysInStarfall();
+            const int daysInWeek = 7;
+
+            return (starfall.Number * daysInStarfall) - daysInStarfall + (daysInWeek * week) - daysInWeek + dayInWeek;
+        }
+
         /// <summary>
         /// Returns string representing this date, in a format similar to how Wurm client shows it.
         /// </summary>
