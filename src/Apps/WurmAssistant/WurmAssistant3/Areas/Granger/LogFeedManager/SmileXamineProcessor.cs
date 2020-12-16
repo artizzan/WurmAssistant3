@@ -200,9 +200,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 }
                 //[20:58:26] A foal skips around here merrily
                 //[01:59:09] This calf looks happy and free.
+                //This fiery creature is rumoured to grow up to be a mount of the demons of Sol
                 if ((line.Contains("A foal skips around here merrily") 
                     || line.Contains("This calf looks happy and free")
-                    || line.Contains("A small cuddly ball of fluff"))
+                    || line.Contains("A small cuddly ball of fluff")
+                    || line.Contains("This fiery creature is rumoured to grow up to be a mount of the demons of Sol"))
                     && !verifyList.Foalization)
                 {
                     debugLogger.Log("applying foalization to the creature");
