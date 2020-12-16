@@ -41,7 +41,7 @@ namespace AldursLab.WurmAssistant3.Areas.Calendar
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBoxChosenSeasons = new System.Windows.Forms.TextBox();
             this.textBoxChosenSound = new System.Windows.Forms.TextBox();
-            this.listViewNFSeasons = new ListViewNf();
+            this.listViewNFSeasons = new AldursLab.WurmAssistant3.Utils.WinForms.ListViewNf();
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -207,10 +207,11 @@ namespace AldursLab.WurmAssistant3.Areas.Calendar
             this.columnHeader5,
             this.columnHeader6});
             this.listViewNFSeasons.GridLines = true;
-            this.listViewNFSeasons.Location = new System.Drawing.Point(9, 28);
+            this.listViewNFSeasons.HideSelection = false;
+            this.listViewNFSeasons.Location = new System.Drawing.Point(9, 37);
             this.listViewNFSeasons.Margin = new System.Windows.Forms.Padding(2);
             this.listViewNFSeasons.Name = "listViewNFSeasons";
-            this.listViewNFSeasons.Size = new System.Drawing.Size(454, 305);
+            this.listViewNFSeasons.Size = new System.Drawing.Size(454, 296);
             this.listViewNFSeasons.TabIndex = 17;
             this.listViewNFSeasons.UseCompatibleStateImageBehavior = false;
             this.listViewNFSeasons.View = System.Windows.Forms.View.Details;
@@ -332,11 +333,12 @@ namespace AldursLab.WurmAssistant3.Areas.Calendar
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(304, 13);
+            this.label2.Size = new System.Drawing.Size(333, 26);
             this.label2.TabIndex = 22;
-            this.label2.Text = "Note: Times are a best guess, actual seasons are a bit random.";
+            this.label2.Text = "Note: Start time is an estimate, actual seasons are +/- 2 wurm weeks \r\n(1 wurm we" +
+    "ek = about 21 real hours)";
             // 
-            // FormCalendar
+            // CalendarForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
