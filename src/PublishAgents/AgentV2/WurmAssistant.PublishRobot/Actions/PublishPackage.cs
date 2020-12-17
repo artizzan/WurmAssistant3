@@ -63,7 +63,6 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
                 webServiceControllerPath,
                 webServiceLogin,
                 webServicePassword);
-            var slacker = new SlackService(output, slackIntegrationSubUrl);
 
             var binDir = new DirectoryInfo(packageBinPath);
 
@@ -76,9 +75,6 @@ namespace AldursLab.WurmAssistant.PublishRobot.Actions
 
             RetryManager.AutoRetry(() => publisher.Publish(zipFile, version.BuildCode, version.BuildNumber));
             output.Write("Publishing operation completed.");
-
-            RetryManager.AutoRetry(
-                () => slacker.SendMessage(string.Format("Published {0} to {1}", BuildFileName(), webServiceRootUrl)));
         }
 
         string BuildFileName()

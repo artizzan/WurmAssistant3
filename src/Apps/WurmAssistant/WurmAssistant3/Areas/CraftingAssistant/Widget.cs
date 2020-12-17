@@ -164,6 +164,53 @@ namespace AldursLab.WurmAssistant3.Areas.CraftingAssistant
                     if (match.Success)
                         currentActionNeeded = match.Groups[1].Value;
                 }
+
+                // For Cloth Tailoring
+                // The XXXX has some stains that must be washed away.
+                {
+                    var match = Regex.Match(entry.Content,
+                        @"The .+ has some stains that must be washed away",
+                        RegexOptions.Compiled);
+                    if (match.Success)
+                        currentActionNeeded = "water";
+                }
+
+                // The XXXX has an open seam that must be backstitched with an iron needle to improve.
+                {
+                    var match = Regex.Match(entry.Content,
+                        @"The .+ has an open seam that must be backstitched with an (.+) to improve",
+                        RegexOptions.Compiled);
+                    if (match.Success)
+                        currentActionNeeded = match.Groups[1].Value;
+                }
+
+                // For Leatherworking
+                // has some holes and must be tailored with an iron needle to improve.
+                {
+                    var match = Regex.Match(entry.Content,
+                        @"has some holes and must be tailored with an (.+) to improve",
+                        RegexOptions.Compiled);
+                    if (match.Success)
+                        currentActionNeeded = match.Groups[1].Value;
+                }
+
+                // A mallet must be used on the XXXX in order to smooth out a quirk.
+                {
+                    var match = Regex.Match(entry.Content,
+                        @"A (.+) must be used on the .+ in order to smooth out a quirk",
+                        RegexOptions.Compiled);
+                    if (match.Success)
+                        currentActionNeeded = match.Groups[1].Value;
+                }
+
+                // some holes punched with an
+                {
+                    var match = Regex.Match(entry.Content,
+                        @"some holes punched with an",
+                        RegexOptions.Compiled);
+                    if (match.Success)
+                        currentActionNeeded = "awl";
+                }
             }
         }
 

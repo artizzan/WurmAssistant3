@@ -3,7 +3,7 @@ using AldursLab.WurmApi.Modules.Networking;
 
 namespace AldursLab.WurmApi
 {
-    interface IHttpWebRequests
+    public interface IHttpWebRequests
     {
         Task<HttpWebResponse> GetResponseAsync(string url);
         HttpWebResponse GetResponse(string url);
