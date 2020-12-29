@@ -105,11 +105,13 @@ namespace AldursLab.WurmApi.Modules.Wurm.Servers
 
         static TimeSpan GetTimeSpanFromUptimeWebString(string webString)
         {
-            //EX: The server has been up 1 days, 14 hours and 43 minutes.
-            Match matchdays = Regex.Match(webString, @"\d\d* days");
-            Match matchhours = Regex.Match(webString, @"\d\d* hours");
-            Match matchminutes = Regex.Match(webString, @"\d\d* minutes");
-            Match matchseconds = Regex.Match(webString, @"\d\d* seconds");
+            //ex: The server has been up 1 days, 14 hours and 43 minutes.
+            //ex: The server has been up 1 day, 1 hour and 1 minute.
+            //note: non capturing group for "s" is redundant, added for clarity.
+            Match matchdays = Regex.Match(webString, @"\d\d* day(?:s)");
+            Match matchhours = Regex.Match(webString, @"\d\d* hour(?:s)");
+            Match matchminutes = Regex.Match(webString, @"\d\d* minute(?:s)");
+            Match matchseconds = Regex.Match(webString, @"\d\d* second(?:s)");
 
             int days = 0;
             int hours = 0;
