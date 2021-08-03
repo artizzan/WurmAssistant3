@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using AldursLab.WurmAssistant3.Areas.Granger.ValuePreset;
 using JetBrains.Annotations;
 
@@ -16,8 +17,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             static readonly Dictionary<CreatureTraitId, string> EnumToNameMap = new Dictionary<CreatureTraitId, string>();
             static readonly Dictionary<CreatureTraitId, string> EnumToCompactNameMap = new Dictionary<CreatureTraitId, string>();
             static readonly Dictionary<CreatureTraitId, string> EnumToShortcutMap = new Dictionary<CreatureTraitId, string>();
-            static readonly Dictionary<CreatureTraitId, float> EnumToAhSkillMapFreedom = new Dictionary<CreatureTraitId, float>();
-            static readonly Dictionary<CreatureTraitId, float> EnumToAhSkillMapEpic = new Dictionary<CreatureTraitId, float>();
 
             static readonly HashSet<string> TraitLineRecognitionSet = new HashSet<string>();
 
@@ -25,181 +24,522 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
             static Helper()
             {
-                NameToEnumMap.Add("Unknown", CreatureTraitId.Unknown);
-                EnumToCompactNameMap.Add(CreatureTraitId.Unknown, "Unk");
-                EnumToShortcutMap.Add(CreatureTraitId.Unknown, "?");
+                MapTrait(
+                    "Unknown", 
+                    CreatureTraitId.Unknown, 
+                    "Unk", 
+                    "?", 
+                    0, 
+                    TraitType.Unknown, 
+                    false, 
+                    false, 
+                    "Unknown trait");
 
-                NameToEnumMap.Add("It will fight fiercely", CreatureTraitId.FightFiercely);
-                EnumToCompactNameMap.Add(CreatureTraitId.FightFiercely, "Fierce fight");
-                EnumToShortcutMap.Add(CreatureTraitId.FightFiercely, "FF");
+                MapTrait(
+                    "It will fight fiercely", 
+                    CreatureTraitId.FightFiercely, 
+                    "Fierce fight", 
+                    "FF", 
+                    10, 
+                    TraitType.Combat, 
+                    false, 
+                    false, 
+                    "Higher fighting skill");
 
-                NameToEnumMap.Add("It has fleeter movement than normal", CreatureTraitId.FleeterMovement);
-                EnumToCompactNameMap.Add(CreatureTraitId.FleeterMovement, "Fleet move");
-                EnumToShortcutMap.Add(CreatureTraitId.FleeterMovement, "FM");
+                MapTrait(
+                    "It has fleeter movement than normal",
+                    CreatureTraitId.FleeterMovement,
+                    "Fleet move",
+                    "FM",
+                    10,
+                    TraitType.Speed,
+                    false,
+                    false,
+                    "Minor speed boost");
 
-                NameToEnumMap.Add("It is a tough bugger", CreatureTraitId.ToughBugger);
-                EnumToCompactNameMap.Add(CreatureTraitId.ToughBugger, "Tough bugger");
-                EnumToShortcutMap.Add(CreatureTraitId.ToughBugger, "TB");
+                MapTrait(
+                    "It is a tough bugger",
+                    CreatureTraitId.ToughBugger,
+                    "Tough bugger",
+                    "TB",
+                    15,
+                    TraitType.Combat,
+                    false,
+                    false,
+                    "Withstands more damage");
 
-                NameToEnumMap.Add("It has a strong body", CreatureTraitId.StrongBody);
-                EnumToCompactNameMap.Add(CreatureTraitId.StrongBody, "Strong body");
-                EnumToShortcutMap.Add(CreatureTraitId.StrongBody, "SB");
+                MapTrait(
+                    "It has a strong body",
+                    CreatureTraitId.StrongBody,
+                    "Strong body",
+                    "SB",
+                    15,
+                    TraitType.Draft,
+                    false,
+                    false,
+                    "Bonus to mounted weight limit");
 
-                NameToEnumMap.Add("It has lightning movement", CreatureTraitId.LightningMovement);
-                EnumToCompactNameMap.Add(CreatureTraitId.LightningMovement, "Light move");
-                EnumToShortcutMap.Add(CreatureTraitId.LightningMovement, "LM");
+                MapTrait(
+                    "It has lightning movement",
+                    CreatureTraitId.LightningMovement,
+                    "Light move",
+                    "LM",
+                    20,
+                    TraitType.Speed,
+                    false,
+                    false,
+                    "Major speed boost");
 
-                NameToEnumMap.Add("It can carry more than average", CreatureTraitId.CarryMoreThanAverage);
-                EnumToCompactNameMap.Add(CreatureTraitId.CarryMoreThanAverage, "Carry more");
-                EnumToShortcutMap.Add(CreatureTraitId.CarryMoreThanAverage, "CM");
+                MapTrait(
+                    "It can carry more than average",
+                    CreatureTraitId.CarryMoreThanAverage,
+                    "Carry more",
+                    "CM",
+                    20,
+                    TraitType.Draft,
+                    false,
+                    false,
+                    "Major bonus to mounted weight limit");
 
-                NameToEnumMap.Add("It has very strong leg muscles", CreatureTraitId.VeryStrongLegs);
-                EnumToCompactNameMap.Add(CreatureTraitId.VeryStrongLegs, "Strong legs");
-                EnumToShortcutMap.Add(CreatureTraitId.VeryStrongLegs, "SL");
+                MapTrait(
+                    "It has very strong leg muscles",
+                    CreatureTraitId.VeryStrongLegs,
+                    "V. Strong legs",
+                    "VSL",
+                    15,
+                    TraitType.Speed,
+                    false,
+                    false,
+                    "Movement speed bonus");
 
-                NameToEnumMap.Add("It has keen senses", CreatureTraitId.KeenSenses);
-                EnumToCompactNameMap.Add(CreatureTraitId.KeenSenses, "Keen senses");
-                EnumToShortcutMap.Add(CreatureTraitId.KeenSenses, "KS");
+                MapTrait(
+                    "It has keen senses",
+                    CreatureTraitId.KeenSenses,
+                    "Keen senses",
+                    "KS",
+                    0,
+                    TraitType.Unknown,
+                    false,
+                    false,
+                    "Unknown effect");
 
-                NameToEnumMap.Add("It has malformed hindlegs", CreatureTraitId.MalformedHindlegs);
-                EnumToCompactNameMap.Add(CreatureTraitId.MalformedHindlegs, "Malf. hindlegs");
-                EnumToShortcutMap.Add(CreatureTraitId.MalformedHindlegs, "MH");
+                MapTrait(
+                    "It has malformed hindlegs",
+                    CreatureTraitId.MalformedHindlegs,
+                    "Malf. hindlegs",
+                    "MH",
+                    5,
+                    TraitType.Negative,
+                    false,
+                    true,
+                    "Minor speed penalty");
 
-                NameToEnumMap.Add("The legs are of different length", CreatureTraitId.LegsOfDifferentLength);
-                EnumToCompactNameMap.Add(CreatureTraitId.LegsOfDifferentLength, "Diff. legs");
-                EnumToShortcutMap.Add(CreatureTraitId.LegsOfDifferentLength, "DL");
+                MapTrait(
+                    "The legs are of different length",
+                    CreatureTraitId.LegsOfDifferentLength,
+                    "Diff. legs",
+                    "DL",
+                    5,
+                    TraitType.Negative,
+                    false,
+                    true,
+                    "Major speed penalty");
 
-                NameToEnumMap.Add("It seems overly aggressive", CreatureTraitId.OverlyAggressive);
-                EnumToCompactNameMap.Add(CreatureTraitId.OverlyAggressive, "Agressive");
-                EnumToShortcutMap.Add(CreatureTraitId.OverlyAggressive, "OA");
+                MapTrait(
+                    "It seems overly aggressive",
+                    CreatureTraitId.OverlyAggressive,
+                    "Agressive",
+                    "OA",
+                    5,
+                    TraitType.Negative,
+                    false,
+                    true,
+                    "Random chance to bite");
 
-                NameToEnumMap.Add("It looks very unmotivated", CreatureTraitId.VeryUnmotivated);
-                EnumToCompactNameMap.Add(CreatureTraitId.VeryUnmotivated, "Unmotivated");
-                EnumToShortcutMap.Add(CreatureTraitId.VeryUnmotivated, "UM");
+                MapTrait(
+                    "It looks very unmotivated",
+                    CreatureTraitId.VeryUnmotivated,
+                    "Unmotivated",
+                    "UM",
+                    5,
+                    TraitType.Negative,
+                    false,
+                    true,
+                    "Major penalty to mounted weight limit");
 
-                NameToEnumMap.Add("It is unusually strong willed", CreatureTraitId.UnusuallyStrongWilled);
-                EnumToCompactNameMap.Add(CreatureTraitId.UnusuallyStrongWilled, "Strong will");
-                EnumToShortcutMap.Add(CreatureTraitId.UnusuallyStrongWilled, "SW");
+                MapTrait(
+                    "It is unusually strong willed",
+                    CreatureTraitId.UnusuallyStrongWilled,
+                    "Strong will",
+                    "SW",
+                    5,
+                    TraitType.Negative,
+                    false,
+                    true,
+                    "Will stop being led at random");
 
-                NameToEnumMap.Add("It has some illness", CreatureTraitId.HasSomeIllness);
-                EnumToCompactNameMap.Add(CreatureTraitId.HasSomeIllness, "Ilness");
-                EnumToShortcutMap.Add(CreatureTraitId.HasSomeIllness, "SL");
+                MapTrait(
+                    "It has some illness",
+                    CreatureTraitId.HasSomeIllness,
+                    "Ilness",
+                    "SI",
+                    5,
+                    TraitType.Negative,
+                    false,
+                    true,
+                    "Body strength will slowly reduce over time eventually making the animal unrideable");
 
-                NameToEnumMap.Add("It looks constantly hungry", CreatureTraitId.ConstantlyHungry);
-                EnumToCompactNameMap.Add(CreatureTraitId.ConstantlyHungry, "Hungry");
-                EnumToShortcutMap.Add(CreatureTraitId.ConstantlyHungry, "CH");
+                MapTrait(
+                    "It looks constantly hungry",
+                    CreatureTraitId.ConstantlyHungry,
+                    "Hungry",
+                    "CH",
+                    5,
+                    TraitType.Combat,
+                    false,
+                    true,
+                    "Becomes hungry twice as fast as normal");
 
-                NameToEnumMap.Add("It looks feeble and unhealthy", CreatureTraitId.FeebleAndUnhealthy);
-                EnumToCompactNameMap.Add(CreatureTraitId.FeebleAndUnhealthy, "Feeble");
-                EnumToShortcutMap.Add(CreatureTraitId.FeebleAndUnhealthy, "FU");
+                MapTrait(
+                    "It looks feeble and unhealthy",
+                    CreatureTraitId.FeebleAndUnhealthy,
+                    "Feeble",
+                    "FU",
+                    5,
+                    TraitType.Negative,
+                    false,
+                    true,
+                    "Prone to catching a disease");
 
-                NameToEnumMap.Add("It looks unusually strong and healthy", CreatureTraitId.StrongAndHealthy);
-                EnumToCompactNameMap.Add(CreatureTraitId.StrongAndHealthy, "Healthy");
-                EnumToShortcutMap.Add(CreatureTraitId.StrongAndHealthy, "SH");
+                MapTrait(
+                    "It looks unusually strong and healthy",
+                    CreatureTraitId.StrongAndHealthy,
+                    "Healthy",
+                    "SH",
+                    10,
+                    TraitType.Misc,
+                    false,
+                    false,
+                    "Has a higher resistance to disease");
 
-                NameToEnumMap.Add("It has a certain spark in its eyes", CreatureTraitId.CertainSpark);
-                EnumToCompactNameMap.Add(CreatureTraitId.CertainSpark, "Spark");
-                EnumToShortcutMap.Add(CreatureTraitId.CertainSpark, "CS");
+                MapTrait(
+                    "It has a certain spark in its eyes",
+                    CreatureTraitId.CertainSpark,
+                    "Spark",
+                    "CS",
+                    10,
+                    TraitType.Misc,
+                    false,
+                    false,
+                    "Lives 50% longer than normal");
 
-                foreach (var keyval in NameToEnumMap)
-                {
-                    EnumToNameMap.Add(keyval.Value, keyval.Key);
-                    TraitLineRecognitionSet.Add(keyval.Key.Substring(0, TraitLineRecognitionCharCount));
-                }
+                MapTrait(
+                    "It seems extremely tame",
+                    CreatureTraitId.SeemsExtremelyTame,
+                    "Extremely tame",
+                    "SET",
+                    0,
+                    TraitType.Combat,
+                    true,
+                    false,
+                    "Aggressive animals become passive");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.Unknown, 0);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.Unknown, 0);
-                DefaultTraitValues.Add(CreatureTraitId.Unknown, 0);
+                MapTrait(
+                    "It seems more friendly",
+                    CreatureTraitId.SeemsMoreFriendly,
+                    "More friendly",
+                    "SMF",
+                    5,
+                    TraitType.Combat,
+                    false,
+                    false,
+                    "Easier to tame");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.FightFiercely, 20);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.FightFiercely, 10.56F);
-                DefaultTraitValues.Add(CreatureTraitId.FightFiercely, 0);
+                MapTrait(
+                    "It looks more friendly than normal",
+                    CreatureTraitId.LooksMoreFriendlyThanNormal,
+                    "More friendly",
+                    "MFTN",
+                    15,
+                    TraitType.Combat,
+                    false,
+                    false,
+                    "Less likely to be attacked by aggressive creatures when tame");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.FleeterMovement, 21);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.FleeterMovement, 11.12F);
-                DefaultTraitValues.Add(CreatureTraitId.FleeterMovement, 60);
+                MapTrait(
+                    "It seems especially loyal",
+                    CreatureTraitId.SeemsEspeciallyLoyal,
+                    "Especially loyal",
+                    "SEL",
+                    20,
+                    TraitType.Combat,
+                    false,
+                    false,
+                    "keeps loyalty to its tamer longer, loses less when taking damage");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.ToughBugger, 22);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.ToughBugger, 11.68F);
-                DefaultTraitValues.Add(CreatureTraitId.ToughBugger, 0);
+                MapTrait(
+                    "It seems stronger than normal",
+                    CreatureTraitId.SeemsStrongerThanNormal,
+                    "Stronger",
+                    "SSTN",
+                    0,
+                    TraitType.Draft,
+                    true,
+                    false,
+                    "Carry weight bonus");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.StrongBody, 23);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.StrongBody, 12.25F);
-                DefaultTraitValues.Add(CreatureTraitId.StrongBody, 40);
+                MapTrait(
+                    "It seems more nimble than normal",
+                    CreatureTraitId.SeemsMoreNimbleThanNormal,
+                    "More nimble",
+                    "MNTN",
+                    0,
+                    TraitType.Draft,
+                    true,
+                    false,
+                    "Increased maximum rideable slope");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.LightningMovement, 24);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.LightningMovement, 12.82F);
-                DefaultTraitValues.Add(CreatureTraitId.LightningMovement, 80);
+                MapTrait(
+                    "It is easy on its gear",
+                    CreatureTraitId.IsEasyOnItsGear,
+                    "Easy on gear",
+                    "EOIG",
+                    10,
+                    TraitType.Draft,
+                    false,
+                    false,
+                    "Equipped gear takes less damage");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.CarryMoreThanAverage, 25);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.CarryMoreThanAverage, 13.40F);
-                DefaultTraitValues.Add(CreatureTraitId.CarryMoreThanAverage, 50);
+                MapTrait(
+                    "It has strong legs",
+                    CreatureTraitId.HasStrongLegs,
+                    "Strong legs",
+                    "HSL",
+                    20,
+                    TraitType.Draft,
+                    false,
+                    false,
+                    "Carry weight bonus");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.VeryStrongLegs, 26);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.VeryStrongLegs, 13.98F);
-                DefaultTraitValues.Add(CreatureTraitId.VeryStrongLegs, 60);
+                MapTrait(
+                    "Bred in captivity",
+                    CreatureTraitId.BredInCaptivity,
+                    "Bred captive",
+                    "BC",
+                    0,
+                    TraitType.Misc,
+                    false,
+                    false,
+                    "Informational, will not count toward the max number of traits");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.KeenSenses, 27);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.KeenSenses, 14.56F);
-                DefaultTraitValues.Add(CreatureTraitId.KeenSenses, 0);
+                MapTrait(
+                    "It has a chance to produce twins",
+                    CreatureTraitId.HasChanceToProduceTwins,
+                    "Produce twins",
+                    "CPT",
+                    0,
+                    TraitType.Misc,
+                    true,
+                    false,
+                    "Chance to birth twins");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.MalformedHindlegs, 28);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.MalformedHindlegs, 15.15F);
-                DefaultTraitValues.Add(CreatureTraitId.MalformedHindlegs, -80);
+                MapTrait(
+                    "It seems immortal",
+                    CreatureTraitId.SeemsImmortal,
+                    "Immortal",
+                    "IM",
+                    0,
+                    TraitType.Misc,
+                    true,
+                    true,
+                    "Will never die as if cared for");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.LegsOfDifferentLength, 29);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.LegsOfDifferentLength, 15.74F);
-                DefaultTraitValues.Add(CreatureTraitId.LegsOfDifferentLength, -100);
+                MapTrait(
+                    "Horse's color is considered a trait",
+                    CreatureTraitId.ColorIsConsideredTrait,
+                    "Color is trait",
+                    "CCT",
+                    0,
+                    TraitType.Misc,
+                    false,
+                    false,
+                    "Does not count against the trait limit");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.OverlyAggressive, 30);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.OverlyAggressive, 16.33F);
-                DefaultTraitValues.Add(CreatureTraitId.OverlyAggressive, 0);
+                MapTrait(
+                    "It has been corrupted",
+                    CreatureTraitId.HasBeenCorrupted,
+                    "Corrupted",
+                    "HBC",
+                    0,
+                    TraitType.Misc,
+                    false,
+                    false,
+                    "Grazes on mycelium instead of grass");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.VeryUnmotivated, 31);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.VeryUnmotivated, 16.93F);
-                DefaultTraitValues.Add(CreatureTraitId.VeryUnmotivated, -80);
+                MapTrait(
+                    "It has a slow metabolism",
+                    CreatureTraitId.HasSlowMetabolism,
+                    "Slow metabolism",
+                    "HSM",
+                    10,
+                    TraitType.Misc,
+                    false,
+                    false,
+                    "Eats half as much as a normal animal");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.UnusuallyStrongWilled, 32);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.UnusuallyStrongWilled, 17.54F);
-                DefaultTraitValues.Add(CreatureTraitId.UnusuallyStrongWilled, 0);
+                MapTrait(
+                    "It seems stationary",
+                    CreatureTraitId.SeemsStationary,
+                    "Stationary",
+                    "SS",
+                    10,
+                    TraitType.Misc,
+                    false,
+                    false,
+                    "It will stay put as if saddled");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.HasSomeIllness, 33);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.HasSomeIllness, 18.15F);
-                DefaultTraitValues.Add(CreatureTraitId.HasSomeIllness, -150);
+                MapTrait(
+                    "It seems to be a graceful eater",
+                    CreatureTraitId.SeemsToBeGracefulEater,
+                    "Graceful eater",
+                    "GE",
+                    10,
+                    TraitType.Misc,
+                    false,
+                    false,
+                    "Less chance to reduce the growth stage of a tile when eating");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.ConstantlyHungry, 34);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.ConstantlyHungry, 18.76F);
-                DefaultTraitValues.Add(CreatureTraitId.ConstantlyHungry, -20);
+                MapTrait(
+                    "It looks extremely sick",
+                    CreatureTraitId.LooksExtremelySick,
+                    "Extremely sick",
+                    "ES",
+                    5,
+                    TraitType.Negative,
+                    false,
+                    true,
+                    "Has a very slim chance to pass away when it receives a hunger tick");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.FeebleAndUnhealthy, 39);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.FeebleAndUnhealthy, 21.90F);
-                DefaultTraitValues.Add(CreatureTraitId.FeebleAndUnhealthy, -10);
+                MapTrait(
+                    "It seems shabby and frail",
+                    CreatureTraitId.SeemsShabbyAndFrail,
+                    "Shabby n frail",
+                    "SF",
+                    5,
+                    TraitType.Negative,
+                    false,
+                    false,
+                    "Reduces output of resources such as milk and wool");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.StrongAndHealthy, 40);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.StrongAndHealthy, 22.54F);
-                DefaultTraitValues.Add(CreatureTraitId.StrongAndHealthy, 10);
+                MapTrait(
+                    "It seems to dislike steep terrain",
+                    CreatureTraitId.SeemsToDislikeSteepTerrain,
+                    "Dislike slopes",
+                    "DST",
+                    5,
+                    TraitType.Negative,
+                    false,
+                    true,
+                    "Decreases ridable slope");
 
-                EnumToAhSkillMapFreedom.Add(CreatureTraitId.CertainSpark, 41);
-                EnumToAhSkillMapEpic.Add(CreatureTraitId.CertainSpark, 23.19F);
-                DefaultTraitValues.Add(CreatureTraitId.CertainSpark, 0);
+                MapTrait(
+                    "It has very good genes",
+                    CreatureTraitId.HasVeryGoodGenes,
+                    "Good genes",
+                    "VGG",
+                    0,
+                    TraitType.Output,
+                    true,
+                    false,
+                    "Increased amount and quality of resources like milk and wool");
+
+                MapTrait(
+                    "It seems to pick stuff up",
+                    CreatureTraitId.SeemsToPickStuffUp,
+                    "Picks stuff",
+                    "PSU",
+                    5,
+                    TraitType.Output,
+                    false,
+                    false,
+                    "Chance to dig something up when eating, drops items on the ground");
+
+                MapTrait(
+                    "It seems vibrant",
+                    CreatureTraitId.SeemsVibrant,
+                    "Vibrant",
+                    "SV",
+                    5,
+                    TraitType.Output,
+                    false,
+                    false,
+                    "Increases the output of resources");
+
+                MapTrait(
+                    "It seems prize winning",
+                    CreatureTraitId.SeemsPrizeWinning,
+                    "Prize winning",
+                    "SPW",
+                    10,
+                    TraitType.Output,
+                    false,
+                    false,
+                    "Gives better products when butchered");
+
+                MapTrait(
+                    "It gives more resources",
+                    CreatureTraitId.GivesMoreResources,
+                    "More resources",
+                    "GMR",
+                    10,
+                    TraitType.Output,
+                    false,
+                    false,
+                    "Increases output of resources such as wool and milk");
+
+                MapTrait(
+                    "It looks plump and ready to butcher",
+                    CreatureTraitId.LooksPlumpAndReadyToButcher,
+                    "Rdy to butcher",
+                    "PRB",
+                    20,
+                    TraitType.Output,
+                    false,
+                    false,
+                    "Gives more products when butchered");
+
+                MapTrait(
+                    "It seems accustomed to water",
+                    CreatureTraitId.SeemsAccustomedToWater,
+                    "Loves water",
+                    "AW",
+                    10,
+                    TraitType.Speed,
+                    false,
+                    false,
+                    "Moves faster in shallow waters");
+
+                MapTrait(
+                    "It is unbelievably fast",
+                    CreatureTraitId.IsUnbelievablyFast,
+                    "Unbieliev fast",
+                    "UF",
+                    0,
+                    TraitType.Speed,
+                    true,
+                    false,
+                    "Always on speed bonus similar to hell horses");
             }
 
-            internal static float GetMinimumAhSkillForTraits(CreatureTrait[] traits, bool epicCurve)
+            static void MapTrait(string wurmText, CreatureTraitId creatureTraitId, string compactText, string shortcutText, 
+                int traitAhCost, TraitType traitType, bool isRare, bool removedByGenesis, string effectDescription)
             {
-                float result = 0;
-                foreach (var trait in traits)
-                {
-                    float skillForThisTrait = GetAhSkillForTrait(trait, epicCurve);
-
-                    if (skillForThisTrait > result) result = skillForThisTrait;
-                }
-                return result;
-            }
-
-            internal static float GetAhSkillForTrait(CreatureTrait creatureTrait, bool epicCurve)
-            {
-                if (epicCurve) return EnumToAhSkillMapEpic[creatureTrait.CreatureTraitId];
-                else return EnumToAhSkillMapFreedom[creatureTrait.CreatureTraitId];
+                NameToEnumMap.Add(wurmText, creatureTraitId);
+                EnumToNameMap.Add(creatureTraitId, wurmText);
+                TraitLineRecognitionSet.Add(wurmText.Substring(0, TraitLineRecognitionCharCount));
+                EnumToCompactNameMap.Add(creatureTraitId, compactText);
+                EnumToShortcutMap.Add(creatureTraitId, shortcutText);
+                DefaultTraitValues.Add(creatureTraitId, 0);
             }
 
             internal static CreatureTrait[] ExtractTraitsFromLine(string line)
@@ -299,58 +639,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 if (value < 0) prefix = "-";
                 return prefix + EnumToShortcutMap[trait.CreatureTraitId];
             }
-
-            internal static CreatureTrait[] GetMissingTraits(CreatureTrait[] creatureTraits, float inspectSkill, bool epicCurve)
-            {
-                var correctDict = (epicCurve ? EnumToAhSkillMapEpic : EnumToAhSkillMapFreedom);
-                List<CreatureTrait> missingTraits = new List<CreatureTrait>();
-
-                foreach (var keyval in correctDict)
-                {
-                    if (inspectSkill < keyval.Value && creatureTraits.All(x => x.CreatureTraitId != keyval.Key))
-                        missingTraits.Add(new CreatureTrait(keyval.Key));
-                }
-
-                return missingTraits.ToArray();
-            }
-
-            static float? _cachedMaxVisiblityCapEpic = null;
-            static float? _cachedMaxVisiblityCapFreedom = null;
-
-            internal static float GetFullTraitVisibilityCap(bool epicCurve)
-            {
-                if (epicCurve)
-                {
-                    if (_cachedMaxVisiblityCapEpic != null) return _cachedMaxVisiblityCapEpic.Value;
-                    else
-                    {
-                        _cachedMaxVisiblityCapEpic = EnumToAhSkillMapEpic.Max(x => x.Value);
-                        return _cachedMaxVisiblityCapEpic.Value;
-                    }
-                }
-                else
-                {
-                    if (_cachedMaxVisiblityCapFreedom != null) return _cachedMaxVisiblityCapFreedom.Value;
-                    else
-                    {
-                        _cachedMaxVisiblityCapFreedom = EnumToAhSkillMapFreedom.Max(x => x.Value);
-                        return _cachedMaxVisiblityCapFreedom.Value;
-                    }
-                }
-            }
-
-            internal static CreatureTrait[] GetTraitsUpToSkillLevel(float skillLevel, bool isEpic)
-            {
-                Dictionary<CreatureTraitId, float> correctDict;
-                if (isEpic) correctDict = EnumToAhSkillMapEpic;
-                else correctDict = EnumToAhSkillMapFreedom;
-                List<CreatureTrait> result = new List<CreatureTrait>();
-                foreach (var keyval in correctDict)
-                {
-                    if (keyval.Value < skillLevel) result.Add(new CreatureTrait(keyval.Key));
-                }
-                return result.ToArray();
-            }
         }
 
         public static class DbHelper
@@ -441,11 +729,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             return Helper.GetTextForTrait(creatureTrait);
         }
 
-        internal static float GetMinSkillForTraits(CreatureTrait[] traitlist, bool epicCurve)
-        {
-            return Helper.GetMinimumAhSkillForTraits(traitlist, epicCurve);
-        }
-
         internal static string GetShortString(CreatureTrait[] traits, TraitValuator valuator)
         {
             List<string> shorts = new List<string>();
@@ -456,21 +739,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 shorts.Add(Helper.GetShortcutForTrait(trait, value));
             }
             return string.Join(",", shorts.OrderBy(x => x));
-        }
-
-        internal static CreatureTrait[] GetMissingTraits(CreatureTrait[] creatureTraits, float inspectSkill, bool epicCurve)
-        {
-            return Helper.GetMissingTraits(creatureTraits, inspectSkill, epicCurve);
-        }
-
-        internal bool IsUnknownForThisCreature(Creature creature)
-        {
-            return Granger.CreatureTrait.GetSkillForTrait(this, creature.EpicCurve) > creature.TraitsInspectSkill;
-        }
-
-        private static float GetSkillForTrait(CreatureTrait creatureTrait, bool epicCurve)
-        {
-            return Helper.GetAhSkillForTrait(creatureTrait, epicCurve);
         }
 
         public override bool Equals(System.Object obj)
@@ -551,11 +819,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             return _cachedInbreedBadTraits;
         }
 
-        internal static float GetFullTraitVisibilityCap(bool epicCurve)
-        {
-            return Helper.GetFullTraitVisibilityCap(epicCurve);
-        }
-        
         /// <summary>
         /// includes the "unknown" trait
         /// </summary>
@@ -581,11 +844,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         internal static bool CanThisBeTraitLogMessage(string message)
         {
             return Helper.CanThisBeTraitLine(message);
-        }
-
-        internal static CreatureTrait[] GetTraitsUpToSkillLevel(float skillLevel, bool isEpic)
-        {
-            return Helper.GetTraitsUpToSkillLevel(skillLevel, isEpic);
         }
     }
 }

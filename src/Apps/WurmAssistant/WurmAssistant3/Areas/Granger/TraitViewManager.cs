@@ -106,7 +106,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     DisplayMode = mainForm.TraitViewDisplayMode,
                     Trait = trait,
                     Exists = currentCreatureTraits.Contains(trait),
-                    Unknown = trait.IsUnknownForThisCreature(creature),
                     Value = trait.GetTraitValue(mainForm.CurrentValuator),
                     DisableBackgroundColors = mainForm.Settings.DisableRowColoring
                 });
@@ -123,7 +122,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     DisplayMode = mainForm.TraitViewDisplayMode,
                     Trait = trait,
                     Exists = false,
-                    Unknown = false,
                     Value = mainForm.CurrentValuator.GetValueForTrait(trait),
                     DisableBackgroundColors = mainForm.Settings.DisableRowColoring
                 });

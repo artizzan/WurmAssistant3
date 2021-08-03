@@ -150,7 +150,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 if (IsParentIdentifyingLine(line) && !verifyList.Parents)
                 {
                     debugLogger.Log("found maybe parents line");
-                    
+
                     Match motherMatch = ParseMother(line);
                     if (motherMatch.Success)
                     {
@@ -201,7 +201,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 //[20:58:26] A foal skips around here merrily
                 //[01:59:09] This calf looks happy and free.
                 //This fiery creature is rumoured to grow up to be a mount of the demons of Sol
-                if ((line.Contains("A foal skips around here merrily") 
+                if ((line.Contains("A foal skips around here merrily")
                     || line.Contains("This calf looks happy and free")
                     || line.Contains("A small cuddly ball of fluff")
                     || line.Contains("This fiery creature is rumoured to grow up to be a mount of the demons of Sol"))
@@ -249,7 +249,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
         bool IsParentIdentifyingLine(string line)
         {
-            return 
+            return
                 // Proper parsing after Rift update for WO:
                 line.Contains("mother is")
                 || line.Contains("father is")
@@ -355,155 +355,48 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             {
                 CreatureEntity oldCreature = herdsFinds[0];
 
-                bool sanityFail = false;
-
-                #region SANITY_CHECKS
-
-                string sanityFailReason = null;
-
-                // Verifying if creature parents match.
-
-                // Wurm trivia:
-                // If a creature has a mother name or a father name, these names cannot change.
-                // However when parent dies, Wurm loses reference and the name is no longer in the log event! 
-
-                // father checks
-                if (String.IsNullOrEmpty(oldCreature.FatherName) &&
-                    !String.IsNullOrEmpty(creatureBuffer.FatherName))
+                oldCreature.Age = creatureBuffer.Age;
+                oldCreature.TakenCareOfBy = creatureBuffer.CaredBy;
+                oldCreature.BrandedFor = creatureBuffer.BrandedBy;
+                if (creatureBuffer.HasFatherName)
                 {
-                    sanityFail = true;
-                    if (sanityFailReason == null)
-                        sanityFailReason = "Old father was blank but new data has a father name";
+                    oldCreature.FatherName = creatureBuffer.FatherName;
                 }
-
-                if (!String.IsNullOrEmpty(oldCreature.FatherName) &&
-                    !String.IsNullOrEmpty(creatureBuffer.FatherName) &&
-                    oldCreature.FatherName != creatureBuffer.FatherName)
+                if (creatureBuffer.HasMotherName)
                 {
-                    sanityFail = true;
-                    if (sanityFailReason == null)
-                        sanityFailReason = "Old data father name was different than new father name";
+                    oldCreature.MotherName = creatureBuffer.MotherName;
                 }
-
-                // mother checks
-                if (String.IsNullOrEmpty(oldCreature.MotherName) &&
-                    !String.IsNullOrEmpty(creatureBuffer.MotherName))
+                oldCreature.ServerName = creatureBuffer.Server.ServerName.Original;
+                oldCreature.Traits = creatureBuffer.Traits;
+                oldCreature.TraitsInspectedAtSkill = creatureBuffer.InspectSkill;
+                oldCreature.SetTag("dead", false);
+                oldCreature.SetSecondaryInfoTag(creatureBuffer.SecondaryInfo);
+                oldCreature.IsMale = creatureBuffer.IsMale;
+                oldCreature.PregnantUntil = creatureBuffer.PregnantUntil;
+                if (oldCreature.Name != creatureBuffer.Name)
                 {
-                    sanityFail = true;
-                    if (sanityFailReason == null)
-                        sanityFailReason = "Old mother was blank but new data has a mother name";
-                }
-
-                if (!String.IsNullOrEmpty(oldCreature.MotherName) &&
-                    !String.IsNullOrEmpty(creatureBuffer.MotherName) &&
-                    oldCreature.MotherName != creatureBuffer.MotherName)
-                {
-                    sanityFail = true;
-                    if (sanityFailReason == null)
-                        sanityFailReason = "Old data mother name was different than new mother name";
-                }
-
-                // Verifying if creature traits match.
-
-                // Have to take into account current AH level of the player,
-                // as well as the level this creature has been previously inspected at.
-
-                if (oldCreature.TraitsInspectedAtSkill.HasValue)
-                {
-                    // Skip this check if creature had genesis cast within last 1 hour.
-                    // Genesis clears some negative traits.
-                    debugLogger.Log($"Checking creature for Genesis cast (creature name: {creatureBuffer.Name}");
-                    if (!parentModule.Settings.HasGenesisCast(creatureBuffer.Name))
+                    if (NameIsUniqueInHerd(creatureBuffer.Name, oldCreature.Herd))
                     {
-                        debugLogger.Log("No genesis cast found");
-                        var lowskill = Math.Min(oldCreature.TraitsInspectedAtSkill.Value, creatureBuffer.InspectSkill);
-                        CreatureTrait[] certainTraits = CreatureTrait.GetTraitsUpToSkillLevel(lowskill,
-                            oldCreature.EpicCurve ?? false);
-                        var oldCreatureTraits = oldCreature.Traits.ToArray();
-                        var newCreatureTraits = creatureBuffer.Traits.ToArray();
-                        foreach (var trait in certainTraits)
-                        {
-                            if (oldCreatureTraits.Contains(trait) != newCreatureTraits.Contains(trait))
-                            {
-                                sanityFail = true;
-                                if (sanityFailReason == null)
-                                    sanityFailReason =
-                                        $"Trait mismatch below inspect skill treshhold ({lowskill}): {trait.ToCompactString()}";
-                                break;
-                            }
-                        }
+                        trayPopups.Schedule(
+                            $"Updating name of creature {oldCreature.Name} to {creatureBuffer.Name}", "CREATURE NAME UPDATE");
+                        oldCreature.Name = creatureBuffer.Name;
                     }
                     else
                     {
-                        debugLogger.Log("Genesis cast found, skipping trait sanity check");
-                        parentModule.Settings.RemoveGenesisCast(creatureBuffer.Name);
-                        debugLogger.Log($"Removed cached genesis cast data for {creatureBuffer.Name}");
+                        trayPopups.Schedule(
+                            $"Could not update name of creature {oldCreature.Name} to {creatureBuffer.Name}, because herd already has a creature with such name.", "WARNING");
                     }
                 }
-
-                #endregion
-
-                if (sanityFail)
+                oldCreature.SmilexamineLastDate = DateTime.Now;
+                if (creatureBuffer.HasColorWurmLogText && grangerSettings.UpdateCreatureColorOnSmilexamines)
                 {
-                    debugLogger.Log("sanity check failed for creature update: " + oldCreature + ". Reason: " +
-                                     sanityFailReason);
-                    trayPopups.Schedule("There was data mismatch when trying to update creature, reason: " + sanityFailReason,
-                        "ERROR AT UPDATE CREATURE",
-                        8000);
+                    oldCreature.CreatureColorId =
+                        creatureColorDefinitions.GetColorIdByWurmLogText(creatureBuffer.ColorWurmLogText);
                 }
-                else
-                {
-                    oldCreature.Age = creatureBuffer.Age;
-                    oldCreature.TakenCareOfBy = creatureBuffer.CaredBy;
-                    oldCreature.BrandedFor = creatureBuffer.BrandedBy;
-                    if (creatureBuffer.HasFatherName)
-                    {
-                        oldCreature.FatherName = creatureBuffer.FatherName;
-                    }
-                    if (creatureBuffer.HasMotherName)
-                    {
-                        oldCreature.MotherName = creatureBuffer.MotherName;
-                    }
-                    oldCreature.ServerName = creatureBuffer.Server.ServerName.Original;
-                    if (oldCreature.TraitsInspectedAtSkill <= creatureBuffer.InspectSkill ||
-                        creatureBuffer.InspectSkill >
-                        CreatureTrait.GetFullTraitVisibilityCap(oldCreature.EpicCurve ?? false))
-                    {
-                        oldCreature.Traits = creatureBuffer.Traits;
-                        oldCreature.TraitsInspectedAtSkill = creatureBuffer.InspectSkill;
-                    }
-                    else
-                    {
-                        debugLogger.Log("old creature data had more accurate trait info, skipping");
-                    }
-                    oldCreature.SetTag("dead", false);
-                    oldCreature.SetSecondaryInfoTag(creatureBuffer.SecondaryInfo);
-                    oldCreature.IsMale = creatureBuffer.IsMale;
-                    oldCreature.PregnantUntil = creatureBuffer.PregnantUntil;
-                    if (oldCreature.Name != creatureBuffer.Name)
-                    {
-                        if (NameIsUniqueInHerd(creatureBuffer.Name, oldCreature.Herd))
-                        {
-                            trayPopups.Schedule(
-                                $"Updating name of creature {oldCreature.Name} to {creatureBuffer.Name}", "CREATURE NAME UPDATE");
-                            oldCreature.Name = creatureBuffer.Name;
-                        }
-                        else
-                        {
-                            trayPopups.Schedule(
-                                $"Could not update name of creature {oldCreature.Name} to {creatureBuffer.Name}, because herd already has a creature with such name.", "WARNING");
-                        }
-                    }
-                    oldCreature.SmilexamineLastDate = DateTime.Now;
-                    if (creatureBuffer.HasColorWurmLogText && grangerSettings.UpdateCreatureColorOnSmilexamines)
-                    {
-                        oldCreature.CreatureColorId =
-                            creatureColorDefinitions.GetColorIdByWurmLogText(creatureBuffer.ColorWurmLogText);
-                    }
-                    context.SubmitChanges();
-                    debugLogger.Log("successfully updated creature in db");
-                    trayPopups.Schedule($"Updated creature: {oldCreature}", "CREATURE UPDATED");
-                }
+                context.SubmitChanges();
+                debugLogger.Log("successfully updated creature in db");
+                trayPopups.Schedule($"Updated creature: {oldCreature}", "CREATURE UPDATED");
+
 
                 debugLogger.Log("processor buffer cleared");
                 return true;
@@ -538,7 +431,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                         var message = $"Creature with name: {creatureBuffer.Name} already exists in herd: {herd}";
                         if (existing.Any(entity =>
                                 entity.Name == creatureBuffer.Name
-                                && !string.IsNullOrEmpty(entity.ServerName) 
+                                && !string.IsNullOrEmpty(entity.ServerName)
                                 && !creatureBuffer.Server.ServerName.Matches(entity.ServerName)))
                         {
                             message += " (creature server name mismatch)";
@@ -630,9 +523,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             {
                 newEntity.BirthDate = DateTime.Now;
             }
-
-            newEntity.EpicCurve = newCreature.Server != null
-                                  && newCreature.Server.ServerGroup.ServerGroupId == ServerGroup.EpicId;
 
             context.InsertCreature(newEntity);
             debugLogger.Log(
@@ -727,13 +617,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     objectNameWithPrefixes = match.Groups["g"].Value;
                 }
 
-                if (GrangerHelpers.HasAgeInName(objectNameWithPrefixes, ignoreCase:true))
+                if (GrangerHelpers.HasAgeInName(objectNameWithPrefixes, ignoreCase: true))
                 {
                     debugLogger.Log("object assumed to be a creature");
                     var server = playerMan.CurrentServer;
                     var skill = playerMan.CurrentServerAhSkill;
 
-                    if (grangerSettings.RequireServerAndSkillToBeKnownForSmilexamine 
+                    if (grangerSettings.RequireServerAndSkillToBeKnownForSmilexamine
                         && (server == null || skill == null))
                     {
                         trayPopups.Schedule(
@@ -742,7 +632,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                             $"processing creature cancelled, AH skill or server group unknown for player {playerMan.PlayerName} (skill: {skill} ; server: {server}");
                     }
                     else
-                    { 
+                    {
                         debugLogger.Log("building new creature object and moving to processor");
 
                         isProcessing = true;

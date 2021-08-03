@@ -42,9 +42,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         bool ageIgnoreOnlyOtherCreatures;
 
         [JsonProperty]
-        bool includePotentialValue;
-
-        [JsonProperty]
         bool preferUniqueTraits;
 
         [JsonProperty]
@@ -61,12 +58,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         [JsonProperty]
         bool discardOnAnyNegativeTraits;
-
-        [JsonProperty]
-        double potentialValuePositiveWeight;
-
-        [JsonProperty]
-        double potentialValueNegativeWeight;
 
         [JsonProperty]
         double uniqueTraitWeight;
@@ -94,10 +85,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             IgnoreAdolescent = false;
 
             AgeIgnoreOnlyOtherCreatures = false;
-
-            IncludePotentialValue = false;
-            PotentialValuePositiveWeight = 1.0;
-            PotentialValueNegativeWeight = 1.0;
 
             PreferUniqueTraits = false;
             UniqueTraitWeight = 3.0;
@@ -177,12 +164,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set { ageIgnoreOnlyOtherCreatures = value; FlagAsChanged(); }
         }
 
-        public bool IncludePotentialValue
-        {
-            get { return includePotentialValue; }
-            set { includePotentialValue = value; FlagAsChanged(); }
-        }
-
         public bool PreferUniqueTraits
         {
             get { return preferUniqueTraits; }
@@ -217,28 +198,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             get { return discardOnAnyNegativeTraits; }
             set { discardOnAnyNegativeTraits = value; FlagAsChanged(); }
-        }
-
-        public double PotentialValuePositiveWeight
-        {
-            get { return potentialValuePositiveWeight; }
-            set
-            {
-                if (potentialValuePositiveWeight < 0) potentialValuePositiveWeight = 0;
-                else potentialValuePositiveWeight = value;
-                FlagAsChanged();
-            }
-        }
-
-        public double PotentialValueNegativeWeight
-        {
-            get { return potentialValueNegativeWeight; }
-            set
-            {
-                if (potentialValueNegativeWeight < 0) potentialValueNegativeWeight = 0;
-                else potentialValueNegativeWeight = value;
-                FlagAsChanged();
-            }
         }
 
         public double UniqueTraitWeight

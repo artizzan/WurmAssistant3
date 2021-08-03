@@ -6,7 +6,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public CreatureTrait Trait;
         public bool Exists;
-        public bool Unknown;
         public int Value;
 
         public string TraitAspect
@@ -35,10 +34,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 {
                     return "YES";
                 }
-                else if (Unknown)
-                {
-                    return "?";
-                }
                 else
                 {
                     return string.Empty;
@@ -65,17 +60,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     else if (Value < 0)
                     {
                         return System.Drawing.Color.OrangeRed;
-                    }
-                }
-                else if (Unknown)
-                {
-                    if (Value > 0)
-                    {
-                        return System.Drawing.Color.LightBlue;
-                    }
-                    else if (Value < 0)
-                    {
-                        return System.Drawing.Color.Yellow;
                     }
                 }
                 return null;

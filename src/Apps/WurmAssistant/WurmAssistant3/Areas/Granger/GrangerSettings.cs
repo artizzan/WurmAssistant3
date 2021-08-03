@@ -33,8 +33,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
             herdViewSplitterPosition = 250;
 
-            genesisLog = new Dictionary<string, DateTime>();
-
             showGroomingTime = TimeSpan.FromMinutes(60);
             updateCreatureDataFromAnyEventLine = true;
 
@@ -89,9 +87,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         [JsonProperty]
         bool adjustForDarkThemes;
-
-        [JsonProperty]
-        readonly Dictionary<string, DateTime> genesisLog;
 
         [JsonProperty]
         List<string> captureForPlayers;
@@ -247,53 +242,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             get { return requireServerAndSkillToBeKnownForSmilexamine; }
             set { requireServerAndSkillToBeKnownForSmilexamine = value; FlagAsChanged(); }
-        }
-
-
-        internal void AddGenesisCast(DateTime castDate, string creatureName)
-        {
-            List<string> keysToRemove = null;
-            var dtTreshhold = DateTime.Now - TimeSpan.FromHours(1);
-            foreach (var keyval in genesisLog)
-            {
-                if (keyval.Value < dtTreshhold)
-                {
-                    if (keysToRemove == null)
-                    {
-                        keysToRemove = new List<string>();
-                    }
-                    keysToRemove.Add(keyval.Key);
-                }
-            }
-            if (keysToRemove != null)
-            {
-                foreach (var creaturename in keysToRemove)
-                {
-                    genesisLog.Remove(creaturename);
-                    logger.Info(string.Format("Removed cached genesis cast data for {0}", creaturename));
-                }
-            }
-            genesisLog[creatureName] = castDate;
-            FlagAsChanged();
-        }
-
-        internal bool HasGenesisCast(string creatureName)
-        {
-            DateTime castTime;
-            if (genesisLog.TryGetValue(creatureName, out castTime))
-            {
-                if (castTime > DateTime.Now - TimeSpan.FromHours(1))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        internal void RemoveGenesisCast(string creatureName)
-        {
-            genesisLog.Remove(creatureName);
-            FlagAsChanged();
         }
     }
 }

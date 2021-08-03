@@ -74,9 +74,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ImportExport.Legacy
                 var xInspect = x.Element("InspectSkill");
                 if (string.IsNullOrEmpty(xInspect.Value)) entity.TraitsInspectedAtSkill = null;
                 else entity.TraitsInspectedAtSkill = float.Parse(xInspect.Value, CultureInfo.InvariantCulture);
-                var xInspectAttr = xInspect.Attribute("IsEpic");
-                if (string.IsNullOrEmpty(xInspectAttr.Value)) entity.EpicCurve = null;
-                else entity.EpicCurve = bool.Parse(xInspectAttr.Value);
 
                 entity.Age = CreatureAge.CreateAgeFromEnumString(x.Element("Age").Value);
                 entity.CreatureColorId = x.Element("CreatureColorId")?.Value ?? CreatureColorEntity.Unknown.Id;

@@ -55,9 +55,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
 
             numericUpDownBadTraitWeight.Value = ((decimal)this.options.BadTraitWeight).ConstrainToRange(0, 100);
             checkBoxDiscardWithBadTraits.Checked = this.options.DiscardOnAnyNegativeTraits;
-            checkBoxIncludePotentialValue.Checked = this.options.IncludePotentialValue;
-            numericUpDownPotValGoodWeight.Value = ((decimal)this.options.PotentialValuePositiveWeight).ConstrainToRange(0, 100);
-            numericUpDownPotValBadWeight.Value = ((decimal)this.options.PotentialValueNegativeWeight).ConstrainToRange(0, 100);
 
             checkBoxPreferUniqueTraits.Checked = this.options.PreferUniqueTraits;
             numericUpDownUniqueTraitWeight.Value = ((decimal)this.options.UniqueTraitWeight).ConstrainToRange(0, 100);
@@ -93,9 +90,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             Tip(checkBoxSkipGaveBirthInLast24h, SkipPregnantLast24HTooltip);
             Tip(numericUpDownBadTraitWeight, BadTraitWeightTooltip);
             Tip(checkBoxDiscardWithBadTraits, DiscardWithAnyBadTraitsTooltip);
-            Tip(checkBoxIncludePotentialValue, IncludePotentialValueTooltip);
-            Tip(numericUpDownPotValGoodWeight, PotentialGoodWeightTooltip);
-            Tip(numericUpDownPotValBadWeight, PotentialBadWeightTooltip);
             Tip(checkBoxPreferUniqueTraits, PreferUniqueTraitsTooltop);
             Tip(numericUpDownUniqueTraitWeight, UniqTraitWeightTooltip);
             Tip(numericUpDownInbreedPenaltyWeight, InbreedWeightTooltip);
@@ -131,9 +125,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
 
             options.BadTraitWeight = (double)numericUpDownBadTraitWeight.Value;
             options.DiscardOnAnyNegativeTraits = checkBoxDiscardWithBadTraits.Checked;
-            options.IncludePotentialValue = checkBoxIncludePotentialValue.Checked;
-            options.PotentialValuePositiveWeight = (double)numericUpDownPotValGoodWeight.Value;
-            options.PotentialValueNegativeWeight = (double)numericUpDownPotValBadWeight.Value;
 
             options.PreferUniqueTraits = checkBoxPreferUniqueTraits.Checked;
             options.UniqueTraitWeight = (double)numericUpDownUniqueTraitWeight.Value;
@@ -151,18 +142,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
         void UpdateCtrlsEnabledStates()
         {
             numericUpDownBadTraitWeight.Enabled = !checkBoxDiscardWithBadTraits.Checked;
-            numericUpDownPotValBadWeight.Enabled = checkBoxIncludePotentialValue.Checked;
-            numericUpDownPotValGoodWeight.Enabled = checkBoxIncludePotentialValue.Checked;
             numericUpDownUniqueTraitWeight.Enabled = checkBoxPreferUniqueTraits.Checked;
             numericUpDownInbreedPenaltyWeight.Enabled = !checkBoxDiscardAllCausingInbreed.Checked;
         }
 
         private void checkBoxDiscardWithBadTraits_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateCtrlsEnabledStates();
-        }
-
-        private void checkBoxIncludePotentialValue_CheckedChanged(object sender, EventArgs e)
         {
             UpdateCtrlsEnabledStates();
         }

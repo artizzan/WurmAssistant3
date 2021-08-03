@@ -37,15 +37,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxSkipPregnant = new System.Windows.Forms.CheckBox();
             this.checkBoxSkipGaveBirthInLast24h = new System.Windows.Forms.CheckBox();
             this.checkBoxSkipCreaturesInOtherHerds = new System.Windows.Forms.CheckBox();
-            this.checkBoxIncludePotentialValue = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBoxDiscardWithBadTraits = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.numericUpDownBadTraitWeight = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.numericUpDownPotValBadWeight = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownPotValGoodWeight = new System.Windows.Forms.NumericUpDown();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
             this.numericUpDownUniqueTraitWeight = new System.Windows.Forms.NumericUpDown();
@@ -74,8 +69,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.labelAutowrap1 = new AldursLab.WurmAssistant3.Utils.WinForms.LabelAutowrap();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBadTraitWeight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPotValBadWeight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPotValGoodWeight)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownUniqueTraitWeight)).BeginInit();
             this.groupBox4.SuspendLayout();
@@ -118,7 +111,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxSkipNotInMood.Location = new System.Drawing.Point(4, 17);
             this.checkBoxSkipNotInMood.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxSkipNotInMood.Name = "checkBoxSkipNotInMood";
-            this.checkBoxSkipNotInMood.Size = new System.Drawing.Size(162, 17);
+            this.checkBoxSkipNotInMood.Size = new System.Drawing.Size(183, 19);
             this.checkBoxSkipNotInMood.TabIndex = 2;
             this.checkBoxSkipNotInMood.Text = "Skip \"not in mood\" creatures";
             this.checkBoxSkipNotInMood.UseVisualStyleBackColor = true;
@@ -129,7 +122,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxSkipPregnant.Location = new System.Drawing.Point(4, 39);
             this.checkBoxSkipPregnant.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxSkipPregnant.Name = "checkBoxSkipPregnant";
-            this.checkBoxSkipPregnant.Size = new System.Drawing.Size(139, 17);
+            this.checkBoxSkipPregnant.Size = new System.Drawing.Size(159, 19);
             this.checkBoxSkipPregnant.TabIndex = 3;
             this.checkBoxSkipPregnant.Text = "Skip pregnant creatures";
             this.checkBoxSkipPregnant.UseVisualStyleBackColor = true;
@@ -141,7 +134,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxSkipGaveBirthInLast24h.Location = new System.Drawing.Point(4, 61);
             this.checkBoxSkipGaveBirthInLast24h.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxSkipGaveBirthInLast24h.Name = "checkBoxSkipGaveBirthInLast24h";
-            this.checkBoxSkipGaveBirthInLast24h.Size = new System.Drawing.Size(297, 17);
+            this.checkBoxSkipGaveBirthInLast24h.Size = new System.Drawing.Size(338, 19);
             this.checkBoxSkipGaveBirthInLast24h.TabIndex = 4;
             this.checkBoxSkipGaveBirthInLast24h.Text = "Skip creatures, that gave birth within last 24h (inaccurate)";
             this.checkBoxSkipGaveBirthInLast24h.UseVisualStyleBackColor = true;
@@ -153,33 +146,16 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxSkipCreaturesInOtherHerds.Location = new System.Drawing.Point(4, 83);
             this.checkBoxSkipCreaturesInOtherHerds.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxSkipCreaturesInOtherHerds.Name = "checkBoxSkipCreaturesInOtherHerds";
-            this.checkBoxSkipCreaturesInOtherHerds.Size = new System.Drawing.Size(277, 17);
+            this.checkBoxSkipCreaturesInOtherHerds.Size = new System.Drawing.Size(316, 19);
             this.checkBoxSkipCreaturesInOtherHerds.TabIndex = 5;
             this.checkBoxSkipCreaturesInOtherHerds.Text = "Skip creatures in other herds than evaluated creature";
             this.checkBoxSkipCreaturesInOtherHerds.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxIncludePotentialValue
-            // 
-            this.checkBoxIncludePotentialValue.AutoSize = true;
-            this.checkBoxIncludePotentialValue.Location = new System.Drawing.Point(4, 61);
-            this.checkBoxIncludePotentialValue.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBoxIncludePotentialValue.Name = "checkBoxIncludePotentialValue";
-            this.checkBoxIncludePotentialValue.Size = new System.Drawing.Size(175, 17);
-            this.checkBoxIncludePotentialValue.TabIndex = 6;
-            this.checkBoxIncludePotentialValue.Text = "Include potential creature value";
-            this.checkBoxIncludePotentialValue.UseVisualStyleBackColor = true;
-            this.checkBoxIncludePotentialValue.CheckedChanged += new System.EventHandler(this.checkBoxIncludePotentialValue_CheckedChanged);
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.checkBoxDiscardWithBadTraits);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.numericUpDownBadTraitWeight);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.numericUpDownPotValBadWeight);
-            this.groupBox1.Controls.Add(this.numericUpDownPotValGoodWeight);
-            this.groupBox1.Controls.Add(this.checkBoxIncludePotentialValue);
             this.groupBox1.Location = new System.Drawing.Point(315, 84);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
@@ -195,7 +171,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxDiscardWithBadTraits.Location = new System.Drawing.Point(4, 39);
             this.checkBoxDiscardWithBadTraits.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxDiscardWithBadTraits.Name = "checkBoxDiscardWithBadTraits";
-            this.checkBoxDiscardWithBadTraits.Size = new System.Drawing.Size(210, 17);
+            this.checkBoxDiscardWithBadTraits.Size = new System.Drawing.Size(241, 19);
             this.checkBoxDiscardWithBadTraits.TabIndex = 6;
             this.checkBoxDiscardWithBadTraits.Text = "Discard all creatures with any bad traits";
             this.checkBoxDiscardWithBadTraits.UseVisualStyleBackColor = true;
@@ -207,7 +183,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.label3.Location = new System.Drawing.Point(4, 18);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(82, 13);
+            this.label3.Size = new System.Drawing.Size(93, 15);
             this.label3.TabIndex = 9;
             this.label3.Text = "bad trait weight:";
             // 
@@ -219,44 +195,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.numericUpDownBadTraitWeight.Name = "numericUpDownBadTraitWeight";
             this.numericUpDownBadTraitWeight.Size = new System.Drawing.Size(59, 20);
             this.numericUpDownBadTraitWeight.TabIndex = 7;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(4, 108);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(131, 13);
-            this.label2.TabIndex = 10;
-            this.label2.Text = "Potential bad traits weight:";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 84);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(137, 13);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "Potential good traits weight:";
-            // 
-            // numericUpDownPotValBadWeight
-            // 
-            this.numericUpDownPotValBadWeight.DecimalPlaces = 2;
-            this.numericUpDownPotValBadWeight.Location = new System.Drawing.Point(146, 106);
-            this.numericUpDownPotValBadWeight.Margin = new System.Windows.Forms.Padding(2);
-            this.numericUpDownPotValBadWeight.Name = "numericUpDownPotValBadWeight";
-            this.numericUpDownPotValBadWeight.Size = new System.Drawing.Size(59, 20);
-            this.numericUpDownPotValBadWeight.TabIndex = 8;
-            // 
-            // numericUpDownPotValGoodWeight
-            // 
-            this.numericUpDownPotValGoodWeight.DecimalPlaces = 2;
-            this.numericUpDownPotValGoodWeight.Location = new System.Drawing.Point(146, 83);
-            this.numericUpDownPotValGoodWeight.Margin = new System.Windows.Forms.Padding(2);
-            this.numericUpDownPotValGoodWeight.Name = "numericUpDownPotValGoodWeight";
-            this.numericUpDownPotValGoodWeight.Size = new System.Drawing.Size(59, 20);
-            this.numericUpDownPotValGoodWeight.TabIndex = 7;
             // 
             // groupBox2
             // 
@@ -278,7 +216,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.label4.Location = new System.Drawing.Point(2, 41);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(98, 13);
+            this.label4.Size = new System.Drawing.Size(112, 15);
             this.label4.TabIndex = 9;
             this.label4.Text = "Unique trait weight:";
             // 
@@ -297,7 +235,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxPreferUniqueTraits.Location = new System.Drawing.Point(4, 17);
             this.checkBoxPreferUniqueTraits.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxPreferUniqueTraits.Name = "checkBoxPreferUniqueTraits";
-            this.checkBoxPreferUniqueTraits.Size = new System.Drawing.Size(114, 17);
+            this.checkBoxPreferUniqueTraits.Size = new System.Drawing.Size(132, 19);
             this.checkBoxPreferUniqueTraits.TabIndex = 6;
             this.checkBoxPreferUniqueTraits.Text = "Prefer unique traits";
             this.checkBoxPreferUniqueTraits.UseVisualStyleBackColor = true;
@@ -323,7 +261,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.label5.Location = new System.Drawing.Point(2, 20);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(184, 13);
+            this.label5.Size = new System.Drawing.Size(208, 15);
             this.label5.TabIndex = 9;
             this.label5.Text = "Inbreeding \"fictional\" bad trait weight:";
             // 
@@ -342,7 +280,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxDiscardAllCausingInbreed.Location = new System.Drawing.Point(4, 41);
             this.checkBoxDiscardAllCausingInbreed.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxDiscardAllCausingInbreed.Name = "checkBoxDiscardAllCausingInbreed";
-            this.checkBoxDiscardAllCausingInbreed.Size = new System.Drawing.Size(258, 17);
+            this.checkBoxDiscardAllCausingInbreed.Size = new System.Drawing.Size(298, 19);
             this.checkBoxDiscardAllCausingInbreed.TabIndex = 6;
             this.checkBoxDiscardAllCausingInbreed.Text = "Discard all creatures that would cause inbreeding";
             this.checkBoxDiscardAllCausingInbreed.UseVisualStyleBackColor = true;
@@ -370,7 +308,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxSkipPaired.Location = new System.Drawing.Point(4, 105);
             this.checkBoxSkipPaired.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxSkipPaired.Name = "checkBoxSkipPaired";
-            this.checkBoxSkipPaired.Size = new System.Drawing.Size(146, 17);
+            this.checkBoxSkipPaired.Size = new System.Drawing.Size(167, 19);
             this.checkBoxSkipPaired.TabIndex = 6;
             this.checkBoxSkipPaired.Text = "Skip any paired creatures";
             this.checkBoxSkipPaired.UseVisualStyleBackColor = true;
@@ -388,7 +326,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxExcludeFoals.Location = new System.Drawing.Point(4, 17);
             this.checkBoxExcludeFoals.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxExcludeFoals.Name = "checkBoxExcludeFoals";
-            this.checkBoxExcludeFoals.Size = new System.Drawing.Size(205, 17);
+            this.checkBoxExcludeFoals.Size = new System.Drawing.Size(236, 19);
             this.checkBoxExcludeFoals.TabIndex = 7;
             this.checkBoxExcludeFoals.Text = "Foals (young foal and adolescent foal)";
             this.checkBoxExcludeFoals.UseVisualStyleBackColor = true;
@@ -399,7 +337,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxExcludeYoung.Location = new System.Drawing.Point(4, 39);
             this.checkBoxExcludeYoung.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxExcludeYoung.Name = "checkBoxExcludeYoung";
-            this.checkBoxExcludeYoung.Size = new System.Drawing.Size(95, 17);
+            this.checkBoxExcludeYoung.Size = new System.Drawing.Size(109, 19);
             this.checkBoxExcludeYoung.TabIndex = 8;
             this.checkBoxExcludeYoung.Text = "Regular young";
             this.checkBoxExcludeYoung.UseVisualStyleBackColor = true;
@@ -410,7 +348,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxExcludeAdolescent.Location = new System.Drawing.Point(4, 61);
             this.checkBoxExcludeAdolescent.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxExcludeAdolescent.Name = "checkBoxExcludeAdolescent";
-            this.checkBoxExcludeAdolescent.Size = new System.Drawing.Size(118, 17);
+            this.checkBoxExcludeAdolescent.Size = new System.Drawing.Size(136, 19);
             this.checkBoxExcludeAdolescent.TabIndex = 9;
             this.checkBoxExcludeAdolescent.Text = "Regular adolescent";
             this.checkBoxExcludeAdolescent.UseVisualStyleBackColor = true;
@@ -438,7 +376,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxExcludeExactAge.Location = new System.Drawing.Point(4, 112);
             this.checkBoxExcludeExactAge.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxExcludeExactAge.Name = "checkBoxExcludeExactAge";
-            this.checkBoxExcludeExactAge.Size = new System.Drawing.Size(278, 30);
+            this.checkBoxExcludeExactAge.Size = new System.Drawing.Size(315, 34);
             this.checkBoxExcludeExactAge.TabIndex = 12;
             this.checkBoxExcludeExactAge.Text = "Exclude creature younger than:\r\n(this works only for creatures  that have birth d" +
     "ate set)";
@@ -460,7 +398,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxKeepComparingSelected.Location = new System.Drawing.Point(4, 83);
             this.checkBoxKeepComparingSelected.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxKeepComparingSelected.Name = "checkBoxKeepComparingSelected";
-            this.checkBoxKeepComparingSelected.Size = new System.Drawing.Size(206, 17);
+            this.checkBoxKeepComparingSelected.Size = new System.Drawing.Size(237, 19);
             this.checkBoxKeepComparingSelected.TabIndex = 10;
             this.checkBoxKeepComparingSelected.Text = "Keep comparing the selected creature";
             this.checkBoxKeepComparingSelected.UseVisualStyleBackColor = true;
@@ -484,7 +422,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxIgnoreDead.Location = new System.Drawing.Point(4, 39);
             this.checkBoxIgnoreDead.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxIgnoreDead.Name = "checkBoxIgnoreDead";
-            this.checkBoxIgnoreDead.Size = new System.Drawing.Size(84, 17);
+            this.checkBoxIgnoreDead.Size = new System.Drawing.Size(92, 19);
             this.checkBoxIgnoreDead.TabIndex = 8;
             this.checkBoxIgnoreDead.Text = "Skip \"dead\"";
             this.checkBoxIgnoreDead.UseVisualStyleBackColor = true;
@@ -495,7 +433,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.checkBoxIgnoreSold.Location = new System.Drawing.Point(4, 17);
             this.checkBoxIgnoreSold.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxIgnoreSold.Name = "checkBoxIgnoreSold";
-            this.checkBoxIgnoreSold.Size = new System.Drawing.Size(79, 17);
+            this.checkBoxIgnoreSold.Size = new System.Drawing.Size(87, 19);
             this.checkBoxIgnoreSold.TabIndex = 7;
             this.checkBoxIgnoreSold.Text = "Skip \"sold\"";
             this.checkBoxIgnoreSold.UseVisualStyleBackColor = true;
@@ -514,6 +452,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.objectListViewColorWeights.GridLines = true;
             this.objectListViewColorWeights.HasCollapsibleGroups = false;
             this.objectListViewColorWeights.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.objectListViewColorWeights.HideSelection = false;
             this.objectListViewColorWeights.Location = new System.Drawing.Point(8, 21);
             this.objectListViewColorWeights.MultiSelect = false;
             this.objectListViewColorWeights.Name = "objectListViewColorWeights";
@@ -562,7 +501,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             // 
             this.labelAutowrap1.Location = new System.Drawing.Point(8, 259);
             this.labelAutowrap1.Name = "labelAutowrap1";
-            this.labelAutowrap1.Size = new System.Drawing.Size(204, 39);
+            this.labelAutowrap1.Size = new System.Drawing.Size(204, 60);
             this.labelAutowrap1.TabIndex = 19;
             this.labelAutowrap1.Text = "Total breeding value will be multiplied by an average of both creatures color wei" +
     "ghts. ex: (1.5 + 1.2 ) / 2 = 1.35";
@@ -591,8 +530,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownBadTraitWeight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPotValBadWeight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPotValGoodWeight)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownUniqueTraitWeight)).EndInit();
@@ -619,12 +556,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
         private System.Windows.Forms.CheckBox checkBoxSkipPregnant;
         private System.Windows.Forms.CheckBox checkBoxSkipGaveBirthInLast24h;
         private System.Windows.Forms.CheckBox checkBoxSkipCreaturesInOtherHerds;
-        private System.Windows.Forms.CheckBox checkBoxIncludePotentialValue;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown numericUpDownPotValBadWeight;
-        private System.Windows.Forms.NumericUpDown numericUpDownPotValGoodWeight;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown numericUpDownUniqueTraitWeight;

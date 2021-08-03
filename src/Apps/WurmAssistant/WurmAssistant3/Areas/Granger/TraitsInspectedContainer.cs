@@ -5,11 +5,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
     public struct TraitsInspectedContainer : IComparable
     {
         public float Skill;
-        public bool EpicCurve;
 
         public override string ToString()
         {
-            return EpicCurve == true ? Skill.ToString() + " (epic)" : Skill.ToString();
+            return Skill.ToString();
         }
 
         public int CompareTo(TraitsInspectedContainer other)

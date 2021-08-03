@@ -89,7 +89,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             HandleGrooming(line);
             HandleBreeding(line);
             HandleDiseased(line);
-            HandleGenesis(line);
         }
 
         void HandleAgeAndTagsUpdates(LogEntry line)
@@ -375,43 +374,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                         creature.SetTag("diseased", true);
                     }
                     context.SubmitChanges();
-                }
-            }
-        }
-
-        void HandleGenesis(LogEntry line)
-        {
-            // genesis handling, purpose:
-            // remembering genesis casts so smilexamine can be allowed to update traits, 
-            // even though it would normally be blocked by sanity check
-
-            //[2013-08-02] [23:08:54] You cast Genesis on Old fat Jollyhalim.
-            if (Regex.IsMatch(line.Content, @".+ cast", RegexOptions.Compiled))
-            {
-                grangerDebug.Log("Found maybe genesis log event: " + line);
-                // New matcher after creature cages update.
-                Match match = Regex.Match(line.Content,
-                    @"(?:You cast|.+ casts) Genesis on(?: a| an| the|) (.+)\.",
-                    RegexOptions.Compiled);
-                if (!match.Success)
-                {
-                    // Message version for older WU servers.
-                    // This version was introduced in caves update.
-                    match = Regex.Match(line.Content, @"(?:You cast|.+ casts) 'Genesis' on(?: a| an| the) (.+)\.", RegexOptions.Compiled);
-                }
-                if (!match.Success)
-                {
-                    // Message version for older WU servers.
-                    match = Regex.Match(line.Content, @"(?:You cast|.+ casts) 'Genesis' on (.+)\.", RegexOptions.Compiled);
-                }
-                if (match.Success)
-                {
-                    string prefixedCreatureName = match.Groups[1].Value;
-                    string creatureName = GrangerHelpers.ExtractCreatureName(prefixedCreatureName);
-                    grangerDebug.Log(string.Format("Recognized Genesis cast on: {0} (raw name: {1})",
-                        creatureName,
-                        prefixedCreatureName));
-                    parentModule.Settings.AddGenesisCast(DateTime.Now, creatureName);
                 }
             }
         }

@@ -110,22 +110,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ValuePreset
             return Evaluate(creature.Traits);
         }
 
-        int GetPotentialValueForCreature(Creature creature, bool positive)
-        {
-            var missingTraits = CreatureTrait.GetMissingTraits(creature.Traits, creature.TraitsInspectSkill, creature.EpicCurve);
-            return Evaluate(missingTraits, positive);
-        }
-
-        internal int GetPotentialPositiveValueForCreature(Creature creature)
-        {
-            return GetPotentialValueForCreature(creature, true);
-        }
-
-        internal int GetPotentialNegativeValueForCreature(Creature creature)
-        {
-            return GetPotentialValueForCreature(creature, false);
-        }
-
         public int MaxPossibleValue { get; private set; }
 
         public int MinPossibleValue { get; private set; }

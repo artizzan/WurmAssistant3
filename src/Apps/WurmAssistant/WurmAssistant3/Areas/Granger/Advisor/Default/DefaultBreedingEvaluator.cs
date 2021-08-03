@@ -217,17 +217,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
 
                 }
 
-                if (options.IncludePotentialValue)
-                {
-                    foreach (var trait in allPossibleTraits)
-                    {
-                        double result = 0;
-                        result += EvaluatePotentialValue(creature1, valuator, trait);
-                        result += EvaluatePotentialValue(creature2, valuator, trait);
-                        results.Value += result;
-                    }
-                }
-
                 if (results.Value > 0)
                 {
                     var h1ColVal = options.GetValueForColor(creature1.Color);
@@ -237,24 +226,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.Advisor.Default
                 }
             }
             return results;
-        }
-
-        private double EvaluatePotentialValue(Creature creature, TraitValuator valuator, CreatureTrait trait)
-        {
-            double result = 0;
-            if (trait.IsUnknownForThisCreature(creature))
-            {
-                var traitval = trait.GetTraitValue(valuator);
-                if (traitval > 0)
-                {
-                    result += traitval * options.PotentialValuePositiveWeight;
-                }
-                else if (traitval < 0)
-                {
-                    result += traitval * options.PotentialValueNegativeWeight;
-                }
-            }
-            return result;
         }
 
         public override System.Drawing.Color? GetHintColor(Creature creature, double minBreedValue, double maxBreedValue)

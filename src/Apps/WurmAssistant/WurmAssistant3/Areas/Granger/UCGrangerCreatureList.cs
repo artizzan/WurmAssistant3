@@ -155,15 +155,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     negatives.Length);
             });
 
-            olvColumnTraitsInspectedAt.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
-            {
-                Creature creature = (Creature)x;
-                var traitinfo = creature.TraitsInspectedAtSkillAspect;
-                if (traitinfo.Skill > CreatureTrait.GetFullTraitVisibilityCap(traitinfo.EpicCurve))
-                    return "Fully known";
-                else return "Known partially";
-            });
-
             olvColumnAge.GroupKeyGetter = new BrightIdeasSoftware.GroupKeyGetterDelegate(x =>
             {
                 CreatureAge age = ((Creature)x).Age;

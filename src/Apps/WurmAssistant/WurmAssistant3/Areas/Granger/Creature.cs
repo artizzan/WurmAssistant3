@@ -35,10 +35,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public int Value => mainForm.CurrentValuator.GetValueForCreature(this);
 
-        public int PotentialPositiveValue => mainForm.CurrentValuator.GetPotentialPositiveValueForCreature(this);
-
-        public int PotentialNegativeValue => mainForm.CurrentValuator.GetPotentialNegativeValueForCreature(this);
-
         double? BreedValue 
         { 
             get 
@@ -205,12 +201,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set { Entity.TraitsInspectedAtSkill = value; }
         }
 
-        public bool EpicCurve
-        {
-            get { return Entity.EpicCurve ?? false; }
-            set { Entity.EpicCurve = value; }
-        }
-
         public CreatureAge Age
         {
             get { return Entity.Age; }
@@ -324,8 +314,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 float val = Entity.TraitsInspectedAtSkill ?? 0;
                 return new TraitsInspectedContainer() 
                 { 
-                    Skill = val, 
-                    EpicCurve = Entity.EpicCurve ?? false 
+                    Skill = val
                 };
             }
         }
@@ -341,18 +330,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         public string CommentsAspect => Entity.Comments;
 
         public int ValueAspect => this.Value;
-
-        public string PotentialValueAspect
-        {
-            get
-            {
-                int potPositive = PotentialPositiveValue;
-                int potNegative = PotentialNegativeValue;
-                return string.Format("{0}, {1}",
-                    potPositive > 0 ? "+" + potPositive.ToString() : potPositive.ToString(),
-                    potNegative.ToString());
-            }
-        }
 
         public double? BreedValueAspect => this.CachedBreedValue;
 

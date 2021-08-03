@@ -151,6 +151,7 @@
       <DependentUpon>FormEditCreatureColors.cs</DependentUpon>
     </Compile>
     <Compile Include="Areas\Granger\IFormEditCreatureColorsFactory.cs" />
+    <Compile Include="Areas\Granger\TraitType.cs" />
     <Compile Include="Areas\Main\ViewModels\DataBackupsViewModel.cs" />
     <Compile Include="Areas\Main\ViewModels\IDataBackupsViewModelFactory.cs" />
     <Compile Include="Areas\Main\Views\DataBackupsView.xaml.cs">

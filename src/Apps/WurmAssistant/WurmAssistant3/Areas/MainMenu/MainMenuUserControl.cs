@@ -246,5 +246,10 @@ namespace AldursLab.WurmAssistant3.Areas.MainMenu
             var vm = dataBackupsViewModelFactory.CreateDataBackupsViewModel();
             windowManager.ShowWindow(vm);
         }
+
+        private void beerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            processStarter.StartSafe("https://www.patreon.com/artizzan?fan_landing=true");
+        }
     }
 }

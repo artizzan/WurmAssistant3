@@ -135,7 +135,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.CreatureEdit
             checkBoxDiseased.Checked = creature.CheckTag("diseased");
             checkBoxSold.Checked = creature.CheckTag("sold");
             numericUpDownAHskill.Value = (decimal)(creature.TraitsInspectSkill.ConstrainToRange(0F, 100F));
-            checkBoxEpic.Checked = creature.EpicCurve;
             textBoxBrandedFor.Text = creature.BrandedForAspect;
             textBoxCaredForBy.Text = creature.TakenCareOfByAspect;
             textBoxComment.Text = creature.CommentsAspect;
@@ -219,10 +218,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.CreatureEdit
                     creature.Traits = traitlistArray;
 
                     creature.TraitsInspectSkill = (float)numericUpDownAHskill.Value;
-                    float traitSkill = CreatureTrait.GetMinSkillForTraits(traitlistArray, checkBoxEpic.Checked);
-                    if (creature.TraitsInspectSkill < traitSkill)
-                        creature.TraitsInspectSkill = traitSkill;
-                    creature.EpicCurve = checkBoxEpic.Checked;
 
                     creature.Comments = textBoxComment.Text;
                     creature.IsMale = radioButtonMale.Checked;

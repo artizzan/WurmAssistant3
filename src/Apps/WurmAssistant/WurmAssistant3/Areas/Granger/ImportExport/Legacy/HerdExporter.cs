@@ -39,12 +39,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.ImportExport.Legacy
                             creatureEntity.GroomedOn?.ToString(CultureInfo.InvariantCulture) ?? string.Empty),
                         new XElement("Gender", GetGender(creatureEntity)),
                         new XElement("CaredBy", creatureEntity.TakenCareOfBy),
-                        new XElement("InspectSkill",
-                            creatureEntity.TraitsInspectedAtSkill,
-                            new XAttribute("IsEpic",
-                                creatureEntity.EpicCurve.HasValue
-                                    ? creatureEntity.EpicCurve.ToString()
-                                    : bool.FalseString)),
+                        new XElement("InspectSkill", creatureEntity.TraitsInspectedAtSkill),
                         new XElement("Age", creatureEntity.Age),
                         new XElement("CreatureColorId", creatureEntity.CreatureColorId),
                         new XElement("Comments", creatureEntity.Comments),

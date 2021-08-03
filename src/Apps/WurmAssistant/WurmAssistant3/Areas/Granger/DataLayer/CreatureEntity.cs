@@ -51,8 +51,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.DataLayer
         public string TakenCareOfBy;
         [JsonProperty("traitsinspectedatskill")]
         public float? TraitsInspectedAtSkill;
-        [JsonProperty("epiccurve")]
-        public bool? EpicCurve;
         [JsonProperty("age")]
         string age;
         public CreatureAge Age

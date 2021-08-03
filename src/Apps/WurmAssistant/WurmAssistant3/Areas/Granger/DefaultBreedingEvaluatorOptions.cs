@@ -100,12 +100,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             set => defaultBreedingEvaluatorOptionsData.AgeIgnoreOnlyOtherCreatures = value;
         }
 
-        public bool IncludePotentialValue
-        {
-            get => defaultBreedingEvaluatorOptionsData.IncludePotentialValue;
-            set => defaultBreedingEvaluatorOptionsData.IncludePotentialValue = value;
-        }
-
         public bool PreferUniqueTraits
         {
             get => defaultBreedingEvaluatorOptionsData.PreferUniqueTraits;
@@ -116,12 +110,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             get => defaultBreedingEvaluatorOptionsData.DiscardOnInbreeding;
             set => defaultBreedingEvaluatorOptionsData.DiscardOnInbreeding = value;
-        }
-
-        public int NumPotentialTraitsToConsider
-        {
-            get => defaultBreedingEvaluatorOptionsData.NumPotentialTraitsToConsider;
-            set => defaultBreedingEvaluatorOptionsData.NumPotentialTraitsToConsider = value;
         }
 
         public bool ExcludeExactAgeEnabled
@@ -140,18 +128,6 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         {
             get => defaultBreedingEvaluatorOptionsData.DiscardOnAnyNegativeTraits;
             set => defaultBreedingEvaluatorOptionsData.DiscardOnAnyNegativeTraits = value;
-        }
-
-        public double PotentialValuePositiveWeight
-        {
-            get => defaultBreedingEvaluatorOptionsData.PotentialValuePositiveWeight;
-            set => defaultBreedingEvaluatorOptionsData.PotentialValuePositiveWeight = value;
-        }
-
-        public double PotentialValueNegativeWeight
-        {
-            get => defaultBreedingEvaluatorOptionsData.PotentialValueNegativeWeight;
-            set => defaultBreedingEvaluatorOptionsData.PotentialValueNegativeWeight = value;
         }
 
         public double UniqueTraitWeight

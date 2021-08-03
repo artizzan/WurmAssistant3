@@ -48,6 +48,8 @@
             this.checkBoxDiseased = new System.Windows.Forms.CheckBox();
             this.checkBoxDead = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.comboBoxServerName = new System.Windows.Forms.ComboBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.dateTimePickerBirthDate = new System.Windows.Forms.DateTimePicker();
             this.label16 = new System.Windows.Forms.Label();
             this.buttonApplyTraitsFromPasteText = new System.Windows.Forms.Button();
@@ -62,7 +64,6 @@
             this.comboBoxAge = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.comboBoxColor = new System.Windows.Forms.ComboBox();
-            this.checkBoxEpic = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.textBoxComment = new System.Windows.Forms.TextBox();
             this.textBoxCaredForBy = new System.Windows.Forms.TextBox();
@@ -73,8 +74,6 @@
             this.comboBoxMother = new System.Windows.Forms.ComboBox();
             this.labelWarn = new System.Windows.Forms.Label();
             this.buttonEdit = new System.Windows.Forms.Button();
-            this.label17 = new System.Windows.Forms.Label();
-            this.comboBoxServerName = new System.Windows.Forms.ComboBox();
             this.groupBoxGender.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAHskill)).BeginInit();
@@ -95,7 +94,7 @@
             this.label1.Location = new System.Drawing.Point(2, 2);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(36, 13);
+            this.label1.Size = new System.Drawing.Size(40, 15);
             this.label1.TabIndex = 1;
             this.label1.Text = "Traits:";
             // 
@@ -119,7 +118,7 @@
             this.radioButtonFemale.Location = new System.Drawing.Point(4, 41);
             this.radioButtonFemale.Margin = new System.Windows.Forms.Padding(2);
             this.radioButtonFemale.Name = "radioButtonFemale";
-            this.radioButtonFemale.Size = new System.Drawing.Size(56, 17);
+            this.radioButtonFemale.Size = new System.Drawing.Size(66, 19);
             this.radioButtonFemale.TabIndex = 2;
             this.radioButtonFemale.TabStop = true;
             this.radioButtonFemale.Text = "female";
@@ -132,7 +131,7 @@
             this.radioButtonMale.Location = new System.Drawing.Point(4, 20);
             this.radioButtonMale.Margin = new System.Windows.Forms.Padding(2);
             this.radioButtonMale.Name = "radioButtonMale";
-            this.radioButtonMale.Size = new System.Drawing.Size(47, 17);
+            this.radioButtonMale.Size = new System.Drawing.Size(56, 19);
             this.radioButtonMale.TabIndex = 1;
             this.radioButtonMale.Text = "male";
             this.radioButtonMale.UseVisualStyleBackColor = true;
@@ -154,7 +153,7 @@
             this.label2.Location = new System.Drawing.Point(230, 2);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.Size = new System.Drawing.Size(41, 15);
             this.label2.TabIndex = 4;
             this.label2.Text = "Name";
             // 
@@ -164,7 +163,7 @@
             this.label3.Location = new System.Drawing.Point(230, 79);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(40, 13);
+            this.label3.Size = new System.Drawing.Size(46, 15);
             this.label3.TabIndex = 6;
             this.label3.Text = "Mother";
             // 
@@ -174,7 +173,7 @@
             this.label4.Location = new System.Drawing.Point(232, 117);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(37, 13);
+            this.label4.Size = new System.Drawing.Size(42, 15);
             this.label4.TabIndex = 8;
             this.label4.Text = "Father";
             // 
@@ -184,7 +183,7 @@
             this.label7.Location = new System.Drawing.Point(440, 176);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(86, 13);
+            this.label7.Size = new System.Drawing.Size(100, 15);
             this.label7.TabIndex = 11;
             this.label7.Text = "Not in mood until";
             // 
@@ -194,7 +193,7 @@
             this.label8.Location = new System.Drawing.Point(440, 213);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(86, 13);
+            this.label8.Size = new System.Drawing.Size(100, 15);
             this.label8.TabIndex = 12;
             this.label8.Text = "Last groomed on";
             // 
@@ -204,7 +203,7 @@
             this.label9.Location = new System.Drawing.Point(440, 249);
             this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(85, 13);
+            this.label9.Size = new System.Drawing.Size(96, 15);
             this.label9.TabIndex = 13;
             this.label9.Text = "Will give birth on";
             // 
@@ -269,7 +268,7 @@
             this.checkBoxDiseased.Location = new System.Drawing.Point(442, 342);
             this.checkBoxDiseased.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxDiseased.Name = "checkBoxDiseased";
-            this.checkBoxDiseased.Size = new System.Drawing.Size(68, 17);
+            this.checkBoxDiseased.Size = new System.Drawing.Size(79, 19);
             this.checkBoxDiseased.TabIndex = 10;
             this.checkBoxDiseased.Text = "diseased";
             this.checkBoxDiseased.UseVisualStyleBackColor = true;
@@ -280,7 +279,7 @@
             this.checkBoxDead.Location = new System.Drawing.Point(442, 364);
             this.checkBoxDead.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxDead.Name = "checkBoxDead";
-            this.checkBoxDead.Size = new System.Drawing.Size(50, 17);
+            this.checkBoxDead.Size = new System.Drawing.Size(57, 19);
             this.checkBoxDead.TabIndex = 11;
             this.checkBoxDead.Text = "dead";
             this.checkBoxDead.UseVisualStyleBackColor = true;
@@ -306,7 +305,6 @@
             this.panel1.Controls.Add(this.comboBoxAge);
             this.panel1.Controls.Add(this.label11);
             this.panel1.Controls.Add(this.comboBoxColor);
-            this.panel1.Controls.Add(this.checkBoxEpic);
             this.panel1.Controls.Add(this.label10);
             this.panel1.Controls.Add(this.textBoxComment);
             this.panel1.Controls.Add(this.textBoxCaredForBy);
@@ -336,6 +334,24 @@
             this.panel1.Size = new System.Drawing.Size(573, 510);
             this.panel1.TabIndex = 24;
             // 
+            // comboBoxServerName
+            // 
+            this.comboBoxServerName.FormattingEnabled = true;
+            this.comboBoxServerName.Location = new System.Drawing.Point(232, 56);
+            this.comboBoxServerName.Name = "comboBoxServerName";
+            this.comboBoxServerName.Size = new System.Drawing.Size(198, 21);
+            this.comboBoxServerName.TabIndex = 51;
+            this.comboBoxServerName.Validating += new System.ComponentModel.CancelEventHandler(this.comboBoxServerName_Validating);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(230, 40);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(42, 15);
+            this.label17.TabIndex = 49;
+            this.label17.Text = "Server";
+            // 
             // dateTimePickerBirthDate
             // 
             this.dateTimePickerBirthDate.CustomFormat = "yyyy-MM-dd   HH:mm";
@@ -352,7 +368,7 @@
             this.label16.Location = new System.Drawing.Point(440, 288);
             this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(52, 13);
+            this.label16.Size = new System.Drawing.Size(59, 15);
             this.label16.TabIndex = 48;
             this.label16.Text = "Birth date";
             // 
@@ -373,7 +389,7 @@
             this.label15.Location = new System.Drawing.Point(2, 461);
             this.label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(270, 13);
+            this.label15.Size = new System.Drawing.Size(309, 15);
             this.label15.TabIndex = 45;
             this.label15.Text = "Update traits by pasting a text line containing traits here:";
             // 
@@ -393,7 +409,7 @@
             this.checkBoxSold.Location = new System.Drawing.Point(442, 386);
             this.checkBoxSold.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxSold.Name = "checkBoxSold";
-            this.checkBoxSold.Size = new System.Drawing.Size(45, 17);
+            this.checkBoxSold.Size = new System.Drawing.Size(52, 19);
             this.checkBoxSold.TabIndex = 43;
             this.checkBoxSold.Text = "sold";
             this.checkBoxSold.UseVisualStyleBackColor = true;
@@ -412,7 +428,7 @@
             this.label14.Location = new System.Drawing.Point(232, 192);
             this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(62, 13);
+            this.label14.Size = new System.Drawing.Size(71, 15);
             this.label14.TabIndex = 42;
             this.label14.Text = "Branded for";
             // 
@@ -431,7 +447,7 @@
             this.label13.Location = new System.Drawing.Point(232, 265);
             this.label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(159, 13);
+            this.label13.Size = new System.Drawing.Size(182, 15);
             this.label13.TabIndex = 39;
             this.label13.Text = "Paired with (change on list view)";
             // 
@@ -441,7 +457,7 @@
             this.label12.Location = new System.Drawing.Point(440, 115);
             this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(26, 13);
+            this.label12.Size = new System.Drawing.Size(28, 15);
             this.label12.TabIndex = 37;
             this.label12.Text = "Age";
             // 
@@ -461,7 +477,7 @@
             this.label11.Location = new System.Drawing.Point(440, 76);
             this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(31, 13);
+            this.label11.Size = new System.Drawing.Size(36, 15);
             this.label11.TabIndex = 35;
             this.label11.Text = "Color";
             // 
@@ -475,24 +491,13 @@
             this.comboBoxColor.Size = new System.Drawing.Size(127, 21);
             this.comboBoxColor.TabIndex = 34;
             // 
-            // checkBoxEpic
-            // 
-            this.checkBoxEpic.AutoSize = true;
-            this.checkBoxEpic.Location = new System.Drawing.Point(294, 246);
-            this.checkBoxEpic.Margin = new System.Windows.Forms.Padding(2);
-            this.checkBoxEpic.Name = "checkBoxEpic";
-            this.checkBoxEpic.Size = new System.Drawing.Size(96, 17);
-            this.checkBoxEpic.TabIndex = 33;
-            this.checkBoxEpic.Text = "epic skill curve";
-            this.checkBoxEpic.UseVisualStyleBackColor = true;
-            // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(232, 302);
             this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(59, 13);
+            this.label10.Size = new System.Drawing.Size(70, 15);
             this.label10.TabIndex = 32;
             this.label10.Text = "Comments:";
             // 
@@ -519,7 +524,7 @@
             this.label6.Location = new System.Drawing.Point(232, 156);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(64, 13);
+            this.label6.Size = new System.Drawing.Size(72, 15);
             this.label6.TabIndex = 29;
             this.label6.Text = "Cared for by";
             // 
@@ -538,7 +543,7 @@
             this.label5.Location = new System.Drawing.Point(232, 229);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(174, 13);
+            this.label5.Size = new System.Drawing.Size(200, 15);
             this.label5.TabIndex = 27;
             this.label5.Text = "Inspected at Animal Husbandry skill";
             // 
@@ -574,7 +579,7 @@
             this.labelWarn.Location = new System.Drawing.Point(11, 533);
             this.labelWarn.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelWarn.Name = "labelWarn";
-            this.labelWarn.Size = new System.Drawing.Size(58, 13);
+            this.labelWarn.Size = new System.Drawing.Size(66, 15);
             this.labelWarn.TabIndex = 26;
             this.labelWarn.Text = "Warn label";
             this.labelWarn.Visible = false;
@@ -591,24 +596,6 @@
             this.buttonEdit.UseVisualStyleBackColor = true;
             this.buttonEdit.Visible = false;
             this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(230, 40);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(38, 13);
-            this.label17.TabIndex = 49;
-            this.label17.Text = "Server";
-            // 
-            // comboBoxServerName
-            // 
-            this.comboBoxServerName.FormattingEnabled = true;
-            this.comboBoxServerName.Location = new System.Drawing.Point(232, 56);
-            this.comboBoxServerName.Name = "comboBoxServerName";
-            this.comboBoxServerName.Size = new System.Drawing.Size(198, 21);
-            this.comboBoxServerName.TabIndex = 51;
-            this.comboBoxServerName.Validating += new System.ComponentModel.CancelEventHandler(this.comboBoxServerName_Validating);
             // 
             // FormCreatureViewEdit
             // 
@@ -673,7 +660,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBoxComment;
-        private System.Windows.Forms.CheckBox checkBoxEpic;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ComboBox comboBoxColor;
         private System.Windows.Forms.Label label12;
