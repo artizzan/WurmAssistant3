@@ -373,6 +373,7 @@ namespace AldursLab.WurmAssistant3
             }
 
             return false;
+
         }
 
         #region Kernel wirings for view resolver
