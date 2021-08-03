@@ -388,7 +388,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     "Eats half as much as a normal animal");
 
                 MapTrait(
-                    "It seems stationary",
+                    "It looks stationary",
                     CreatureTraitId.SeemsStationary,
                     "Stationary",
                     "SS",
