@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AldursLab.Essentials.Extensions.DotNet;
+using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 {
@@ -58,15 +59,62 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
         public static string RemoveAllPrefixes(string creatureName)
         {
-            foreach (string prefix in AllNamePrefixes)
+            return new CreatureNameForPrefixRemoval(creatureName).GetNameWithoutPrefixes().Trim();
+        }
+
+        class CreatureNameForPrefixRemoval
+        {
+            // Note: this is interesting early candidate for CreatureName abstraction, consider for WA4
+
+            public string OriginalCreatureName { get; } = string.Empty;
+            public bool HasBrandingName { get; } = false;
+            public string PartUntilBrandingName { get; } = string.Empty;
+            public string PartCoveringBrandingName { get; } = string.Empty;
+
+            const char BrandingNameSeparator = '\'';
+
+            public CreatureNameForPrefixRemoval([NotNull] string creatureName)
             {
-                creatureName = Regex.Replace(creatureName,
-                    $@"^{prefix}(\W)|(\W){prefix}(\W)",
-                    "$1$2",
-                    RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+                this.OriginalCreatureName = creatureName ?? throw new ArgumentNullException(nameof(creatureName));
+
+                if (creatureName.Length > 0)
+                {
+                    var substrings = creatureName.Split(BrandingNameSeparator);
+                    if (substrings.Length > 1)
+                    {
+                        HasBrandingName = true;
+                        PartUntilBrandingName = substrings[0];
+                        PartCoveringBrandingName = string.Join(BrandingNameSeparator.ToString(), substrings.Skip(1));
+                    }
+                    else
+                    {
+                        HasBrandingName = false;
+                        PartUntilBrandingName = creatureName;
+                    }
+                }
+
             }
-            creatureName = creatureName.Trim();
-            return creatureName;
+
+            public string GetNameWithoutPrefixes()
+            {
+                var x = PartUntilBrandingName;
+                foreach (string prefix in AllNamePrefixes)
+                {
+                    x = Regex.Replace(x,
+                        $@"^{prefix}(\W)|(\W){prefix}(\W)",
+                        "$1$2",
+                        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+                }
+
+                if (HasBrandingName)
+                {
+                    return string.Join(BrandingNameSeparator.ToString(), x, PartCoveringBrandingName);
+                }
+                else
+                {
+                    return x;
+                }
+            }
         }
 
         internal static string CapitalizeCreatureName(string lowercasename)
