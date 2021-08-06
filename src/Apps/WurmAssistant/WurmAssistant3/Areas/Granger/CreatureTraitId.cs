@@ -15,6 +15,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
         LightningMovement = 5,
         CarryMoreThanAverage = 6,
         VeryStrongLegs = 7,
+        // following trait is obsolete as of Wurm mid 2021, replaced by accustomed to water
         KeenSenses = 8,
         MalformedHindlegs = 9,
         LegsOfDifferentLength = 10,

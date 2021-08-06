@@ -121,7 +121,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     TraitType.Unknown,
                     false,
                     false,
-                    "Unknown effect");
+                    "No longer in Wurm. Replaced by 'It seems accustomed to water'");
 
                 MapTrait(
                     "It has malformed hindlegs",
