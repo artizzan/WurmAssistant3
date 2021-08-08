@@ -168,7 +168,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     "Major penalty to mounted weight limit");
 
                 MapTrait(
-                    "It is unusually strong willed",
+                    "It is unusually strong-willed",
                     CreatureTraitId.UnusuallyStrongWilled,
                     "Strong will",
                     "SW",
