@@ -148,7 +148,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 MapTrait(
                     "It seems overly aggressive",
                     CreatureTraitId.OverlyAggressive,
-                    "Agressive",
+                    "Aggressive",
                     "OA",
                     5,
                     TraitType.Negative,
@@ -181,7 +181,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 MapTrait(
                     "It has some illness",
                     CreatureTraitId.HasSomeIllness,
-                    "Ilness",
+                    "Illness",
                     "SI",
                     5,
                     TraitType.Negative,
@@ -258,7 +258,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 MapTrait(
                     "It looks more friendly than normal",
                     CreatureTraitId.LooksMoreFriendlyThanNormal,
-                    "More friendly",
+                    "Abnormally friendly",
                     "MFTN",
                     15,
                     TraitType.Combat,
@@ -522,7 +522,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                 MapTrait(
                     "It is unbelievably fast",
                     CreatureTraitId.IsUnbelievablyFast,
-                    "Unbieliev fast",
+                    "Unbielieve fast",
                     "UF",
                     0,
                     TraitType.Speed,
