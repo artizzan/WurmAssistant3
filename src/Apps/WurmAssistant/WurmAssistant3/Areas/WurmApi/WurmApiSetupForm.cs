@@ -52,9 +52,11 @@ namespace AldursLab.WurmAssistant3.Areas.WurmApi
             {
 
                 this.Text = "Wurm Assistant 3 - Wurm Api Setup";
-                labelPathDescription.Text = "Choose the folder, where Wurm Online game client is installed, "
+                labelPathDescription.Text = "Choose path to wurm (or gamedata folder if steam) of your Wurm Online game client, "
                                             + Environment.NewLine +
-                                            @"eg: C:\Games\wurm";
+                                            @"eg: C:\Program Files (x86)\Wurm Online" 
+                                            + Environment.NewLine + 
+                                            @"or steam: C:\Program Files (x86)\Steam\steamapps\common\Wurm Online\gamedata";
             }
         }
 
