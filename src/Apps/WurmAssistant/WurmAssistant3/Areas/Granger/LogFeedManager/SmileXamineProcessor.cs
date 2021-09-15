@@ -146,7 +146,11 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     debugLogger.Log("creature set to female");
                 }
                 //[22:34:28] His mother is the old fat Painthop. His father is the venerable fat Starkclip. 
+                //[22:34:28] His Mother is the old fat Painthop. His Father is the venerable fat Starkclip. 
+                //[22:34:28] His mother was Painthop. His father was Starkclip. 
                 //[22:34:28] Her mother is the old fat Painthop. Her father is the venerable fat Starkclip. 
+                //[22:34:28] Her Mother is the old fat Painthop. Her Father is the venerable fat Starkclip. 
+                //[22:34:28] Her mother was Painthop. Her father was Starkclip. 
                 if (IsParentIdentifyingLine(line) && !verifyList.Parents)
                 {
                     debugLogger.Log("found maybe parents line");
@@ -154,18 +158,18 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     Match motherMatch = ParseMother(line);
                     if (motherMatch.Success)
                     {
-                        string mother = motherMatch.Groups["g"].Value;
-                        mother = GrangerHelpers.ExtractCreatureName(mother);
-                        creatureBuffer.MotherName = mother;
-                        debugLogger.Log("mother set to: " + mother);
+                        string motherPart = motherMatch.Groups["g"].Value;
+                        motherPart = GrangerHelpers.ExtractCreatureName(motherPart);
+                        creatureBuffer.MotherName = motherPart;
+                        debugLogger.Log("mother set to: " + motherPart);
                     }
                     Match fatherMatch = ParseFather(line);
                     if (fatherMatch.Success)
                     {
-                        string father = fatherMatch.Groups["g"].Value;
-                        father = GrangerHelpers.ExtractCreatureName(father);
-                        creatureBuffer.FatherName = father;
-                        debugLogger.Log("father set to: " + father);
+                        string fatherPart = fatherMatch.Groups["g"].Value;
+                        fatherPart = GrangerHelpers.ExtractCreatureName(fatherPart);
+                        creatureBuffer.FatherName = fatherPart;
+                        debugLogger.Log("father set to: " + fatherPart);
                     }
                     verifyList.Parents = true;
                     debugLogger.Log("finished parsing parents line");
@@ -249,44 +253,33 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
         bool IsParentIdentifyingLine(string line)
         {
+            // debt: consider if this optimization warrants complexity
+
             return
                 // Proper parsing after Rift update for WO:
                 line.Contains("mother is")
                 || line.Contains("father is")
                 // WU server was not updated together with WO Rift update, old conditions are still needed:
                 || line.Contains("Mother is")
-                || line.Contains("Father is");
+                || line.Contains("Father is")
+                // WO added a feature to see parent even if it's long gone, wording changed to "(...) was":
+                || line.Contains("Mother was")
+                || line.Contains("Father was");
         }
 
         Match ParseMother(string line)
         {
             var result = Regex.Match(line,
-                @"mother is \w+ (?<g>\w+ \w+ .+?)\.|mother is \w+ (?<g>\w+ .+?)\.",
+                @"(?:mother|Mother) (?:was|is the) (?<g>\w+.*?)\.",
                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
-            // WU server was not updated together with WO Rift update, need old check for WU:
-            if (!result.Success && wurmAssistantConfig.WurmUnlimitedMode)
-            {
-                result = Regex.Match(line,
-                    @"Mother is (?<g>\w+ \w+ .+?)\.|Mother is (?<g>\w+ .+?)\.",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
-            }
             return result;
         }
 
         Match ParseFather(string line)
         {
             var result = Regex.Match(line,
-                @"father is \w+ (?<g>\w+ \w+ .+?)\.|father is \w+ (?<g>\w+ .+?)\.",
+                @"(?:father|Father) (?:was|is the) (?<g>\w+.*?)\.",
                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
-            // WU server was not updated together with WO Rift update, need old check for WU:
-            if (!result.Success && wurmAssistantConfig.WurmUnlimitedMode)
-            {
-                result = Regex.Match(line,
-                        @"Father is (?<g>\w+ \w+ .+?)\.|Father is (?<g>\w+ .+?)\.",
-                        RegexOptions.IgnoreCase | RegexOptions.Compiled);
-            }
             return result;
         }
 
