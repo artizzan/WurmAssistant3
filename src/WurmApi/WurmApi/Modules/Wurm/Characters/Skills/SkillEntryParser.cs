@@ -34,7 +34,7 @@ namespace AldursLab.WurmApi.Modules.Wurm.Characters.Skills
             {
                 if (wurmLogEntry.Content.EndsWith("affinity", StringComparison.InvariantCulture))
                 {
-                    logger.Log(LogLevel.Info,
+                    logger.Log(LogLevel.Diag,
                         "Skill message appears to inform about affinity, not supported. Raw entry: " + wurmLogEntry,
                         this,
                         null);

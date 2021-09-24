@@ -270,7 +270,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         Match ParseMother(string line)
         {
             var result = Regex.Match(line,
-                @"(?:mother|Mother) (?:was|is the) (?<g>\w+.*?)\.",
+                @"(?:mother|Mother) (?:was|was the|was an|was a|is|is the|is an|is a) (?<g>\w+.*?)\.",
                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
             return result;
         }
@@ -278,7 +278,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
         Match ParseFather(string line)
         {
             var result = Regex.Match(line,
-                @"(?:father|Father) (?:was|is the) (?<g>\w+.*?)\.",
+                @"(?:father|Father) (?:was|was the|was an|was a|is|is the|is an|is a) (?<g>\w+.*?)\.",
                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
             return result;
         }

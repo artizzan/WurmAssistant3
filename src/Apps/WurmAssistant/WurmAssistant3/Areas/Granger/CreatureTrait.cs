@@ -322,7 +322,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     "Carry weight bonus");
 
                 MapTrait(
-                    "Bred in captivity",
+                    "It has been bred in captivity",
                     CreatureTraitId.BredInCaptivity,
                     "Bred captive",
                     "BC",
@@ -421,7 +421,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     "Has a very slim chance to pass away when it receives a hunger tick");
 
                 MapTrait(
-                    "It seems shabby and frail",
+                    "It looks shabby and frail",
                     CreatureTraitId.SeemsShabbyAndFrail,
                     "Shabby n frail",
                     "SF",
