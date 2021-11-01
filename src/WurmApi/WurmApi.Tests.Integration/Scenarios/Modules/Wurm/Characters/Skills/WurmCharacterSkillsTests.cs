@@ -64,7 +64,7 @@ namespace AldursLab.WurmApi.Tests.Integration.Scenarios.Modules.Wurm.Characters.
         /// Todo: [opt] replace filewatcher with polling-based system.
         /// </summary>
         /// <returns></returns>
-        [Test, Category("NoRunCI")]
+        [Test, Category("Manual")]
         public async Task RefreshesDumpsWhenNewFound()
         {
             var skill = await TestguytwoSkills.TryGetCurrentSkillLevelAsync("Masonry",

@@ -155,22 +155,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 {
                     debugLogger.Log("found maybe parents line");
 
-                    Match motherMatch = ParseMother(line);
-                    if (motherMatch.Success)
-                    {
-                        string motherPart = motherMatch.Groups["g"].Value;
-                        motherPart = GrangerHelpers.ExtractCreatureName(motherPart);
-                        creatureBuffer.MotherName = motherPart;
-                        debugLogger.Log("mother set to: " + motherPart);
-                    }
-                    Match fatherMatch = ParseFather(line);
-                    if (fatherMatch.Success)
-                    {
-                        string fatherPart = fatherMatch.Groups["g"].Value;
-                        fatherPart = GrangerHelpers.ExtractCreatureName(fatherPart);
-                        creatureBuffer.FatherName = fatherPart;
-                        debugLogger.Log("father set to: " + fatherPart);
-                    }
+                    var result = GrangerHelpers.ExtractParentNames(line, debugLogger);
+                    creatureBuffer.MotherName = result.Mother;
+                    creatureBuffer.FatherName = result.Father;
+
                     verifyList.Parents = true;
                     debugLogger.Log("finished parsing parents line");
                 }
@@ -189,18 +177,16 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 }
                 //[17:11:42] She will deliver in about 4 days.
                 //[17:11:42] She will deliver in about 1 day.
-                if (line.Contains("She will deliver in") && !verifyList.Pregnant)
+                //[10:48:00] You feel confident she will give birth in 6 days.
+                //[10:48:00] You feel confident she will give birth in 6 days, 5 hours.
+                if (!verifyList.Pregnant)
                 {
-                    debugLogger.Log("found maybe pregnant line");
-                    Match match = Regex.Match(line, @"She will deliver in about (\d+)");
-                    if (match.Success)
+                    var pregnantUntil = GrangerHelpers.ParsePregnantUntil(line, debugLogger, DateTime.Now);
+                    if (pregnantUntil != null)
                     {
-                        double length = Double.Parse(match.Groups[1].Value) + 1D;
-                        creatureBuffer.PregnantUntil = DateTime.Now + TimeSpan.FromDays(length);
-                        debugLogger.Log("found creature to be pregnant, estimated delivery: " + creatureBuffer.PregnantUntil);
+                        creatureBuffer.PregnantUntil = pregnantUntil.Value;
+                        verifyList.Pregnant = true;
                     }
-                    verifyList.Pregnant = true;
-                    debugLogger.Log("finished parsing pregnant line");
                 }
                 //[20:58:26] A foal skips around here merrily
                 //[01:59:09] This calf looks happy and free.

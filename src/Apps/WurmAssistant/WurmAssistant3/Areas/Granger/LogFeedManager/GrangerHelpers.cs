@@ -146,9 +146,82 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             return false;
         }
 
+        public static ExtractParentNamesResult ExtractParentNames(string parentLine, GrangerDebugLogger logger)
+        {
+            Match motherMatch = ParseMother(parentLine);
+            var motherPart = string.Empty;
+            var fatherPart = string.Empty;
+
+            if (motherMatch.Success)
+            {
+                motherPart = motherMatch.Groups["g"].Value;
+                motherPart = ExtractCreatureName(motherPart);
+                logger.Log("mother set to: " + motherPart);
+            }
+            Match fatherMatch = ParseFather(parentLine);
+            if (fatherMatch.Success)
+            {
+                fatherPart = fatherMatch.Groups["g"].Value;
+                fatherPart = ExtractCreatureName(fatherPart);
+                logger.Log("father set to: " + fatherPart);
+            }
+
+            return new ExtractParentNamesResult(motherPart, fatherPart);
+
+            Match ParseMother(string line)
+            {
+                var result = Regex.Match(line,
+                    @"(?:mother|Mother) (?:was the|was an|was a|was|is the|is an|is a|is) (?<g>\w+.*?)\.",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                return result;
+            }
+
+            Match ParseFather(string line)
+            {
+                var result = Regex.Match(line,
+                    @"(?:father|Father) (?:was the|was an|was a|was|is the|is an|is a|is) (?<g>\w+.*?)\.",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                return result;
+            }
+        }
+
         public static string ExtractCreatureName(string prefixedObjectName)
         {
             return RemoveAllPrefixes(prefixedObjectName);
+        }
+
+        public static DateTime? ParsePregnantUntil(string line, GrangerDebugLogger logger, DateTime now)
+        {
+            DateTime? pregnantUntil = null;
+
+            if (line.Contains("She will deliver in"))
+            {
+                logger.Log("found maybe pregnant line");
+                Match match = Regex.Match(line, @"She will deliver in about (?<days>\d+)");
+
+                if (match.Success)
+                {
+                    double length = Double.Parse(match.Groups[1].Value) + 1D;
+                    pregnantUntil = now + TimeSpan.FromDays(length);
+                    logger.Log("found creature to be pregnant, estimated delivery: " + pregnantUntil);
+                }
+            }
+
+            if (line.Contains("You feel confident she will give birth"))
+            {
+                Match match = Regex.Match(line, @"You feel confident she will give birth in (?<days>\d+) (?:days|day), (?<hours>\d+) (?:hours|hour)|You feel confident she will give birth in (?<days>\d+) (?:days|day)|You feel confident she will give birth in (?<hours>\d+) (?:hours|hour)");
+                if (match.Success)
+                {
+                    Double.TryParse(match.Groups["days"].Value, out double days);
+                    Double.TryParse(match.Groups["hours"].Value, out double hours);
+                    pregnantUntil = now + TimeSpan.FromDays(days) + TimeSpan.FromHours(hours);
+                    logger.Log("found creature to be pregnant, exact delivery: " + pregnantUntil);
+                }
+            }
+
+            logger.Log("finished parsing pregnant line");
+            
+            return pregnantUntil;
         }
 
         public static string TryParseCreatureNameIfLineContainsDiseased(string inputLine)
@@ -188,6 +261,18 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 }
             }
             return result.ToArray();
+        }
+
+        public class ExtractParentNamesResult
+        {
+            public string Father { get; }
+            public string Mother { get; }
+
+            public ExtractParentNamesResult([NotNull] string mother, [NotNull] string father)
+            {
+                Father = father ?? throw new ArgumentNullException(nameof(father));
+                Mother = mother ?? throw new ArgumentNullException(nameof(mother));
+            }
         }
     }
 }

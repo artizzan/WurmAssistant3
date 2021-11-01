@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 {
-    class GrangerDebugLogger
+    public class GrangerDebugLogger
     {
         readonly ILogger logger;
 
