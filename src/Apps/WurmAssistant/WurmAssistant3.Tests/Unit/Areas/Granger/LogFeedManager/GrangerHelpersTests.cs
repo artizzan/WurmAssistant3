@@ -25,21 +25,29 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Areas.Granger.LogFeedManager
             Assert.AreEqual(expectedFather, result.Father);
         }
 
-        [TestCase("She will deliver in about 4 days.", 5, 0)]
-        [TestCase("She will deliver in about 1 day.", 2, 0)]
-        [TestCase("You feel confident she will give birth in 6 days.", 6, 0)]
-        [TestCase("You feel confident she will give birth in 1 day.", 1, 0)]
-        [TestCase("You feel confident she will give birth in 6 days, 5 hours.", 6, 5)]
-        [TestCase("You feel confident she will give birth in 1 day, 1 hour.", 1, 1)]
-        [TestCase("You feel confident she will give birth in 6 days, 1 hour.", 6, 1)]
-        [TestCase("You feel confident she will give birth in 6 hours.", 0, 6)]
-        [TestCase("You feel confident she will give birth in 1 hour.", 0, 1)]
-        public void ParsePregnantUntil(string line, int expectedDays, int expectedHours)
+        [TestCase("She will deliver in about 4 days.", 5, 0, 0)]
+        [TestCase("She will deliver in about 1 day.", 2, 0, 0)]
+        [TestCase("You feel confident she will give birth in 6 days.", 6, 0, 0)]
+        [TestCase("You feel confident she will give birth in 1 day.", 1, 0, 0)]
+        [TestCase("You feel confident she will give birth in 6 days, 5 hours, 35 minutes.", 6, 5, 35)]
+        [TestCase("You feel confident she will give birth in 6 days, 5 hours.", 6, 5, 0)]
+        [TestCase("You feel confident she will give birth in 1 day, 1 hour.", 1, 1, 0)]
+        [TestCase("You feel confident she will give birth in 6 days, 1 hour.", 6, 1, 0)]
+        [TestCase("You feel confident she will give birth in 6 hours.", 0, 6, 0)]
+        [TestCase("You feel confident she will give birth in 1 hour.", 0, 1, 0)]
+        [TestCase("You feel confident she will give birth in 9 minutes.", 0, 0, 9)]
+        [TestCase("You predict she will give birth in 6 days, 19 hours.", 6, 19, 0)]
+        [TestCase("You predict she will give birth in 1 days, 19 hours.", 1, 19, 0)]
+        [TestCase("You predict she will give birth in 19 hours.", 0, 19, 0)]
+        [TestCase("You predict she will give birth in 1 hour.", 0, 1, 0)]
+        [TestCase("You predict she will give birth in 6 days.", 6, 0, 0)]
+        [TestCase("You predict she will give birth in 1 day.", 1, 0, 0)]
+        public void ParsePregnantUntil(string line, int expectedDays, int expectedHours, int expectedMinutes)
         {
             var now = new DateTime(2021, 1, 1, 0, 0, 0);
             var result = GrangerHelpers.ParsePregnantUntil(line, new GrangerDebugLogger(new LoggerStub()), now);
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Value, now + TimeSpan.FromDays(expectedDays) + TimeSpan.FromHours(expectedHours));
+            Assert.AreEqual(now + TimeSpan.FromDays(expectedDays) + TimeSpan.FromHours(expectedHours) + TimeSpan.FromMinutes(expectedMinutes), result.Value);
         }
     }
 }

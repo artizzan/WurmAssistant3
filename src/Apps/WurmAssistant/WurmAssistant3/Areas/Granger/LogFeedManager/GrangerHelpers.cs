@@ -207,14 +207,16 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 }
             }
 
-            if (line.Contains("You feel confident she will give birth"))
+            if (line.Contains("You feel confident she will give birth") 
+                || line.Contains("You predict she will give birth"))
             {
-                Match match = Regex.Match(line, @"You feel confident she will give birth in (?<days>\d+) (?:days|day), (?<hours>\d+) (?:hours|hour)|You feel confident she will give birth in (?<days>\d+) (?:days|day)|You feel confident she will give birth in (?<hours>\d+) (?:hours|hour)");
+                Match match = Regex.Match(line, @"(?:You feel confident|You predict) she will give birth in (?:(?<days>\d+)(?: days| day))?(?:, |)?(?:(?<hours>\d+)(?: hours| hour))?(?:, |)?(?:(?<minutes>\d+)(?: minutes| minute))?");
                 if (match.Success)
                 {
                     Double.TryParse(match.Groups["days"].Value, out double days);
                     Double.TryParse(match.Groups["hours"].Value, out double hours);
-                    pregnantUntil = now + TimeSpan.FromDays(days) + TimeSpan.FromHours(hours);
+                    Double.TryParse(match.Groups["minutes"].Value, out double minutes);
+                    pregnantUntil = now + TimeSpan.FromDays(days) + TimeSpan.FromHours(hours) + TimeSpan.FromMinutes(minutes);
                     logger.Log("found creature to be pregnant, exact delivery: " + pregnantUntil);
                 }
             }
