@@ -222,10 +222,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     }
                 }
                 //[11:43:35] Its colour is ash.
-                if (line.Contains("Its colour is"))
+                //[11:43:35] Her colour is ash.
+                //[11:43:35] His colour is ash.
+                if (line.Contains("colour is"))
                 {
                     debugLogger.Log("found maybe color line");
-                    Match match = Regex.Match(line, @"Its colour is (.+)\.");
+                    Match match = Regex.Match(line, @"(?:Its|His|Her) colour is (.+)\.");
                     if (match.Success)
                     {
                         string colorName = match.Groups[1].Value;
