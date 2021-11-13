@@ -175,13 +175,9 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     verifyList.CaredBy = true;
                     debugLogger.Log("finished parsing care line");
                 }
-                //[17:11:42] She will deliver in about 4 days.
-                //[17:11:42] She will deliver in about 1 day.
-                //[10:48:00] You feel confident she will give birth in 6 days.
-                //[10:48:00] You feel confident she will give birth in 6 days, 5 hours.
                 if (!verifyList.Pregnant)
                 {
-                    var pregnantUntil = GrangerHelpers.ParsePregnantUntil(line, debugLogger, DateTime.Now);
+                    var pregnantUntil = GrangerHelpers.TryParsePregnantUntil(line, debugLogger, DateTime.Now);
                     if (pregnantUntil != null)
                     {
                         creatureBuffer.PregnantUntil = pregnantUntil.Value;

@@ -190,7 +190,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             return RemoveAllPrefixes(prefixedObjectName);
         }
 
-        public static DateTime? ParsePregnantUntil(string line, GrangerDebugLogger logger, DateTime now)
+        public static DateTime? TryParsePregnantUntil(string line, GrangerDebugLogger logger, DateTime now)
         {
             DateTime? pregnantUntil = null;
 
@@ -207,10 +207,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 }
             }
 
-            if (line.Contains("You feel confident she will give birth") 
-                || line.Contains("You predict she will give birth"))
+            const string entrySentence1 = "You are absolutely certain";
+            const string entrySentence2 = "You feel confident";
+            const string entrySentence3 = "You predict";
+
+            if (line.Contains(entrySentence1) || line.Contains(entrySentence2) || line.Contains(entrySentence3))
             {
-                Match match = Regex.Match(line, @"(?:You feel confident|You predict) she will give birth in (?:(?<days>\d+)(?: days| day))?(?:, |)?(?:(?<hours>\d+)(?: hours| hour))?(?:, |)?(?:(?<minutes>\d+)(?: minutes| minute))?");
+                Match match = Regex.Match(line, $@"(?:{entrySentence1}|{entrySentence2}|{entrySentence3}) (?:she|he|it) will give birth in (?:(?<days>\d+)(?: days| day))?(?:, |)?(?:(?<hours>\d+)(?: hours| hour))?(?:, |)?(?:(?<minutes>\d+)(?: minutes| minute))?");
                 if (match.Success)
                 {
                     Double.TryParse(match.Groups["days"].Value, out double days);
