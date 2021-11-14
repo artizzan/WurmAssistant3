@@ -96,6 +96,15 @@ namespace AldursLab.WurmAssistant3.Areas.CraftingAssistant
                         currentActionNeeded = match.Groups[1].Value;
                 }
 
+                // You need to polish the longsword with a pelt.
+                {
+                    var match = Regex.Match(entry.Content,
+                        @"You need to polish the .+ with (.+)\.",
+                        RegexOptions.Compiled);
+                    if (match.Success)
+                        currentActionNeeded = match.Groups[1].Value;
+                }
+
                 // You need to temper the lamp by dipping it in water while it's hot.
                 {
                     var match = Regex.Match(entry.Content,
