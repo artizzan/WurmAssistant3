@@ -163,7 +163,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     debugLogger.Log("finished parsing parents line");
                 }
                 //[20:23:18] It is being taken care of by Darkprincevale.
-                if (line.Contains("It is being taken care") && !verifyList.CaredBy)
+                if (line.Contains("is being taken care") && !verifyList.CaredBy)
                 {
                     debugLogger.Log("found maybe take care of line");
                     Match caredby = Regex.Match(line, @"care of by (\w+)");
@@ -205,7 +205,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     }
                 }
                 //[20:57:27] It has been branded by and belongs to the settlement of Silver Hill Estate.
-                if (line.Contains("It has been branded") && !verifyList.Branding)
+                if (line.Contains("has been branded") && !verifyList.Branding)
                 {
                     debugLogger.Log("found maybe branding line");
                     Match match = Regex.Match(line, @"belongs to the settlement of (.+)\.");
