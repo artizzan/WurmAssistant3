@@ -205,6 +205,8 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     pregnantUntil = now + TimeSpan.FromDays(length);
                     logger.Log("found creature to be pregnant, estimated delivery: " + pregnantUntil);
                 }
+
+                logger.Log("finished parsing pregnant line");
             }
 
             const string entrySentence1 = "You are absolutely certain";
@@ -222,10 +224,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     pregnantUntil = now + TimeSpan.FromDays(days) + TimeSpan.FromHours(hours) + TimeSpan.FromMinutes(minutes);
                     logger.Log("found creature to be pregnant, exact delivery: " + pregnantUntil);
                 }
+
+                logger.Log("finished parsing pregnant line");
             }
 
-            logger.Log("finished parsing pregnant line");
-            
             return pregnantUntil;
         }
 

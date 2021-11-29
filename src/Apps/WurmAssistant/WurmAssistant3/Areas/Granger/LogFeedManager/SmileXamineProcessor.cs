@@ -133,13 +133,13 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                     }
                 }
                 //[20:23:18] She is very strong and has a good reserve of fat.
-                if (line.StartsWith("He", StringComparison.Ordinal) && !verifyList.Gender)
+                if (line.StartsWith("He ", StringComparison.Ordinal) && !verifyList.Gender)
                 {
                     creatureBuffer.IsMale = true;
                     verifyList.Gender = true;
                     debugLogger.Log("creature set to male");
                 }
-                if (line.StartsWith("She", StringComparison.Ordinal) && !verifyList.Gender)
+                if (line.StartsWith("She ", StringComparison.Ordinal) && !verifyList.Gender)
                 {
                     creatureBuffer.IsMale = false;
                     verifyList.Gender = true;
