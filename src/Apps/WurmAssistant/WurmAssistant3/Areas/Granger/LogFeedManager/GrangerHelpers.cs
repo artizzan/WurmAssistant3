@@ -209,13 +209,12 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 logger.Log("finished parsing pregnant line");
             }
 
-            const string entrySentence1 = "You are absolutely certain";
-            const string entrySentence2 = "You feel confident";
-            const string entrySentence3 = "You predict";
+            string[] entrySentences = new[]
+                {"You are absolutely certain", "You feel confident", "You feel very confident", "You predict"};
 
-            if (line.Contains(entrySentence1) || line.Contains(entrySentence2) || line.Contains(entrySentence3))
+            if (entrySentences.Any(line.Contains))
             {
-                Match match = Regex.Match(line, $@"(?:{entrySentence1}|{entrySentence2}|{entrySentence3}) (?:she|he|it) will give birth in (?:(?<days>\d+)(?: days| day))?(?:, |)?(?:(?<hours>\d+)(?: hours| hour))?(?:, |)?(?:(?<minutes>\d+)(?: minutes| minute))?");
+                Match match = Regex.Match(line, $@"(?:{string.Join("|", entrySentences)}) (?:she|he|it) will give birth in (?:(?<days>\d+)(?: days| day))?(?:, |)?(?:(?<hours>\d+)(?: hours| hour))?(?:, |)?(?:(?<minutes>\d+)(?: minutes| minute))?");
                 if (match.Success)
                 {
                     Double.TryParse(match.Groups["days"].Value, out double days);
