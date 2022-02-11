@@ -267,7 +267,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
                     "Less likely to be attacked by aggressive creatures when tame");
 
                 MapTrait(
-                    "It seems especially loyal",
+                    "It is especially loyal",
                     CreatureTraitId.SeemsEspeciallyLoyal,
                     "Especially loyal",
                     "SEL",
