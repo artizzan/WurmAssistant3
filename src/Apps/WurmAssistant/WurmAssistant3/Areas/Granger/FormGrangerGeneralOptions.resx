@@ -125,9 +125,10 @@ This may break if WU server name changes (WO server names are stable)
 Creature server can be edited manually.</value>
   </data>
   <data name="checkBoxDoNotMatchCreaturesByBrandName.Text" xml:space="preserve">
-    <value>Use branding name as just part of creature name.
-This disables treating branding name, as alternative creature identity.
-Use this option, if you name creatures by some convention eg. positive trait count,
-and are having issues with adding/updating/breeding.</value>
+    <value>Use branding name as alternative creature name.
+Behavior when checked: creatures must match by creature name only 
+(branding name is ignored)
+Behavior when unchecked: creatures first match by creature name. 
+If no creature found, try matching by branding name only.</value>
   </data>
 </root>

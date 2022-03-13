@@ -209,7 +209,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
 
         public string Name { get { return Entity.Name; } set { Entity.Name = value; } }
 
-        public string InnerName => GetInnerNameInfo(Entity.Name).InnerName;
+        public string InnerName => GetBrandingNameInfo(Entity.Name).InnerName;
 
         public string Father { get { return Entity.FatherName; } set { Entity.FatherName = value; } }
 
@@ -421,7 +421,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             return Age.CreatureAgeId == CreatureAgeId.YoungFoal || Age.CreatureAgeId == CreatureAgeId.AdolescentFoal;
         }
 
-        public static InnerCreatureNameInfo GetInnerNameInfo(string name)
+        public static InnerCreatureNameInfo GetBrandingNameInfo(string name)
         {
             var match = Regex.Match(name, @"'(.+)'", RegexOptions.Compiled);
             if (match.Success)

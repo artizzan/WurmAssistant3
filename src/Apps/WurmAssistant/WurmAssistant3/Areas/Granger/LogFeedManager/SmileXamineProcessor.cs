@@ -518,7 +518,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             IEnumerable<CreatureEntity> query;
             if (checkInnerName)
             {
-                var bufferInnerNameInfo = Creature.GetInnerNameInfo(creatureBuffer.Name);
+                var bufferInnerNameInfo = Creature.GetBrandingNameInfo(creatureBuffer.Name);
                 if (!bufferInnerNameInfo.HasInnerName)
                 {
                     return new CreatureEntity[0];
@@ -526,7 +526,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
                 query = context.Creatures
                                .Where(x =>
                                {
-                                   var iteratedInnerNameInfo = Creature.GetInnerNameInfo(x.Name);
+                                   var iteratedInnerNameInfo = Creature.GetBrandingNameInfo(x.Name);
                                    if (!iteratedInnerNameInfo.HasInnerName)
                                    {
                                        return false;

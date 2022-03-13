@@ -59,7 +59,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // 
             // timeSpanInputGroomingTime
             // 
-            this.timeSpanInputGroomingTime.Location = new System.Drawing.Point(12, 404);
+            this.timeSpanInputGroomingTime.Location = new System.Drawing.Point(12, 417);
             this.timeSpanInputGroomingTime.Margin = new System.Windows.Forms.Padding(2);
             this.timeSpanInputGroomingTime.Name = "timeSpanInputGroomingTime";
             this.timeSpanInputGroomingTime.Size = new System.Drawing.Size(231, 45);
@@ -69,7 +69,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(238, 490);
+            this.buttonOK.Location = new System.Drawing.Point(238, 503);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(92, 29);
             this.buttonOK.TabIndex = 3;
@@ -80,7 +80,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.Location = new System.Drawing.Point(336, 490);
+            this.buttonCancel.Location = new System.Drawing.Point(336, 503);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(92, 29);
             this.buttonCancel.TabIndex = 4;
@@ -91,7 +91,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 389);
+            this.label1.Location = new System.Drawing.Point(9, 402);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(359, 13);
             this.label1.TabIndex = 5;
@@ -154,7 +154,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             this.checkBoxDoNotMatchCreaturesByBrandName.AutoSize = true;
             this.checkBoxDoNotMatchCreaturesByBrandName.Location = new System.Drawing.Point(12, 241);
             this.checkBoxDoNotMatchCreaturesByBrandName.Name = "checkBoxDoNotMatchCreaturesByBrandName";
-            this.checkBoxDoNotMatchCreaturesByBrandName.Size = new System.Drawing.Size(411, 56);
+            this.checkBoxDoNotMatchCreaturesByBrandName.Size = new System.Drawing.Size(359, 69);
             this.checkBoxDoNotMatchCreaturesByBrandName.TabIndex = 11;
             this.checkBoxDoNotMatchCreaturesByBrandName.Text = resources.GetString("checkBoxDoNotMatchCreaturesByBrandName.Text");
             this.checkBoxDoNotMatchCreaturesByBrandName.UseVisualStyleBackColor = true;
@@ -162,7 +162,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // checkBoxUpdateCreatureColorsOnSmilexamines
             // 
             this.checkBoxUpdateCreatureColorsOnSmilexamines.AutoSize = true;
-            this.checkBoxUpdateCreatureColorsOnSmilexamines.Location = new System.Drawing.Point(12, 303);
+            this.checkBoxUpdateCreatureColorsOnSmilexamines.Location = new System.Drawing.Point(12, 316);
             this.checkBoxUpdateCreatureColorsOnSmilexamines.Name = "checkBoxUpdateCreatureColorsOnSmilexamines";
             this.checkBoxUpdateCreatureColorsOnSmilexamines.Size = new System.Drawing.Size(295, 30);
             this.checkBoxUpdateCreatureColorsOnSmilexamines.TabIndex = 12;
@@ -173,7 +173,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // checkBoxRequireServerAndSkillToBeKnownForSmilexamine
             // 
             this.checkBoxRequireServerAndSkillToBeKnownForSmilexamine.AutoSize = true;
-            this.checkBoxRequireServerAndSkillToBeKnownForSmilexamine.Location = new System.Drawing.Point(12, 342);
+            this.checkBoxRequireServerAndSkillToBeKnownForSmilexamine.Location = new System.Drawing.Point(12, 355);
             this.checkBoxRequireServerAndSkillToBeKnownForSmilexamine.Name = "checkBoxRequireServerAndSkillToBeKnownForSmilexamine";
             this.checkBoxRequireServerAndSkillToBeKnownForSmilexamine.Size = new System.Drawing.Size(409, 30);
             this.checkBoxRequireServerAndSkillToBeKnownForSmilexamine.TabIndex = 13;
@@ -185,7 +185,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(440, 531);
+            this.ClientSize = new System.Drawing.Size(440, 544);
             this.Controls.Add(this.checkBoxRequireServerAndSkillToBeKnownForSmilexamine);
             this.Controls.Add(this.checkBoxUpdateCreatureColorsOnSmilexamines);
             this.Controls.Add(this.checkBoxDoNotMatchCreaturesByBrandName);

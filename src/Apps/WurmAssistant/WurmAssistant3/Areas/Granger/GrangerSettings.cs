@@ -39,7 +39,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger
             updateCreatureColorOnSmilexamines = true;
             requireServerAndSkillToBeKnownForSmilexamine = true;
 
-            DoNotMatchCreaturesByBrandName = true;
+            doNotMatchCreaturesByBrandName = true;
         }
 
         [JsonProperty]
