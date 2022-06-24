@@ -210,7 +210,7 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
             }
 
             string[] entrySentences = new[]
-                {"You are absolutely certain", "You feel confident", "You feel very confident", "You predict", "You guess that"};
+                {"You are absolutely certain", "You feel confident", "You feel very confident", "You predict", "You guess that", "You make an educated guess that"};
 
             if (entrySentences.Any(line.Contains))
             {

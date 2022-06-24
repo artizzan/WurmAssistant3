@@ -52,7 +52,8 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Areas.Granger.LogFeedManager
                 "You predict {gender} will give birth",
                 "You are absolutely certain {gender} will give birth",
                 "You feel very confident {gender} will give birth",
-                "You guess that {gender} might give birth"
+                "You guess that {gender} might give birth",
+                "You make an educated guess that she will give birth"
             };
 
             Tuple<string, int, int, int>[] part2Strings = new[]
