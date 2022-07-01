@@ -75,13 +75,9 @@ namespace AldursLab.Essentials.Extensions.DotNet
             {
                 return timespan.ToString("h'h'");
             }
-            else if (totalMinutes < 144 * 60)
-            {
-                return timespan.ToString("d'd 'h'h'");
-            }
             else
             {
-                return timespan.ToString("d'd'");
+                return timespan.ToString("d'd 'h'h'");
             }
         }
 
@@ -104,13 +100,9 @@ namespace AldursLab.Essentials.Extensions.DotNet
             {
                 return timespan.ToString("h'h'");
             }
-            else if (totalMinutes < 144 * 60)
-            {
-                return timespan.ToString("d'd 'h'h'");
-            }
             else
             {
-                return timespan.ToString("d'd'");
+                return timespan.ToString("d'd 'h'h'");
             }
         }
     }
