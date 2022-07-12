@@ -211,10 +211,10 @@ namespace AldursLab.WurmAssistant3.Areas.Granger.LogFeedManager
 
             string[] entrySentences = new[]
                 {"You are absolutely certain", "You feel confident", "You feel very confident", "You predict", "You guess that", "You make an educated guess that"};
-
+            
             if (entrySentences.Any(line.Contains))
             {
-                Match match = Regex.Match(line, $@"(?:{string.Join("|", entrySentences)}) (?:she|he|it) (?:will|might) give birth in (?:(?<days>\d+)(?: days| day))?(?:, |)?(?:(?<hours>\d+)(?: hours| hour))?(?:, |)?(?:(?<minutes>\d+)(?: minutes| minute))?");
+                Match match = Regex.Match(line, $@"(?:{string.Join("|", entrySentences)}) (?:she|he|it) (?:will|might) give birth in (?:less than |)(?:(?<days>\d+)(?: days| day))?(?:, |)?(?:(?<hours>\d+)(?: hours| hour))?(?:, |)?(?:(?<minutes>\d+)(?: minutes| minute))?");
                 if (match.Success)
                 {
                     Double.TryParse(match.Groups["days"].Value, out double days);

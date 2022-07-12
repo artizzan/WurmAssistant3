@@ -46,34 +46,37 @@ namespace AldursLab.WurmAssistant3.Tests.Unit.Areas.Granger.LogFeedManager
 
             // new eloquent pregnancy messages, lets hope these are the all possible combinations!
 
-            string[] part1Strings = new[]
+            var part1Strings = new List<string>
             {
-                "You feel confident {gender} will give birth",
-                "You predict {gender} will give birth",
-                "You are absolutely certain {gender} will give birth",
-                "You feel very confident {gender} will give birth",
-                "You guess that {gender} might give birth",
-                "You make an educated guess that she will give birth"
+                "You feel confident {gender} will give birth in",
+                "You predict {gender} will give birth in",
+                "You are absolutely certain {gender} will give birth in",
+                "You feel very confident {gender} will give birth in",
+                "You guess that {gender} might give birth in",
+                "You make an educated guess that she will give birth in"
             };
+
+            // create cases for when there is "will give birth in less than"
+            part1Strings.AddRange(part1Strings.Select(s => s + " less than").ToArray());
 
             Tuple<string, int, int, int>[] part2Strings = new[]
             {
-                new Tuple<string, int, int, int>("in 1 day.", 1, 0, 0),
-                new Tuple<string, int, int, int>("in 4 days.", 4, 0, 0),
-                new Tuple<string, int, int, int>("in 1 hour.", 0, 1, 0),
-                new Tuple<string, int, int, int>("in 16 hours.", 0, 16, 0),
-                new Tuple<string, int, int, int>("in 1 minute.", 0, 0, 1),
-                new Tuple<string, int, int, int>("in 37 minutes.", 0, 0, 37),
-                new Tuple<string, int, int, int>("in 1 day, 1 hour.", 1, 1, 0),
-                new Tuple<string, int, int, int>("in 1 day, 1 hour, 1 minute.", 1, 1, 1),
-                new Tuple<string, int, int, int>("in 1 day, 1 minute.", 1, 0, 1),
-                new Tuple<string, int, int, int>("in 1 hour, 1 minute.", 0, 1, 1),
-                new Tuple<string, int, int, int>("in 1 minute.", 0, 0, 1),
-                new Tuple<string, int, int, int>("in 13 days, 12 hours.", 13, 12, 0),
-                new Tuple<string, int, int, int>("in 13 days, 12 hours, 37 minutes.", 13, 12, 37),
-                new Tuple<string, int, int, int>("in 13 days, 37 minutes.", 13, 0, 37),
-                new Tuple<string, int, int, int>("in 12 hours, 37 minutes.", 0, 12, 37),
-                new Tuple<string, int, int, int>("in 37 minutes.", 0, 0, 37),
+                new Tuple<string, int, int, int>("1 day.", 1, 0, 0),
+                new Tuple<string, int, int, int>("4 days.", 4, 0, 0),
+                new Tuple<string, int, int, int>("1 hour.", 0, 1, 0),
+                new Tuple<string, int, int, int>("16 hours.", 0, 16, 0),
+                new Tuple<string, int, int, int>("1 minute.", 0, 0, 1),
+                new Tuple<string, int, int, int>("37 minutes.", 0, 0, 37),
+                new Tuple<string, int, int, int>("1 day, 1 hour.", 1, 1, 0),
+                new Tuple<string, int, int, int>("1 day, 1 hour, 1 minute.", 1, 1, 1),
+                new Tuple<string, int, int, int>("1 day, 1 minute.", 1, 0, 1),
+                new Tuple<string, int, int, int>("1 hour, 1 minute.", 0, 1, 1),
+                new Tuple<string, int, int, int>("1 minute.", 0, 0, 1),
+                new Tuple<string, int, int, int>("13 days, 12 hours.", 13, 12, 0),
+                new Tuple<string, int, int, int>("13 days, 12 hours, 37 minutes.", 13, 12, 37),
+                new Tuple<string, int, int, int>("13 days, 37 minutes.", 13, 0, 37),
+                new Tuple<string, int, int, int>("12 hours, 37 minutes.", 0, 12, 37),
+                new Tuple<string, int, int, int>("37 minutes.", 0, 0, 37),
             };
 
             // note: it may feel silly to include "he" gender, but... it's Wurm, lets assume the unassumable
