@@ -257,7 +257,8 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Prayer
                         || line.Content.Contains("feel that an envoy of") 
                         || line.Content.Contains("Deep in your heart") 
                         || line.Content.Contains("You feel calm and solemn")
-                        || line.Content.Contains("is here with you now."))
+                        || line.Content.Contains("is here with you now.")
+                        || line.Content.Contains("The Otherworldly Monolith feels slightly more stable now!"))
                     {
                         prayerHistory.Add(new PrayHistoryEntry(PrayHistoryEntryTypes.Prayed, line.Timestamp));
                     }
@@ -363,10 +364,13 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Prayer
         public override void HandleNewEventLogLine(LogEntry line)
         {
             if (line.Content.Contains("You feel sincere devotion")
-                || line.Content.Contains("Was that a sudden gust of wind") ||
-                line.Content.Contains("You are relying on") || line.Content.Contains("feel that an envoy of") ||
-                line.Content.Contains("Deep in your heart") || line.Content.Contains("You feel calm and solemn") ||
-                line.Content.Contains("is here with you now."))
+                || line.Content.Contains("Was that a sudden gust of wind") 
+                || line.Content.Contains("You are relying on") 
+                || line.Content.Contains("feel that an envoy of") 
+                || line.Content.Contains("Deep in your heart") 
+                || line.Content.Contains("You feel calm and solemn") 
+                || line.Content.Contains("is here with you now.") 
+                || line.Content.Contains("The Otherworldly Monolith feels slightly more stable now!"))
             {
                 prayerHistory.Add(new PrayHistoryEntry(PrayHistoryEntryTypes.Prayed, DateTime.Now));
                 updatePrayerCooldownOperation.Trigger();
