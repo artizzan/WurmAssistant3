@@ -100,10 +100,14 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
         {
             try
             {
-                if (customTimersManagerUi.WindowState == FormWindowState.Minimized)
-                    customTimersManagerUi.WindowState = FormWindowState.Normal;
-                customTimersManagerUi.Show();
-                customTimersManagerUi.BringToFront();
+                customTimersManagerUi = new CustomTimersManagerForm(wurmApi, timerDefinitions);
+                if (customTimersManagerUi != null)
+                {
+                    if (customTimersManagerUi.WindowState == FormWindowState.Minimized)
+                        customTimersManagerUi.WindowState = FormWindowState.Normal;
+                    customTimersManagerUi.Show();
+                    customTimersManagerUi.BringToFront();
+                }
             }
             catch
             {

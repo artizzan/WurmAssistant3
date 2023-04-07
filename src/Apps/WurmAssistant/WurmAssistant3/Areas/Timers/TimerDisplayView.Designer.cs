@@ -30,8 +30,8 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.labelTimeTo = new System.Windows.Forms.Label();
             this.labelName = new System.Windows.Forms.Label();
+            this.labelTimeTo = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -71,6 +71,19 @@
             this.tableLayoutPanel2.TabIndex = 0;
             this.tableLayoutPanel2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tableLayoutPanel2_MouseClick);
             // 
+            // labelName
+            // 
+            this.labelName.AutoSize = true;
+            this.labelName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelName.Location = new System.Drawing.Point(0, 0);
+            this.labelName.Margin = new System.Windows.Forms.Padding(0);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(122, 15);
+            this.labelName.TabIndex = 1;
+            this.labelName.Text = "name";
+            this.labelName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelName.MouseClick += new System.Windows.Forms.MouseEventHandler(this.labelName_MouseClick);
+            // 
             // labelTimeTo
             // 
             this.labelTimeTo.AutoSize = true;
@@ -85,22 +98,10 @@
             this.labelTimeTo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.labelTimeTo.MouseClick += new System.Windows.Forms.MouseEventHandler(this.labelTimeTo_MouseClick);
             // 
-            // labelName
-            // 
-            this.labelName.AutoSize = true;
-            this.labelName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelName.Location = new System.Drawing.Point(0, 0);
-            this.labelName.Margin = new System.Windows.Forms.Padding(0);
-            this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(122, 15);
-            this.labelName.TabIndex = 1;
-            this.labelName.Text = "name";
-            this.labelName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.labelName.MouseClick += new System.Windows.Forms.MouseEventHandler(this.labelName_MouseClick);
-            // 
             // progressBar1
             // 
             this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progressBar1.ForeColor = System.Drawing.Color.Orange;
             this.progressBar1.Location = new System.Drawing.Point(0, 15);
             this.progressBar1.Margin = new System.Windows.Forms.Padding(0);
             this.progressBar1.Maximum = 1000;
@@ -109,7 +110,7 @@
             this.progressBar1.TabIndex = 0;
             this.progressBar1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.progressBar1_MouseClick);
             // 
-            // UControlTimerDisplay
+            // TimerDisplayView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

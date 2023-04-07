@@ -45,6 +45,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Custom
             }
             timeInputUControl2.Value = options.Duration;
             checkBoxUptimeReset.Checked = options.ResetOnUptime;
+            rbnElapsedTime.Checked = options.ShowElapsedTime;
         }
 
         private void CustomTimersManagerEditWindow_Load(object sender, EventArgs e)
@@ -66,6 +67,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Custom
                 definition.CustomTimerConfig.AddTrigger(textBoxCond.Text, (LogType)comboBoxLogType.SelectedItem, checkBoxAsRegex.Checked);
                 definition.CustomTimerConfig.Duration = timeInputUControl2.Value;
                 definition.CustomTimerConfig.ResetOnUptime = checkBoxUptimeReset.Checked;
+                definition.CustomTimerConfig.ShowElapsedTime = rbnElapsedTime.Checked;
                 timerDefinitions.AddTimerDefinitionIfNotExists(definition);
                 this.Close();
             }
@@ -80,6 +82,19 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Custom
                 MessageBox.Show("Give your timer a name.");
             }
             return valid;
+        }
+
+        private void TimerChoiceChanged(object sender, EventArgs e)
+        {
+            if (rbnElapsedTime.Checked)
+            {
+                timeInputUControl2.Enabled = false;
+            }
+            else
+            {
+                timeInputUControl2.Enabled = true;
+            }
+
         }
     }
 }
