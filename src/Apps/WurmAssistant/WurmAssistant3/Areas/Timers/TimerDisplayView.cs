@@ -104,7 +104,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
             labelName.Text = presentation;
             labelTimeTo.Text = string.Empty;
 
-            if (wurmTimer.TimerDefinition.CustomTimerConfig.ShowElapsedTime)
+            if (wurmTimer.TimerDefinition.IsCustomTimerShowingElapsed())
             {
                 // Elapset timer shows yellow bar (3) and elapsed time from event start time
                 progressBar1.Value = progressBar1.Maximum;
