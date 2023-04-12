@@ -1,24 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-using AldursLab.Essentials.Extensions.DotNet;
 using AldursLab.PersistentObjects;
 using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Areas.Core;
 using AldursLab.WurmAssistant3.Areas.Features;
 using AldursLab.WurmAssistant3.Properties;
 using AldursLab.WurmAssistant3.Areas.Insights;
 using JetBrains.Annotations;
-using Newtonsoft.Json;
-using static AldursLab.WurmApi.Constants;
 using ILogger = AldursLab.WurmAssistant3.Areas.Logging.ILogger;
-using Ninject;
-using AldursLab.WurmAssistant3.Areas.Timers;
-using AldursLab.WurmAssistant3.Areas.Sermoner.Sermon;
-using AldursLab.WurmAssistant3.Areas.CombatAssistant;
 
 namespace AldursLab.WurmAssistant3.Areas.Sermoner
 {

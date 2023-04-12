@@ -1,20 +1,13 @@
 ﻿using AldursLab.WurmApi;
-using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
 using AldursLab.WurmAssistant3.Areas.Sermoner.Sermon;
-using AldursLab.WurmAssistant3.Areas.SkillStats;
-using AldursLab.WurmAssistant3.Areas.Timers;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 using BrightIdeasSoftware;
 using JetBrains.Annotations;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AldursLab.WurmAssistant3.Areas.Sermoner
@@ -26,8 +19,6 @@ namespace AldursLab.WurmAssistant3.Areas.Sermoner
         readonly SermonerSettings sermonerSettings;
 
         PreacherList preacherList;
-
-        private bool Running = false;
 
         public SermonerForm(
             [NotNull] ILogger logger, 
@@ -90,7 +81,7 @@ namespace AldursLab.WurmAssistant3.Areas.Sermoner
 
                 if (preacherList == null)
                 {
-                    preacherList = new PreacherList(gameCharacter);
+                    preacherList = new PreacherList(gameCharacter, logger);
                     preacherList.AsyncInitCompleted += this.AsyncPreacherListInitCompleted;
                 }
                 else
@@ -100,9 +91,6 @@ namespace AldursLab.WurmAssistant3.Areas.Sermoner
 
                 preacherList.PerformAsyncInit();
                 wurmApi.LogsMonitor.Subscribe(gameChar, LogType.AllLogs, OnNewLogEvents);
-
-
-                Running = true;
             }
             catch (Exception exception)
             {

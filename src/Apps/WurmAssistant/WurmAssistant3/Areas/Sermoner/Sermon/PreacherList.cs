@@ -1,33 +1,22 @@
 ﻿using AldursLab.WurmApi;
-using AldursLab.Essentials.Extensions.DotNet;
-using AldursLab.PersistentObjects;
-using AldursLab.WurmAssistant3.Areas.Insights;
 using AldursLab.WurmAssistant3.Areas.Logging;
-using AldursLab.WurmAssistant3.Areas.SoundManager;
-using AldursLab.WurmAssistant3.Areas.TrayPopups;
-using Ninject.Planning;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
-using System.Windows.Shapes;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace AldursLab.WurmAssistant3.Areas.Sermoner.Sermon
 {
     public class PreacherList : List<Preacher>
     {
         protected IWurmCharacter WurmCharacter;
-        protected ServerGroup playerTimersGroup;
+        protected readonly ILogger Logger;
 
         public event EventHandler AsyncInitCompleted;
 
-        public PreacherList(IWurmCharacter character)
+        public PreacherList(IWurmCharacter character, ILogger logger)
         {
             WurmCharacter = character;
+            Logger = logger;
         }
 
         public void AddSermon(string name, DateTime sermonTime)
@@ -61,7 +50,7 @@ namespace AldursLab.WurmAssistant3.Areas.Sermoner.Sermon
             }
             catch (Exception exception)
             {
-                
+                Logger.Error(exception, "Error during PerformAsyncInit");
             }
         }
 
