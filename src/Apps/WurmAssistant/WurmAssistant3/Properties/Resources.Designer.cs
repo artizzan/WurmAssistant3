@@ -309,6 +309,16 @@ namespace AldursLab.WurmAssistant3.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Sermoner {
+            get {
+                object obj = ResourceManager.GetObject("Sermoner", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://www.youtube.com/watch?v=4J5b_Tlmsus.
         /// </summary>
         internal static string SkillStatsVideoUrl {

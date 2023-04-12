@@ -158,7 +158,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
                     if (timeSpan.Days > 1)
                     {
                         labelTimeTo.Text += String.Format("{0} days ", timeSpan.Days);
-                        labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
+                        labelTimeTo.Text += timeSpan.ToString(@"hh\:mm\:ss");
                     }
                     else if (timeSpan.Days > 0)
                     {
