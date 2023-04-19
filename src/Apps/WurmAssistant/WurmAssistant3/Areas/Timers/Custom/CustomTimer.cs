@@ -19,6 +19,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Custom
 
         CustomTimerDefinition config;
         DateTime cooldownTo = DateTime.MinValue;
+        DateTime cooldownFrom = DateTime.MaxValue;
         DateTime uptimeResetSince = DateTime.MinValue;
 
         public CustomTimer(string persistentObjectId, IWurmApi wurmApi, ILogger logger, ISoundManager soundManager,
@@ -75,6 +76,15 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Custom
             }
         }
 
+        DateTime CoolDownFrom
+        {             
+            get { return cooldownFrom; }
+            set
+            {
+                cooldownFrom = value;
+            }
+        }
+
         public void ApplyCustomTimerOptions(CustomTimerDefinition customTimerConfig)
         {
             this.config = customTimerConfig;
@@ -86,7 +96,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Custom
             if (View.Visible)
             {
                 View.SetCooldown(config.Duration);
-                View.UpdateCooldown(CooldownTo);
+                View.UpdateCooldown(CooldownTo, CoolDownFrom);
             }
         }
 
@@ -143,10 +153,12 @@ namespace AldursLab.WurmAssistant3.Areas.Timers.Custom
                 if (cdTo > nextUptimeReset)
                     cdTo = nextUptimeReset;
                 CooldownTo = cdTo;
+                CoolDownFrom = startDate;
             }
             else
             {
                 CooldownTo = startDate + config.Duration;
+                CoolDownFrom = startDate;
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using AldursLab.WurmAssistant3.Utils.WinForms;
 
@@ -55,9 +56,19 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
             this.cooldownLength = length;
         }
 
+        // Update cooldown overloads group to support different input types
+        // Only custom timers can run as elapsed time, and pass the cooldown from
+        public void UpdateCooldown(DateTime cooldownTo, DateTime coolDownFrom)
+        {
+            UpdateCooldown(cooldownTo - DateTime.Now, coolDownFrom);
+        }
         public void UpdateCooldown(DateTime cooldownTo)
         {
-            UpdateCooldown(cooldownTo - DateTime.Now);
+            UpdateCooldown(cooldownTo - DateTime.Now, DateTime.Now);
+        }
+        public void UpdateCooldown(TimeSpan cooldownTo)
+        {
+            UpdateCooldown(cooldownTo, DateTime.Now);
         }
 
         /// <summary>
@@ -83,67 +94,80 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
             meditCount = count.ToString();
         }
 
-        public void UpdateCooldown(TimeSpan cd_remaining)
+        public void UpdateCooldown(TimeSpan cd_remaining, DateTime cooldownFrom)
         {
+            TimeSpan timeSpan = cd_remaining;
             string presentation = timerName;
+            int value;
             if (ShowSkill) presentation += " ("+skillLevel+")";
             if (ShowMeditCount) presentation += " " + meditCount;
             labelName.Text = presentation;
+            labelTimeTo.Text = string.Empty;
 
-            if (cd_remaining.Ticks < 0)
+            if (wurmTimer.TimerDefinition.IsCustomTimerShowingElapsed())
             {
-                labelTimeTo.Text = "ready!";
+                // Elapset timer shows yellow bar (3) and elapsed time from event start time
                 progressBar1.Value = progressBar1.Maximum;
+                timeSpan = DateTime.Now - cooldownFrom;
+                progressBar1.SetState(3);
             }
             else
             {
-                int value = (int)((cd_remaining.TotalSeconds / cooldownLength.TotalSeconds) * progressBar1.Maximum);
+                // Running cooldown timer shows green bar (1)
+                value = (int)((cd_remaining.TotalSeconds / cooldownLength.TotalSeconds) * progressBar1.Maximum);
                 if (value > progressBar1.Maximum) value = progressBar1.Maximum;
                 else if (value < 0) value = 0;
-
                 value = progressBar1.Maximum - value;
-
                 progressBar1.Value = value;
-                
-                labelTimeTo.Text = string.Empty;
+                progressBar1.SetState(1);
+            }
 
+            if (timeSpan.Ticks < 0)
+            {
+                // Completed timer shows red bar (2)
+                labelTimeTo.Text = "ready!";
+                progressBar1.Value = progressBar1.Maximum;
+                progressBar1.SetState(2);
+            }
+            else
+            {
                 if (wurmTimer.TimersFeature.ShowEndDateInsteadOfTimeRemaining)
                 {
-                    labelTimeTo.Text += (DateTime.Now + cd_remaining).ToString("MM-dd HH:mm:ss");
+                    labelTimeTo.Text += (DateTime.Now + timeSpan).ToString("MM-dd HH:mm:ss");
                 }
                 else if (wurmTimer.TimersFeature.ShowEndDate)
                 {
-                    if (cd_remaining.Days > 1)
+                    if (timeSpan.Days > 1)
                     {
-                        labelTimeTo.Text += String.Format("{0} days ", cd_remaining.Days);
-                        labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
+                        labelTimeTo.Text += String.Format("{0} days ", timeSpan.Days);
+                        labelTimeTo.Text += timeSpan.ToString(@"hh\:mm\:ss");
                     }
-                    else if (cd_remaining.Days > 0)
+                    else if (timeSpan.Days > 0)
                     {
-                        labelTimeTo.Text += String.Format("{0} day ", cd_remaining.Days);
-                        labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
+                        labelTimeTo.Text += String.Format("{0} day ", timeSpan.Days);
+                        labelTimeTo.Text += timeSpan.ToString(@"hh\:mm\:ss");
                     }
                     else
                     {
-                        labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
-                        labelTimeTo.Text += string.Format(" ({0})", (DateTime.Now + cd_remaining).ToString("HH:mm"));
+                        labelTimeTo.Text += timeSpan.ToString(@"hh\:mm\:ss");
+                        labelTimeTo.Text += string.Format(" ({0})", (DateTime.Now + timeSpan).ToString("HH:mm"));
                     }
                 }
                 else
                 {
-                    if (cd_remaining.Days > 1)
+                    if (timeSpan.Days > 1)
                     {
-                        labelTimeTo.Text += String.Format("{0} days ", cd_remaining.Days);
+                        labelTimeTo.Text += String.Format("{0} days ", timeSpan.Days);
                         labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
                     }
-                    else if (cd_remaining.Days > 0)
+                    else if (timeSpan.Days > 0)
                     {
-                        labelTimeTo.Text += String.Format("{0} day ", cd_remaining.Days);
-                        labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
+                        labelTimeTo.Text += String.Format("{0} day ", timeSpan.Days);
+                        labelTimeTo.Text += timeSpan.ToString(@"hh\:mm\:ss");
                     }
                     else
                     {
-                        labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
+                        labelTimeTo.Text += timeSpan.ToString(@"hh\:mm\:ss");
                     }
                 }
 
@@ -188,6 +212,16 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
         private void tableLayoutPanel1_MouseClick(object sender, MouseEventArgs e)
         {
             HandleMouseClick(e);
+        }
+    }
+
+    public static class ModifyProgressBarColor
+    {
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+        static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr w, IntPtr l);
+        public static void SetState(this ProgressBar pBar, int state)
+        {
+            SendMessage(pBar.Handle, 1040, (IntPtr)state, IntPtr.Zero);
         }
     }
 }

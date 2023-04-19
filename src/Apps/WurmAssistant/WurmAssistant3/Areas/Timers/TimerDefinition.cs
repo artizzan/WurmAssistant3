@@ -62,5 +62,14 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
         {
             return !Equals(left, right);
         }
+
+        public bool IsCustomTimerShowingElapsed()
+        {
+            if(this.CustomTimerConfig != null)
+            {
+                return this.CustomTimerConfig.ShowElapsedTime;
+            }
+            return false;
+        }
     }
 }

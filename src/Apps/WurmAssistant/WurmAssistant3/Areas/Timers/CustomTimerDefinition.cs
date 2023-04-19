@@ -25,6 +25,8 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
         [JsonProperty]
         public bool ResetOnUptime;
         [JsonProperty]
+        public bool ShowElapsedTime;
+        [JsonProperty]
         public TimeSpan Duration;
         [JsonProperty]
         public bool IsRegex { get; private set; }
