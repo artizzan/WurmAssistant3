@@ -96,6 +96,8 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
 
         public void UpdateCooldown(TimeSpan cd_remaining, DateTime cooldownFrom)
         {
+            // todo: before making more adjustments here, consider refactoring naming and simplifying logic, as it becomes difficult to understand what happens here
+
             TimeSpan timeSpan = cd_remaining;
             string presentation = timerName;
             int value;
@@ -106,7 +108,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
 
             if (wurmTimer.TimerDefinition.IsCustomTimerShowingElapsed())
             {
-                // Elapset timer shows yellow bar (3) and elapsed time from event start time
+                // Elapsed timer shows yellow bar (3) and elapsed time from event start time
                 progressBar1.Value = progressBar1.Maximum;
                 timeSpan = DateTime.Now - cooldownFrom;
                 progressBar1.SetState(3);
