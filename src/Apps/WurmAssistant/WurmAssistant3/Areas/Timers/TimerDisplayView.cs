@@ -96,6 +96,8 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
 
         public void UpdateCooldown(TimeSpan cd_remaining, DateTime cooldownFrom)
         {
+            // todo: before making more adjustments here, consider refactoring naming and simplifying logic, as it becomes difficult to understand what happens here
+
             TimeSpan timeSpan = cd_remaining;
             string presentation = timerName;
             int value;
