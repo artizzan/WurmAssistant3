@@ -170,6 +170,12 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
             set { timersFeature.ShowEndDateInsteadOfTimeRemaining = value; }
         }
 
+        public int BarColorMode
+        {
+            get { return timersFeature.BarColorMode; }
+            set { timersFeature.BarColorMode = value; }
+        }
+
 
         void ApplyTimerGroupsOrdering()
         {
