@@ -19,6 +19,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
             checkBoxShowEndDate.Checked = timersView.ShowEndDate;
             checkBoxShowEndDateInstead.Checked = timersView.ShowEndDateInsteadOfTimeRemaining;
             UpdateControls();
+            SetBarColorMode(this.timersView.BarColorMode);
         }
 
         void UpdateControls()
@@ -76,6 +77,37 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
         {
             timersView.ShowEndDateInsteadOfTimeRemaining = checkBoxShowEndDateInstead.Checked;
             UpdateControls();
+        }
+
+        private void SetBarColorMode(int barColorMode)
+        {
+            switch(barColorMode)
+            {
+                case 0:
+                    rbnColorSimple.Checked = true;
+                    break;
+                case 1:
+                    rbnColorGreenReady.Checked = true;
+                    break;
+                case 2:
+                    rbnColorRedReady.Checked = true;
+                    break;
+            }
+        }
+
+        private void rbnColor_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton radioButton = (RadioButton)sender;
+            if (radioButton == rbnColorSimple)
+            {
+                this.timersView.BarColorMode = 0;
+            } else if (radioButton == rbnColorGreenReady)
+            {
+                this.timersView.BarColorMode = 1;
+            } else if (radioButton == rbnColorRedReady)
+            {
+                this.timersView.BarColorMode = 2;
+            }
         }
     }
 }

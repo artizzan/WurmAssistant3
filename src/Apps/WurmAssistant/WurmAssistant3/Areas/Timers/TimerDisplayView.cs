@@ -108,28 +108,28 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
 
             if (wurmTimer.TimerDefinition.IsCustomTimerShowingElapsed())
             {
-                // Elapsed timer shows yellow bar (3) and elapsed time from event start time
+                // Elapsed timer
                 progressBar1.Value = progressBar1.Maximum;
                 timeSpan = DateTime.Now - cooldownFrom;
-                progressBar1.SetState(3);
+                SetBarColor(BarState.Elapsed);
             }
             else
             {
-                // Running cooldown timer shows green bar (1)
+                // Running
                 value = (int)((cd_remaining.TotalSeconds / cooldownLength.TotalSeconds) * progressBar1.Maximum);
                 if (value > progressBar1.Maximum) value = progressBar1.Maximum;
                 else if (value < 0) value = 0;
                 value = progressBar1.Maximum - value;
                 progressBar1.Value = value;
-                progressBar1.SetState(1);
+                SetBarColor(BarState.Running);
             }
 
             if (timeSpan.Ticks < 0)
             {
-                // Completed timer shows red bar (2)
+                // Completed timer
                 labelTimeTo.Text = "ready!";
                 progressBar1.Value = progressBar1.Maximum;
-                progressBar1.SetState(2);
+                SetBarColor(BarState.Ready);
             }
             else
             {
@@ -160,7 +160,7 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
                     if (timeSpan.Days > 1)
                     {
                         labelTimeTo.Text += String.Format("{0} days ", timeSpan.Days);
-                        labelTimeTo.Text += cd_remaining.ToString(@"hh\:mm\:ss");
+                        labelTimeTo.Text += timeSpan.ToString(@"hh\:mm\:ss");
                     }
                     else if (timeSpan.Days > 0)
                     {
@@ -215,6 +215,36 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
         {
             HandleMouseClick(e);
         }
+
+        private void SetBarColor(BarState barState)
+        {
+            // SetState colors: 1 = Green, 2 = Red, 3 = Yellow
+            if (this.wurmTimer.TimersFeature.BarColorMode == 0)
+            {
+                progressBar1.SetState(1);
+            } else
+            {
+                switch(barState)
+                {
+                    case BarState.Ready: 
+                        progressBar1.SetState(this.wurmTimer.TimersFeature.BarColorMode == 1 ? 1 : 2);
+                        break;
+                    case BarState.Running: 
+                        progressBar1.SetState(this.wurmTimer.TimersFeature.BarColorMode == 1 ? 2 : 1);
+                        break;
+                    case BarState.Elapsed:
+                        progressBar1.SetState(3);
+                        break;
+                }
+            }
+        }
+    }
+
+    public enum BarState
+    {
+        Elapsed,
+        Running,
+        Ready
     }
 
     public static class ModifyProgressBarColor
@@ -226,4 +256,5 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
             SendMessage(pBar.Handle, 1040, (IntPtr)state, IntPtr.Zero);
         }
     }
+   
 }

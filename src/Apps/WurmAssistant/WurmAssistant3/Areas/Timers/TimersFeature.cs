@@ -45,6 +45,8 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
         bool showEndDate = false;
         [JsonProperty] 
         bool showEndDateInsteadOfTimeRemaining = false;
+        [JsonProperty]
+        int barColorMode = 0;
 
         TimersForm timersForm;
         readonly ITimer updateTimer;
@@ -121,6 +123,12 @@ namespace AldursLab.WurmAssistant3.Areas.Timers
         {
             get { return showEndDateInsteadOfTimeRemaining; }
             set { showEndDateInsteadOfTimeRemaining = value; FlagAsChanged(); }
+        }
+
+        public int BarColorMode
+        {
+            get { return barColorMode; }
+            set { barColorMode = value; FlagAsChanged(); }
         }
 
         public void Initialize()
