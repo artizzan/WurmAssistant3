@@ -158,6 +158,23 @@
       <DependentUpon>DataBackupsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Areas\Main\WurmUnlimitedLogsDirChecker.cs" />
+    <Compile Include="Areas\Sermoner\SermonerSettings.cs" />
+    <Compile Include="Areas\Sermoner\SermonerFeature.cs" />
+    <Compile Include="Areas\Sermoner\SermonerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Sermoner\SermonerForm.Designer.cs">
+      <DependentUpon>SermonerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Sermoner\SermonerSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Areas\Sermoner\SermonerSettingsForm.Designer.cs">
+      <DependentUpon>SermonerSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Sermoner\Sermon\Preacher.cs" />
+    <Compile Include="Areas\Sermoner\Sermon\PreacherList.cs" />
+    <Compile Include="Areas\Sermoner\Sermon\Sermon.cs" />
     <Compile Include="Areas\SoundManager\SoundEngine.cs" />
     <Compile Include="Areas\TrayPopups\PositionStrategy.cs" />
     <Compile Include="Systems\AppMigrations\AppMigrationsManager.cs" />
@@ -933,6 +950,12 @@
     <EmbeddedResource Include="Areas\MainMenu\OptionsForm.resx">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Sermoner\SermonerForm.resx">
+      <DependentUpon>SermonerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Sermoner\SermonerSettingsForm.resx">
+      <DependentUpon>SermonerSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Areas\Triggers\ImportExport\ConflictResolveDialog.resx">
       <DependentUpon>ConflictResolveDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -1242,6 +1265,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\Radar.png" />
+    <None Include="Resources\Sermoner.bmp" />
+    <None Include="Resources\Sermoner.png" />
     <Content Include="Resources\SoundDisabled.png" />
     <Content Include="Resources\SoundDisabledSmall.png" />
     <Content Include="Resources\SoundEnabled.png" />
@@ -1263,6 +1288,7 @@
     <Folder Include="Areas\Core\Data\Model\" />
     <Folder Include="Messages\Events\" />
     <Folder Include="Messages\Requests\" />
+    <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Areas\Debugging\DebuggingWindow.xaml">

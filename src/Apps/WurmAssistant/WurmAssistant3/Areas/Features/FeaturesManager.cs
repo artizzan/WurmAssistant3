@@ -69,6 +69,7 @@ namespace AldursLab.WurmAssistant3.Areas.Features
                 "Reveal Creatures Parser",
                 "Skill Stats",
                 "Combat Assistant",
+                "Sermoner"
             });
 
             foreach (var f in Features)
