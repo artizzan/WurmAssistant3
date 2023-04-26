@@ -20,8 +20,11 @@ namespace AldursLab.WurmAssistant3.Areas.Sermoner
 
         PreacherList preacherList;
 
+        private bool SessionRunning = false;
+        private string CharacterString;
+
         public SermonerForm(
-            [NotNull] ILogger logger, 
+            [NotNull] ILogger logger,
             [NotNull] IWurmApi wurmApi,
             [NotNull] SermonerSettings sermonerSettings
             )
@@ -69,15 +72,33 @@ namespace AldursLab.WurmAssistant3.Areas.Sermoner
 
         private void startLiveSessionBtn_Click(object sender, EventArgs e)
         {
+            if (SessionRunning)
+            {
+                StopSession();
+                liveMonCharacterCbox.Enabled = true;
+                startLiveSessionBtn.Text = "Start session";
+                SessionRunning = false;
+            }
+            else
+            {
+                StartSession();
+                liveMonCharacterCbox.Enabled = false;
+                startLiveSessionBtn.Text = "Stop session";
+                SessionRunning = true;
+            }
+        }
+
+        private void StartSession()
+        {
             try
             {
-                var gameChar = liveMonCharacterCbox.Text;
-                if (string.IsNullOrWhiteSpace(gameChar))
+                CharacterString = liveMonCharacterCbox.Text;
+                if (string.IsNullOrWhiteSpace(CharacterString))
                 {
                     MessageBox.Show("Please choose game character");
                     return;
                 }
-                var gameCharacter = wurmApi.Characters.Get(gameChar);
+                var gameCharacter = wurmApi.Characters.Get(CharacterString);
 
                 if (preacherList == null)
                 {
@@ -90,14 +111,18 @@ namespace AldursLab.WurmAssistant3.Areas.Sermoner
                 }
 
                 preacherList.PerformAsyncInit();
-                wurmApi.LogsMonitor.Subscribe(gameChar, LogType.AllLogs, OnNewLogEvents);
+                wurmApi.LogsMonitor.Subscribe(CharacterString, LogType.AllLogs, OnNewLogEvents);
             }
             catch (Exception exception)
             {
                 ShowError(exception);
                 logger.Error(exception, "Sermoner live session start failed");
             }
+        }
 
+        private void StopSession()
+        {
+            wurmApi.LogsMonitor.Unsubscribe(CharacterString, OnNewLogEvents);
         }
 
 
@@ -151,7 +176,7 @@ namespace AldursLab.WurmAssistant3.Areas.Sermoner
             SermonerSettingsForm settings = new SermonerSettingsForm(this, sermonerSettings);
             settings.ShowDialogCenteredOnForm(this);
         }
-        
+
         #endregion
 
     }
