@@ -294,35 +294,51 @@ namespace AldursLab.WurmApi
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Independence",
-                    "https://freedom001.game.wurmonline.com/battles/stats.html",
+                    "https://independence.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Deliverance",
-                    "https://freedom002.game.wurmonline.com/battles/stats.html",
+                    "https://deliverance.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Exodus",
-                    "https://freedom003.game.wurmonline.com/battles/stats.html",
+                    "https://exodus.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Celebration",
-                    "https://freedom004.game.wurmonline.com/battles/stats.html",
+                    "https://celebration.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Chaos",
-                    "https://wild001.game.wurmonline.com/battles/stats.html",
+                    "https://chaos.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Pristine",
-                    "https://freedom005.game.wurmonline.com/battles/stats.html",
+                    "https://pristine.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Release",
-                    "https://freedom006.game.wurmonline.com/battles/stats.html",
+                    "https://release.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Xanadu",
-                    "https://freedom007.game.wurmonline.com/battles/stats.html",
+                    "https://xanadu.game.wurmonline.com/battles/stats.html",
+                    new ServerGroup(ServerGroup.FreedomId)),
+                new WurmServerInfo(
+                    "Harmony",
+                    "https://harmony.game.wurmonline.com/battles/stats.html",
+                    new ServerGroup(ServerGroup.FreedomId)),
+                new WurmServerInfo(
+                    "Melody",
+                    "https://melody.game.wurmonline.com/battles/stats.html",
+                    new ServerGroup(ServerGroup.FreedomId)),
+                new WurmServerInfo(
+                    "Cadence",
+                    "https://cadence.game.wurmonline.com/battles/stats.html",
+                    new ServerGroup(ServerGroup.FreedomId)),
+                new WurmServerInfo(
+                    "Defiance",
+                    "https://defiance.game.wurmonline.com/battles/stats.html",
                     new ServerGroup(ServerGroup.FreedomId)),
                 new WurmServerInfo(
                     "Elevation",
