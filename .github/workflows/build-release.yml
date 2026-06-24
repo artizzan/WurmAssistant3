@@ -215,25 +215,25 @@ jobs:
 
           & $env:PUBLISH_ROBOT_EXE 'publish-package-wa3-azure.cfg'
 
-      - name: Create or update GitHub Release
-        shell: pwsh
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ steps.package.outputs.tag }}
-          PACKAGE_PATH: ${{ steps.package.outputs.package_path }}
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $title = "Stable Windows $env:LEGACY_BUILD_NUMBER"
-          $notes = "Automated stable Windows build from master commit $env:GITHUB_SHA."
+      # - name: Create or update GitHub Release
+      #   shell: pwsh
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
+      #     TAG: ${{ steps.package.outputs.tag }}
+      #     PACKAGE_PATH: ${{ steps.package.outputs.package_path }}
+      #   run: |
+      #     $ErrorActionPreference = 'Stop'
+      #     $title = "Stable Windows $env:LEGACY_BUILD_NUMBER"
+      #     $notes = "Automated stable Windows build from master commit $env:GITHUB_SHA."
 
-          gh release view $env:TAG *> $null
-          if ($LASTEXITCODE -eq 0) {
-            gh release upload $env:TAG $env:PACKAGE_PATH --clobber
-          }
-          else {
-            gh release create $env:TAG $env:PACKAGE_PATH `
-              --target $env:GITHUB_SHA `
-              --title $title `
-              --notes $notes `
-              --latest
-          }
+      #     gh release view $env:TAG *> $null
+      #     if ($LASTEXITCODE -eq 0) {
+      #       gh release upload $env:TAG $env:PACKAGE_PATH --clobber
+      #     }
+      #     else {
+      #       gh release create $env:TAG $env:PACKAGE_PATH `
+      #         --target $env:GITHUB_SHA `
+      #         --title $title `
+      #         --notes $notes `
+      #         --latest
+      #     }
