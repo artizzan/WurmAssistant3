@@ -123,6 +123,7 @@ jobs:
             try {
               & $runner ".\$assemblyName" `
                 --x86 `
+                --workers=1 `
                 --where 'cat != Manual && cat != NoRunCI' `
                 "--work=$assemblyDir" `
                 "--result=$resultPath;format=nunit3"
