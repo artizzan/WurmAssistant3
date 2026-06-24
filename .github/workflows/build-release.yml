@@ -115,9 +115,9 @@ jobs:
             $resultPath = Join-Path $workspace "test-results\$safeName.xml"
 
             Write-Host "Running NUnit:"
-            Write-Host "  assembly: $assemblyName"
-            Write-Host "  working directory: $assemblyDir"
-            Write-Host "  result: $resultPath"
+            Write-Host ("Running NUnit assembly: {0}" -f $assemblyName)
+            Write-Host ("Working directory: {0}" -f $assemblyDir)
+            Write-Host ("Result path: {0}" -f $resultPath)
 
             Push-Location $assemblyDir
             try {
@@ -133,7 +133,7 @@ jobs:
               Pop-Location
             }
 
-            Write-Host "NUnit exit code for $assemblyName: $exitCode"
+            Write-Host ("NUnit exit code for {0}: {1}" -f $assemblyName, $exitCode)
 
             if ($exitCode -ne 0) {
               $failed = $true
