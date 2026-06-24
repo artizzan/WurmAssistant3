@@ -28,8 +28,6 @@ namespace AldursLab.WurmApi.Tests.Integration.Scenarios.Modules.Wurm.CharacterDi
             var realdirfullpaths = Fixture.WurmClientMock.Players.Select(player => player.PlayerDir.FullName).OrderBy(s => s).ToArray();
             var dirpaths = System.AllDirectoriesFullPaths.OrderBy(s => s).ToArray();
             Expect(dirpaths, EqualTo(realdirfullpaths));
-
-            Assert.Fail("Simulated NUnit failure for CI validation.");
         }
 
         [Test]
