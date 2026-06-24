@@ -1,0 +1,239 @@
+name: Build and release WA3
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wa3-master-release
+  cancel-in-progress: false
+
+env:
+  SOLUTION_PATH: src\Complete.sln
+  CONFIGURATION: Release
+  PLATFORM: Any CPU
+  BUILD_CODE: stable-win
+  LEGACY_BUILD_NUMBER_OFFSET: ${{ vars.LEGACY_BUILD_NUMBER_OFFSET || '138' }}
+  PUBLISH_CONFIG_PATH: src\PublishAgents\AgentV2\WurmAssistant.PublishRobot\publish-package-wa3-azure.cfg
+  APP_BIN_PATH: src\Apps\WurmAssistant\WurmAssistant3\bin\Release
+  RELEASES_INFO_PATH: src\Apps\WurmAssistant\WurmAssistant3\Releases
+  PUBLISH_ROBOT_EXE: src\PublishAgents\AgentV2\WurmAssistant.PublishRobot\bin\Release\AldursLab.WurmAssistant.PublishRobot.exe
+  PUBLISH_TO_LEGACY_SERVICE: ${{ vars.PUBLISH_TO_LEGACY_SERVICE || 'false' }}
+
+jobs:
+  build-test-release:
+    name: Build, test, package, release
+    runs-on: windows-2022
+    timeout-minutes: 60
+
+    steps:
+      - name: Compute legacy build number
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $githubRunNumber = [int]$env:GITHUB_RUN_NUMBER
+          $offset = [int]$env:LEGACY_BUILD_NUMBER_OFFSET
+          $legacyBuildNumber = $githubRunNumber + $offset
+
+          "LEGACY_BUILD_NUMBER=$legacyBuildNumber" >> $env:GITHUB_ENV
+          Write-Host "GitHub run number: $githubRunNumber"
+          Write-Host "Legacy build offset: $offset"
+          Write-Host "Legacy build number: $legacyBuildNumber"
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: recursive
+          clean: true
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Clean legacy Release output
+        shell: pwsh
+        run: |
+          if (Test-Path $env:APP_BIN_PATH) {
+            Remove-Item -Recurse -Force $env:APP_BIN_PATH
+          }
+
+      - name: Restore NuGet packages
+        shell: pwsh
+        run: nuget restore $env:SOLUTION_PATH -NonInteractive -Verbosity normal
+
+      - name: Build solution
+        shell: pwsh
+        run: |
+          msbuild $env:SOLUTION_PATH `
+            /m `
+            /t:Rebuild `
+            /p:Configuration=$env:CONFIGURATION `
+            "/p:Platform=$env:PLATFORM" `
+            /p:VisualStudioVersion=17.0
+
+      - name: Run NUnit tests
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $runner = 'packages\NUnit.ConsoleRunner.3.2.1\tools\nunit3-console.exe'
+          if (-not (Test-Path $runner)) {
+            throw "NUnit console runner not found at $runner. Check NuGet restore/package versions."
+          }
+
+          $excludeExact = (Join-Path $pwd 'src\WurmApi\WurmApi.Tests.Unit\bin\Release\AldursLab.WurmApi.Tests.Unit.dll')
+          $assemblies = Get-ChildItem -Path . -Recurse -Filter '*.Tests.*dll' |
+            Where-Object { $_.FullName -like '*\bin\Release\*' } |
+            Where-Object { $_.FullName -ne $excludeExact } |
+            Select-Object -ExpandProperty FullName
+
+          if (-not $assemblies -or $assemblies.Count -eq 0) {
+            throw 'No NUnit test assemblies matching **\bin\Release\*.Tests.*dll were found.'
+          }
+
+          & $runner @assemblies `
+            --x86 `
+            --where 'cat != Manual && cat != NoRunCI' `
+            --result='TestResult.xml;format=nunit3'
+
+      - name: Upload NUnit test result
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: nunit-test-result
+          path: TestResult.xml
+          if-no-files-found: ignore
+
+      - name: Write changelog from commits
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path $env:APP_BIN_PATH | Out-Null
+          git log --pretty='%ad|%an|%s' --date=iso | Out-File "$env:APP_BIN_PATH\changelog-raw.txt" -Encoding utf8
+
+      - name: Prepare publish robot config
+        shell: pwsh
+        env:
+          WA3_WEB_SERVICE_PASSWORD: ${{ secrets.WA3_WEB_SERVICE_PASSWORD }}
+          WA3_SLACK_INTEGRATION_SUB_URL: ${{ secrets.WA3_SLACK_INTEGRATION_SUB_URL }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          foreach ($secret in @($env:WA3_WEB_SERVICE_PASSWORD, $env:WA3_SLACK_INTEGRATION_SUB_URL)) {
+            if (-not [string]::IsNullOrWhiteSpace($secret)) {
+              Write-Host "::add-mask::$secret"
+            }
+          }
+
+          $path = $env:PUBLISH_CONFIG_PATH
+          if (-not (Test-Path $path)) {
+            throw "Publish config file not found: $path"
+          }
+
+          $text = [System.IO.File]::ReadAllText((Resolve-Path $path))
+
+          function Set-CfgValue([string] $key, [string] $value) {
+            if ([string]::IsNullOrWhiteSpace($value)) { return }
+            $pattern = "(?m)^($([regex]::Escape($key))\s*)=.*$"
+            $script:text = [regex]::Replace($script:text, $pattern, { param($m) "$($m.Groups[1].Value)= $value" })
+          }
+
+          Set-CfgValue 'build code' $env:BUILD_CODE
+          Set-CfgValue 'build number' $env:LEGACY_BUILD_NUMBER
+          Set-CfgValue 'web service password' $env:WA3_WEB_SERVICE_PASSWORD
+          Set-CfgValue 'slack integration sub url' $env:WA3_SLACK_INTEGRATION_SUB_URL
+
+          $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+          [System.IO.File]::WriteAllText((Resolve-Path $path), $text, $utf8NoBom)
+
+      - name: Create release package
+        id: package
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $binDir = Resolve-Path $env:APP_BIN_PATH
+          $releasesPath = Resolve-Path $env:RELEASES_INFO_PATH
+
+          $releaseDirs = foreach ($dir in Get-ChildItem -Path $releasesPath -Directory) {
+            $version = $null
+            if ([Version]::TryParse($dir.Name, [ref] $version)) {
+              [pscustomobject]@{ Dir = $dir; Version = $version }
+            }
+          }
+
+          if (-not $releaseDirs -or $releaseDirs.Count -eq 0) {
+            throw "No version-like release subdirectories found under $releasesPath."
+          }
+
+          $latest = $releaseDirs | Sort-Object Version -Descending | Select-Object -First 1
+          $minorVersion = '{0}.{1}' -f $latest.Version.Major, $latest.Version.Minor
+          $versionDat = '{0}`n{1}`n{2}`n{3}' -f $minorVersion, $env:BUILD_CODE, $env:LEGACY_BUILD_NUMBER, (Get-Date).ToString('O')
+          [System.IO.File]::WriteAllText((Join-Path $binDir 'version.dat'), $versionDat, [System.Text.UTF8Encoding]::new($false))
+
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+          $packageFile = 'WurmAssistant-{0}-{1}-R{2}.zip' -f $minorVersion, $env:BUILD_CODE, $env:LEGACY_BUILD_NUMBER
+          $packagePath = Join-Path 'artifacts' $packageFile
+          if (Test-Path $packagePath) { Remove-Item -Force $packagePath }
+          Compress-Archive -Path (Join-Path $binDir '*') -DestinationPath $packagePath -CompressionLevel Optimal
+
+          "package_file=$packageFile" >> $env:GITHUB_OUTPUT
+          "package_path=$packagePath" >> $env:GITHUB_OUTPUT
+          "tag=$($env:BUILD_CODE)-$($env:LEGACY_BUILD_NUMBER)" >> $env:GITHUB_OUTPUT
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.package.outputs.package_file }}
+          path: ${{ steps.package.outputs.package_path }}
+          if-no-files-found: error
+
+      - name: Publish to legacy WA3 web service
+        shell: pwsh
+        env:
+          WA3_WEB_SERVICE_PASSWORD: ${{ secrets.WA3_WEB_SERVICE_PASSWORD }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          if ($env:PUBLISH_TO_LEGACY_SERVICE -ne 'true') {
+            Write-Host 'Skipping legacy publish robot. Set repository variable PUBLISH_TO_LEGACY_SERVICE=true to enable it.'
+            exit 0
+          }
+
+          if ([string]::IsNullOrWhiteSpace($env:WA3_WEB_SERVICE_PASSWORD)) {
+            throw 'PUBLISH_TO_LEGACY_SERVICE is true, but secret WA3_WEB_SERVICE_PASSWORD is not configured.'
+          }
+
+          if (-not (Test-Path $env:PUBLISH_ROBOT_EXE)) {
+            throw "Publish robot executable not found: $env:PUBLISH_ROBOT_EXE"
+          }
+
+          & $env:PUBLISH_ROBOT_EXE 'publish-package-wa3-azure.cfg'
+
+      - name: Create or update GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.package.outputs.tag }}
+          PACKAGE_PATH: ${{ steps.package.outputs.package_path }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $title = "Stable Windows $env:LEGACY_BUILD_NUMBER"
+          $notes = "Automated stable Windows build from master commit $env:GITHUB_SHA."
+
+          gh release view $env:TAG *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $env:TAG $env:PACKAGE_PATH --clobber
+          }
+          else {
+            gh release create $env:TAG $env:PACKAGE_PATH `
+              --target $env:GITHUB_SHA `
+              --title $title `
+              --notes $notes `
+              --latest
+          }
