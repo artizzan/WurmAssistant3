@@ -83,32 +83,73 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          $runner = 'packages\NUnit.ConsoleRunner.3.2.1\tools\nunit3-console.exe'
+
+          $workspace = (Resolve-Path $env:GITHUB_WORKSPACE).Path
+          $runner = Join-Path $workspace 'packages\NUnit.ConsoleRunner.3.2.1\tools\nunit3-console.exe'
+
           if (-not (Test-Path $runner)) {
-            throw "NUnit console runner not found at $runner. Check NuGet restore/package versions."
+            throw "NUnit console runner not found at $runner"
           }
 
-          $excludeExact = (Join-Path $pwd 'src\WurmApi\WurmApi.Tests.Unit\bin\Release\AldursLab.WurmApi.Tests.Unit.dll')
-          $assemblies = Get-ChildItem -Path . -Recurse -Filter '*.Tests.*dll' |
+          $excludeExact = [System.IO.Path]::GetFullPath(
+            (Join-Path $workspace 'src\WurmApi\WurmApi.Tests.Unit\bin\Release\AldursLab.WurmApi.Tests.Unit.dll')
+          )
+
+          $assemblies = Get-ChildItem -Path $workspace -Recurse -Filter '*.Tests.*dll' |
             Where-Object { $_.FullName -like '*\bin\Release\*' } |
-            Where-Object { $_.FullName -ne $excludeExact } |
-            Select-Object -ExpandProperty FullName
+            Where-Object { [System.IO.Path]::GetFullPath($_.FullName) -ne $excludeExact } |
+            Sort-Object FullName
 
           if (-not $assemblies -or $assemblies.Count -eq 0) {
             throw 'No NUnit test assemblies matching **\bin\Release\*.Tests.*dll were found.'
           }
 
-          & $runner @assemblies `
-            --x86 `
-            --where 'cat != Manual && cat != NoRunCI' `
-            --result='TestResult.xml;format=nunit3'
+          New-Item -ItemType Directory -Force -Path (Join-Path $workspace 'test-results') | Out-Null
+
+          $failed = $false
+
+          foreach ($assembly in $assemblies) {
+            $assemblyDir = $assembly.DirectoryName
+            $assemblyName = $assembly.Name
+            $safeName = $assembly.BaseName -replace '[^A-Za-z0-9_.-]', '_'
+            $resultPath = Join-Path $workspace "test-results\$safeName.xml"
+
+            Write-Host "Running NUnit:"
+            Write-Host "  assembly: $assemblyName"
+            Write-Host "  working directory: $assemblyDir"
+            Write-Host "  result: $resultPath"
+
+            Push-Location $assemblyDir
+            try {
+              & $runner ".\$assemblyName" `
+                --x86 `
+                --where 'cat != Manual && cat != NoRunCI' `
+                "--work=$assemblyDir" `
+                "--result=$resultPath;format=nunit3"
+
+              $exitCode = $LASTEXITCODE
+            }
+            finally {
+              Pop-Location
+            }
+
+            Write-Host "NUnit exit code for $assemblyName: $exitCode"
+
+            if ($exitCode -ne 0) {
+              $failed = $true
+            }
+          }
+
+          if ($failed) {
+            throw 'One or more NUnit test assemblies failed.'
+          }
 
       - name: Upload NUnit test result
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: nunit-test-result
-          path: TestResult.xml
+          name: nunit-test-results
+          path: test-results/*.xml
           if-no-files-found: ignore
 
       - name: Write changelog from commits
@@ -118,6 +159,7 @@ jobs:
           git log --pretty='%ad|%an|%s' --date=iso | Out-File "$env:APP_BIN_PATH\changelog-raw.txt" -Encoding utf8
 
       - name: Prepare publish robot config
+        if: vars.PUBLISH_TO_LEGACY_SERVICE == 'true'
         shell: pwsh
         env:
           WA3_WEB_SERVICE_PASSWORD: ${{ secrets.WA3_WEB_SERVICE_PASSWORD }}
@@ -131,26 +173,59 @@ jobs:
             }
           }
 
-          $path = $env:PUBLISH_CONFIG_PATH
+          $path = Join-Path $env:GITHUB_WORKSPACE 'src\PublishAgents\AgentV2\WurmAssistant.PublishRobot\bin\Release\publish-package-wa3-azure.cfg'
+
           if (-not (Test-Path $path)) {
-            throw "Publish config file not found: $path"
+            throw "Publish robot config file not found: $path"
+          }
+
+          if ([string]::IsNullOrWhiteSpace($env:WA3_WEB_SERVICE_PASSWORD)) {
+            throw "Missing required secret: WA3_WEB_SERVICE_PASSWORD"
+          }
+
+          if ([string]::IsNullOrWhiteSpace($env:BUILD_CODE)) {
+            throw "BUILD_CODE is empty"
+          }
+
+          if ([string]::IsNullOrWhiteSpace($env:LEGACY_BUILD_NUMBER)) {
+            throw "LEGACY_BUILD_NUMBER is empty"
           }
 
           $text = [System.IO.File]::ReadAllText((Resolve-Path $path))
 
           function Set-CfgValue([string] $key, [string] $value) {
-            if ([string]::IsNullOrWhiteSpace($value)) { return }
             $pattern = "(?m)^($([regex]::Escape($key))\s*)=.*$"
-            $script:text = [regex]::Replace($script:text, $pattern, { param($m) "$($m.Groups[1].Value)= $value" })
+
+            if ($script:text -notmatch $pattern) {
+              throw "Config key not found: $key"
+            }
+
+            $script:text = [regex]::Replace(
+              $script:text,
+              $pattern,
+              { param($m) "$($m.Groups[1].Value)= $value" }
+            )
           }
 
           Set-CfgValue 'build code' $env:BUILD_CODE
           Set-CfgValue 'build number' $env:LEGACY_BUILD_NUMBER
           Set-CfgValue 'web service password' $env:WA3_WEB_SERVICE_PASSWORD
-          Set-CfgValue 'slack integration sub url' $env:WA3_SLACK_INTEGRATION_SUB_URL
+
+          if (-not [string]::IsNullOrWhiteSpace($env:WA3_SLACK_INTEGRATION_SUB_URL)) {
+            Set-CfgValue 'slack integration sub url' $env:WA3_SLACK_INTEGRATION_SUB_URL
+          }
 
           $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
           [System.IO.File]::WriteAllText((Resolve-Path $path), $text, $utf8NoBom)
+
+          $check = [System.IO.File]::ReadAllText((Resolve-Path $path))
+          if ($check -match '(?im)^(build code|build number|web service password)\s*=\s*placeholder\s*$') {
+            throw "Publish robot config still contains required placeholder values."
+          }
+
+          Write-Host "Publish robot config prepared:"
+          Write-Host "  build code: $env:BUILD_CODE"
+          Write-Host "  build number: $env:LEGACY_BUILD_NUMBER"
 
       - name: Create release package
         id: package
