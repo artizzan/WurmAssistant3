@@ -80,6 +80,7 @@ jobs:
             /p:VisualStudioVersion=17.0
 
       - name: Run NUnit tests
+
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
@@ -104,28 +105,55 @@ jobs:
             throw 'No NUnit test assemblies matching **\bin\Release\*.Tests.*dll were found.'
           }
 
-          New-Item -ItemType Directory -Force -Path (Join-Path $workspace 'test-results') | Out-Null
+          $resultsDir = Join-Path $workspace 'test-results'
+          New-Item -ItemType Directory -Force -Path $resultsDir | Out-Null
+
+          $stageRoot = Join-Path $env:RUNNER_TEMP 'wa3-nunit'
+          if (Test-Path $stageRoot) {
+            Remove-Item -Recurse -Force $stageRoot
+          }
+          New-Item -ItemType Directory -Force -Path $stageRoot | Out-Null
 
           $failed = $false
 
           foreach ($assembly in $assemblies) {
-            $assemblyDir = $assembly.DirectoryName
+            $sourceDir = $assembly.DirectoryName
             $assemblyName = $assembly.Name
             $safeName = $assembly.BaseName -replace '[^A-Za-z0-9_.-]', '_'
-            $resultPath = Join-Path $workspace "test-results\$safeName.xml"
+            $stageDir = Join-Path $stageRoot $safeName
+            $resultPath = Join-Path $resultsDir "$safeName.xml"
+
+            Write-Host "Staging NUnit assembly:"
+            Write-Host ("  source: {0}" -f $sourceDir)
+            Write-Host ("  stage:  {0}" -f $stageDir)
+
+            New-Item -ItemType Directory -Force -Path $stageDir | Out-Null
+            Copy-Item -Path (Join-Path $sourceDir '*') -Destination $stageDir -Recurse -Force
+
+            # Remove read-only attributes just in case files came from checkout/build as read-only.
+            Get-ChildItem -Path $stageDir -Recurse -Force | ForEach-Object {
+              $_.Attributes = $_.Attributes -band (-bnot [System.IO.FileAttributes]::ReadOnly)
+            }
+
+            # Prove the staged directory is writable.
+            $probeDir = Join-Path $stageDir 'TempDirectories\__ci_write_probe'
+            $probeFile = Join-Path $probeDir 'probe.txt'
+            New-Item -ItemType Directory -Force -Path $probeDir | Out-Null
+            Set-Content -Path $probeFile -Value 'write-ok' -Encoding UTF8
+            Remove-Item -Recurse -Force $probeDir
 
             Write-Host "Running NUnit:"
-            Write-Host ("Running NUnit assembly: {0}" -f $assemblyName)
-            Write-Host ("Working directory: {0}" -f $assemblyDir)
-            Write-Host ("Result path: {0}" -f $resultPath)
+            Write-Host ("  assembly: {0}" -f $assemblyName)
+            Write-Host ("  working directory: {0}" -f $stageDir)
+            Write-Host ("  result: {0}" -f $resultPath)
 
-            Push-Location $assemblyDir
+            Push-Location $stageDir
             try {
               & $runner ".\$assemblyName" `
                 --x86 `
                 --workers=1 `
                 --where 'cat != Manual && cat != NoRunCI' `
-                "--work=$assemblyDir" `
+                "--work=$stageDir" `
                 "--result=$resultPath;format=nunit3"
 
               $exitCode = $LASTEXITCODE
@@ -136,6 +164,26 @@ jobs:
 
             Write-Host ("NUnit exit code for {0}: {1}" -f $assemblyName, $exitCode)
 
+            if (Test-Path $resultPath) {
+              [xml]$xml = Get-Content $resultPath
+              $testRun = $xml.'test-run'
+
+              Write-Host ("NUnit result for {0}: result={1}, total={2}, passed={3}, failed={4}, errors={5}, skipped={6}" -f `
+                $assemblyName,
+                $testRun.result,
+                $testRun.total,
+                $testRun.passed,
+                $testRun.failed,
+                $testRun.errors,
+                $testRun.skipped)
+
+              $failedCases = $xml.SelectNodes("//test-case[@result='Failed']")
+              foreach ($case in $failedCases) {
+                Write-Host ("FAILED: {0}" -f $case.fullname)
+                Write-Host $case.failure.message
+              }
+            }
+
             if ($exitCode -ne 0) {
               $failed = $true
             }
@@ -144,6 +192,71 @@ jobs:
           if ($failed) {
             throw 'One or more NUnit test assemblies failed.'
           }
+
+        # shell: pwsh
+        # run: |
+        #   $ErrorActionPreference = 'Stop'
+
+        #   $workspace = (Resolve-Path $env:GITHUB_WORKSPACE).Path
+        #   $runner = Join-Path $workspace 'packages\NUnit.ConsoleRunner.3.2.1\tools\nunit3-console.exe'
+
+        #   if (-not (Test-Path $runner)) {
+        #     throw "NUnit console runner not found at $runner"
+        #   }
+
+        #   $excludeExact = [System.IO.Path]::GetFullPath(
+        #     (Join-Path $workspace 'src\WurmApi\WurmApi.Tests.Unit\bin\Release\AldursLab.WurmApi.Tests.Unit.dll')
+        #   )
+
+        #   $assemblies = Get-ChildItem -Path $workspace -Recurse -Filter '*.Tests.*dll' |
+        #     Where-Object { $_.FullName -like '*\bin\Release\*' } |
+        #     Where-Object { [System.IO.Path]::GetFullPath($_.FullName) -ne $excludeExact } |
+        #     Sort-Object FullName
+
+        #   if (-not $assemblies -or $assemblies.Count -eq 0) {
+        #     throw 'No NUnit test assemblies matching **\bin\Release\*.Tests.*dll were found.'
+        #   }
+
+        #   New-Item -ItemType Directory -Force -Path (Join-Path $workspace 'test-results') | Out-Null
+
+        #   $failed = $false
+
+        #   foreach ($assembly in $assemblies) {
+        #     $assemblyDir = $assembly.DirectoryName
+        #     $assemblyName = $assembly.Name
+        #     $safeName = $assembly.BaseName -replace '[^A-Za-z0-9_.-]', '_'
+        #     $resultPath = Join-Path $workspace "test-results\$safeName.xml"
+
+        #     Write-Host "Running NUnit:"
+        #     Write-Host ("Running NUnit assembly: {0}" -f $assemblyName)
+        #     Write-Host ("Working directory: {0}" -f $assemblyDir)
+        #     Write-Host ("Result path: {0}" -f $resultPath)
+
+        #     Push-Location $assemblyDir
+        #     try {
+        #       & $runner ".\$assemblyName" `
+        #         --x86 `
+        #         --workers=1 `
+        #         --where 'cat != Manual && cat != NoRunCI' `
+        #         "--work=$assemblyDir" `
+        #         "--result=$resultPath;format=nunit3"
+
+        #       $exitCode = $LASTEXITCODE
+        #     }
+        #     finally {
+        #       Pop-Location
+        #     }
+
+        #     Write-Host ("NUnit exit code for {0}: {1}" -f $assemblyName, $exitCode)
+
+        #     if ($exitCode -ne 0) {
+        #       $failed = $true
+        #     }
+        #   }
+
+        #   if ($failed) {
+        #     throw 'One or more NUnit test assemblies failed.'
+        #   }
 
       - name: Upload NUnit test result
         if: ${{ always() }}
